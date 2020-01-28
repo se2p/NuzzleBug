@@ -11,11 +11,19 @@ class Controls extends React.Component {
         super(props);
         bindAll(this, [
             'handleGreenFlagClick',
+            'handlePauseResumeClick',
             'handleStopAllClick'
         ]);
     }
     handleGreenFlagClick (e) {
         e.preventDefault();
+
+        if (this.props.projectPaused) {
+            // Resets the state of the VM back to normal.
+            // Otherwise we could not start execution again.
+            this.resetPauseResume();
+        }
+
         if (e.shiftKey) {
             this.props.vm.setTurboMode(!this.props.turbo);
         } else {
@@ -25,15 +33,40 @@ class Controls extends React.Component {
             this.props.vm.greenFlag();
         }
     }
+    handlePauseResumeClick (e) {
+        e.preventDefault();
+
+        if (!this.props.projectRunning) {
+            // No handling when project isn't running.
+            return;
+        }
+
+        if (this.props.projectPaused) {
+            this.resetPauseResume();
+        } else {
+            this.props.vm.haltExecution();
+        }
+    }
     handleStopAllClick (e) {
         e.preventDefault();
+
+        if (this.props.projectPaused) {
+            // Resets the state of the VM back to normal.
+            // Otherwise we could not stop execution.
+            this.resetPauseResume();
+        }
+
         this.props.vm.stopAll();
+    }
+    resetPauseResume () {
+        this.props.vm.resumeExecution();
     }
     render () {
         const {
             vm, // eslint-disable-line no-unused-vars
             isStarted, // eslint-disable-line no-unused-vars
             projectRunning,
+            projectPaused,
             turbo,
             ...props
         } = this.props;
@@ -41,8 +74,10 @@ class Controls extends React.Component {
             <ControlsComponent
                 {...props}
                 active={projectRunning}
+                paused={projectPaused}
                 turbo={turbo}
                 onGreenFlagClick={this.handleGreenFlagClick}
+                onPauseResumeClick={this.handlePauseResumeClick}
                 onStopAllClick={this.handleStopAllClick}
             />
         );
@@ -51,6 +86,7 @@ class Controls extends React.Component {
 
 Controls.propTypes = {
     isStarted: PropTypes.bool.isRequired,
+    projectPaused: PropTypes.bool.isRequired,
     projectRunning: PropTypes.bool.isRequired,
     turbo: PropTypes.bool.isRequired,
     vm: PropTypes.instanceOf(VM)
@@ -58,6 +94,7 @@ Controls.propTypes = {
 
 const mapStateToProps = state => ({
     isStarted: state.scratchGui.vmStatus.running,
+    projectPaused: state.scratchGui.vmStatus.paused,
     projectRunning: state.scratchGui.vmStatus.running,
     turbo: state.scratchGui.vmStatus.turbo
 });

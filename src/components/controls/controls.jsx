@@ -4,6 +4,7 @@ import React from 'react';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 import GreenFlag from '../green-flag/green-flag.jsx';
+import PauseResume from '../pause-resume/pause-resume.jsx';
 import StopAll from '../stop-all/stop-all.jsx';
 import TurboMode from '../turbo-mode/turbo-mode.jsx';
 
@@ -14,6 +15,11 @@ const messages = defineMessages({
         id: 'gui.controls.go',
         defaultMessage: 'Go',
         description: 'Green flag button title'
+    },
+    pauseTitle: {
+        id: 'gui.controls.pause',
+        defaultMessage: 'Pause / Resume',
+        description: 'Pause or resume button title'
     },
     stopTitle: {
         id: 'gui.controls.stop',
@@ -28,7 +34,9 @@ const Controls = function (props) {
         className,
         intl,
         onGreenFlagClick,
+        onPauseResumeClick,
         onStopAllClick,
+        paused,
         turbo,
         ...componentProps
     } = props;
@@ -38,12 +46,18 @@ const Controls = function (props) {
             {...componentProps}
         >
             <GreenFlag
-                active={active}
+                active={active && !paused}
                 title={intl.formatMessage(messages.goTitle)}
                 onClick={onGreenFlagClick}
             />
-            <StopAll
+            <PauseResume
                 active={active}
+                paused={paused}
+                title={intl.formatMessage(messages.pauseTitle)}
+                onClick={onPauseResumeClick}
+            />
+            <StopAll
+                active={active && !paused}
                 title={intl.formatMessage(messages.stopTitle)}
                 onClick={onStopAllClick}
             />
@@ -56,15 +70,18 @@ const Controls = function (props) {
 
 Controls.propTypes = {
     active: PropTypes.bool,
+    paused: PropTypes.bool,
     className: PropTypes.string,
     intl: intlShape.isRequired,
     onGreenFlagClick: PropTypes.func.isRequired,
+    onPauseResumeClick: PropTypes.func.isRequired,
     onStopAllClick: PropTypes.func.isRequired,
     turbo: PropTypes.bool
 };
 
 Controls.defaultProps = {
     active: false,
+    paused: false,
     turbo: false
 };
 

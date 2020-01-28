@@ -1,0 +1,26 @@
+@import "../../css/colors.css";
+
+.pauseResume {
+    width: 2rem;
+    height: 2rem;
+    padding: 0.375rem;
+    border-radius: 0.25rem;
+    user-select: none;
+    cursor: pointer;
+}
+
+.pauseResume:hover {
+    background-color: $motion-light-transparent;
+}
+
+.pauseResume {
+    opacity: 0.5;
+}
+
+.pauseResume.is-active {
+    opacity: 1;
+}
+
+.pauseResume.paused {
+    background-color: $motion-transparent;
+}

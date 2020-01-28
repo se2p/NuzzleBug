@@ -9,7 +9,7 @@ import {updateTargets} from '../reducers/targets';
 import {updateBlockDrag} from '../reducers/block-drag';
 import {updateMonitors} from '../reducers/monitors';
 import {setProjectChanged, setProjectUnchanged} from '../reducers/project-changed';
-import {setRunningState, setTurboState, setStartedState} from '../reducers/vm-status';
+import {setRunningState, setPauseState, setTurboState, setStartedState} from '../reducers/vm-status';
 import {showExtensionAlert} from '../reducers/alerts';
 import {updateMicIndicator} from '../reducers/mic-indicator';
 
@@ -41,6 +41,8 @@ const vmListenerHOC = function (WrappedComponent) {
             this.props.vm.on('TURBO_MODE_OFF', this.props.onTurboModeOff);
             this.props.vm.on('PROJECT_RUN_START', this.props.onProjectRunStart);
             this.props.vm.on('PROJECT_RUN_STOP', this.props.onProjectRunStop);
+            this.props.vm.on('PROJECT_RUN_PAUSE', this.props.onProjectRunPause);
+            this.props.vm.on('PROJECT_RUN_RESUME', this.props.onProjectRunResume);
             this.props.vm.on('PROJECT_CHANGED', this.handleProjectChanged);
             this.props.vm.on('RUNTIME_STARTED', this.props.onRuntimeStarted);
             this.props.vm.on('PROJECT_START', this.props.onGreenFlag);
@@ -130,6 +132,8 @@ const vmListenerHOC = function (WrappedComponent) {
                 onProjectChanged,
                 onProjectRunStart,
                 onProjectRunStop,
+                onProjectRunPause,
+                onProjectRunResume,
                 onProjectSaved,
                 onRuntimeStarted,
                 onTurboModeOff,
@@ -152,6 +156,8 @@ const vmListenerHOC = function (WrappedComponent) {
         onProjectChanged: PropTypes.func.isRequired,
         onProjectRunStart: PropTypes.func.isRequired,
         onProjectRunStop: PropTypes.func.isRequired,
+        onProjectRunPause: PropTypes.func.isRequired,
+        onProjectRunResume: PropTypes.func.isRequired,
         onProjectSaved: PropTypes.func.isRequired,
         onRuntimeStarted: PropTypes.func.isRequired,
         onShowExtensionAlert: PropTypes.func.isRequired,
@@ -192,6 +198,8 @@ const vmListenerHOC = function (WrappedComponent) {
         },
         onProjectRunStart: () => dispatch(setRunningState(true)),
         onProjectRunStop: () => dispatch(setRunningState(false)),
+        onProjectRunPause: () => dispatch(setPauseState(true)),
+        onProjectRunResume: () => dispatch(setPauseState(false)),
         onProjectChanged: () => dispatch(setProjectChanged()),
         onProjectSaved: () => dispatch(setProjectUnchanged()),
         onRuntimeStarted: () => dispatch(setStartedState(true)),
