@@ -57,7 +57,7 @@ const Controls = function (props) {
                 onClick={onPauseResumeClick}
             />
             <StopAll
-                active={active && !paused}
+                active={active}
                 title={intl.formatMessage(messages.stopTitle)}
                 onClick={onStopAllClick}
             />

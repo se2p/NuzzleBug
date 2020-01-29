@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import VM from 'scratch-vm';
 import {connect} from 'react-redux';
+import tracer from '../lib/tracing';
 
 import ControlsComponent from '../components/controls/controls.jsx';
 
@@ -17,6 +18,8 @@ class Controls extends React.Component {
     }
     handleGreenFlagClick (e) {
         e.preventDefault();
+
+        tracer.reset();
 
         if (this.props.projectPaused) {
             // Resets the state of the VM back to normal.
@@ -45,6 +48,7 @@ class Controls extends React.Component {
             this.resetPauseResume();
         } else {
             this.props.vm.haltExecution();
+            tracer.printRecord();
         }
     }
     handleStopAllClick (e) {
