@@ -6,8 +6,6 @@ import {connect} from 'react-redux';
 import VM from 'scratch-vm';
 import AudioEngine from 'scratch-audio';
 
-import {frameCallback} from './tracing';
-
 import {setProjectUnchanged} from '../reducers/project-changed';
 import {
     LoadingStates,
@@ -36,7 +34,6 @@ const vmManagerHOC = function (WrappedComponent) {
                 this.props.vm.setCompatibilityMode(true);
                 this.props.vm.initialized = true;
                 this.props.vm.setLocale(this.props.locale, this.props.messages);
-                this.props.vm.runtime.enableProfiling(frameCallback);
             }
             if (!this.props.isPlayerOnly && !this.props.isStarted) {
                 this.props.vm.start();
