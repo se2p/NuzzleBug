@@ -2,52 +2,71 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {FormattedMessage, injectIntl, intlShape} from 'react-intl';
+import VM from 'scratch-vm';
 
-import {Question} from '../../lib/ir-questions';
+import {computeQuestionAnswer, Question} from '../../lib/ir-questions';
 
 import styles from './question.css';
 import Box from '../box/box.jsx';
 
-const IRQuestion = props => {
-    const {
-        className,
-        intl,
-        onClick,
-        question,
-        ...componentProps
-    } = props;
-    return (
-        <li
-            key={question.id}
-            className={classNames(styles.irQuestion, className)}
-            {...componentProps}
-        >
-            <Box className={styles.irQuestion}>
-                <span className={styles.irQuestionText}>
-                    {question.text}
-                </span>
-                <button
-                    className={styles.irQuestionAnswerButton}
-                    onClick={onClick}
-                >
-                    <span className={styles.irQuestionAnswerButtonText}>
-                        <FormattedMessage
-                            defaultMessage="Show Answer"
-                            description="Label for button to show answer for interrogative debugging question"
-                            id="gui.ir-questions.show-answer"
-                        />
+import bindAll from 'lodash.bindall';
+
+class IRQuestion extends React.Component {
+    constructor (props) {
+        super(props);
+        bindAll(this, [
+            'handleShowQuestion'
+        ]);
+    }
+
+    handleShowQuestion (e) {
+        e.preventDefault();
+        // TODO Phil 17/02/2020: Calculate answer and show answer modal
+        computeQuestionAnswer(this.props.question, this.props.vm);
+    }
+
+    render () {
+        const {
+            className,
+            intl,
+            question,
+            vm,
+            ...componentProps
+        } = this.props;
+        return (
+            <li
+                key={question.id}
+                className={classNames(styles.irQuestion, className)}
+                {...componentProps}
+            >
+                <Box className={styles.irQuestion}>
+                    <span className={styles.irQuestionText}>
+                        {question.text}
                     </span>
-                </button>
-            </Box>
-        </li>
-    );
-};
+                    <button
+                        className={styles.irQuestionAnswerButton}
+                        onClick={this.handleShowQuestion}
+                    >
+                        <span className={styles.irQuestionAnswerButtonText}>
+                            <FormattedMessage
+                                defaultMessage="Show Answer"
+                                description="Label for button to show answer for interrogative debugging question"
+                                id="gui.ir-questions.show-answer"
+                            />
+                        </span>
+                    </button>
+                </Box>
+            </li>
+        );
+    }
+
+}
 
 IRQuestion.propTypes = {
     className: PropTypes.string,
     intl: intlShape.isRequired,
-    onClick: PropTypes.func.isRequired,
-    question: PropTypes.instanceOf(Question).isRequired
+    question: PropTypes.instanceOf(Question).isRequired,
+    vm: PropTypes.instanceOf(VM).isRequired
 };
 
 IRQuestion.defaultProps = {

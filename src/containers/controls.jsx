@@ -70,12 +70,14 @@ class Controls extends React.Component {
             turbo,
             ...props
         } = this.props;
+
         return (
             <ControlsComponent
                 {...props}
                 active={projectRunning}
                 paused={projectPaused}
                 turbo={turbo}
+                vm={vm}
                 onGreenFlagClick={this.handleGreenFlagClick}
                 onPauseResumeClick={this.handlePauseResumeClick}
                 onStopAllClick={this.handleStopAllClick}

@@ -4,9 +4,10 @@ import React from 'react';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 import iconQuestions from './icon--questions.svg';
-import {Question} from '../../lib/ir-questions';
+import {computeQuestions, computeQuestionAnswer} from '../../lib/ir-questions';
 
 import IRQuestion from '../ir-question-row/question.jsx';
+import VM from 'scratch-vm';
 
 import styles from './questions.css';
 import Modal from '../../containers/modal.jsx';
@@ -39,11 +40,11 @@ class IRQuestions extends React.Component {
     handleQuestionModalCloseClick () {
         this.setState({questionModal: false});
     }
-    buildHandleShowQuestion (question) {
+    buildHandleShowQuestion (question, vm) {
         return e => {
             e.preventDefault();
             // TODO Phil 17/02/2020: Calculate answer and show answer modal
-            console.log(question);
+            computeQuestionAnswer(question, vm);
         };
     }
 
@@ -52,14 +53,16 @@ class IRQuestions extends React.Component {
             active,
             className,
             intl,
-            questions,
+            vm,
             ...componentProps
         } = this.props;
+        const questions = computeQuestions(vm);
+
         const renderedQuestions = questions.map(question =>
             (<IRQuestion
                 key={question.id}
                 question={question}
-                onClick={this.buildHandleShowQuestion(question)}
+                vm={vm}
             />)
         );
         return (
@@ -103,7 +106,7 @@ IRQuestions.propTypes = {
     active: PropTypes.bool.isRequired,
     className: PropTypes.string,
     intl: intlShape.isRequired,
-    questions: PropTypes.arrayOf(PropTypes.instanceOf(Question)).isRequired
+    vm: PropTypes.instanceOf(VM).isRequired
 };
 
 export default injectIntl(IRQuestions);
