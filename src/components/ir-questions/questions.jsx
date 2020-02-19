@@ -4,9 +4,9 @@ import React from 'react';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 import iconQuestions from './icon--questions.svg';
-import {computeQuestions, computeQuestionAnswer} from '../../lib/ir-questions';
+import {computeQuestions} from '../../lib/ir-questions';
 
-import IRQuestion from '../ir-question-row/question.jsx';
+import IRQuestionCategory from '../ir-question-category/question-category.jsx';
 import VM from 'scratch-vm';
 
 import styles from './questions.css';
@@ -28,24 +28,30 @@ class IRQuestions extends React.Component {
         bindAll(this, [
             'handleQuestionModalOpenClick',
             'handleQuestionModalCloseClick',
-            'buildHandleShowQuestion'
+            'questionCategories'
         ]);
         this.state = {questionModal: false};
     }
+
     handleQuestionModalOpenClick () {
         if (this.props.active) {
             this.setState({questionModal: true});
         }
     }
+
     handleQuestionModalCloseClick () {
         this.setState({questionModal: false});
     }
-    buildHandleShowQuestion (question, vm) {
-        return e => {
-            e.preventDefault();
-            // TODO Phil 17/02/2020: Calculate answer and show answer modal
-            computeQuestionAnswer(question, vm);
-        };
+
+    questionCategories (categories) {
+        return categories.map(category =>
+            (<IRQuestionCategory
+                key={category.info.name}
+                category={category.info}
+                questions={category.questions}
+                vm={this.props.vm}
+            />)
+        );
     }
 
     render () {
@@ -56,15 +62,8 @@ class IRQuestions extends React.Component {
             vm,
             ...componentProps
         } = this.props;
-        const questions = computeQuestions(vm);
+        const questionCategories = computeQuestions(vm);
 
-        const renderedQuestions = questions.map(question =>
-            (<IRQuestion
-                key={question.id}
-                question={question}
-                vm={vm}
-            />)
-        );
         return (
             <div>
                 <img
@@ -81,19 +80,17 @@ class IRQuestions extends React.Component {
                     onClick={this.handleQuestionModalOpenClick}
                     {...componentProps}
                 />
-                {this.state.questionModal && renderedQuestions ? (
+                {this.state.questionModal ? (
                     <Modal
-                        id={'ir-questions'}
+                        id={'ir-questions-categories'}
                         className={styles.irQuestionsModal}
                         onRequestClose={this.handleQuestionModalCloseClick}
                         contentLabel={'Why did all of that just happen?'}
                     >
                         <Box className={styles.irQuestionsModalBody}>
-                            <Box className={styles.irQuestionsList}>
-                                <ul>
-                                    {renderedQuestions}
-                                </ul>
-                            </Box>
+                            {this.questionCategories(questionCategories.misc)}
+                            {this.questionCategories(questionCategories.targets)}
+                            {this.questionCategories(questionCategories.globalVariables)}
                         </Box>
                     </Modal>
                 ) : null}

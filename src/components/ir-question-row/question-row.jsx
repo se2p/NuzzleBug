@@ -6,12 +6,12 @@ import VM from 'scratch-vm';
 
 import {computeQuestionAnswer, Question} from '../../lib/ir-questions';
 
-import styles from './question.css';
+import styles from './question-row.css';
 import Box from '../box/box.jsx';
 
 import bindAll from 'lodash.bindall';
 
-class IRQuestion extends React.Component {
+class IRQuestionRow extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
@@ -28,9 +28,7 @@ class IRQuestion extends React.Component {
     render () {
         const {
             className,
-            intl,
             question,
-            vm,
             ...componentProps
         } = this.props;
         return (
@@ -62,14 +60,13 @@ class IRQuestion extends React.Component {
 
 }
 
-IRQuestion.propTypes = {
+IRQuestionRow.propTypes = {
     className: PropTypes.string,
     intl: intlShape.isRequired,
     question: PropTypes.instanceOf(Question).isRequired,
     vm: PropTypes.instanceOf(VM).isRequired
 };
 
-IRQuestion.defaultProps = {
-};
+IRQuestionRow.defaultProps = {};
 
-export default injectIntl(IRQuestion);
+export default injectIntl(IRQuestionRow);

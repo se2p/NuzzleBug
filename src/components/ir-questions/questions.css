@@ -18,6 +18,7 @@
 .ir-questions-modal {
     width: 720px;
 }
+
 .label {
     font-weight: 500;
     margin: 0 0 0.75rem;
@@ -26,10 +27,5 @@
 .ir-questions-modal-body {
     height: 720px;
     background: $ui-white;
-    padding: 1.5rem 2.25rem;
-}
-
-.ir-questions-list {
-
-
+    padding: 0.5rem 1rem;
 }

@@ -7,30 +7,101 @@ class Question {
     }
 }
 
-class Answer {
-    constructor (props) {
-        const {id, text, blocks} = props;
-        this.id = id;
-        this.text = text;
-        this.blocks = blocks
+const qid = () => {
+    const array = new Uint32Array(1);
+    window.crypto.getRandomValues(array);
+    return array.toString();
+};
+
+class QuestionProvider {
+    // TODO Phil 19/02/2020: Required for `why` questions
+    //   Query trace for sprites
+    //   Many more
+
+    // TODO Phil 19/02/2020: Required for `why not` questions
+    //   Get AST for each target
+    //   Compute full AST
+    constructor (vm, trace) {
+        this.vm = vm;
+        this.trace = trace;
     }
 
+    forTarget (target) {
+        const results = [new Question({id: qid(), blockId: '12321314', text: `Why did ${target.sprite.name} move?`})];
+
+        // Skip variables for stage
+        if (!target.isStage) {
+            results.push(new Question({
+                id: qid(),
+                blockId: '12321314',
+                text: `Why does ${target.sprite.name} have ${Object.values(target.variables).length} variables?`
+            }));
+        }
+        return results;
+    }
+
+    forGlobalVariable (variable) {
+        return [
+            new Question({
+                id: qid(),
+                blockId: '12321314',
+                text: `Why did global variable ${variable.name} change?`
+            })
+        ];
+    }
+
+    generalQuestions () {
+        return new Question({id: qid(), blockId: '1324321455', text: 'Why did nothing happen?'});
+    }
 }
 
-// TODO Phil 17/02/2020: Obviously replace this with a QuestionProvider
 const computeQuestions = vm => {
-    return [
-        new Question({id: 123, blockId: '12321314', text: 'Why did nothing move?'}),
-        new Question({id: 125, blockId: '1324321455', text: 'Why did sprite MJ move so fast?'})
-    ];
-};
+    const results = {
+        targets: [],
+        misc: [{info: {name: 'General Questions'}, questions: []}],
+        globalVariables: []
+    };
+    const recordedTrace = vm.runtime.traceInfo.tracer.traces;
+    if (!recordedTrace.length) {
+        return results;
+    }
 
+    const questionProvider = new QuestionProvider(vm, recordedTrace);
+
+    for (const target of vm.runtime.targets) {
+        const targetInfo = {
+            id: target.id,
+            currentCostume: target.currentCostume,
+            direction: target.direction,
+            isStage: target.isStage,
+            isOriginal: target.isOriginal,
+            name: target.sprite.name,
+            visible: target.visible,
+            xPosition: target.x,
+            yPosition: target.y
+        };
+        results.targets.push({
+            info: targetInfo,
+            questions: questionProvider.forTarget(target)
+        });
+    }
+
+    // TODO Phil 19/02/2020: Stage doesn't seem to include global variables, so what does?
+    for (const [id, variable] of Object.entries(vm.runtime.getTargetForStage().variables)) {
+        results.globalVariables.push({
+            info: {id: id, name: variable.name},
+            questions: questionProvider.forGlobalVariable(variable)
+        });
+    }
+
+    results.misc[0].questions.push(questionProvider.generalQuestions());
+
+    return results;
+};
 
 const computeQuestionAnswer = (question, vm) => {
-    console.log(question);
-    console.log(vm);
+    // TODO Phil 19/02/2020: Implement me
 };
-
 
 export {
     Question,
