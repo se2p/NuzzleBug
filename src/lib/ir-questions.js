@@ -3,36 +3,59 @@ import {
     generateId,
     getTargetVariableValue,
     getVariableValue,
-    isMoveStatement,
+    isBackdropChangeStatement,
+    isCostumeChangeStatement,
+    isDirectionChangeStatement,
+    isDirectionSetStatement,
+    isMoveChangeStatement,
+    isSizeChangeStatement,
+    isSoundStatement,
     isUpdateVariableStatement,
-    isSoundStatement
+    isVisibilityChangeStatement
 } from './ir-questions-util';
 
 const QuestionTypes = Object.freeze({
-    // Target specific
+    // Movement Questions
     DID_MOVE: 0,
     DID_NOT_MOVE: 1,
-    DID_CHANGE_COSTUME: 2,
-    DID_NOT_CHANGE_COSTUME: 3,
+    DID_CHANGE_DIRECTION: 10,
+    DID_NOT_CHANGE_DIRECTION: 11,
+    DID_NOT_SPECIFIC_POSITION: 20,
+    DID_NOT_SPECIFIC_X: 21,
+    DID_NOT_SPECIFIC_Y: 22,
+    DID_NOT_SPECIFIC_DIRECTION: 23,
 
-    // Sound specific
-    DID_PLAY_SOUND: 100,
-    DID_NOT_PLAY_SOUND: 101,
-    DID_NOT_PLAY_ANY_SOUND: 102,
+    // Appearance
+    DID_CHANGE_COSTUME: 50,
+    DID_NOT_CHANGE_COSTUME: 51,
+    DID_NOT_SPECIFIC_COSTUME: 51,
+    DID_CHANGE_SIZE: 60,
+    DID_NOT_CHANGE_SIZE: 61,
+    DID_NOT_SPECIFIC_SIZE: 62,
+    DID_CHANGE_VISIBILITY: 70,
+    DID_NOT_CHANGE_VISIBILITY: 71,
+    DID_NOT_SPECIFIC_VISIBILITY: 72,
 
     // Variable specific
-    DID_VARIABLE_CHANGE: 200,
-    DID_NOT_VARIABLE_CHANGE: 201,
-    HAS_VARIABLE_VALUE: 202,
-    HAS_NOT_VARIABLE_VALUE: 203,
+    DID_VARIABLE_CHANGE: 100,
+    DID_NOT_VARIABLE_CHANGE: 101,
+    DID_VARIABLE_SPECIFIC_VALUE: 102,
+    DID_NOT_VARIABLE_SPECIFIC_VALUE: 103,
+    DID_VARIABLE_SHOW: 104,
+    DID_NOT_VARIABLE_SHOW: 105,
 
-    // Block specific
-    DID_EXECUTE: 300,
-    DID_NOT_EXECUTE: 301,
+    // Sound specific
+    DID_NOT_PLAY_ANY_SOUND: 150,
+    DID_PLAY_SOUND: 151,
+    DID_NOT_PLAY_SOUND: 152,
 
     // General stuff
     DID_NOTHING_MOVE: 400,
     DID_NOTHING_SOUND: 401,
+
+    // Block specific
+    DID_EXECUTE: 200,
+    DID_NOT_EXECUTE: 201,
 
     DID_LAST_QUESTION: 9999
 });
@@ -60,6 +83,10 @@ class Answer {
 
         // Optional properties
         this.statements = props.statements;
+
+        this.blocks = props.blocks;
+
+        this.variable = props.variable;
         this.startValue = props.startValue;
         this.endValue = props.endValue;
     }
@@ -100,6 +127,7 @@ class QuestionProvider {
 
             const initialTargetState = trace[0].targetsInfo[target.id];
             const blocks = target.blocks._blocks;
+            const targetTrace = trace.filter(s => blocks.hasOwnProperty(s.blockId));
 
             // // Checks whether a block was executed or not
             // for (const blockId in blocks) {
@@ -122,21 +150,156 @@ class QuestionProvider {
 
             // Checks whether the target did move or not?
             if (!target.isStage) {
-                if (initialTargetState.x !== target.x || initialTargetState.y !== target.y) {
-                    anything.move = true;
+                const containedMoveStmts = targetTrace.some(isMoveChangeStatement);
+                if (containedMoveStmts) {
+                    if (initialTargetState.x === target.x && initialTargetState.y === target.y) {
+                        askableQuestions.push(new Question({
+                            type: QuestionTypes.DID_NOT_MOVE,
+                            target: target,
+                            text: `Why didn't ${target.sprite.name} move?`
+                        }));
+                    } else {
+                        anything.move = true;
+                        askableQuestions.push(new Question({
+                            type: QuestionTypes.DID_MOVE,
+                            target: target,
+                            text: `Why did ${target.sprite.name} move?`
+                        }));
+                    }
+                }
+            }
+
+            // Check whether the sprite direction did change or not?
+            if (!target.isStage) {
+                // Why did sprite’s direction change?
+                // Why didn't sprite’s direction change?
+                const containedDirectionStmt = targetTrace.some(isDirectionChangeStatement);
+                if (containedDirectionStmt) {
+                    if (initialTargetState.direction === target.direction) {
+                        askableQuestions.push(new Question({
+                            type: QuestionTypes.DID_NOT_CHANGE_DIRECTION,
+                            target: target,
+                            text: `Why didn't ${target.sprite.name}'s direction change?`
+                        }));
+                    } else {
+                        askableQuestions.push(new Question({
+                            type: QuestionTypes.DID_CHANGE_DIRECTION,
+                            target: target,
+                            text: `Why did ${target.sprite.name}'s direction change?`
+                        }));
+                    }
+                }
+
+                // Why didn't sprite’s direction have value <direction>?
+                const covered = {};
+                const directionSetStmts = Object.values(blocks).filter(isDirectionSetStatement);
+                for (const setStmt of directionSetStmts) {
+                    const directionValue = blocks[setStmt.inputs.DIRECTION.block].fields.NUM.value;
+                    if (parseInt(directionValue) !== target.direction) {
+                        if (covered.hasOwnProperty(directionValue)) {
+                            covered[directionValue].push(setStmt);
+                        } else {
+                            covered[directionValue] = [setStmt];
+                        }
+                    }
+                }
+                for (const direction of Object.keys(covered)) {
                     askableQuestions.push(new Question({
-                        type: QuestionTypes.DID_MOVE,
+                        type: QuestionTypes.DID_NOT_SPECIFIC_DIRECTION,
                         target: target,
-                        text: `Why did ${target.sprite.name} move?`
-                    }));
-                } else {
-                    askableQuestions.push(new Question({
-                        type: QuestionTypes.DID_NOT_MOVE,
-                        target: target,
-                        text: `Why didn't ${target.sprite.name} move?`
+                        blocks: Object.values(covered),
+                        text: `Why didn't ${target.sprite.name}'s direction have value ${direction}?`
                     }));
                 }
             }
+            // TODO Phil 11/03/2020: why didn't have sprite position (x,y)
+            // TODO Phil 11/03/2020: why didn't x == ???
+            // TODO Phil 11/03/2020: why didn't y == ???
+
+            // Check whether the stage backdrop or target costume did change or not?
+            if (target.isStage) {
+                const containedBackdropChange = trace.some(isBackdropChangeStatement);
+                if (containedBackdropChange) {
+                    const firstBackdrop = initialTargetState.currentCostume;
+                    const finalBackDrop = target.currentCostume;
+                    if (firstBackdrop === finalBackDrop) {
+                        askableQuestions.push(new Question({
+                            type: QuestionTypes.DID_NOT_CHANGE_COSTUME,
+                            target: target,
+                            text: `Why didn't stage's backdrop change?`
+                        }));
+                    } else {
+                        askableQuestions.push(new Question({
+                            type: QuestionTypes.DID_CHANGE_COSTUME,
+                            target: target,
+                            text: `Why did stage's backdrop change?`
+                        }));
+                    }
+                }
+            } else {
+                const containedCostumeStmt = targetTrace.some(isCostumeChangeStatement);
+                if (containedCostumeStmt) {
+                    const firstCostume = initialTargetState.currentCostume;
+                    const finalCostume = target.currentCostume;
+                    if (firstCostume === finalCostume) {
+                        askableQuestions.push(new Question({
+                            type: QuestionTypes.DID_NOT_CHANGE_COSTUME,
+                            target: target,
+                            text: `Why didn't ${target.sprite.name}'s costume change?`
+                        }));
+                    } else {
+                        askableQuestions.push(new Question({
+                            type: QuestionTypes.DID_CHANGE_COSTUME,
+                            target: target,
+                            text: `Why did ${target.sprite.name}'s costume change?`
+                        }));
+                    }
+                }
+            }
+            // TODO Phil 11/03/2020: why didn't backdrop == ???
+            // TODO Phil 11/03/2020: why didn't costume == ???
+
+            // Check whether the sprite size change
+            if (!target.isStage) {
+                const containedSizeStmt = targetTrace.some(isSizeChangeStatement);
+                if (containedSizeStmt) {
+                    if (initialTargetState.size === target.size) {
+                        askableQuestions.push(new Question({
+                            type: QuestionTypes.DID_NOT_CHANGE_SIZE,
+                            target: target,
+                            text: `Why didn't ${target.sprite.name}'s size change?`
+                        }));
+                    } else {
+                        askableQuestions.push(new Question({
+                            type: QuestionTypes.DID_CHANGE_SIZE,
+                            target: target,
+                            text: `Why did ${target.sprite.name}'s size change?`
+                        }));
+                    }
+                }
+            }
+            // TODO Phil 11/03/2020: why didn't size == ???
+
+            // Check whether the sprite visibility change
+            if (!target.isStage) {
+                const containedVisibilityStmt = targetTrace.some(isVisibilityChangeStatement);
+                if (containedVisibilityStmt) {
+                    if (initialTargetState.visible === target.visible) {
+                        askableQuestions.push(new Question({
+                            type: QuestionTypes.DID_NOT_CHANGE_VISIBILITY,
+                            target: target,
+                            text: `Why didn't ${target.sprite.name}'s visibility change?`
+                        }));
+                    } else {
+                        askableQuestions.push(new Question({
+                            type: QuestionTypes.DID_CHANGE_VISIBILITY,
+                            target: target,
+                            text: `Why did ${target.sprite.name}'s visibility change?`
+                        }));
+                    }
+                }
+            }
+            // TODO Phil 11/03/2020: why didn't visiblity == ???
 
             // Checks target variable values
             for (const variableId in target.variables) {
@@ -186,41 +349,6 @@ class QuestionProvider {
             //         text: `Why didn't ${target.sprite.name}'s variable speed change to 9000?`
             //     }));
 
-            // Check whether the stage backdrop or target costume has changed
-            if (target.isStage) {
-                const firstBackdrop = initialTargetState.currentCostume;
-                const finalBackDrop = target.currentCostume;
-                if (firstBackdrop === finalBackDrop) {
-                    askableQuestions.push(new Question({
-                        type: QuestionTypes.DID_NOT_CHANGE_COSTUME,
-                        target: target,
-                        text: `Why didn't ${target.sprite.name}'s backdrop change?`
-                    }));
-                } else {
-                    askableQuestions.push(new Question({
-                        type: QuestionTypes.DID_CHANGE_COSTUME,
-                        target: target,
-                        text: `Why did ${target.sprite.name}'s backdrop change?`
-                    }));
-                }
-            } else {
-                const firstCostume = initialTargetState.currentCostume;
-                const finalCostume = target.currentCostume;
-                if (firstCostume === finalCostume) {
-                    askableQuestions.push(new Question({
-                        type: QuestionTypes.DID_NOT_CHANGE_COSTUME,
-                        target: target,
-                        text: `Why didn't ${target.sprite.name}'s costume change?`
-                    }));
-                } else {
-                    askableQuestions.push(new Question({
-                        type: QuestionTypes.DID_CHANGE_COSTUME,
-                        target: target,
-                        text: `Why did ${target.sprite.name}'s costume change?`
-                    }));
-                }
-            }
-
             // Check whether this target played a sound or not
             {
                 const targetSounds = target.sprite.sounds;
@@ -256,9 +384,6 @@ class QuestionProvider {
                 }
             }
 
-            // TODO Phil 01/03/2020: continue here
-            //  implement every question sequentially
-            //  Questions for global variables
             this.questions.targets[target.id] = askableQuestions;
         }
 
@@ -292,6 +417,7 @@ class QuestionProvider {
     }
 }
 
+// TODO Phil 09/03/2020: this function is called way too often...
 const computeQuestions = vm => {
     const results = {
         empty: false,
@@ -325,7 +451,7 @@ const computeQuestions = vm => {
     }
 
     results.misc.push({
-        info: {name: 'General Questions'},
+        info: {name: 'General'},
         questions: questionProvider.generalQuestions()
     });
 
@@ -346,7 +472,7 @@ const computeQuestionAnswer = (question, vm) => {
     case QuestionTypes.DID_MOVE: {
         const changingStatements = [];
 
-        const tracedMoveStatements = traces.filter(t => targetBlocks.hasOwnProperty(t.blockId) && isMoveStatement(t));
+        const tracedMoveStatements = traces.filter(t => targetBlocks.hasOwnProperty(t.blockId) && isMoveChangeStatement(t));
 
         // Check whether the target's position was changed between two recorded move statements
         let index = 0;
@@ -371,10 +497,10 @@ const computeQuestionAnswer = (question, vm) => {
         });
     }
     case QuestionTypes.DID_NOT_MOVE: {
-        const containsMoveStatements = Object.values(targetBlocks).some(b => isMoveStatement(b));
+        const containsMoveStatements = Object.values(targetBlocks).some(b => isMoveChangeStatement(b));
         if (containsMoveStatements) {
             const tracedMoveStatements =
-                traces.filter(t => targetBlocks.hasOwnProperty(t.blockId) && isMoveStatement(t));
+                traces.filter(t => targetBlocks.hasOwnProperty(t.blockId) && isMoveChangeStatement(t));
             if (tracedMoveStatements.length) {
                 const changingStatements = [];
 
@@ -443,14 +569,13 @@ const computeQuestionAnswer = (question, vm) => {
             if (getTargetVariableValue(updateStatements[index], target.id, variable.id) !== endValue) {
                 changingStatements.push(updateStatements[index]);
             }
-        } else {
-            // TODO Phil 03/03/2020: How to handle global variables? Currently, they're not traced? Are they?
         }
 
         return new Answer({
             type: question.type,
             text: `These statements affected ${variable.name}'s change from ${startValue} to ${endValue}.`,
             statements: changingStatements,
+            variable: variable,
             startValue: startValue,
             endValue: endValue
         });
