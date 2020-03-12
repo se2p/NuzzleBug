@@ -85,9 +85,13 @@ const isUpdateVariableStatement = statement =>
     statement.opcode === 'data_setvariableto' ||
     statement.opcode === 'data_changevariableby';
 
+const isVariableSetStatement = statement =>
+    statement.opcode === 'data_setvariableto';
+
 const isVisibilitySetStatement = statement =>
     statement.opcode === 'looks_show' ||
     statement.opcode === 'looks_hide';
+
 const isXSetStatement = statement =>
     statement.opcode === 'motion_setx';
 
@@ -114,6 +118,7 @@ export {
     isSizeSetStatement,
     isSoundStatement,
     isUpdateVariableStatement,
+    isVariableSetStatement,
     isVisibilitySetStatement,
     isXSetStatement,
     isYSetStatement

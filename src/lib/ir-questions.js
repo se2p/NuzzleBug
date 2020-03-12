@@ -18,6 +18,7 @@ import {
     isSizeSetStatement,
     isSoundStatement,
     isUpdateVariableStatement,
+    isVariableSetStatement,
     isVisibilitySetStatement,
     isXSetStatement,
     isYSetStatement
@@ -490,46 +491,75 @@ class QuestionProvider {
                     continue;
                 }
 
-                const currValue = variable.value;
-                const initialValue = initialTargetState.variables[variableId].value;
+                // Why did sprite’s variable <name> change from <start> to <end>?
+                // Why didn't sprite’s variable <name> change?
+                {
+                    let startValue = initialTargetState.variables[variableId].value;
+                    let endValue = variable.value;
+                    if (!isNaN(startValue)) {
+                        startValue = parseInt(startValue, 10);
+                    }
+                    if (!isNaN(endValue)) {
+                        endValue = parseInt(endValue, 10);
+                    }
 
-                if (initialValue === currValue) {
-                    askableQuestions.push(new Question({
-                        type: QuestionTypes.DID_NOT_VARIABLE_CHANGE,
-                        target: target,
-                        variable: variable,
-                        text: `Why didn't ${target.sprite.name}'s variable ${variable.name} change?`
-                    }));
-                } else {
-                    askableQuestions.push(new Question({
-                        type: QuestionTypes.DID_VARIABLE_CHANGE,
-                        target: target,
-                        variable: variable,
-                        text: `Why did ${target.sprite.name}'s variable ${variable.name} change?`
-                    }));
+                    if (startValue === endValue) {
+                        askableQuestions.push(new Question({
+                            type: QuestionTypes.DID_NOT_VARIABLE_CHANGE,
+                            target: target,
+                            variable: variable,
+                            /* eslint-disable-next-line max-len */
+                            text: `Why didn't ${target.sprite.name}'s variable ${variable.name} change from ${startValue}?`
+                        }));
+                    } else {
+                        askableQuestions.push(new Question({
+                            type: QuestionTypes.DID_VARIABLE_CHANGE,
+                            target: target,
+                            variable: variable,
+                            /* eslint-disable-next-line max-len */
+                            text: `Why did ${target.sprite.name}'s variable ${variable.name} change from ${startValue} to ${endValue}?`
+                        }));
+                    }
+                }
+                {
+                    // Why didn't sprite's variable <name> have value <value> ?
+                    const covered = {};
+                    const variableSetStmts = Object.values(blocks)
+                        .filter(b => isVariableSetStatement(b) && b.fields.VARIABLE.id === variableId);
+                    for (const setStmt of variableSetStmts) {
+                        // Can either be text or a text containing a valid integer
+                        let expectedValue = allBlocks[setStmt.inputs.VALUE.block].fields.TEXT.value;
+                        let actualValue = variable.value;
+                        if (!isNaN(expectedValue)) {
+                            expectedValue = parseInt(expectedValue, 10);
+                        }
+                        if (!isNaN(actualValue)) {
+                            actualValue = parseInt(actualValue, 10);
+                        }
+                        if (expectedValue !== actualValue) {
+                            if (covered.hasOwnProperty(expectedValue)) {
+                                covered[expectedValue].push(setStmt);
+                            } else {
+                                covered[expectedValue] = [setStmt];
+                            }
+                        }
+                    }
+                    for (const expectedValue of Object.keys(covered)) {
+                        askableQuestions.push(new Question({
+                            type: QuestionTypes.DID_NOT_VARIABLE_SPECIFIC_VALUE,
+                            target: target,
+                            variable: variable,
+                            blocks: Object.values(covered),
+                            /* eslint-disable-next-line max-len */
+                            text: `Why didn't ${target.sprite.name}'s variable ${variable.name} have value ${expectedValue}?`
+                        }));
+                    }
+                }
+                {
+                    // Why did sprite’s variable <name> show?
+                    // Why didn't sprite’s variable <name> show?
                 }
             }
-
-            // // Check why variable has certain value or not?
-            // {
-            //     if (target) {
-            //         // TODO Phil 03/03/2020: filter out update statements for THAT variable
-            //         const updateStatements =
-            //             traces.filter(t => isUpdateVariableStatement(t) && (t.fields.VARIABLE.id === variable.id));
-            //         for (let updateStatement of updateStatements) {
-            //             console.log(updateStatement);
-            //             const oldValue = updateStatement.argValues.VALUE;
-            //             // inputs.keys() -> "VALUE"
-            //             // -> argValues["VALUE"] -> actual value
-            //         }
-            //     }
-            // }
-
-            //     askableQuestions.push(new Question({
-            //         type: QuestionTypes.HAS_NOT_VARIABLE_VALUE,
-            //         target: target,
-            //         text: `Why didn't ${target.sprite.name}'s variable speed change to 9000?`
-            //     }));
 
             // Check whether this target played a sound or not
             {
