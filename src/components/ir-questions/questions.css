@@ -16,7 +16,7 @@
 }
 
 .ir-questions-modal {
-    width: 720px;
+    width: 800px;
 }
 
 .label {
@@ -28,4 +28,5 @@
     height: 720px;
     background: $ui-white;
     padding: 0.5rem 1rem;
+    overflow-y: auto;
 }
