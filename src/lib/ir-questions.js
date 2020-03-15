@@ -8,6 +8,7 @@ import {
 
     isBackdropChangeStatement,
     isBackdropSetStatement,
+    isBroadcastStatement,
     isCostumeChangeStatement,
     isCostumeSetStatement,
     isDirectionChangeStatement,
@@ -58,6 +59,10 @@ const QuestionTypes = Object.freeze({
     DID_NOT_PLAY_ANY_SOUND: 150,
     DID_PLAY_SOUND: 151,
     DID_NOT_PLAY_SOUND: 152,
+
+    // Event specific
+    DID_CALL_EVENT: 200,
+    DID_NOT_CALL_EVENT: 201,
 
     // General stuff
     DID_NOTHING_MOVE: 400,
@@ -115,11 +120,10 @@ class QuestionProvider {
         this.trace = trace;
 
         this.questions = {
-            targets: {},
-            globalVariables: {},
-            generalQuestions: []
+            generalQuestions: [],
+            eventQuestions: [],
+            targets: {}
         };
-
 
         this.generateQuestions();
     }
@@ -134,7 +138,7 @@ class QuestionProvider {
         const targets = this.vm.runtime.targets;
         const allBlocks = getAllBlocks(targets);
         for (const target of targets) {
-            const askableQuestions = [];
+            const targetQuestions = [];
 
             const initialTargetState = trace[0].targetsInfo[target.id];
             const blocks = target.blocks._blocks;
@@ -152,7 +156,7 @@ class QuestionProvider {
             //         text = `Why didn't ${blocks[blockId].opcode} execute?`;
             //     }
             //
-            //     askableQuestions.push(new Question({
+            //     targetQuestions.push(new Question({
             //         type: type,
             //         blockId: blockId,
             //         text: text
@@ -167,14 +171,14 @@ class QuestionProvider {
                     const containedMoveStmts = targetTrace.some(isMoveChangeStatement);
                     if (containedMoveStmts) {
                         if (initialTargetState.x === target.x && initialTargetState.y === target.y) {
-                            askableQuestions.push(new Question({
+                            targetQuestions.push(new Question({
                                 type: QuestionTypes.DID_NOT_MOVE,
                                 target: target,
                                 text: `Why didn't ${target.sprite.name} move?`
                             }));
                         } else {
                             anything.move = true;
-                            askableQuestions.push(new Question({
+                            targetQuestions.push(new Question({
                                 type: QuestionTypes.DID_MOVE,
                                 target: target,
                                 text: `Why did ${target.sprite.name} move?`
@@ -200,7 +204,7 @@ class QuestionProvider {
                         }
                     }
                     for (const coordinate of Object.keys(covered)) {
-                        askableQuestions.push(new Question({
+                        targetQuestions.push(new Question({
                             type: QuestionTypes.DID_NOT_SPECIFIC_POSITION,
                             target: target,
                             blocks: Object.values(covered),
@@ -224,7 +228,7 @@ class QuestionProvider {
                         }
                     }
                     for (const xPos of Object.keys(covered)) {
-                        askableQuestions.push(new Question({
+                        targetQuestions.push(new Question({
                             type: QuestionTypes.DID_NOT_SPECIFIC_X,
                             target: target,
                             blocks: Object.values(covered),
@@ -248,7 +252,7 @@ class QuestionProvider {
                         }
                     }
                     for (const yPos of Object.keys(covered)) {
-                        askableQuestions.push(new Question({
+                        targetQuestions.push(new Question({
                             type: QuestionTypes.DID_NOT_SPECIFIC_X,
                             target: target,
                             blocks: Object.values(covered),
@@ -265,13 +269,13 @@ class QuestionProvider {
                 const containedDirectionStmt = targetTrace.some(isDirectionChangeStatement);
                 if (containedDirectionStmt) {
                     if (initialTargetState.direction === target.direction) {
-                        askableQuestions.push(new Question({
+                        targetQuestions.push(new Question({
                             type: QuestionTypes.DID_NOT_CHANGE_DIRECTION,
                             target: target,
                             text: `Why didn't ${target.sprite.name}'s direction change?`
                         }));
                     } else {
-                        askableQuestions.push(new Question({
+                        targetQuestions.push(new Question({
                             type: QuestionTypes.DID_CHANGE_DIRECTION,
                             target: target,
                             text: `Why did ${target.sprite.name}'s direction change?`
@@ -293,7 +297,7 @@ class QuestionProvider {
                     }
                 }
                 for (const direction of Object.keys(covered)) {
-                    askableQuestions.push(new Question({
+                    targetQuestions.push(new Question({
                         type: QuestionTypes.DID_NOT_SPECIFIC_DIRECTION,
                         target: target,
                         blocks: Object.values(covered),
@@ -309,13 +313,13 @@ class QuestionProvider {
                     const firstBackdrop = initialTargetState.currentCostume;
                     const finalBackDrop = target.currentCostume;
                     if (firstBackdrop === finalBackDrop) {
-                        askableQuestions.push(new Question({
+                        targetQuestions.push(new Question({
                             type: QuestionTypes.DID_NOT_CHANGE_COSTUME,
                             target: target,
                             text: `Why didn't stage's backdrop change?`
                         }));
                     } else {
-                        askableQuestions.push(new Question({
+                        targetQuestions.push(new Question({
                             type: QuestionTypes.DID_CHANGE_COSTUME,
                             target: target,
                             text: `Why did stage's backdrop change?`
@@ -339,7 +343,7 @@ class QuestionProvider {
                         }
                     }
                     for (const costume of Object.keys(covered)) {
-                        askableQuestions.push(new Question({
+                        targetQuestions.push(new Question({
                             type: QuestionTypes.DID_NOT_SPECIFIC_COSTUME,
                             target: target,
                             blocks: Object.values(covered),
@@ -353,13 +357,13 @@ class QuestionProvider {
                     const firstCostume = initialTargetState.currentCostume;
                     const finalCostume = target.currentCostume;
                     if (firstCostume === finalCostume) {
-                        askableQuestions.push(new Question({
+                        targetQuestions.push(new Question({
                             type: QuestionTypes.DID_NOT_CHANGE_COSTUME,
                             target: target,
                             text: `Why didn't ${target.sprite.name}'s costume change?`
                         }));
                     } else {
-                        askableQuestions.push(new Question({
+                        targetQuestions.push(new Question({
                             type: QuestionTypes.DID_CHANGE_COSTUME,
                             target: target,
                             text: `Why did ${target.sprite.name}'s costume change?`
@@ -383,7 +387,7 @@ class QuestionProvider {
                         }
                     }
                     for (const costume of Object.keys(covered)) {
-                        askableQuestions.push(new Question({
+                        targetQuestions.push(new Question({
                             type: QuestionTypes.DID_NOT_SPECIFIC_COSTUME,
                             target: target,
                             blocks: Object.values(covered),
@@ -400,13 +404,13 @@ class QuestionProvider {
                 const containedSizeStmt = targetTrace.some(isSizeChangeStatement);
                 if (containedSizeStmt) {
                     if (initialTargetState.size === target.size) {
-                        askableQuestions.push(new Question({
+                        targetQuestions.push(new Question({
                             type: QuestionTypes.DID_NOT_CHANGE_SIZE,
                             target: target,
                             text: `Why didn't ${target.sprite.name}'s size change?`
                         }));
                     } else {
-                        askableQuestions.push(new Question({
+                        targetQuestions.push(new Question({
                             type: QuestionTypes.DID_CHANGE_SIZE,
                             target: target,
                             text: `Why did ${target.sprite.name}'s size change?`
@@ -428,7 +432,7 @@ class QuestionProvider {
                         }
                     }
                     for (const size of Object.keys(covered)) {
-                        askableQuestions.push(new Question({
+                        targetQuestions.push(new Question({
                             type: QuestionTypes.DID_NOT_SPECIFIC_SIZE,
                             target: target,
                             blocks: Object.values(covered),
@@ -443,13 +447,13 @@ class QuestionProvider {
                 const containedVisibilityStmt = targetTrace.some(isVisibilitySetStatement);
                 if (containedVisibilityStmt) {
                     if (initialTargetState.visible === target.visible) {
-                        askableQuestions.push(new Question({
+                        targetQuestions.push(new Question({
                             type: QuestionTypes.DID_NOT_CHANGE_VISIBILITY,
                             target: target,
                             text: `Why didn't ${target.sprite.name}'s visibility change?`
                         }));
                     } else {
-                        askableQuestions.push(new Question({
+                        targetQuestions.push(new Question({
                             type: QuestionTypes.DID_CHANGE_VISIBILITY,
                             target: target,
                             text: `Why did ${target.sprite.name}'s visibility change?`
@@ -473,7 +477,7 @@ class QuestionProvider {
                     }
                     for (const visibility of Object.keys(covered)) {
                         const visibleString = visibility ? 'shown' : 'hidden';
-                        askableQuestions.push(new Question({
+                        targetQuestions.push(new Question({
                             type: QuestionTypes.DID_NOT_SPECIFIC_VISIBILITY,
                             target: target,
                             blocks: Object.values(covered),
@@ -488,76 +492,96 @@ class QuestionProvider {
                 const variable = target.variables[variableId];
                 if (variable.type === 'broadcast_msg') {
                     // Broadcast messages shouldn't be counted as target variables
-                    continue;
-                }
-
-                // Why did sprite’s variable <name> change from <start> to <end>?
-                // Why didn't sprite’s variable <name> change?
-                {
-                    let startValue = initialTargetState.variables[variableId].value;
-                    let endValue = variable.value;
-                    if (!isNaN(startValue)) {
-                        startValue = parseInt(startValue, 10);
-                    }
-                    if (!isNaN(endValue)) {
-                        endValue = parseInt(endValue, 10);
-                    }
-
-                    if (startValue === endValue) {
-                        askableQuestions.push(new Question({
-                            type: QuestionTypes.DID_NOT_VARIABLE_CHANGE,
+                    const broadcastStmts = Object.values(allBlocks)
+                        .filter(s => isBroadcastStatement(s) &&
+                            allBlocks[s.inputs.BROADCAST_INPUT.block].fields.BROADCAST_OPTION.value === variable.name);
+                    if (trace.some(t => broadcastStmts.some(s => s.id === t.blockId))) {
+                        this.questions.eventQuestions.push(new Question({
+                            type: QuestionTypes.DID_CALL_EVENT,
                             target: target,
                             variable: variable,
-                            /* eslint-disable-next-line max-len */
-                            text: `Why didn't ${target.sprite.name}'s variable ${variable.name} change from ${startValue}?`
+                            text: `Why did event ${variable.name} get called?`
                         }));
                     } else {
-                        askableQuestions.push(new Question({
-                            type: QuestionTypes.DID_VARIABLE_CHANGE,
+                        this.questions.eventQuestions.push(new Question({
+                            type: QuestionTypes.DID_NOT_CALL_EVENT,
                             target: target,
                             variable: variable,
-                            /* eslint-disable-next-line max-len */
-                            text: `Why did ${target.sprite.name}'s variable ${variable.name} change from ${startValue} to ${endValue}?`
+                            text: `Why didn't event ${variable.name} get called?`
                         }));
                     }
-                }
-                {
-                    // Why didn't sprite's variable <name> have value <value> ?
-                    const covered = {};
-                    const variableSetStmts = Object.values(blocks)
-                        .filter(b => isVariableSetStatement(b) && b.fields.VARIABLE.id === variableId);
-                    for (const setStmt of variableSetStmts) {
-                        // Can either be text or a text containing a valid integer
-                        let expectedValue = allBlocks[setStmt.inputs.VALUE.block].fields.TEXT.value;
-                        let actualValue = variable.value;
-                        if (!isNaN(expectedValue)) {
-                            expectedValue = parseInt(expectedValue, 10);
+
+                } else {
+                    // Why did sprite’s variable <name> change from <start> to <end>?
+                    // Why didn't sprite’s variable <name> change?
+                    {
+                        let startValue = initialTargetState.variables[variableId].value;
+                        let endValue = variable.value;
+                        if (!isNaN(startValue)) {
+                            startValue = parseInt(startValue, 10);
                         }
-                        if (!isNaN(actualValue)) {
-                            actualValue = parseInt(actualValue, 10);
+                        if (!isNaN(endValue)) {
+                            endValue = parseInt(endValue, 10);
                         }
-                        if (expectedValue !== actualValue) {
-                            if (covered.hasOwnProperty(expectedValue)) {
-                                covered[expectedValue].push(setStmt);
-                            } else {
-                                covered[expectedValue] = [setStmt];
+
+                        if (startValue === endValue) {
+                            targetQuestions.push(new Question({
+                                type: QuestionTypes.DID_NOT_VARIABLE_CHANGE,
+                                target: target,
+                                variable: variable,
+                                /* eslint-disable-next-line max-len */
+                                text: `Why didn't ${target.sprite.name}'s variable ${variable.name} change from ${startValue}?`
+                            }));
+                        } else {
+                            targetQuestions.push(new Question({
+                                type: QuestionTypes.DID_VARIABLE_CHANGE,
+                                target: target,
+                                variable: variable,
+                                /* eslint-disable-next-line max-len */
+                                text: `Why did ${target.sprite.name}'s variable ${variable.name} change from ${startValue} to ${endValue}?`
+                            }));
+                        }
+                    }
+
+                    {
+                        // Why didn't sprite's variable <name> have value <value> ?
+                        const covered = {};
+                        const variableSetStmts = Object.values(blocks)
+                            .filter(b => isVariableSetStatement(b) && b.fields.VARIABLE.id === variableId);
+                        for (const setStmt of variableSetStmts) {
+                            // Can either be text or a text containing a valid integer
+                            let expectedValue = allBlocks[setStmt.inputs.VALUE.block].fields.TEXT.value;
+                            let actualValue = variable.value;
+                            if (!isNaN(expectedValue)) {
+                                expectedValue = parseInt(expectedValue, 10);
+                            }
+                            if (!isNaN(actualValue)) {
+                                actualValue = parseInt(actualValue, 10);
+                            }
+                            if (expectedValue !== actualValue) {
+                                if (covered.hasOwnProperty(expectedValue)) {
+                                    covered[expectedValue].push(setStmt);
+                                } else {
+                                    covered[expectedValue] = [setStmt];
+                                }
                             }
                         }
+                        for (const expectedValue of Object.keys(covered)) {
+                            targetQuestions.push(new Question({
+                                type: QuestionTypes.DID_NOT_VARIABLE_SPECIFIC_VALUE,
+                                target: target,
+                                variable: variable,
+                                blocks: Object.values(covered),
+                                /* eslint-disable-next-line max-len */
+                                text: `Why didn't ${target.sprite.name}'s variable ${variable.name} have value ${expectedValue}?`
+                            }));
+                        }
                     }
-                    for (const expectedValue of Object.keys(covered)) {
-                        askableQuestions.push(new Question({
-                            type: QuestionTypes.DID_NOT_VARIABLE_SPECIFIC_VALUE,
-                            target: target,
-                            variable: variable,
-                            blocks: Object.values(covered),
-                            /* eslint-disable-next-line max-len */
-                            text: `Why didn't ${target.sprite.name}'s variable ${variable.name} have value ${expectedValue}?`
-                        }));
+                    {
+                        // TODO Phil 13/03/2020: continue
+                        // Why did sprite’s variable <name> show?
+                        // Why didn't sprite’s variable <name> show?
                     }
-                }
-                {
-                    // Why did sprite’s variable <name> show?
-                    // Why didn't sprite’s variable <name> show?
                 }
             }
 
@@ -571,14 +595,14 @@ class QuestionProvider {
                         for (const sound of targetSounds) {
                             const soundPlayed = soundStmts.some(s => s.argValues.SOUND_MENU === sound.name);
                             if (soundPlayed) {
-                                askableQuestions.push(new Question({
+                                targetQuestions.push(new Question({
                                     type: QuestionTypes.DID_PLAY_SOUND,
                                     target: target,
                                     sound: sound,
                                     text: `Why did ${target.sprite.name} play sound ${sound.name}?`
                                 }));
                             } else {
-                                askableQuestions.push(new Question({
+                                targetQuestions.push(new Question({
                                     type: QuestionTypes.DID_NOT_PLAY_SOUND,
                                     target: target,
                                     sound: sound,
@@ -587,7 +611,7 @@ class QuestionProvider {
                             }
                         }
                     } else {
-                        askableQuestions.push(new Question({
+                        targetQuestions.push(new Question({
                             type: QuestionTypes.DID_NOT_PLAY_ANY_SOUND,
                             target: target,
                             text: `Why didn't ${target.sprite.name} play any sound?`
@@ -596,7 +620,7 @@ class QuestionProvider {
                 }
             }
 
-            this.questions.targets[target.id] = askableQuestions;
+            this.questions.targets[target.id] = targetQuestions;
         }
 
         // Check anything object for general questions
@@ -616,16 +640,20 @@ class QuestionProvider {
         }
     }
 
+    generalQuestions () {
+        return this.questions.generalQuestions;
+    }
+
+    eventQuestions () {
+        return this.questions.eventQuestions;
+    }
+
     forTarget (target) {
         if (!this.questions.targets.hasOwnProperty(target.id)) {
             return [];
         }
 
         return this.questions.targets[target.id];
-    }
-
-    generalQuestions () {
-        return this.questions.generalQuestions;
     }
 }
 
@@ -665,6 +693,11 @@ const computeQuestions = vm => {
     results.misc.push({
         info: {name: 'General'},
         questions: questionProvider.generalQuestions()
+    });
+
+    results.misc.push({
+        info: {name: 'Events'},
+        questions: questionProvider.eventQuestions()
     });
 
     return results;

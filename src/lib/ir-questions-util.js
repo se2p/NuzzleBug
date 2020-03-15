@@ -44,6 +44,10 @@ const isBackdropSetStatement = statement =>
     statement.opcode === 'looks_switchbackdroptoandwait' ||
     statement.opcode === 'looks_switchbackdropto';
 
+const isBroadcastStatement = statement =>
+    statement.opcode === 'event_broadcast' ||
+    statement.opcode === 'event_broadcastandwait';
+
 const isCostumeChangeStatement = statement =>
     statement.opcode === 'looks_switchcostumeto' ||
     statement.opcode === 'looks_nextcostume';
@@ -108,6 +112,7 @@ export {
 
     isBackdropChangeStatement,
     isBackdropSetStatement,
+    isBroadcastStatement,
     isCostumeChangeStatement,
     isCostumeSetStatement,
     isDirectionChangeStatement,
