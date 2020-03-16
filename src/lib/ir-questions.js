@@ -121,7 +121,7 @@ class QuestionProvider {
 
         this.questions = {
             generalQuestions: [],
-            eventQuestions: [],
+            overallQuestions: [],
             targets: {}
         };
 
@@ -496,14 +496,14 @@ class QuestionProvider {
                         .filter(s => isBroadcastStatement(s) &&
                             allBlocks[s.inputs.BROADCAST_INPUT.block].fields.BROADCAST_OPTION.value === variable.name);
                     if (trace.some(t => broadcastStmts.some(s => s.id === t.blockId))) {
-                        this.questions.eventQuestions.push(new Question({
+                        this.questions.overallQuestions.push(new Question({
                             type: QuestionTypes.DID_CALL_EVENT,
                             target: target,
                             variable: variable,
                             text: `Why did event ${variable.name} get called?`
                         }));
                     } else {
-                        this.questions.eventQuestions.push(new Question({
+                        this.questions.overallQuestions.push(new Question({
                             type: QuestionTypes.DID_NOT_CALL_EVENT,
                             target: target,
                             variable: variable,
@@ -524,22 +524,43 @@ class QuestionProvider {
                             endValue = parseInt(endValue, 10);
                         }
 
-                        if (startValue === endValue) {
-                            targetQuestions.push(new Question({
-                                type: QuestionTypes.DID_NOT_VARIABLE_CHANGE,
-                                target: target,
-                                variable: variable,
-                                /* eslint-disable-next-line max-len */
-                                text: `Why didn't ${target.sprite.name}'s variable ${variable.name} change from ${startValue}?`
-                            }));
+                        if (target.isStage) {
+                            if (startValue === endValue) {
+                                this.questions.overallQuestions.push(new Question({
+                                    type: QuestionTypes.DID_NOT_VARIABLE_CHANGE,
+                                    target: target,
+                                    variable: variable,
+                                    /* eslint-disable-next-line max-len */
+                                    text: `Why didn't global variable ${variable.name} change from ${startValue}?`
+                                }));
+                            } else {
+                                this.questions.overallQuestions.push(new Question({
+                                    type: QuestionTypes.DID_VARIABLE_CHANGE,
+                                    target: target,
+                                    variable: variable,
+                                    /* eslint-disable-next-line max-len */
+                                    text: `Why did global variable ${variable.name} change from ${startValue} to ${endValue}?`
+                                }));
+                            }
                         } else {
-                            targetQuestions.push(new Question({
-                                type: QuestionTypes.DID_VARIABLE_CHANGE,
-                                target: target,
-                                variable: variable,
-                                /* eslint-disable-next-line max-len */
-                                text: `Why did ${target.sprite.name}'s variable ${variable.name} change from ${startValue} to ${endValue}?`
-                            }));
+                            /* eslint-disable-next-line no-lonely-if */
+                            if (startValue === endValue) {
+                                targetQuestions.push(new Question({
+                                    type: QuestionTypes.DID_NOT_VARIABLE_CHANGE,
+                                    target: target,
+                                    variable: variable,
+                                    /* eslint-disable-next-line max-len */
+                                    text: `Why didn't ${target.sprite.name}'s variable ${variable.name} change from ${startValue}?`
+                                }));
+                            } else {
+                                targetQuestions.push(new Question({
+                                    type: QuestionTypes.DID_VARIABLE_CHANGE,
+                                    target: target,
+                                    variable: variable,
+                                    /* eslint-disable-next-line max-len */
+                                    text: `Why did ${target.sprite.name}'s variable ${variable.name} change from ${startValue} to ${endValue}?`
+                                }));
+                            }
                         }
                     }
 
@@ -567,14 +588,25 @@ class QuestionProvider {
                             }
                         }
                         for (const expectedValue of Object.keys(covered)) {
-                            targetQuestions.push(new Question({
-                                type: QuestionTypes.DID_NOT_VARIABLE_SPECIFIC_VALUE,
-                                target: target,
-                                variable: variable,
-                                blocks: Object.values(covered),
-                                /* eslint-disable-next-line max-len */
-                                text: `Why didn't ${target.sprite.name}'s variable ${variable.name} have value ${expectedValue}?`
-                            }));
+                            if (target.isStage) {
+                                this.questions.overallQuestions.push(new Question({
+                                    type: QuestionTypes.DID_NOT_VARIABLE_SPECIFIC_VALUE,
+                                    target: target,
+                                    variable: variable,
+                                    blocks: Object.values(covered),
+                                    /* eslint-disable-next-line max-len */
+                                    text: `Why didn't global variable ${variable.name} have value ${expectedValue}?`
+                                }));
+                            } else {
+                                targetQuestions.push(new Question({
+                                    type: QuestionTypes.DID_NOT_VARIABLE_SPECIFIC_VALUE,
+                                    target: target,
+                                    variable: variable,
+                                    blocks: Object.values(covered),
+                                    /* eslint-disable-next-line max-len */
+                                    text: `Why didn't ${target.sprite.name}'s variable ${variable.name} have value ${expectedValue}?`
+                                }));
+                            }
                         }
                     }
                     {
@@ -644,8 +676,8 @@ class QuestionProvider {
         return this.questions.generalQuestions;
     }
 
-    eventQuestions () {
-        return this.questions.eventQuestions;
+    overallQuestions () {
+        return this.questions.overallQuestions;
     }
 
     forTarget (target) {
@@ -696,8 +728,8 @@ const computeQuestions = vm => {
     });
 
     results.misc.push({
-        info: {name: 'Events'},
-        questions: questionProvider.eventQuestions()
+        info: {name: 'Overall'},
+        questions: questionProvider.overallQuestions()
     });
 
     return results;
