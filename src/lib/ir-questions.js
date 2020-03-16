@@ -1,11 +1,10 @@
 import {
+    costumeIndexForTargetAndName,
     forQuestionType,
     generateId,
+    getAllBlocks,
     getTargetVariableValue,
     getVariableValue,
-    costumeIndexForTargetAndName,
-    getAllBlocks,
-
     isBackdropChangeStatement,
     isBackdropSetStatement,
     isBroadcastStatement,
@@ -85,6 +84,14 @@ class Question {
         this.text = props.text;
         this.variable = props.variable;
         this.sound = props.sound;
+    }
+}
+
+class ChangingStatement {
+    constructor (statement, startValue, endValue) {
+        this.statement = statement;
+        this.startValue = startValue;
+        this.endValue = endValue;
     }
 }
 
@@ -720,6 +727,46 @@ const computeQuestions = vm => {
     return results;
 };
 
+const whyDidAttributeChangeQuestion = (question, traces, target, blocks,
+    filterStatements, extractAttr, textFunction, valMapper) => {
+    const changingStatements = [];
+
+    // By definition may not be empty
+    const stmts = traces.filter(t => blocks.hasOwnProperty(t.blockId) && filterStatements(t));
+    if (!stmts.length) {
+        throw new Error(`stmts array may not be empty by definition.`);
+    }
+
+    const firstValue = extractAttr(stmts[0].ti(target.id));
+    const finalValue = extractAttr(target);
+
+    // Changes between two statements
+    let index = 0;
+    for (; stmts.length > 1 && index < stmts.length - 1; index++) {
+        const ti1 = stmts[index].ti(target.id);
+        const ti2 = stmts[index + 1].ti(target.id);
+        const startValue = extractAttr(ti1);
+        const endValue = extractAttr(ti2);
+        if (ti1 && ti2 && startValue !== endValue) {
+            changingStatements.push(new ChangingStatement(stmts[index], valMapper(startValue), valMapper(endValue)));
+        }
+    }
+    // Change between second to last and last statement
+    const sndLastValue = extractAttr(stmts[index].ti(target.id));
+    if (sndLastValue !== finalValue) {
+        changingStatements.push(new ChangingStatement(stmts[index], valMapper(sndLastValue), valMapper(finalValue)));
+    }
+
+    return new Answer({
+        type: question.type,
+        text: textFunction(firstValue, finalValue, changingStatements),
+        statements: changingStatements,
+        startValue: valMapper(firstValue),
+        endValue: valMapper(finalValue)
+    });
+};
+
+
 const computeQuestionAnswer = (question, vm) => {
     const traces = vm.runtime.traceInfo.tracer.traces;
     const allBlocks = getAllBlocks(vm.runtime.targets);
@@ -730,35 +777,25 @@ const computeQuestionAnswer = (question, vm) => {
     const targetBlocks = target ? target.blocks._blocks : [];
 
     switch (question.type) {
+    // Movement Questions
     case QuestionTypes.DID_MOVE: {
-        const changingStatements = [];
+        const extractAttribute = t => `(${t.x},${t.y})`;
+        const textFunction = () => `These statements changed ${target.sprite.name}'s position.`;
+        const valMapper = val => val;
 
-        const tracedMoveStatements =
-            traces.filter(t => targetBlocks.hasOwnProperty(t.blockId) && isMoveChangeStatement(t));
-
-        // Check whether the target's position was changed between two recorded move statements
-        let index = 0;
-        for (; tracedMoveStatements.length > 1 && index < tracedMoveStatements.length - 1; index++) {
-            const t1 = tracedMoveStatements[index].targetsInfo[target.id];
-            const t2 = tracedMoveStatements[index + 1].targetsInfo[target.id];
-            if (t1 && t2 && (t1.x !== t2.x || t1.y !== t2.y)) {
-                changingStatements.push(tracedMoveStatements[index]);
-            }
-        }
-        // Maybe the last moving statement changed the position?
-        // Compare it with current target state
-        const lastMoveTargetState = tracedMoveStatements[index].targetsInfo[target.id];
-        if (target.x !== lastMoveTargetState.x || target.y !== lastMoveTargetState.y) {
-            changingStatements.push(tracedMoveStatements[index]);
-        }
-
-        return new Answer({
-            type: question.type,
-            text: `These statements made ${target.sprite.name} move.`,
-            statements: changingStatements
-        });
+        return whyDidAttributeChangeQuestion(
+            question,
+            traces,
+            target,
+            targetBlocks,
+            isMoveChangeStatement,
+            extractAttribute,
+            textFunction,
+            valMapper
+        );
     }
     case QuestionTypes.DID_NOT_MOVE: {
+        // TODO Phil 16/03/2020: update this
         const containsMoveStatements = Object.values(targetBlocks).some(b => isMoveChangeStatement(b));
         if (containsMoveStatements) {
             const tracedMoveStatements =
@@ -789,16 +826,17 @@ const computeQuestionAnswer = (question, vm) => {
                         text: `${target.sprite.name} did move, but its start and finish positions are just the same.`,
                         statements: changingStatements
                     });
-                } else {
+                } else { // eslint-disable-line no-else-return
                     return new Answer({
                         type: question.type,
                         text: `${target.sprite.name}'s moving statements were called, but never changed its position.`
                     });
                 }
-            } else {
-                // Not a single move statement was ever called
-                // TODO Phil 02/03/2020: Here we need the full AST to check why existing block statements weren't called
+
             }
+            // Not a single move statement was ever called
+            // TODO Phil 02/03/2020: Here we need the full AST to check why existing block statements weren't called
+
         } else {
             // Code doesn't contain any move statements
             return new Answer({
@@ -808,7 +846,126 @@ const computeQuestionAnswer = (question, vm) => {
         }
         break;
     }
+    case QuestionTypes.DID_CHANGE_DIRECTION: {
+        const extractAttribute = t => t.direction;
+        const textFunction = () => `These statements changed ${target.sprite.name}'s direction.`;
+        const valMapper = val => val;
+
+        return whyDidAttributeChangeQuestion(
+            question,
+            traces,
+            target,
+            targetBlocks,
+            isDirectionChangeStatement,
+            extractAttribute,
+            textFunction,
+            valMapper
+        );
+    }
+    case QuestionTypes.DID_NOT_CHANGE_DIRECTION: {
+        break;
+    }
+    case QuestionTypes.DID_NOT_SPECIFIC_POSITION: {
+        break;
+    }
+    case QuestionTypes.DID_NOT_SPECIFIC_X: {
+        break;
+    }
+    case QuestionTypes.DID_NOT_SPECIFIC_Y: {
+        break;
+    }
+    case QuestionTypes.DID_NOT_SPECIFIC_DIRECTION: {
+        break;
+    }
+
+    // Appearance
+    case QuestionTypes.DID_CHANGE_COSTUME: {
+        if (target.isStage) {
+            const extractAttribute = t => t.currentCostume;
+            const textFunction = () => `These statements changed the backdrop.`;
+            const valMapper = val => target.sprite.costumes_[val].name;
+
+            return whyDidAttributeChangeQuestion(
+                question,
+                traces,
+                target,
+                allBlocks,
+                isBackdropChangeStatement,
+                extractAttribute,
+                textFunction,
+                valMapper
+            );
+        } else { // eslint-disable-line no-else-return
+            const extractAttribute = t => t.currentCostume;
+            const textFunction = () => `These statements changed ${target.sprite.name}'s costume.`;
+            const valMapper = val => target.sprite.costumes_[val].name;
+
+            return whyDidAttributeChangeQuestion(
+                question,
+                traces,
+                target,
+                targetBlocks,
+                isCostumeChangeStatement,
+                extractAttribute,
+                textFunction,
+                valMapper,
+            );
+        }
+    }
+    case QuestionTypes.DID_NOT_CHANGE_COSTUME: {
+        break;
+    }
+    case QuestionTypes.DID_NOT_SPECIFIC_COSTUME: {
+        break;
+    }
+    case QuestionTypes.DID_CHANGE_SIZE: {
+        const extractAttribute = t => t.size;
+        const textFunction = () => `These statements changed ${target.sprite.name}'s size.`;
+        const valMapper = val => val;
+
+        return whyDidAttributeChangeQuestion(
+            question,
+            traces,
+            target,
+            targetBlocks,
+            isSizeChangeStatement,
+            extractAttribute,
+            textFunction,
+            valMapper,
+        );
+    }
+    case QuestionTypes.DID_NOT_CHANGE_SIZE: {
+        break;
+    }
+    case QuestionTypes.DID_NOT_SPECIFIC_SIZE: {
+        break;
+    }
+    case QuestionTypes.DID_CHANGE_VISIBILITY: {
+        const extractAttribute = t => t.visible;
+        const textFunction = () => `These statements changed ${target.sprite.name}'s visibility.`;
+        const valMapper = val => (val ? 'visible' : 'hidden');
+
+        return whyDidAttributeChangeQuestion(
+            question,
+            traces,
+            target,
+            targetBlocks,
+            isSizeChangeStatement,
+            extractAttribute,
+            textFunction,
+            valMapper,
+        );
+    }
+    case QuestionTypes.DID_NOT_CHANGE_VISIBILITY: {
+        break;
+    }
+    case QuestionTypes.DID_NOT_SPECIFIC_VISIBILITY: {
+        break;
+    }
+
+    // Variable specific
     case QuestionTypes.DID_VARIABLE_CHANGE: {
+        // TODO Phil 16/03/2020: Update to call method
         const changingStatements = [];
         const variable = question.variable;
 
@@ -842,14 +999,53 @@ const computeQuestionAnswer = (question, vm) => {
             endValue: endValue
         });
     }
-    // case QuestionTypes.DID_NOT_VARIABLE_CHANGE: {
-    //     // TODO Phil 03/03/2020: following cases
-    //     //  no variable change statement
-    //     //  not called
-    //     //  called but did not affect
-    //         break;
-    //     }
-    // }
+    case QuestionTypes.DID_NOT_VARIABLE_CHANGE: {
+        // TODO Phil 03/03/2020: following cases
+        //  no variable change statement
+        //  not called
+        //  called but did not affect
+        break;
+    }
+    case QuestionTypes.DID_VARIABLE_SPECIFIC_VALUE: {
+        break;
+    }
+    case QuestionTypes.DID_NOT_VARIABLE_SPECIFIC_VALUE: {
+        break;
+    }
+    case QuestionTypes.DID_VARIABLE_SHOW: {
+        break;
+    }
+    case QuestionTypes.DID_NOT_VARIABLE_SHOW: {
+        break;
+    }
+
+    // Sound specific
+    case QuestionTypes.DID_NOT_PLAY_ANY_SOUND: {
+        break;
+    }
+    case QuestionTypes.DID_PLAY_SOUND: {
+        break;
+    }
+    case QuestionTypes.DID_NOT_PLAY_SOUND: {
+        break;
+    }
+
+    // Event specific
+    case
+    QuestionTypes.DID_CALL_EVENT: {
+        break;
+    }
+    case QuestionTypes.DID_NOT_CALL_EVENT: {
+        break;
+    }
+
+    // General stuff
+    case QuestionTypes.DID_NOTHING_MOVE: {
+        break;
+    }
+    case QuestionTypes.DID_NOTHING_SOUND: {
+        break;
+    }
     default:
         console.log(`Unrecognized question type: ${forQuestionType(question.type)}`);
         break;
