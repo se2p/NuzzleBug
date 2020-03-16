@@ -69,8 +69,8 @@ const QuestionTypes = Object.freeze({
     DID_NOTHING_SOUND: 401,
 
     // Block specific
-    DID_EXECUTE: 200,
-    DID_NOT_EXECUTE: 201,
+    DID_EXECUTE: 900,
+    DID_NOT_EXECUTE: 901,
 
     DID_LAST_QUESTION: 9999
 });
@@ -108,13 +108,6 @@ class Answer {
 }
 
 class QuestionProvider {
-    // TODO Phil 19/02/2020: Required for `why` questions
-    //   Query trace for sprites
-    //   Many more
-
-    // TODO Phil 19/02/2020: Required for `why not` questions
-    //   Get AST for each target
-    //   Compute full AST
     constructor (vm, trace) {
         this.vm = vm;
         this.trace = trace;
@@ -609,11 +602,6 @@ class QuestionProvider {
                             }
                         }
                     }
-                    {
-                        // TODO Phil 13/03/2020: continue
-                        // Why did sprite’s variable <name> show?
-                        // Why didn't sprite’s variable <name> show?
-                    }
                 }
             }
 
@@ -656,19 +644,17 @@ class QuestionProvider {
         }
 
         // Check anything object for general questions
-        {
-            if (!anything.move) {
-                this.questions.generalQuestions.push(new Question({
-                    type: QuestionTypes.DID_NOTHING_MOVE,
-                    text: `Why didn't anything move?`
-                }));
-            }
-            if (!anything.sound) {
-                this.questions.generalQuestions.push(new Question({
-                    type: QuestionTypes.DID_NOTHING_SOUND,
-                    text: `Why didn't the program play any sound?`
-                }));
-            }
+        if (!anything.move) {
+            this.questions.generalQuestions.push(new Question({
+                type: QuestionTypes.DID_NOTHING_MOVE,
+                text: `Why didn't anything move?`
+            }));
+        }
+        if (!anything.sound) {
+            this.questions.generalQuestions.push(new Question({
+                type: QuestionTypes.DID_NOTHING_SOUND,
+                text: `Why didn't the program play any sound?`
+            }));
         }
     }
 
@@ -689,7 +675,6 @@ class QuestionProvider {
     }
 }
 
-// TODO Phil 09/03/2020: this function is called way too often...
 const computeQuestions = vm => {
     const results = {
         empty: false,
@@ -735,7 +720,6 @@ const computeQuestions = vm => {
     return results;
 };
 
-// TODO Phil 03/03/2020: May make async
 const computeQuestionAnswer = (question, vm) => {
     const traces = vm.runtime.traceInfo.tracer.traces;
     const allBlocks = getAllBlocks(vm.runtime.targets);
