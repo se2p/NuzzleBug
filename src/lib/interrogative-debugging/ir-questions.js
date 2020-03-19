@@ -4,25 +4,15 @@ import {
     generateId,
     getAllBlocks,
     getTargetVariableValue,
-    getVariableValue,
-    isBackdropChangeStatement,
-    isBackdropSetStatement,
-    isBroadcastStatement,
-    isCostumeChangeStatement,
-    isCostumeSetStatement,
-    isDirectionChangeStatement,
-    isDirectionSetStatement,
-    isMoveChangeStatement,
-    isPositionSetStatement,
-    isSizeChangeStatement,
-    isSizeSetStatement,
-    isSoundStatement,
-    isUpdateVariableStatement,
-    isVariableSetStatement,
-    isVisibilitySetStatement,
-    isXSetStatement,
-    isYSetStatement
+    getVariableValue
 } from './ir-questions-util';
+import {
+    MotionFilter,
+    LooksFilter,
+    SoundFilter,
+    EventFilter,
+    VariableFilter
+} from './block-filter';
 
 const QuestionTypes = Object.freeze({
     // Movement Questions
@@ -168,7 +158,7 @@ class QuestionProvider {
                 {
                     // Why did sprite move?
                     // Why didn't sprite move?
-                    const containedMoveStmts = targetTrace.some(isMoveChangeStatement);
+                    const containedMoveStmts = targetTrace.some(MotionFilter.positionChange);
                     if (containedMoveStmts) {
                         if (initialTargetState.x === target.x && initialTargetState.y === target.y) {
                             targetQuestions.push(new Question({
@@ -190,7 +180,7 @@ class QuestionProvider {
                 {
                     // Why didn't have sprite position (<x>,<y>)?
                     const covered = {};
-                    const positionSetStmts = Object.values(blocks).filter(isPositionSetStatement);
+                    const positionSetStmts = Object.values(blocks).filter(MotionFilter.positionSet);
                     for (const setStmt of positionSetStmts) {
                         const xPos = parseInt(blocks[setStmt.inputs.X.block].fields.NUM.value, 10);
                         const yPos = parseInt(blocks[setStmt.inputs.Y.block].fields.NUM.value, 10);
@@ -216,7 +206,7 @@ class QuestionProvider {
                 {
                     // Why didn't sprite’s x coordinate have value <x> ?
                     const covered = {};
-                    const xSetStmts = Object.values(blocks).filter(isXSetStatement);
+                    const xSetStmts = Object.values(blocks).filter(MotionFilter.xSet);
                     for (const setStmt of xSetStmts) {
                         const xPos = parseInt(blocks[setStmt.inputs.X.block].fields.NUM.value, 10);
                         if (xPos !== target.x) {
@@ -240,7 +230,7 @@ class QuestionProvider {
                 {
                     // Why didn't sprite’s y coordinate have value <y> ?
                     const covered = {};
-                    const ySetStmts = Object.values(blocks).filter(isYSetStatement);
+                    const ySetStmts = Object.values(blocks).filter(MotionFilter.ySet);
                     for (const setStmt of ySetStmts) {
                         const yPos = parseInt(blocks[setStmt.inputs.Y.block].fields.NUM.value, 10);
                         if (yPos !== target.y) {
@@ -266,7 +256,7 @@ class QuestionProvider {
             if (!target.isStage) {
                 // Why did sprite’s direction change?
                 // Why didn't sprite’s direction change?
-                const containedDirectionStmt = targetTrace.some(isDirectionChangeStatement);
+                const containedDirectionStmt = targetTrace.some(MotionFilter.directionChange);
                 if (containedDirectionStmt) {
                     if (initialTargetState.direction === target.direction) {
                         targetQuestions.push(new Question({
@@ -285,7 +275,7 @@ class QuestionProvider {
 
                 // Why didn't sprite’s direction have value <direction> ?
                 const covered = {};
-                const directionSetStmts = Object.values(blocks).filter(isDirectionSetStatement);
+                const directionSetStmts = Object.values(blocks).filter(MotionFilter.directionSet);
                 for (const setStmt of directionSetStmts) {
                     const directionValue = parseInt(blocks[setStmt.inputs.DIRECTION.block].fields.NUM.value, 10);
                     if (directionValue !== target.direction) {
@@ -308,7 +298,7 @@ class QuestionProvider {
 
             // Check whether the stage backdrop or target costume did change or not?
             if (target.isStage) {
-                const containedBackdropChange = trace.some(isBackdropChangeStatement);
+                const containedBackdropChange = trace.some(LooksFilter.backdropChange);
                 if (containedBackdropChange) {
                     const firstBackdrop = initialTargetState.currentCostume;
                     const finalBackDrop = target.currentCostume;
@@ -329,7 +319,7 @@ class QuestionProvider {
                 {
                     // Why didn't stage's backdrop have value <costume> ?
                     const covered = {};
-                    const backdropSetStmts = Object.values(allBlocks).filter(isBackdropSetStatement);
+                    const backdropSetStmts = Object.values(allBlocks).filter(LooksFilter.backdropSet);
                     for (const setStmt of backdropSetStmts) {
                         // Only the name, but we need the index
                         const backdrop = allBlocks[setStmt.inputs.BACKDROP.block].fields.BACKDROP.value;
@@ -352,7 +342,7 @@ class QuestionProvider {
                     }
                 }
             } else {
-                const containedCostumeStmt = targetTrace.some(isCostumeChangeStatement);
+                const containedCostumeStmt = targetTrace.some(LooksFilter.costumeChange);
                 if (containedCostumeStmt) {
                     const firstCostume = initialTargetState.currentCostume;
                     const finalCostume = target.currentCostume;
@@ -373,7 +363,7 @@ class QuestionProvider {
                 {
                     // Why didn't sprite’s costume have value <costume> ?
                     const covered = {};
-                    const costumeSetStmts = Object.values(blocks).filter(isCostumeSetStatement);
+                    const costumeSetStmts = Object.values(blocks).filter(LooksFilter.costumeSet);
                     for (const setStmt of costumeSetStmts) {
                         // Only the name, but we need the index
                         const costume = blocks[setStmt.inputs.COSTUME.block].fields.COSTUME.value;
@@ -401,7 +391,7 @@ class QuestionProvider {
             if (!target.isStage) {
                 // Why did sprite’s size change?
                 // Why didn't sprite’s size change?
-                const containedSizeStmt = targetTrace.some(isSizeChangeStatement);
+                const containedSizeStmt = targetTrace.some(LooksFilter.sizeChange);
                 if (containedSizeStmt) {
                     if (initialTargetState.size === target.size) {
                         targetQuestions.push(new Question({
@@ -420,7 +410,7 @@ class QuestionProvider {
                 {
                     // Why didn't sprite’s size have value <size> ?
                     const covered = {};
-                    const sizeSetStmts = Object.values(blocks).filter(isSizeSetStatement);
+                    const sizeSetStmts = Object.values(blocks).filter(LooksFilter.sizeSet);
                     for (const setStmt of sizeSetStmts) {
                         const size = parseInt(blocks[setStmt.inputs.SIZE.block].fields.NUM.value, 10);
                         if (size !== target.size) {
@@ -444,7 +434,7 @@ class QuestionProvider {
 
             // Check whether the sprite visibility change
             if (!target.isStage) {
-                const containedVisibilityStmt = targetTrace.some(isVisibilitySetStatement);
+                const containedVisibilityStmt = targetTrace.some(LooksFilter.visibilitySet);
                 if (containedVisibilityStmt) {
                     if (initialTargetState.visible === target.visible) {
                         targetQuestions.push(new Question({
@@ -463,7 +453,7 @@ class QuestionProvider {
                 {
                     // Why didn't sprite’s visibility have value <visibility> ?
                     const covered = {};
-                    const visibilitySetStmts = Object.values(blocks).filter(isVisibilitySetStatement);
+                    const visibilitySetStmts = Object.values(blocks).filter(LooksFilter.visibilitySet);
                     for (const setStmt of visibilitySetStmts) {
                         // target.visible is a boolean value
                         const visibility = setStmt.opcode === 'looks_show'; // && !=== 'looks_hide'
@@ -493,7 +483,7 @@ class QuestionProvider {
                 if (variable.type === 'broadcast_msg') {
                     // Broadcast messages shouldn't be counted as target variables
                     const broadcastStmts = Object.values(allBlocks)
-                        .filter(s => isBroadcastStatement(s) &&
+                        .filter(s => EventFilter.broadcastSend(s) &&
                             allBlocks[s.inputs.BROADCAST_INPUT.block].fields.BROADCAST_OPTION.value === variable.name);
                     if (trace.some(t => broadcastStmts.some(s => s.id === t.blockId))) {
                         this.questions.overallQuestions.push(new Question({
@@ -568,7 +558,7 @@ class QuestionProvider {
                         // Why didn't sprite's variable <name> have value <value> ?
                         const covered = {};
                         const variableSetStmts = Object.values(blocks)
-                            .filter(b => isVariableSetStatement(b) && b.fields.VARIABLE.id === variableId);
+                            .filter(b => VariableFilter.set(b) && b.fields.VARIABLE.id === variableId);
                         for (const setStmt of variableSetStmts) {
                             // Can either be text or a text containing a valid integer
                             let expectedValue = allBlocks[setStmt.inputs.VALUE.block].fields.TEXT.value;
@@ -616,7 +606,7 @@ class QuestionProvider {
             {
                 const targetSounds = target.sprite.sounds;
                 if (targetSounds.length) {
-                    const soundStmts = trace.filter(s => isSoundStatement(s) && blocks.hasOwnProperty(s.blockId));
+                    const soundStmts = trace.filter(s => SoundFilter.play(s) && blocks.hasOwnProperty(s.blockId));
                     if (soundStmts.length) {
                         anything.sound = true;
                         for (const sound of targetSounds) {
@@ -788,7 +778,7 @@ const computeQuestionAnswer = (question, vm) => {
             traces,
             target,
             targetBlocks,
-            isMoveChangeStatement,
+            MotionFilter.positionChange,
             extractAttribute,
             textFunction,
             valMapper
@@ -796,10 +786,10 @@ const computeQuestionAnswer = (question, vm) => {
     }
     case QuestionTypes.DID_NOT_MOVE: {
         // TODO Phil 16/03/2020: update this
-        const containsMoveStatements = Object.values(targetBlocks).some(b => isMoveChangeStatement(b));
+        const containsMoveStatements = Object.values(targetBlocks).some(b => MotionFilter.positionChange(b));
         if (containsMoveStatements) {
             const tracedMoveStatements =
-                traces.filter(t => targetBlocks.hasOwnProperty(t.blockId) && isMoveChangeStatement(t));
+                traces.filter(t => targetBlocks.hasOwnProperty(t.blockId) && MotionFilter.positionChange(t));
             if (tracedMoveStatements.length) {
                 const changingStatements = [];
 
@@ -856,7 +846,7 @@ const computeQuestionAnswer = (question, vm) => {
             traces,
             target,
             targetBlocks,
-            isDirectionChangeStatement,
+            MotionFilter.directionChange,
             extractAttribute,
             textFunction,
             valMapper
@@ -890,7 +880,7 @@ const computeQuestionAnswer = (question, vm) => {
                 traces,
                 target,
                 allBlocks,
-                isBackdropChangeStatement,
+                LooksFilter.backdropChange,
                 extractAttribute,
                 textFunction,
                 valMapper
@@ -905,7 +895,7 @@ const computeQuestionAnswer = (question, vm) => {
                 traces,
                 target,
                 targetBlocks,
-                isCostumeChangeStatement,
+                LooksFilter.costumeChange,
                 extractAttribute,
                 textFunction,
                 valMapper,
@@ -928,7 +918,7 @@ const computeQuestionAnswer = (question, vm) => {
             traces,
             target,
             targetBlocks,
-            isSizeChangeStatement,
+            LooksFilter.sizeChange,
             extractAttribute,
             textFunction,
             valMapper,
@@ -950,7 +940,7 @@ const computeQuestionAnswer = (question, vm) => {
             traces,
             target,
             targetBlocks,
-            isSizeChangeStatement,
+            LooksFilter.sizeChange,
             extractAttribute,
             textFunction,
             valMapper,
@@ -973,7 +963,7 @@ const computeQuestionAnswer = (question, vm) => {
         const endValue = variable.value;
 
         if (target) {
-            const updateStatements = traces.filter(t => isUpdateVariableStatement(t) &&
+            const updateStatements = traces.filter(t => VariableFilter.update(t) &&
                 (t.fields.VARIABLE.id === variable.id));
             let index = 0;
             for (; updateStatements.length > 1 && index < updateStatements.length - 1; index++) {
