@@ -85,6 +85,7 @@ const EventFilter = {
         statement.opcode === 'event_whenflagclicked',
 
     hatEvent: statement =>
+        statement.opcode === 'event_whenflagclicked' ||
         statement.opcode === 'event_whenthisspriteclicked' ||
         statement.opcode === 'event_whenstageclicked' ||
         statement.opcode === 'event_whenbackdropswitchesto' ||
