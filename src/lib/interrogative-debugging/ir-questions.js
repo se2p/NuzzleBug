@@ -4,7 +4,9 @@ import {
     generateId,
     getAllBlocks,
     getTargetVariableValue,
-    getVariableValue
+    getVariableValue,
+    Extract
+
 } from './ir-questions-util';
 import {
     MotionFilter,
@@ -182,8 +184,8 @@ class QuestionProvider {
                     const covered = {};
                     const positionSetStmts = Object.values(blocks).filter(MotionFilter.positionSet);
                     for (const setStmt of positionSetStmts) {
-                        const xPos = parseInt(blocks[setStmt.inputs.X.block].fields.NUM.value, 10);
-                        const yPos = parseInt(blocks[setStmt.inputs.Y.block].fields.NUM.value, 10);
+                        const xPos = Extract.xPosition(blocks, setStmt);
+                        const yPos = Extract.yPosition(blocks, setStmt);
                         if (xPos !== target.x || yPos !== target.y) {
                             const coordinate = `(${xPos},${yPos})`;
                             if (covered.hasOwnProperty(coordinate)) {
@@ -208,7 +210,7 @@ class QuestionProvider {
                     const covered = {};
                     const xSetStmts = Object.values(blocks).filter(MotionFilter.xSet);
                     for (const setStmt of xSetStmts) {
-                        const xPos = parseInt(blocks[setStmt.inputs.X.block].fields.NUM.value, 10);
+                        const xPos = Extract.xPosition(blocks, setStmt);
                         if (xPos !== target.x) {
                             if (covered.hasOwnProperty(xPos)) {
                                 covered[xPos].push(setStmt);
@@ -232,7 +234,7 @@ class QuestionProvider {
                     const covered = {};
                     const ySetStmts = Object.values(blocks).filter(MotionFilter.ySet);
                     for (const setStmt of ySetStmts) {
-                        const yPos = parseInt(blocks[setStmt.inputs.Y.block].fields.NUM.value, 10);
+                        const yPos = Extract.yPosition(blocks, setStmt);
                         if (yPos !== target.y) {
                             if (covered.hasOwnProperty(yPos)) {
                                 covered[yPos].push(setStmt);
@@ -277,7 +279,7 @@ class QuestionProvider {
                 const covered = {};
                 const directionSetStmts = Object.values(blocks).filter(MotionFilter.directionSet);
                 for (const setStmt of directionSetStmts) {
-                    const directionValue = parseInt(blocks[setStmt.inputs.DIRECTION.block].fields.NUM.value, 10);
+                    const directionValue = Extract.direction(blocks, setStmt);
                     if (directionValue !== target.direction) {
                         if (covered.hasOwnProperty(directionValue)) {
                             covered[directionValue].push(setStmt);
@@ -322,7 +324,7 @@ class QuestionProvider {
                     const backdropSetStmts = Object.values(allBlocks).filter(LooksFilter.backdropSet);
                     for (const setStmt of backdropSetStmts) {
                         // Only the name, but we need the index
-                        const backdrop = allBlocks[setStmt.inputs.BACKDROP.block].fields.BACKDROP.value;
+                        const backdrop = Extract.backdrop(allBlocks, setStmt);
                         const costumeIndex = costumeIndexForTargetAndName(target, backdrop);
                         if (costumeIndex && parseInt(costumeIndex, 10) !== target.currentCostume) {
                             if (covered.hasOwnProperty(backdrop)) {
@@ -366,7 +368,7 @@ class QuestionProvider {
                     const costumeSetStmts = Object.values(blocks).filter(LooksFilter.costumeSet);
                     for (const setStmt of costumeSetStmts) {
                         // Only the name, but we need the index
-                        const costume = blocks[setStmt.inputs.COSTUME.block].fields.COSTUME.value;
+                        const costume = Extract.costume(blocks, setStmt);
                         const costumeIndex = costumeIndexForTargetAndName(target, costume);
                         if (costumeIndex && parseInt(costumeIndex, 10) !== target.currentCostume) {
                             if (covered.hasOwnProperty(costume)) {
@@ -412,7 +414,7 @@ class QuestionProvider {
                     const covered = {};
                     const sizeSetStmts = Object.values(blocks).filter(LooksFilter.sizeSet);
                     for (const setStmt of sizeSetStmts) {
-                        const size = parseInt(blocks[setStmt.inputs.SIZE.block].fields.NUM.value, 10);
+                        const size = Extract.sizeValue(blocks, setStmt);
                         if (size !== target.size) {
                             if (covered.hasOwnProperty(size)) {
                                 covered[size].push(setStmt);
@@ -484,7 +486,7 @@ class QuestionProvider {
                     // Broadcast messages shouldn't be counted as target variables
                     const broadcastStmts = Object.values(allBlocks)
                         .filter(s => EventFilter.broadcastSend(s) &&
-                            allBlocks[s.inputs.BROADCAST_INPUT.block].fields.BROADCAST_OPTION.value === variable.name);
+                            Extract.broadcastForStatement(allBlocks, s) === variable.name);
                     if (trace.some(t => broadcastStmts.some(s => s.id === t.blockId))) {
                         this.questions.overallQuestions.push(new Question({
                             type: QuestionTypes.DID_CALL_EVENT,
@@ -561,7 +563,7 @@ class QuestionProvider {
                             .filter(b => VariableFilter.set(b) && b.fields.VARIABLE.id === variableId);
                         for (const setStmt of variableSetStmts) {
                             // Can either be text or a text containing a valid integer
-                            let expectedValue = allBlocks[setStmt.inputs.VALUE.block].fields.TEXT.value;
+                            let expectedValue = Extract.variableValue(allBlocks, setStmt);
                             let actualValue = variable.value;
                             if (!isNaN(expectedValue)) {
                                 expectedValue = parseInt(expectedValue, 10);
