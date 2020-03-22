@@ -1,5 +1,7 @@
 const MotionFilter = {
     directionChange: statement =>
+        statement.opcode === 'motion_turnright' ||
+        statement.opcode === 'motion_turnleft' ||
         statement.opcode === 'motion_pointindirection' ||
         statement.opcode === 'motion_pointtowards' ||
         statement.opcode === 'motion_pointtowards_menu',
@@ -22,8 +24,14 @@ const MotionFilter = {
         statement.opcode === 'motion_setx',
 
     ySet: statement =>
-        statement.opcode === 'motion_sety'
+        statement.opcode === 'motion_sety',
 
+    motionStatement: block =>
+        block.opcode.startsWith('motion_') && !(
+            block.opcode === 'motion_xposition' ||
+            block.opcode === 'motion_yposition' ||
+            block.opcode === 'motion_direction'
+        )
 };
 const LooksFilter = {
     backdropChange: statement =>
@@ -51,14 +59,25 @@ const LooksFilter = {
 
     visibilitySet: statement =>
         statement.opcode === 'looks_show' ||
-        statement.opcode === 'looks_hide'
+        statement.opcode === 'looks_hide',
 
+    looksStatement: block =>
+        block.opcode.startsWith('looks_') && !(
+            block.opcode === 'looks_backdropnumbername' ||
+            block.opcode === 'looks_costumenumbername' ||
+            block.opcode === 'looks_size'
+        )
 };
 
 const SoundFilter = {
     play: statement =>
         statement.opcode === 'sound_play' ||
-        statement.opcode === 'sound_playuntildone'
+        statement.opcode === 'sound_playuntildone',
+
+    soundStatement: block =>
+        block.opcode.startsWith('sound_') && !(
+            block.opcode === 'sound_volume'
+        )
 };
 
 const EventFilter = {
@@ -77,8 +96,23 @@ const EventFilter = {
         statement.opcode === 'event_broadcastandwait',
 
     broadcastReceive: statement =>
-        statement.opcode === 'event_whenbroadcastreceived' ||
-        statement.opcode === 'event_broadcastandwait'
+        statement.opcode === 'event_whenbroadcastreceived',
+
+    eventStatement: block =>
+        block.opcode.startsWith('event_') &&
+        block.opcode !== 'event_touchingobjectmenu'
+};
+
+const ControlFilter = {
+    controlStatement: block =>
+        block.opcode.startsWith('control_')
+};
+
+const SensingFilter = {
+    sensingStatement: block =>
+        block.opcode === 'sensing_askandwait' ||
+        block.opcode === 'sensing_setdragmode' ||
+        block.opcode === 'sensing_resettimer'
 };
 
 const VariableFilter = {
@@ -86,14 +120,40 @@ const VariableFilter = {
         statement.opcode === 'data_setvariableto',
     update: statement =>
         statement.opcode === 'data_setvariableto' ||
-        statement.opcode === 'data_changevariableby'
+        statement.opcode === 'data_changevariableby',
+    variableStatement: block =>
+        block.opcode === 'data_setvariableto' ||
+        block.opcode === 'data_changevariableby' ||
+        block.opcode === 'data_showvariable' ||
+        block.opcode === 'data_hidevariable'
 
 };
 
+const StatementFilter = {
+    isStatementBlock: block => {
+        if (block.topLevel) {
+            return true;
+        }
+        if (block.opcode.endsWith('_menu')) {
+            return false;
+        }
+        const result = MotionFilter.motionStatement(block) ||
+            LooksFilter.looksStatement(block) ||
+            SoundFilter.soundStatement(block) ||
+            EventFilter.eventStatement(block) ||
+            ControlFilter.controlStatement(block) ||
+            SensingFilter.sensingStatement(block) ||
+            VariableFilter.variableStatement(block);
+        return result;
+    }
+};
+
 export {
+    ControlFilter,
     MotionFilter,
     LooksFilter,
     SoundFilter,
     EventFilter,
-    VariableFilter
+    VariableFilter,
+    StatementFilter
 };
