@@ -126,6 +126,58 @@ class Graph {
         return Object.values(this._nodes);
     }
 
+    _transitiveSuccessors (node, visited) {
+        const successors = new Set();
+        for (const succ of this.successors(node.id)) {
+            if (!visited.has(succ)) {
+                successors.add(succ);
+                visited.add(succ);
+                for (const succ2 of this._transitiveSuccessors(succ, visited)) {
+                    successors.add(succ2);
+                }
+            }
+        }
+        return successors;
+    }
+
+    /**
+     * Gathers and returns all transitive successors of a given node.
+     * Transitive successors are all nodes which can be reached from a certain node.
+     *
+     * @param {GraphNode} node - the node which transitive successors are returned.
+     * @returns {Set<GraphNode>} - a set of all transitive successors.
+     */
+    getTransitiveSuccessors (node) {
+        return this._transitiveSuccessors(node, new Set());
+    }
+
+    _containsTransitiveSuccessors (pStartNode, pFirstNode, pSecondNode) {
+        const transitiveSuccessors = this.getTransitiveSuccessors(pStartNode);
+        transitiveSuccessors.add(pStartNode);
+        return transitiveSuccessors.has(pFirstNode) && transitiveSuccessors.has(pSecondNode);
+    }
+
+    /**
+     * Finds and returns the least common ancestor of two given nodes in this graph.
+     *
+     * @param {GraphNode} pFirstNode - the first node.
+     * @param {GraphNode} pSecondNode - the second node.
+     * @returns {GraphNode} the least common ancestor of both given nodes.
+     */
+    getLeastCommonAncestor (pFirstNode, pSecondNode) {
+        let current = pFirstNode;
+        while (!this._containsTransitiveSuccessors(current, pFirstNode, pSecondNode)) {
+            // eslint-disable-next-line newline-per-chained-call
+            const iterator = this.predecessors(current.id).values().next();
+            if (iterator.done) {
+                return current;
+            }
+
+            current = iterator.value;
+        }
+        return current;
+    }
+
     toDot () {
         const edges = [];
         for (const node of this.getAllNodes()) {
@@ -147,6 +199,23 @@ class Graph {
         }
     }
 }
+
+/**
+ * Creates a new reversed graph of a given graph.
+ *
+ * @param {Graph} graph - the graph to be reverse, will not be altered.
+ * @returns {Graph} - a reversed graph.
+ */
+const reverseGraph = graph => {
+    const reversed = new Graph(graph.exit(), graph.entry());
+    for (const node of graph.getAllNodes()) {
+        reversed.addNode(node);
+        for (const succ of graph.successors(node.id)) {
+            reversed.addEdge(succ, node);
+        }
+    }
+    return reversed;
+};
 
 export {
     Edge,
