@@ -81,6 +81,12 @@ const SoundFilter = {
 };
 
 const EventFilter = {
+    userEvent: statement =>
+        statement.opcode === 'event_whenflagclicked' ||
+        statement.opcode === 'event_whenthisspriteclicked' ||
+        statement.opcode === 'event_whenstageclicked' ||
+        statement.opcode === 'event_whenkeypressed',
+
     greenFlag: statement =>
         statement.opcode === 'event_whenflagclicked',
 
@@ -98,6 +104,12 @@ const EventFilter = {
 
     broadcastReceive: statement =>
         statement.opcode === 'event_whenbroadcastreceived',
+
+    cloneCreate: statement =>
+        statement.opcode === 'control_create_clone_of',
+
+    cloneStart: statement =>
+        statement.opcode === 'control_start_as_clone',
 
     eventStatement: block =>
         block.opcode.startsWith('event_') &&

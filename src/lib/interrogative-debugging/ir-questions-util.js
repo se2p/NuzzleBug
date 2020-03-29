@@ -12,6 +12,14 @@ const forQuestionType = value => {
     }
 };
 
+const targetForBlockId = (targets, blockId) => {
+    for (const target of targets) {
+        if (target.blocks._blocks.hasOwnProperty(blockId)) {
+            return target;
+        }
+    }
+};
+
 const getTargetVariableValue = (trace, targetId, variableId) =>
     trace.targetsInfo[targetId]
         .variables[variableId].value;
@@ -40,6 +48,10 @@ const Extract = {
         block.fields.BROADCAST_OPTION.value,
     broadcastForStatement: (blocks, statement) =>
         Extract.broadcastForBlock(blocks[statement.inputs.BROADCAST_INPUT.block]),
+    cloneCreateTarget: (blocks, statement) =>
+        blocks[statement.inputs.CLONE_OPTION.block].fields.CLONE_OPTION.value,
+    cloneSendTarget: (targets, block) =>
+        targetForBlockId(targets, block.id).sprite.name,
     direction: (blocks, statement) =>
         parseInt(blocks[statement.inputs.DIRECTION.block].fields.NUM.value, 10),
     xPosition: (blocks, statement) =>
@@ -55,7 +67,11 @@ const Extract = {
     variableValue: (blocks, statement) =>
         blocks[statement.inputs.VALUE.block].fields.TEXT.value,
     stopOption: block =>
-        block.fields.STOP_OPTION.value
+        block.fields.STOP_OPTION.value,
+    clickedSprite: (targets, block) =>
+        targetForBlockId(targets, block.id).sprite.name,
+    clickedKey: block =>
+        block.fields.KEY_OPTION.value
 };
 
 export {

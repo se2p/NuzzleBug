@@ -1,7 +1,6 @@
 import {ControlFilter, EventFilter, StatementFilter} from './block-filter';
-import {Extract, getBranchStart, getElseBranchStart} from './ir-questions-util';
+import {Extract, getAllBlocks, getBranchStart, getElseBranchStart} from './ir-questions-util';
 import {Graph, GraphNode, Mapping} from './graph-utils';
-
 
 /**
  * Class representing a Control Flow Graph (CFG).
@@ -82,11 +81,18 @@ const _setBasicBlockSuccessors = (cfg, successors, shouldSuccessors, startNode) 
 const _fixControlStatement = (cfg, successors, controlNode) => {
     const controlStmt = controlNode.block;
     switch (controlStmt.opcode) {
-    case 'control_forever':
-    case 'control_repeat':
-    case 'control_repeat_until': {
+    case 'control_repeat_until':
+    case 'control_repeat': {
         const branchStart = getBranchStart(controlStmt);
         _extendBasicBlockSuccessors(cfg, successors, [controlNode], cfg.getNode(branchStart));
+        break;
+    }
+    case 'control_forever': {
+        const branchStart = getBranchStart(controlStmt);
+        _setBasicBlockSuccessors(cfg, successors, [controlNode], cfg.getNode(branchStart));
+
+        successors.set(controlNode.id, [cfg.getNode(branchStart), cfg.exit()]);
+
         break;
     }
     case 'control_if': {
@@ -150,8 +156,8 @@ const _fixControlStatements = (cfg, successors, node, visited) => {
     }
     visited.push(node);
 
-    const entryOrExit = node === cfg.entry() || node === cfg.exit();
-    if (!entryOrExit && ControlFilter.controlStatement(node.block)) {
+    const actualStatement = node.block;
+    if (actualStatement && ControlFilter.controlStatement(node.block)) {
         _fixControlStatement(cfg, successors, node);
     }
     for (const next of successors.get(node.id)) {
@@ -170,6 +176,53 @@ const fixControlStatements = (cfg, successors) => {
 };
 
 /**
+ * Checks for a given user event node whether a preceeding user event node exists.
+ * If the user events exists, it is returned.
+ * If not, it is added to the given control flow graph
+ *
+ * @param {Array} targets - the targets of the program. Used to identify from which target a block is.
+ * @param {ControlFlowGraph} cfg - the control flow graph.
+ * @param {Mapping<GraphNode>} successors - a mapping from nodes to their successors.
+ * @param {Map<string, GraphNode>} userEvents - a mapping from event key to user event node.
+ * @param {GraphNode} node - the node that is initially checked. A successor of the user event node.
+ * @returns {GraphNode} - the user event node, either existing or newly created.
+ */
+const addOrGetUserEventNode = (targets, cfg, successors, userEvents, node) => {
+    const event = {name: node.block.opcode.substring(10)}; // removes leading "event_when"
+    switch (node.block.opcode) {
+    case 'event_whenflagclicked': {
+        // necessary event information already complete
+        break;
+    }
+    case 'event_whenthisspriteclicked': {
+        event.value = Extract.clickedSprite(targets, node.block);
+        break;
+    }
+    case 'event_whenstageclicked': {
+        event.value = 'Stage';
+        break;
+    }
+    case 'event_whenkeypressed': {
+        event.value = Extract.clickedKey(node.block);
+        break;
+    }
+    }
+
+    const eventKey = `${event.name}${event.value ? (`:${event.value}`) : ''}`;
+    let eventNode = userEvents.get(eventKey);
+    if (!eventNode) {
+        eventNode = new GraphNode(eventKey);
+        cfg.addNode(eventNode);
+
+        successors.put(cfg.entry().id, eventNode);
+        successors.put(eventNode.id, cfg.exit());
+
+        userEvents.set(eventKey, eventNode);
+    }
+    return eventNode;
+};
+
+/**
  * Constructs an interprocedural control flow graph (CFG) for all blocks of a program.
  *
  * The given blocks represent the Abstract Syntax Tree (AST) of each script.
@@ -178,11 +231,16 @@ const fixControlStatements = (cfg, successors) => {
  * Furthermore, this method updates the control statements, since their AST information cannot
  * be used directly for CFG generation.
  *
- * @param {object} blocks - all blocks in the program, used to construct the CFG.
+ * @param {VirtualMachine} vm - the instance of the current virtual machine state.
+ * Contains all blocks in the program, used to construct the CFG.
  * @return {ControlFlowGraph} - a newly generated {@link ControlFlowGraph}.
  */
-const generateCFG = blocks => {
+const generateCFG = vm => {
+    const targets = vm.runtime.targets;
+    const blocks = getAllBlocks(targets);
+
     const cfg = new ControlFlowGraph();
+    const userEvents = new Map();
     const eventSend = new Mapping();
     const eventReceive = new Mapping();
     const successors = new Mapping();
@@ -205,23 +263,39 @@ const generateCFG = blocks => {
             successors.put(node.id, cfg.exit());
         }
 
-        if (EventFilter.hatEvent(node.block)) {
-            successors.put(cfg.entry().id, node);
+        if (EventFilter.userEvent(node.block)) {
+            // Original
+            // successors.put(cfg.entry().id, node);
+
+            // Updated
+            const userEventNode = addOrGetUserEventNode(targets, cfg, successors, userEvents, node);
+            successors.put(userEventNode.id, node);
         }
         if (EventFilter.broadcastSend(node.block)) {
             const event = Extract.broadcastForStatement(blocks, node.block);
-            eventSend.put(event, node);
+            eventSend.put(`broadcast:${event}`, node);
         }
         if (EventFilter.broadcastReceive(node.block)) {
             const event = Extract.broadcastForBlock(node.block);
-            eventReceive.put(event, node);
+            eventReceive.put(`broadcast:${event}`, node);
         }
-        // TODO Phil 19/03/2020: handle cloning?
+        if (EventFilter.cloneCreate(node.block)) {
+            let cloneTarget = Extract.cloneCreateTarget(blocks, node.block);
+            if (cloneTarget === '_myself_') {
+                cloneTarget = Extract.cloneSendTarget(targets, node.block);
+            }
+            eventSend.put(`clone:${cloneTarget}`, node);
+        }
+        if (EventFilter.cloneStart(node.block)) {
+            const cloneTarget = Extract.cloneSendTarget(targets, node.block);
+            eventReceive.put(`clone:${cloneTarget}`, node);
+        }
     }
 
     cfg.addNode(cfg.entry());
     cfg.addNode(cfg.exit());
 
+    // Broadcasts & cloning events
     for (const event of eventSend.keys()) {
         for (const sender of eventSend.get(event)) {
             for (const receiver of eventReceive.get(event)) {
