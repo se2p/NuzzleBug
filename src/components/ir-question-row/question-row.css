@@ -1,15 +1,23 @@
 @import "../../css/colors.css";
 @import "../../css/units.css";
 
+.ir-question-container {
+    width: 100%;
+    padding: 0.2rem 0.5rem 0.2rem 2em;
+    text-indent: -2em;
+    margin: 0;
+    list-style-type: none;
+}
+
+.ir-question-container:hover {
+    background-color: $motion-light-transparent;
+}
+
 .ir-question {
     width: 100%;
     display: flex;
     justify-content: space-between;
     padding: 0.2rem 0.5rem;
-}
-
-.ir-question:hover {
-    background-color: $motion-light-transparent;
 }
 
 .ir-question-text {
@@ -23,6 +31,9 @@
     background: white;
     font-weight: bold;
     font-size: 0.85rem;
+}
+.ir-question-answer-button:hover {
+    background-color: $motion-transparent;
 }
 
 .ir-question-answer-button-text {

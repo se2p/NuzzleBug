@@ -1,0 +1,9 @@
+.ir-answer {
+    width: 100%;
+    padding: 0.2rem 0.5rem;
+}
+
+.ir-answer-statements {
+    list-style-type: none;
+}
+

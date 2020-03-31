@@ -3,7 +3,8 @@ import React from 'react';
 import {injectIntl} from 'react-intl';
 import VM from 'scratch-vm';
 
-import {Question} from '../../lib/ir-questions';
+import {ControlDependenceGraph, ControlFlowGraph} from 'scratch-analysis';
+import {Question, computeQuestionAnswer} from '../../lib/interrogative-debugging/ir-questions';
 
 import Box from '../box/box.jsx';
 import styles from './question-category.css';
@@ -15,8 +16,19 @@ class IRQuestionCategory extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'questionRows'
+            'questionRows',
+            'computeQuestionsAnswer'
         ]);
+    }
+
+    computeQuestionsAnswer (question) {
+        const vm = this.props.vm;
+        const traceMap = this.props.traceMap;
+        const cfg = this.props.cfg;
+        const cdg = this.props.cdg;
+
+        return () => computeQuestionAnswer(question, vm, traceMap, cfg, cdg);
+
     }
 
     questionRows (questions) {
@@ -24,7 +36,7 @@ class IRQuestionCategory extends React.Component {
             (<IRQuestionRow
                 key={question.id}
                 question={question}
-                vm={this.props.vm}
+                computeAnswer={this.computeQuestionsAnswer(question)}
             />)
         );
     }
@@ -50,6 +62,9 @@ class IRQuestionCategory extends React.Component {
 
 IRQuestionCategory.propTypes = {
     vm: PropTypes.instanceOf(VM).isRequired,
+    traceMap: PropTypes.instanceOf(Map).isRequired,
+    cfg: PropTypes.instanceOf(ControlFlowGraph).isRequired,
+    cdg: PropTypes.instanceOf(ControlDependenceGraph).isRequired,
     questions: PropTypes.arrayOf(PropTypes.instanceOf(Question)).isRequired,
     category: PropTypes.shape({
         name: PropTypes.string

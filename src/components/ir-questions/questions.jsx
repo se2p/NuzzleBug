@@ -4,7 +4,8 @@ import React from 'react';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 import iconQuestions from './icon--questions.svg';
-import {computeQuestions} from '../../lib/ir-questions';
+import {computeQuestions, createTraceMap} from '../../lib/interrogative-debugging/ir-questions';
+import {generateCDG, generateCFG} from 'scratch-analysis';
 
 import IRQuestionCategory from '../ir-question-category/question-category.jsx';
 import VM from 'scratch-vm';
@@ -43,13 +44,16 @@ class IRQuestions extends React.Component {
         this.setState({questionModal: false});
     }
 
-    questionCategories (categories) {
+    questionCategories (categories, traceMap, cfg, cdg) {
         return categories.map(category =>
             (<IRQuestionCategory
                 key={category.info.name}
                 category={category.info}
                 questions={category.questions}
                 vm={this.props.vm}
+                traceMap={traceMap}
+                cfg={cfg}
+                cdg={cdg}
             />)
         );
     }
@@ -62,10 +66,24 @@ class IRQuestions extends React.Component {
             vm,
             ...componentProps
         } = this.props;
-        const questionCategories = computeQuestions(vm);
+        let cfg;
+        let cdg;
+        let traceMap;
+        let questionCategories;
+
+        if (active && this.state.questionModal) {
+            cfg = generateCFG(vm);
+            cdg = generateCDG(cfg);
+            traceMap = createTraceMap(vm);
+
+            questionCategories = computeQuestions(vm, traceMap, cfg, cdg);
+        } else {
+            questionCategories = null;
+        }
+        // TODO Phil 05/03/2020: Could differentiate between no green flag exists or just nothing triggered yet.
 
         return (
-            <div>
+            <>
                 <img
                     className={classNames(
                         className,
@@ -80,21 +98,35 @@ class IRQuestions extends React.Component {
                     onClick={this.handleQuestionModalOpenClick}
                     {...componentProps}
                 />
-                {this.state.questionModal ? (
-                    <Modal
-                        id={'ir-questions-categories'}
-                        className={styles.irQuestionsModal}
-                        onRequestClose={this.handleQuestionModalCloseClick}
-                        contentLabel={'Why did all of that just happen?'}
-                    >
-                        <Box className={styles.irQuestionsModalBody}>
-                            {this.questionCategories(questionCategories.misc)}
-                            {this.questionCategories(questionCategories.targets)}
-                            {this.questionCategories(questionCategories.globalVariables)}
-                        </Box>
-                    </Modal>
-                ) : null}
-            </div>
+                {this.state.questionModal ?
+                    (!questionCategories || questionCategories.empty) ? (
+                        <Modal
+                            id={'ir-questions-categories'}
+                            className={styles.irQuestionsModal}
+                            onRequestClose={this.handleQuestionModalCloseClick}
+                            contentLabel={'Why did nothing happen?'}
+                        >
+                            <Box className={styles.irQuestionsModalBody}>
+                                <ul>
+                                    <li><span>{'You have to click the Green Flag to start.'}</span></li>
+                                    <li><span>{'Or you forgot a script triggered by the Green Flag.'}</span></li>
+                                </ul>
+                            </Box>
+                        </Modal>
+                    ) : (
+                        <Modal
+                            id={'ir-questions-categories'}
+                            className={styles.irQuestionsModal}
+                            onRequestClose={this.handleQuestionModalCloseClick}
+                            contentLabel={'Why did all of that just happen?'}
+                        >
+                            <Box className={styles.irQuestionsModalBody}>
+                                {this.questionCategories(questionCategories.misc, traceMap, cfg, cdg)}
+                                {this.questionCategories(questionCategories.targets, traceMap, cfg, cdg)}
+                            </Box>
+                        </Modal>
+                    ) : null}
+            </>
         );
     }
 }

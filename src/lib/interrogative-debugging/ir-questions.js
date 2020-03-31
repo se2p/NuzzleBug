@@ -674,7 +674,21 @@ class QuestionProvider {
     }
 }
 
-const computeQuestions = vm => {
+const createTraceMap = vm => {
+    const traceMap = new Map();
+
+    const recordedTrace = vm.runtime.traceInfo.tracer.traces;
+    const allBlocks = getAllBlocks(vm.runtime.targets);
+    for (const block of Object.values(allBlocks)) {
+        traceMap.set(block.id, []);
+    }
+    for (const record of recordedTrace) {
+        traceMap.get(record.blockId).push(record);
+    }
+    return traceMap;
+};
+
+const computeQuestions = (vm, traceMap, cfg, cdg) => {
     const results = {
         empty: false,
         targets: [],
@@ -759,7 +773,7 @@ const whyDidAttributeChangeQuestion = (question, traces, target, blocks,
 };
 
 
-const computeQuestionAnswer = (question, vm) => {
+const computeQuestionAnswer = (question, vm, traceMap, cfg, cdg) => {
     const traces = vm.runtime.traceInfo.tracer.traces;
     const allBlocks = getAllBlocks(vm.runtime.targets);
 
@@ -1047,6 +1061,7 @@ const computeQuestionAnswer = (question, vm) => {
 export {
     Question,
     Answer,
+    createTraceMap,
     computeQuestions,
     computeQuestionAnswer,
     QuestionTypes
