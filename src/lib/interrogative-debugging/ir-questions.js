@@ -810,9 +810,18 @@ const whyWasntStatementCalled = (question, specificStatements, traceMap, cdg, ex
         let controlNode;
 
         while (current) {
-            controlNode = cdg.predecessors(current.id)
-                .values()
-                .next().value;
+            const preds = cdg.predecessors(current.id);
+            // A node could be control dependency on itself. Time to filter them out to avoid an endless loop.
+            if (preds.size > 1) {
+                const iter = preds.values();
+                let node = iter.next().value;
+                while (current === node.block) {
+                    node = iter.next().value;
+                }
+                controlNode = node;
+            } else {
+                controlNode = preds.values().next().value;
+            }
             const controlNodeExecutions = traceMap.get(controlNode.id);
             if (controlNodeExecutions.length) {
                 // Was executed, but required condition never seemed to be hit
