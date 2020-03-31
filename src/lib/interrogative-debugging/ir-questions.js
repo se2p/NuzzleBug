@@ -5,7 +5,8 @@ import {
     getAllBlocks,
     getTargetVariableValue,
     getVariableValue,
-    Extract
+    Extract,
+    ExtractTrace
 
 } from './ir-questions-util';
 import {
@@ -79,13 +80,40 @@ class Question {
     }
 }
 
-class ChangingStatement {
-    constructor (statement, startValue, endValue) {
+class Statement {
+    constructor (statement) {
         this.statement = statement;
+    }
+}
+
+class ChangingStatement extends Statement {
+    constructor (statement, startValue, endValue) {
+        super(statement);
         this.startValue = startValue;
         this.endValue = endValue;
     }
 }
+
+class NotCalledStatement extends Statement {
+    constructor (statement, controlStatements) {
+        super(statement);
+        this.controlStatements = controlStatements;
+    }
+}
+
+class ControlStatement extends Statement {
+}
+
+class CalledButWrongBranchStatement extends ControlStatement {
+    constructor (statement, values) {
+        super(statement);
+        this.values = values;
+    }
+}
+
+class NotCalledControlStatement extends ControlStatement {
+}
+
 
 class Answer {
     constructor (props) {
@@ -160,7 +188,7 @@ class QuestionProvider {
                 {
                     // Why did sprite move?
                     // Why didn't sprite move?
-                    const containedMoveStmts = targetTrace.some(MotionFilter.positionChange);
+                    const containedMoveStmts = Object.values(blocks).some(MotionFilter.positionChange);
                     if (containedMoveStmts) {
                         if (initialTargetState.x === target.x && initialTargetState.y === target.y) {
                             targetQuestions.push(new Question({
@@ -740,6 +768,7 @@ const whyDidAttributeChangeQuestion = (question, traces, target, blocks,
     // By definition may not be empty
     const stmts = traces.filter(t => blocks.hasOwnProperty(t.blockId) && filterStatements(t));
     if (!stmts.length) {
+        // TODO value was probably by hand
         throw new Error(`stmts array may not be empty by definition.`);
     }
 
@@ -769,6 +798,41 @@ const whyDidAttributeChangeQuestion = (question, traces, target, blocks,
         statements: changingStatements,
         startValue: valMapper(firstValue),
         endValue: valMapper(finalValue)
+    });
+};
+
+const whyWasntStatementCalled = (question, specificStatements, traceMap, cdg, extractAttr, textFunction) => {
+    const statements = [];
+    for (const stmt of specificStatements) {
+        const controlStatements = [];
+
+        let current = stmt;
+        let controlNode;
+
+        while (current) {
+            controlNode = cdg.predecessors(current.id)
+                .values()
+                .next().value;
+            const controlNodeExecutions = traceMap.get(controlNode.id);
+            if (controlNodeExecutions.length) {
+                // Was executed, but required condition never seemed to be hit
+                const values = controlNodeExecutions.map(extractAttr);
+
+                controlStatements.push(new CalledButWrongBranchStatement(controlNode.block, values));
+                current = null;
+            } else {
+                // Was never executed, add to list and go one control dependency up
+                controlStatements.push(new NotCalledControlStatement(controlNode.block));
+                current = controlNode.block;
+            }
+        }
+
+        statements.push(new NotCalledStatement(stmt, controlStatements));
+    }
+    return new Answer({
+        type: question.type,
+        text: textFunction(),
+        statements: statements
     });
 };
 
@@ -802,8 +866,8 @@ const computeQuestionAnswer = (question, vm, traceMap, cfg, cdg) => {
     }
     case QuestionTypes.DID_NOT_MOVE: {
         // TODO Phil 16/03/2020: update this
-        const containsMoveStatements = Object.values(targetBlocks).some(b => MotionFilter.positionChange(b));
-        if (containsMoveStatements) {
+        const moveStatements = Object.values(targetBlocks).filter(b => MotionFilter.positionChange(b));
+        if (moveStatements) {
             const tracedMoveStatements =
                 traces.filter(t => targetBlocks.hasOwnProperty(t.blockId) && MotionFilter.positionChange(t));
             if (tracedMoveStatements.length) {
@@ -840,9 +904,18 @@ const computeQuestionAnswer = (question, vm, traceMap, cfg, cdg) => {
                 }
 
             }
-            // Not a single move statement was ever called
-            // TODO Phil 02/03/2020: Here we need the full AST to check why existing block statements weren't called
 
+            // Not a single move statement was ever called
+            {
+                const textFunction = () => `${target.sprite.name} move statements were never called, here's why.`;
+                return whyWasntStatementCalled(question,
+                    moveStatements,
+                    traceMap,
+                    cdg,
+                    ExtractTrace.condition,
+                    textFunction
+                );
+            }
         } else {
             // Code doesn't contain any move statements
             return new Answer({
@@ -850,7 +923,6 @@ const computeQuestionAnswer = (question, vm, traceMap, cfg, cdg) => {
                 text: `Your code does not contain any move statement for ${target.sprite.name}.`
             });
         }
-        break;
     }
     case QuestionTypes.DID_CHANGE_DIRECTION: {
         const extractAttribute = t => t.direction;
@@ -1064,5 +1136,9 @@ export {
     createTraceMap,
     computeQuestions,
     computeQuestionAnswer,
-    QuestionTypes
+    QuestionTypes,
+    Statement,
+    NotCalledStatement,
+    ControlStatement,
+    NotCalledControlStatement
 };

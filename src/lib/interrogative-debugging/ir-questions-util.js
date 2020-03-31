@@ -74,6 +74,13 @@ const Extract = {
         block.fields.KEY_OPTION.value
 };
 
+const ExtractTrace = {
+    condition: record =>
+        record.argValues.CONDITION,
+    conditionString: record =>
+        'Not yet implemented'
+};
+
 export {
     generateId,
     forQuestionType,
@@ -83,5 +90,6 @@ export {
     getAllBlocks,
     getBranchStart,
     getElseBranchStart,
-    Extract
+    Extract,
+    ExtractTrace
 };
