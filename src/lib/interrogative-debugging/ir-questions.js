@@ -286,7 +286,7 @@ class QuestionProvider {
             if (!target.isStage) {
                 // Why did sprite’s direction change?
                 // Why didn't sprite’s direction change?
-                const containedDirectionStmt = targetTrace.some(MotionFilter.directionChange);
+                const containedDirectionStmt = Object.values(blocks).some(MotionFilter.directionChange);
                 if (containedDirectionStmt) {
                     if (initialTargetState.direction === target.direction) {
                         targetQuestions.push(new Question({
@@ -328,7 +328,7 @@ class QuestionProvider {
 
             // Check whether the stage backdrop or target costume did change or not?
             if (target.isStage) {
-                const containedBackdropChange = trace.some(LooksFilter.backdropChange);
+                const containedBackdropChange = Object.values(allBlocks).some(LooksFilter.backdropChange);
                 if (containedBackdropChange) {
                     const firstBackdrop = initialTargetState.currentCostume;
                     const finalBackDrop = target.currentCostume;
@@ -372,7 +372,7 @@ class QuestionProvider {
                     }
                 }
             } else {
-                const containedCostumeStmt = targetTrace.some(LooksFilter.costumeChange);
+                const containedCostumeStmt = Object.values(blocks).some(LooksFilter.costumeChange);
                 if (containedCostumeStmt) {
                     const firstCostume = initialTargetState.currentCostume;
                     const finalCostume = target.currentCostume;
@@ -421,7 +421,7 @@ class QuestionProvider {
             if (!target.isStage) {
                 // Why did sprite’s size change?
                 // Why didn't sprite’s size change?
-                const containedSizeStmt = targetTrace.some(LooksFilter.sizeChange);
+                const containedSizeStmt = Object.values(blocks).some(LooksFilter.sizeChange);
                 if (containedSizeStmt) {
                     if (initialTargetState.size === target.size) {
                         targetQuestions.push(new Question({
@@ -464,7 +464,7 @@ class QuestionProvider {
 
             // Check whether the sprite visibility change
             if (!target.isStage) {
-                const containedVisibilityStmt = targetTrace.some(LooksFilter.visibilitySet);
+                const containedVisibilityStmt = Object.values(blocks).some(LooksFilter.visibilitySet);
                 if (containedVisibilityStmt) {
                     if (initialTargetState.visible === target.visible) {
                         targetQuestions.push(new Question({
@@ -636,33 +636,36 @@ class QuestionProvider {
             {
                 const targetSounds = target.sprite.sounds;
                 if (targetSounds.length) {
-                    const soundStmts = trace.filter(s => SoundFilter.play(s) && blocks.hasOwnProperty(s.blockId));
-                    if (soundStmts.length) {
-                        anything.sound = true;
-                        for (const sound of targetSounds) {
-                            const soundPlayed = soundStmts.some(s => s.argValues.SOUND_MENU === sound.name);
-                            if (soundPlayed) {
-                                targetQuestions.push(new Question({
-                                    type: QuestionTypes.DID_PLAY_SOUND,
-                                    target: target,
-                                    sound: sound,
-                                    text: `Why did ${target.sprite.name} play sound ${sound.name}?`
-                                }));
-                            } else {
-                                targetQuestions.push(new Question({
-                                    type: QuestionTypes.DID_NOT_PLAY_SOUND,
-                                    target: target,
-                                    sound: sound,
-                                    text: `Why didn't ${target.sprite.name} play sound ${sound.name}?`
-                                }));
+                    const containedSoundPlayStmt = Object.values(blocks).some(SoundFilter.play);
+                    if (containedSoundPlayStmt) {
+                        const soundStmts = targetTrace.filter(SoundFilter.play);
+                        if (soundStmts.length) {
+                            anything.sound = true;
+                            for (const sound of targetSounds) {
+                                const soundPlayed = soundStmts.some(s => s.argValues.SOUND_MENU === sound.name);
+                                if (soundPlayed) {
+                                    targetQuestions.push(new Question({
+                                        type: QuestionTypes.DID_PLAY_SOUND,
+                                        target: target,
+                                        sound: sound,
+                                        text: `Why did ${target.sprite.name} play sound ${sound.name}?`
+                                    }));
+                                } else {
+                                    targetQuestions.push(new Question({
+                                        type: QuestionTypes.DID_NOT_PLAY_SOUND,
+                                        target: target,
+                                        sound: sound,
+                                        text: `Why didn't ${target.sprite.name} play sound ${sound.name}?`
+                                    }));
+                                }
                             }
+                        } else {
+                            targetQuestions.push(new Question({
+                                type: QuestionTypes.DID_NOT_PLAY_ANY_SOUND,
+                                target: target,
+                                text: `Why didn't ${target.sprite.name} play any sound?`
+                            }));
                         }
-                    } else {
-                        targetQuestions.push(new Question({
-                            type: QuestionTypes.DID_NOT_PLAY_ANY_SOUND,
-                            target: target,
-                            text: `Why didn't ${target.sprite.name} play any sound?`
-                        }));
                     }
                 }
             }
@@ -672,16 +675,23 @@ class QuestionProvider {
 
         // Check anything object for general questions
         if (!anything.move) {
-            this.questions.generalQuestions.push(new Question({
-                type: QuestionTypes.DID_NOTHING_MOVE,
-                text: `Why didn't anything move?`
-            }));
+            const containsAnyMoveStmt = Object.values(allBlocks).some(MotionFilter.motionStatement);
+            if (containsAnyMoveStmt) {
+                this.questions.generalQuestions.push(new Question({
+                    type: QuestionTypes.DID_NOTHING_MOVE,
+                    text: `Why didn't anything move?`
+                }));
+            }
+
         }
         if (!anything.sound) {
-            this.questions.generalQuestions.push(new Question({
-                type: QuestionTypes.DID_NOTHING_SOUND,
-                text: `Why didn't the program play any sound?`
-            }));
+            const containsAnySoundStmt = Object.values(allBlocks).some(SoundFilter.play);
+            if (containsAnySoundStmt) {
+                this.questions.generalQuestions.push(new Question({
+                    type: QuestionTypes.DID_NOTHING_SOUND,
+                    text: `Why didn't the program play any sound?`
+                }));
+            }
         }
     }
 
