@@ -39,10 +39,6 @@ const costumeIndexForTargetAndName = (target, name) => {
     }
 };
 
-const getBranchStart = statement => statement.inputs.SUBSTACK.block;
-
-const getElseBranchStart = statement => statement.inputs.SUBSTACK2.block;
-
 const Extract = {
     broadcastForBlock: block =>
         block.fields.BROADCAST_OPTION.value,
@@ -78,7 +74,16 @@ const ExtractTrace = {
     condition: record =>
         record.argValues.CONDITION,
     conditionString: record =>
-        'Not yet implemented'
+        'Not yet implemented',
+    targetVariableValue: (record, targetId, variableId) => {
+        return record.targetsInfo[targetId]
+            .variables[variableId].value;
+    },
+    variableValue: (record, variableId) => {
+        return Object.values(record.targetsInfo)
+            .find(target => target.variables.hasOwnProperty(variableId))
+            .variables[variableId].value;
+    }
 };
 
 export {
@@ -88,8 +93,6 @@ export {
     getVariableValue,
     costumeIndexForTargetAndName,
     getAllBlocks,
-    getBranchStart,
-    getElseBranchStart,
     Extract,
     ExtractTrace
 };

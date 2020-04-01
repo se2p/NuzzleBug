@@ -1,21 +1,12 @@
 import {
     costumeIndexForTargetAndName,
+    Extract,
+    ExtractTrace,
     forQuestionType,
     generateId,
-    getAllBlocks,
-    getTargetVariableValue,
-    getVariableValue,
-    Extract,
-    ExtractTrace
-
+    getAllBlocks
 } from './ir-questions-util';
-import {
-    MotionFilter,
-    LooksFilter,
-    SoundFilter,
-    EventFilter,
-    VariableFilter
-} from './block-filter';
+import {EventFilter, LooksFilter, MotionFilter, SoundFilter, VariableFilter} from './block-filter';
 
 const QuestionTypes = Object.freeze({
     // Movement Questions
@@ -772,7 +763,7 @@ const computeQuestions = (vm, traceMap, cfg, cdg) => {
 };
 
 const whyDidAttributeChangeQuestion = (question, traces, target, blocks,
-    filterStatements, extractAttr, textFunction, valMapper) => {
+    filterStatements, extractAttr, textFunction, valMapper, variable) => {
     const changingStatements = [];
 
     const stmts = traces.filter(t => blocks.hasOwnProperty(t.blockId) && filterStatements(t));
@@ -811,7 +802,8 @@ const whyDidAttributeChangeQuestion = (question, traces, target, blocks,
         text: textFunction(firstValue, finalValue, changingStatements),
         statements: changingStatements,
         startValue: valMapper(firstValue),
-        endValue: valMapper(finalValue)
+        endValue: valMapper(finalValue),
+        variable: variable
     });
 };
 
@@ -860,13 +852,14 @@ const whyWasntStatementCalled = (question, specificStatements, traceMap, cdg, te
 };
 
 const whyDidntAttributeChangeQuestion = (question, traces, traceMap, cdg, target, blocks, filterStatements, extractAttr,
-    containsNoneText, neverCalledText, didChangeText, didntChangeText, valMapper) => {
+    containsNoneText, neverCalledText, didChangeText, didntChangeText, valMapper, variable) => {
     const changeBlocks = Object.values(blocks).filter(filterStatements);
     if (!changeBlocks.length) {
         // Code doesn't contain any specific statement
         return new Answer({
             type: question.type,
-            text: containsNoneText()
+            text: containsNoneText(),
+            variable: variable
         });
     }
     const stmts = traces.filter(t => blocks.hasOwnProperty(t.blockId) && filterStatements(t));
@@ -904,12 +897,14 @@ const whyDidntAttributeChangeQuestion = (question, traces, traceMap, cdg, target
         return new Answer({
             type: question.type,
             text: didChangeText(),
-            statements: changingStatements
+            statements: changingStatements,
+            variable: variable
         });
     } else { // eslint-disable-line no-else-return
         return new Answer({
             type: question.type,
-            text: didntChangeText()
+            text: didntChangeText(),
+            variable: variable
         });
     }
 };
@@ -1162,46 +1157,47 @@ const computeQuestionAnswer = (question, vm, traceMap, cfg, cdg) => {
 
     // Variable specific
     case QuestionTypes.DID_VARIABLE_CHANGE: {
-        // TODO Phil 16/03/2020: Update to call method
-        const changingStatements = [];
         const variable = question.variable;
+        const filterStatements = b => VariableFilter.update(b) && b.fields.VARIABLE.id === variable.id;
+        const extractAttribute = t => t.variables[variable.id].value;
+        const textFunction = (firstValue, finalValue) =>
+            `These statements affected ${variable.name}'s change from ${firstValue} to ${finalValue}.`;
+        const valMapper = val => val;
 
-        const startValue = getVariableValue(traces[0], variable.id);
-        const endValue = variable.value;
-
-        if (target) {
-            const updateStatements = traces.filter(t => VariableFilter.update(t) &&
-                (t.fields.VARIABLE.id === variable.id));
-            let index = 0;
-            for (; updateStatements.length > 1 && index < updateStatements.length - 1; index++) {
-                const v1 = getTargetVariableValue(updateStatements[index], target.id, variable.id);
-                const v2 = getTargetVariableValue(updateStatements[index + 1], target.id, variable.id);
-
-                if (v1 !== v2) {
-                    changingStatements.push(updateStatements[index]);
-                }
-            }
-            // Special case for last statement
-            if (getTargetVariableValue(updateStatements[index], target.id, variable.id) !== endValue) {
-                changingStatements.push(updateStatements[index]);
-            }
-        }
-
-        return new Answer({
-            type: question.type,
-            text: `These statements affected ${variable.name}'s change from ${startValue} to ${endValue}.`,
-            statements: changingStatements,
-            variable: variable,
-            startValue: startValue,
-            endValue: endValue
-        });
+        return whyDidAttributeChangeQuestion(
+            question,
+            traces,
+            target,
+            target.isStage ? allBlocks : targetBlocks,
+            filterStatements,
+            extractAttribute,
+            textFunction,
+            valMapper,
+            variable
+        );
     }
     case QuestionTypes.DID_NOT_VARIABLE_CHANGE: {
-        // TODO Phil 03/03/2020: following cases
-        //  no variable change statement
-        //  not called
-        //  called but did not affect
-        break;
+        const variable = question.variable;
+        const filterStatements = b => VariableFilter.update(b) && b.fields.VARIABLE.id === variable.id;
+        const extractAttribute = t => t.variables[variable.id].value;
+        const valMapper = val => val;
+
+        return whyDidntAttributeChangeQuestion(
+            question,
+            traces,
+            traceMap,
+            cdg,
+            target,
+            target.isStage ? allBlocks : targetBlocks,
+            filterStatements,
+            extractAttribute,
+            () => `Your code does not contain any change statements for ${variable.name}.`,
+            () => `${variable.name}'s change statements were never called, here's why.`,
+            () => `${variable.name} did change its value, but its start and finish value are just the same.`,
+            () => `${variable.name}'s change statements were called, but never changed its value.`,
+            valMapper,
+            variable
+        );
     }
     case QuestionTypes.DID_VARIABLE_SPECIFIC_VALUE: {
         break;
