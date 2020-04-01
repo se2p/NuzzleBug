@@ -775,11 +775,15 @@ const whyDidAttributeChangeQuestion = (question, traces, target, blocks,
     filterStatements, extractAttr, textFunction, valMapper) => {
     const changingStatements = [];
 
-    // By definition may not be empty
     const stmts = traces.filter(t => blocks.hasOwnProperty(t.blockId) && filterStatements(t));
+    // If empty, the value was changed manually
     if (!stmts.length) {
-        // TODO value was probably by hand
-        throw new Error(`stmts array may not be empty by definition.`);
+        return new Answer({
+            type: question.type,
+            text: 'No changing statements found, must have been changed manually.',
+            startValue: valMapper(extractAttr(traces[0].ti(target.id))),
+            endValue: valMapper(extractAttr(target))
+        });
     }
 
     const firstValue = extractAttr(stmts[0].ti(target.id));
@@ -811,7 +815,7 @@ const whyDidAttributeChangeQuestion = (question, traces, target, blocks,
     });
 };
 
-const whyWasntStatementCalled = (question, specificStatements, traceMap, cdg, extractAttr, textFunction) => {
+const whyWasntStatementCalled = (question, specificStatements, traceMap, cdg, textFunction) => {
     const statements = [];
     for (const stmt of specificStatements) {
         const controlStatements = [];
@@ -835,7 +839,7 @@ const whyWasntStatementCalled = (question, specificStatements, traceMap, cdg, ex
             const controlNodeExecutions = traceMap.get(controlNode.id);
             if (controlNodeExecutions.length) {
                 // Was executed, but required condition never seemed to be hit
-                const values = controlNodeExecutions.map(extractAttr);
+                const values = controlNodeExecutions.map(ExtractTrace.condition);
 
                 controlStatements.push(new CalledButWrongBranchStatement(controlNode.block, values));
                 current = null;
@@ -855,6 +859,60 @@ const whyWasntStatementCalled = (question, specificStatements, traceMap, cdg, ex
     });
 };
 
+const whyDidntAttributeChangeQuestion = (question, traces, traceMap, cdg, target, blocks, filterStatements, extractAttr,
+    containsNoneText, neverCalledText, didChangeText, didntChangeText, valMapper) => {
+    const changeBlocks = Object.values(blocks).filter(filterStatements);
+    if (!changeBlocks.length) {
+        // Code doesn't contain any specific statement
+        return new Answer({
+            type: question.type,
+            text: containsNoneText()
+        });
+    }
+    const stmts = traces.filter(t => blocks.hasOwnProperty(t.blockId) && filterStatements(t));
+    if (!stmts.length) {
+        // Not a single specific statement was ever called
+        return whyWasntStatementCalled(question,
+            changeBlocks,
+            traceMap,
+            cdg,
+            neverCalledText
+        );
+    }
+
+    const changingStatements = [];
+    // Changes between two statements
+    let index = 0;
+    for (; stmts.length > 1 && index < stmts.length - 1; index++) {
+        const ti1 = stmts[index].ti(target.id);
+        const ti2 = stmts[index + 1].ti(target.id);
+        const startValue = extractAttr(ti1);
+        const endValue = extractAttr(ti2);
+        if (ti1 && ti2 && startValue !== endValue) {
+            changingStatements.push(new ChangingStatement(stmts[index], valMapper(startValue), valMapper(endValue)));
+        }
+    }
+    // Change between second to last and last statement
+    const sndLastValue = extractAttr(stmts[index].ti(target.id));
+    const finalValue = extractAttr(target);
+    if (sndLastValue !== finalValue) {
+        changingStatements.push(new ChangingStatement(stmts[index], valMapper(sndLastValue), valMapper(finalValue)));
+    }
+
+    // Statements that affected the current target's position
+    if (changingStatements.length) {
+        return new Answer({
+            type: question.type,
+            text: didChangeText(),
+            statements: changingStatements
+        });
+    } else { // eslint-disable-line no-else-return
+        return new Answer({
+            type: question.type,
+            text: didntChangeText()
+        });
+    }
+};
 
 const computeQuestionAnswer = (question, vm, traceMap, cfg, cdg) => {
     const traces = vm.runtime.traceInfo.tracer.traces;
@@ -864,12 +922,13 @@ const computeQuestionAnswer = (question, vm, traceMap, cfg, cdg) => {
     const block = blockId ? allBlocks[blockId] : null;
     const target = question.target;
     const targetBlocks = target ? target.blocks._blocks : [];
+    const targetName = target ? target.sprite.name : '';
 
     switch (question.type) {
     // Movement Questions
     case QuestionTypes.DID_MOVE: {
         const extractAttribute = t => `(${t.x},${t.y})`;
-        const textFunction = () => `These statements changed ${target.sprite.name}'s position.`;
+        const textFunction = () => `These statements changed ${targetName}'s position.`;
         const valMapper = val => val;
 
         return whyDidAttributeChangeQuestion(
@@ -884,68 +943,27 @@ const computeQuestionAnswer = (question, vm, traceMap, cfg, cdg) => {
         );
     }
     case QuestionTypes.DID_NOT_MOVE: {
-        // TODO Phil 16/03/2020: update this
-        const moveStatements = Object.values(targetBlocks).filter(b => MotionFilter.positionChange(b));
-        if (moveStatements) {
-            const tracedMoveStatements =
-                traces.filter(t => targetBlocks.hasOwnProperty(t.blockId) && MotionFilter.positionChange(t));
-            if (tracedMoveStatements.length) {
-                const changingStatements = [];
-
-                // Check whether the target's position was changed between two recorded move statements
-                let index = 0;
-                for (; tracedMoveStatements.length > 1 && index < tracedMoveStatements.length - 1; index++) {
-                    const t1 = tracedMoveStatements[index].targetsInfo[target.id];
-                    const t2 = tracedMoveStatements[index + 1].targetsInfo[target.id];
-                    if (t1 && t2 && (t1.x !== t2.x || t1.y !== t2.y)) {
-                        changingStatements.push(tracedMoveStatements[index]);
-                    }
-                }
-                // Maybe the last moving statement changed the position?
-                // Compare it with current target state
-                const lastMoveTargetState = tracedMoveStatements[index].targetsInfo[target.id];
-                if (target.x !== lastMoveTargetState.x || target.y !== lastMoveTargetState.y) {
-                    changingStatements.push(tracedMoveStatements[index]);
-                }
-
-                // Statements that affected the current target's position
-                if (changingStatements.length) {
-                    return new Answer({
-                        type: question.type,
-                        text: `${target.sprite.name} did move, but its start and finish positions are just the same.`,
-                        statements: changingStatements
-                    });
-                } else { // eslint-disable-line no-else-return
-                    return new Answer({
-                        type: question.type,
-                        text: `${target.sprite.name}'s moving statements were called, but never changed its position.`
-                    });
-                }
-
-            }
-
-            // Not a single move statement was ever called
-            {
-                const textFunction = () => `${target.sprite.name} move statements were never called, here's why.`;
-                return whyWasntStatementCalled(question,
-                    moveStatements,
-                    traceMap,
-                    cdg,
-                    ExtractTrace.condition,
-                    textFunction
-                );
-            }
-        } else {
-            // Code doesn't contain any move statements
-            return new Answer({
-                type: question.type,
-                text: `Your code does not contain any move statement for ${target.sprite.name}.`
-            });
-        }
+        const extractAttribute = t => `(${t.x},${t.y})`;
+        const valMapper = val => val;
+        return whyDidntAttributeChangeQuestion(
+            question,
+            traces,
+            traceMap,
+            cdg,
+            target,
+            targetBlocks,
+            MotionFilter.positionChange,
+            extractAttribute,
+            () => `Your code does not contain any move statement for ${targetName}.`,
+            () => `${targetName} move statements were never called, here's why.`,
+            () => `${targetName} did move, but its start and finish positions are just the same.`,
+            () => `${targetName}'s moving statements were called, but never changed its position.`,
+            valMapper
+        );
     }
     case QuestionTypes.DID_CHANGE_DIRECTION: {
         const extractAttribute = t => t.direction;
-        const textFunction = () => `These statements changed ${target.sprite.name}'s direction.`;
+        const textFunction = () => `These statements changed ${targetName}'s direction.`;
         const valMapper = val => val;
 
         return whyDidAttributeChangeQuestion(
@@ -960,7 +978,23 @@ const computeQuestionAnswer = (question, vm, traceMap, cfg, cdg) => {
         );
     }
     case QuestionTypes.DID_NOT_CHANGE_DIRECTION: {
-        break;
+        const extractAttribute = t => t.direction;
+        const valMapper = val => val;
+        return whyDidntAttributeChangeQuestion(
+            question,
+            traces,
+            traceMap,
+            cdg,
+            target,
+            targetBlocks,
+            MotionFilter.directionChange,
+            extractAttribute,
+            () => `Your code does not contain any direction change statements for ${targetName}.`,
+            () => `${targetName} direction change statements were never called, here's why.`,
+            () => `${targetName} did change its direction, but its start and finish direction are just the same.`,
+            () => `${targetName}'s direction change statements were called, but never changed its direction.`,
+            valMapper
+        );
     }
     case QuestionTypes.DID_NOT_SPECIFIC_POSITION: {
         break;
@@ -977,10 +1011,10 @@ const computeQuestionAnswer = (question, vm, traceMap, cfg, cdg) => {
 
     // Appearance
     case QuestionTypes.DID_CHANGE_COSTUME: {
+        const extractAttribute = t => t.currentCostume;
+        const valMapper = val => target.sprite.costumes_[val].name;
         if (target.isStage) {
-            const extractAttribute = t => t.currentCostume;
             const textFunction = () => `These statements changed the backdrop.`;
-            const valMapper = val => target.sprite.costumes_[val].name;
 
             return whyDidAttributeChangeQuestion(
                 question,
@@ -993,9 +1027,7 @@ const computeQuestionAnswer = (question, vm, traceMap, cfg, cdg) => {
                 valMapper
             );
         } else { // eslint-disable-line no-else-return
-            const extractAttribute = t => t.currentCostume;
-            const textFunction = () => `These statements changed ${target.sprite.name}'s costume.`;
-            const valMapper = val => target.sprite.costumes_[val].name;
+            const textFunction = () => `These statements changed ${targetName}'s costume.`;
 
             return whyDidAttributeChangeQuestion(
                 question,
@@ -1010,14 +1042,48 @@ const computeQuestionAnswer = (question, vm, traceMap, cfg, cdg) => {
         }
     }
     case QuestionTypes.DID_NOT_CHANGE_COSTUME: {
-        break;
+        const extractAttribute = t => t.currentCostume;
+        const valMapper = val => target.sprite.costumes_[val].name;
+        if (target.isStage) {
+            return whyDidntAttributeChangeQuestion(
+                question,
+                traces,
+                traceMap,
+                cdg,
+                target,
+                allBlocks,
+                LooksFilter.backdropChange,
+                extractAttribute,
+                () => `Your code does not contain any backdrop change statements.`,
+                () => `Backdrop change statements were never called, here's why.`,
+                () => `The backdrop was changed, but its start and finish values are just the same.`,
+                () => `Backdrop change statements were called, but never changed the backdrop.`,
+                valMapper
+            );
+        } else { // eslint-disable-line no-else-return
+            return whyDidntAttributeChangeQuestion(
+                question,
+                traces,
+                traceMap,
+                cdg,
+                target,
+                allBlocks,
+                LooksFilter.backdropChange,
+                extractAttribute,
+                () => `Your code does not contain any costume change statements for ${targetName}.`,
+                () => `${targetName}'s costume change statements were never called, here's why.`,
+                () => `${targetName} did change its costume, but its start and finish costume are just the same.`,
+                () => `${targetName}'s costume change statements were called, but never changed its costume.`,
+                valMapper
+            );
+        }
     }
     case QuestionTypes.DID_NOT_SPECIFIC_COSTUME: {
         break;
     }
     case QuestionTypes.DID_CHANGE_SIZE: {
         const extractAttribute = t => t.size;
-        const textFunction = () => `These statements changed ${target.sprite.name}'s size.`;
+        const textFunction = () => `These statements changed ${targetName}'s size.`;
         const valMapper = val => val;
 
         return whyDidAttributeChangeQuestion(
@@ -1032,14 +1098,31 @@ const computeQuestionAnswer = (question, vm, traceMap, cfg, cdg) => {
         );
     }
     case QuestionTypes.DID_NOT_CHANGE_SIZE: {
-        break;
+        const extractAttribute = t => t.size;
+        const valMapper = val => val;
+
+        return whyDidntAttributeChangeQuestion(
+            question,
+            traces,
+            traceMap,
+            cdg,
+            target,
+            allBlocks,
+            LooksFilter.sizeChange,
+            extractAttribute,
+            () => `Your code does not contain any change size statements for ${targetName}.`,
+            () => `${targetName}'s size change statements were never called, here's why.`,
+            () => `${targetName} did change its size, but its start and finish size are just the same.`,
+            () => `${targetName}'s size change statements were called, but never changed its size.`,
+            valMapper
+        );
     }
     case QuestionTypes.DID_NOT_SPECIFIC_SIZE: {
         break;
     }
     case QuestionTypes.DID_CHANGE_VISIBILITY: {
         const extractAttribute = t => t.visible;
-        const textFunction = () => `These statements changed ${target.sprite.name}'s visibility.`;
+        const textFunction = () => `These statements changed ${targetName}'s visibility.`;
         const valMapper = val => (val ? 'visible' : 'hidden');
 
         return whyDidAttributeChangeQuestion(
@@ -1054,7 +1137,24 @@ const computeQuestionAnswer = (question, vm, traceMap, cfg, cdg) => {
         );
     }
     case QuestionTypes.DID_NOT_CHANGE_VISIBILITY: {
-        break;
+        const extractAttribute = t => t.visible;
+        const valMapper = val => (val ? 'visible' : 'hidden');
+
+        return whyDidntAttributeChangeQuestion(
+            question,
+            traces,
+            traceMap,
+            cdg,
+            target,
+            allBlocks,
+            LooksFilter.sizeChange,
+            extractAttribute,
+            () => `Your code does not contain any change visibility statements for ${targetName}.`,
+            () => `${targetName}'s visibility change statements were never called, here's why.`,
+            () => `${targetName} did change its visibility, but its start and finish visibility are just the same.`,
+            () => `${targetName}'s visibility change statements were called, but never changed its visibility.`,
+            valMapper
+        );
     }
     case QuestionTypes.DID_NOT_SPECIFIC_VISIBILITY: {
         break;
