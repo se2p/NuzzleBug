@@ -6,7 +6,13 @@ import {
     generateId,
     getAllBlocks
 } from './ir-questions-util';
-import {EventFilter, LooksFilter, MotionFilter, SoundFilter, VariableFilter} from './block-filter';
+import {
+    EventFilter,
+    LooksFilter,
+    MotionFilter,
+    SoundFilter,
+    VariableFilter
+} from 'scratch-analysis';
 
 const QuestionTypes = Object.freeze({
     // Movement Questions
