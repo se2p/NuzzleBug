@@ -28,7 +28,7 @@ const QuestionTypes = Object.freeze({
     // Appearance
     DID_CHANGE_COSTUME: 50,
     DID_NOT_CHANGE_COSTUME: 51,
-    DID_NOT_SPECIFIC_COSTUME: 51,
+    DID_NOT_SPECIFIC_COSTUME: 52,
     DID_CHANGE_SIZE: 60,
     DID_NOT_CHANGE_SIZE: 61,
     DID_NOT_SPECIFIC_SIZE: 62,
@@ -39,8 +39,7 @@ const QuestionTypes = Object.freeze({
     // Variable specific
     DID_VARIABLE_CHANGE: 100,
     DID_NOT_VARIABLE_CHANGE: 101,
-    DID_VARIABLE_SPECIFIC_VALUE: 102,
-    DID_NOT_VARIABLE_SPECIFIC_VALUE: 103,
+    DID_NOT_VARIABLE_SPECIFIC_VALUE: 102,
     DID_VARIABLE_SHOW: 104,
     DID_NOT_VARIABLE_SHOW: 105,
 
@@ -69,11 +68,21 @@ class Question {
         this.id = generateId();
 
         this.type = props.type;
-        this.target = props.target;
-        this.blockId = props.blockId;
         this.text = props.text;
+
+        this.blockId = props.blockId;
+        this.target = props.target;
+
         this.variable = props.variable;
+
+        this.broadcastVariable = props.broadcastVariable;
+        this.broadcastBlocks = props.broadcastBlocks;
+
         this.sound = props.sound;
+        this.soundBlocks = props.soundBlocks;
+
+        this.value = props.value;
+        this.setBlocks = props.setBlocks;
     }
 }
 
@@ -91,6 +100,13 @@ class ChangingStatement extends Statement {
     }
 }
 
+class CalledStatement extends Statement {
+    constructor (statement, controlStatements) {
+        super(statement);
+        this.controlStatements = controlStatements;
+    }
+}
+
 class NotCalledStatement extends Statement {
     constructor (statement, controlStatements) {
         super(statement);
@@ -98,7 +114,30 @@ class NotCalledStatement extends Statement {
     }
 }
 
+class OverwrittenStatement extends Statement {
+}
+
 class ControlStatement extends Statement {
+}
+
+class CalledControlStatement extends ControlStatement {
+    constructor (statement, values) {
+        super(statement);
+        this.values = values;
+    }
+}
+class UserEventStatement extends ControlStatement {
+    constructor (event) {
+        super();
+        this.event = event;
+    }
+}
+
+class EventStatement extends ControlStatement {
+    constructor (event) {
+        super();
+        this.event = event;
+    }
 }
 
 class CalledButWrongBranchStatement extends ControlStatement {
@@ -132,9 +171,10 @@ class Answer {
 }
 
 class QuestionProvider {
-    constructor (vm, trace) {
+    constructor (vm, trace, traceMap) {
         this.vm = vm;
         this.trace = trace;
+        this.traceMap = traceMap;
 
         this.questions = {
             generalQuestions: [],
@@ -147,6 +187,7 @@ class QuestionProvider {
 
     generateQuestions () {
         const trace = this.trace;
+        const traceMap = this.traceMap;
         const anything = {
             move: false,
             sound: false
@@ -157,7 +198,7 @@ class QuestionProvider {
         for (const target of targets) {
             const targetQuestions = [];
 
-            const initialTargetState = trace[0].targetsInfo[target.id];
+            const initialTargetState = trace[0].ti(target.id);
             const blocks = target.blocks._blocks;
             const targetTrace = trace.filter(s => blocks.hasOwnProperty(s.blockId));
 
@@ -220,11 +261,12 @@ class QuestionProvider {
                             }
                         }
                     }
-                    for (const coordinate of Object.keys(covered)) {
+                    for (const [coordinate, setBlocks] of Object.entries(covered)) {
                         targetQuestions.push(new Question({
                             type: QuestionTypes.DID_NOT_SPECIFIC_POSITION,
                             target: target,
-                            blocks: Object.values(covered),
+                            setBlocks: setBlocks,
+                            value: coordinate,
                             text: `Why didn't ${target.sprite.name}'s have position ${coordinate}?`
                         }));
                     }
@@ -244,11 +286,12 @@ class QuestionProvider {
                             }
                         }
                     }
-                    for (const xPos of Object.keys(covered)) {
+                    for (const [xPos, setBlocks] of Object.entries(covered)) {
                         targetQuestions.push(new Question({
                             type: QuestionTypes.DID_NOT_SPECIFIC_X,
                             target: target,
-                            blocks: Object.values(covered),
+                            setBlocks: setBlocks,
+                            value: xPos,
                             text: `Why didn't ${target.sprite.name}'s x coordinate have value ${xPos}?`
                         }));
                     }
@@ -268,11 +311,12 @@ class QuestionProvider {
                             }
                         }
                     }
-                    for (const yPos of Object.keys(covered)) {
+                    for (const [yPos, setBlocks] of Object.entries(covered)) {
                         targetQuestions.push(new Question({
                             type: QuestionTypes.DID_NOT_SPECIFIC_X,
                             target: target,
-                            blocks: Object.values(covered),
+                            setBlocks: setBlocks,
+                            value: yPos,
                             text: `Why didn't ${target.sprite.name}'s y coordinate have value ${yPos}?`
                         }));
                     }
@@ -313,11 +357,11 @@ class QuestionProvider {
                         }
                     }
                 }
-                for (const direction of Object.keys(covered)) {
+                for (const [direction, setBlocks] of Object.entries(covered)) {
                     targetQuestions.push(new Question({
                         type: QuestionTypes.DID_NOT_SPECIFIC_DIRECTION,
                         target: target,
-                        blocks: Object.values(covered),
+                        setBlocks: setBlocks,
                         text: `Why didn't ${target.sprite.name}'s direction have value ${direction}?`
                     }));
                 }
@@ -359,12 +403,13 @@ class QuestionProvider {
                             }
                         }
                     }
-                    for (const costume of Object.keys(covered)) {
+                    for (const [backdrop, setBlocks] of Object.entries(covered)) {
                         targetQuestions.push(new Question({
                             type: QuestionTypes.DID_NOT_SPECIFIC_COSTUME,
                             target: target,
-                            blocks: Object.values(covered),
-                            text: `Why didn't stage's backdrop have value ${costume}?`
+                            setBlocks: setBlocks,
+                            value: backdrop,
+                            text: `Why didn't stage's backdrop have value ${backdrop}?`
                         }));
                     }
                 }
@@ -403,12 +448,13 @@ class QuestionProvider {
                             }
                         }
                     }
-                    for (const costume of Object.keys(covered)) {
+                    for (const [costume, setBlocks] of Object.entries(covered)) {
                         targetQuestions.push(new Question({
                             type: QuestionTypes.DID_NOT_SPECIFIC_COSTUME,
                             target: target,
-                            blocks: Object.values(covered),
-                            text: `Why didn't ${target.sprite.name}'s costume have value ${costume}?`
+                            setBlocks: setBlocks,
+                            value: costume,
+                            text: `Why didn't ${target.sprite.name}'s wear costume ${costume}?`
                         }));
                     }
                 }
@@ -448,11 +494,12 @@ class QuestionProvider {
                             }
                         }
                     }
-                    for (const size of Object.keys(covered)) {
+                    for (const [size, setBlocks] of Object.entries(covered)) {
                         targetQuestions.push(new Question({
                             type: QuestionTypes.DID_NOT_SPECIFIC_SIZE,
                             target: target,
-                            blocks: Object.values(covered),
+                            setBlocks: setBlocks,
+                            value: size,
                             text: `Why didn't ${target.sprite.name}'s size have value ${size}?`
                         }));
                     }
@@ -492,12 +539,13 @@ class QuestionProvider {
                             }
                         }
                     }
-                    for (const visibility of Object.keys(covered)) {
+                    for (const [visibility, setBlocks] of Object.entries(covered)) {
                         const visibleString = visibility ? 'shown' : 'hidden';
                         targetQuestions.push(new Question({
                             type: QuestionTypes.DID_NOT_SPECIFIC_VISIBILITY,
                             target: target,
-                            blocks: Object.values(covered),
+                            setBlocks: setBlocks,
+                            value: visibleString,
                             text: `Why didn't ${target.sprite.name}'s visibility have value ${visibleString}?`
                         }));
                     }
@@ -505,25 +553,32 @@ class QuestionProvider {
             }
 
             // Checks target variable values
-            for (const variableId in target.variables) {
-                const variable = target.variables[variableId];
+            for (const [variableId, variable] of Object.entries(target.variables)) {
                 if (variable.type === 'broadcast_msg') {
                     // Broadcast messages shouldn't be counted as target variables
                     const broadcastStmts = Object.values(allBlocks)
                         .filter(s => EventFilter.broadcastSend(s) &&
                             Extract.broadcastForStatement(allBlocks, s) === variable.name);
-                    if (trace.some(t => broadcastStmts.some(s => s.id === t.blockId))) {
+                    const calledBroadcastStmts = [];
+                    for (const broadcastStmt of broadcastStmts) {
+                        if (traceMap.get(broadcastStmt.id).length) {
+                            calledBroadcastStmts.push(broadcastStmt);
+                        }
+                    }
+                    if (calledBroadcastStmts.length) {
                         this.questions.overallQuestions.push(new Question({
                             type: QuestionTypes.DID_CALL_EVENT,
                             target: target,
-                            variable: variable,
+                            broadcastVariable: variable,
+                            broadcastBlocks: calledBroadcastStmts,
                             text: `Why did event ${variable.name} get called?`
                         }));
                     } else {
                         this.questions.overallQuestions.push(new Question({
                             type: QuestionTypes.DID_NOT_CALL_EVENT,
                             target: target,
-                            variable: variable,
+                            broadcastVariable: variable,
+                            broadcastBlocks: broadcastStmts,
                             text: `Why didn't event ${variable.name} get called?`
                         }));
                     }
@@ -604,14 +659,14 @@ class QuestionProvider {
                                 }
                             }
                         }
-                        for (const expectedValue of Object.keys(covered)) {
+                        for (const [expectedValue, setBlocks] of Object.entries(covered)) {
                             if (target.isStage) {
                                 this.questions.overallQuestions.push(new Question({
                                     type: QuestionTypes.DID_NOT_VARIABLE_SPECIFIC_VALUE,
                                     target: target,
                                     variable: variable,
-                                    blocks: Object.values(covered),
-                                    /* eslint-disable-next-line max-len */
+                                    setBlocks: setBlocks,
+                                    value: expectedValue,
                                     text: `Why didn't global variable ${variable.name} have value ${expectedValue}?`
                                 }));
                             } else {
@@ -619,7 +674,8 @@ class QuestionProvider {
                                     type: QuestionTypes.DID_NOT_VARIABLE_SPECIFIC_VALUE,
                                     target: target,
                                     variable: variable,
-                                    blocks: Object.values(covered),
+                                    setBlocks: setBlocks,
+                                    value: expectedValue,
                                     /* eslint-disable-next-line max-len */
                                     text: `Why didn't ${target.sprite.name}'s variable ${variable.name} have value ${expectedValue}?`
                                 }));
@@ -633,36 +689,76 @@ class QuestionProvider {
             {
                 const targetSounds = target.sprite.sounds;
                 if (targetSounds.length) {
-                    const containedSoundPlayStmt = Object.values(blocks).some(SoundFilter.play);
-                    if (containedSoundPlayStmt) {
-                        const soundStmts = targetTrace.filter(SoundFilter.play);
-                        if (soundStmts.length) {
-                            anything.sound = true;
-                            for (const sound of targetSounds) {
-                                const soundPlayed = soundStmts.some(s => s.argValues.SOUND_MENU === sound.name);
-                                if (soundPlayed) {
-                                    targetQuestions.push(new Question({
-                                        type: QuestionTypes.DID_PLAY_SOUND,
-                                        target: target,
-                                        sound: sound,
-                                        text: `Why did ${target.sprite.name} play sound ${sound.name}?`
-                                    }));
-                                } else {
-                                    targetQuestions.push(new Question({
-                                        type: QuestionTypes.DID_NOT_PLAY_SOUND,
-                                        target: target,
-                                        sound: sound,
-                                        text: `Why didn't ${target.sprite.name} play sound ${sound.name}?`
-                                    }));
+                    const soundPlayStmts = Object.values(blocks).filter(SoundFilter.play);
+                    if (soundPlayStmts.length) {
+                        const soundMap = {};
+                        for (const soundStmt of soundPlayStmts) {
+                            const soundName = Extract.sound(blocks, soundStmt);
+                            if (soundMap.hasOwnProperty(soundName)) {
+                                soundMap[soundName].push(soundStmt);
+                            } else {
+                                soundMap[soundName] = [soundStmt];
+                            }
+                        }
+                        for (const [name, playableBlocks] of Object.entries(soundMap)) {
+                            const sound = targetSounds.find(s => s.name === name);
+                            const playedBlocks = [];
+                            for (const block of playableBlocks) {
+                                if (traceMap.get(block.id).length) {
+                                    playedBlocks.push(block);
                                 }
                             }
-                        } else {
-                            targetQuestions.push(new Question({
-                                type: QuestionTypes.DID_NOT_PLAY_ANY_SOUND,
-                                target: target,
-                                text: `Why didn't ${target.sprite.name} play any sound?`
-                            }));
+                            if (playedBlocks.length) {
+                                targetQuestions.push(new Question({
+                                    type: QuestionTypes.DID_PLAY_SOUND,
+                                    target: target,
+                                    sound: sound,
+                                    soundBlocks: playedBlocks,
+                                    text: `Why did ${target.sprite.name} play sound ${name}?`
+                                }));
+                            } else {
+                                targetQuestions.push(new Question({
+                                    type: QuestionTypes.DID_NOT_PLAY_SOUND,
+                                    target: target,
+                                    sound: sound,
+                                    soundBlocks: playableBlocks,
+                                    text: `Why didn't ${target.sprite.name} play sound ${name}?`
+                                }));
+                            }
                         }
+
+                        // TODO Phil 03/04/2020: maybe add QuestionTypes.DID_NOT_PLAY_ANY_SOUND
+
+                        // // Old
+                        // const soundStmts = targetTrace.filter(SoundFilter.play);
+                        // if (soundStmts.length) {
+                        //     anything.sound = true;
+                        //     for (const sound of targetSounds) {
+                        //         const soundPlayed = soundStmts.some(s => ExtractTrace.sound(s) === sound.name);
+                        //         if (soundPlayed) {
+                        //             targetQuestions.push(new Question({
+                        //                 type: QuestionTypes.DID_PLAY_SOUND,
+                        //                 target: target,
+                        //                 sound: sound,
+                        //                 text: `Why did ${target.sprite.name} play sound ${sound.name}?`
+                        //             }));
+                        //         } else {
+                        //             targetQuestions.push(new Question({
+                        //                 type: QuestionTypes.DID_NOT_PLAY_SOUND,
+                        //                 target: target,
+                        //                 sound: sound,
+                        //                 text: `Why didn't ${target.sprite.name} play sound ${sound.name}?`
+                        //             }));
+                        //         }
+                        //     }
+                        // } else {
+                        //     targetQuestions.push(new Question({
+                        //         type: QuestionTypes.DID_NOT_PLAY_ANY_SOUND,
+                        //         target: target,
+                        //         text: `Why didn't ${target.sprite.name} play any sound?`,
+                        //         soundBlocks: soundPlayStmts
+                        //     }));
+                        // }
                     }
                 }
             }
@@ -672,7 +768,7 @@ class QuestionProvider {
 
         // Check anything object for general questions
         if (!anything.move) {
-            const containsAnyMoveStmt = Object.values(allBlocks).some(MotionFilter.motionStatement);
+            const containsAnyMoveStmt = Object.values(allBlocks).some(MotionFilter.motionBlock);
             if (containsAnyMoveStmt) {
                 this.questions.generalQuestions.push(new Question({
                     type: QuestionTypes.DID_NOTHING_MOVE,
@@ -723,7 +819,7 @@ const createTraceMap = vm => {
     return traceMap;
 };
 
-const computeQuestions = (vm, traceMap, cfg, cdg) => {
+const computeQuestions = (vm, traceMap) => {
     const results = {
         empty: false,
         targets: [],
@@ -735,7 +831,7 @@ const computeQuestions = (vm, traceMap, cfg, cdg) => {
         return results;
     }
 
-    const questionProvider = new QuestionProvider(vm, recordedTrace);
+    const questionProvider = new QuestionProvider(vm, recordedTrace, traceMap);
 
     for (const target of vm.runtime.targets) {
         const targetInfo = {
@@ -813,48 +909,107 @@ const whyDidAttributeChangeQuestion = (question, traces, target, blocks,
     });
 };
 
-const whyWasntStatementCalled = (question, specificStatements, traceMap, cdg, textFunction) => {
+const whyWasntStatementCalled = (statement, traceMap, cdg) => {
+    const controlStatements = [];
+
+    let current = statement;
+    let controlNode;
+
+    while (current) {
+        const preds = cdg.predecessors(current.id);
+        const iter = preds.values();
+        const directPred = iter.next();
+        if (directPred.done) {
+            // TODO Phil 03/04/2020: handle finding entry node
+            // Probably found the entry node
+            break;
+        }
+        // A node could be control dependency on itself. Time to filter them out to avoid an endless loop.
+        if (preds.size > 1) {
+            let node = directPred.value;
+            while (current === node.block) {
+                node = iter.next().value;
+            }
+            controlNode = node;
+        } else {
+            controlNode = directPred.value;
+        }
+        const controlNodeExecutions = traceMap.get(controlNode.id);
+        if (controlNodeExecutions.length) {
+            // Was executed, but required condition never seemed to be hit
+            const values = controlNodeExecutions.map(ExtractTrace.condition);
+
+            controlStatements.push(new CalledButWrongBranchStatement(controlNode.block, values));
+            current = null;
+        } else {
+            // Was never executed, add to list and go one control dependency up
+            controlStatements.push(new NotCalledControlStatement(controlNode.block));
+            current = controlNode.block;
+        }
+    }
+
+    return new NotCalledStatement(statement, controlStatements);
+};
+
+const whyWerentStatementsCalled = (specificStatements, traceMap, cdg) => {
     const statements = [];
     for (const stmt of specificStatements) {
-        const controlStatements = [];
-
-        let current = stmt;
-        let controlNode;
-
-        while (current) {
-            const preds = cdg.predecessors(current.id);
-            // A node could be control dependency on itself. Time to filter them out to avoid an endless loop.
-            if (preds.size > 1) {
-                const iter = preds.values();
-                let node = iter.next().value;
-                while (current === node.block) {
-                    node = iter.next().value;
-                }
-                controlNode = node;
-            } else {
-                controlNode = preds.values().next().value;
-            }
-            const controlNodeExecutions = traceMap.get(controlNode.id);
-            if (controlNodeExecutions.length) {
-                // Was executed, but required condition never seemed to be hit
-                const values = controlNodeExecutions.map(ExtractTrace.condition);
-
-                controlStatements.push(new CalledButWrongBranchStatement(controlNode.block, values));
-                current = null;
-            } else {
-                // Was never executed, add to list and go one control dependency up
-                controlStatements.push(new NotCalledControlStatement(controlNode.block));
-                current = controlNode.block;
-            }
-        }
-
-        statements.push(new NotCalledStatement(stmt, controlStatements));
+        const statement = whyWasntStatementCalled(stmt, traceMap, cdg);
+        statements.push(statement);
     }
-    return new Answer({
-        type: question.type,
-        text: textFunction(),
-        statements: statements
-    });
+    return statements;
+};
+
+const whyWasStatementCalled = (statement, traceMap, cdg) => {
+    const controlStatements = [];
+
+    let current = statement;
+    let controlNode;
+
+    while (current) {
+        const preds = cdg.predecessors(current.id);
+        const iter = preds.values();
+        const directPred = iter.next();
+        if (directPred.done) {
+            // Probably found the entry node, abort.
+            break;
+        }
+        // A node could be control dependency on itself. Time to filter them out to avoid an endless loop.
+        if (preds.size > 1) {
+            let node = directPred.value;
+            while (current === node.block) {
+                node = iter.next().value;
+            }
+            controlNode = node;
+        } else {
+            controlNode = directPred.value;
+        }
+        const controlNodeExecutions = traceMap.get(controlNode.id);
+
+        if (controlNode.userEvent) {
+            controlStatements.push(new UserEventStatement(controlNode.userEvent));
+            current = null;
+        } else if (controlNode.event) {
+            controlStatements.push(new EventStatement(controlNode.event));
+            current = null;
+        } else {
+            const values = controlNodeExecutions.map(ExtractTrace.condition);
+            controlStatements.push(new CalledControlStatement(controlNode.block, values));
+
+            current = controlNode.block;
+        }
+    }
+
+    return new CalledStatement(statement, controlStatements);
+};
+
+const whyWereStatementsCalled = (specificStatements, traceMap, cdg) => {
+    const statements = [];
+    for (const stmt of specificStatements) {
+        const statement = whyWasStatementCalled(stmt, traceMap, cdg);
+        statements.push(statement);
+    }
+    return statements;
 };
 
 const whyDidntAttributeChangeQuestion = (question, traces, traceMap, cdg, target, blocks, filterStatements, extractAttr,
@@ -871,12 +1026,12 @@ const whyDidntAttributeChangeQuestion = (question, traces, traceMap, cdg, target
     const stmts = traces.filter(t => blocks.hasOwnProperty(t.blockId) && filterStatements(t));
     if (!stmts.length) {
         // Not a single specific statement was ever called
-        return whyWasntStatementCalled(question,
-            changeBlocks,
-            traceMap,
-            cdg,
-            neverCalledText
-        );
+        const reasons = whyWerentStatementsCalled(changeBlocks, traceMap, cdg);
+        return new Answer({
+            type: question.type,
+            text: neverCalledText(),
+            statements: reasons
+        });
     }
 
     const changingStatements = [];
@@ -914,6 +1069,40 @@ const whyDidntAttributeChangeQuestion = (question, traces, traceMap, cdg, target
         });
     }
 };
+
+const whyNoSpecificValue = (question, traceMap, cdg,
+    overwrittenAndNotCalledText, overwrittenText, notCalledText) => {
+    const statements = [];
+
+    let overwritten = false;
+    let notCalled = false;
+
+    for (const setStmt of question.setBlocks) {
+        const executions = traceMap.get(setStmt.id);
+        if (executions.length) {
+            overwritten = true;
+            statements.push(new OverwrittenStatement(setStmt));
+        } else {
+            notCalled = true;
+            statements.push(whyWasntStatementCalled(setStmt, traceMap, cdg));
+        }
+    }
+    let text;
+    if (overwritten && notCalled) {
+        text = overwrittenAndNotCalledText();
+    } else if (overwritten) {
+        text = overwrittenText();
+    } else if (notCalled) {
+        text = notCalledText();
+    }
+
+    return new Answer({
+        type: question.type,
+        text: text,
+        statements: statements
+    });
+};
+
 
 const computeQuestionAnswer = (question, vm, traceMap, cfg, cdg) => {
     const traces = vm.runtime.traceInfo.tracer.traces;
@@ -998,16 +1187,48 @@ const computeQuestionAnswer = (question, vm, traceMap, cfg, cdg) => {
         );
     }
     case QuestionTypes.DID_NOT_SPECIFIC_POSITION: {
-        break;
+        return whyNoSpecificValue(
+            question,
+            traceMap,
+            cdg,
+            // eslint-disable-next-line max-len
+            () => `Some statements for setting position to ${question.value} were called, but overwritten. Some were never called `,
+            () => `Setting position to ${question.value} was called, but later overwritten.`,
+            () => `Setting position to ${question.value} was never called.`
+        );
     }
     case QuestionTypes.DID_NOT_SPECIFIC_X: {
-        break;
+        return whyNoSpecificValue(
+            question,
+            traceMap,
+            cdg,
+            // eslint-disable-next-line max-len
+            () => `Some statements for setting x to ${question.value} were called, but overwritten. Some were never called `,
+            () => `Setting x to ${question.value} was called, but later overwritten.`,
+            () => `Setting x to ${question.value} was never called.`
+        );
     }
     case QuestionTypes.DID_NOT_SPECIFIC_Y: {
-        break;
+        return whyNoSpecificValue(
+            question,
+            traceMap,
+            cdg,
+            // eslint-disable-next-line max-len
+            () => `Some statements for setting y to ${question.value} were called, but overwritten. Some were never called `,
+            () => `Setting y to ${question.value} was called, but later overwritten.`,
+            () => `Setting y to ${question.value} was never called.`
+        );
     }
     case QuestionTypes.DID_NOT_SPECIFIC_DIRECTION: {
-        break;
+        return whyNoSpecificValue(
+            question,
+            traceMap,
+            cdg,
+            // eslint-disable-next-line max-len
+            () => `Some statements for setting direction to ${question.value} were called, but overwritten. Some were never called `,
+            () => `Setting direction to ${question.value} was called, but later overwritten.`,
+            () => `Setting direction to ${question.value} was never called.`
+        );
     }
 
     // Appearance
@@ -1080,7 +1301,27 @@ const computeQuestionAnswer = (question, vm, traceMap, cfg, cdg) => {
         }
     }
     case QuestionTypes.DID_NOT_SPECIFIC_COSTUME: {
-        break;
+        if (target.isStage) {
+            return whyNoSpecificValue(
+                question,
+                traceMap,
+                cdg,
+                // eslint-disable-next-line max-len
+                () => `Some statements for setting the backdrop to ${question.value} were called, but overwritten. Some were never called `,
+                () => `Setting the backdrop to ${question.value} was called, but later overwritten.`,
+                () => `Setting the backdrop to ${question.value} was never called.`
+            );
+        } else { // eslint-disable-line no-else-return
+            return whyNoSpecificValue(
+                question,
+                traceMap,
+                cdg,
+                // eslint-disable-next-line max-len
+                () => `Some statements for setting ${targetName}'s costume to ${question.value} were called, but overwritten. Some were never called `,
+                () => `Setting ${targetName}'s costume to ${question.value} was called, but later overwritten.`,
+                () => `Setting ${targetName}'s costume to ${question.value} was never called.`
+            );
+        }
     }
     case QuestionTypes.DID_CHANGE_SIZE: {
         const extractAttribute = t => t.size;
@@ -1119,7 +1360,14 @@ const computeQuestionAnswer = (question, vm, traceMap, cfg, cdg) => {
         );
     }
     case QuestionTypes.DID_NOT_SPECIFIC_SIZE: {
-        break;
+        return whyNoSpecificValue(
+            question,
+            traceMap,
+            cdg,
+            () => `Some statements for setting size to ${question.value} were called, but overwritten. Some were never called `,
+            () => `Setting size to ${question.value} was called, but later overwritten.`,
+            () => `Setting size to ${question.value} was never called.`
+        );
     }
     case QuestionTypes.DID_CHANGE_VISIBILITY: {
         const extractAttribute = t => t.visible;
@@ -1158,7 +1406,14 @@ const computeQuestionAnswer = (question, vm, traceMap, cfg, cdg) => {
         );
     }
     case QuestionTypes.DID_NOT_SPECIFIC_VISIBILITY: {
-        break;
+        return whyNoSpecificValue(
+            question,
+            traceMap,
+            cdg,
+            () => `Some statements for setting visibility to ${question.value} were called, but overwritten. Some were never called `,
+            () => `Setting visibility to ${question.value} was called, but later overwritten.`,
+            () => `Setting visibility to ${question.value} was never called.`
+        );
     }
 
     // Variable specific
@@ -1205,11 +1460,16 @@ const computeQuestionAnswer = (question, vm, traceMap, cfg, cdg) => {
             variable
         );
     }
-    case QuestionTypes.DID_VARIABLE_SPECIFIC_VALUE: {
-        break;
-    }
     case QuestionTypes.DID_NOT_VARIABLE_SPECIFIC_VALUE: {
-        break;
+        const variable = question.variable;
+        return whyNoSpecificValue(
+            question,
+            traceMap,
+            cdg,
+            () => `Some statements for ${variable.name}'s value to ${question.value} were called, but overwritten. Some were never called `,
+            () => `Setting ${variable.name}'s value to ${question.value} was called, but later overwritten.`,
+            () => `Setting ${variable.name}'s value to ${question.value} was never called.`
+        );
     }
     case QuestionTypes.DID_VARIABLE_SHOW: {
         break;
@@ -1220,29 +1480,70 @@ const computeQuestionAnswer = (question, vm, traceMap, cfg, cdg) => {
 
     // Sound specific
     case QuestionTypes.DID_NOT_PLAY_ANY_SOUND: {
+        // TODO Phil 03/04/2020: probably remove it
         break;
     }
     case QuestionTypes.DID_PLAY_SOUND: {
-        break;
+        const sound = question.sound;
+        const playedBlocks = question.soundBlocks;
+
+        const reasons = whyWereStatementsCalled(playedBlocks, traceMap, cdg);
+        return new Answer({
+            type: question.type,
+            text: `Sound ${sound.name} was played, here's why.`,
+            statements: reasons
+        });
     }
     case QuestionTypes.DID_NOT_PLAY_SOUND: {
-        break;
+        const sound = question.sound;
+        const soundBlocks = question.soundBlocks;
+        const reasons = whyWerentStatementsCalled(soundBlocks, traceMap, cdg);
+
+        return new Answer({
+            type: question.type,
+            text: `${targetName} never played ${sound.name}, here's why.`,
+            statements: reasons
+        });
     }
 
     // Event specific
-    case
-    QuestionTypes.DID_CALL_EVENT: {
-        break;
+    case QuestionTypes.DID_CALL_EVENT: {
+        const broadcastVariable = question.broadcastVariable;
+        const broadcastBlocks = question.broadcastBlocks;
+        const reasons = whyWereStatementsCalled(broadcastBlocks, traceMap, cdg);
+
+        return new Answer({
+            type: question.type,
+            text: `Event ${broadcastVariable.name} was called, here's why.`,
+            statements: reasons
+        });
     }
     case QuestionTypes.DID_NOT_CALL_EVENT: {
-        break;
+        const broadcastVariable = question.broadcastVariable;
+        const broadcastBlocks = question.broadcastBlocks;
+
+        if (broadcastBlocks.length) {
+            const reasons = whyWerentStatementsCalled(broadcastBlocks, traceMap, cdg);
+            return new Answer({
+                type: question.type,
+                text: `Event ${broadcastVariable.name} was never called, here's why.`,
+                statements: reasons
+            });
+        } else { // eslint-disable-line no-else-return
+            return new Answer({
+                type: question.type,
+                text: `There is no statement calling event ${broadcastVariable.name}.`
+            });
+        }
     }
 
     // General stuff
     case QuestionTypes.DID_NOTHING_MOVE: {
+        // TODO Phil 03/04/2020:
         break;
     }
     case QuestionTypes.DID_NOTHING_SOUND: {
+        // TODO Phil 03/04/2020:
         break;
     }
     default:

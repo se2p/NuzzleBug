@@ -40,28 +40,30 @@ const costumeIndexForTargetAndName = (target, name) => {
 };
 
 const Extract = {
+    sound: (blocks, block) =>
+        blocks[block.inputs.SOUND_MENU.block].fields.SOUND_MENU.value,
     broadcastForBlock: block =>
         block.fields.BROADCAST_OPTION.value,
-    broadcastForStatement: (blocks, statement) =>
-        Extract.broadcastForBlock(blocks[statement.inputs.BROADCAST_INPUT.block]),
-    cloneCreateTarget: (blocks, statement) =>
-        blocks[statement.inputs.CLONE_OPTION.block].fields.CLONE_OPTION.value,
+    broadcastForStatement: (blocks, block) =>
+        Extract.broadcastForBlock(blocks[block.inputs.BROADCAST_INPUT.block]),
+    cloneCreateTarget: (blocks, block) =>
+        blocks[block.inputs.CLONE_OPTION.block].fields.CLONE_OPTION.value,
     cloneSendTarget: (targets, block) =>
         targetForBlockId(targets, block.id).sprite.name,
-    direction: (blocks, statement) =>
-        parseInt(blocks[statement.inputs.DIRECTION.block].fields.NUM.value, 10),
-    xPosition: (blocks, statement) =>
-        parseInt(blocks[statement.inputs.X.block].fields.NUM.value, 10),
-    yPosition: (blocks, statement) =>
-        parseInt(blocks[statement.inputs.Y.block].fields.NUM.value, 10),
-    sizeValue: (blocks, statement) =>
-        parseInt(blocks[statement.inputs.SIZE.block].fields.NUM.value, 10),
-    costume: (blocks, statement) =>
-        blocks[statement.inputs.COSTUME.block].fields.COSTUME.value,
-    backdrop: (blocks, statement) =>
-        blocks[statement.inputs.BACKDROP.block].fields.BACKDROP.value,
-    variableValue: (blocks, statement) =>
-        blocks[statement.inputs.VALUE.block].fields.TEXT.value,
+    direction: (blocks, block) =>
+        parseInt(blocks[block.inputs.DIRECTION.block].fields.NUM.value, 10),
+    xPosition: (blocks, block) =>
+        parseInt(blocks[block.inputs.X.block].fields.NUM.value, 10),
+    yPosition: (blocks, block) =>
+        parseInt(blocks[block.inputs.Y.block].fields.NUM.value, 10),
+    sizeValue: (blocks, block) =>
+        parseInt(blocks[block.inputs.SIZE.block].fields.NUM.value, 10),
+    costume: (blocks, block) =>
+        blocks[block.inputs.COSTUME.block].fields.COSTUME.value,
+    backdrop: (blocks, block) =>
+        blocks[block.inputs.BACKDROP.block].fields.BACKDROP.value,
+    variableValue: (blocks, block) =>
+        blocks[block.inputs.VALUE.block].fields.TEXT.value,
     stopOption: block =>
         block.fields.STOP_OPTION.value,
     clickedSprite: (targets, block) =>
@@ -83,7 +85,8 @@ const ExtractTrace = {
         return Object.values(record.targetsInfo)
             .find(target => target.variables.hasOwnProperty(variableId))
             .variables[variableId].value;
-    }
+    },
+    sound: record => record.argValues.SOUND_MENU
 };
 
 export {
