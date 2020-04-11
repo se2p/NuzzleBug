@@ -61,6 +61,7 @@ class IRQuestionRow extends React.Component {
             question,
             // eslint-disable-next-line no-unused-vars
             computeAnswer,
+            glowFunction,
             ...componentProps
         } = this.props;
         return (
@@ -93,6 +94,7 @@ class IRQuestionRow extends React.Component {
                             key={this.state.answer.id}
                             intl={intl}
                             answer={this.state.answer}
+                            glowFunction={glowFunction}
                         />
                     ) : null}
                 </Box>
@@ -106,7 +108,8 @@ IRQuestionRow.propTypes = {
     className: PropTypes.string,
     intl: intlShape.isRequired,
     question: PropTypes.instanceOf(Question).isRequired,
-    computeAnswer: PropTypes.func.isRequired
+    computeAnswer: PropTypes.func.isRequired,
+    glowFunction: PropTypes.func.isRequired
 };
 
 IRQuestionRow.defaultProps = {};

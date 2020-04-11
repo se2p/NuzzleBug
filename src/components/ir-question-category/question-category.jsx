@@ -17,8 +17,16 @@ class IRQuestionCategory extends React.Component {
         super(props);
         bindAll(this, [
             'questionRows',
-            'computeQuestionsAnswer'
+            'computeQuestionsAnswer',
+            'glowBlock'
         ]);
+    }
+
+    glowBlock (blockId) {
+        this.props.vm.runtime.glowBlock(blockId, true);
+        setTimeout(() => {
+            this.props.vm.runtime.glowBlock(blockId, false);
+        }, 2000);
     }
 
     computeQuestionsAnswer (question) {
@@ -28,7 +36,6 @@ class IRQuestionCategory extends React.Component {
         const cdg = this.props.cdg;
 
         return () => computeQuestionAnswer(question, vm, traceMap, cfg, cdg);
-
     }
 
     questionRows (questions) {
@@ -37,6 +44,7 @@ class IRQuestionCategory extends React.Component {
                 key={question.id}
                 question={question}
                 computeAnswer={this.computeQuestionsAnswer(question)}
+                glowFunction={this.glowBlock}
             />)
         );
     }

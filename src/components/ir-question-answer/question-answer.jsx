@@ -25,17 +25,21 @@ class QuestionAnswer extends React.Component {
                 key={this.props.answer.id}
                 intl={this.props.intl}
                 statement={statement}
+                glowFunction={this.props.glowFunction}
             />)
         );
     }
 
     render () {
         const {
+            // eslint-disable-next-line no-unused-vars
             intl,
-            answer
+            answer,
+            // eslint-disable-next-line no-unused-vars
+            glowFunction
         } = this.props;
 
-        const statements = answer.statements;
+        const statements = answer.statements ? answer.statements : [];
         const variable = answer.variable;
         const startValue = answer.startValue;
         const endValue = answer.endValue;
@@ -71,7 +75,8 @@ class QuestionAnswer extends React.Component {
 
 QuestionAnswer.propTypes = {
     intl: intlShape.isRequired,
-    answer: PropTypes.instanceOf(Answer).isRequired
+    answer: PropTypes.instanceOf(Answer).isRequired,
+    glowFunction: PropTypes.func.isRequired
 };
 
 QuestionAnswer.defaultProps = {};
