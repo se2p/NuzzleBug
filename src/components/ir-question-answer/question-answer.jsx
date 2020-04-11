@@ -4,7 +4,7 @@ import React from 'react';
 import {FormattedMessage, injectIntl, intlShape} from 'react-intl';
 
 import QuestionAnswerStatement from '../ir-question-answer-statement/question-answer-statement.jsx';
-import {Answer} from '../../lib/interrogative-debugging/ir-questions';
+import {Answer} from 'scratch-ir';
 
 import styles from './question-answer.css';
 

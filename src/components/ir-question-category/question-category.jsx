@@ -4,7 +4,7 @@ import {injectIntl} from 'react-intl';
 import VM from 'scratch-vm';
 
 import {ControlDependenceGraph, ControlFlowGraph} from 'scratch-analysis';
-import {Question, computeQuestionAnswer} from '../../lib/interrogative-debugging/ir-questions';
+import {Question, computeQuestionAnswer} from 'scratch-ir';
 
 import Box from '../box/box.jsx';
 import styles from './question-category.css';

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
-import {Question} from '../../lib/interrogative-debugging/ir-questions';
+import {Question} from 'scratch-ir';
 import QuestionAnswer from '../ir-question-answer/question-answer.jsx';
 
 import styles from './question-row.css';

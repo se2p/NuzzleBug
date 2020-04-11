@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {FormattedMessage, injectIntl, intlShape} from 'react-intl';
 
-import {Trace} from 'scratch-vm/src/engine/tracing';
+import {Statement} from 'scratch-ir';
 
 import styles from './question-answer-statement.css';
 

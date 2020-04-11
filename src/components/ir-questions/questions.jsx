@@ -4,7 +4,7 @@ import React from 'react';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 import iconQuestions from './icon--questions.svg';
-import {computeQuestions, createTraceMap} from '../../lib/interrogative-debugging/ir-questions';
+import {computeQuestions, createTraceMap} from 'scratch-ir';
 import {generateCDG, generateCFG} from 'scratch-analysis';
 
 import IRQuestionCategory from '../ir-question-category/question-category.jsx';
