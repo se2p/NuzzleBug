@@ -8,7 +8,7 @@ import GreenFlag from '../green-flag/green-flag.jsx';
 import PauseResume from '../pause-resume/pause-resume.jsx';
 import StopAll from '../stop-all/stop-all.jsx';
 import TurboMode from '../turbo-mode/turbo-mode.jsx';
-import IRQuestions from '../ir-questions/questions.jsx';
+import IRQuestions from '../ir-questions/ir-question-button.jsx';
 
 import styles from './controls.css';
 
@@ -48,9 +48,9 @@ const Controls = function (props) {
         onGreenFlagClick,
         onPauseResumeClick,
         onStopAllClick,
+        onIRQuestionsClick,
         paused,
         turbo,
-        vm,
         ...componentProps
     } = props;
     return (
@@ -79,7 +79,7 @@ const Controls = function (props) {
             ) : null}
             <IRQuestions
                 active={!active || paused}
-                vm={vm}
+                onClick={onIRQuestionsClick}
             />
         </div>
     );
@@ -93,8 +93,8 @@ Controls.propTypes = {
     onGreenFlagClick: PropTypes.func.isRequired,
     onPauseResumeClick: PropTypes.func.isRequired,
     onStopAllClick: PropTypes.func.isRequired,
-    turbo: PropTypes.bool,
-    vm: PropTypes.instanceOf(VM).isRequired
+    onIRQuestionsClick: PropTypes.func.isRequired,
+    turbo: PropTypes.bool
 };
 
 Controls.defaultProps = {

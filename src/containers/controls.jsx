@@ -5,6 +5,7 @@ import VM from 'scratch-vm';
 import {connect} from 'react-redux';
 
 import ControlsComponent from '../components/controls/controls.jsx';
+import {viewCards} from '../reducers/ir-cards.js';
 
 class Controls extends React.Component {
     constructor (props) {
@@ -65,6 +66,7 @@ class Controls extends React.Component {
         const {
             vm, // eslint-disable-line no-unused-vars
             isStarted, // eslint-disable-line no-unused-vars
+            handleIRQuestionsClick,
             projectRunning,
             projectPaused,
             turbo,
@@ -81,6 +83,7 @@ class Controls extends React.Component {
                 onGreenFlagClick={this.handleGreenFlagClick}
                 onPauseResumeClick={this.handlePauseResumeClick}
                 onStopAllClick={this.handleStopAllClick}
+                onIRQuestionsClick={handleIRQuestionsClick}
             />
         );
     }
@@ -88,6 +91,7 @@ class Controls extends React.Component {
 
 Controls.propTypes = {
     isStarted: PropTypes.bool.isRequired,
+    handleIRQuestionsClick: PropTypes.func.isRequired,
     projectPaused: PropTypes.bool.isRequired,
     projectRunning: PropTypes.bool.isRequired,
     turbo: PropTypes.bool.isRequired,
@@ -100,7 +104,9 @@ const mapStateToProps = state => ({
     projectRunning: state.scratchGui.vmStatus.running,
     turbo: state.scratchGui.vmStatus.turbo
 });
-// no-op function to prevent dispatch prop being passed to component
-const mapDispatchToProps = () => ({});
+
+const mapDispatchToProps = dispatch => ({
+    handleIRQuestionsClick: () => dispatch(viewCards())
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Controls);

@@ -1,0 +1,91 @@
+@import "../../css/units.css";
+@import "../../css/colors.css";
+@import "../../css/z-index.css";
+
+.card-title-header {
+    font-size: 0.9rem;
+    margin: 0.9rem;
+    text-align: center;
+    font-weight: bold;
+    color: $ui-primary;
+}
+
+.steps-list {
+    padding-left: 20px;
+}
+
+.category-container {
+    overflow-y: auto;
+    cursor: default;
+}
+
+.question-list {
+    list-style-type: none;
+    padding-inline-start: 0
+}
+
+.question-container {
+    width: 100%;
+    /*padding: 0.2rem 0.5rem 0.2rem 0.5em;*/
+    padding: 0.2rem;
+    margin: 0;
+    list-style-type: none;
+    padding-inline-start: 0
+}
+
+.question-container:hover {
+    background-color: $motion-light-transparent;
+}
+
+.question {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.2rem;
+}
+
+.question-text {
+    padding: 0.75rem 0.5rem;
+}
+
+.show-answer-button {
+    border: 1px solid $ui-black-transparent;
+    border-radius: 0.25rem;
+    padding: 0.75rem 1rem;
+    background: white;
+    font-weight: bold;
+    font-size: 0.85rem;
+    cursor: default;
+}
+.show-answer-button:hover {
+    background-color: $motion-transparent;
+}
+.answer {
+    width: 100%;
+    padding: 0.2rem 0.5rem;
+}
+
+.answer-statements {
+    list-style-type: none;
+}
+
+.statement {
+    cursor: default;
+}
+
+/* setting background color*/
+.left-card::after, .right-card::after {
+    background: $motion-primary;
+}
+.left-button, .right-button {
+    background: $motion-primary;
+    box-shadow: 0 0 0 4px $motion-transparent;
+}
+.left-button:hover, .right-button:hover {
+    box-shadow: 0 0 0 6px $motion-transparent;
+}
+.header-buttons {
+    background: $motion-primary;
+    border-bottom: 1px solid $motion-tertiary;
+}
+
