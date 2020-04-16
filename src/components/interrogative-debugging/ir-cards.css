@@ -21,16 +21,16 @@
 
 .question-list {
     list-style-type: none;
-    padding-inline-start: 0
+    padding-inline-start: 0;
+    padding: 0 1.5rem;
 }
 
 .question-container {
     width: 100%;
-    /*padding: 0.2rem 0.5rem 0.2rem 0.5em;*/
-    padding: 0.2rem;
+    padding: 0.2rem 0.5rem 0.2rem 0.2rem;
     margin: 0;
     list-style-type: none;
-    padding-inline-start: 0
+    padding-inline-start: 0;
 }
 
 .question-container:hover {

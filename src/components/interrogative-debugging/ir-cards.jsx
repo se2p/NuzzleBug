@@ -226,7 +226,15 @@ const QuestionsCards = props => {
 QuestionsCards.propTypes = {
     categories: PropTypes.arrayOf(PropTypes.shape({
         info: PropTypes.shape({
-            name: PropTypes.string.isRequired
+            name: PropTypes.string.isRequired,
+            id: PropTypes.string,
+            currentCostume: PropTypes.number,
+            direction: PropTypes.number,
+            isStage: PropTypes.bool,
+            isOriginal: PropTypes.bool,
+            visible: PropTypes.bool,
+            xPosition: PropTypes.number,
+            yPosition: PropTypes.number
         }).isRequired,
         questions: PropTypes.arrayOf(PropTypes.instanceOf(Question)).isRequired
     })).isRequired,

@@ -24,16 +24,28 @@ const renderRows = (questions, computeAnswer, glowBlock) =>
 
 const QuestionCategory = ({category, computeAnswer, glowBlock}) => (
     <div className={irStyles.categoryContainer}>
-        <ul className={irStyles.questionList}>
-            {renderRows(category.questions, computeAnswer, glowBlock)}
-        </ul>
+        {category.questions.length ? (
+            <ul className={irStyles.questionList}>
+                {renderRows(category.questions, computeAnswer, glowBlock)}
+            </ul>
+        ) : category.info.id ? (
+            <span>{`No questions for ${category.info.isStage ? 'the ' : ''}${category.info.name}`}</span>
+        ) : null}
     </div>
 );
 
 QuestionCategory.propTypes = {
     category: PropTypes.shape({
         info: PropTypes.shape({
-            name: PropTypes.string.isRequired
+            name: PropTypes.string.isRequired,
+            id: PropTypes.string,
+            currentCostume: PropTypes.number,
+            direction: PropTypes.number,
+            isStage: PropTypes.bool,
+            isOriginal: PropTypes.bool,
+            visible: PropTypes.bool,
+            xPosition: PropTypes.number,
+            yPosition: PropTypes.number
         }).isRequired,
         questions: PropTypes.arrayOf(PropTypes.instanceOf(Question)).isRequired
     }).isRequired,

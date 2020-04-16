@@ -46,7 +46,7 @@ class IRQuestion extends React.Component {
             question
         } = this.props;
         return (
-            <Fragment classNam={irStyles.questionContainer}>
+            <Fragment>
                 <Box className={irStyles.question}>
                     <span className={irStyles.questionText}>
                         {question.text}
