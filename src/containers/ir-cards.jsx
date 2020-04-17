@@ -14,7 +14,7 @@ import {
 import IRCardsComponent from '../components/interrogative-debugging/ir-cards.jsx';
 
 import {generateCDG, generateCFG} from 'scratch-analysis';
-import {computeQuestionAnswer, computeQuestions, createTraceMap} from 'scratch-ir';
+import {AnswerProvider, computeQuestions, createTraceMap} from 'scratch-ir';
 
 class IRCards extends React.Component {
     componentWillMount () {
@@ -43,10 +43,19 @@ class IRCards extends React.Component {
             this.cancel = true;
             return;
         }
+        this.answerProvider = new AnswerProvider(vm, traceMap, cfg, cdg);
 
         const content = computeQuestions(vm, traceMap, cfg, cdg);
-
-        this.firstStep = 0;
+        const categories = [];
+        for (const category of content.misc) {
+            if (category.questions.length) {
+                categories.push(category);
+            }
+        }
+        for (const category of content.targets) {
+            categories.push(category);
+        }
+        this.categories = categories;
 
         this.glowBlock = blockId => {
             const glowTimes = 5;
@@ -60,19 +69,6 @@ class IRCards extends React.Component {
                 }, i * 2 * glowDuration);
             }
         };
-
-        const categories = [];
-        for (const category of content.misc) {
-            if (category.questions.length) {
-                categories.push(category);
-            }
-        }
-        for (const category of content.targets) {
-            categories.push(category);
-        }
-        this.categories = categories;
-
-        this.computeAnswer = question => computeQuestionAnswer(question, vm, traceMap, cfg, cdg);
     }
 
     render () {
@@ -84,8 +80,7 @@ class IRCards extends React.Component {
             <IRCardsComponent
                 categories={this.categories}
                 glowBlock={this.glowBlock}
-                step={this.firstStep}
-                computeAnswer={this.computeAnswer}
+                computeAnswer={this.answerProvider.computeQuestionAnswer}
                 {...this.props}
             />
         );
@@ -118,7 +113,7 @@ const mapDispatchToProps = dispatch => ({
     onPrevStep: () => dispatch(prevStep()),
     onDrag: (e_, data) => dispatch(dragCard(data.x, data.y)),
     onStartDrag: () => dispatch(startDrag()),
-    onEndDrag: () => dispatch(endDrag()),
+    onEndDrag: () => dispatch(endDrag())
 });
 
 export default connect(
