@@ -42,10 +42,16 @@ class IRCards extends React.Component {
         this.firstStep = 0;
 
         this.glowBlock = blockId => {
-            vm.runtime.glowBlock(blockId, true);
-            setTimeout(() => {
-                vm.runtime.glowBlock(blockId, false);
-            }, 500);
+            const glowTimes = 5;
+            const glowDuration = 150; // ms
+            for (let i = 0; i < glowTimes; i++) {
+                setTimeout(() => {
+                    vm.runtime.glowBlock(blockId, true);
+                    setTimeout(() => {
+                        vm.runtime.glowBlock(blockId, false);
+                    }, glowDuration);
+                }, i * 2 * glowDuration);
+            }
         };
 
         const categories = [];
