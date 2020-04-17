@@ -30,12 +30,19 @@ class IRCards extends React.Component {
             return;
         }
 
-        const cfg = generateCFG(vm);
-        const cdg = generateCDG(cfg);
-        const traceMap = createTraceMap(vm);
-
-        console.log(cfg.toDot());
-        console.log(cdg.toDot());
+        let cfg;
+        let cdg;
+        let traceMap;
+        try {
+            cfg = generateCFG(vm);
+            cdg = generateCDG(cfg);
+            traceMap = createTraceMap(vm);
+        } catch (e) {
+            console.error(e);
+            this.props.onCloseCards();
+            this.cancel = true;
+            return;
+        }
 
         const content = computeQuestions(vm, traceMap, cfg, cdg);
 
