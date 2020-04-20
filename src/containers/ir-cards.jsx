@@ -57,7 +57,7 @@ class IRCards extends React.Component {
         }
         this.categories = categories;
 
-        this.glowBlock = blockId => {
+        this.glowBlock = blockId => () => {
             const glowTimes = 5;
             const glowDuration = 150; // ms
             for (let i = 0; i < glowTimes; i++) {

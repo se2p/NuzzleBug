@@ -10,14 +10,12 @@ import IRStatement from './ir-statement.jsx';
 
 const renderStatements = (answer, statements, glowBlock) => statements.map(statement =>
     (
-        <li
+        <IRStatement
             key={`${answer.id}-${statement.id}`}
-        >
-            <IRStatement
-                statement={statement}
-                glowBlock={glowBlock}
-            />
-        </li>
+            parentKey={`${answer.id}-${statement.id}`}
+            statement={statement}
+            glowBlock={glowBlock}
+        />
     )
 );
 
