@@ -19,17 +19,15 @@ import irStyles from './ir-cards.css';
 
 const getComponentKey = (parentKey, statement) => {
     let id;
-    if (statement.statement) {
-        const block = statement.statement;
-        id = block.blockId ? block.blockId : block.id;
-    } else if (statement.event) {
+    if (statement.event) {
         const event = statement.event;
         id = `${event.type}:${event.value}`;
     } else if (statement.userEvent) {
         const event = statement.userEvent;
         id = `${event.type}:${event.value}`;
     } else {
-        id = 'unknown';
+        const block = statement.block;
+        id = block ? block.id : 'unknown';
     }
     return `${parentKey}-${id}`;
 };
@@ -75,10 +73,9 @@ const prettyPrint = data => {
 };
 
 const IRStatement = ({parentKey, glowBlock, statement}) => {
-    const tracedBlock = statement.statement;
+    const block = statement.block;
     // blockId for trace content, id for static blocks
-    const blockId = tracedBlock ? (tracedBlock.blockId ? tracedBlock.blockId : tracedBlock.id) : null;
-    const handleClick = blockId ? glowBlock(blockId) : null;
+    const handleClick = block ? glowBlock(block.id) : null;
 
     let content;
     let children;
@@ -91,29 +88,29 @@ const IRStatement = ({parentKey, glowBlock, statement}) => {
     case CalledButWrongBranchStatement: {
         content = (
             <span>
-                {`${prettyPrint(tracedBlock)} was called ${statement.values.length} times.`}
+                {`${prettyPrint(block)} was called ${statement.values.length} times.`}
             </span>
         );
         break;
     }
     case NotCalledControlStatement: {
-        content = <span> {`${prettyPrint(tracedBlock)} was never called.`} </span>;
+        content = <span> {`${prettyPrint(block)} was never called.`} </span>;
         break;
     }
     case CalledStatement: {
-        content = (<span> {`${tracedBlock.opcode} was called, because`} </span>);
+        content = (<span> {`${block.opcode} was called, because`} </span>);
         children = (
             <ul>
-                {renderNestedStatements(parentKey, statement.controlStatements, glowBlock)}
+                {renderNestedStatements(parentKey, statement.controlBlocks, glowBlock)}
             </ul>
         );
         break;
     }
     case NotCalledStatement: {
-        content = (<span> {`${tracedBlock.opcode} was never called, because`} </span>);
+        content = (<span> {`${block.opcode} was never called, because`} </span>);
         children = (
             <ul>
-                {renderNestedStatements(parentKey, statement.controlStatements, glowBlock)}
+                {renderNestedStatements(parentKey, statement.controlBlocks, glowBlock)}
             </ul>
         );
         break;
@@ -140,7 +137,7 @@ const IRStatement = ({parentKey, glowBlock, statement}) => {
         }
         children = (
             <ul>
-                {renderNestedStatements(parentKey, statement.sendStatements, glowBlock)}
+                {renderNestedStatements(parentKey, statement.sendBlocks, glowBlock)}
             </ul>
         );
         break;
