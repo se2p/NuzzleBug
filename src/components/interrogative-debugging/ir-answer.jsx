@@ -7,8 +7,9 @@ import styles from './ir-cards.css';
 import Box from '../box/box.jsx';
 
 import IRStatement from './ir-statement.jsx';
+import {intlShape, injectIntl} from 'react-intl';
 
-const renderStatements = (answer, statements, glowBlock) => statements.map(statement =>
+const renderStatements = (statements, answer, glowBlock) => statements.map(statement =>
     (
         <IRStatement
             key={`${answer.id}-${statement.id}`}
@@ -19,31 +20,23 @@ const renderStatements = (answer, statements, glowBlock) => statements.map(state
     )
 );
 
-const IRAnswer = ({answer, glowBlock}) => {
+const IRAnswer = ({answer, glowBlock, intl}) => {
+    const text = answer.text;
     const statements = answer.statements ? answer.statements : [];
     const variable = answer.variable;
     const startValue = answer.startValue;
     const endValue = answer.endValue;
 
-    const renderedStatements = renderStatements(answer, statements, glowBlock);
+    const renderedStatements = renderStatements(statements, answer, glowBlock);
 
     return (
         <Box
             className={styles.answer}
         >
             <span>
-                {answer.text}
+                {intl.formatMessage(text.msg, text.data)}
             </span>
             <br />
-            {variable ? (
-                <div>
-                    <span>{`${variable.name} was changed ${statements.length} times.`}</span>
-                    <br />
-                    <span>{`Start value: ${startValue}`}</span>
-                    <br />
-                    <span>{`End value: ${endValue}.`}</span>
-                </div>
-            ) : null}
             {statements.length ? (
                 <ul className={styles.answerStatements}>
                     {renderedStatements}
@@ -54,8 +47,9 @@ const IRAnswer = ({answer, glowBlock}) => {
 };
 
 IRAnswer.propTypes = {
+    intl: intlShape.isRequired,
     answer: PropTypes.instanceOf(Answer).isRequired,
     glowBlock: PropTypes.func.isRequired
 };
 
-export default IRAnswer;
+export default injectIntl(IRAnswer);

@@ -12,6 +12,7 @@ import {
     endDrag
 } from '../reducers/ir-cards';
 import IRCardsComponent from '../components/interrogative-debugging/ir-cards.jsx';
+import {questionMessages, answerMessages} from '../lib/libraries/ir-messages';
 
 import {generateCDG, generateCFG} from 'scratch-analysis';
 import {AnswerProvider, computeQuestions, createTraceMap} from 'scratch-ir';
@@ -43,7 +44,7 @@ class IRCards extends React.Component {
             this.cancel = true;
             return;
         }
-        this.answerProvider = new AnswerProvider(vm, traceMap, cfg, cdg);
+        this.answerProvider = new AnswerProvider(vm, traceMap, cfg, cdg, answerMessages);
 
         const content = computeQuestions(vm, traceMap, cfg, cdg);
         const categories = [];
