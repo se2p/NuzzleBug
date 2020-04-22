@@ -17,27 +17,12 @@ import {
 
 import irStyles from './ir-cards.css';
 
-const getComponentKey = (parentKey, statement) => {
-    let id;
-    if (statement.event) {
-        const event = statement.event;
-        id = `${event.type}:${event.value}`;
-    } else if (statement.userEvent) {
-        const event = statement.userEvent;
-        id = `${event.type}:${event.value}`;
-    } else {
-        const block = statement.block;
-        id = block ? block.id : 'unknown';
-    }
-    return `${parentKey}-${id}`;
-};
-
-const renderNestedStatements = (parentKey, children, glowBlock) => children.map(stmt => {
-    const key = getComponentKey(parentKey, stmt);
+const renderNestedStatements = (parentKey, children, glowBlock) => children.map(statement => {
+    const key = `${parentKey}-${statement.id}`;
     return (<IRStatement
         key={key}
         parentKey={key}
-        statement={stmt}
+        statement={statement}
         glowBlock={glowBlock}
     />);
 });

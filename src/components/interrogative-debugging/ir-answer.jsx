@@ -7,18 +7,19 @@ import styles from './ir-cards.css';
 import Box from '../box/box.jsx';
 
 import IRStatement from './ir-statement.jsx';
-import {intlShape, injectIntl} from 'react-intl';
+import {injectIntl, intlShape} from 'react-intl';
 
-const renderStatements = (statements, answer, glowBlock) => statements.map(statement =>
-    (
+const renderStatements = (statements, answer, glowBlock) => statements.map(statement => {
+    const key = `${(answer.id)}-${statement.id}`;
+    return (
         <IRStatement
-            key={`${answer.id}-${statement.id}`}
-            parentKey={`${answer.id}-${statement.id}`}
+            key={key}
+            parentKey={key}
             statement={statement}
             glowBlock={glowBlock}
         />
-    )
-);
+    );
+});
 
 const IRAnswer = ({answer, glowBlock, intl}) => {
     const text = answer.text;
