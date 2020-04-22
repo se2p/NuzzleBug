@@ -37,7 +37,7 @@ const QuestionCategory = ({category, computeAnswer, glowBlock}) => (
 QuestionCategory.propTypes = {
     category: PropTypes.shape({
         info: PropTypes.shape({
-            name: PropTypes.string.isRequired,
+            name: PropTypes.string,
             id: PropTypes.string,
             currentCostume: PropTypes.number,
             direction: PropTypes.number,

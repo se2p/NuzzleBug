@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, {Fragment} from 'react';
 import Draggable from 'react-draggable';
 
-import {FormattedMessage} from 'react-intl';
+import {injectIntl, intlShape, FormattedMessage} from 'react-intl';
 
 import styles from '../cards/card.css';
 import irStyles from './ir-cards.css';
@@ -68,7 +68,7 @@ NextPrevButtons.propTypes = {
     onPrevStep: PropTypes.func
 };
 
-const QuestionsCardHeader = ({title, onCloseCards, onShrinkExpandCards, totalSteps, step, expanded}) => (
+const QuestionsCardHeader = ({intl, title, onCloseCards, onShrinkExpandCards, totalSteps, step, expanded}) => (
     <div
         className={expanded ?
             classNames(styles.headerButtons, irStyles.headerButtons) :
@@ -86,7 +86,7 @@ const QuestionsCardHeader = ({title, onCloseCards, onShrinkExpandCards, totalSte
             </div>
         ) : null}
         <div className={irStyles.cardTitleHeader}>
-            <span> {title} </span>
+            <span> {intl.formatMessage(title.msg, title.data)} </span>
         </div>
         <div className={styles.headerButtonsRight}>
             <div
@@ -128,18 +128,23 @@ const QuestionsCardHeader = ({title, onCloseCards, onShrinkExpandCards, totalSte
     </div>
 );
 QuestionsCardHeader.propTypes = {
-    title: PropTypes.string.isRequired,
+    title: PropTypes.shape({
+        msg: PropTypes.object.isRequired,
+        data: PropTypes.object
+    }),
     expanded: PropTypes.bool.isRequired,
     onCloseCards: PropTypes.func.isRequired,
     onShrinkExpandCards: PropTypes.func.isRequired,
     step: PropTypes.number,
-    totalSteps: PropTypes.number
+    totalSteps: PropTypes.number,
+    intl: intlShape.isRequired
 };
 
 const QuestionsCards = props => {
     const {
         categories,
         computeAnswer,
+        intl,
         isRtl,
         glowBlock,
         onCloseCards,
@@ -197,7 +202,8 @@ const QuestionsCards = props => {
                 <div className={styles.cardContainer}>
                     <div className={styles.card}>
                         <QuestionsCardHeader
-                            title={categories[step].info.name}
+                            intl={intl}
+                            title={categories[step].title}
                             expanded={expanded}
                             step={step}
                             totalSteps={categories.length}
@@ -225,8 +231,12 @@ const QuestionsCards = props => {
 };
 QuestionsCards.propTypes = {
     categories: PropTypes.arrayOf(PropTypes.shape({
+        title: PropTypes.shape({
+            msg: PropTypes.object.isRequired,
+            data: PropTypes.object
+        }),
         info: PropTypes.shape({
-            name: PropTypes.string.isRequired,
+            name: PropTypes.string,
             id: PropTypes.string,
             currentCostume: PropTypes.number,
             direction: PropTypes.number,
@@ -241,6 +251,7 @@ QuestionsCards.propTypes = {
     computeAnswer: PropTypes.func.isRequired,
     dragging: PropTypes.bool.isRequired,
     expanded: PropTypes.bool.isRequired,
+    intl: intlShape.isRequired,
     isRtl: PropTypes.bool.isRequired,
     glowBlock: PropTypes.func.isRequired,
     locale: PropTypes.string.isRequired,
@@ -256,4 +267,4 @@ QuestionsCards.propTypes = {
     y: PropTypes.number
 };
 
-export default QuestionsCards;
+export default injectIntl(QuestionsCards);

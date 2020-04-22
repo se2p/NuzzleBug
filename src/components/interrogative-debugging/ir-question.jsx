@@ -2,7 +2,7 @@ import React, {Fragment} from 'react';
 import bindAll from 'lodash.bindall';
 import Box from '../box/box.jsx';
 import irStyles from './ir-cards.css';
-import {FormattedMessage} from 'react-intl';
+import {injectIntl, intlShape, FormattedMessage} from 'react-intl';
 import PropTypes from 'prop-types';
 import {Question} from 'scratch-ir';
 import IRAnswer from './ir-answer.jsx';
@@ -42,14 +42,16 @@ class IRQuestion extends React.Component {
 
     render () {
         const {
+            intl,
             glowBlock,
             question
         } = this.props;
+        const text = question.text;
         return (
             <Fragment>
                 <Box className={irStyles.question}>
                     <span className={irStyles.questionText}>
-                        {question.text}
+                        {intl.formatMessage(text.msg, text.data)}
                     </span>
                     <button
                         className={irStyles.showAnswerButton}
@@ -93,9 +95,10 @@ class IRQuestion extends React.Component {
 }
 
 IRQuestion.propTypes = {
+    intl: intlShape.isRequired,
     computeAnswer: PropTypes.func.isRequired,
     glowBlock: PropTypes.func.isRequired,
     question: PropTypes.instanceOf(Question).isRequired
 };
 
-export default IRQuestion;
+export default injectIntl(IRQuestion);

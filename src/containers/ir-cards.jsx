@@ -46,7 +46,7 @@ class IRCards extends React.Component {
         }
         this.answerProvider = new AnswerProvider(vm, traceMap, cfg, cdg, answerMessages);
 
-        const content = computeQuestions(vm, traceMap, cfg, cdg);
+        const content = computeQuestions(vm, traceMap, questionMessages);
         const categories = [];
         for (const category of content.misc) {
             if (category.questions.length) {
