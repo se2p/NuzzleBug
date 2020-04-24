@@ -11,6 +11,10 @@
     opacity: 0.5;
 }
 
+.ir-questions-button:hover {
+    background-color: $motion-light-transparent;
+}
+
 .ir-questions-button.is-active {
     opacity: 1;
 }

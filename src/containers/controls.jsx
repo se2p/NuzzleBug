@@ -69,6 +69,7 @@ class Controls extends React.Component {
             handleIRQuestionsClick,
             projectRunning,
             projectPaused,
+            irDisabled,
             turbo,
             ...props
         } = this.props;
@@ -78,6 +79,7 @@ class Controls extends React.Component {
                 {...props}
                 active={projectRunning}
                 paused={projectPaused}
+                irDisabled={irDisabled}
                 turbo={turbo}
                 vm={vm}
                 onGreenFlagClick={this.handleGreenFlagClick}
@@ -93,6 +95,7 @@ Controls.propTypes = {
     isStarted: PropTypes.bool.isRequired,
     handleIRQuestionsClick: PropTypes.func.isRequired,
     projectPaused: PropTypes.bool.isRequired,
+    irDisabled: PropTypes.bool.isRequired,
     projectRunning: PropTypes.bool.isRequired,
     turbo: PropTypes.bool.isRequired,
     vm: PropTypes.instanceOf(VM)
@@ -101,6 +104,7 @@ Controls.propTypes = {
 const mapStateToProps = state => ({
     isStarted: state.scratchGui.vmStatus.running,
     projectPaused: state.scratchGui.vmStatus.paused,
+    irDisabled: state.scratchGui.ircards.disabled,
     projectRunning: state.scratchGui.vmStatus.running,
     turbo: state.scratchGui.vmStatus.turbo
 });

@@ -1,4 +1,11 @@
+// Copied from './vm-status'
+const SET_RUNNING_STATE = 'scratch-gui/vm-status/SET_RUNNING_STATE';
+// Copied from './block-drag'
+const BLOCK_DRAG_UPDATE = 'scratch-gui/block-drag/BLOCK_DRAG_UPDATE';
+
 const CLOSE_CARDS = 'scratch-gui/ircards/CLOSE_CARDS';
+const ENABLE_CARDS = 'scratch-gui/ircards/ENABLE_CARDS';
+const DISABLE_CARDS = 'scratch-gui/ircards/DISABLE_CARDS';
 const SHRINK_EXPAND_CARDS = 'scratch-gui/ircards/SHRINK_EXPAND_CARDS';
 const VIEW_CARDS = 'scratch-gui/ircards/VIEW_CARDS';
 const NEXT_STEP = 'scratch-gui/ircards/NEXT_STEP';
@@ -9,7 +16,7 @@ const END_DRAG = 'scratch-gui/ircards/END_DRAG';
 
 const initialState = {
     visible: false,
-    content: {},
+    disabled: false,
     step: 0,
     x: 0,
     y: 0,
@@ -23,6 +30,25 @@ const reducer = function (state, action) {
     case CLOSE_CARDS:
         return Object.assign({}, state, {
             visible: false
+        });
+    case BLOCK_DRAG_UPDATE:
+        return Object.assign({}, state, {
+            disabled: true
+        });
+    case SET_RUNNING_STATE:
+        if (!action.running) {
+            return state;
+        }
+        return Object.assign({}, state, {
+            disabled: false
+        });
+    case ENABLE_CARDS:
+        return Object.assign({}, state, {
+            disabled: false
+        });
+    case DISABLE_CARDS:
+        return Object.assign({}, state, {
+            disabled: true
         });
     case SHRINK_EXPAND_CARDS:
         return Object.assign({}, state, {
@@ -69,6 +95,14 @@ const closeCards = function () {
     return {type: CLOSE_CARDS};
 };
 
+const enableCards = function () {
+    return {type: ENABLE_CARDS};
+};
+
+const disableCards = function () {
+    return {type: DISABLE_CARDS};
+};
+
 const shrinkExpandCards = function () {
     return {type: SHRINK_EXPAND_CARDS};
 };
@@ -98,6 +132,8 @@ export {
     initialState as irCardsInitialState,
     viewCards,
     closeCards,
+    enableCards,
+    disableCards,
     shrinkExpandCards,
     nextStep,
     prevStep,

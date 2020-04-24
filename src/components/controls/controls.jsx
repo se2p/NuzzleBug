@@ -2,7 +2,6 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import VM from 'scratch-vm';
 
 import GreenFlag from '../green-flag/green-flag.jsx';
 import PauseResume from '../pause-resume/pause-resume.jsx';
@@ -49,6 +48,7 @@ const Controls = function (props) {
         onPauseResumeClick,
         onStopAllClick,
         onIRQuestionsClick,
+        irDisabled,
         paused,
         turbo,
         ...componentProps
@@ -78,7 +78,7 @@ const Controls = function (props) {
                 <TurboMode />
             ) : null}
             <IRQuestions
-                active={!active || paused}
+                active={!irDisabled && (!active || paused)}
                 onClick={onIRQuestionsClick}
             />
         </div>
@@ -94,13 +94,15 @@ Controls.propTypes = {
     onPauseResumeClick: PropTypes.func.isRequired,
     onStopAllClick: PropTypes.func.isRequired,
     onIRQuestionsClick: PropTypes.func.isRequired,
+    irDisabled: PropTypes.bool,
     turbo: PropTypes.bool
 };
 
 Controls.defaultProps = {
     active: false,
     paused: false,
-    turbo: false
+    turbo: false,
+    irDisabled: false
 };
 
 export default injectIntl(Controls);

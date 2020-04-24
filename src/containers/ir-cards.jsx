@@ -4,6 +4,8 @@ import React from 'react';
 import VirtualMachine from 'scratch-vm';
 import {
     closeCards,
+    enableCards,
+    disableCards,
     shrinkExpandCards,
     nextStep,
     prevStep,
@@ -18,14 +20,16 @@ import {generateCDG, generateCFG} from 'scratch-analysis';
 import {AnswerProvider, computeQuestions, createTraceMap} from 'scratch-ir';
 
 class IRCards extends React.Component {
-    componentWillMount () {
+    constructor (props) {
+        super(props);
         if (!this.props.visible) {
             this.cancel = true;
             return;
         }
         const vm = this.props.vm;
-        if (this.props.vm.runtime.traceInfo.tracer.traces.length === 0) {
+        if (this.props.vm.runtime.traceInfo.isEmpty()) {
             this.props.onCloseCards();
+            this.props.onDisableCards();
             this.cancel = true;
 
             return;
@@ -39,8 +43,10 @@ class IRCards extends React.Component {
             cdg = generateCDG(cfg);
             traceMap = createTraceMap(vm);
         } catch (e) {
-            console.error(e);
+            // eslint-disable-next-line no-console
+            console.error(new Error('Failed to generate CFG or CDG'), e);
             this.props.onCloseCards();
+            this.props.onDisableCards();
             this.cancel = true;
             return;
         }
@@ -91,6 +97,8 @@ class IRCards extends React.Component {
 IRCards.propTypes = {
     visible: PropTypes.bool.isRequired,
     onCloseCards: PropTypes.func.isRequired,
+    onEnableCards: PropTypes.func.isRequired,
+    onDisableCards: PropTypes.func.isRequired,
     locale: PropTypes.string.isRequired,
     vm: PropTypes.instanceOf(VirtualMachine).isRequired
 };
@@ -109,6 +117,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     onCloseCards: () => dispatch(closeCards()),
+    onEnableCards: () => dispatch(enableCards()),
+    onDisableCards: () => dispatch(disableCards()),
     onShrinkExpandCards: () => dispatch(shrinkExpandCards()),
     onNextStep: () => dispatch(nextStep()),
     onPrevStep: () => dispatch(prevStep()),
