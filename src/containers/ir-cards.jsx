@@ -69,9 +69,13 @@ class IRCards extends React.Component {
             const glowDuration = 150; // ms
             for (let i = 0; i < glowTimes; i++) {
                 setTimeout(() => {
-                    vm.runtime.glowBlock(blockId, true);
+                    try {
+                        vm.runtime.glowBlock(blockId, true);
+                    } catch (ignored) {} // eslint-disable-line no-empty
                     setTimeout(() => {
-                        vm.runtime.glowBlock(blockId, false);
+                        try {
+                            vm.runtime.glowBlock(blockId, false);
+                        } catch (ignored) {} // eslint-disable-line no-empty
                     }, glowDuration);
                 }, i * 2 * glowDuration);
             }
