@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-
+import {injectIntl, intlShape, FormattedMessage} from 'react-intl';
+import bindAll from 'lodash.bindall';
+import classNames from 'classnames';
 import {
     CalledButWrongBranchStatement,
     CalledControlStatement,
     CalledStatement,
     ChangingStatement,
-    ControlStatement,
     EventStatement,
     NotCalledControlStatement,
     NotCalledStatement,
@@ -16,151 +17,233 @@ import {
 } from 'scratch-ir';
 
 import irStyles from './ir-cards.css';
+import {blockMessages as blockMsg, statementMessages as stmtMsg} from '../../lib/libraries/ir-messages.js';
 
-const renderNestedStatements = (parentKey, children, glowBlock) => children.map(statement => {
+const renderNestedStatements = (intl, parentKey, children, glowBlock) => children.map(statement => {
     const key = `${parentKey}-${statement.id}`;
     return (<IRStatement
+        intl={intl}
         key={key}
         parentKey={key}
         statement={statement}
         glowBlock={glowBlock}
+        inner
     />);
 });
 
-const forBlock = opcode => {
-    switch (opcode) {
-    case '':
-        return '';
-    }
-};
-
-// TODO Phil 20/04/2020: obviously adjust this
-const prettyPrint = data => {
+const prettyPrint = (intl, data) => {
     const opcode = data.opcode ? data.opcode : '???';
-    switch (opcode) {
-    case 'control_forever': {
-        return `Forever loop`;
+    if (blockMsg.hasOwnProperty(opcode)) {
+        return intl.formatMessage(blockMsg[opcode]);
     }
-    case 'control_repeat': {
-        return `Repeat loop`;
-    }
-    case 'control_repeat_until': {
-        return `Repeat until loop`;
-    }
-    case 'control_if': {
-        return `If block`;
-    }
-    case 'control_if_else': {
-        return `If else block`;
-    }
-    }
-    return '';
+    return opcode;
 };
 
-const IRStatement = ({parentKey, glowBlock, statement}) => {
-    const block = statement.block;
-    // blockId for trace content, id for static blocks
-    const handleClick = block ? glowBlock(block.id) : null;
+class IRStatement extends React.Component {
+    constructor (props) {
+        super(props);
 
-    let content;
-    let children;
+        bindAll(this, [
+            'handleExpand'
+        ]);
 
-    switch (statement.constructor) {
-    case ChangingStatement: {
-        content = (<span> {statement.startValue} {'->'} {statement.endValue} </span>);
-        break;
+        this.state = {
+            expand: this.props.inner
+        };
     }
-    case CalledButWrongBranchStatement: {
-        content = (
-            <span>
-                {`${prettyPrint(block)} was called ${statement.values.length} times.`}
-            </span>
-        );
-        break;
+
+    handleExpand (e) {
+        e.preventDefault();
+
+        this.setState(state => ({
+            expand: !state.expand
+        }));
     }
-    case NotCalledControlStatement: {
-        content = <span> {`${prettyPrint(block)} was never called.`} </span>;
-        break;
-    }
-    case CalledStatement: {
-        content = (<span> {`${block.opcode} was called, because`} </span>);
-        children = (
-            <ul>
-                {renderNestedStatements(parentKey, statement.controlBlocks, glowBlock)}
-            </ul>
-        );
-        break;
-    }
-    case NotCalledStatement: {
-        content = (<span> {`${block.opcode} was never called, because`} </span>);
-        children = (
-            <ul>
-                {renderNestedStatements(parentKey, statement.controlBlocks, glowBlock)}
-            </ul>
-        );
-        break;
-    }
-    case EventStatement: {
-        const event = statement.event;
-        switch (event.type) {
-        case 'broadcast': {
-            content = statement.wasCalled ? (
-                <span> {`Broadcast ${event.value} was called.`} </span>
-            ) : (
-                <span> {`Broadcast ${event.value} never called.`} </span>
+
+    render () {
+        const {
+            intl,
+            parentKey,
+            glowBlock,
+            statement,
+            inner
+        } = this.props;
+        const block = statement.block;
+        // blockId for trace content, id for static blocks
+        const handleClick = block ? glowBlock(block.id) : null;
+
+        let message; // has to be set.
+        let messageData; // can be empty
+        let children; // can be empty
+
+        switch (statement.constructor) {
+        case ChangingStatement: {
+            message = stmtMsg.changingStatement;
+            messageData = {
+                startValue: statement.startValue,
+                endValue: statement.endValue
+            };
+            break;
+        }
+        case CalledButWrongBranchStatement: {
+            message = stmtMsg.calledButWrongBranchStatement;
+            messageData = {
+                block: prettyPrint(intl, block),
+                timesCalled: statement.values.length,
+                value: `${statement.values[0]}`
+            };
+            break;
+        }
+        case CalledControlStatement: {
+            message = stmtMsg.calledControlStatement;
+            messageData = {
+                block: prettyPrint(intl, block)
+            };
+            break;
+        }
+        case NotCalledControlStatement: {
+            message = stmtMsg.notCalledControlStatement;
+            messageData = {
+                block: prettyPrint(intl, block)
+            };
+            break;
+        }
+        case CalledStatement: {
+            message = stmtMsg.calledStatement;
+            messageData = {
+                block: prettyPrint(intl, block)
+            };
+            children = (
+                <ul className={irStyles.statementsInnerList}>
+                    {renderNestedStatements(intl, parentKey, statement.controlBlocks, glowBlock)}
+                </ul>
             );
             break;
         }
-        case 'clone': {
-            content = statement.wasCalled ? (
-                <span> {`Sprite ${event.value} was cloned.`} </span>
-            ) : (
-                <span> {`Sprite ${event.value} never cloned.`} </span>
+        case NotCalledStatement: {
+            message = stmtMsg.notCalledStatement;
+            messageData = {
+                block: prettyPrint(intl, block)
+            };
+            children = (
+                <ul className={irStyles.statementsInnerList}>
+                    {renderNestedStatements(intl, parentKey, statement.controlBlocks, glowBlock)}
+                </ul>
             );
             break;
         }
+        case OverwrittenStatement: {
+            message = stmtMsg.overwrittenStatement;
+            messageData = {
+                block: prettyPrint(intl, block)
+            };
+            break;
         }
-        children = (
-            <ul>
-                {renderNestedStatements(parentKey, statement.sendBlocks, glowBlock)}
-            </ul>
-        );
-        break;
-    }
-    case Statement:
-    case OverwrittenStatement:
-    case ControlStatement:
-    case CalledControlStatement:
-    case UserEventStatement: {
-        content = <span>{statement.constructor.name}</span>;
-        break;
-    }
-    default: {
-        content = (
-            <span>{'Could not find that statement.'}</span>
-        );
-        break;
-    }
-    }
-    // TODO Phil 17/04/2020: Make children hideable
-    return (
-        <li className={irStyles.statement}>
-            <div onClick={handleClick}>
-                {content}
-            </div>
-            {children ? (
+        case EventStatement: {
+            const event = statement.event;
+            switch (event.type) {
+            case 'broadcast': {
+                if (statement.wasCalled) {
+                    message = stmtMsg.calledBroadcast;
+                    messageData = {
+                        name: statement.event.value
+                    };
+                } else {
+                    message = stmtMsg.notCalledBroadcast;
+                    messageData = {
+                        name: statement.event.value
+                    };
+                }
+                break;
+            }
+            case 'clone': {
+                if (statement.wasCalled) {
+                    message = stmtMsg.createdClone;
+                    messageData = {
+                        name: statement.event.value
+                    };
+                } else {
+                    message = stmtMsg.notCreatedClone;
+                    messageData = {
+                        name: statement.event.value
+                    };
+                }
+            }
+            }
+            children = (
+                <ul className={irStyles.statementsInnerList}>
+                    {renderNestedStatements(intl, parentKey, statement.sendBlocks, glowBlock)}
+                </ul>
+            );
+            break;
+        }
+        case UserEventStatement: {
+            if (statement.wasCalled) {
+                message = stmtMsg.calledUserEvent;
+                messageData = {
+                    name: statement.userEvent.name
+                };
+            } else {
+                message = stmtMsg.notCalledUserEvent;
+                messageData = {
+                    name: statement.userEvent.name
+                };
+            }
+            break;
+        }
+        default: {
+            message = stmtMsg.failed;
+            break;
+        }
+        }
+        if (!message) {
+            return null;
+        }
+        return (
+            <li
+                className={classNames(
+                    inner ? classNames(irStyles.statement, irStyles.statementInner) : irStyles.statement,
+                    {
+                        [irStyles.statementClickable]: !!handleClick
+                    }
+                )}
+            >
                 <div>
-                    {children}
+                    <div onClick={handleClick}>
+                        <span>{intl.formatMessage(message, messageData)}</span>
+                    </div>
+                    { !inner && children ? (
+                        <button onClick={this.handleExpand}>
+                            {this.state.expand ?
+                                <FormattedMessage
+                                    defaultMessage="Close"
+                                    description="Title for answer statement to close."
+                                    id="gui.ir-statement.close"
+                                /> : <FormattedMessage
+                                    defaultMessage="Expand"
+                                    description="Title for answer statement to expand additional content."
+                                    id="gui.ir-statement.expand"
+                                />
+                            }
+                        </button>
+                    ) : null}
                 </div>
-            ) : null}
-        </li>
-    );
-};
+                {children && this.state.expand ? (
+                    <div>
+                        {children}
+                    </div>
+                ) : null}
+            </li>
+        );
+    }
+}
 
 IRStatement.propTypes = {
+    intl: intlShape.isRequired,
     parentKey: PropTypes.string.isRequired,
     glowBlock: PropTypes.func.isRequired,
-    statement: PropTypes.instanceOf(Statement)
+    statement: PropTypes.instanceOf(Statement),
+    inner: PropTypes.bool.isRequired
 };
 
-export default IRStatement;
+export default injectIntl(IRStatement);

@@ -14,6 +14,10 @@
     padding-left: 20px;
 }
 
+.step-body {
+    overflow-y: auto;
+}
+
 .category-container {
     overflow-y: auto;
     cursor: default;
@@ -65,12 +69,31 @@
     padding: 0.2rem 0.5rem;
 }
 
-.answer-statements {
+.answer-statements-list {
     list-style-type: none;
+    padding-inline-start: 0;
+    border: 0 solid $ui-black-transparent;
+    /*border-width: 0 0 1px 1px;*/
 }
 
 .statement {
     cursor: default;
+    border: 0 solid $ui-black-transparent;
+}
+
+.statement-clickable:hover {
+    background-color: $motion-light-transparent;
+}
+
+.statements-inner-list {
+    list-style-type: none;
+    padding-inline-start: 0;
+    border: 0 solid $ui-black-transparent;
+    /*border-width: 0 0 1px 1px;*/
+}
+.statement-inner {
+    border: 0 solid $ui-black-transparent;
+    border-width: 1px 0 0 0;
 }
 
 /* setting background color*/
