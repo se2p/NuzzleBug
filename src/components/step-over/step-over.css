@@ -1,0 +1,15 @@
+@import "../../css/colors.css";
+
+.stopOver {
+    width: 2rem;
+    height: 2rem;
+    padding: 0.375rem;
+    border-radius: 0.25rem;
+    user-select: none;
+    cursor: pointer;
+    opacity: 1;
+}
+
+.stopOver:hover {
+    background-color: $motion-light-transparent;
+}

@@ -13,6 +13,7 @@ class Controls extends React.Component {
         bindAll(this, [
             'handleGreenFlagClick',
             'handlePauseResumeClick',
+            'handleStepOver',
             'handleStopAllClick'
         ]);
     }
@@ -32,6 +33,13 @@ class Controls extends React.Component {
                 this.props.vm.start();
             }
             this.props.vm.greenFlag();
+        }
+    }
+    handleStepOver (e) {
+        e.preventDefault();
+
+        if (this.props.projectPaused) {
+            this.props.vm.stepOver();
         }
     }
     handlePauseResumeClick (e) {
@@ -83,6 +91,7 @@ class Controls extends React.Component {
                 turbo={turbo}
                 vm={vm}
                 onGreenFlagClick={this.handleGreenFlagClick}
+                onStepOverClick={this.handleStepOver}
                 onPauseResumeClick={this.handlePauseResumeClick}
                 onStopAllClick={this.handleStopAllClick}
                 onIRQuestionsClick={handleIRQuestionsClick}

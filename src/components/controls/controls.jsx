@@ -5,6 +5,7 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 import GreenFlag from '../green-flag/green-flag.jsx';
 import PauseResume from '../pause-resume/pause-resume.jsx';
+import StepOver from '../step-over/step-over.jsx';
 import StopAll from '../stop-all/stop-all.jsx';
 import TurboMode from '../turbo-mode/turbo-mode.jsx';
 import IRQuestions from '../ir-questions/ir-question-button.jsx';
@@ -27,6 +28,11 @@ const messages = defineMessages({
         defaultMessage: 'Resume',
         description: 'Resume button title'
     },
+    stepOverTitle: {
+        id: 'gui.controls.step-over',
+        defaultMessage: 'Step Over',
+        description: 'Step Over title'
+    },
     stopTitle: {
         id: 'gui.controls.stop',
         defaultMessage: 'Stop',
@@ -47,6 +53,7 @@ const Controls = function (props) {
         onGreenFlagClick,
         onPauseResumeClick,
         onStopAllClick,
+        onStepOverClick,
         onIRQuestionsClick,
         irDisabled,
         paused,
@@ -69,6 +76,10 @@ const Controls = function (props) {
                 title={intl.formatMessage(paused ? messages.resumeTitle : messages.pauseTitle)}
                 onClick={onPauseResumeClick}
             />
+            {paused ? (<StepOver
+                title={intl.formatMessage(messages.stepOverTitle)}
+                onClick={onStepOverClick}
+            />) : null}
             <StopAll
                 active={active}
                 title={intl.formatMessage(messages.stopTitle)}
@@ -92,6 +103,7 @@ Controls.propTypes = {
     intl: intlShape.isRequired,
     onGreenFlagClick: PropTypes.func.isRequired,
     onPauseResumeClick: PropTypes.func.isRequired,
+    onStepOverClick: PropTypes.func.isRequired,
     onStopAllClick: PropTypes.func.isRequired,
     onIRQuestionsClick: PropTypes.func.isRequired,
     irDisabled: PropTypes.bool,
