@@ -221,6 +221,18 @@ const questionMessages = defineMessages({
     broadcastDidntCall: {
         defaultMessage: `Why didn't event {broadcastName} get called?`,
         id: 'gui.ir-question.broadcast-didnt-call'
+    },
+
+    /**
+     * Cloning events
+     */
+    cloneDidCreate: {
+        defaultMessage: `Why did {targetName} get cloned?`,
+        id: 'gui.ir-question.clone-did-create'
+    },
+    cloneDidntCreate: {
+        defaultMessage: `Why didn't {targetName} get cloned?`,
+        id: 'gui.ir-question.clone-didnt-create'
     }
 });
 
@@ -556,7 +568,11 @@ const answerMessages = defineMessages({
      * Broadcasts
      */
     broadcastCalled: {
-        defaultMessage: `Broadcast {broadcastName} was called, here's why.`,
+        defaultMessage: `Broadcast {broadcastName} was called {calledTimes, plural,
+            =1 {once}
+            =2 {twice}
+            other {# times}
+        }.`,
         id: 'gui.ir-answer.broadcast-called'
     },
     broadcastNoBlock: {
@@ -566,6 +582,22 @@ const answerMessages = defineMessages({
     broadcastNeverCalled: {
         defaultMessage: `{broadcastName} send blocks were never called.`,
         id: 'gui.ir-answer.broadcast-never-called'
+    },
+
+    /**
+     * Cloning
+     */
+    cloneCreated: {
+        defaultMessage: `{targetName} was cloned {calledTimes, plural,
+            =1 {once}
+            =2 {twice}
+            other {# times}
+        }.`,
+        id: 'gui.ir-answer.clone-created'
+    },
+    cloneNeverCreated: {
+        defaultMessage: `{targetName}'s cloning was never initiated.`,
+        id: 'gui.ir-answer.clone-never-created'
     }
 });
 
