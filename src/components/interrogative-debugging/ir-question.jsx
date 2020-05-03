@@ -2,10 +2,15 @@ import React, {Fragment} from 'react';
 import bindAll from 'lodash.bindall';
 import Box from '../box/box.jsx';
 import irStyles from './ir-cards.css';
-import {injectIntl, intlShape, FormattedMessage} from 'react-intl';
+import {FormattedMessage, injectIntl, intlShape} from 'react-intl';
 import PropTypes from 'prop-types';
 import {Question} from 'scratch-ir';
 import IRAnswer from './ir-answer.jsx';
+
+const defaultState = {
+    answer: null,
+    showAnswer: false
+};
 
 class IRQuestion extends React.Component {
     constructor (props) {
@@ -13,28 +18,31 @@ class IRQuestion extends React.Component {
         bindAll(this, [
             'handleShowQuestion'
         ]);
-        this.state = {
-            answer: null,
-            showAnswer: false,
-            calculating: false
-        };
+        this.state = defaultState;
+    }
+
+    shouldComponentUpdate (nextProps, nextState) {
+        if (this.props.question !== nextProps.question) {
+            this.setState(defaultState);
+            return true;
+        }
+        if (this.state.answer !== nextState.answer || this.state.showAnswer !== nextState.showAnswer) {
+            return true;
+        }
+        return false;
     }
 
     handleShowQuestion (e) {
         e.preventDefault();
-        const computeAnswer = this.props.computeAnswer;
 
         if (this.state.showAnswer) {
             this.setState({showAnswer: false});
         } else {
             this.setState({showAnswer: true});
             if (!this.state.answer) {
-                this.setState({calculating: true}, () => {
-                    const answer = computeAnswer(this.props.question);
-                    this.setState({
-                        answer: answer,
-                        calculating: false
-                    });
+                const answer = this.props.computeAnswer(this.props.question);
+                this.setState({
+                    answer: answer
                 });
             }
         }
@@ -75,13 +83,6 @@ class IRQuestion extends React.Component {
                     </button>
                 </Box>
                 <Box>
-                    {this.state.calculating && !this.state.showAnswer ? (
-                        <FormattedMessage
-                            id="gui.ir-questions.show-answer-calculation"
-                            description="Indication that an interrogative debugging question's answer is calculating."
-                            defaultMessage="Calculating..."
-                        />
-                    ) : null}
                     {this.state.showAnswer && this.state.answer ? (
                         <IRAnswer
                             answer={this.state.answer}
