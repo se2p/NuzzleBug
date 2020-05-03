@@ -162,21 +162,16 @@ const QuestionsCards = props => {
 
     if (categories[step] === null) return;
 
-    // Tutorial cards need to calculate their own dragging bounds
-    // to allow for dragging the cards off the left, right and bottom
-    // edges of the workspace.
+    // Copied from the tutorial cards
     const wideCardWidth = 700;
     const cardHorizontalDragOffset = 560; // ~80% of card width
     const cardVerticalDragOffset = expanded ? 400 : 0; // ~80% of card height, if expanded
-    const menuBarHeight = 48; // TODO: get pre-calculated from elsewhere?
+    const menuBarHeight = 48;
 
     if (x === 0 && y === 0) {
-        // initialize positions
-        x = isRtl ? (-190 - wideCardWidth - cardHorizontalDragOffset) : 500;
+        x = isRtl ? (-190 - wideCardWidth - cardHorizontalDragOffset) : 820;
         x += cardHorizontalDragOffset;
-        // The tallest cards are about 320px high, and the default position is pinned
-        // to near the bottom of the blocks palette to allow room to work above.
-        const tallCardHeight = 500;
+        const tallCardHeight = 800;
         const bottomMargin = 60; // To avoid overlapping the backpack region
         y = window.innerHeight - tallCardHeight - bottomMargin - menuBarHeight;
     }
@@ -210,7 +205,7 @@ const QuestionsCards = props => {
                             onCloseCards={onCloseCards}
                             onShrinkExpandCards={onShrinkExpandCards}
                         />
-                        <div className={expanded ? styles.stepBody : styles.hidden}>
+                        <div className={expanded ? classNames(styles.stepBody, irStyles.stepBody) : styles.hidden}>
                             <QuestionCategory
                                 category={categories[step]}
                                 computeAnswer={computeAnswer}

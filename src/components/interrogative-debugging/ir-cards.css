@@ -16,10 +16,25 @@
 
 .step-body {
     overflow-y: auto;
+    height: 700px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.step-body::-webkit-scrollbar {
+    width: 0.4rem;
+}
+.step-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+.step-body::-webkit-scrollbar-thumb {
+    background: #888;
+}
+.step-body::-webkit-scrollbar-thumb:hover {
+    background: #555555;
 }
 
 .category-container {
-    overflow-y: auto;
     cursor: default;
 }
 
@@ -30,7 +45,7 @@
 }
 
 .question-container {
-    width: 100%;
+    width: 700px;
     padding: 0.2rem 0.5rem 0.2rem 0.2rem;
     margin: 0;
     list-style-type: none;
