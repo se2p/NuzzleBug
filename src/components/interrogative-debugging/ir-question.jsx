@@ -1,11 +1,16 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import bindAll from 'lodash.bindall';
-import Box from '../box/box.jsx';
-import irStyles from './ir-cards.css';
-import {FormattedMessage, injectIntl, intlShape} from 'react-intl';
+import {injectIntl, intlShape} from 'react-intl';
 import PropTypes from 'prop-types';
 import {Question} from 'scratch-ir';
+
 import IRAnswer from './ir-answer.jsx';
+import Box from '../box/box.jsx';
+import irStyles from './ir-cards.css';
+import styles from './ir-cards.css';
+import iconHeadLight from './icon--light-head.svg';
+import iconHide from './icon--hide.svg';
+import iconShow from './icon--show.svg';
 
 const defaultState = {
     answer: null,
@@ -56,30 +61,34 @@ class IRQuestion extends React.Component {
         } = this.props;
         const text = question.text;
         return (
-            <Fragment>
+            <>
                 <Box className={irStyles.question}>
-                    <span className={irStyles.questionText}>
-                        {intl.formatMessage(text.msg, text.data)}
-                    </span>
+                    <div className={irStyles.questionTextContainer}>
+                        <img
+                            className={styles.showIcon}
+                            alt={'Question Indicator'}
+                            src={iconHeadLight}
+                        />
+                        <span className={irStyles.questionText}>
+                            {intl.formatMessage(text.msg, text.data)}
+                        </span>
+                    </div>
                     <button
                         className={irStyles.showAnswerButton}
                         onClick={this.handleShowQuestion}
                     >
-                        <span>
-                            {this.state.showAnswer ? (
-                                <FormattedMessage
-                                    defaultMessage="Hide Answer"
-                                    description="Label for button to hide answer for interrogative debugging question"
-                                    id="gui.ir-questions.hide-answer"
-                                />
-                            ) : (
-                                <FormattedMessage
-                                    defaultMessage="Show Answer"
-                                    description="Label for button to show answer for interrogative debugging question"
-                                    id="gui.ir-questions.show-answer"
-                                />
-                            )}
-                        </span>
+                        {this.state.showAnswer ?
+                            <img
+                                className={styles.buttonIcon}
+                                alt={'Hide Answer'}
+                                src={iconHide}
+                            /> :
+                            <img
+                                className={styles.buttonIcon}
+                                alt={'Show Answer'}
+                                src={iconShow}
+                            />
+                        }
                     </button>
                 </Box>
                 <Box>
@@ -90,7 +99,7 @@ class IRQuestion extends React.Component {
                         />
                     ) : null}
                 </Box>
-            </Fragment>
+            </>
         );
     }
 }

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {injectIntl, intlShape, FormattedMessage} from 'react-intl';
+import {injectIntl, intlShape} from 'react-intl';
 import bindAll from 'lodash.bindall';
 import classNames from 'classnames';
 import {
@@ -16,8 +16,11 @@ import {
     UserEventStatement
 } from 'scratch-ir';
 
-import irStyles from './ir-cards.css';
 import {blockMessages as blockMsg, statementMessages as stmtMsg} from '../../lib/libraries/ir-messages.js';
+import irStyles from './ir-cards.css';
+import styles from './ir-cards.css';
+import iconExpand from './icon--expand.svg';
+import iconCollapse from './icon--collapse.svg';
 
 const renderNestedStatements = (intl, parentKey, children, glowBlock) => children.map(statement => {
     const key = `${parentKey}-${statement.id}`;
@@ -202,27 +205,32 @@ class IRStatement extends React.Component {
         return (
             <li
                 className={classNames(
-                    inner ? classNames(irStyles.statement, irStyles.statementInner) : irStyles.statement,
-                    {
-                        [irStyles.statementClickable]: !!handleClick
-                    }
+                    inner ? classNames(irStyles.statementListItem, irStyles.statementInner) :
+                        irStyles.statementListItem, {[irStyles.statementClickable]: !!handleClick}
                 )}
             >
-                <div>
-                    <div onClick={handleClick}>
+                <div className={irStyles.statementContent}>
+                    <div
+                        className={irStyles.statementText}
+                        onClick={handleClick}
+                    >
                         <span>{intl.formatMessage(message, messageData)}</span>
                     </div>
                     { !inner && children ? (
-                        <button onClick={this.handleExpand}>
+                        <button
+                            className={irStyles.statementExpandButton}
+                            onClick={this.handleExpand}
+                        >
                             {this.state.expand ?
-                                <FormattedMessage
-                                    defaultMessage="Close"
-                                    description="Title for answer statement to close."
-                                    id="gui.ir-statement.close"
-                                /> : <FormattedMessage
-                                    defaultMessage="Expand"
-                                    description="Title for answer statement to expand additional content."
-                                    id="gui.ir-statement.expand"
+                                <img
+                                    className={styles.buttonIcon}
+                                    alt={'Close'}
+                                    src={iconCollapse}
+                                /> :
+                                <img
+                                    className={styles.buttonIcon}
+                                    alt={'Expand'}
+                                    src={iconExpand}
                                 />
                             }
                         </button>
