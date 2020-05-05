@@ -16,7 +16,7 @@ import {
     UserEventStatement
 } from 'scratch-ir';
 
-import {blockMessages as blockMsg, statementMessages as stmtMsg} from '../../lib/libraries/ir-messages.js';
+import {statementMessages as stmtMsg, getBlockMessage} from '../../lib/libraries/ir-messages.js';
 import irStyles from './ir-cards.css';
 import styles from './ir-cards.css';
 import iconExpand from './icon--expand.svg';
@@ -35,32 +35,14 @@ const messages = defineMessages({
     }
 });
 
-const renderNestedStatements = (intl, parentKey, children, glowBlock) => children.map(statement => {
-    const key = `${parentKey}-${statement.id}`;
-    return (<IRStatement
-        intl={intl}
-        key={key}
-        parentKey={key}
-        statement={statement}
-        glowBlock={glowBlock}
-        inner
-    />);
-});
-
-const prettyPrint = (intl, data) => {
-    const opcode = data.opcode ? data.opcode : '???';
-    if (blockMsg.hasOwnProperty(opcode)) {
-        return intl.formatMessage(blockMsg[opcode]);
-    }
-    return opcode;
-};
-
 class IRStatement extends React.Component {
     constructor (props) {
         super(props);
 
         bindAll(this, [
-            'handleExpand'
+            'handleExpand',
+            'prettyPrintBlock',
+            'renderNestedStatements'
         ]);
 
         this.state = {
@@ -76,6 +58,28 @@ class IRStatement extends React.Component {
         }));
     }
 
+    prettyPrintBlock (block) {
+        const {title, extras} = getBlockMessage(block);
+        return {
+            blockTitle: this.props.intl.formatMessage(title),
+            blockTitleExtra: extras
+        };
+    }
+
+    renderNestedStatements (parentKey, children) {
+        return children.map(childStatement => {
+            const key = `${parentKey}-${childStatement.id}`;
+            return (<IRStatement
+                key={key}
+                parentKey={key}
+                statement={childStatement}
+                inner
+                intl={this.props.intl}
+                glowBlock={this.props.glowBlock}
+            />);
+        });
+    }
+
     render () {
         const {
             intl,
@@ -85,17 +89,18 @@ class IRStatement extends React.Component {
             inner
         } = this.props;
         const block = statement.block;
-        // blockId for trace content, id for static blocks
+        const {blockTitle, blockTitleExtra} = block ? this.prettyPrintBlock(block) : {};
         const handleClick = block ? glowBlock(block.id) : null;
 
-        let message; // has to be set.
-        let messageData; // can be empty
-        let children; // can be empty
+        let message = null; // has to be set.
+        let messageData = {}; // can be empty
+        let children = null; // can be empty
 
         switch (statement.constructor) {
         case ChangingStatement: {
             message = stmtMsg.changingStatement;
             messageData = {
+                block: blockTitle,
                 startValue: statement.startValue,
                 endValue: statement.endValue
             };
@@ -104,7 +109,7 @@ class IRStatement extends React.Component {
         case CalledButWrongBranchStatement: {
             message = stmtMsg.calledButWrongBranchStatement;
             messageData = {
-                block: prettyPrint(intl, block),
+                block: blockTitle,
                 timesCalled: statement.values.length,
                 value: `${statement.values[0]}`
             };
@@ -113,25 +118,25 @@ class IRStatement extends React.Component {
         case CalledControlStatement: {
             message = stmtMsg.calledControlStatement;
             messageData = {
-                block: prettyPrint(intl, block)
+                block: blockTitle
             };
             break;
         }
         case NotCalledControlStatement: {
             message = stmtMsg.notCalledControlStatement;
             messageData = {
-                block: prettyPrint(intl, block)
+                block: blockTitle
             };
             break;
         }
         case CalledStatement: {
             message = stmtMsg.calledStatement;
             messageData = {
-                block: prettyPrint(intl, block)
+                block: blockTitle
             };
             children = (
                 <ul className={irStyles.statementsInnerList}>
-                    {renderNestedStatements(intl, parentKey, statement.controlBlocks, glowBlock)}
+                    {this.renderNestedStatements(parentKey, statement.controlBlocks)}
                 </ul>
             );
             break;
@@ -139,11 +144,11 @@ class IRStatement extends React.Component {
         case NotCalledStatement: {
             message = stmtMsg.notCalledStatement;
             messageData = {
-                block: prettyPrint(intl, block)
+                block: blockTitle
             };
             children = (
                 <ul className={irStyles.statementsInnerList}>
-                    {renderNestedStatements(intl, parentKey, statement.controlBlocks, glowBlock)}
+                    {this.renderNestedStatements(parentKey, statement.controlBlocks)}
                 </ul>
             );
             break;
@@ -151,7 +156,7 @@ class IRStatement extends React.Component {
         case OverwrittenStatement: {
             message = stmtMsg.overwrittenStatement;
             messageData = {
-                block: prettyPrint(intl, block)
+                block: blockTitle
             };
             break;
         }
@@ -159,6 +164,7 @@ class IRStatement extends React.Component {
             const event = statement.event;
             switch (event.type) {
             case 'broadcast': {
+                // TODO Phil 05/05/2020: add block
                 if (statement.wasCalled) {
                     message = stmtMsg.calledBroadcast;
                     messageData = {
@@ -188,7 +194,7 @@ class IRStatement extends React.Component {
             }
             children = (
                 <ul className={irStyles.statementsInnerList}>
-                    {renderNestedStatements(intl, parentKey, statement.sendBlocks, glowBlock)}
+                    {this.renderNestedStatements(parentKey, statement.sendBlocks)}
                 </ul>
             );
             break;
@@ -215,6 +221,7 @@ class IRStatement extends React.Component {
         if (!message) {
             return null;
         }
+        Object.assign(messageData, blockTitleExtra);
         return (
             <li
                 className={classNames(

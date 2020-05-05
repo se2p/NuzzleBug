@@ -568,7 +568,7 @@ const answerMessages = defineMessages({
      * Broadcasts
      */
     broadcastCalled: {
-        defaultMessage: `Broadcast {broadcastName} was called {calledTimes, plural,
+        defaultMessage: `Broadcast {broadcastName} was called {timesCalled, plural,
             =1 {once}
             =2 {twice}
             other {# times}
@@ -588,7 +588,7 @@ const answerMessages = defineMessages({
      * Cloning
      */
     cloneCreated: {
-        defaultMessage: `{targetName} was cloned {calledTimes, plural,
+        defaultMessage: `{targetName} was cloned {timesCalled, plural,
             =1 {once}
             =2 {twice}
             other {# times}
@@ -602,16 +602,193 @@ const answerMessages = defineMessages({
 });
 
 const blockMessages = {
+    // Motion blocks
+    motion_movesteps: {
+        defaultMessage: 'Move steps block',
+        id: 'gui.ir-blocks.motion_movesteps'
+    },
+    motion_turnleft: {
+        defaultMessage: 'Turn right block',
+        id: 'gui.ir-blocks.motion_turnleft'
+    },
+    motion_turnright: {
+        defaultMessage: 'Turn right block',
+        id: 'gui.ir-blocks.motion_turnright'
+    },
+    motion_pointindirection: {
+        defaultMessage: 'Point in direction block',
+        id: 'gui.ir-blocks.motion_pointindirection'
+    },
+    motion_pointtowards: {
+        defaultMessage: 'Point towards block',
+        id: 'gui.ir-blocks.motion_pointtowards'
+    },
+    motion_goto: {
+        defaultMessage: 'Go to block',
+        id: 'gui.ir-blocks.motion_goto'
+    },
+    motion_gotoxy: {
+        defaultMessage: 'Go to position block',
+        id: 'gui.ir-blocks.motion_gotoxy'
+    },
+    motion_glidesecstoxy: {
+        defaultMessage: 'Glide to position block',
+        id: 'gui.ir-blocks.motion_glidesecstoxy'
+    },
+    motion_glideto: {
+        defaultMessage: 'Glide to position block',
+        id: 'gui.ir-blocks.motion_glideto'
+    },
+    motion_changexby: {
+        defaultMessage: 'Change x by block',
+        id: 'gui.ir-blocks.motion_changexby'
+    },
+    motion_setx: {
+        defaultMessage: 'Set x block',
+        id: 'gui.ir-blocks.motion_setx'
+    },
+    motion_changeyby: {
+        defaultMessage: 'Change y by block',
+        id: 'gui.ir-blocks.motion_changeyby'
+    },
+    motion_sety: {
+        defaultMessage: 'Set y block',
+        id: 'gui.ir-blocks.motion_sety'
+    },
+    motion_ifonedgebounce: {
+        defaultMessage: 'Bounce on edge block',
+        id: 'gui.ir-blocks.motion_ifonedgebounce'
+    },
+    motion_setrotationstyle: {
+        defaultMessage: 'Set rotation block',
+        id: 'gui.ir-blocks.motion_setrotationstyle'
+    },
+
+    // Looks blocks
+    looks_sayforsecs: {
+        defaultMessage: 'Say block',
+        id: 'gui.ir-blocks.looks_sayforsecs'
+    },
+    looks_say: {
+        defaultMessage: 'Say block',
+        id: 'gui.ir-blocks.looks_say'
+    },
+    looks_thinkforsecs: {
+        defaultMessage: 'Think block',
+        id: 'gui.ir-blocks.looks_thinkforsecs'
+    },
+    looks_think: {
+        defaultMessage: 'Think block',
+        id: 'gui.ir-blocks.looks_think'
+    },
+    looks_switchcostumeto: {
+        defaultMessage: 'Switch costume block',
+        id: 'gui.ir-blocks.looks_switchcostumeto'
+    },
+    looks_nextcostume: {
+        defaultMessage: 'Next costume block',
+        id: 'gui.ir-blocks.looks_nextcostume'
+    },
+    looks_switchbackdropto: {
+        defaultMessage: 'Switch backdrop block',
+        id: 'gui.ir-blocks.looks_switchbackdropto'
+    },
+    looks_nextbackdrop: {
+        defaultMessage: 'Next backdrop block',
+        id: 'gui.ir-blocks.looks_nextbackdrop'
+    },
+    looks_changesizeby: {
+        defaultMessage: 'Change size block',
+        id: 'gui.ir-blocks.looks_changesizeby'
+    },
+    looks_setsizeto: {
+        defaultMessage: 'Set size block',
+        id: 'gui.ir-blocks.looks_setsizeto'
+    },
+    looks_show: {
+        defaultMessage: 'Show block',
+        id: 'gui.ir-blocks.looks_show'
+    },
+    looks_hide: {
+        defaultMessage: 'Show block',
+        id: 'gui.ir-blocks.looks_hide'
+    },
+
+    // Sound blocks
+    sound_play: {
+        defaultMessage: 'Play sound block',
+        id: 'gui.ir-blocks.sound_play'
+    },
+    sound_playuntildone: {
+        defaultMessage: 'Play sound block',
+        id: 'gui.ir-blocks.sound_playuntildone'
+    },
+    sound_stopallsounds: {
+        defaultMessage: 'Stop sounds block',
+        id: 'gui.ir-blocks.sound_stopallsounds'
+    },
+
+    // Event blocks
+    event_whenflagclicked: {
+        defaultMessage: 'When green flag clicked block',
+        id: 'gui.ir-blocks.event_whenflagclicked'
+    },
+    event_whenkeypressed: {
+        defaultMessage: 'When key pressed block',
+        id: 'gui.ir-blocks.event_whenkeypressed'
+    },
+    event_whenthisspriteclicked: {
+        defaultMessage: 'When this sprite clicked block',
+        id: 'gui.ir-blocks.event_whenthisspriteclicked'
+    },
+    event_whenstageclicked: {
+        defaultMessage: 'When stage clicked block',
+        id: 'gui.ir-blocks.event_whenstageclicked'
+    },
+    event_whentouchingobject: {
+        defaultMessage: 'When this sprite touches block',
+        id: 'gui.ir-blocks.event_whentouchingobject'
+    },
+    event_whenbroadcastreceived: {
+        defaultMessage: 'Receive broadcast block',
+        id: 'gui.ir-blocks.event_whenbroadcastreceived'
+    },
+    event_whenbackdropswitchesto: {
+        defaultMessage: 'When backdrop switches block',
+        id: 'gui.ir-blocks.event_whenbackdropswitchesto'
+    },
+    event_whengreaterthan: {
+        defaultMessage: 'When greater block',
+        id: 'gui.ir-blocks.event_whengreaterthan'
+    },
+    event_broadcast: {
+        defaultMessage: 'Send broadcast block',
+        id: 'gui.ir-blocks.event_broadcast'
+    },
+    event_broadcastandwait: {
+        defaultMessage: 'Send broadcast block',
+        id: 'gui.ir-blocks.event_broadcastandwait'
+    },
+
+    // Control blocks
+    control_wait: {
+        defaultMessage: `Wait block`,
+        id: 'gui.ir-blocks.control_wait'
+    },
+    control_wait_until: {
+        defaultMessage: `Wait until block`,
+        id: 'gui.ir-blocks.control_wait_until'
+    },
     control_forever: {
-        defaultMessage: `Forever loop`,
+        defaultMessage: `Forever loop block`,
         id: 'gui.ir-blocks.control_forever'
     },
     control_repeat: {
-        defaultMessage: `Repeat loop`,
+        defaultMessage: `Repeat loop block`,
         id: 'gui.ir-blocks.control_repeat'
     },
     control_repeat_until: {
-        defaultMessage: `Repeat until loop`,
+        defaultMessage: `Repeat until loop block`,
         id: 'gui.ir-blocks.control_repeat_until'
     },
     control_if: {
@@ -622,185 +799,96 @@ const blockMessages = {
         defaultMessage: `If-else block`,
         id: 'gui.ir-blocks.control_if_else'
     },
+    // TODO Phil 05/05/2020: differentiate between stop types
+    control_stop: {
+        defaultMessage: `Stop block`,
+        id: 'gui.ir-blocks.control_stop'
+    },
+    control_start_as_clone: {
+        defaultMessage: `Start as clone block`,
+        id: `gui.ir-blocks.control_start_as_clone`
+    },
+    control_create_clone_of: {
+        defaultMessage: `Clone block`,
+        id: `gui.ir-blocks.control_create_clone_of`
+    },
+    control_delete_this_clone: {
+        defaultMessage: `Delete clone block`,
+        id: `gui.ir-blocks.control_delete_this_clone`
+    },
 
-    /*
-    control_stop: 'stop',
-    control_stop_all: 'all',
-    control_stop_this: 'this script',
-    control_stop_other: 'other scripts in sprite',
-    control_wait: 'wait %1 seconds',
-    control_waituntil: 'wait until %1',
-    control_repeatuntil: 'repeat until %1',
-    control_while: 'while %1',
-    control_startasclone: 'when i start as a clone',
-    control_createcloneof: 'create clone of %1',
-    control_createcloneof_myself: 'myself',
-    control_deletethisclone: 'delete this clone',
-    data_setvariableto: 'set %1 to %2',
-    data_changevariableby: 'change %1 by %2',
-    event_whenflagclicked: 'when %1 clicked',
-    event_whenthisspriteclicked: 'when this sprite clicked',
-    event_whenstageclicked: 'when stage clicked',
-    event_whentouchingobject: 'when this sprite touches %1',
-    event_whenbroadcastreceived: 'when i receive %1',
-    event_whenbackdropswitchesto: 'when backdrop switches to %1',
-    event_whengreaterthan: 'when %1 > %2',
-    event_whengreaterthan_timer: 'timer',
-    event_whengreaterthan_loudness: 'loudness',
-    event_broadcast: 'broadcast %1',
-    event_broadcastandwait: 'broadcast %1 and wait',
-    event_whenkeypressed: 'when %1 key pressed',
-    event_whenkeypressed_space: 'space',
-    event_whenkeypressed_left: 'left arrow',
-    event_whenkeypressed_right: 'right arrow',
-    event_whenkeypressed_down: 'down arrow',
-    event_whenkeypressed_up: 'up arrow',
-    event_whenkeypressed_any: 'any',
-    looks_sayforsecs: 'say %1 for %2 seconds',
-    looks_say: 'say %1',
-    looks_hello: 'hello!',
-    looks_thinkforsecs: 'think %1 for %2 seconds',
-    looks_think: 'think %1',
-    looks_hmm: 'hmm...',
-    looks_show: 'show',
-    looks_hide: 'hide',
-    looks_changesizeby: 'change size by %1',
-    looks_setsizeto: 'set size to %1 %',
-    looks_size: 'size',
-    looks_changestretchby: 'change stretch by %1',
-    looks_setstretchto: 'set stretch to %1 %',
-    looks_switchcostumeto: 'switch costume to %1',
-    looks_nextcostume: 'next costume',
-    looks_switchbackdropto: 'switch backdrop to %1',
-    looks_backdropnumbername: 'backdrop %1',
-    looks_costumenumbername: 'costume %1',
-    looks_numbername_number: 'number',
-    looks_numbername_name: 'name',
-    looks_switchbackdroptoandwait: 'switch backdrop to %1 and wait',
-    looks_nextbackdrop_block: 'next backdrop',
-    looks_nextbackdrop: 'next backdrop',
-    looks_previousbackdrop: 'previous backdrop',
-    looks_randombackdrop: 'random backdrop',
-    motion_movesteps: 'move %1 steps',
-    motion_turnleft: 'turn %1 %2 degrees',
-    motion_turnright: 'turn %1 %2 degrees',
-    motion_pointindirection: 'point in direction %1',
-    motion_pointtowards: 'point towards %1',
-    motion_pointtowards_pointer: 'mouse-pointer',
-    motion_pointtowards_random: 'random direction',
-    motion_goto: 'go to %1',
-    motion_goto_pointer: 'mouse-pointer',
-    motion_goto_random: 'random position',
-    motion_gotoxy: 'go to x: %1 y: %2',
-    motion_glidesecstoxy: 'glide %1 secs to x: %2 y: %3',
-    motion_glideto: 'glide %1 secs to %2',
-    motion_glideto_pointer: 'mouse-pointer',
-    motion_glideto_random: 'random position',
-    motion_changexby: 'change x by %1',
-    motion_setx: 'set x to %1',
-    motion_changeyby: 'change y by %1',
-    motion_sety: 'set y to %1',
-    motion_ifonedgebounce: 'if on edge, bounce',
-    motion_setrotationstyle: 'set rotation style %1',
-    motion_setrotationstyle_leftright: 'left-right',
-    motion_setrotationstyle_dontrotate: 'don\'t rotate',
-    motion_setrotationstyle_allaround: 'all around',
-    motion_xposition: 'x position',
-    motion_yposition: 'y position',
-    motion_direction: 'direction',
-    motion_scrollright: 'scroll right %1',
-    motion_scrollup: 'scroll up %1',
-    motion_alignscene: 'align scene %1',
-    motion_alignscene_bottomleft: 'bottom-left',
-    motion_alignscene_bottomright: 'bottom-right',
-    motion_alignscene_middle: 'middle',
-    motion_alignscene_topleft: 'top-left',
-    motion_alignscene_topright: 'top-right',
-    motion_xscroll: 'x scroll',
-    motion_yscroll: 'y scroll',
-    motion_stage_selected: 'stage selected: no motion blocks',
-    operators_add: '%1 + %2',
-    operators_subtract: '%1 - %2',
-    operators_multiply: '%1 * %2',
-    operators_divide: '%1 / %2',
-    operators_random: 'pick random %1 to %2',
-    operators_gt: '%1 > %2',
-    operators_lt: '%1 < %2',
-    operators_equals: '%1 = %2',
-    operators_and: '%1 and %2',
-    operators_or: '%1 or %2',
-    operators_not: 'not %1',
-    operators_join: 'join %1 %2',
-    operators_join_apple: 'apple',
-    operators_join_banana: 'banana',
-    operators_letterof: 'letter %1 of %2',
-    operators_letterof_apple: 'a',
-    operators_length: 'length of %1',
-    operators_contains: '%1 contains %2?',
-    operators_mod: '%1 mod %2',
-    operators_round: 'round %1',
-    operators_mathop: '%1 of %2',
-    operators_mathop_abs: 'abs',
-    operators_mathop_floor: 'floor',
-    operators_mathop_ceiling: 'ceiling',
-    operators_mathop_sqrt: 'sqrt',
-    operators_mathop_sin: 'sin',
-    operators_mathop_cos: 'cos',
-    operators_mathop_tan: 'tan',
-    operators_mathop_asin: 'asin',
-    operators_mathop_acos: 'acos',
-    operators_mathop_atan: 'atan',
-    operators_mathop_ln: 'ln',
-    operators_mathop_log: 'log',
-    operators_mathop_eexp: 'e ^',
-    operators_mathop_10exp: '10 ^',
-    procedures_definition: 'define %1',
-    sensing_touchingobject: 'touching %1?',
-    sensing_touchingobject_pointer: 'mouse-pointer',
-    sensing_touchingobject_edge: 'edge',
-    sensing_touchingcolor: 'touching color %1?',
-    sensing_coloristouchingcolor: 'color %1 is touching %2?',
-    sensing_distanceto: 'distance to %1',
-    sensing_distanceto_pointer: 'mouse-pointer',
-    sensing_askandwait: 'ask %1 and wait',
-    sensing_ask_text: 'what\'s your name?',
-    sensing_answer: 'answer',
-    sensing_keypressed: 'key %1 pressed?',
-    sensing_mousedown: 'mouse down?',
-    sensing_mousex: 'mouse x',
-    sensing_mousey: 'mouse y',
-    sensing_setdragmode: 'set drag mode %1',
-    sensing_setdragmode_draggable: 'draggable',
-    sensing_setdragmode_notdraggable: 'not draggable',
-    sensing_loudness: 'loudness',
-    sensing_loud: 'loud?',
-    sensing_timer: 'timer',
-    sensing_resettimer: 'reset timer',
-    sensing_of: '%1 of %2',
-    sensing_of_xposition: 'x position',
-    sensing_of_yposition: 'y position',
-    sensing_of_direction: 'direction',
-    sensing_of_costumenumber: 'costume #',
-    sensing_of_costumename: 'costume name',
-    sensing_of_size: 'size',
-    sensing_of_volume: 'volume',
-    sensing_of_backdropnumber: 'backdrop #',
-    sensing_of_backdropname: 'backdrop name',
-    sensing_of_stage: 'stage',
-    sensing_current: 'current %1',
-    sensing_current_year: 'year',
-    sensing_current_month: 'month',
-    sensing_current_date: 'date',
-    sensing_current_dayofweek: 'day of week',
-    sensing_current_hour: 'hour',
-    sensing_current_minute: 'minute',
-    sensing_current_second: 'second',
-    sensing_dayssince2000: 'days since 2000',
-    sensing_username: 'username',
-    sensing_userid: 'user id',
-    sound_play: 'start sound %1',
-    sound_playuntildone: 'play sound %1 until done'
-    */
+    // Sensing blocks
+    sensing_touchingobject: {
+        defaultMessage: 'Touching block',
+        id: 'gui.ir-blocks.sensing_touchingobject'
+    },
+    sensing_touchingcolor: {
+        defaultMessage: 'Touching color block',
+        id: 'gui.ir-blocks.sensing_touchingcolor'
+    },
+    sensing_coloristouchingcolor: {
+        defaultMessage: 'Two colors touching block',
+        id: 'gui.ir-blocks.sensing_coloristouchingcolor'
+    },
+    sensing_distanceto: {
+        defaultMessage: 'Distance block',
+        id: 'gui.ir-blocks.sensing_distanceto'
+    },
+    sensing_askandwait: {
+        defaultMessage: 'Ask block',
+        id: 'gui.ir-blocks.sensing_askandwait'
+    },
+    sensing_keypressed: {
+        defaultMessage: 'Key pressed block',
+        id: 'gui.ir-blocks.sensing_keypressed'
+    },
+    sensing_mousedown: {
+        defaultMessage: 'Mouse down block',
+        id: 'gui.ir-blocks.sensing_mousedown'
+    },
+    sensing_setdragmode: {
+        defaultMessage: 'Set drag mode block',
+        id: 'gui.ir-blocks.sensing_setdragmode'
+    },
+    sensing_resettimer: {
+        defaultMessage: 'Reset timer block',
+        id: 'gui.ir-blocks.sensing_resettimer'
+    },
+    sensing_of: {
+        defaultMessage: 'Attribute block',
+        id: 'gui.ir-blocks.sensing_of'
+    },
+
+    // Variables blocks
+    data_setvariableto: {
+        defaultMessage: 'Variable set block',
+        id: 'gui.ir-blocks.data_setvariableto'
+    },
+    data_changevariableby: {
+        defaultMessage: 'Variable change block',
+        id: 'gui.ir-blocks.data_changevariableby'
+    }
+};
+
+// TODO Phil 05/05/2020: Eventually change this functionality to a BlockTextProvider containing
+//   the current state of the vm to display in detail.
+const getBlockMessage = block => {
+    let title;
+    const opcode = block.opcode;
+    const extras = {};
+    if (blockMessages.hasOwnProperty(opcode)) {
+        title = blockMessages[opcode];
+    } else {
+        // TODO Phil 05/05/2020: eventually remove this
+        title = opcode;
+    }
+
+    switch (opcode) {
+    case 'test':
+        extras.test = 'test';
+    }
+
+    return {title, extras};
 };
 
 const statementMessages = defineMessages({
@@ -811,12 +899,16 @@ const statementMessages = defineMessages({
     },
     // ChangingStatement
     changingStatement: {
-        defaultMessage: `{startValue} -> {endValue}`,
+        defaultMessage: `{block} resulted in a change from {startValue} to {endValue}`,
         id: 'gui.ir-statement.changing-statement'
     },
     // CalledButWrongBranchStatement
     calledButWrongBranchStatement: {
-        defaultMessage: `{block} was called {timesCalled} times, but the condition was always {value}.`,
+        defaultMessage: `{block} was called {timesCalled, plural,
+            =1 {once}
+            =2 {twice}
+            other {# times}
+        }, but the condition was always {value}.`,
         id: 'gui.ir-statement.called-but-wrong-branch-statement'
     },
     // NotCalledControlStatement: {
@@ -869,12 +961,12 @@ const statementMessages = defineMessages({
     notCalledUserEvent: {
         defaultMessage: `User Event {name} was never called.`,
         id: 'gui.ir-statement.not-called-user-event'
-    },
+    }
 });
 
 export {
     questionMessages,
     answerMessages,
-    blockMessages,
-    statementMessages
+    statementMessages,
+    getBlockMessage
 };
