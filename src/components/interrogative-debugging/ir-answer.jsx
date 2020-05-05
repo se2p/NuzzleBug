@@ -8,7 +8,7 @@ import styles from './ir-cards.css';
 import Box from '../box/box.jsx';
 
 import IRStatement from './ir-statement.jsx';
-import {injectIntl, intlShape} from 'react-intl';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 import iconLightBulb from './icon--light-bulb.svg';
 
@@ -45,7 +45,7 @@ const IRAnswer = ({answer, glowBlock, intl}) => {
             </div>
             {answer.statements && answer.statements.length ? (
                 <div className={styles.answerContent}>
-                    <ul className={classNames(styles.answerStatementsList, styles.alignLeft)}>
+                    <ul className={classNames(styles.answerStatementsList)}>
                         {renderStatements(answer.statements, answer, glowBlock)}
                     </ul>
                 </div>

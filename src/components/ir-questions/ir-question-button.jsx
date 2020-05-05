@@ -10,7 +10,7 @@ import styles from './ir-question-button.css';
 const messages = defineMessages({
     showQuestionTitle: {
         id: 'gui.ir-questions.show-question',
-        defaultMessage: 'Show Question',
+        defaultMessage: 'Show Questions',
         description: 'Show question button title'
     }
 });

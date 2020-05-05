@@ -1,6 +1,6 @@
 import React from 'react';
 import bindAll from 'lodash.bindall';
-import {injectIntl, intlShape} from 'react-intl';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import PropTypes from 'prop-types';
 import {Question} from 'scratch-ir';
 
@@ -11,6 +11,19 @@ import styles from './ir-cards.css';
 import iconHeadLight from './icon--light-head.svg';
 import iconHide from './icon--hide.svg';
 import iconShow from './icon--show.svg';
+
+const messages = defineMessages({
+    showAnswerTitle: {
+        id: 'gui.ir-question.show-answer',
+        defaultMessage: 'Show Answer',
+        description: 'Show answer button title'
+    },
+    hideAnswerTitle: {
+        id: 'gui.ir-question.hide-answer',
+        defaultMessage: 'Hide Answer',
+        description: 'Hide answer button title'
+    }
+});
 
 const defaultState = {
     answer: null,
@@ -80,12 +93,12 @@ class IRQuestion extends React.Component {
                         {this.state.showAnswer ?
                             <img
                                 className={styles.buttonIcon}
-                                alt={'Hide Answer'}
+                                title={intl.formatMessage(messages.hideAnswerTitle)}
                                 src={iconHide}
                             /> :
                             <img
                                 className={styles.buttonIcon}
-                                alt={'Show Answer'}
+                                title={intl.formatMessage(messages.showAnswerTitle)}
                                 src={iconShow}
                             />
                         }

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {injectIntl, intlShape} from 'react-intl';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import bindAll from 'lodash.bindall';
 import classNames from 'classnames';
 import {
@@ -21,6 +21,19 @@ import irStyles from './ir-cards.css';
 import styles from './ir-cards.css';
 import iconExpand from './icon--expand.svg';
 import iconCollapse from './icon--collapse.svg';
+
+const messages = defineMessages({
+    showStatementDetailsTitle: {
+        id: 'gui.ir-statement.show-details',
+        defaultMessage: 'Show Details',
+        description: 'Show statement details button title'
+    },
+    closeStatementDetailsTitle: {
+        id: 'gui.ir-statement.close-details',
+        defaultMessage: 'Close Details',
+        description: 'Close statement details button title'
+    }
+});
 
 const renderNestedStatements = (intl, parentKey, children, glowBlock) => children.map(statement => {
     const key = `${parentKey}-${statement.id}`;
@@ -224,12 +237,12 @@ class IRStatement extends React.Component {
                             {this.state.expand ?
                                 <img
                                     className={styles.buttonIcon}
-                                    alt={'Close'}
+                                    title={intl.formatMessage(messages.closeStatementDetailsTitle)}
                                     src={iconCollapse}
                                 /> :
                                 <img
                                     className={styles.buttonIcon}
-                                    alt={'Expand'}
+                                    title={intl.formatMessage(messages.showStatementDetailsTitle)}
                                     src={iconExpand}
                                 />
                             }
