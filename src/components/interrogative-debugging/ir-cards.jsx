@@ -2,8 +2,10 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, {Fragment} from 'react';
 import Draggable from 'react-draggable';
-
 import {injectIntl, intlShape, FormattedMessage} from 'react-intl';
+import {Question} from 'scratch-ir';
+
+import QuestionCategory from './ir-category.jsx';
 
 import styles from '../cards/card.css';
 import irStyles from './ir-cards.css';
@@ -13,9 +15,8 @@ import expandIcon from '../cards/icon--expand.svg';
 import closeIcon from '../cards/icon--close.svg';
 import leftArrow from '../cards/icon--prev.svg';
 import rightArrow from '../cards/icon--next.svg';
-import {Question} from 'scratch-ir';
+import refreshIcon from './icon--refresh.svg';
 
-import QuestionCategory from './ir-category.jsx';
 
 const NextPrevButtons = ({isRtl, onNextStep, onPrevStep, expanded}) => (
     <Fragment>
@@ -68,7 +69,7 @@ NextPrevButtons.propTypes = {
     onPrevStep: PropTypes.func
 };
 
-const QuestionsCardHeader = ({intl, title, onCloseCards, onShrinkExpandCards, totalSteps, step, expanded}) => (
+const QuestionsCardHeader = ({intl, title, onRefreshView, onCloseCards, onShrinkExpandCards, totalSteps, step, expanded}) => (
     <div
         className={expanded ?
             classNames(styles.headerButtons, irStyles.headerButtons) :
@@ -89,6 +90,22 @@ const QuestionsCardHeader = ({intl, title, onCloseCards, onShrinkExpandCards, to
             <span> {intl.formatMessage(title.msg, title.data)} </span>
         </div>
         <div className={styles.headerButtonsRight}>
+            {expanded ? (
+                <div
+                    className={irStyles.refreshButton}
+                    onClick={onRefreshView}
+                >
+                    <img
+                        className={irStyles.refreshIcon}
+                        src={refreshIcon}
+                    />
+                    <FormattedMessage
+                        defaultMessage="Refresh"
+                        description="Title for button to refresh a question category"
+                        id="gui.ircards.refresh-view"
+                    />
+                </div>
+            ) : null}
             <div
                 className={styles.shrinkExpandButton}
                 onClick={onShrinkExpandCards}
@@ -133,6 +150,7 @@ QuestionsCardHeader.propTypes = {
         data: PropTypes.object
     }),
     expanded: PropTypes.bool.isRequired,
+    onRefreshView: PropTypes.func.isRequired,
     onCloseCards: PropTypes.func.isRequired,
     onShrinkExpandCards: PropTypes.func.isRequired,
     step: PropTypes.number,
@@ -147,6 +165,7 @@ const QuestionsCards = props => {
         intl,
         isRtl,
         glowBlock,
+        handleRefreshView,
         onCloseCards,
         onShrinkExpandCards,
         onDrag,
@@ -202,6 +221,7 @@ const QuestionsCards = props => {
                             expanded={expanded}
                             step={step}
                             totalSteps={categories.length}
+                            onRefreshView={handleRefreshView}
                             onCloseCards={onCloseCards}
                             onShrinkExpandCards={onShrinkExpandCards}
                         />
@@ -249,6 +269,7 @@ QuestionsCards.propTypes = {
     intl: intlShape.isRequired,
     isRtl: PropTypes.bool.isRequired,
     glowBlock: PropTypes.func.isRequired,
+    handleRefreshView: PropTypes.func.isRequired,
     locale: PropTypes.string.isRequired,
     onCloseCards: PropTypes.func.isRequired,
     onDrag: PropTypes.func,

@@ -1,27 +1,42 @@
+import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import React from 'react';
-import VirtualMachine from 'scratch-vm';
-import {
-    closeCards,
-    enableCards,
-    disableCards,
-    shrinkExpandCards,
-    nextStep,
-    prevStep,
-    dragCard,
-    startDrag,
-    endDrag
-} from '../reducers/ir-cards';
-import IRCardsComponent from '../components/interrogative-debugging/ir-cards.jsx';
-import {questionMessages, answerMessages} from '../lib/libraries/ir-messages';
+import bindAll from 'lodash.bindall';
 
+import VirtualMachine from 'scratch-vm';
 import {generateCDG, generateCFG} from 'scratch-analysis';
 import {AnswerProvider, computeQuestions, createTraceMap} from 'scratch-ir';
+
+import {
+    closeCards,
+    disableCards,
+    dragCard,
+    enableCards,
+    endDrag,
+    nextStep,
+    prevStep,
+    shrinkExpandCards,
+    startDrag
+} from '../reducers/ir-cards';
+import IRCardsComponent from '../components/interrogative-debugging/ir-cards.jsx';
+import {answerMessages, questionMessages} from '../lib/libraries/ir-messages';
 
 class IRCards extends React.Component {
     constructor (props) {
         super(props);
+        bindAll(this, [
+            'calculateCategories',
+            'glowBlock',
+            'rerender'
+        ]);
+        this.cancel = false;
+        this.categories = null;
+        this.answerProvider = null;
+
+        this.calculateCategories();
+    }
+
+    calculateCategories () {
         if (!this.props.visible) {
             this.cancel = true;
             return;
@@ -50,7 +65,6 @@ class IRCards extends React.Component {
             this.cancel = true;
             return;
         }
-        this.answerProvider = new AnswerProvider(vm, traceMap, cfg, cdg, answerMessages);
 
         const content = computeQuestions(vm, traceMap, questionMessages);
         const categories = [];
@@ -62,24 +76,35 @@ class IRCards extends React.Component {
         for (const category of content.targets) {
             categories.push(category);
         }
-        this.categories = categories;
 
-        this.glowBlock = blockId => () => {
+        const answerProvider = new AnswerProvider(vm, traceMap, cfg, cdg, answerMessages);
+
+        this.categories = categories;
+        this.answerProvider = answerProvider;
+    }
+
+    glowBlock (blockId) {
+        return () => {
             const glowTimes = 5;
             const glowDuration = 150; // ms
             for (let i = 0; i < glowTimes; i++) {
                 setTimeout(() => {
                     try {
-                        vm.runtime.glowBlock(blockId, true);
+                        this.props.vm.runtime.glowBlock(blockId, true);
                     } catch (ignored) {} // eslint-disable-line no-empty
                     setTimeout(() => {
                         try {
-                            vm.runtime.glowBlock(blockId, false);
+                            this.props.vm.runtime.glowBlock(blockId, false);
                         } catch (ignored) {} // eslint-disable-line no-empty
                     }, glowDuration);
                 }, i * 2 * glowDuration);
             }
         };
+    }
+
+    rerender () {
+        this.calculateCategories();
+        this.forceUpdate();
     }
 
     render () {
@@ -92,6 +117,7 @@ class IRCards extends React.Component {
                 categories={this.categories}
                 glowBlock={this.glowBlock}
                 computeAnswer={this.answerProvider.computeQuestionAnswer}
+                handleRefreshView={this.rerender}
                 {...this.props}
             />
         );

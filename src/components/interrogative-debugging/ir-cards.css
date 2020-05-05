@@ -34,6 +34,33 @@
     background: #555555;
 }
 
+.refresh-button, .all-button {
+    cursor: pointer;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0.75rem;
+}
+
+.refresh-button:hover, .all-button:hover {
+    background-color: $ui-black-transparent;
+}
+
+.refresh-icon {
+    height: 1.25rem;
+    margin: .125rem 0; /* To offset the .25rem difference in icon size */
+}
+
+[dir="ltr"] .refresh-icon {
+    margin-left: 0.25rem;
+}
+
+[dir="rtl"] .refresh-icon {
+    margin-right: 0.25rem;
+}
+
 .category-container {
     cursor: default;
 }
