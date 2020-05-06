@@ -162,6 +162,7 @@ const QuestionsCards = props => {
     const {
         categories,
         computeAnswer,
+        formatBlock,
         intl,
         isRtl,
         glowBlock,
@@ -230,6 +231,7 @@ const QuestionsCards = props => {
                                 category={categories[step]}
                                 computeAnswer={computeAnswer}
                                 glowBlock={glowBlock}
+                                formatBlock={formatBlock}
                             />
                         </div>
                         <NextPrevButtons
@@ -266,6 +268,7 @@ QuestionsCards.propTypes = {
     computeAnswer: PropTypes.func.isRequired,
     dragging: PropTypes.bool.isRequired,
     expanded: PropTypes.bool.isRequired,
+    formatBlock: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
     isRtl: PropTypes.bool.isRequired,
     glowBlock: PropTypes.func.isRequired,

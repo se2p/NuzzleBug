@@ -16,7 +16,7 @@ import {
     UserEventStatement
 } from 'scratch-ir';
 
-import {statementMessages as stmtMsg, getBlockMessage} from '../../lib/libraries/ir-messages.js';
+import {statementMessages as stmtMsg} from '../../lib/libraries/ir-messages.js';
 import irStyles from './ir-cards.css';
 import styles from './ir-cards.css';
 import iconExpand from './icon--expand.svg';
@@ -59,7 +59,7 @@ class IRStatement extends React.Component {
     }
 
     prettyPrintBlock (block) {
-        const {title, extras} = getBlockMessage(block);
+        const {title, extras} = this.props.formatBlock(block);
         return {
             blockTitle: this.props.intl.formatMessage(title),
             blockTitleExtra: extras
@@ -67,6 +67,12 @@ class IRStatement extends React.Component {
     }
 
     renderNestedStatements (parentKey, children) {
+        const {
+            glowBlock,
+            intl,
+            formatBlock
+        } = this.props;
+
         return children.map(childStatement => {
             const key = `${parentKey}-${childStatement.id}`;
             return (<IRStatement
@@ -74,8 +80,9 @@ class IRStatement extends React.Component {
                 parentKey={key}
                 statement={childStatement}
                 inner
-                intl={this.props.intl}
-                glowBlock={this.props.glowBlock}
+                intl={intl}
+                formatBlock={formatBlock}
+                glowBlock={glowBlock}
             />);
         });
     }
@@ -269,6 +276,7 @@ class IRStatement extends React.Component {
 IRStatement.propTypes = {
     intl: intlShape.isRequired,
     parentKey: PropTypes.string.isRequired,
+    formatBlock: PropTypes.func.isRequired,
     glowBlock: PropTypes.func.isRequired,
     statement: PropTypes.instanceOf(Statement),
     inner: PropTypes.bool.isRequired

@@ -19,7 +19,9 @@ import {
     startDrag
 } from '../reducers/ir-cards';
 import IRCardsComponent from '../components/interrogative-debugging/ir-cards.jsx';
-import {answerMessages, questionMessages} from '../lib/libraries/ir-messages';
+import {answerMessages, BlockFormatter, questionMessages} from '../lib/libraries/ir-messages';
+
+const getAllBlocks = targets => targets.reduce((acc, target) => Object.assign(acc, target.blocks._blocks), {});
 
 class IRCards extends React.Component {
     constructor (props) {
@@ -77,10 +79,9 @@ class IRCards extends React.Component {
             categories.push(category);
         }
 
-        const answerProvider = new AnswerProvider(vm, traceMap, cfg, cdg, answerMessages);
-
         this.categories = categories;
-        this.answerProvider = answerProvider;
+        this.answerProvider = new AnswerProvider(vm, traceMap, cfg, cdg, answerMessages);
+        this.blockFormatter = new BlockFormatter(vm.runtime.targets, getAllBlocks(vm.runtime.targets));
     }
 
     glowBlock (blockId) {
@@ -118,6 +119,7 @@ class IRCards extends React.Component {
                 glowBlock={this.glowBlock}
                 computeAnswer={this.answerProvider.computeQuestionAnswer}
                 handleRefreshView={this.rerender}
+                formatBlock={this.blockFormatter.formatBlock}
                 {...this.props}
             />
         );

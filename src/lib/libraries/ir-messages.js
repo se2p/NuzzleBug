@@ -870,26 +870,31 @@ const blockMessages = {
     }
 };
 
-// TODO Phil 05/05/2020: Eventually change this functionality to a BlockTextProvider containing
-//   the current state of the vm to display in detail.
-const getBlockMessage = block => {
-    let title;
-    const opcode = block.opcode;
-    const extras = {};
-    if (blockMessages.hasOwnProperty(opcode)) {
-        title = blockMessages[opcode];
-    } else {
-        // TODO Phil 05/05/2020: eventually remove this
-        title = opcode;
+class BlockFormatter {
+    constructor (targets, blocks) {
+        this.targets = targets;
+        this.blocks = blocks;
     }
 
-    switch (opcode) {
-    case 'test':
-        extras.test = 'test';
-    }
+    formatBlock (block) {
+        let title;
+        const opcode = block.opcode;
+        const extras = {};
+        if (blockMessages.hasOwnProperty(opcode)) {
+            title = blockMessages[opcode];
+        } else {
+            // TODO Phil 05/05/2020: eventually remove this
+            title = opcode;
+        }
 
-    return {title, extras};
-};
+        switch (opcode) {
+        case 'test':
+            extras.test = 'test';
+        }
+
+        return {title, extras};
+    };
+}
 
 const statementMessages = defineMessages({
     // No statement
@@ -968,5 +973,5 @@ export {
     questionMessages,
     answerMessages,
     statementMessages,
-    getBlockMessage
+    BlockFormatter
 };

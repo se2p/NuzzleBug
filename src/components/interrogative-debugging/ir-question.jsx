@@ -69,6 +69,7 @@ class IRQuestion extends React.Component {
     render () {
         const {
             intl,
+            formatBlock,
             glowBlock,
             question
         } = this.props;
@@ -109,6 +110,7 @@ class IRQuestion extends React.Component {
                         <IRAnswer
                             answer={this.state.answer}
                             glowBlock={glowBlock}
+                            formatBlock={formatBlock}
                         />
                     ) : null}
                 </Box>
@@ -120,6 +122,7 @@ class IRQuestion extends React.Component {
 IRQuestion.propTypes = {
     intl: intlShape.isRequired,
     computeAnswer: PropTypes.func.isRequired,
+    formatBlock: PropTypes.func.isRequired,
     glowBlock: PropTypes.func.isRequired,
     question: PropTypes.instanceOf(Question).isRequired
 };
