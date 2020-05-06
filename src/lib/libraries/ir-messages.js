@@ -913,8 +913,25 @@ const statementMessages = defineMessages({
             =1 {once}
             =2 {twice}
             other {# times}
-        }, but the condition was always {value}.`,
+        } and the condition was {timesCalled, plural,
+            =1 {{value}}
+            =2 {{value} both times}
+            other {always {value}}
+        }, but expected to be {requiredCondition, select,
+            true {true}
+            false {false}
+            other {other}
+        }.`,
         id: 'gui.ir-statement.called-but-wrong-branch-statement'
+    },
+    // RightBranchButStoppedStatement
+    rightBranchButStoppedStatement: {
+        defaultMessage: `{block} was called {condition, select,
+            true {with the correct condition true}
+            false {with the correct condition false}
+            other {}
+        }, but execution was stopped before reaching the target block.`,
+        id: 'gui.ir-statement.right-branch-but-stopped-statement'
     },
     // NotCalledControlStatement: {
     calledControlStatement: {

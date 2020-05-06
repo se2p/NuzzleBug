@@ -12,6 +12,7 @@ import {
     NotCalledControlStatement,
     NotCalledStatement,
     OverwrittenStatement,
+    RightBranchButStoppedStatement,
     Statement,
     UserEventStatement
 } from 'scratch-ir';
@@ -118,7 +119,16 @@ class IRStatement extends React.Component {
             messageData = {
                 block: blockTitle,
                 timesCalled: statement.values.length,
-                value: `${statement.values[0]}`
+                value: `${statement.values[0]}`,
+                requiredCondition: statement.requiredCondition
+            };
+            break;
+        }
+        case RightBranchButStoppedStatement: {
+            message = stmtMsg.rightBranchButStoppedStatement;
+            messageData = {
+                block: blockTitle,
+                condition: `${statement.requiredCondition}`
             };
             break;
         }
