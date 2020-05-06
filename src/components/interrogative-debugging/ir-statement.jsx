@@ -11,6 +11,7 @@ import {
     EventStatement,
     NotCalledControlStatement,
     NotCalledStatement,
+    NotChangingStatement,
     OverwrittenStatement,
     RightBranchButStoppedStatement,
     Statement,
@@ -111,6 +112,15 @@ class IRStatement extends React.Component {
                 block: blockTitle,
                 startValue: statement.startValue,
                 endValue: statement.endValue
+            };
+            break;
+        }
+        case NotChangingStatement: {
+            message = stmtMsg.notChangingStatement;
+            messageData = {
+                block: blockTitle,
+                value: statement.value,
+                timesCalled: statement.timesCalled
             };
             break;
         }

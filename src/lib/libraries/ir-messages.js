@@ -861,11 +861,11 @@ const blockMessages = {
 
     // Variables blocks
     data_setvariableto: {
-        defaultMessage: 'Variable set block',
+        defaultMessage: 'Set variable block',
         id: 'gui.ir-blocks.data_setvariableto'
     },
     data_changevariableby: {
-        defaultMessage: 'Variable change block',
+        defaultMessage: 'Change variable block',
         id: 'gui.ir-blocks.data_changevariableby'
     }
 };
@@ -904,8 +904,17 @@ const statementMessages = defineMessages({
     },
     // ChangingStatement
     changingStatement: {
-        defaultMessage: `{block} resulted in a change from {startValue} to {endValue}`,
+        defaultMessage: `{block} resulted in a change from {startValue} to {endValue}.`,
         id: 'gui.ir-statement.changing-statement'
+    },
+    // NotChangingStatement
+    notChangingStatement: {
+        defaultMessage: `{block} was called {timesCalled, plural,
+            =1 {once}
+            =2 {twice}
+            other {# times}
+        }, but never resulted in a change from {value}.`,
+        id: 'gui.ir-statement.not-changing-statement'
     },
     // CalledButWrongBranchStatement
     calledButWrongBranchStatement: {
