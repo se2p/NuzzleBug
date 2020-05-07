@@ -10,6 +10,7 @@ const SHRINK_EXPAND_CARDS = 'scratch-gui/ircards/SHRINK_EXPAND_CARDS';
 const VIEW_CARDS = 'scratch-gui/ircards/VIEW_CARDS';
 const NEXT_STEP = 'scratch-gui/ircards/NEXT_STEP';
 const PREV_STEP = 'scratch-gui/ircards/PREV_STEP';
+const RESET_STEP = 'scratch-gui/ircards/RESET_STEP';
 const DRAG_CARD = 'scratch-gui/ircards/DRAG_CARD';
 const START_DRAG = 'scratch-gui/ircards/START_DRAG';
 const END_DRAG = 'scratch-gui/ircards/END_DRAG';
@@ -69,6 +70,10 @@ const reducer = function (state, action) {
             });
         }
         return state;
+    case RESET_STEP:
+        return Object.assign({}, state, {
+            step: action.step
+        });
     case DRAG_CARD:
         return Object.assign({}, state, {
             x: action.x,
@@ -115,6 +120,10 @@ const prevStep = function () {
     return {type: PREV_STEP};
 };
 
+const resetStep = function (step) {
+    return {type: RESET_STEP, step};
+};
+
 const dragCard = function (x, y) {
     return {type: DRAG_CARD, x, y};
 };
@@ -137,6 +146,7 @@ export {
     shrinkExpandCards,
     nextStep,
     prevStep,
+    resetStep,
     dragCard,
     startDrag,
     endDrag

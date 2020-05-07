@@ -15,6 +15,7 @@ import {
     endDrag,
     nextStep,
     prevStep,
+    resetStep,
     shrinkExpandCards,
     startDrag
 } from '../reducers/ir-cards';
@@ -76,7 +77,13 @@ class IRCards extends React.Component {
             }
         }
         for (const category of content.targets) {
-            categories.push(category);
+            if (category.questions.length) {
+                categories.push(category);
+            }
+        }
+
+        if (this.props.step >= categories.length) {
+            this.props.onResetStep(categories.length - 1);
         }
 
         this.categories = categories;
@@ -131,7 +138,9 @@ IRCards.propTypes = {
     onCloseCards: PropTypes.func.isRequired,
     onEnableCards: PropTypes.func.isRequired,
     onDisableCards: PropTypes.func.isRequired,
+    onResetStep: PropTypes.func.isRequired,
     locale: PropTypes.string.isRequired,
+    step: PropTypes.number.isRequired,
     vm: PropTypes.instanceOf(VirtualMachine).isRequired
 };
 
@@ -154,6 +163,7 @@ const mapDispatchToProps = dispatch => ({
     onShrinkExpandCards: () => dispatch(shrinkExpandCards()),
     onNextStep: () => dispatch(nextStep()),
     onPrevStep: () => dispatch(prevStep()),
+    onResetStep: step => dispatch(resetStep(step)),
     onDrag: (e_, data) => dispatch(dragCard(data.x, data.y)),
     onStartDrag: () => dispatch(startDrag()),
     onEndDrag: () => dispatch(endDrag())
