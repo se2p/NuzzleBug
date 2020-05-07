@@ -12,6 +12,7 @@ import {
     NotCalledControlStatement,
     NotCalledStatement,
     NotChangingStatement,
+    OverwritingStatement,
     OverwrittenStatement,
     RightBranchButStoppedStatement,
     Statement,
@@ -183,7 +184,22 @@ class IRStatement extends React.Component {
         case OverwrittenStatement: {
             message = stmtMsg.overwrittenStatement;
             messageData = {
-                block: blockTitle
+                block: blockTitle,
+                timesCalled: statement.timesCalled
+            };
+            children = (
+                <ul className={irStyles.statementsInnerList}>
+                    {this.renderNestedStatements(parentKey, [statement.overwriting])}
+                </ul>
+            );
+            break;
+        }
+        case OverwritingStatement: {
+            message = stmtMsg.overwritingStatement;
+            messageData = {
+                block: blockTitle,
+                startValue: statement.startValue,
+                endValue: statement.endValue
             };
             break;
         }

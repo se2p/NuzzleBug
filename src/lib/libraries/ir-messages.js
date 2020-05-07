@@ -964,8 +964,17 @@ const statementMessages = defineMessages({
     },
     // OverwrittenStatement
     overwrittenStatement: {
-        defaultMessage: `{block} was called, but later overwritten.`,
+        defaultMessage: `{block} was called {timesCalled, plural,
+            =1 {once, but}
+            =2 {twice, but the last call}
+            other {# times, but the last call}
+        } was overwritten.`,
         id: 'gui.ir-statement.overwritten-statement'
+    },
+    // OverwritingStatement
+    overwritingStatement: {
+        defaultMessage: `{block} overwrote {startValue} to {endValue}.`,
+        id: 'gui.ir-statement.overwriting-statement'
     },
     // EventStatement
     calledBroadcast: {
