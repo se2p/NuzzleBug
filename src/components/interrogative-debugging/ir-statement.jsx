@@ -8,7 +8,10 @@ import {
     CalledControlStatement,
     CalledStatement,
     ChangingStatement,
-    EventStatement,
+    EventNotSentStatement,
+    EventSentAndReceiveButStoppedStatement,
+    EventSentNotReceivedStatement,
+    EventSentStatement,
     NotCalledControlStatement,
     NotCalledStatement,
     NotChangingStatement,
@@ -67,26 +70,17 @@ class IRStatement extends React.Component {
 
     prettyPrintBlock (block) {
         const {title, extras} = this.props.formatter.formatBlock(block);
-        return {
-            blockTitle: this.props.intl.formatMessage(title),
-            blockTitleExtra: extras
-        };
+        return this.props.intl.formatMessage(title, extras);
     }
 
     prettyPrintEvent (event) {
         const {title, extras} = this.props.formatter.formatEvent(event);
-        return {
-            eventTitle: this.props.intl.formatMessage(title),
-            eventTitleExtra: extras
-        };
+        return this.props.intl.formatMessage(title, extras);
     }
 
     prettyPrintUserEvent (userEvent) {
         const {title, extras} = this.props.formatter.formatUserEvent(userEvent);
-        return {
-            userEventTitle: this.props.intl.formatMessage(title),
-            userEventTitleExtra: extras
-        };
+        return this.props.intl.formatMessage(title, extras);
     }
 
     renderNestedStatements (parentKey, children) {
@@ -119,12 +113,12 @@ class IRStatement extends React.Component {
             inner
         } = this.props;
         const block = statement.block;
-        const {blockTitle, blockTitleExtra} = block ? this.prettyPrintBlock(block) : {};
+        const blockTitle = block ? this.prettyPrintBlock(block) : {};
         const event = statement.event;
-        const {eventTitle, eventTitleExtra} = event ? this.prettyPrintEvent(event) : {};
+        const eventTitle = event ? this.prettyPrintEvent(event) : {};
         const userEvent = statement.userEvent;
-        const {userEventTitle, userEventTitleExtra} = userEvent ? this.prettyPrintUserEvent(userEvent) : {};
-        const handleClick = block ? glowBlock(block.id) : null;
+        const userEventTitle = userEvent ? this.prettyPrintUserEvent(userEvent) : {};
+        let handleClick = block ? glowBlock(block.id) : null;
 
         let message = null; // has to be set.
         let messageData = {}; // can be empty
@@ -228,43 +222,49 @@ class IRStatement extends React.Component {
             };
             break;
         }
-        case EventStatement: {
-            const event = statement.event;
-            switch (event.type) {
-            case 'broadcast': {
-                // TODO Phil 05/05/2020: add block
-                if (statement.wasCalled) {
-                    message = stmtMsg.calledBroadcast;
-                    messageData = {
-                        name: statement.event.value
-                    };
-                } else {
-                    message = stmtMsg.notCalledBroadcast;
-                    messageData = {
-                        name: statement.event.value
-                    };
-                }
-                break;
+
+        case EventSentStatement: {
+            message = stmtMsg.eventSentStatement;
+            messageData = {
+                event: eventTitle
+            };
+            if (!inner) {
+                children = (
+                    <ul className={irStyles.statementsInnerList}>
+                        {this.renderNestedStatements(parentKey, statement.sendBlocks)}
+                    </ul>
+                );
             }
-            case 'clone': {
-                if (statement.wasCalled) {
-                    message = stmtMsg.createdClone;
-                    messageData = {
-                        name: statement.event.value
-                    };
-                } else {
-                    message = stmtMsg.notCreatedClone;
-                    messageData = {
-                        name: statement.event.value
-                    };
-                }
+            break;
+        }
+        case EventNotSentStatement: {
+            message = stmtMsg.eventNotSentStatement;
+            messageData = {
+                event: eventTitle
+            };
+            if (!inner) {
+                children = (
+                    <ul className={irStyles.statementsInnerList}>
+                        {this.renderNestedStatements(parentKey, statement.sendBlocks)}
+                    </ul>
+                );
             }
-            }
-            children = (
-                <ul className={irStyles.statementsInnerList}>
-                    {this.renderNestedStatements(parentKey, statement.sendBlocks)}
-                </ul>
-            );
+            break;
+        }
+        case EventSentAndReceiveButStoppedStatement: {
+            message = stmtMsg.eventSentAndReceiveButStoppedStatement;
+            messageData = {
+                event: eventTitle
+            };
+            handleClick = glowBlock(statement.receivingBlock.id);
+            break;
+        }
+        case EventSentNotReceivedStatement: {
+            message = stmtMsg.eventSentNotReceivedStatement;
+            messageData = {
+                event: eventTitle
+            };
+            handleClick = glowBlock(statement.receivingBlock.id);
             break;
         }
 
@@ -297,9 +297,6 @@ class IRStatement extends React.Component {
         if (!message) {
             return null;
         }
-        Object.assign(messageData, blockTitleExtra);
-        Object.assign(messageData, eventTitleExtra);
-        Object.assign(messageData, userEventTitleExtra);
         return (
             <li
                 className={classNames(
@@ -310,7 +307,7 @@ class IRStatement extends React.Component {
                 <div className={irStyles.statementContent}>
                     <div
                         className={irStyles.statementText}
-                        style={{'text-align': 'left'}}
+                        style={{textAlign: 'left'}}
                         onClick={handleClick}
                     >
                         <span>{intl.formatMessage(message, messageData)}</span>

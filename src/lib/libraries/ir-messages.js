@@ -872,10 +872,11 @@ const blockMessages = defineMessages({
 
 const eventMessages = defineMessages({
     broadcast: {
-        defaultMessage: 'Green Flag event',
-        id: 'gui.ir-event.clone'
+        defaultMessage: 'Broadcast {value}',
+        id: 'gui.ir-event.broadcast'
     },
     clone: {
+        defaultMessage: 'Cloning {value} event',
         id: 'gui.ir-event.clone'
     }
 });
@@ -923,19 +924,19 @@ class StatementFormatter {
     }
 
     formatEvent (event) {
-        const title = eventMessages[event.name];
-        const titleExtra = {
+        const title = eventMessages[event.type];
+        const extras = {
             value: event.value
         };
-        return {title, titleExtra};
+        return {title, extras};
     }
 
     formatUserEvent (userEvent) {
         const title = userEventMessages[userEvent.opcode];
-        const titleExtra = {
+        const extras = {
             value: userEvent.value
         };
-        return {title, titleExtra};
+        return {title, extras};
     }
 }
 
@@ -1023,22 +1024,25 @@ const statementMessages = defineMessages({
         defaultMessage: `{block} overwrote {startValue} to {endValue}.`,
         id: 'gui.ir-statement.overwriting-statement'
     },
-    // EventStatement
-    calledBroadcast: {
-        defaultMessage: `Broadcast {name} was called.`,
-        id: 'gui.ir-statement.called-broadcast'
+    // EventNotSentStatement,
+    eventNotSentStatement: {
+        defaultMessage: `{event} was never sent.`,
+        id: 'gui.ir-statement.event-not-sent-statement'
     },
-    notCalledBroadcast: {
-        defaultMessage: `Broadcast {name} was never called.`,
-        id: 'gui.ir-statement.not-called-broadcast'
+    // EventSentAndReceiveButStoppedStatement,
+    eventSentAndReceiveButStoppedStatement: {
+        defaultMessage: `{event} was sent and received, but execution was stopped before the target block.`,
+        id: 'gui.ir-statement.event-sent-and-receive-but-stopped-statement'
     },
-    createdClone: {
-        defaultMessage: `Sprite {name} was cloned.`,
-        id: 'gui.ir-statement.created-clone'
+    // EventSentNotReceivedStatement,
+    eventSentNotReceivedStatement: {
+        defaultMessage: `{event} was sent, but did not trigger the receiving block just yet.`,
+        id: 'gui.ir-statement.event-sent-not-receive-statement'
     },
-    notCreatedClone: {
-        defaultMessage: `Sprite {name} was never cloned.`,
-        id: 'gui.ir-statement.not-created-clone'
+    // EventSentStatement,
+    eventSentStatement: {
+        defaultMessage: `{event} was sent.`,
+        id: 'gui.ir-statement.event-sent-statement'
     },
     // UserEventCalledStatement,
     userEventCalledStatement: {
