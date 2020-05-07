@@ -18,21 +18,14 @@ class QuestionCategory extends React.Component {
     }
 
     renderRows (questions) {
-        const {
-            computeAnswer,
-            glowBlock,
-            formatBlock
-        } = this.props;
         return questions.map(question => (
             <li
                 key={question.id}
                 className={irStyles.questionContainer}
             >
                 <IRQuestion
-                    computeAnswer={computeAnswer}
-                    glowBlock={glowBlock}
                     question={question}
-                    formatBlock={formatBlock}
+                    {...this.props}
                 />
             </li>
         ));
@@ -44,13 +37,9 @@ class QuestionCategory extends React.Component {
         } = this.props;
         return (
             <div className={irStyles.categoryContainer}>
-                {category.questions.length ? (
-                    <ul className={irStyles.questionList}>
-                        {this.renderRows(category.questions)}
-                    </ul>
-                ) : category.info.id ? (
-                    <span>{`No questions for ${category.info.isStage ? 'the ' : ''}${category.info.name}`}</span>
-                ) : null}
+                <ul className={irStyles.questionList}>
+                    {category.questions.length ? this.renderRows(category.questions) : null}
+                </ul>
             </div>
         );
     }

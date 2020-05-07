@@ -275,6 +275,7 @@ class IRStatement extends React.Component {
                 <div className={irStyles.statementContent}>
                     <div
                         className={irStyles.statementText}
+                        style={{'text-align': 'left'}}
                         onClick={handleClick}
                     >
                         <span>{intl.formatMessage(message, messageData)}</span>

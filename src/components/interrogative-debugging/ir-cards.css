@@ -63,6 +63,7 @@
 
 .category-container {
     cursor: default;
+    width: 720px;
 }
 
 .question-list {
@@ -75,7 +76,6 @@
 }
 
 .question-container {
-    width: 700px;
     list-style-type: none;
     padding-inline-start: 0;
 
