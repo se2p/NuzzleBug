@@ -987,7 +987,11 @@ const statementMessages = defineMessages({
     },
     // NotCalledControlStatement: {
     calledControlStatement: {
-        defaultMessage: `{block} was called.`,
+        defaultMessage: `{block} was called  {condition, select,
+            true {with the correct condition true}
+            false {with the correct condition false}
+            other {}
+        }.`,
         id: 'gui.ir-statement.called-control-statement'
     },
     // NotCalledControlStatement: {

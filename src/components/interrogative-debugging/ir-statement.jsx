@@ -170,7 +170,8 @@ class IRStatement extends React.Component {
         case CalledControlStatement: {
             message = stmtMsg.calledControlStatement;
             messageData = {
-                block: blockTitle
+                block: blockTitle,
+                condition: `${statement.requiredCondition}`
             };
             break;
         }
