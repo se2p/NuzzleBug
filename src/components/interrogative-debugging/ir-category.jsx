@@ -6,6 +6,7 @@ import {Question} from 'scratch-ir';
 
 import irStyles from './ir-cards.css';
 
+import {StatementFormatter} from '../../lib/libraries/ir-messages.js';
 import IRQuestion from './ir-question.jsx';
 
 
@@ -61,7 +62,7 @@ QuestionCategory.propTypes = {
         questions: PropTypes.arrayOf(PropTypes.instanceOf(Question)).isRequired
     }).isRequired,
     computeAnswer: PropTypes.func.isRequired,
-    formatBlock: PropTypes.func.isRequired,
+    statementFormatter: PropTypes.instanceOf(StatementFormatter).isRequired,
     glowBlock: PropTypes.func.isRequired
 };
 

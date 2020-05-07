@@ -576,7 +576,7 @@ const answerMessages = defineMessages({
         id: 'gui.ir-answer.broadcast-called'
     },
     broadcastNoBlock: {
-        defaultMessage: `There is no block calling broadcast {broadcastName}`,
+        defaultMessage: `Your code does not not contain any blocks calling broadcast {broadcastName}.`,
         id: 'gui.ir-answer.broadcast-no-block'
     },
     broadcastNeverCalled: {
@@ -601,7 +601,7 @@ const answerMessages = defineMessages({
     }
 });
 
-const blockMessages = {
+const blockMessages = defineMessages({
     // Motion blocks
     motion_movesteps: {
         defaultMessage: 'Move steps block',
@@ -868,24 +868,51 @@ const blockMessages = {
         defaultMessage: 'Change variable block',
         id: 'gui.ir-blocks.data_changevariableby'
     }
-};
+});
 
-class BlockFormatter {
+const eventMessages = defineMessages({
+    broadcast: {
+        defaultMessage: 'Green Flag event',
+        id: 'gui.ir-event.clone'
+    },
+    clone: {
+        id: 'gui.ir-event.clone'
+    }
+});
+
+const userEventMessages = defineMessages({
+    event_whenflagclicked: {
+        defaultMessage: 'Green Flag event',
+        id: 'gui.ir-user-event.event_whenflagclicked'
+    },
+    event_whenthisspriteclicked: {
+        defaultMessage: '{value} Clicked event',
+        id: 'gui.ir-user-event.event_whenthisspriteclicked'
+    },
+    event_whenstageclicked: {
+        defaultMessage: 'Stage Clicked event',
+        id: 'gui.ir-user-event.event_whenstageclicked'
+    },
+    event_whenkeypressed: {
+        defaultMessage: `{value, select,
+            space {Space Key}
+            any {Any Key}
+            other {Key {value}}
+        } Pressed event`,
+        id: 'gui.ir-user-event.event_whenkeypressed'
+    }
+});
+
+class StatementFormatter {
     constructor (targets, blocks) {
         this.targets = targets;
         this.blocks = blocks;
     }
 
     formatBlock (block) {
-        let title;
         const opcode = block.opcode;
+        const title = blockMessages[opcode];
         const extras = {};
-        if (blockMessages.hasOwnProperty(opcode)) {
-            title = blockMessages[opcode];
-        } else {
-            // TODO Phil 05/05/2020: eventually remove this
-            title = opcode;
-        }
 
         switch (opcode) {
         case 'test':
@@ -893,7 +920,23 @@ class BlockFormatter {
         }
 
         return {title, extras};
-    };
+    }
+
+    formatEvent (event) {
+        const title = eventMessages[event.name];
+        const titleExtra = {
+            value: event.value
+        };
+        return {title, titleExtra};
+    }
+
+    formatUserEvent (userEvent) {
+        const title = userEventMessages[userEvent.opcode];
+        const titleExtra = {
+            value: userEvent.value
+        };
+        return {title, titleExtra};
+    }
 }
 
 const statementMessages = defineMessages({
@@ -993,14 +1036,20 @@ const statementMessages = defineMessages({
         defaultMessage: `Sprite {name} was never cloned.`,
         id: 'gui.ir-statement.not-created-clone'
     },
-    // UserEventStatement
-    calledUserEvent: {
-        defaultMessage: `User Event {name} was called.`,
-        id: 'gui.ir-statement.called-user-event'
+    // UserEventCalledStatement,
+    userEventCalledStatement: {
+        defaultMessage: `{userEvent} was triggered.`,
+        id: 'gui.ir-statement.user-event-called-statement'
     },
-    notCalledUserEvent: {
-        defaultMessage: `User Event {name} was never called.`,
-        id: 'gui.ir-statement.not-called-user-event'
+    // UserEventCalledButStoppedStatement,
+    userEventCalledButStoppedStatement: {
+        defaultMessage: `{userEvent} was triggered, but execution was stopped before reaching the target block.`,
+        id: 'gui.ir-statement.user-event-called-but-stopped-statement'
+    },
+    // UserEventNotCalledStatement
+    userEventNotCalledStatement: {
+        defaultMessage: `{userEvent} was never triggered.`,
+        id: 'gui.ir-statement.user-event-not-called-statement'
     }
 });
 
@@ -1008,5 +1057,5 @@ export {
     questionMessages,
     answerMessages,
     statementMessages,
-    BlockFormatter
+    StatementFormatter
 };

@@ -2,14 +2,15 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import bindAll from 'lodash.bindall';
+import {injectIntl, intlShape} from 'react-intl';
 
 import {Answer} from 'scratch-ir';
 
 import styles from './ir-cards.css';
 import Box from '../box/box.jsx';
 
+import {StatementFormatter} from '../../lib/libraries/ir-messages.js';
 import IRStatement from './ir-statement.jsx';
-import {injectIntl, intlShape} from 'react-intl';
 
 import iconLightBulb from './icon--light-bulb.svg';
 
@@ -25,8 +26,8 @@ class IRAnswer extends React.Component {
     renderStatements (statements) {
         const {
             answer,
-            formatBlock,
-            glowBlock
+            glowBlock,
+            statementFormatter
         } = this.props;
 
         return statements.map(statement => {
@@ -37,7 +38,7 @@ class IRAnswer extends React.Component {
                     parentKey={key}
                     statement={statement}
                     glowBlock={glowBlock}
-                    formatBlock={formatBlock}
+                    formatter={statementFormatter}
                     inner={false}
                 />
             );
@@ -81,7 +82,7 @@ class IRAnswer extends React.Component {
 IRAnswer.propTypes = {
     intl: intlShape.isRequired,
     answer: PropTypes.instanceOf(Answer).isRequired,
-    formatBlock: PropTypes.func.isRequired,
+    statementFormatter: PropTypes.instanceOf(StatementFormatter).isRequired,
     glowBlock: PropTypes.func.isRequired
 };
 

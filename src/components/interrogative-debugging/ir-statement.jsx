@@ -16,10 +16,12 @@ import {
     OverwrittenStatement,
     RightBranchButStoppedStatement,
     Statement,
-    UserEventStatement
+    UserEventCalledStatement,
+    UserEventCalledButStoppedStatement,
+    UserEventNotCalledStatement
 } from 'scratch-ir';
 
-import {statementMessages as stmtMsg} from '../../lib/libraries/ir-messages.js';
+import {StatementFormatter, statementMessages as stmtMsg} from '../../lib/libraries/ir-messages.js';
 import irStyles from './ir-cards.css';
 import styles from './ir-cards.css';
 import iconExpand from './icon--expand.svg';
@@ -45,6 +47,8 @@ class IRStatement extends React.Component {
         bindAll(this, [
             'handleExpand',
             'prettyPrintBlock',
+            'prettyPrintEvent',
+            'prettyPrintUserEvent',
             'renderNestedStatements'
         ]);
 
@@ -62,18 +66,34 @@ class IRStatement extends React.Component {
     }
 
     prettyPrintBlock (block) {
-        const {title, extras} = this.props.formatBlock(block);
+        const {title, extras} = this.props.formatter.formatBlock(block);
         return {
             blockTitle: this.props.intl.formatMessage(title),
             blockTitleExtra: extras
         };
     }
 
+    prettyPrintEvent (event) {
+        const {title, extras} = this.props.formatter.formatEvent(event);
+        return {
+            eventTitle: this.props.intl.formatMessage(title),
+            eventTitleExtra: extras
+        };
+    }
+
+    prettyPrintUserEvent (userEvent) {
+        const {title, extras} = this.props.formatter.formatUserEvent(userEvent);
+        return {
+            userEventTitle: this.props.intl.formatMessage(title),
+            userEventTitleExtra: extras
+        };
+    }
+
     renderNestedStatements (parentKey, children) {
         const {
+            formatter,
             glowBlock,
-            intl,
-            formatBlock
+            intl
         } = this.props;
 
         return children.map(childStatement => {
@@ -84,7 +104,7 @@ class IRStatement extends React.Component {
                 statement={childStatement}
                 inner
                 intl={intl}
-                formatBlock={formatBlock}
+                formatter={formatter}
                 glowBlock={glowBlock}
             />);
         });
@@ -100,6 +120,10 @@ class IRStatement extends React.Component {
         } = this.props;
         const block = statement.block;
         const {blockTitle, blockTitleExtra} = block ? this.prettyPrintBlock(block) : {};
+        const event = statement.event;
+        const {eventTitle, eventTitleExtra} = event ? this.prettyPrintEvent(event) : {};
+        const userEvent = statement.userEvent;
+        const {userEventTitle, userEventTitleExtra} = userEvent ? this.prettyPrintUserEvent(userEvent) : {};
         const handleClick = block ? glowBlock(block.id) : null;
 
         let message = null; // has to be set.
@@ -242,18 +266,26 @@ class IRStatement extends React.Component {
             );
             break;
         }
-        case UserEventStatement: {
-            if (statement.wasCalled) {
-                message = stmtMsg.calledUserEvent;
-                messageData = {
-                    name: statement.userEvent.name
-                };
-            } else {
-                message = stmtMsg.notCalledUserEvent;
-                messageData = {
-                    name: statement.userEvent.name
-                };
-            }
+
+        case UserEventCalledStatement: {
+            message = stmtMsg.userEventCalledStatement;
+            messageData = {
+                userEvent: userEventTitle
+            };
+            break;
+        }
+        case UserEventCalledButStoppedStatement: {
+            message = stmtMsg.userEventCalledButStoppedStatement;
+            messageData = {
+                userEvent: userEventTitle
+            };
+            break;
+        }
+        case UserEventNotCalledStatement: {
+            message = stmtMsg.userEventNotCalledStatement;
+            messageData = {
+                userEvent: userEventTitle
+            };
             break;
         }
         default: {
@@ -265,6 +297,8 @@ class IRStatement extends React.Component {
             return null;
         }
         Object.assign(messageData, blockTitleExtra);
+        Object.assign(messageData, eventTitleExtra);
+        Object.assign(messageData, userEventTitleExtra);
         return (
             <li
                 className={classNames(
@@ -313,7 +347,7 @@ class IRStatement extends React.Component {
 IRStatement.propTypes = {
     intl: intlShape.isRequired,
     parentKey: PropTypes.string.isRequired,
-    formatBlock: PropTypes.func.isRequired,
+    formatter: PropTypes.instanceOf(StatementFormatter).isRequired,
     glowBlock: PropTypes.func.isRequired,
     statement: PropTypes.instanceOf(Statement),
     inner: PropTypes.bool.isRequired

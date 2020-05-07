@@ -4,6 +4,7 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import PropTypes from 'prop-types';
 import {Question} from 'scratch-ir';
 
+import {StatementFormatter} from '../../lib/libraries/ir-messages.js';
 import IRAnswer from './ir-answer.jsx';
 import Box from '../box/box.jsx';
 import irStyles from './ir-cards.css';
@@ -69,8 +70,8 @@ class IRQuestion extends React.Component {
     render () {
         const {
             intl,
-            formatBlock,
             glowBlock,
+            statementFormatter,
             question
         } = this.props;
         const text = question.text;
@@ -110,7 +111,7 @@ class IRQuestion extends React.Component {
                         <IRAnswer
                             answer={this.state.answer}
                             glowBlock={glowBlock}
-                            formatBlock={formatBlock}
+                            statementFormatter={statementFormatter}
                         />
                     ) : null}
                 </Box>
@@ -122,7 +123,7 @@ class IRQuestion extends React.Component {
 IRQuestion.propTypes = {
     intl: intlShape.isRequired,
     computeAnswer: PropTypes.func.isRequired,
-    formatBlock: PropTypes.func.isRequired,
+    statementFormatter: PropTypes.instanceOf(StatementFormatter).isRequired,
     glowBlock: PropTypes.func.isRequired,
     question: PropTypes.instanceOf(Question).isRequired
 };

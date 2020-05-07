@@ -5,6 +5,7 @@ import Draggable from 'react-draggable';
 import {injectIntl, intlShape, FormattedMessage} from 'react-intl';
 import {Question} from 'scratch-ir';
 
+import {StatementFormatter} from '../../lib/libraries/ir-messages';
 import QuestionCategory from './ir-category.jsx';
 
 import styles from '../cards/card.css';
@@ -162,7 +163,6 @@ const QuestionsCards = props => {
     const {
         categories,
         computeAnswer,
-        formatBlock,
         intl,
         isRtl,
         glowBlock,
@@ -176,6 +176,7 @@ const QuestionsCards = props => {
         onPrevStep,
         step,
         expanded,
+        statementFormatter,
         ...posProps
     } = props;
     let {x, y} = posProps;
@@ -231,7 +232,7 @@ const QuestionsCards = props => {
                                 category={categories[step]}
                                 computeAnswer={computeAnswer}
                                 glowBlock={glowBlock}
-                                formatBlock={formatBlock}
+                                statementFormatter={statementFormatter}
                             />
                         </div>
                         <NextPrevButtons
@@ -268,7 +269,7 @@ QuestionsCards.propTypes = {
     computeAnswer: PropTypes.func.isRequired,
     dragging: PropTypes.bool.isRequired,
     expanded: PropTypes.bool.isRequired,
-    formatBlock: PropTypes.func.isRequired,
+    statementFormatter: PropTypes.instanceOf(StatementFormatter).isRequired,
     intl: intlShape.isRequired,
     isRtl: PropTypes.bool.isRequired,
     glowBlock: PropTypes.func.isRequired,
