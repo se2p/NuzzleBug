@@ -24,7 +24,7 @@ import {
     UserEventNotCalledStatement
 } from 'scratch-ir';
 
-import {StatementFormatter, statementMessages as stmtMsg} from '../../lib/libraries/ir-messages.js';
+import {StatementFormatter, statementMessages as msg} from '../../lib/libraries/ir-messages.js';
 import irStyles from './ir-cards.css';
 import styles from './ir-cards.css';
 import iconExpand from './icon--expand.svg';
@@ -126,7 +126,7 @@ class IRStatement extends React.Component {
 
         switch (statement.constructor) {
         case ChangingStatement: {
-            message = stmtMsg.changingStatement;
+            message = msg.changingStatement;
             messageData = {
                 block: blockTitle,
                 startValue: statement.startValue,
@@ -135,7 +135,7 @@ class IRStatement extends React.Component {
             break;
         }
         case NotChangingStatement: {
-            message = stmtMsg.notChangingStatement;
+            message = msg.notChangingStatement;
             messageData = {
                 block: blockTitle,
                 value: statement.value,
@@ -144,7 +144,7 @@ class IRStatement extends React.Component {
             break;
         }
         case CalledButWrongBranchStatement: {
-            message = stmtMsg.calledButWrongBranchStatement;
+            message = msg.calledButWrongBranchStatement;
             messageData = {
                 block: blockTitle,
                 timesCalled: statement.values.length,
@@ -154,7 +154,7 @@ class IRStatement extends React.Component {
             break;
         }
         case RightBranchButStoppedStatement: {
-            message = stmtMsg.rightBranchButStoppedStatement;
+            message = msg.rightBranchButStoppedStatement;
             messageData = {
                 block: blockTitle,
                 condition: `${statement.requiredCondition}`
@@ -162,7 +162,7 @@ class IRStatement extends React.Component {
             break;
         }
         case CalledControlStatement: {
-            message = stmtMsg.calledControlStatement;
+            message = msg.calledControlStatement;
             messageData = {
                 block: blockTitle,
                 condition: `${statement.requiredCondition}`
@@ -170,14 +170,14 @@ class IRStatement extends React.Component {
             break;
         }
         case NotCalledControlStatement: {
-            message = stmtMsg.notCalledControlStatement;
+            message = msg.notCalledControlStatement;
             messageData = {
                 block: blockTitle
             };
             break;
         }
         case CalledStatement: {
-            message = stmtMsg.calledStatement;
+            message = msg.calledStatement;
             messageData = {
                 block: blockTitle
             };
@@ -189,7 +189,7 @@ class IRStatement extends React.Component {
             break;
         }
         case NotCalledStatement: {
-            message = stmtMsg.notCalledStatement;
+            message = msg.notCalledStatement;
             messageData = {
                 block: blockTitle
             };
@@ -201,7 +201,7 @@ class IRStatement extends React.Component {
             break;
         }
         case OverwrittenStatement: {
-            message = stmtMsg.overwrittenStatement;
+            message = msg.overwrittenStatement;
             messageData = {
                 block: blockTitle,
                 timesCalled: statement.timesCalled
@@ -214,7 +214,7 @@ class IRStatement extends React.Component {
             break;
         }
         case OverwritingStatement: {
-            message = stmtMsg.overwritingStatement;
+            message = msg.overwritingStatement;
             messageData = {
                 block: blockTitle,
                 startValue: statement.startValue,
@@ -224,7 +224,7 @@ class IRStatement extends React.Component {
         }
 
         case EventSentStatement: {
-            message = stmtMsg.eventSentStatement;
+            message = msg.eventSentStatement;
             messageData = {
                 event: eventTitle
             };
@@ -238,7 +238,7 @@ class IRStatement extends React.Component {
             break;
         }
         case EventNotSentStatement: {
-            message = stmtMsg.eventNotSentStatement;
+            message = msg.eventNotSentStatement;
             messageData = {
                 event: eventTitle
             };
@@ -252,7 +252,7 @@ class IRStatement extends React.Component {
             break;
         }
         case EventSentAndReceiveButStoppedStatement: {
-            message = stmtMsg.eventSentAndReceiveButStoppedStatement;
+            message = msg.eventSentAndReceiveButStoppedStatement;
             messageData = {
                 event: eventTitle
             };
@@ -260,7 +260,7 @@ class IRStatement extends React.Component {
             break;
         }
         case EventSentNotReceivedStatement: {
-            message = stmtMsg.eventSentNotReceivedStatement;
+            message = msg.eventSentNotReceivedStatement;
             messageData = {
                 event: eventTitle
             };
@@ -269,28 +269,28 @@ class IRStatement extends React.Component {
         }
 
         case UserEventCalledStatement: {
-            message = stmtMsg.userEventCalledStatement;
+            message = msg.userEventCalledStatement;
             messageData = {
                 userEvent: userEventTitle
             };
             break;
         }
         case UserEventCalledButStoppedStatement: {
-            message = stmtMsg.userEventCalledButStoppedStatement;
+            message = msg.userEventCalledButStoppedStatement;
             messageData = {
                 userEvent: userEventTitle
             };
             break;
         }
         case UserEventNotCalledStatement: {
-            message = stmtMsg.userEventNotCalledStatement;
+            message = msg.userEventNotCalledStatement;
             messageData = {
                 userEvent: userEventTitle
             };
             break;
         }
         default: {
-            message = stmtMsg.failed;
+            message = msg.failed;
             break;
         }
         }

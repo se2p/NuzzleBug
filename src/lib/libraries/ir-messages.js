@@ -7,12 +7,10 @@ const questionMessages = defineMessages({
      */
     categoryGeneral: {
         defaultMessage: `General`,
-        description: 'Tag for filtering a library for animals',
         id: 'gui.ir-question.category-general'
     },
     categoryOverall: {
         defaultMessage: `Overall`,
-        description: 'Tag for filtering a library for animals',
         id: 'gui.ir-question.category-overall'
     },
     categoryTarget: {
@@ -40,17 +38,14 @@ const questionMessages = defineMessages({
      */
     positionDidChange: {
         defaultMessage: `Why did {targetName}'s position change?`,
-        description: 'Tag for filtering a library for animals',
         id: 'gui.ir-question.position-did-change'
     },
     positionDidntChange: {
         defaultMessage: `Why didn't {targetName}'s position change?`,
-        description: 'Tag for filtering a library for animals',
         id: 'gui.ir-question.position-didnt-change'
     },
     positionDidntSpecific: {
         defaultMessage: `Why didn't {targetName} have position {value}?`,
-        description: 'Tag for filtering a library for animals',
         id: 'gui.ir-question.position-didnt-specific'
     },
 
@@ -59,7 +54,6 @@ const questionMessages = defineMessages({
      */
     xCoordinateDidntSpecific: {
         defaultMessage: `Why didn't {targetName}'s x coordinate have value {value}?`,
-        description: 'Tag for filtering a library for animals',
         id: 'gui.ir-question.xcoordinate-didnt-specific'
     },
 
@@ -68,7 +62,6 @@ const questionMessages = defineMessages({
      */
     yCoordinateDidntSpecific: {
         defaultMessage: `Why didn't {targetName}'s y coordinate have value {value}?`,
-        description: 'Tag for filtering a library for animals',
         id: 'gui.ir-question.ycoordinate-didnt-specific'
     },
 
@@ -77,17 +70,14 @@ const questionMessages = defineMessages({
      */
     directionDidChange: {
         defaultMessage: `Why did {targetName}'s direction change?`,
-        description: 'Tag for filtering a library for animals',
         id: 'gui.ir-question.direction-did-change'
     },
     directionDidntChange: {
         defaultMessage: `Why didn't {targetName}'s direction change?`,
-        description: 'Tag for filtering a library for animals',
         id: 'gui.ir-question.direction-didnt-change'
     },
     directionDidntSpecific: {
         defaultMessage: `Why didn't {targetName}'s direction have value {value}?`,
-        description: 'Tag for filtering a library for animals',
         id: 'gui.ir-question.direction-didnt-specific'
     },
 
@@ -96,17 +86,14 @@ const questionMessages = defineMessages({
      */
     backdropDidChange: {
         defaultMessage: `Why did stage's backdrop change?`,
-        description: 'Tag for filtering a library for animals',
         id: 'gui.ir-question.backdrop-did-change'
     },
     backdropDidntChange: {
         defaultMessage: `Why didn't stage's backdrop change?`,
-        description: 'Tag for filtering a library for animals',
         id: 'gui.ir-question.backdrop-didnt-change'
     },
     backdropDidntSpecific: {
         defaultMessage: `Why didn't stage's backdrop have value {value}?`,
-        description: 'Tag for filtering a library for animals',
         id: 'gui.ir-question.backdrop-didnt-specific'
     },
 
@@ -115,17 +102,14 @@ const questionMessages = defineMessages({
      */
     costumeDidChange: {
         defaultMessage: `Why did {targetName}'s costume change?`,
-        description: 'Tag for filtering a library for animals',
         id: 'gui.ir-question.costume-did-change'
     },
     costumeDidntChange: {
         defaultMessage: `Why didn't {targetName}'s costume change?`,
-        description: 'Tag for filtering a library for animals',
         id: 'gui.ir-question.costume-didnt-change'
     },
     costumeDidntSpecific: {
         defaultMessage: `Why didn't {targetName}'s costume have value {value}?`,
-        description: 'Tag for filtering a library for animals',
         id: 'gui.ir-question.costume-didnt-specific'
     },
 
@@ -134,17 +118,14 @@ const questionMessages = defineMessages({
      */
     sizeDidChange: {
         defaultMessage: `Why did {targetName}'s size change?`,
-        description: 'Tag for filtering a library for animals',
         id: 'gui.ir-question.size-did-change'
     },
     sizeDidntChange: {
         defaultMessage: `Why didn't {targetName}'s size change?`,
-        description: 'Tag for filtering a library for animals',
         id: 'gui.ir-question.size-didnt-change'
     },
     sizeDidntSpecific: {
         defaultMessage: `Why didn't {targetName}'s size have value {value}?`,
-        description: 'Tag for filtering a library for animals',
         id: 'gui.ir-question.size-didnt-specific'
     },
 
@@ -153,17 +134,14 @@ const questionMessages = defineMessages({
      */
     visibilityDidChange: {
         defaultMessage: `Why did {targetName}'s visibility change?`,
-        description: 'Tag for filtering a library for animals',
         id: 'gui.ir-question.visibility-did-change'
     },
     visibilityDidntChange: {
         defaultMessage: `Why didn't {targetName}'s visibility change?`,
-        description: 'Tag for filtering a library for animals',
         id: 'gui.ir-question.visibility-didnt-change'
     },
     visibilityDidntSpecific: {
         defaultMessage: `Why didn't {targetName}'s visibility have value {value}?`,
-        description: 'Tag for filtering a library for animals',
         id: 'gui.ir-question.visibility-didnt-specific'
     },
 
@@ -241,7 +219,7 @@ const answerMessages = defineMessages({
      * General
      */
     manualChange: {
-        defaultMessage: 'No changing statements found, must have been changed manually.',
+        defaultMessage: `No changing statements found, must have been changed manually.`,
         id: 'gui.ir-answer.no-changing-statement'
     },
 
@@ -604,169 +582,169 @@ const answerMessages = defineMessages({
 const blockMessages = defineMessages({
     // Motion blocks
     motion_movesteps: {
-        defaultMessage: 'Move steps block',
+        defaultMessage: `Move steps block`,
         id: 'gui.ir-blocks.motion_movesteps'
     },
     motion_turnleft: {
-        defaultMessage: 'Turn right block',
+        defaultMessage: `Turn right block`,
         id: 'gui.ir-blocks.motion_turnleft'
     },
     motion_turnright: {
-        defaultMessage: 'Turn right block',
+        defaultMessage: `Turn right block`,
         id: 'gui.ir-blocks.motion_turnright'
     },
     motion_pointindirection: {
-        defaultMessage: 'Point in direction block',
+        defaultMessage: `Point in direction block`,
         id: 'gui.ir-blocks.motion_pointindirection'
     },
     motion_pointtowards: {
-        defaultMessage: 'Point towards block',
+        defaultMessage: `Point towards block`,
         id: 'gui.ir-blocks.motion_pointtowards'
     },
     motion_goto: {
-        defaultMessage: 'Go to block',
+        defaultMessage: `Go to block`,
         id: 'gui.ir-blocks.motion_goto'
     },
     motion_gotoxy: {
-        defaultMessage: 'Go to position block',
+        defaultMessage: `Go to position block`,
         id: 'gui.ir-blocks.motion_gotoxy'
     },
     motion_glidesecstoxy: {
-        defaultMessage: 'Glide to position block',
+        defaultMessage: `Glide to position block`,
         id: 'gui.ir-blocks.motion_glidesecstoxy'
     },
     motion_glideto: {
-        defaultMessage: 'Glide to position block',
+        defaultMessage: `Glide to position block`,
         id: 'gui.ir-blocks.motion_glideto'
     },
     motion_changexby: {
-        defaultMessage: 'Change x by block',
+        defaultMessage: `Change x by block`,
         id: 'gui.ir-blocks.motion_changexby'
     },
     motion_setx: {
-        defaultMessage: 'Set x block',
+        defaultMessage: `Set x block`,
         id: 'gui.ir-blocks.motion_setx'
     },
     motion_changeyby: {
-        defaultMessage: 'Change y by block',
+        defaultMessage: `Change y by block`,
         id: 'gui.ir-blocks.motion_changeyby'
     },
     motion_sety: {
-        defaultMessage: 'Set y block',
+        defaultMessage: `Set y block`,
         id: 'gui.ir-blocks.motion_sety'
     },
     motion_ifonedgebounce: {
-        defaultMessage: 'Bounce on edge block',
+        defaultMessage: `Bounce on edge block`,
         id: 'gui.ir-blocks.motion_ifonedgebounce'
     },
     motion_setrotationstyle: {
-        defaultMessage: 'Set rotation block',
+        defaultMessage: `Set rotation block`,
         id: 'gui.ir-blocks.motion_setrotationstyle'
     },
 
     // Looks blocks
     looks_sayforsecs: {
-        defaultMessage: 'Say block',
+        defaultMessage: `Say block`,
         id: 'gui.ir-blocks.looks_sayforsecs'
     },
     looks_say: {
-        defaultMessage: 'Say block',
+        defaultMessage: `Say block`,
         id: 'gui.ir-blocks.looks_say'
     },
     looks_thinkforsecs: {
-        defaultMessage: 'Think block',
+        defaultMessage: `Think block`,
         id: 'gui.ir-blocks.looks_thinkforsecs'
     },
     looks_think: {
-        defaultMessage: 'Think block',
+        defaultMessage: `Think block`,
         id: 'gui.ir-blocks.looks_think'
     },
     looks_switchcostumeto: {
-        defaultMessage: 'Switch costume block',
+        defaultMessage: `Switch costume block`,
         id: 'gui.ir-blocks.looks_switchcostumeto'
     },
     looks_nextcostume: {
-        defaultMessage: 'Next costume block',
+        defaultMessage: `Next costume block`,
         id: 'gui.ir-blocks.looks_nextcostume'
     },
     looks_switchbackdropto: {
-        defaultMessage: 'Switch backdrop block',
+        defaultMessage: `Switch backdrop block`,
         id: 'gui.ir-blocks.looks_switchbackdropto'
     },
     looks_nextbackdrop: {
-        defaultMessage: 'Next backdrop block',
+        defaultMessage: `Next backdrop block`,
         id: 'gui.ir-blocks.looks_nextbackdrop'
     },
     looks_changesizeby: {
-        defaultMessage: 'Change size block',
+        defaultMessage: `Change size block`,
         id: 'gui.ir-blocks.looks_changesizeby'
     },
     looks_setsizeto: {
-        defaultMessage: 'Set size block',
+        defaultMessage: `Set size block`,
         id: 'gui.ir-blocks.looks_setsizeto'
     },
     looks_show: {
-        defaultMessage: 'Show block',
+        defaultMessage: `Show block`,
         id: 'gui.ir-blocks.looks_show'
     },
     looks_hide: {
-        defaultMessage: 'Show block',
+        defaultMessage: `Show block`,
         id: 'gui.ir-blocks.looks_hide'
     },
 
     // Sound blocks
     sound_play: {
-        defaultMessage: 'Play sound block',
+        defaultMessage: `Play sound block`,
         id: 'gui.ir-blocks.sound_play'
     },
     sound_playuntildone: {
-        defaultMessage: 'Play sound block',
+        defaultMessage: `Play sound block`,
         id: 'gui.ir-blocks.sound_playuntildone'
     },
     sound_stopallsounds: {
-        defaultMessage: 'Stop sounds block',
+        defaultMessage: `Stop sounds block`,
         id: 'gui.ir-blocks.sound_stopallsounds'
     },
 
     // Event blocks
     event_whenflagclicked: {
-        defaultMessage: 'When green flag clicked block',
+        defaultMessage: `When green flag clicked block`,
         id: 'gui.ir-blocks.event_whenflagclicked'
     },
     event_whenkeypressed: {
-        defaultMessage: 'When key pressed block',
+        defaultMessage: `When key pressed block`,
         id: 'gui.ir-blocks.event_whenkeypressed'
     },
     event_whenthisspriteclicked: {
-        defaultMessage: 'When this sprite clicked block',
+        defaultMessage: `When this sprite clicked block`,
         id: 'gui.ir-blocks.event_whenthisspriteclicked'
     },
     event_whenstageclicked: {
-        defaultMessage: 'When stage clicked block',
+        defaultMessage: `When stage clicked block`,
         id: 'gui.ir-blocks.event_whenstageclicked'
     },
     event_whentouchingobject: {
-        defaultMessage: 'When this sprite touches block',
+        defaultMessage: `When this sprite touches block`,
         id: 'gui.ir-blocks.event_whentouchingobject'
     },
     event_whenbroadcastreceived: {
-        defaultMessage: 'Receive broadcast block',
+        defaultMessage: `Receive broadcast block`,
         id: 'gui.ir-blocks.event_whenbroadcastreceived'
     },
     event_whenbackdropswitchesto: {
-        defaultMessage: 'When backdrop switches block',
+        defaultMessage: `When backdrop switches block`,
         id: 'gui.ir-blocks.event_whenbackdropswitchesto'
     },
     event_whengreaterthan: {
-        defaultMessage: 'When greater block',
+        defaultMessage: `When greater block`,
         id: 'gui.ir-blocks.event_whengreaterthan'
     },
     event_broadcast: {
-        defaultMessage: 'Send broadcast block',
+        defaultMessage: `Send broadcast block`,
         id: 'gui.ir-blocks.event_broadcast'
     },
     event_broadcastandwait: {
-        defaultMessage: 'Send broadcast block',
+        defaultMessage: `Send broadcast block`,
         id: 'gui.ir-blocks.event_broadcastandwait'
     },
 
@@ -799,7 +777,6 @@ const blockMessages = defineMessages({
         defaultMessage: `If-else block`,
         id: 'gui.ir-blocks.control_if_else'
     },
-    // TODO Phil 05/05/2020: differentiate between stop types
     control_stop: {
         defaultMessage: `Stop block`,
         id: 'gui.ir-blocks.control_stop'
@@ -819,79 +796,79 @@ const blockMessages = defineMessages({
 
     // Sensing blocks
     sensing_touchingobject: {
-        defaultMessage: 'Touching block',
+        defaultMessage: `Touching block`,
         id: 'gui.ir-blocks.sensing_touchingobject'
     },
     sensing_touchingcolor: {
-        defaultMessage: 'Touching color block',
+        defaultMessage: `Touching color block`,
         id: 'gui.ir-blocks.sensing_touchingcolor'
     },
     sensing_coloristouchingcolor: {
-        defaultMessage: 'Two colors touching block',
+        defaultMessage: `Two colors touching block`,
         id: 'gui.ir-blocks.sensing_coloristouchingcolor'
     },
     sensing_distanceto: {
-        defaultMessage: 'Distance block',
+        defaultMessage: `Distance block`,
         id: 'gui.ir-blocks.sensing_distanceto'
     },
     sensing_askandwait: {
-        defaultMessage: 'Ask block',
+        defaultMessage: `Ask block`,
         id: 'gui.ir-blocks.sensing_askandwait'
     },
     sensing_keypressed: {
-        defaultMessage: 'Key pressed block',
+        defaultMessage: `Key pressed block`,
         id: 'gui.ir-blocks.sensing_keypressed'
     },
     sensing_mousedown: {
-        defaultMessage: 'Mouse down block',
+        defaultMessage: `Mouse down block`,
         id: 'gui.ir-blocks.sensing_mousedown'
     },
     sensing_setdragmode: {
-        defaultMessage: 'Set drag mode block',
+        defaultMessage: `Set drag mode block`,
         id: 'gui.ir-blocks.sensing_setdragmode'
     },
     sensing_resettimer: {
-        defaultMessage: 'Reset timer block',
+        defaultMessage: `Reset timer block`,
         id: 'gui.ir-blocks.sensing_resettimer'
     },
     sensing_of: {
-        defaultMessage: 'Attribute block',
+        defaultMessage: `Attribute block`,
         id: 'gui.ir-blocks.sensing_of'
     },
 
     // Variables blocks
     data_setvariableto: {
-        defaultMessage: 'Set variable block',
+        defaultMessage: `Set variable block`,
         id: 'gui.ir-blocks.data_setvariableto'
     },
     data_changevariableby: {
-        defaultMessage: 'Change variable block',
+        defaultMessage: `Change variable block`,
         id: 'gui.ir-blocks.data_changevariableby'
     }
 });
 
 const eventMessages = defineMessages({
     broadcast: {
-        defaultMessage: 'Broadcast {value}',
+        defaultMessage: `Broadcast {value}`,
         id: 'gui.ir-event.broadcast'
     },
     clone: {
-        defaultMessage: 'Cloning {value} event',
+        defaultMessage: `Cloning {value} event`,
         id: 'gui.ir-event.clone'
     }
 });
 
 const userEventMessages = defineMessages({
     event_whenflagclicked: {
-        defaultMessage: 'Green Flag event',
+        defaultMessage: `Green Flag event`,
         id: 'gui.ir-user-event.event_whenflagclicked'
     },
     event_whenthisspriteclicked: {
-        defaultMessage: '{value} Clicked event',
+        defaultMessage: `{value} Clicked event`,
         id: 'gui.ir-user-event.event_whenthisspriteclicked'
     },
     event_whenstageclicked: {
-        defaultMessage: 'Stage Clicked event',
+        defaultMessage: `Stage Clicked event`,
         id: 'gui.ir-user-event.event_whenstageclicked'
     },
     event_whenkeypressed: {
@@ -903,42 +880,6 @@ const userEventMessages = defineMessages({
         id: 'gui.ir-user-event.event_whenkeypressed'
     }
 });
-
-class StatementFormatter {
-    constructor (targets, blocks) {
-        this.targets = targets;
-        this.blocks = blocks;
-    }
-
-    formatBlock (block) {
-        const opcode = block.opcode;
-        const title = blockMessages[opcode];
-        const extras = {};
-
-        switch (opcode) {
-        case 'test':
-            extras.test = 'test';
-        }
-
-        return {title, extras};
-    }
-
-    formatEvent (event) {
-        const title = eventMessages[event.type];
-        const extras = {
-            value: event.value
-        };
-        return {title, extras};
-    }
-
-    formatUserEvent (userEvent) {
-        const title = userEventMessages[userEvent.opcode];
-        const extras = {
-            value: userEvent.value
-        };
-        return {title, extras};
-    }
-}
 
 const statementMessages = defineMessages({
     // No statement
@@ -1060,6 +1001,43 @@ const statementMessages = defineMessages({
         id: 'gui.ir-statement.user-event-not-called-statement'
     }
 });
+
+class StatementFormatter {
+    constructor (targets, blocks) {
+        this.targets = targets;
+        this.blocks = blocks;
+    }
+
+    formatBlock (block) {
+        const opcode = block.opcode;
+        const title = blockMessages[opcode];
+        const extras = {};
+
+        // targets, blocks and opcode can be used to format a block specifically:
+        // switch (opcode) {
+        // case 'control_stop':
+        //     extras.type = block.inputs...;
+        // }
+
+        return {title, extras};
+    }
+
+    formatEvent (event) {
+        const title = eventMessages[event.type];
+        const extras = {
+            value: event.value
+        };
+        return {title, extras};
+    }
+
+    formatUserEvent (userEvent) {
+        const title = userEventMessages[userEvent.opcode];
+        const extras = {
+            value: userEvent.value
+        };
+        return {title, extras};
+    }
+}
 
 export {
     questionMessages,
