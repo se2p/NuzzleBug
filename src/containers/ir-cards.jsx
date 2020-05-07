@@ -146,7 +146,6 @@ IRCards.propTypes = {
 
 const mapStateToProps = state => ({
     visible: state.scratchGui.ircards.visible,
-    content: state.scratchGui.ircards.content,
     step: state.scratchGui.ircards.step,
     expanded: state.scratchGui.ircards.expanded,
     x: state.scratchGui.ircards.x,

@@ -144,6 +144,21 @@ const questionMessages = defineMessages({
         defaultMessage: `Why didn't {targetName}'s visibility have value {value}?`,
         id: 'gui.ir-question.visibility-didnt-specific'
     },
+    /**
+     * Interaction
+     */
+    interactionDidNotAsk: {
+        defaultMessage: `Why didn't {targetName} ask "{message}"?`,
+        id: 'gui.ir-question.interaction-did-not-ask'
+    },
+    interactionDidNotSay: {
+        defaultMessage: `Why didn't {targetName} say "{message}"?`,
+        id: 'gui.ir-question.interaction-did-not-say'
+    },
+    interactionDidNotThink: {
+        defaultMessage: `Why didn't {targetName} think "{message}"?`,
+        id: 'gui.ir-question.interaction-did-not-think'
+    },
 
     /**
      * Global Variables
@@ -492,6 +507,22 @@ const answerMessages = defineMessages({
     },
 
     /**
+     * Interaction
+     */
+    interactionDidNotAskNeverCalled: {
+        defaultMessage: `Blocks to ask "{message}" were just never called.`,
+        id: 'gui.ir-answer.interaction-did-not-ask-never-called'
+    },
+    interactionDidNotSayNeverCalled: {
+        defaultMessage: `Blocks to say "{message}" were just never called.`,
+        id: 'gui.ir-answer.interaction-did-not-say-never-called'
+    },
+    interactionDidNotThinkNeverCalled: {
+        defaultMessage: `Blocks to think "{message}" were just never called.`,
+        id: 'gui.ir-answer.interaction-did-not-think-never-called'
+    },
+
+    /**
      * Variable
      */
     // Why did change
@@ -644,19 +675,19 @@ const blockMessages = defineMessages({
 
     // Looks blocks
     looks_sayforsecs: {
-        defaultMessage: `Say block`,
+        defaultMessage: `Saying block`,
         id: 'gui.ir-blocks.looks_sayforsecs'
     },
     looks_say: {
-        defaultMessage: `Say block`,
+        defaultMessage: `Saying block`,
         id: 'gui.ir-blocks.looks_say'
     },
     looks_thinkforsecs: {
-        defaultMessage: `Think block`,
+        defaultMessage: `Thinking block`,
         id: 'gui.ir-blocks.looks_thinkforsecs'
     },
     looks_think: {
-        defaultMessage: `Think block`,
+        defaultMessage: `Thinking block`,
         id: 'gui.ir-blocks.looks_think'
     },
     looks_switchcostumeto: {
@@ -812,7 +843,7 @@ const blockMessages = defineMessages({
         id: 'gui.ir-blocks.sensing_distanceto'
     },
     sensing_askandwait: {
-        defaultMessage: `Ask block`,
+        defaultMessage: `Asking block`,
         id: 'gui.ir-blocks.sensing_askandwait'
     },
     sensing_keypressed: {
