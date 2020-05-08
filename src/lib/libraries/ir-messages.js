@@ -14,8 +14,8 @@ const questionMessages = defineMessages({
         id: 'gui.ir-question.category-overall'
     },
     categoryTarget: {
-        defaultMessage: `{targetName}`,
-        description: 'Questions about target {targetName}',
+        defaultMessage: `"{targetName}"`,
+        description: 'Questions about target "{targetName}"',
         id: 'gui.ir-question.category-target'
     },
 
@@ -24,12 +24,12 @@ const questionMessages = defineMessages({
      */
     generalDidntAnythingMove: {
         defaultMessage: `Why didn't anything move?`,
-        description: 'Questions about target {targetName}',
+        description: 'Questions about target "{targetName}"',
         id: 'gui.ir-question.general-didnt-anything-move'
     },
     generalDidntPlayAnySound: {
         defaultMessage: `Why didn't the program play any sound?`,
-        description: 'Questions about target {targetName}',
+        description: 'Questions about target "{targetName}"',
         id: 'gui.ir-question.general-didnt-play-any-sound'
     },
 
@@ -37,15 +37,15 @@ const questionMessages = defineMessages({
      * Position
      */
     positionDidChange: {
-        defaultMessage: `Why did {targetName}'s position change?`,
+        defaultMessage: `Why did "{targetName}"'s position change?`,
         id: 'gui.ir-question.position-did-change'
     },
     positionDidntChange: {
-        defaultMessage: `Why didn't {targetName}'s position change?`,
+        defaultMessage: `Why didn't "{targetName}"'s position change?`,
         id: 'gui.ir-question.position-didnt-change'
     },
     positionDidntSpecific: {
-        defaultMessage: `Why didn't {targetName} have position {value}?`,
+        defaultMessage: `Why didn't "{targetName}" have position {value}?`,
         id: 'gui.ir-question.position-didnt-specific'
     },
 
@@ -53,7 +53,7 @@ const questionMessages = defineMessages({
      * x-Coordinate
      */
     xCoordinateDidntSpecific: {
-        defaultMessage: `Why didn't {targetName}'s x coordinate have value {value}?`,
+        defaultMessage: `Why didn't "{targetName}"'s x coordinate have value {value}?`,
         id: 'gui.ir-question.xcoordinate-didnt-specific'
     },
 
@@ -61,7 +61,7 @@ const questionMessages = defineMessages({
      * y-Coordinate
      */
     yCoordinateDidntSpecific: {
-        defaultMessage: `Why didn't {targetName}'s y coordinate have value {value}?`,
+        defaultMessage: `Why didn't "{targetName}"'s y coordinate have value {value}?`,
         id: 'gui.ir-question.ycoordinate-didnt-specific'
     },
 
@@ -69,15 +69,15 @@ const questionMessages = defineMessages({
      * Direction
      */
     directionDidChange: {
-        defaultMessage: `Why did {targetName}'s direction change?`,
+        defaultMessage: `Why did "{targetName}"'s direction change?`,
         id: 'gui.ir-question.direction-did-change'
     },
     directionDidntChange: {
-        defaultMessage: `Why didn't {targetName}'s direction change?`,
+        defaultMessage: `Why didn't "{targetName}"'s direction change?`,
         id: 'gui.ir-question.direction-didnt-change'
     },
     directionDidntSpecific: {
-        defaultMessage: `Why didn't {targetName}'s direction have value {value}?`,
+        defaultMessage: `Why didn't "{targetName}"'s direction have value {value}?`,
         id: 'gui.ir-question.direction-didnt-specific'
     },
 
@@ -101,15 +101,15 @@ const questionMessages = defineMessages({
      * Costume
      */
     costumeDidChange: {
-        defaultMessage: `Why did {targetName}'s costume change?`,
+        defaultMessage: `Why did "{targetName}"'s costume change?`,
         id: 'gui.ir-question.costume-did-change'
     },
     costumeDidntChange: {
-        defaultMessage: `Why didn't {targetName}'s costume change?`,
+        defaultMessage: `Why didn't "{targetName}"'s costume change?`,
         id: 'gui.ir-question.costume-didnt-change'
     },
     costumeDidntSpecific: {
-        defaultMessage: `Why didn't {targetName}'s costume have value {value}?`,
+        defaultMessage: `Why didn't "{targetName}"'s costume have value {value}?`,
         id: 'gui.ir-question.costume-didnt-specific'
     },
 
@@ -117,15 +117,15 @@ const questionMessages = defineMessages({
      * Size
      */
     sizeDidChange: {
-        defaultMessage: `Why did {targetName}'s size change?`,
+        defaultMessage: `Why did "{targetName}"'s size change?`,
         id: 'gui.ir-question.size-did-change'
     },
     sizeDidntChange: {
-        defaultMessage: `Why didn't {targetName}'s size change?`,
+        defaultMessage: `Why didn't "{targetName}"'s size change?`,
         id: 'gui.ir-question.size-didnt-change'
     },
     sizeDidntSpecific: {
-        defaultMessage: `Why didn't {targetName}'s size have value {value}?`,
+        defaultMessage: `Why didn't "{targetName}"'s size have value {value}?`,
         id: 'gui.ir-question.size-didnt-specific'
     },
 
@@ -133,30 +133,30 @@ const questionMessages = defineMessages({
      * Visibility
      */
     visibilityDidChange: {
-        defaultMessage: `Why did {targetName}'s visibility change?`,
+        defaultMessage: `Why did "{targetName}"'s visibility change?`,
         id: 'gui.ir-question.visibility-did-change'
     },
     visibilityDidntChange: {
-        defaultMessage: `Why didn't {targetName}'s visibility change?`,
+        defaultMessage: `Why didn't "{targetName}"'s visibility change?`,
         id: 'gui.ir-question.visibility-didnt-change'
     },
     visibilityDidntSpecific: {
-        defaultMessage: `Why didn't {targetName}'s visibility have value {value}?`,
+        defaultMessage: `Why didn't "{targetName}"'s visibility have value {value}?`,
         id: 'gui.ir-question.visibility-didnt-specific'
     },
     /**
      * Interaction
      */
     interactionDidNotAsk: {
-        defaultMessage: `Why didn't {targetName} ask "{message}"?`,
+        defaultMessage: `Why didn't "{targetName}" ask "{message}"?`,
         id: 'gui.ir-question.interaction-did-not-ask'
     },
     interactionDidNotSay: {
-        defaultMessage: `Why didn't {targetName} say "{message}"?`,
+        defaultMessage: `Why didn't "{targetName}" say "{message}"?`,
         id: 'gui.ir-question.interaction-did-not-say'
     },
     interactionDidNotThink: {
-        defaultMessage: `Why didn't {targetName} think "{message}"?`,
+        defaultMessage: `Why didn't "{targetName}" think "{message}"?`,
         id: 'gui.ir-question.interaction-did-not-think'
     },
 
@@ -164,15 +164,15 @@ const questionMessages = defineMessages({
      * Global Variables
      */
     globalVariableDidntChange: {
-        defaultMessage: `Why didn't global variable {variableName} change from {value}?`,
+        defaultMessage: `Why didn't global variable "{variableName}" change from {value}?`,
         id: 'gui.ir-question.global-variable-didnt-change'
     },
     globalVariableDidChange: {
-        defaultMessage: `Why did global variable {variableName} change from {firstValue} to {finalValue}?`,
+        defaultMessage: `Why did global variable "{variableName}" change from {firstValue} to {finalValue}?`,
         id: 'gui.ir-question.global-variable-did-change'
     },
     globalVariableDidntSpecific: {
-        defaultMessage: `Why didn't global variable {variableName} have value {value}?`,
+        defaultMessage: `Why didn't global variable "{variableName}" have value {value}?`,
         id: 'gui.ir-question.global-variable-didnt-specific'
     },
 
@@ -180,27 +180,47 @@ const questionMessages = defineMessages({
      * Variable
      */
     variableDidntChange: {
-        defaultMessage: `Why didn't {targetName}'s variable {variableName} change from {value}?`,
+        defaultMessage: `Why didn't "{targetName}"'s variable "{variableName}" change from {value}?`,
         id: 'gui.ir-question.variable-didnt-change'
     },
     variableDidChange: {
-        defaultMessage: `Why did {targetName}'s variable {variableName} change from {firstValue} to {finalValue}?`,
+        defaultMessage: `Why did "{targetName}"'s variable "{variableName}" change from {firstValue} to {finalValue}?`,
         id: 'gui.ir-question.variable-did-change'
     },
     variableDidntSpecific: {
-        defaultMessage: `Why didn't {targetName}'s variable {variableName} have value {value}?`,
+        defaultMessage: `Why didn't "{targetName}"'s variable "{variableName}" have value {value}?`,
         id: 'gui.ir-question.variable-didnt-specific'
+    },
+
+    /**
+     * List
+     */
+    globalListDidntChange: {
+        defaultMessage: `Why didn't global list {listName} change from {value}?`,
+        id: 'gui.ir-question.global-list-didnt-change'
+    },
+    globalListDidChange: {
+        defaultMessage: `Why did global list {listName} change from {firstValue} to {finalValue}?`,
+        id: 'gui.ir-question.global-list-did-change'
+    },
+    listDidntChange: {
+        defaultMessage: `Why didn't {targetName}'s list {listName} change from {value}?`,
+        id: 'gui.ir-question.list-didnt-change'
+    },
+    listDidChange: {
+        defaultMessage: `Why did {targetName}'s list {listName} change from {firstValue} to {finalValue}?`,
+        id: 'gui.ir-question.list-did-change'
     },
 
     /**
      * Sound
      */
     soundDidPlay: {
-        defaultMessage: `Why did {targetName} play sound {soundName}?`,
+        defaultMessage: `Why did "{targetName}" play sound "{soundName}"?`,
         id: 'gui.ir-question.sound-did-play'
     },
     soundDidntPlay: {
-        defaultMessage: `Why didn't {targetName} play sound {soundName}?`,
+        defaultMessage: `Why didn't "{targetName}" play sound "{soundName}"?`,
         id: 'gui.ir-question.sound-didnt-play'
     },
 
@@ -220,11 +240,11 @@ const questionMessages = defineMessages({
      * Cloning events
      */
     cloneDidCreate: {
-        defaultMessage: `Why did {targetName} get cloned?`,
+        defaultMessage: `Why did "{targetName}" get cloned?`,
         id: 'gui.ir-question.clone-did-create'
     },
     cloneDidntCreate: {
-        defaultMessage: `Why didn't {targetName} get cloned?`,
+        defaultMessage: `Why didn't "{targetName}" get cloned?`,
         id: 'gui.ir-question.clone-didnt-create'
     }
 });
@@ -243,24 +263,24 @@ const answerMessages = defineMessages({
      */
     // Why did change
     positionChange: {
-        defaultMessage: `These blocks changed {targetName}'s position.`,
+        defaultMessage: `These blocks changed "{targetName}"'s position.`,
         id: 'gui.ir-answer.position-changed'
     },
     // Why didn't change
     positionNoBlock: {
-        defaultMessage: `Your code does not contain any position change blocks for {targetName}.`,
+        defaultMessage: `Your code does not contain any position change blocks for "{targetName}".`,
         id: 'gui.ir-answer.position-no-block'
     },
     positionNeverCalled: {
-        defaultMessage: `{targetName} position change statements were never called, here's why.`,
+        defaultMessage: `"{targetName}" position change statements were never called.`,
         id: 'gui.ir-answer.position-never-called'
     },
     positionSame: {
-        defaultMessage: `{targetName} did change its position, but its start and finish position are just the same.`,
+        defaultMessage: `"{targetName}" did change its position, but its start and finish position are just the same.`,
         id: 'gui.ir-answer.position-same'
     },
     positionNeverChanged: {
-        defaultMessage: `{targetName}'s position change statements were called, but never changed its position.`,
+        defaultMessage: `"{targetName}"'s position change statements were called, but never changed its position.`,
         id: 'gui.ir-answer.position-never-changed'
     },
     // Why not specific value?
@@ -316,24 +336,24 @@ const answerMessages = defineMessages({
      */
     // Why did change
     directionChange: {
-        defaultMessage: `These blocks changed {targetName}'s direction.`,
+        defaultMessage: `These blocks changed "{targetName}"'s direction.`,
         id: 'gui.ir-answer.direction-changed'
     },
     // Why didn't change
     directionNoBlock: {
-        defaultMessage: `Your code does not contain any direction change blocks for {targetName}.`,
+        defaultMessage: `Your code does not contain any direction change blocks for "{targetName}".`,
         id: 'gui.ir-answer.direction-no-block'
     },
     directionNeverCalled: {
-        defaultMessage: `{targetName} direction change statements were never called, here's why.`,
+        defaultMessage: `"{targetName}" direction change statements were never called.`,
         id: 'gui.ir-answer.direction-never-called'
     },
     directionSame: {
-        defaultMessage: `{targetName} did change its direction, but its start and finish direction are just the same.`,
+        defaultMessage: `"{targetName}" did change its direction, but its start and finish direction are just the same.`,
         id: 'gui.ir-answer.direction-same'
     },
     directionNeverChanged: {
-        defaultMessage: `{targetName}'s direction change statements were called, but never changed its direction.`,
+        defaultMessage: `"{targetName}"'s direction change statements were called, but never changed its direction.`,
         id: 'gui.ir-answer.direction-never-changed'
     },
     // Why not specific value?
@@ -364,7 +384,7 @@ const answerMessages = defineMessages({
         id: 'gui.ir-answer.backdrop-no-block'
     },
     backdropNeverCalled: {
-        defaultMessage: `Backdrop change statements were never called, here's why.`,
+        defaultMessage: `Backdrop change statements were never called.`,
         id: 'gui.ir-answer.backdrop-never-called'
     },
     backdropSame: {
@@ -394,37 +414,37 @@ const answerMessages = defineMessages({
      */
     // Why did change
     costumeChange: {
-        defaultMessage: `These statements changed {targetName}'s costume.`,
+        defaultMessage: `These statements changed "{targetName}"'s costume.`,
         id: 'gui.ir-answer.costume-changed'
     },
     // Why didn't change
     costumeNoBlock: {
-        defaultMessage: `Your code does not contain any costume change statements for {targetName}.`,
+        defaultMessage: `Your code does not contain any costume change statements for "{targetName}".`,
         id: 'gui.ir-answer.costume-no-block'
     },
     costumeNeverCalled: {
-        defaultMessage: `{targetName}'s costume change statements were never called, here's why.`,
+        defaultMessage: `"{targetName}"'s costume change statements were never called.`,
         id: 'gui.ir-answer.costume-never-called'
     },
     costumeSame: {
-        defaultMessage: `{targetName}'s costume was changed, but its start and finish values are just the same.`,
+        defaultMessage: `"{targetName}"'s costume was changed, but its start and finish values are just the same.`,
         id: 'gui.ir-answer.costume-same'
     },
     costumeNeverChanged: {
-        defaultMessage: `{targetName}'s costume change statements were called, but never changed its costume.`,
+        defaultMessage: `"{targetName}"'s costume change statements were called, but never changed its costume.`,
         id: 'gui.ir-answer.costume-never-changed'
     },
     // Why not specific value?
     costumeSpecificOverwrittenAndNotCalled: {
-        defaultMessage: `Some statements for setting {targetName}'s costume to {value} were called, but overwritten. Some were never called.`,
+        defaultMessage: `Some statements for setting "{targetName}"'s costume to {value} were called, but overwritten. Some were never called.`,
         id: 'gui.ir-answer.costume-specific-overwritten-and-not-called'
     },
     costumeSpecificOverwritten: {
-        defaultMessage: `Setting {targetName}'s costume to {value} was called, but later overwritten.`,
+        defaultMessage: `Setting "{targetName}"'s costume to {value} was called, but later overwritten.`,
         id: 'gui.ir-answer.costume-specific-overwritten'
     },
     costumeSpecificNeverCalled: {
-        defaultMessage: `Setting {targetName}'s costume to {value} was never called.`,
+        defaultMessage: `Setting "{targetName}"'s costume to {value} was never called.`,
         id: 'gui.ir-answer.costume-specific-not-called'
     },
 
@@ -433,24 +453,24 @@ const answerMessages = defineMessages({
      */
     // Why did change
     sizeChange: {
-        defaultMessage: `These statements changed {targetName}'s size.`,
+        defaultMessage: `These statements changed "{targetName}"'s size.`,
         id: 'gui.ir-answer.size-changed'
     },
     // Why didn't change
     sizeNoBlock: {
-        defaultMessage: `Your code does not contain any size change statements for {targetName}.`,
+        defaultMessage: `Your code does not contain any size change statements for "{targetName}".`,
         id: 'gui.ir-answer.size-no-block'
     },
     sizeNeverCalled: {
-        defaultMessage: `{targetName}'s size change statements were never called, here's why.`,
+        defaultMessage: `"{targetName}"'s size change statements were never called.`,
         id: 'gui.ir-answer.size-never-called'
     },
     sizeSame: {
-        defaultMessage: `{targetName}'s size was changed, but its start and finish values are just the same.`,
+        defaultMessage: `"{targetName}"'s size was changed, but its start and finish values are just the same.`,
         id: 'gui.ir-answer.size-same'
     },
     sizeNeverChanged: {
-        defaultMessage: `{targetName}'s size change statements were called, but never changed its size.`,
+        defaultMessage: `"{targetName}"'s size change statements were called, but never changed its size.`,
         id: 'gui.ir-answer.size-never-changed'
     },
     // Why not specific value?
@@ -472,24 +492,24 @@ const answerMessages = defineMessages({
      */
     // Why did change
     visibilityChange: {
-        defaultMessage: `These statements changed {targetName}'s visibility.`,
+        defaultMessage: `These statements changed "{targetName}"'s visibility.`,
         id: 'gui.ir-answer.visibility-changed'
     },
     // Why didn't change
     visibilityNoBlock: {
-        defaultMessage: `Your code does not contain any visibility change statements for {targetName}.`,
+        defaultMessage: `Your code does not contain any visibility change statements for "{targetName}".`,
         id: 'gui.ir-answer.visibility-no-block'
     },
     visibilityNeverCalled: {
-        defaultMessage: `{targetName}'s visibility change statements were never called, here's why.`,
+        defaultMessage: `"{targetName}"'s visibility change statements were never called.`,
         id: 'gui.ir-answer.visibility-never-called'
     },
     visibilitySame: {
-        defaultMessage: `{targetName}'s visibility was changed, but its start and finish values are just the same.`,
+        defaultMessage: `"{targetName}"'s visibility was changed, but its start and finish values are just the same.`,
         id: 'gui.ir-answer.visibility-same'
     },
     visibilityNeverChanged: {
-        defaultMessage: `{targetName}'s visibility change statements were called, but never changed its visibility.`,
+        defaultMessage: `"{targetName}"'s visibility change statements were called, but never changed its visibility.`,
         id: 'gui.ir-answer.visibility-never-changed'
     },
     // Why not specific value?
@@ -527,49 +547,74 @@ const answerMessages = defineMessages({
      */
     // Why did change
     variableChange: {
-        defaultMessage: `These statements changed {variableName}'s value.`,
+        defaultMessage: `These statements changed "{variableName}"'s value.`,
         id: 'gui.ir-answer.variable-changed'
     },
     // Why didn't change
     variableNoBlock: {
-        defaultMessage: `Your code does not contain any variable change statements for {variableName}.`,
+        defaultMessage: `Your code does not contain any variable change statements for "{variableName}".`,
         id: 'gui.ir-answer.variable-no-block'
     },
     variableNeverCalled: {
-        defaultMessage: `{variableName}'s change statements were never called, here's why.`,
+        defaultMessage: `"{variableName}"'s change statements were never called.`,
         id: 'gui.ir-answer.variable-never-called'
     },
     variableSame: {
-        defaultMessage: `{variableName} was changed, but its start and finish values are just the same.`,
+        defaultMessage: `"{variableName}" was changed, but its start and finish values are just the same.`,
         id: 'gui.ir-answer.variable-same'
     },
     variableNeverChanged: {
-        defaultMessage: `{variableName}'s change statements were called, but never changed its value.`,
+        defaultMessage: `"{variableName}"'s change statements were called, but never changed its value.`,
         id: 'gui.ir-answer.variable-never-changed'
     },
     // Why not specific value?
     variableSpecificOverwrittenAndNotCalled: {
-        defaultMessage: `Some statements for {variableName}'s value to {value} were called, but overwritten. Some were never called.`,
+        defaultMessage: `Some statements for "{variableName}"'s value to {value} were called, but overwritten. Some were never called.`,
         id: 'gui.ir-answer.variable-specific-overwritten-and-not-called'
     },
     variableSpecificOverwritten: {
-        defaultMessage: `Setting {variableName}'s value to {value} was called, but later overwritten.`,
+        defaultMessage: `Setting "{variableName}"'s value to {value} was called, but later overwritten.`,
         id: 'gui.ir-answer.variable-specific-overwritten'
     },
     variableSpecificNeverCalled: {
-        defaultMessage: `Setting {variableName}'s value to {value} was never called.`,
+        defaultMessage: `Setting "{variableName}"'s value to {value} was never called.`,
         id: 'gui.ir-answer.variable-specific-not-called'
+    },
+    /**
+     * List
+     */
+    // Why did change
+    listChange: {
+        defaultMessage: `These statements changed "{listName}".`,
+        id: 'gui.ir-answer.list-changed'
+    },
+    // Why didn't change
+    listNoBlock: {
+        defaultMessage: `Your code does not contain any list update statements for "{listName}".`,
+        id: 'gui.ir-answer.list-no-block'
+    },
+    listNeverCalled: {
+        defaultMessage: `"{listName}"'s update statements were never called.`,
+        id: 'gui.ir-answer.list-never-called'
+    },
+    listSame: {
+        defaultMessage: `"{listName}" was updated, but its start and finish values are just the same.`,
+        id: 'gui.ir-answer.list-same'
+    },
+    listNeverChanged: {
+        defaultMessage: `"{listName}"'s update statements were called, but never changed its value.`,
+        id: 'gui.ir-answer.list-never-changed'
     },
 
     /**
      * Sound
      */
     soundPlayed: {
-        defaultMessage: `Sound {soundName} was played by {targetName}, here's why.`,
+        defaultMessage: `Sound "{soundName}" was played by "{targetName}".`,
         id: 'gui.ir-answer.sound-played'
     },
     soundNotPlayed: {
-        defaultMessage: `{soundName} never played by {targetName}, here's why.`,
+        defaultMessage: `"{soundName}" was never played by "{targetName}".`,
         id: 'gui.ir-answer.sound-not-played'
     },
 
@@ -597,7 +642,7 @@ const answerMessages = defineMessages({
      * Cloning
      */
     cloneCreated: {
-        defaultMessage: `{targetName} was cloned {timesCalled, plural,
+        defaultMessage: `"{targetName}" was cloned {timesCalled, plural,
             =1 {once}
             =2 {twice}
             other {# times}
@@ -605,7 +650,7 @@ const answerMessages = defineMessages({
         id: 'gui.ir-answer.clone-created'
     },
     cloneNeverCreated: {
-        defaultMessage: `{targetName}'s cloning was never initiated.`,
+        defaultMessage: `"{targetName}"'s cloning was never initiated.`,
         id: 'gui.ir-answer.clone-never-created'
     }
 });
@@ -875,16 +920,37 @@ const blockMessages = defineMessages({
     data_changevariableby: {
         defaultMessage: `Change variable block`,
         id: 'gui.ir-blocks.data_changevariableby'
+    },
+    // List blocks
+    data_addtolist: {
+        defaultMessage: `Add to list block`,
+        id: 'gui.ir-blocks.data_addtolist'
+    },
+    data_deleteoflist: {
+        defaultMessage: `Delete from list block`,
+        id: 'gui.ir-blocks.data_deleteoflist'
+    },
+    data_deletealloflist: {
+        defaultMessage: `Clear list block`,
+        id: 'gui.ir-blocks.data_deletealloflist'
+    },
+    data_insertatlist: {
+        defaultMessage: `Insert at list block`,
+        id: 'gui.ir-blocks.data_insertatlist'
+    },
+    data_replaceitemoflist: {
+        defaultMessage: `Replace at list block`,
+        id: 'gui.ir-blocks.data_replaceitemoflist'
     }
 });
 
 const eventMessages = defineMessages({
     broadcast: {
-        defaultMessage: `Broadcast {value}`,
+        defaultMessage: `Broadcast "{value}"`,
         id: 'gui.ir-event.broadcast'
     },
     clone: {
-        defaultMessage: `Cloning {value} event`,
+        defaultMessage: `Cloning "{value}" event`,
         id: 'gui.ir-event.clone'
     }
 });
