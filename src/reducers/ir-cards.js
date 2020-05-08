@@ -2,6 +2,8 @@
 const SET_RUNNING_STATE = 'scratch-gui/vm-status/SET_RUNNING_STATE';
 // Copied from './block-drag'
 const BLOCK_DRAG_UPDATE = 'scratch-gui/block-drag/BLOCK_DRAG_UPDATE';
+// Copied from './project-changed'
+const SET_PROJECT_CHANGED = 'scratch-gui/project-changed/SET_PROJECT_CHANGED';
 
 const CLOSE_CARDS = 'scratch-gui/ircards/CLOSE_CARDS';
 const ENABLE_CARDS = 'scratch-gui/ircards/ENABLE_CARDS';
@@ -28,6 +30,8 @@ const initialState = {
 const reducer = function (state, action) {
     if (typeof state === 'undefined') state = initialState;
     switch (action.type) {
+    case SET_PROJECT_CHANGED:
+        return Object.assign({}, state, initialState);
     case CLOSE_CARDS:
         return Object.assign({}, state, {
             visible: false
