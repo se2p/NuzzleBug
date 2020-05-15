@@ -19,6 +19,7 @@ import {
     OverwrittenStatement,
     RightBranchButStoppedStatement,
     Statement,
+    UnreachableStatement,
     UserEventCalledStatement,
     UserEventCalledButStoppedStatement,
     UserEventNotCalledStatement
@@ -222,7 +223,13 @@ class IRStatement extends React.Component {
             };
             break;
         }
-
+        case UnreachableStatement: {
+            message = msg.unreachableStatement;
+            messageData = {
+                block: blockTitle
+            };
+            break;
+        }
         case EventSentStatement: {
             message = msg.eventSentStatement;
             messageData = {

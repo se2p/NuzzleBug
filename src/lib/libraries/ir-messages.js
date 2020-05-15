@@ -984,6 +984,11 @@ const statementMessages = defineMessages({
         defaultMessage: `Failed to display`,
         id: 'gui.ir-statement.failed'
     },
+    // UnreachableStatement
+    unreachableStatement: {
+        defaultMessage: `{block} seems to be unreachable.`,
+        id: 'gui.ir-statement.unreachable-statement'
+    },
     // ChangingStatement
     changingStatement: {
         defaultMessage: `{block} resulted in a change from {startValue} to {endValue}.`,
