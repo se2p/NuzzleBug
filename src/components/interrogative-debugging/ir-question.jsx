@@ -15,12 +15,12 @@ import iconShow from './icon--show.svg';
 
 const messages = defineMessages({
     showAnswerTitle: {
-        id: 'gui.ir-question.show-answer',
+        id: 'gui.ir.question.show-answer',
         defaultMessage: 'Show Answer',
         description: 'Show answer button title'
     },
     hideAnswerTitle: {
-        id: 'gui.ir-question.hide-answer',
+        id: 'gui.ir.question.hide-answer',
         defaultMessage: 'Hide Answer',
         description: 'Hide answer button title'
     }

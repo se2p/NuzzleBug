@@ -12,6 +12,7 @@ const PauseResumeComponent = function (props) {
         paused,
         className,
         onClick,
+        title,
         ...componentProps
     } = props;
     return (
@@ -26,7 +27,7 @@ const PauseResumeComponent = function (props) {
             )}
             draggable={false}
             src={paused ? iconResume : iconPause}
-            title={paused ? 'Resume' : 'Pause'}
+            title={title}
             onClick={onClick}
             {...componentProps}
         />
@@ -37,13 +38,14 @@ PauseResumeComponent.propTypes = {
     active: PropTypes.bool,
     className: PropTypes.string,
     onClick: PropTypes.func.isRequired,
-    paused: PropTypes.bool
+    paused: PropTypes.bool,
+    title: PropTypes.string
 };
 
 PauseResumeComponent.defaultProps = {
     active: false,
     paused: false,
-    title: 'Stop'
+    title: 'Pause'
 };
 
 export default PauseResumeComponent;

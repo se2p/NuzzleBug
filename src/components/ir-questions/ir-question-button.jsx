@@ -1,26 +1,17 @@
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 import iconQuestions from './icon--questions.svg';
 
 import styles from './ir-question-button.css';
 
-const messages = defineMessages({
-    showQuestionTitle: {
-        id: 'gui.ir-questions.show-question',
-        defaultMessage: 'Show Questions',
-        description: 'Show question button title'
-    }
-});
-
 const IRQuestions = props => {
     const {
         active,
         className,
-        intl,
         onClick,
+        title,
         ...componentProps
     } = props;
 
@@ -37,7 +28,7 @@ const IRQuestions = props => {
                 draggable={false}
                 aria-disabled={active}
                 src={iconQuestions}
-                title={intl.formatMessage(messages.showQuestionTitle)}
+                title={title}
                 onClick={active ? onClick : null}
                 {...componentProps}
             />
@@ -48,8 +39,12 @@ const IRQuestions = props => {
 IRQuestions.propTypes = {
     active: PropTypes.bool.isRequired,
     className: PropTypes.string,
-    intl: intlShape.isRequired,
-    onClick: PropTypes.func.isRequired
+    onClick: PropTypes.func.isRequired,
+    title: PropTypes.string
 };
 
-export default injectIntl(IRQuestions);
+IRQuestions.defaultProps = {
+    title: 'Show Questions'
+};
+
+export default IRQuestions;

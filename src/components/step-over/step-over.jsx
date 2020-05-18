@@ -9,6 +9,7 @@ const StepOverComponent = function (props) {
     const {
         className,
         onClick,
+        title,
         ...componentProps
     } = props;
     return (
@@ -20,6 +21,7 @@ const StepOverComponent = function (props) {
             draggable={false}
             src={icon}
             onClick={onClick}
+            title={title}
             {...componentProps}
         />
     );
@@ -27,7 +29,12 @@ const StepOverComponent = function (props) {
 
 StepOverComponent.propTypes = {
     className: PropTypes.string,
-    onClick: PropTypes.func.isRequired
+    onClick: PropTypes.func.isRequired,
+    title: PropTypes.string
+};
+
+StepOverComponent.defaultProps = {
+    title: 'Step Over'
 };
 
 export default StepOverComponent;

@@ -103,7 +103,7 @@ const QuestionsCardHeader = ({intl, title, onRefreshView, onCloseCards, onShrink
                     <FormattedMessage
                         defaultMessage="Refresh"
                         description="Title for button to refresh a question category"
-                        id="gui.ircards.refresh-view"
+                        id="gui.ir.cards.refresh-view"
                     />
                 </div>
             ) : null}
@@ -119,12 +119,12 @@ const QuestionsCardHeader = ({intl, title, onRefreshView, onCloseCards, onShrink
                     <FormattedMessage
                         defaultMessage="Shrink"
                         description="Title for button to shrink question category"
-                        id="gui.ircards.shrink"
+                        id="gui.ir.cards.shrink"
                     /> :
                     <FormattedMessage
                         defaultMessage="Expand"
                         description="Title for button to expand question category"
-                        id="gui.ircards.expand"
+                        id="gui.ir.cards.expand"
                     />
                 }
             </div>
@@ -139,7 +139,7 @@ const QuestionsCardHeader = ({intl, title, onRefreshView, onCloseCards, onShrink
                 <FormattedMessage
                     defaultMessage="Close"
                     description="Title for button to close question category"
-                    id="gui.ircards.close"
+                    id="gui.ir.cards.close"
                 />
             </div>
         </div>

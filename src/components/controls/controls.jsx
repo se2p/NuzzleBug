@@ -19,19 +19,19 @@ const messages = defineMessages({
         description: 'Green flag button title'
     },
     pauseTitle: {
-        id: 'gui.controls.pause',
+        id: 'gui.ir.controls.pause',
         defaultMessage: 'Pause',
         description: 'Pause button title'
     },
     resumeTitle: {
-        id: 'gui.controls.resume',
+        id: 'gui.ir.controls.resume',
         defaultMessage: 'Resume',
         description: 'Resume button title'
     },
     stepOverTitle: {
-        id: 'gui.controls.step-over',
+        id: 'gui.ir.controls.step-over',
         defaultMessage: 'Step Over',
-        description: 'Step Over title'
+        description: 'Step Over button title'
     },
     stopTitle: {
         id: 'gui.controls.stop',
@@ -39,9 +39,9 @@ const messages = defineMessages({
         description: 'Stop button title'
     },
     irQuestionTitle: {
-        id: 'gui.controls.ir-questions',
+        id: 'gui.ir.controls.ir-questions',
         defaultMessage: 'Show Questions',
-        description: 'Show questions title'
+        description: 'Show questions button title'
     }
 });
 
@@ -91,6 +91,7 @@ const Controls = function (props) {
             <IRQuestions
                 active={!irDisabled && (!active || paused)}
                 onClick={onIRQuestionsClick}
+                title={intl.formatMessage(messages.irQuestionTitle)}
             />
         </div>
     );

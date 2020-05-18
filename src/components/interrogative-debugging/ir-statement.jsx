@@ -33,12 +33,12 @@ import iconCollapse from './icon--collapse.svg';
 
 const messages = defineMessages({
     showStatementDetailsTitle: {
-        id: 'gui.ir-statement.show-details',
+        id: 'gui.ir.statement.show-details',
         defaultMessage: 'Show Details',
         description: 'Show statement details button title'
     },
     closeStatementDetailsTitle: {
-        id: 'gui.ir-statement.close-details',
+        id: 'gui.ir.statement.close-details',
         defaultMessage: 'Close Details',
         description: 'Close statement details button title'
     }
