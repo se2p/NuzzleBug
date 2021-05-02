@@ -6,6 +6,7 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import GreenFlag from '../green-flag/green-flag.jsx';
 import StopAll from '../stop-all/stop-all.jsx';
 import TurboMode from '../turbo-mode/turbo-mode.jsx';
+import Tutorial from '../tutorial-button/tutorial-button.jsx';
 
 import styles from './controls.css';
 
@@ -19,6 +20,11 @@ const messages = defineMessages({
         id: 'gui.controls.stop',
         defaultMessage: 'Stop',
         description: 'Stop button title'
+    },
+    tutorialTitle: {
+        id: 'gui.tutorial.controls.tutorial',
+        defaultMessage: 'Tutorials',
+        description: 'Show tutorials button title'
     }
 });
 
@@ -29,6 +35,7 @@ const Controls = function (props) {
         intl,
         onGreenFlagClick,
         onStopAllClick,
+        onTutorialClick,
         turbo,
         ...componentProps
     } = props;
@@ -50,6 +57,11 @@ const Controls = function (props) {
             {turbo ? (
                 <TurboMode />
             ) : null}
+            <Tutorial
+                active
+                onClick={onTutorialClick}
+                title={intl.formatMessage(messages.tutorialTitle)}
+            />
         </div>
     );
 };
@@ -60,6 +72,7 @@ Controls.propTypes = {
     intl: intlShape.isRequired,
     onGreenFlagClick: PropTypes.func.isRequired,
     onStopAllClick: PropTypes.func.isRequired,
+    onTutorialClick: PropTypes.func.isRequired,
     turbo: PropTypes.bool
 };
 

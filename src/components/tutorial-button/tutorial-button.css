@@ -1,0 +1,36 @@
+@import "../../css/colors.css";
+
+/* Button attributes*/
+.tutorial-button {
+    width: 2rem;
+    height: 2rem;
+    padding: 0.375rem;
+    border-radius: 0.25rem;
+    user-select: none;
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+.tutorial-button:hover {
+    background-color: $motion-light-transparent;
+}
+
+.tutorial-button.is-active {
+    opacity: 1;
+}
+
+.tutorial-modal {
+    width: 800px;
+}
+
+.label {
+    font-weight: 500;
+    margin: 0 0 0.75rem;
+}
+
+.tutorial-modal-body {
+    height: 720px;
+    background: $ui-white;
+    padding: 0.5rem 1rem;
+    overflow-y: auto;
+}
