@@ -5,6 +5,7 @@ import VM from 'scratch-vm';
 import {connect} from 'react-redux';
 
 import ControlsComponent from '../components/controls/controls.jsx';
+import {viewTutorial} from '../reducers/tutorial-cards.js';
 
 class Controls extends React.Component {
     constructor (props) {
@@ -34,6 +35,7 @@ class Controls extends React.Component {
             vm, // eslint-disable-line no-unused-vars
             isStarted, // eslint-disable-line no-unused-vars
             projectRunning,
+            handleTutorialClick,
             turbo,
             ...props
         } = this.props;
@@ -44,6 +46,7 @@ class Controls extends React.Component {
                 turbo={turbo}
                 onGreenFlagClick={this.handleGreenFlagClick}
                 onStopAllClick={this.handleStopAllClick}
+                onTutorialClick={handleTutorialClick}
             />
         );
     }
@@ -52,6 +55,7 @@ class Controls extends React.Component {
 Controls.propTypes = {
     isStarted: PropTypes.bool.isRequired,
     projectRunning: PropTypes.bool.isRequired,
+    handleTutorialClick: PropTypes.func.isRequired,
     turbo: PropTypes.bool.isRequired,
     vm: PropTypes.instanceOf(VM)
 };
@@ -59,9 +63,12 @@ Controls.propTypes = {
 const mapStateToProps = state => ({
     isStarted: state.scratchGui.vmStatus.running,
     projectRunning: state.scratchGui.vmStatus.running,
+    tutorialCardsVisible: state.scratchGui.tutorialCards.visible,
     turbo: state.scratchGui.vmStatus.turbo
 });
-// no-op function to prevent dispatch prop being passed to component
-const mapDispatchToProps = () => ({});
+
+const mapDispatchToProps = dispatch => ({
+    handleTutorialClick: () => dispatch(viewTutorial())
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Controls);

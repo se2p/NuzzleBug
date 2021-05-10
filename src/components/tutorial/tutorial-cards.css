@@ -1,0 +1,52 @@
+@import "../../css/units.css";
+@import "../../css/colors.css";
+@import "../../css/z-index.css";
+
+.card-title-header {
+    font-size: 0.9rem;
+    margin: 0.9rem;
+    text-align: center;
+    font-weight: bold;
+    color: $ui-primary;
+}
+
+.steps-list {
+    padding-left: 20px;
+}
+
+.step-body {
+    overflow-y: auto;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.step-body::-webkit-scrollbar {
+    width: 0.4rem;
+}
+.step-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+.step-body::-webkit-scrollbar-thumb {
+    background: #888;
+}
+.step-body::-webkit-scrollbar-thumb:hover {
+    background: #555555;
+}
+
+/* setting background color*/
+.left-card::after, .right-card::after {
+    background: $motion-primary;
+}
+.left-button, .right-button {
+    background: $motion-primary;
+    box-shadow: 0 0 0 4px $motion-transparent;
+}
+.left-button:hover, .right-button:hover {
+    box-shadow: 0 0 0 6px $motion-transparent;
+}
+.header-buttons {
+    background: $motion-primary;
+    border-bottom: 1px solid $motion-tertiary;
+}
+

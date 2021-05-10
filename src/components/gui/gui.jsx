@@ -26,6 +26,7 @@ import Backpack from '../../containers/backpack.jsx';
 import WebGlModal from '../../containers/webgl-modal.jsx';
 import TipsLibrary from '../../containers/tips-library.jsx';
 import Cards from '../../containers/cards.jsx';
+import TutorialCards from '../../containers/tutorial-cards.jsx';
 import Alerts from '../../containers/alerts.jsx';
 import DragLayer from '../../containers/drag-layer.jsx';
 import ConnectionModal from '../../containers/connection-modal.jsx';
@@ -66,6 +67,7 @@ const GUIComponent = props => {
         backpackVisible,
         blocksTabVisible,
         cardsVisible,
+        tutorialCardsVisible,
         canChangeLanguage,
         canCreateNew,
         canEditTitle,
@@ -140,7 +142,6 @@ const GUIComponent = props => {
 
     return (<MediaQuery minWidth={layout.fullSizeMinWidth}>{isFullSize => {
         const stageSize = resolveStageSize(stageSizeMode, isFullSize);
-
         return isPlayerOnly ? (
             <StageWrapper
                 isFullScreen={isFullScreen}
@@ -185,6 +186,9 @@ const GUIComponent = props => {
                 ) : null}
                 {cardsVisible ? (
                     <Cards />
+                ) : null}
+                {tutorialCardsVisible ? (
+                    <TutorialCards />
                 ) : null}
                 {alertsVisible ? (
                     <Alerts className={styles.alertsContainer} />
@@ -423,6 +427,7 @@ GUIComponent.propTypes = {
     targetIsStage: PropTypes.bool,
     telemetryModalVisible: PropTypes.bool,
     tipsLibraryVisible: PropTypes.bool,
+    tutorialCardsVisible: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired
 };
 GUIComponent.defaultProps = {

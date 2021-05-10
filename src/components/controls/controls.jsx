@@ -37,6 +37,7 @@ const Controls = function (props) {
         onStopAllClick,
         onTutorialClick,
         turbo,
+        tutorialCardsVisible,
         ...componentProps
     } = props;
     return (
@@ -58,7 +59,7 @@ const Controls = function (props) {
                 <TurboMode />
             ) : null}
             <Tutorial
-                active
+                active={!tutorialCardsVisible}
                 onClick={onTutorialClick}
                 title={intl.formatMessage(messages.tutorialTitle)}
             />
@@ -73,6 +74,7 @@ Controls.propTypes = {
     onGreenFlagClick: PropTypes.func.isRequired,
     onStopAllClick: PropTypes.func.isRequired,
     onTutorialClick: PropTypes.func.isRequired,
+    tutorialCardsVisible: PropTypes.bool,
     turbo: PropTypes.bool
 };
 
