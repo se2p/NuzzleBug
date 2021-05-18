@@ -1,6 +1,8 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import VirtualMachine from 'scratch-vm';
+
 
 import {
     closeCards,
@@ -43,7 +45,8 @@ TutorialCards.propTypes = {
     onDisableCards: PropTypes.func.isRequired,
     onResetStep: PropTypes.func.isRequired,
     locale: PropTypes.string.isRequired,
-    step: PropTypes.number.isRequired
+    step: PropTypes.number.isRequired,
+    vm: PropTypes.instanceOf(VirtualMachine).isRequired
 };
 
 const mapStateToProps = state => ({
@@ -54,7 +57,8 @@ const mapStateToProps = state => ({
     y: state.scratchGui.tutorialCards.y,
     isRtl: state.locales.isRtl,
     locale: state.locales.locale,
-    dragging: state.scratchGui.tutorialCards.dragging
+    dragging: state.scratchGui.tutorialCards.dragging,
+    saveProjectSb3: state.scratchGui.vm.saveProjectSb3.bind(state.scratchGui.vm)
 });
 
 const mapDispatchToProps = dispatch => ({

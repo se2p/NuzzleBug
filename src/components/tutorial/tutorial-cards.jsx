@@ -13,6 +13,9 @@ import closeIcon from '../cards/icon--close.svg';
 import leftArrow from '../cards/icon--prev.svg';
 import rightArrow from '../cards/icon--next.svg';
 
+import {VirtualMachine} from 'scratch-vm';
+import {runTest} from 'tutorial-tests';
+
 const NextPrevButtons = ({isRtl, onNextStep, onPrevStep, expanded}) => (
     <Fragment>
         {onNextStep ? (
@@ -151,6 +154,8 @@ const TutorialCards = props => {
         totalSteps,
         step,
         expanded,
+        saveProjectSb3,
+        vm,
         ...posProps
     } = props;
     let {x, y} = posProps;
@@ -199,8 +204,13 @@ const TutorialCards = props => {
                         <div
                             className={expanded ? classNames(styles.stepBody, tutorialStyles.stepBody) : styles.hidden}
                         >
-                            {/* eslint-disable-next-line react/jsx-no-literals */}
-                            <h1>Hello World</h1>
+                            <button
+                                onClick={() => saveProjectSb3().then(content => {
+                                    runTest(vm);
+                                })}
+                            >
+                                Hallo
+                            </button>
                         </div>
                         <NextPrevButtons
                             expanded={expanded}
@@ -234,7 +244,9 @@ TutorialCards.propTypes = {
     totalSteps: PropTypes.number.isRequired,
     step: PropTypes.number.isRequired,
     x: PropTypes.number,
-    y: PropTypes.number
+    y: PropTypes.number,
+    saveProjectSb3: PropTypes.func,
+    vm: PropTypes.instanceOf(VirtualMachine).isRequired
 };
 
 export default injectIntl(TutorialCards);
