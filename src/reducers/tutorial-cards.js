@@ -16,10 +16,13 @@ const RESET_STEP = 'scratch-gui/tutorial-cards/RESET_STEP';
 const DRAG_CARD = 'scratch-gui/tutorial-cards/DRAG_CARD';
 const START_DRAG = 'scratch-gui/tutorial-cards/START_DRAG';
 const END_DRAG = 'scratch-gui/tutorial-cards/END_DRAG';
+const SELECT_TUTORIAL = 'scratch-gui/tutorial-cards/SELECT_TUTORIAL';
 
 const initialState = {
     visible: false,
     disabled: false,
+    menu: true,
+    tutorial: '',
     step: 0,
     x: 0,
     y: 0,
@@ -91,6 +94,11 @@ const reducer = function (state, action) {
         return Object.assign({}, state, {
             dragging: false
         });
+    case SELECT_TUTORIAL:
+        return Object.assign({}, state, {
+            tutorial: action.tutorial,
+            menu: false
+        });
     default:
         return state;
     }
@@ -140,6 +148,10 @@ const endDrag = function () {
     return {type: END_DRAG};
 };
 
+const selectTutorial = function (tutorial) {
+    return {type: SELECT_TUTORIAL, tutorial};
+};
+
 export {
     reducer as default,
     initialState as tutorialCardsInitialState,
@@ -153,5 +165,6 @@ export {
     resetStep,
     dragCard,
     startDrag,
-    endDrag
+    endDrag,
+    selectTutorial
 };

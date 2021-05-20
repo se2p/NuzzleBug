@@ -14,7 +14,11 @@ import leftArrow from '../cards/icon--prev.svg';
 import rightArrow from '../cards/icon--next.svg';
 
 import {VirtualMachine} from 'scratch-vm';
+import * as tutorials from 'tutorial-tests/src/tutorials';
+
+import Tutorial from './tutorial.jsx';
 import {runTest} from 'tutorial-tests';
+import * as messages from "tutorial-tests";
 
 const NextPrevButtons = ({isRtl, onNextStep, onPrevStep, expanded}) => (
     <Fragment>
@@ -67,13 +71,13 @@ NextPrevButtons.propTypes = {
     onPrevStep: PropTypes.func
 };
 
-const TutorialHeader = ({intl, title, onCloseCards, onShrinkExpandCards, totalSteps, step, expanded}) => (
+const TutorialHeader = ({menu, intl, title, onCloseCards, onShrinkExpandCards, totalSteps, step, expanded}) => (
     <div
         className={expanded ?
             classNames(styles.headerButtons, tutorialStyles.headerButtons) :
             classNames(styles.headerButtons, tutorialStyles.headerButtons, styles.headerButtonsHidden)}
     >
-        {totalSteps > 1 ? (
+        {totalSteps > 1 && !menu ? (
             <div className={styles.stepsList}>
                 {Array(totalSteps).fill(0)
                     .map((_, i) => (
@@ -85,7 +89,7 @@ const TutorialHeader = ({intl, title, onCloseCards, onShrinkExpandCards, totalSt
             </div>
         ) : null}
         <div className={tutorialStyles.cardTitleHeader}>
-            <span> {intl.formatMessage(title.msg)} </span>
+            <span> {intl.formatMessage(title)} </span>
         </div>
         <div className={styles.headerButtonsRight}>
             <div
@@ -127,6 +131,7 @@ const TutorialHeader = ({intl, title, onCloseCards, onShrinkExpandCards, totalSt
     </div>
 );
 TutorialHeader.propTypes = {
+    menu: PropTypes.bool,
     title: PropTypes.shape({
         msg: PropTypes.object.isRequired,
         data: PropTypes.object
@@ -141,6 +146,8 @@ TutorialHeader.propTypes = {
 
 const TutorialCards = props => {
     const {
+        menu,
+        selectedTutorial,
         title,
         intl,
         isRtl,
@@ -151,10 +158,10 @@ const TutorialCards = props => {
         onEndDrag,
         onNextStep,
         onPrevStep,
+        onSelectTutorial,
         totalSteps,
         step,
         expanded,
-        saveProjectSb3,
         vm,
         ...posProps
     } = props;
@@ -170,6 +177,16 @@ const TutorialCards = props => {
         x = isRtl ? (-190 - wideCardWidth - cardHorizontalDragOffset) : 620;
         x += cardHorizontalDragOffset;
         y = 60;
+    }
+
+    const tutorialMessages = messages[selectedTutorial];
+
+    const rows = [];
+    for (let i = 0; i < Object.values(tutorials).length; i++) {
+        rows.push(<Tutorial
+            content={Object.values(tutorials)[i]}
+            onSelect={onSelectTutorial}
+        />);
     }
 
     return (
@@ -193,8 +210,9 @@ const TutorialCards = props => {
                 <div className={styles.cardContainer}>
                     <div className={styles.card}>
                         <TutorialHeader
+                            menu={menu}
                             intl={intl}
-                            title={title}
+                            title={menu ? title.msg : tutorialMessages.title}
                             expanded={expanded}
                             step={step}
                             totalSteps={totalSteps}
@@ -204,13 +222,11 @@ const TutorialCards = props => {
                         <div
                             className={expanded ? classNames(styles.stepBody, tutorialStyles.stepBody) : styles.hidden}
                         >
-                            <button
-                                onClick={() => saveProjectSb3().then(content => {
-                                    runTest(vm);
-                                })}
-                            >
-                                Hallo
-                            </button>
+                            {menu ? rows :
+                            <>
+                                <p>{selectedTutorial}</p>
+                            </>
+                            }
                         </div>
                         <NextPrevButtons
                             expanded={expanded}
@@ -225,6 +241,8 @@ const TutorialCards = props => {
     );
 };
 TutorialCards.propTypes = {
+    menu: PropTypes.bool,
+    selectedTutorial: PropTypes.string,
     title: PropTypes.shape({
         msg: PropTypes.object.isRequired,
         data: PropTypes.object
@@ -241,11 +259,11 @@ TutorialCards.propTypes = {
     onPrevStep: PropTypes.func.isRequired,
     onShrinkExpandCards: PropTypes.func.isRequired,
     onStartDrag: PropTypes.func,
+    onSelectTutorial: PropTypes.func.isRequired,
     totalSteps: PropTypes.number.isRequired,
     step: PropTypes.number.isRequired,
     x: PropTypes.number,
     y: PropTypes.number,
-    saveProjectSb3: PropTypes.func,
     vm: PropTypes.instanceOf(VirtualMachine).isRequired
 };
 

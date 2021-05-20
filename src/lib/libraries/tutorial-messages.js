@@ -6,6 +6,7 @@ const tutorialMessages = defineMessages({
      */
     header: {
         defaultMessage: `Tutorial`,
+        de: 'Übungen',
         id: 'gui.tutorial.header'
     }
 });
