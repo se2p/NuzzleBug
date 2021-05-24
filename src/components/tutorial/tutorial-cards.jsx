@@ -2,155 +2,173 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, {Fragment} from 'react';
 import Draggable from 'react-draggable';
-import {injectIntl, intlShape, FormattedMessage} from 'react-intl';
+import {injectIntl, FormattedMessage} from 'react-intl';
 
 import styles from '../cards/card.css';
 import tutorialStyles from './tutorial-cards.css';
 
+import homeIcon from './icon--home.svg';
 import shrinkIcon from '../cards/icon--shrink.svg';
 import expandIcon from '../cards/icon--expand.svg';
 import closeIcon from '../cards/icon--close.svg';
 import leftArrow from '../cards/icon--prev.svg';
 import rightArrow from '../cards/icon--next.svg';
 
-import {VirtualMachine} from 'scratch-vm';
-import * as tutorials from 'tutorial-tests/src/tutorials';
-
 import Tutorial from './tutorial.jsx';
-import {runTest} from 'tutorial-tests';
-import * as messages from "tutorial-tests";
+import TutorialStep from '../../containers/tutorial-step.jsx';
 
-const NextPrevButtons = ({isRtl, onNextStep, onPrevStep, expanded}) => (
-    <Fragment>
-        {onNextStep ? (
-            <div>
-                <div
-                    className={expanded ? (isRtl ? classNames(styles.leftCard, tutorialStyles.leftCard) :
-                        classNames(styles.rightCard, tutorialStyles.rightCard)) :
-                        styles.hidden}
-                />
-                <div
-                    className={expanded ? (isRtl ? classNames(styles.leftButton, tutorialStyles.leftButton) :
-                        classNames(styles.rightButton, tutorialStyles.rightButton)) :
-                        styles.hidden}
-                    onClick={onNextStep}
-                >
-                    <img
-                        draggable={false}
-                        src={isRtl ? leftArrow : rightArrow}
+const NextPrevButtons = ({isMenuVisible, onNextStep, onPrevStep, expanded}) => (
+    isMenuVisible ? null :
+        (<Fragment>
+            {onNextStep ? (
+                <div>
+                    <div
+                        className={expanded ? classNames(styles.rightCard, tutorialStyles.rightCard) : styles.hidden}
                     />
+                    <div
+                        className={expanded ? classNames(styles.rightButton, tutorialStyles.rightButton) :
+                            styles.hidden}
+                        onClick={onNextStep}
+                    >
+                        <img
+                            draggable={false}
+                            src={rightArrow}
+                        />
+                    </div>
                 </div>
-            </div>
-        ) : null}
-        {onPrevStep ? (
-            <div>
-                <div
-                    className={expanded ? (isRtl ? classNames(styles.rightCard, tutorialStyles.rightCard) :
-                        classNames(styles.leftCard, tutorialStyles.leftCard)) :
-                        styles.hidden}
-                />
-                <div
-                    className={expanded ? (isRtl ? classNames(styles.rightButton, tutorialStyles.rightButton) :
-                        classNames(styles.leftButton, tutorialStyles.leftButton)) :
-                        styles.hidden}
-                    onClick={onPrevStep}
-                >
-                    <img
-                        draggable={false}
-                        src={isRtl ? rightArrow : leftArrow}
+            ) : null}
+            {onPrevStep ? (
+                <div>
+                    <div
+                        className={expanded ? classNames(styles.leftCard, tutorialStyles.leftCard) : styles.hidden}
                     />
+                    <div
+                        className={expanded ? classNames(styles.leftButton, tutorialStyles.leftButton) : styles.hidden}
+                        onClick={onPrevStep}
+                    >
+                        <img
+                            draggable={false}
+                            src={leftArrow}
+                        />
+                    </div>
                 </div>
-            </div>
-        ) : null}
-    </Fragment>
+            ) : null}
+        </Fragment>)
 );
 NextPrevButtons.propTypes = {
+    isMenuVisible: PropTypes.bool.isRequired,
     expanded: PropTypes.bool.isRequired,
-    isRtl: PropTypes.bool,
     onNextStep: PropTypes.func,
     onPrevStep: PropTypes.func
 };
 
-const TutorialHeader = ({menu, intl, title, onCloseCards, onShrinkExpandCards, totalSteps, step, expanded}) => (
-    <div
-        className={expanded ?
-            classNames(styles.headerButtons, tutorialStyles.headerButtons) :
-            classNames(styles.headerButtons, tutorialStyles.headerButtons, styles.headerButtonsHidden)}
-    >
-        {totalSteps > 1 && !menu ? (
-            <div className={styles.stepsList}>
-                {Array(totalSteps).fill(0)
-                    .map((_, i) => (
-                        <div
-                            className={i === step ? styles.activeStepPip : styles.inactiveStepPip}
-                            key={`pip-step-${i}`}
-                        />
-                    ))}
+const TutorialHeader = props => {
+    const {
+        isMenuVisible,
+        locale,
+        title,
+        onCloseCards,
+        onShrinkExpandCards,
+        onHomeMenu,
+        totalSteps,
+        step,
+        expanded
+    } = props;
+
+    return (
+        <div
+            className={expanded ? classNames(styles.headerButtons, tutorialStyles.headerButtons) :
+                classNames(styles.headerButtons, tutorialStyles.headerButtons, styles.headerButtonsHidden)}
+        >
+            {totalSteps > 1 && !isMenuVisible ? (
+                <div className={styles.stepsList}>
+                    {Array(totalSteps).fill(0)
+                        .map((_, i) => (
+                            <div
+                                className={i === step ? styles.activeStepPip : styles.inactiveStepPip}
+                                key={`pip-step-${i}`}
+                            />
+                        ))}
+                </div>
+            ) : null}
+            <div className={tutorialStyles.cardTitleHeader}>
+                <span> {title} </span>
             </div>
-        ) : null}
-        <div className={tutorialStyles.cardTitleHeader}>
-            <span> {intl.formatMessage(title)} </span>
-        </div>
-        <div className={styles.headerButtonsRight}>
             <div
-                className={styles.shrinkExpandButton}
-                onClick={onShrinkExpandCards}
+                className={styles.headerButtonsRight}
             >
-                <img
-                    draggable={false}
-                    src={expanded ? shrinkIcon : expandIcon}
-                />
                 {expanded ?
-                    <FormattedMessage
-                        defaultMessage="Shrink"
-                        description="Title for button to shrink question category"
-                        id="gui.tutorial.cards.shrink"
-                    /> :
-                    <FormattedMessage
-                        defaultMessage="Expand"
-                        description="Title for button to expand question category"
-                        id="gui.tutorial.cards.expand"
+                    <div
+                        className={tutorialStyles.homeButton}
+                        onClick={onHomeMenu}
+                    >
+                        <img
+                            className={tutorialStyles.homeButtonIcon}
+                            draggable={false}
+                            src={homeIcon}
+                        />
+                        {locale === 'de' ? 'Hauptmenü' : 'Home'}
+                    </div> : null}
+                <div
+                    className={styles.shrinkExpandButton}
+                    onClick={onShrinkExpandCards}
+                >
+                    <img
+                        draggable={false}
+                        src={expanded ? shrinkIcon : expandIcon}
                     />
-                }
-            </div>
-            <div
-                className={styles.removeButton}
-                onClick={onCloseCards}
-            >
-                <img
-                    className={styles.closeIcon}
-                    src={closeIcon}
-                />
-                <FormattedMessage
-                    defaultMessage="Close"
-                    description="Title for button to close question category"
-                    id="gui.tutorial.cards.close"
-                />
+                    {expanded ?
+                        <FormattedMessage
+                            defaultMessage="Shrink"
+                            description="Title for button to shrink question category"
+                            id="gui.cards.shrink"
+                        /> :
+                        <FormattedMessage
+                            defaultMessage="Expand"
+                            description="Title for button to expand question category"
+                            id="gui.cards.expand"
+                        />
+                    }
+                </div>
+                <div
+                    className={styles.removeButton}
+                    onClick={onCloseCards}
+                >
+                    <img
+                        className={styles.closeIcon}
+                        src={closeIcon}
+                    />
+                    <FormattedMessage
+                        defaultMessage="Close"
+                        description="Title for button to close question category"
+                        id="gui.cards.close"
+                    />
+                </div>
             </div>
         </div>
-    </div>
-);
+    );
+};
 TutorialHeader.propTypes = {
-    menu: PropTypes.bool,
-    title: PropTypes.shape({
-        msg: PropTypes.object.isRequired,
-        data: PropTypes.object
-    }),
+    isMenuVisible: PropTypes.bool,
+    locale: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
     expanded: PropTypes.bool.isRequired,
     onCloseCards: PropTypes.func.isRequired,
     onShrinkExpandCards: PropTypes.func.isRequired,
+    onHomeMenu: PropTypes.func.isRequired,
     step: PropTypes.number,
-    totalSteps: PropTypes.number,
-    intl: intlShape.isRequired
+    totalSteps: PropTypes.number
 };
 
 const TutorialCards = props => {
     const {
-        menu,
-        selectedTutorial,
+        tutorials,
+        isMenuVisible,
+        locale,
+        currentTutorialStep,
+        steps,
         title,
-        intl,
-        isRtl,
+        tutorialMessagesTest,
         onCloseCards,
         onShrinkExpandCards,
         onDrag,
@@ -159,34 +177,23 @@ const TutorialCards = props => {
         onNextStep,
         onPrevStep,
         onSelectTutorial,
+        onHomeMenu,
         totalSteps,
         step,
         expanded,
-        vm,
         ...posProps
     } = props;
     let {x, y} = posProps;
 
     // Copied from the tutorial cards
-    const wideCardWidth = 700;
     const cardHorizontalDragOffset = 560; // ~80% of card width
     const cardVerticalDragOffset = expanded ? 400 : 0; // ~80% of card height, if expanded
     const menuBarHeight = 48;
 
     if (x === 0 && y === 0) {
-        x = isRtl ? (-190 - wideCardWidth - cardHorizontalDragOffset) : 620;
+        x = 620;
         x += cardHorizontalDragOffset;
         y = 60;
-    }
-
-    const tutorialMessages = messages[selectedTutorial];
-
-    const rows = [];
-    for (let i = 0; i < Object.values(tutorials).length; i++) {
-        rows.push(<Tutorial
-            content={Object.values(tutorials)[i]}
-            onSelect={onSelectTutorial}
-        />);
     }
 
     return (
@@ -210,28 +217,39 @@ const TutorialCards = props => {
                 <div className={styles.cardContainer}>
                     <div className={styles.card}>
                         <TutorialHeader
-                            menu={menu}
-                            intl={intl}
-                            title={menu ? title.msg : tutorialMessages.title}
+                            isMenuVisible={isMenuVisible}
+                            locale={locale}
+                            title={isMenuVisible ? title : tutorialMessagesTest.title}
                             expanded={expanded}
                             step={step}
                             totalSteps={totalSteps}
                             onCloseCards={onCloseCards}
                             onShrinkExpandCards={onShrinkExpandCards}
+                            onHomeMenu={onHomeMenu}
                         />
                         <div
                             className={expanded ? classNames(styles.stepBody, tutorialStyles.stepBody) : styles.hidden}
                         >
-                            {menu ? rows :
-                            <>
-                                <p>{selectedTutorial}</p>
-                            </>
+                            {isMenuVisible ?
+                                Array(tutorials.length).fill(0)
+                                    .map((_, i) => (
+                                        <Tutorial
+                                            key={tutorials[i].id}
+                                            content={tutorials[i]}
+                                            onSelect={onSelectTutorial}
+                                        />
+                                    )) :
+                                <TutorialStep
+                                    step={steps[step]}
+                                    index={step}
+                                />
                             }
                         </div>
                         <NextPrevButtons
+                            isMenuVisible={isMenuVisible}
                             expanded={expanded}
-                            isRtl={isRtl}
-                            onNextStep={step < totalSteps - 1 ? onNextStep : null}
+                            onNextStep={step < totalSteps - 1 && step < currentTutorialStep ?
+                                onNextStep : null}
                             onPrevStep={step > 0 ? onPrevStep : null}
                         />
                     </div>
@@ -240,17 +258,29 @@ const TutorialCards = props => {
         </div>
     );
 };
+
 TutorialCards.propTypes = {
-    menu: PropTypes.bool,
-    selectedTutorial: PropTypes.string,
-    title: PropTypes.shape({
-        msg: PropTypes.object.isRequired,
-        data: PropTypes.object
-    }),
+    tutorials: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.string.isRequired,
+            title: PropTypes.string.isRequired,
+            img: PropTypes.node.isRequired,
+            difficulty: PropTypes.string.isRequired,
+            totalSteps: PropTypes.number.isRequired
+        })),
+    steps: PropTypes.arrayOf(
+        PropTypes.shape({
+            title: PropTypes.string.isRequired,
+            message1: PropTypes.string.isRequired,
+            img: PropTypes.node.isRequired,
+            message2: PropTypes.string.isRequired
+        })
+    ),
+    isMenuVisible: PropTypes.bool,
+    title: PropTypes.string,
+    tutorialMessagesTest: PropTypes.objectOf(PropTypes.string),
     dragging: PropTypes.bool.isRequired,
     expanded: PropTypes.bool.isRequired,
-    intl: intlShape.isRequired,
-    isRtl: PropTypes.bool.isRequired,
     locale: PropTypes.string.isRequired,
     onCloseCards: PropTypes.func.isRequired,
     onDrag: PropTypes.func,
@@ -260,11 +290,12 @@ TutorialCards.propTypes = {
     onShrinkExpandCards: PropTypes.func.isRequired,
     onStartDrag: PropTypes.func,
     onSelectTutorial: PropTypes.func.isRequired,
+    onHomeMenu: PropTypes.func.isRequired,
     totalSteps: PropTypes.number.isRequired,
     step: PropTypes.number.isRequired,
+    currentTutorialStep: PropTypes.number.isRequired,
     x: PropTypes.number,
-    y: PropTypes.number,
-    vm: PropTypes.instanceOf(VirtualMachine).isRequired
+    y: PropTypes.number
 };
 
 export default injectIntl(TutorialCards);

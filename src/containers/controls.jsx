@@ -64,7 +64,8 @@ const mapStateToProps = state => ({
     isStarted: state.scratchGui.vmStatus.running,
     projectRunning: state.scratchGui.vmStatus.running,
     tutorialCardsVisible: state.scratchGui.tutorialCards.visible,
-    turbo: state.scratchGui.vmStatus.turbo
+    turbo: state.scratchGui.vmStatus.turbo,
+    locale: state.locales.locale
 });
 
 const mapDispatchToProps = dispatch => ({

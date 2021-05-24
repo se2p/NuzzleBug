@@ -16,7 +16,8 @@
 
 .step-body {
     overflow-y: auto;
-    height: 300px;
+    height: 400px;
+    width: 600px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -50,9 +51,28 @@
     border-bottom: 1px solid $motion-tertiary;
 }
 
+.home-button {
+    cursor: pointer;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0.75rem;
+}
+
+.home-button:hover, .all-button:hover {
+    background-color: $ui-black-transparent;
+}
+
+.home-button-icon {
+    height: 20px;
+    width: 20px;
+}
+
 .tutorial {
     width: 100%;
-    height: 123px;
+    height: 110px;
     text-align: left;
     background: #e9f2fa;
     box-sizing: border-box;
@@ -62,7 +82,11 @@
     cursor: pointer;
 }
 
-.tutorialHead {
+.tutorial:hover {
+    background-color: $ui-black-transparent;
+}
+
+.tutorial-head {
     width: 100%;
     height: 15px;
     background: #4c7397;
@@ -70,7 +94,7 @@
     border-radius: 10px;
 }
 
-.tutorialImage {
+.tutorial-image {
     height: 70px;
     width: 103px;
     margin: 4px 10px;
@@ -79,7 +103,7 @@
 
 }
 
-.tutorialContainer {
+.tutorial-container {
     height: 80px;
     display: flex;
     border: 1px solid #77aad9;
@@ -88,15 +112,15 @@
     margin: 3px 10px 10px;
 }
 
-.tutorialTitle {
+.tutorial-title {
     font-family: Comic Sans MS, serif;
     font-size: 20px;
-    color: hsla(225, 15%, 40%, 1);;
+    color: hsla(225, 15%, 40%, 1);
     line-height: 80px;
     margin-left: 10px;
 }
 
-.tutorialDifficulty {
+.tutorial-difficulty {
     margin-left: auto;
     margin-right: 0;
     width: 20%;
@@ -118,3 +142,73 @@
     color: #CD5C5C;
 }
 
+.tutorial-step {
+    background-color: hsl(0, 0%, 100%);
+}
+
+.step-title {
+    margin: 20px auto 0;
+    font-weight: 400;
+    font-size: 1.875rem;
+    line-height: 1.2;
+    color: hsla(225, 15%, 40%, 1);
+}
+
+.step-instructions {
+    margin: 12px 29px 0;
+    text-align: center;
+    font-size: 1rem;
+    line-height: 1.6;
+    font-family: 'Open Sans',sans-serif;
+    color: hsla(225, 15%, 40%, 1);
+}
+
+.step-image {
+    width: 205px;
+    height: 136px;
+    margin: 20px auto 0;
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+.step-testing {
+    display: block ruby;
+    height: 60px;
+}
+
+.step-testing-button {
+    width: 100px;
+    height: 40px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    margin: 30px;
+    background-color: #ff8a54;
+    box-sizing: border-box;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.step-testing-button:hover {
+    background-color: #ff9c6d;
+}
+
+.step-testing-button-title {
+    line-height: 40px;
+    vertical-align: middle;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1.3rem;
+    color: white;
+}
+
+.step-testing-success {
+    line-height: 30px;
+    color: #229954;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.step-testing-fail {
+    line-height: 30px;
+    color: #cb4335;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}

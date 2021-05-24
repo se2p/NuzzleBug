@@ -8,7 +8,7 @@ const Tutorial = ({content, onSelect}) => (
         className={styles.tutorial}
         /* eslint-disable-next-line react/jsx-no-bind */
         onClick={() => {
-            onSelect(content.id);
+            onSelect(content.id, content.totalSteps);
         }}
     >
         <div className={styles.tutorialHead} />
@@ -30,10 +30,11 @@ const Tutorial = ({content, onSelect}) => (
 );
 Tutorial.propTypes = {
     content: PropTypes.shape({
+        title: PropTypes.string.isRequired,
         id: PropTypes.string.isRequired,
         img: PropTypes.node.isRequired,
-        title: PropTypes.string.isRequired,
-        difficulty: PropTypes.string.isRequired
+        difficulty: PropTypes.string.isRequired,
+        totalSteps: PropTypes.number.isRequired
     }),
     onSelect: PropTypes.func.isRequired
 };

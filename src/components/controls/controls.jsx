@@ -20,11 +20,6 @@ const messages = defineMessages({
         id: 'gui.controls.stop',
         defaultMessage: 'Stop',
         description: 'Stop button title'
-    },
-    tutorialTitle: {
-        id: 'gui.tutorial.controls.tutorial',
-        defaultMessage: 'Tutorials',
-        description: 'Show tutorials button title'
     }
 });
 
@@ -37,9 +32,14 @@ const Controls = function (props) {
         onStopAllClick,
         onTutorialClick,
         turbo,
+        locale,
         tutorialCardsVisible,
         ...componentProps
     } = props;
+
+    const tutorialTitleEn = 'Tutorial';
+    const tutorialTitleDe = 'Tutorien';
+
     return (
         <div
             className={classNames(styles.controlsContainer, className)}
@@ -61,7 +61,7 @@ const Controls = function (props) {
             <Tutorial
                 active={!tutorialCardsVisible}
                 onClick={onTutorialClick}
-                title={intl.formatMessage(messages.tutorialTitle)}
+                title={locale === 'de' ? tutorialTitleDe : tutorialTitleEn}
             />
         </div>
     );
@@ -75,7 +75,8 @@ Controls.propTypes = {
     onStopAllClick: PropTypes.func.isRequired,
     onTutorialClick: PropTypes.func.isRequired,
     tutorialCardsVisible: PropTypes.bool,
-    turbo: PropTypes.bool
+    turbo: PropTypes.bool,
+    locale: PropTypes.string.isRequired
 };
 
 Controls.defaultProps = {

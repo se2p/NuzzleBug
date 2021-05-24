@@ -1,9 +1,5 @@
-// Copied from './vm-status'
-const SET_RUNNING_STATE = 'scratch-gui/vm-status/SET_RUNNING_STATE';
 // Copied from './block-drag'
 const BLOCK_DRAG_UPDATE = 'scratch-gui/block-drag/BLOCK_DRAG_UPDATE';
-// Copied from './project-changed'
-const SET_PROJECT_CHANGED = 'scratch-gui/project-changed/SET_PROJECT_CHANGED';
 
 const CLOSE_CARDS = 'scratch-gui/tutorial-cards/CLOSE_CARDS';
 const ENABLE_CARDS = 'scratch-gui/tutorial-cards/ENABLE_CARDS';
@@ -17,12 +13,17 @@ const DRAG_CARD = 'scratch-gui/tutorial-cards/DRAG_CARD';
 const START_DRAG = 'scratch-gui/tutorial-cards/START_DRAG';
 const END_DRAG = 'scratch-gui/tutorial-cards/END_DRAG';
 const SELECT_TUTORIAL = 'scratch-gui/tutorial-cards/SELECT_TUTORIAL';
+const HOME_MENU = 'scratch-gui/tutorial-cards/HOME_MENU';
+const NEXT_TEST = 'scratch-gui/tutorial-cards/NEXT_TEST';
+const NEXT_TUTORIAL_STEP = 'scratch-gui/tutorial-cards/NEXT_TUTORIAL_STEP';
 
 const initialState = {
     visible: false,
     disabled: false,
     menu: true,
     tutorial: '',
+    testedStep: -1,
+    currentTutorialStep: 0,
     step: 0,
     x: 0,
     y: 0,
@@ -33,8 +34,6 @@ const initialState = {
 const reducer = function (state, action) {
     if (typeof state === 'undefined') state = initialState;
     switch (action.type) {
-    case SET_PROJECT_CHANGED:
-        return Object.assign({}, state, initialState);
     case CLOSE_CARDS:
         return Object.assign({}, state, {
             visible: false
@@ -42,13 +41,6 @@ const reducer = function (state, action) {
     case BLOCK_DRAG_UPDATE:
         return Object.assign({}, state, {
             disabled: true
-        });
-    case SET_RUNNING_STATE:
-        if (!action.running) {
-            return state;
-        }
-        return Object.assign({}, state, {
-            disabled: false
         });
     case ENABLE_CARDS:
         return Object.assign({}, state, {
@@ -97,8 +89,29 @@ const reducer = function (state, action) {
     case SELECT_TUTORIAL:
         return Object.assign({}, state, {
             tutorial: action.tutorial,
+            totalSteps: action.totalSteps,
             menu: false
         });
+    case HOME_MENU:
+        return Object.assign({}, state, {
+            tutorial: '',
+            menu: true,
+            totalSteps: 0,
+            step: 0,
+            currentTutorialStep: 0,
+            testedStep: -1
+        });
+    case NEXT_TEST:
+        return Object.assign({}, state, {
+            testedStep: state.testedStep + 1
+        });
+    case NEXT_TUTORIAL_STEP: {
+        return state.currentTutorialStep + 1 < state.totalSteps ?
+            Object.assign({}, state, {
+                currentTutorialStep: state.currentTutorialStep + 1,
+                step: state.step + 1
+            }) : state;
+    }
     default:
         return state;
     }
@@ -148,8 +161,20 @@ const endDrag = function () {
     return {type: END_DRAG};
 };
 
-const selectTutorial = function (tutorial) {
-    return {type: SELECT_TUTORIAL, tutorial};
+const selectTutorial = function (tutorial, totalSteps) {
+    return {type: SELECT_TUTORIAL, tutorial, totalSteps};
+};
+
+const homeMenu = function () {
+    return {type: HOME_MENU};
+};
+
+const testNextStep = function () {
+    return {type: NEXT_TEST};
+};
+
+const nextTutorialStep = function () {
+    return {type: NEXT_TUTORIAL_STEP};
 };
 
 export {
@@ -166,5 +191,8 @@ export {
     dragCard,
     startDrag,
     endDrag,
-    selectTutorial
+    selectTutorial,
+    homeMenu,
+    testNextStep,
+    nextTutorialStep
 };
