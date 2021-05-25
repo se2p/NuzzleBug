@@ -16,6 +16,7 @@ import rightArrow from '../cards/icon--next.svg';
 
 import Tutorial from './tutorial.jsx';
 import TutorialStep from '../../containers/tutorial-step.jsx';
+import VirtualMachine from 'scratch-vm';
 
 const NextPrevButtons = ({isMenuVisible, onNextStep, onPrevStep, expanded}) => (
     isMenuVisible ? null :
@@ -181,6 +182,7 @@ const TutorialCards = props => {
         totalSteps,
         step,
         expanded,
+        vm,
         ...posProps
     } = props;
     let {x, y} = posProps;
@@ -242,6 +244,7 @@ const TutorialCards = props => {
                                 <TutorialStep
                                     step={steps[step]}
                                     index={step}
+                                    vm={vm}
                                 />
                             }
                         </div>
@@ -295,7 +298,8 @@ TutorialCards.propTypes = {
     step: PropTypes.number.isRequired,
     currentTutorialStep: PropTypes.number.isRequired,
     x: PropTypes.number,
-    y: PropTypes.number
+    y: PropTypes.number,
+    vm: PropTypes.instanceOf(VirtualMachine).isRequired
 };
 
 export default injectIntl(TutorialCards);

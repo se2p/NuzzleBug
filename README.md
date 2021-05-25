@@ -120,13 +120,13 @@ npm run test:integration
 Or, you can run a single file of integration tests (in this example, the `backpack` tests):
 
 ```bash
-$(npm bin)/jest --runInBand test/integration/backpack.test.js
+$(npm bin)/jest --runInBand test/integration/backpack.test-runner.js
 ```
 
 If you want to watch the browser as it runs the test, rather than running headless, use:
 
 ```bash
-USE_HEADLESS=no $(npm bin)/jest --runInBand test/integration/backpack.test.js
+USE_HEADLESS=no $(npm bin)/jest --runInBand test/integration/backpack.test-runner.js
 ```
 
 ## Troubleshooting
