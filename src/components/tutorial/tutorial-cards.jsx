@@ -14,7 +14,7 @@ import closeIcon from '../cards/icon--close.svg';
 import leftArrow from '../cards/icon--prev.svg';
 import rightArrow from '../cards/icon--next.svg';
 
-import Tutorial from './tutorial.jsx';
+import Tutorial from './tutorial-menu-item.jsx';
 import TutorialStep from '../../containers/tutorial-step.jsx';
 import VirtualMachine from 'scratch-vm';
 
@@ -34,6 +34,7 @@ const NextPrevButtons = ({isMenuVisible, onNextStep, onPrevStep, expanded}) => (
                         <img
                             draggable={false}
                             src={rightArrow}
+                            alt={'Arrow pointing right'}
                         />
                     </div>
                 </div>
@@ -50,6 +51,7 @@ const NextPrevButtons = ({isMenuVisible, onNextStep, onPrevStep, expanded}) => (
                         <img
                             draggable={false}
                             src={leftArrow}
+                            alt={'Arrow pointing left'}
                         />
                     </div>
                 </div>
@@ -66,8 +68,8 @@ NextPrevButtons.propTypes = {
 const TutorialHeader = props => {
     const {
         isMenuVisible,
-        locale,
         title,
+        homeButtonTitle,
         onCloseCards,
         onShrinkExpandCards,
         onHomeMenu,
@@ -107,8 +109,9 @@ const TutorialHeader = props => {
                             className={tutorialStyles.homeButtonIcon}
                             draggable={false}
                             src={homeIcon}
+                            alt={'House'}
                         />
-                        {locale === 'de' ? 'Hauptmenü' : 'Home'}
+                        {homeButtonTitle}
                     </div> : null}
                 <div
                     className={styles.shrinkExpandButton}
@@ -117,6 +120,7 @@ const TutorialHeader = props => {
                     <img
                         draggable={false}
                         src={expanded ? shrinkIcon : expandIcon}
+                        alt={'Arrow, that indicates whether to shrink or expand the content.'}
                     />
                     {expanded ?
                         <FormattedMessage
@@ -138,6 +142,7 @@ const TutorialHeader = props => {
                     <img
                         className={styles.closeIcon}
                         src={closeIcon}
+                        alt={'Cross'}
                     />
                     <FormattedMessage
                         defaultMessage="Close"
@@ -151,8 +156,8 @@ const TutorialHeader = props => {
 };
 TutorialHeader.propTypes = {
     isMenuVisible: PropTypes.bool,
-    locale: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
+    homeButtonTitle: PropTypes.string.isRequired,
     expanded: PropTypes.bool.isRequired,
     onCloseCards: PropTypes.func.isRequired,
     onShrinkExpandCards: PropTypes.func.isRequired,
@@ -163,13 +168,14 @@ TutorialHeader.propTypes = {
 
 const TutorialCards = props => {
     const {
+        cardRef,
         tutorials,
         isMenuVisible,
-        locale,
         currentTutorialStep,
-        steps,
         title,
-        tutorialMessagesTest,
+        homeButtonTitle,
+        guiMessages,
+        tutorialMessages,
         onCloseCards,
         onShrinkExpandCards,
         onDrag,
@@ -217,11 +223,11 @@ const TutorialCards = props => {
                 onStop={onEndDrag}
             >
                 <div className={styles.cardContainer}>
-                    <div className={styles.card}>
+                    <div className={styles.card} >
                         <TutorialHeader
                             isMenuVisible={isMenuVisible}
-                            locale={locale}
-                            title={isMenuVisible ? title : tutorialMessagesTest.title}
+                            title={title}
+                            homeButtonTitle={homeButtonTitle}
                             expanded={expanded}
                             step={step}
                             totalSteps={totalSteps}
@@ -231,6 +237,7 @@ const TutorialCards = props => {
                         />
                         <div
                             className={expanded ? classNames(styles.stepBody, tutorialStyles.stepBody) : styles.hidden}
+                            ref={cardRef}
                         >
                             {isMenuVisible ?
                                 Array(tutorials.length).fill(0)
@@ -242,8 +249,10 @@ const TutorialCards = props => {
                                         />
                                     )) :
                                 <TutorialStep
-                                    step={steps[step]}
-                                    index={step}
+                                    guiMessages={guiMessages}
+                                    tutorialMessages={tutorialMessages}
+                                    step={step}
+                                    nextStep={onNextStep}
                                     vm={vm}
                                 />
                             }
@@ -263,6 +272,7 @@ const TutorialCards = props => {
 };
 
 TutorialCards.propTypes = {
+    cardRef: PropTypes.node,
     tutorials: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.string.isRequired,
@@ -271,20 +281,13 @@ TutorialCards.propTypes = {
             difficulty: PropTypes.string.isRequired,
             totalSteps: PropTypes.number.isRequired
         })),
-    steps: PropTypes.arrayOf(
-        PropTypes.shape({
-            title: PropTypes.string.isRequired,
-            message1: PropTypes.string.isRequired,
-            img: PropTypes.node.isRequired,
-            message2: PropTypes.string.isRequired
-        })
-    ),
     isMenuVisible: PropTypes.bool,
     title: PropTypes.string,
-    tutorialMessagesTest: PropTypes.objectOf(PropTypes.string),
+    homeButtonTitle: PropTypes.string,
+    guiMessages: PropTypes.objectOf(PropTypes.string),
+    tutorialMessages: PropTypes.objectOf(PropTypes.string),
     dragging: PropTypes.bool.isRequired,
     expanded: PropTypes.bool.isRequired,
-    locale: PropTypes.string.isRequired,
     onCloseCards: PropTypes.func.isRequired,
     onDrag: PropTypes.func,
     onEndDrag: PropTypes.func,

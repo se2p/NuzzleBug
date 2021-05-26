@@ -30,6 +30,7 @@ const TutorialButton = props => {
                 src={iconTutorial}
                 title={title}
                 onClick={active ? onClick : null}
+                alt={'Light bulb'}
                 {...componentProps}
             />
         </>

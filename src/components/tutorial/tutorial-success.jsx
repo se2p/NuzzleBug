@@ -3,18 +3,35 @@ import PropTypes from 'prop-types';
 import {injectIntl} from 'react-intl';
 import styles from './tutorial-cards.css';
 
-const TutorialSuccess = ({onHomeMenu}) => (
+const TutorialSuccess = ({content, homeButtonTitle, onHome}) => (
     <div className={styles.tutorialStep}>
-        <h4 className={styles.stepTitle}> Success </h4>
-        <p className={styles.stepInstructions}> You successfully finished tutorial boat Race. Probier noch weitere Tutorials aus </p>
-        <div className={styles.stepTestingButton}
-        onClick={onHomeMenu}>
-        <span className={styles.stepTestingButtonTitle}>Home</span>
-    </div>
+        <h4 className={styles.stepTitle}> {content.title} </h4>
+        <img
+            style={{
+                height: '200px',
+                marginTop: '15px'
+            }}
+            draggable={false}
+            src={content.img}
+            alt={'Cat cheering and celebrating.'}
+        />
+        <p className={styles.stepInstructions}> {content.message} </p>
+        <div
+            className={styles.successHomeButton}
+            onClick={onHome}
+        >
+            <span className={styles.stepTestingButtonTitle}>{homeButtonTitle}</span>
+        </div>
     </div>
 );
 TutorialSuccess.propTypes = {
-    onHomeMenu: PropTypes.func.isRequired
+    content: PropTypes.shape({
+        title: PropTypes.string.isRequired,
+        message: PropTypes.string.isRequired,
+        img: PropTypes.node.isRequired
+    }),
+    onHome: PropTypes.func.isRequired,
+    homeButtonTitle: PropTypes.func.isRequired
 };
 
 export default injectIntl(TutorialSuccess);

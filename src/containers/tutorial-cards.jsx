@@ -5,25 +5,31 @@ import VirtualMachine from 'scratch-vm';
 
 import {
     closeCards,
-    disableCards,
     dragCard,
-    enableCards,
     endDrag,
     nextStep,
     prevStep,
-    resetStep,
     shrinkExpandCards,
     startDrag,
     selectTutorial,
     homeMenu
 } from '../reducers/tutorial-cards';
+import {reset} from '../reducers/tutorial-step';
+
+import * as messagesDE from '../lib/libraries/tutorial-messages-de.js';
+import * as messagesEN from '../lib/libraries/tutorial-messages-en.js';
+
+
 import TutorialCardsComponent from '../components/tutorial/tutorial-cards.jsx';
 import * as tutorials from 'tutorial-tests/src/tutorials';
 
 class TutorialCards extends React.Component {
     constructor (props) {
         super(props);
-        this.cancel = false;
+        this.handleHome = this.handleHome.bind(this);
+        this.handleNext = this.handleNext.bind(this);
+        this.handlePrev = this.handlePrev.bind(this);
+        this.myRef = null;
     }
 
     processTutorials () {
@@ -44,47 +50,50 @@ class TutorialCards extends React.Component {
         return rows;
     }
 
-    processSteps () {
-        const steps = [];
-        if (this.props.selectedTutorial !== '') {
-            // eslint-disable-next-line react/prop-types,import/namespace
-            const tutorial = tutorials[`${this.props.selectedTutorial}`];
+    handleHome () {
+        this.props.onReset();
+        this.props.onHome();
+    }
 
-            for (let i = 1; i <= tutorial.totalSteps; i++) {
-                const messagesContainer = this.props.locale === 'de' ? tutorial.messagesDE : tutorial.messagesEN;
-                const messages = Object.values(messagesContainer)[0];
-                steps.push({
-                    title: messages[`titleStep${i}`],
-                    message1: messages[`messageStep${i}`],
-                    img: tutorial[`imageStep${i}`],
-                    message2: messages[`message2Step${i}`]
-                });
-            }
-        }
-        return steps;
+    handlePrev () {
+        this.props.prevStep();
+        this.myRef.scrollTop = 0;
+    }
+
+    handleNext () {
+        this.props.nextStep();
+        this.myRef.scrollTop = 0;
     }
 
     render () {
-        const testTutorials = this.processTutorials();
-        const steps = this.processSteps();
-        const title = 'Tutorial';
+        const tutorialsData = this.processTutorials();
 
         let tutorialMessages;
 
         if (this.props.selectedTutorial !== '') {
-            // eslint-disable-next-line react/prop-types,import/namespace
             const messages = this.props.locale === 'de' ? tutorials[`${this.props.selectedTutorial}`].messagesDE :
-            // eslint-disable-next-line import/namespace,react/prop-types
                 tutorials[`${this.props.selectedTutorial}`].messagesEN;
             tutorialMessages = Object.values(messages)[0];
         }
 
+        const guiMessagesContainer = this.props.locale === 'de' ? messagesDE : messagesEN;
+        const guiMessages = Object.values(guiMessagesContainer)[0];
+
+        const title = this.props.isMenuVisible ? guiMessages.headerTitle : tutorialMessages.title;
+        const homeButtonTitle = guiMessages.homeButtonTitle;
+
         return (
             <TutorialCardsComponent
-                tutorials={testTutorials}
-                tutorialMessagesTest={tutorialMessages}
+                /* eslint-disable-next-line react/jsx-no-bind */
+                cardRef={ref => (this.myRef = ref)}
+                tutorials={tutorialsData}
+                guiMessages={guiMessages}
+                tutorialMessages={tutorialMessages}
                 title={title}
-                steps={steps}
+                homeButtonTitle={homeButtonTitle}
+                onHomeMenu={this.handleHome}
+                onNextStep={this.handleNext}
+                onPrevStep={this.handlePrev}
                 {...this.props}
             />
         );
@@ -93,13 +102,14 @@ class TutorialCards extends React.Component {
 
 TutorialCards.propTypes = {
     visible: PropTypes.bool.isRequired,
+    isMenuVisible: PropTypes.bool.isRequired,
     selectedTutorial: PropTypes.string.isRequired,
+    prevStep: PropTypes.func.isRequired,
+    nextStep: PropTypes.func.isRequired,
     onCloseCards: PropTypes.func.isRequired,
-    onEnableCards: PropTypes.func.isRequired,
-    onDisableCards: PropTypes.func.isRequired,
-    onResetStep: PropTypes.func.isRequired,
+    onReset: PropTypes.func.isRequired,
     onSelectTutorial: PropTypes.func.isRequired,
-    onHomeMenu: PropTypes.func.isRequired,
+    onHome: PropTypes.func.isRequired,
     locale: PropTypes.string.isRequired,
     step: PropTypes.number.isRequired,
     vm: PropTypes.instanceOf(VirtualMachine).isRequired
@@ -109,10 +119,9 @@ const mapStateToProps = state => ({
     visible: state.scratchGui.tutorialCards.visible,
     isMenuVisible: state.scratchGui.tutorialCards.menu,
     selectedTutorial: state.scratchGui.tutorialCards.tutorial,
-    tutorial: state.scratchGui.tutorialCards.tutorial,
-    step: state.scratchGui.tutorialCards.step,
-    currentTutorialStep: state.scratchGui.tutorialCards.currentTutorialStep,
     totalSteps: state.scratchGui.tutorialCards.totalSteps,
+    step: state.scratchGui.tutorialCards.step,
+    currentTutorialStep: state.scratchGui.tutorialStep.currentStep,
     expanded: state.scratchGui.tutorialCards.expanded,
     x: state.scratchGui.tutorialCards.x,
     y: state.scratchGui.tutorialCards.y,
@@ -122,17 +131,15 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     onCloseCards: () => dispatch(closeCards()),
-    onEnableCards: () => dispatch(enableCards()),
-    onDisableCards: () => dispatch(disableCards()),
     onShrinkExpandCards: () => dispatch(shrinkExpandCards()),
-    onNextStep: () => dispatch(nextStep()),
-    onPrevStep: () => dispatch(prevStep()),
-    onResetStep: step => dispatch(resetStep(step)),
+    nextStep: () => dispatch(nextStep()),
+    prevStep: () => dispatch(prevStep()),
     onDrag: (e_, data) => dispatch(dragCard(data.x, data.y)),
     onStartDrag: () => dispatch(startDrag()),
     onEndDrag: () => dispatch(endDrag()),
     onSelectTutorial: (tutorial, totalSteps) => dispatch(selectTutorial(tutorial, totalSteps)),
-    onHomeMenu: () => dispatch(homeMenu())
+    onHome: () => dispatch(homeMenu()),
+    onReset: () => dispatch(reset())
 });
 
 export default connect(

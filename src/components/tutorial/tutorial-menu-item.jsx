@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {injectIntl} from 'react-intl';
 import styles from './tutorial-cards.css';
 
-const Tutorial = ({content, onSelect}) => (
+const TutorialMenuItem = ({content, onSelect}) => (
     <div
         className={styles.tutorial}
         /* eslint-disable-next-line react/jsx-no-bind */
@@ -17,6 +17,7 @@ const Tutorial = ({content, onSelect}) => (
                 draggable={false}
                 className={styles.tutorialImage}
                 src={content.img}
+                alt={'Image of the Tutorial'}
             />
             <div className={styles.tutorialTitle}>{content.title}</div>
             <div
@@ -28,7 +29,7 @@ const Tutorial = ({content, onSelect}) => (
         </div>
     </div>
 );
-Tutorial.propTypes = {
+TutorialMenuItem.propTypes = {
     content: PropTypes.shape({
         title: PropTypes.string.isRequired,
         id: PropTypes.string.isRequired,
@@ -39,4 +40,4 @@ Tutorial.propTypes = {
     onSelect: PropTypes.func.isRequired
 };
 
-export default injectIntl(Tutorial);
+export default injectIntl(TutorialMenuItem);
