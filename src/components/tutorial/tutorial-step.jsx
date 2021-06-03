@@ -4,6 +4,7 @@ import styles from './tutorial-cards.css';
 
 import checkmark from './icon--checkmark.png';
 import crossMark from './icon--cross-mark.png';
+import loading from './icon--loading.svg';
 import arrow from './icon--arrow.svg';
 
 const Solution = ({title, content, onSolution, solutionExpanded}) => (
@@ -43,46 +44,72 @@ Solution.propTypes = {
     solutionExpanded: PropTypes.bool.isRequired
 };
 
-const TestingComponent = ({testButtonTitle, successMsg, failMsg, onTest, testButtonVisible, tested, success}) => (
-    <div className={styles.stepTesting}>
-        { testButtonVisible ?
-            <div
-                className={styles.stepTestingButton}
-                onClick={onTest}
-            >
-                <span className={styles.stepTestingButtonTitle}>{testButtonTitle}</span>
-            </div> : null}
-        {tested ?
-            (success ?
-                <p className={styles.stepTestingSuccess}>
-                    <img
-                        style={{height: '20px', verticalAlign: 'middle'}}
-                        src={checkmark}
-                        draggable={false}
-                        alt={'Checkmark'}
-                    />
-                    {successMsg}
-                </p> :
-                <p className={styles.stepTestingFail}>
-                    <img
-                        style={{height: '20px', verticalAlign: 'middle'}}
-                        src={crossMark}
-                        draggable={false}
-                        alt={'Cross mark'}
-                    />
-                    {failMsg}
-                </p>
-            ) : null}
-    </div>
-);
+const TestingComponent = props => {
+    const {
+        testButtonTitle,
+        successMsg,
+        failMsg,
+        loadingMsg,
+        onTest,
+        testButtonVisible,
+        tested,
+        success,
+        currentlyTesting
+    } = props;
+
+    return (
+        <div className={styles.stepTesting}>
+            { testButtonVisible ?
+                <div
+                    className={styles.stepTestingButton}
+                    onClick={onTest}
+                >
+                    <span className={styles.stepTestingButtonTitle}>{testButtonTitle}</span>
+                </div> : null}
+            {tested ?
+                (currentlyTesting ?
+                    <p className={styles.stepTestingLoading}>
+                        <img
+                            style={{height: '20px', verticalAlign: 'middle'}}
+                            src={loading}
+                            draggable={false}
+                            alt={'loading arrows'}
+                        />
+                        {loadingMsg}
+                    </p> :
+                    (success ?
+                        <p className={styles.stepTestingSuccess}>
+                            <img
+                                style={{height: '20px', verticalAlign: 'middle'}}
+                                src={checkmark}
+                                draggable={false}
+                                alt={'Checkmark'}
+                            />
+                            {successMsg}
+                        </p> :
+                        <p className={styles.stepTestingFail}>
+                            <img
+                                style={{height: '20px', verticalAlign: 'middle'}}
+                                src={crossMark}
+                                draggable={false}
+                                alt={'Cross mark'}
+                            />
+                            {failMsg}
+                        </p>
+                    )) : null}
+        </div>
+    );
+};
 TestingComponent.propTypes = {
     testButtonTitle: PropTypes.string.isRequired,
     successMsg: PropTypes.string.isRequired,
     failMsg: PropTypes.string.isRequired,
+    loadingMsg: PropTypes.string.isRequired,
     onTest: PropTypes.func.isRequired,
     testButtonVisible: PropTypes.bool.isRequired,
     tested: PropTypes.bool.isRequired,
-    success: PropTypes.bool.isRequired
+    success: PropTypes.bool.isRequired,
+    currentlyTesting: PropTypes.bool.isRequired
 };
 
 const TutorialStep = props => {
@@ -97,6 +124,7 @@ const TutorialStep = props => {
         failureMessage,
         solutionVisible,
         solutionExpanded,
+        currentlyTesting,
         onSolution
     } = props;
 
@@ -125,10 +153,12 @@ const TutorialStep = props => {
                     testButtonTitle={testButtonTitle}
                     successMsg={guiMessages.successMessage}
                     failMsg={guiMessages.failMessage}
+                    loadingMsg={guiMessages.loadingMessage}
                     onTest={onTest}
                     testButtonVisible={testButtonVisible}
                     tested={tested}
                     success={success}
+                    currentlyTesting={currentlyTesting}
                 />
             </div>
         </div>
@@ -158,6 +188,7 @@ TutorialStep.propTypes = {
     }),
     solutionVisible: PropTypes.bool.isRequired,
     solutionExpanded: PropTypes.bool.isRequired,
+    currentlyTesting: PropTypes.bool.isRequired,
     onSolution: PropTypes.func.isRequired
 };
 

@@ -11,6 +11,11 @@ export default {
     homeButtonTitle: 'Home',
 
     /**
+     * Download button title
+     */
+    downloadButtonTitle: 'Download',
+
+    /**
      * Tutorial steps
      */
     testButtonTitle: 'Test',
@@ -18,6 +23,7 @@ export default {
 
     successMessage: 'Congratulations, your solution is correct.',
     failMessage: 'Your solution is not yet correct. Please try it again.',
+    loadingMessage: 'Tests running. Don\'t move your mouse please.',
 
     solutionHeader: 'Solution'
 };

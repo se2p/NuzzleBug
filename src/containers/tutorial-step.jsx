@@ -2,11 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Step from '../components/tutorial/tutorial-step.jsx';
 import Success from '../components/tutorial/tutorial-success.jsx';
+import Intro from '../components/tutorial/tutorial-intro.jsx';
 import {connect} from 'react-redux';
 import VirtualMachine from 'scratch-vm';
+import downloadBlob from '../lib/download-blob';
 
 import {homeMenu} from '../reducers/tutorial-cards';
-import {testNextStep, nextTutorialStep, reset, success, fail, expandSolution} from '../reducers/tutorial-step';
+import {testNextStep, nextTutorialStep, testStopped, testStarted,
+    reset, success, fail, expandSolution} from '../reducers/tutorial-step';
 
 import {runTest} from 'tutorial-tests';
 import * as tutorials from 'tutorial-tests/src/tutorials';
@@ -19,6 +22,7 @@ class TutorialStep extends React.Component {
         super(props);
         this.handleHome = this.handleHome.bind(this);
         this.test = this.test.bind(this);
+        this.handleDownload = this.handleDownload.bind(this);
         this.next = this.next.bind(this);
     }
 
@@ -34,12 +38,29 @@ class TutorialStep extends React.Component {
                 message2: messages[`message2Step${i}`],
                 solution: {
                     message: messages[`solutionStep${i}`],
-                    img: tutorial[`imageSolution${i}`]
+                    img: this.props.locale === 'de' ? tutorial[`imageSolutionDE${i}`] : tutorial[`imageSolutionEN${i}`]
                 }
             });
 
         }
         return steps;
+    }
+
+    processDownloads () {
+        const downloads = [];
+        const tutorial = tutorials[`${this.props.tutorial}`];
+        const messages = this.props.tutorialMessages;
+        for (let i = 1; i <= tutorial.totalDownloads; i++) {
+            downloads.push({
+                title: messages[`download${i}`],
+                content: tutorial[`downloadContent${i}`]
+            });
+        }
+        return {
+            title: messages.title,
+            message: messages.downloadMessage,
+            download: downloads
+        };
     }
 
     setFailureMessages (step, messageID) {
@@ -56,14 +77,32 @@ class TutorialStep extends React.Component {
         if (this.props.step > this.props.testedSteps) {
             this.props.incTest();
         }
+        this.props.testStarted();
         const summary = runTest(this.props.vm, this.props.tutorial, this.props.step);
         summary.then(result => {
+            this.props.testStopped();
             if (result.passed) {
                 this.props.succeeded();
             } else {
                 this.setFailureMessages(result.step, result.messageId);
             }
         });
+    }
+
+    handleDownload (name, content) {
+        const img = new Image();
+        img.src = content;
+        const c = document.createElement('canvas');
+        const ctx = c.getContext('2d');
+
+        img.onload = function () {
+            c.width = this.naturalWidth;
+            c.height = this.naturalHeight;
+            ctx.drawImage(this, 0, 0);
+            c.toBlob(blob => {
+                downloadBlob(name.concat('.png'), blob);
+            }, 'image/png', 1);
+        };
     }
 
     next () {
@@ -88,6 +127,8 @@ class TutorialStep extends React.Component {
 
         const steps = this.processSteps();
 
+        const downloads = this.processDownloads();
+
         const guiMessages = this.props.guiMessages;
 
         return (
@@ -101,17 +142,26 @@ class TutorialStep extends React.Component {
                     onHome={this.handleHome}
                     homeButtonTitle={guiMessages.homeButtonTitle}
                 /> :
-                <Step
-                    content={steps[this.props.step]}
-                    tested={tested}
-                    success={stepSucceeded}
-                    testButtonVisible={isCurrentStep}
-                    testButtonTitle={this.props.stepSucceeded ? guiMessages.continueButtonTitle :
-                        guiMessages.testButtonTitle}
-                    onTest={this.props.stepSucceeded ? this.next : this.test}
-                    solutionVisible={!isCurrentStep || this.props.failedTimes >= 3}
-                    {...this.props}
-                />
+                <>
+                    {this.props.step === 0 ?
+                        <Intro
+                            content={downloads}
+                            onDownload={this.handleDownload}
+                            downloadButtonTitle={guiMessages.downloadButtonTitle}
+                        /> : null}
+                    <Step
+                        content={steps[this.props.step]}
+                        tested={tested}
+                        currentlyTesting={this.props.currentlyTesting}
+                        success={stepSucceeded}
+                        testButtonVisible={isCurrentStep}
+                        testButtonTitle={this.props.stepSucceeded ? guiMessages.continueButtonTitle :
+                            guiMessages.testButtonTitle}
+                        onTest={this.props.stepSucceeded ? this.next : this.test}
+                        solutionVisible={!isCurrentStep || this.props.failedTimes >= 3}
+                        {...this.props}
+                    />
+                </>
         );
     }
 }
@@ -123,11 +173,14 @@ TutorialStep.propTypes = {
     step: PropTypes.number.isRequired,
     testedSteps: PropTypes.number.isRequired,
     currentTutorialStep: PropTypes.number.isRequired,
+    currentlyTesting: PropTypes.bool.isRequired,
     stepSucceeded: PropTypes.bool.isRequired,
     failedTimes: PropTypes.number.isRequired,
     onHome: PropTypes.func.isRequired,
     onReset: PropTypes.func.isRequired,
     incTest: PropTypes.func.isRequired,
+    testStarted: PropTypes.func.isRequired,
+    testStopped: PropTypes.func.isRequired,
     nextTutorialStep: PropTypes.func.isRequired,
     nextStep: PropTypes.func.isRequired,
     failed: PropTypes.func.isRequired,
@@ -142,6 +195,7 @@ const mapStateToProps = state => ({
     stepSucceeded: state.scratchGui.tutorialStep.success,
     testedSteps: state.scratchGui.tutorialStep.testedStep,
     currentTutorialStep: state.scratchGui.tutorialStep.currentStep,
+    currentlyTesting: state.scratchGui.tutorialStep.currentlyTesting,
     failureMessage: state.scratchGui.tutorialStep.failureMessage,
     failedTimes: state.scratchGui.tutorialStep.failedTimes,
     solutionExpanded: state.scratchGui.tutorialStep.solutionExpanded,
@@ -152,6 +206,8 @@ const mapDispatchToProps = dispatch => ({
     onHome: () => dispatch(homeMenu()),
     onReset: () => dispatch(reset()),
     incTest: () => dispatch(testNextStep()),
+    testStarted: () => dispatch(testStarted()),
+    testStopped: () => dispatch(testStopped()),
     nextTutorialStep: () => dispatch(nextTutorialStep()),
     succeeded: () => dispatch(success()),
     failed: failureMessage => dispatch(fail(failureMessage)),

@@ -24,7 +24,7 @@ const TutorialMenuItem = ({content, onSelect}) => (
                 className={[styles.tutorialDifficulty, content.difficulty === 'easy' ? styles.easy :
                     content.difficulty === 'medium' ? styles.medium : styles.difficult].join(' ')}
             >
-                {content.difficulty}
+                {content.difficultyMsg}
             </div>
         </div>
     </div>
@@ -35,6 +35,7 @@ TutorialMenuItem.propTypes = {
         id: PropTypes.string.isRequired,
         img: PropTypes.node.isRequired,
         difficulty: PropTypes.string.isRequired,
+        difficultyMsg: PropTypes.string.isRequired,
         totalSteps: PropTypes.number.isRequired
     }),
     onSelect: PropTypes.func.isRequired

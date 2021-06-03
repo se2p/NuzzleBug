@@ -143,7 +143,57 @@
 }
 
 .tutorial-step {
+    width: 100%;
     background-color: hsl(0, 0%, 100%);
+}
+
+.intro-download-container {
+    height: 145px;
+    display: inline-block;
+    background-color: bisque;
+    width: 80%;
+    box-sizing: border-box;
+    border: 1px #b3734a solid;
+    border-radius: 10px;
+    margin-top: 5px;
+}
+
+.intro-image {
+    width: 130px;
+    float: left;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 30px;
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+.intro-download-button {
+    width: 150px;
+    height: 40px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    margin-top: 30px;
+    margin-right: 50px;
+    float: right;
+    background-color: #ff8a54;
+    box-sizing: border-box;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.intro-download-text {
+    margin-top: 5px;
+    margin-bottom: 0px;
+    text-align: left;
+    margin-left: 30px;
+    font-family: 'Open Sans',sans-serif;
+    color: hsla(225, 15%, 40%, 1);
+}
+
+.intro-download-button:hover {
+    background-color: #ff9c6d;
 }
 
 .step-title {
@@ -210,6 +260,13 @@
 .step-testing-fail {
     line-height: 30px;
     color: #cb4335;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 20px 0 0 0;
+}
+
+.step-testing-loading {
+    line-height: 30px;
+    color: hsla(225, 15%, 40%, 1);
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     margin: 20px 0 0 0;
 }

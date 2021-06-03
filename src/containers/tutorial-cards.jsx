@@ -37,12 +37,13 @@ class TutorialCards extends React.Component {
         for (let i = 0; i < Object.values(tutorials).length; i++) {
             const element = Object.values(tutorials)[i];
             const messages = this.props.locale === 'de' ? element.messagesDE : element.messagesEN;
-            const tutorialTitle = Object.values(messages)[0].title;
+            const tutorialMsg = Object.values(messages)[0];
             rows.push({
                 id: element.id,
-                title: tutorialTitle,
+                title: tutorialMsg.title,
                 img: element.img,
                 difficulty: element.difficulty,
+                difficultyMsg: tutorialMsg.difficulty,
                 totalSteps: element.totalSteps
             }
             );
