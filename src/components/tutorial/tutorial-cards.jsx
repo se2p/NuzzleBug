@@ -272,7 +272,7 @@ const TutorialCards = props => {
 };
 
 TutorialCards.propTypes = {
-    cardRef: PropTypes.node,
+    cardRef: PropTypes.func,
     tutorials: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.string.isRequired,

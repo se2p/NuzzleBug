@@ -49,10 +49,12 @@ TutorialIntro.propTypes = {
     content: PropTypes.shape({
         title: PropTypes.string.isRequired,
         message: PropTypes.string.isRequired,
-        download: PropTypes.arrayOf({
-            title: PropTypes.string.isRequired,
-            content: PropTypes.node.isRequired
-        })
+        download: PropTypes.arrayOf(
+            PropTypes.shape({
+                title: PropTypes.string.isRequired,
+                content: PropTypes.node.isRequired
+            })
+        )
     }),
     downloadButtonTitle: PropTypes.string.isRequired,
     onDownload: PropTypes.func.isRequired
