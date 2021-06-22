@@ -37,9 +37,6 @@ const Controls = function (props) {
         ...componentProps
     } = props;
 
-    const tutorialTitleEn = 'Tutorial';
-    const tutorialTitleDe = 'Tutorien';
-
     return (
         <div
             className={classNames(styles.controlsContainer, className)}
@@ -61,7 +58,7 @@ const Controls = function (props) {
             <Tutorial
                 active={!tutorialCardsVisible}
                 onClick={onTutorialClick}
-                title={locale === 'de' ? tutorialTitleDe : tutorialTitleEn}
+                title={'Tutorial'}
             />
         </div>
     );

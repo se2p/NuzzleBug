@@ -16,9 +16,7 @@ import {
 } from '../reducers/tutorial-cards';
 import {reset} from '../reducers/tutorial-step';
 
-import * as messagesDE from '../lib/libraries/tutorial-messages-de.js';
 import * as messagesEN from '../lib/libraries/tutorial-messages-en.js';
-
 
 import TutorialCardsComponent from '../components/tutorial/tutorial-cards.jsx';
 import * as tutorials from 'tutorial-tests/src/tutorials';
@@ -36,8 +34,12 @@ class TutorialCards extends React.Component {
         const rows = [];
         for (let i = 0; i < Object.values(tutorials).length; i++) {
             const element = Object.values(tutorials)[i];
-            const messages = this.props.locale === 'de' ? element.messagesDE : element.messagesEN;
-            const tutorialMsg = Object.values(messages)[0];
+
+            let messages = element[`messages${this.props.locale.toUpperCase()}`];
+            if (typeof messages === 'undefined') {
+                messages = element.messagesEN;
+            }
+            const tutorialMsg = messages.default;
             rows.push({
                 id: element.id,
                 title: tutorialMsg.title,
@@ -72,13 +74,22 @@ class TutorialCards extends React.Component {
         let tutorialMessages;
 
         if (this.props.selectedTutorial !== '') {
-            const messages = this.props.locale === 'de' ? tutorials[`${this.props.selectedTutorial}`].messagesDE :
-                tutorials[`${this.props.selectedTutorial}`].messagesEN;
-            tutorialMessages = Object.values(messages)[0];
+            const tutorial = tutorials[`${this.props.selectedTutorial}`];
+            let messages = tutorial[`messages${this.props.locale.toUpperCase()}`];
+            if (typeof messages === 'undefined') {
+                messages = tutorial.messagesEN;
+            }
+            tutorialMessages = messages.default;
         }
 
-        const guiMessagesContainer = this.props.locale === 'de' ? messagesDE : messagesEN;
-        const guiMessages = Object.values(guiMessagesContainer)[0];
+        let guiMessagesContainer;
+        try {
+            guiMessagesContainer =
+                require(`../lib/libraries/tutorial-messages-${this.props.locale}.js`);
+        } catch (e) {
+            guiMessagesContainer = messagesEN;
+        }
+        const guiMessages = guiMessagesContainer.default;
 
         const title = this.props.isMenuVisible ? guiMessages.headerTitle : tutorialMessages.title;
         const homeButtonTitle = guiMessages.homeButtonTitle;
@@ -112,6 +123,7 @@ TutorialCards.propTypes = {
     onSelectTutorial: PropTypes.func.isRequired,
     onHome: PropTypes.func.isRequired,
     locale: PropTypes.string.isRequired,
+    isRtl: PropTypes.bool.isRequired,
     step: PropTypes.number.isRequired,
     vm: PropTypes.instanceOf(VirtualMachine).isRequired
 };
@@ -127,6 +139,7 @@ const mapStateToProps = state => ({
     x: state.scratchGui.tutorialCards.x,
     y: state.scratchGui.tutorialCards.y,
     locale: state.locales.locale,
+    isRtl: state.locales.isRtl,
     dragging: state.scratchGui.tutorialCards.dragging
 });
 

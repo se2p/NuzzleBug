@@ -31,6 +31,10 @@ class TutorialStep extends React.Component {
         const tutorial = tutorials[`${this.props.tutorial}`];
         const messages = this.props.tutorialMessages;
         for (let i = 1; i <= tutorial.totalSteps - 1; i++) {
+            let image = tutorial[`imageSolution${this.props.locale.toUpperCase()}${i}`];
+            if (typeof image === 'undefined') {
+                image = tutorial[`imageSolutionEN${i}`];
+            }
             steps.push({
                 title: messages[`titleStep${i}`],
                 message1: messages[`messageStep${i}`],
@@ -38,7 +42,7 @@ class TutorialStep extends React.Component {
                 message2: messages[`message2Step${i}`],
                 solution: {
                     message: messages[`solutionStep${i}`],
-                    img: this.props.locale === 'de' ? tutorial[`imageSolutionDE${i}`] : tutorial[`imageSolutionEN${i}`]
+                    img: image
                 }
             });
 

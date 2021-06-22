@@ -171,6 +171,7 @@ const TutorialCards = props => {
         cardRef,
         tutorials,
         isMenuVisible,
+        isRtl,
         currentTutorialStep,
         title,
         homeButtonTitle,
@@ -199,7 +200,7 @@ const TutorialCards = props => {
     const menuBarHeight = 48;
 
     if (x === 0 && y === 0) {
-        x = 620;
+        x = isRtl ? (-800 - cardHorizontalDragOffset) : 620;
         x += cardHorizontalDragOffset;
         y = 60;
     }
@@ -282,6 +283,7 @@ TutorialCards.propTypes = {
             totalSteps: PropTypes.number.isRequired
         })),
     isMenuVisible: PropTypes.bool,
+    isRtl: PropTypes.bool.isRequired,
     title: PropTypes.string,
     homeButtonTitle: PropTypes.string,
     guiMessages: PropTypes.objectOf(PropTypes.string),
