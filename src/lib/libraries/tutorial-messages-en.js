@@ -6,6 +6,11 @@ export default {
     headerTitle: 'Tutorial',
 
     /**
+     * Footer.
+     */
+    codeClub: 'These and further tutorials you can find in the Raspberry Pi ',
+
+    /**
      * Home button title.
      */
     homeButtonTitle: 'Home',

@@ -16,7 +16,7 @@
 
 .step-body {
     overflow-y: auto;
-    height: 400px;
+    height: 350px;
     width: 600px;
     display: flex;
     flex-direction: column;
@@ -68,6 +68,30 @@
 .home-button-icon {
     height: 20px;
     width: 20px;
+}
+
+.footer {
+    width: 100%;
+    text-align: center;
+    background-color: hsla(215, 100%, 65%, 1);
+    border-top: 1px solid hsla(215, 60%, 50%, 1);
+    display: block ruby;
+}
+
+.footer-text {
+    text-align: center;
+    color: hsla(215, 100%, 95%, 1);
+    margin: 5px;
+}
+
+.footer-link {
+    color: hsla(215, 100%, 95%, 1);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.footer-link:hover {
+    color: hsl(18, 100%, 77%);
 }
 
 .tutorial {
