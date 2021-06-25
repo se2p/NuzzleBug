@@ -10,6 +10,7 @@ import downloadBlob from '../lib/download-blob';
 import {homeMenu} from '../reducers/tutorial-cards';
 import {testNextStep, nextTutorialStep, testStopped, testStarted,
     reset, success, fail, expandSolution} from '../reducers/tutorial-step';
+import {lock, unlock} from '../reducers/vm-status';
 
 import {runTest} from 'tutorial-tests';
 import * as tutorials from 'tutorial-tests/src/tutorials';
@@ -82,8 +83,10 @@ class TutorialStep extends React.Component {
             this.props.incTest();
         }
         this.props.testStarted();
+        this.props.lockVM();
         const summary = runTest(this.props.vm, this.props.tutorial, this.props.step);
         summary.then(result => {
+            this.props.unlockVM();
             this.props.testStopped();
             if (result.passed) {
                 this.props.succeeded();
@@ -189,6 +192,8 @@ TutorialStep.propTypes = {
     nextStep: PropTypes.func.isRequired,
     failed: PropTypes.func.isRequired,
     succeeded: PropTypes.func.isRequired,
+    lockVM: PropTypes.func,
+    unlockVM: PropTypes.func,
     locale: PropTypes.string.isRequired,
     vm: PropTypes.instanceOf(VirtualMachine).isRequired
 };
@@ -215,7 +220,9 @@ const mapDispatchToProps = dispatch => ({
     nextTutorialStep: () => dispatch(nextTutorialStep()),
     succeeded: () => dispatch(success()),
     failed: failureMessage => dispatch(fail(failureMessage)),
-    onSolution: () => dispatch(expandSolution())
+    onSolution: () => dispatch(expandSolution()),
+    lockVM: () => dispatch(lock()),
+    unlockVM: () => dispatch(unlock())
 });
 
 export default connect(
