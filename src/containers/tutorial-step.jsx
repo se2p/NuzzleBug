@@ -8,7 +8,7 @@ import VirtualMachine from 'scratch-vm';
 import downloadBlob from '../lib/download-blob';
 
 import {homeMenu} from '../reducers/tutorial-cards';
-import {testNextStep, nextTutorialStep, testStopped, testStarted,
+import initialState, {testNextStep, nextTutorialStep, testStopped, testStarted,
     reset, success, fail, expandSolution} from '../reducers/tutorial-step';
 import {lock, unlock} from '../reducers/vm-status';
 
@@ -88,9 +88,17 @@ class TutorialStep extends React.Component {
         summary.then(result => {
             this.props.unlockVM();
             this.props.testStopped();
+            // Needed for testing
+            const today = new Date();
             if (result.passed) {
+                // Needed for testing
+                console.log('Step: ' + (this.props.step+1) + ' Try: ' + (this.props.failedTimes + 1) + ' success  at Time: '
+                    + today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds());
                 this.props.succeeded();
             } else {
+                // Needed for testing
+                console.log('Step: ' + (this.props.step+1) + ' Try: ' + (this.props.failedTimes + 1) + ' failed  at Time: '
+                    + today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds());
                 this.setFailureMessages(result.step, result.messageId);
             }
         });
@@ -137,6 +145,11 @@ class TutorialStep extends React.Component {
         const downloads = this.processDownloads();
 
         const guiMessages = this.props.guiMessages;
+
+        // Needed for testing
+        if (this.props.step + 1 === this.props.totalSteps) {
+            console.log('Tutorial finished');
+        }
 
         return (
             this.props.step + 1 === this.props.totalSteps ?
