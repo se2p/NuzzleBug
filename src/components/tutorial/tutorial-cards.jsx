@@ -265,16 +265,17 @@ const TutorialCards = props => {
                                 onNextStep : null}
                             onPrevStep={step > 0 ? onPrevStep : null}
                         />
-                        <div className={tutorialStyles.footer}>
-                            <p className={tutorialStyles.footerText}>{guiMessages.codeClub}</p>
-                            <div
-                                /* eslint-disable-next-line react/jsx-no-bind */
-                                onClick={() =>
-                                    window.open('https://projects.raspberrypi.org/en/codeclub', '_blank')}
-                                className={tutorialStyles.footerLink}
-                                /* eslint-disable-next-line react/jsx-no-literals */
-                            >Code Club</div>
-                        </div>
+                        {expanded ?
+                            <div className={tutorialStyles.footer}>
+                                <p className={tutorialStyles.footerText}>{guiMessages.codeClub}</p>
+                                <div
+                                    /* eslint-disable-next-line react/jsx-no-bind */
+                                    onClick={() =>
+                                        window.open('https://projects.raspberrypi.org/en/codeclub', '_blank')}
+                                    className={tutorialStyles.footerLink}
+                                    /* eslint-disable-next-line react/jsx-no-literals */
+                                >Code Club</div>
+                            </div> : null}
                     </div>
                 </div>
             </Draggable>

@@ -8,8 +8,8 @@ const FAIL = 'scratch-gui/tutorial-cards/FAIL';
 const EXPAND_SOLUTION = 'scratch-gui/tutorial-cards/EXPAND_SOLUTION';
 
 const initialState = {
-    testedStep: -1,
-    currentStep: 0,
+    testedStep: 2,
+    currentStep: 3,
     success: false,
     failedTimes: 0,
     failureMessage: '',
