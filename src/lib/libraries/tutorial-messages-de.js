@@ -27,8 +27,8 @@ export default {
     continueButtonTitle: 'Weiter',
 
     successMessage: 'Herzlichen Glückwunsch, deine Lösung ist korrekt.',
-    failMessage: 'Deine Lösung stimmt nocht nicht. Versuche es nochmal.',
-    loadingMessage: 'Tests laufen. Bitte bewege die Maus nicht.',
+    failMessage: 'Deine Lösung stimmt noch nicht. Versuche es nochmal.',
+    loadingMessage: 'Deine Lösung wird getestet.',
 
     solutionHeader: 'Lösung'
 };
