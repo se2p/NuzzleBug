@@ -8,7 +8,7 @@ import VirtualMachine from 'scratch-vm';
 import downloadBlob from '../lib/download-blob';
 
 import {homeMenu} from '../reducers/tutorial-cards';
-import initialState, {testNextStep, nextTutorialStep, testStopped, testStarted,
+import {testNextStep, nextTutorialStep, testStopped, testStarted,
     reset, success, fail, expandSolution} from '../reducers/tutorial-step';
 import {lock, unlock} from '../reducers/vm-status';
 
@@ -97,7 +97,8 @@ class TutorialStep extends React.Component {
                 this.props.succeeded();
             } else {
                 // Needed for testing
-                console.log('Step: ' + (this.props.step+1) + ' Try: ' + (this.props.failedTimes + 1) + ' failed  at Time: '
+                console.log('Step: ' + (this.props.step+1) + ' Try: ' + (this.props.failedTimes + 1) + ' failed because of ' +
+                    result.messageId + ' at Time: '
                     + today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds());
                 this.setFailureMessages(result.step, result.messageId);
             }
