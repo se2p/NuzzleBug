@@ -118,16 +118,10 @@ const endDrag = function () {
 };
 
 const selectTutorial = function (tutorial, totalSteps) {
-    // Needed for testing
-    const today = new Date();
-    console.log('Tutorial: ' + tutorial + ' Steps: ' + (totalSteps-1) + ' started at Time: ' +
-        today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds());
     return {type: SELECT_TUTORIAL, tutorial, totalSteps};
 };
 
 const homeMenu = function () {
-    // Needed for testing
-    console.log('aborted');
     return {type: HOME_MENU};
 };
 
