@@ -5,7 +5,7 @@ import VM from 'scratch-vm';
 import {connect} from 'react-redux';
 
 import ControlsComponent from '../components/controls/controls.jsx';
-import {viewCards} from '../reducers/ir-cards.js';
+import {viewCards} from '../reducers/interrogative-debugging/version-1/ir-cards.js';
 
 class Controls extends React.Component {
     constructor (props) {

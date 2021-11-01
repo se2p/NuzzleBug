@@ -5,17 +5,17 @@ import Draggable from 'react-draggable';
 import {injectIntl, intlShape, FormattedMessage} from 'react-intl';
 import {Question} from 'scratch-ir';
 
-import {StatementFormatter} from '../../lib/libraries/ir-messages';
+import {StatementFormatter} from '../../../lib/libraries/ir-messages';
 import QuestionCategory from './ir-category.jsx';
 
-import styles from '../cards/card.css';
+import styles from '../../cards/card.css';
 import irStyles from './ir-cards.css';
 
-import shrinkIcon from '../cards/icon--shrink.svg';
-import expandIcon from '../cards/icon--expand.svg';
-import closeIcon from '../cards/icon--close.svg';
-import leftArrow from '../cards/icon--prev.svg';
-import rightArrow from '../cards/icon--next.svg';
+import shrinkIcon from '../../cards/icon--shrink.svg';
+import expandIcon from '../../cards/icon--expand.svg';
+import closeIcon from '../../cards/icon--close.svg';
+import leftArrow from '../../cards/icon--prev.svg';
+import rightArrow from '../../cards/icon--next.svg';
 import refreshIcon from './icon--refresh.svg';
 
 

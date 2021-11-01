@@ -25,7 +25,7 @@ import {
     UserEventNotCalledStatement
 } from 'scratch-ir';
 
-import {StatementFormatter, statementMessages as msg} from '../../lib/libraries/ir-messages.js';
+import {StatementFormatter, statementMessages as msg} from '../../../lib/libraries/ir-messages.js';
 import irStyles from './ir-cards.css';
 import styles from './ir-cards.css';
 import iconExpand from './icon--expand.svg';

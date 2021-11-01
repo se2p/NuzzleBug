@@ -18,9 +18,9 @@ import {
     resetStep,
     shrinkExpandCards,
     startDrag
-} from '../reducers/ir-cards';
-import IRCardsComponent from '../components/interrogative-debugging/ir-cards.jsx';
-import {answerMessages, StatementFormatter, questionMessages} from '../lib/libraries/ir-messages';
+} from '../../../reducers/interrogative-debugging/version-1/ir-cards';
+import IRCardsComponent from '../../../components/interrogative-debugging/version-1/ir-cards.jsx';
+import {answerMessages, StatementFormatter, questionMessages} from '../../../lib/libraries/ir-messages';
 
 const getAllBlocks = targets => targets.reduce((acc, target) => Object.assign(acc, target.blocks._blocks), {});
 

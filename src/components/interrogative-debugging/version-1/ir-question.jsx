@@ -4,9 +4,9 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import PropTypes from 'prop-types';
 import {Question} from 'scratch-ir';
 
-import {StatementFormatter} from '../../lib/libraries/ir-messages.js';
+import {StatementFormatter} from '../../../lib/libraries/ir-messages.js';
 import IRAnswer from './ir-answer.jsx';
-import Box from '../box/box.jsx';
+import Box from '../../box/box.jsx';
 import irStyles from './ir-cards.css';
 import styles from './ir-cards.css';
 import iconHeadLight from './icon--light-head.svg';

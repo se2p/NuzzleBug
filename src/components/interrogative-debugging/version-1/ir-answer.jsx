@@ -7,9 +7,9 @@ import {injectIntl, intlShape} from 'react-intl';
 import {Answer} from 'scratch-ir';
 
 import styles from './ir-cards.css';
-import Box from '../box/box.jsx';
+import Box from '../../box/box.jsx';
 
-import {StatementFormatter} from '../../lib/libraries/ir-messages.js';
+import {StatementFormatter} from '../../../lib/libraries/ir-messages.js';
 import IRStatement from './ir-statement.jsx';
 
 import iconLightBulb from './icon--light-bulb.svg';

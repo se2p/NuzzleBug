@@ -8,7 +8,7 @@ import PauseResume from '../pause-resume/pause-resume.jsx';
 import StepOver from '../step-over/step-over.jsx';
 import StopAll from '../stop-all/stop-all.jsx';
 import TurboMode from '../turbo-mode/turbo-mode.jsx';
-import IRQuestions from '../ir-questions/ir-question-button.jsx';
+import IRQuestions from '../interrogative-debugging/version-1/ir-questions/ir-question-button.jsx';
 
 import styles from './controls.css';
 

@@ -6,7 +6,7 @@ import {Question} from 'scratch-ir';
 
 import irStyles from './ir-cards.css';
 
-import {StatementFormatter} from '../../lib/libraries/ir-messages.js';
+import {StatementFormatter} from '../../../lib/libraries/ir-messages.js';
 import IRQuestion from './ir-question.jsx';
 
 
