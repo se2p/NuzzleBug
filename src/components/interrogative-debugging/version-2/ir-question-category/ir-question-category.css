@@ -1,0 +1,63 @@
+@import "../../../../css/colors.css";
+
+.category {
+    display: flex;
+    flex-direction: row;
+    padding: 4px 0;
+    cursor: pointer;
+}
+
+.category-text {
+    height: 16px;
+    line-height: 16px;
+    text-align: center;
+}
+
+.arrow-button {
+    border: 0px;
+    padding: 0 4px;
+    background: transparent;
+    cursor: pointer;
+}
+
+.icon {
+    width: 16px;
+    display: block;
+}
+
+.white-icon {
+    filter: brightness(0) invert(1);
+}
+
+.gray-icon {
+    filter: invert(36%) sepia(7%) saturate(1612%) hue-rotate(189deg) brightness(94%) contrast(84%);
+}
+
+.category-list {
+    list-style-type: none;
+    padding-inline-start: 0;
+    font-weight: bold;
+    background-color: white;
+    border: 1px solid white;
+    border-radius: 4px;
+    padding: 4px 8px; 
+    margin-top: 4px;
+}
+
+.category-list-item {
+    padding: 2px 0;
+    color: #575E75; 
+    background-color: white; 
+}
+
+.question-list {
+    list-style-type: none;
+    padding: 4px; 
+    padding-left: 20px;
+}
+
+.question-list-item {
+    position: relative;
+    cursor: pointer;
+    margin-bottom: 6px;
+}

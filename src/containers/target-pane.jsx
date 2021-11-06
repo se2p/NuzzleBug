@@ -22,6 +22,7 @@ import {highlightTarget} from '../reducers/targets';
 import {fetchSprite, fetchCode} from '../lib/backpack-api';
 import randomizeSpritePosition from '../lib/randomize-sprite-position';
 import downloadBlob from '../lib/download-blob';
+import {openDebugger} from '../reducers/interrogative-debugging/version-2/ir-debugger.js';
 
 class TargetPane extends React.Component {
     constructor (props) {
@@ -257,7 +258,10 @@ const mapStateToProps = state => ({
     sprites: state.scratchGui.targets.sprites,
     stage: state.scratchGui.targets.stage,
     raiseSprites: state.scratchGui.blockDrag,
-    spriteLibraryVisible: state.scratchGui.modals.spriteLibrary
+    spriteLibraryVisible: state.scratchGui.modals.spriteLibrary,
+    active: state.scratchGui.vmStatus.running,
+    paused: state.scratchGui.vmStatus.paused,
+    interrogationEnabled: state.scratchGui.irDebugger.enabled
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -281,7 +285,10 @@ const mapDispatchToProps = dispatch => ({
         dispatch(highlightTarget(id));
     },
     onCloseImporting: () => dispatch(closeAlertWithId('importingAsset')),
-    onShowImporting: () => dispatch(showStandardAlert('importingAsset'))
+    onShowImporting: () => dispatch(showStandardAlert('importingAsset')),
+    onInterrogativeButtonClick: targetId => {
+        dispatch(openDebugger(targetId));
+    }
 });
 
 export default injectIntl(connect(

@@ -27,6 +27,7 @@ import WebGlModal from '../../containers/webgl-modal.jsx';
 import TipsLibrary from '../../containers/tips-library.jsx';
 import Cards from '../../containers/cards.jsx';
 import IRCards from '../../containers/interrogative-debugging/version-1/ir-cards.jsx';
+import IRDebugger from '../../containers/interrogative-debugging/version-2/ir-debugger.jsx';
 import Alerts from '../../containers/alerts.jsx';
 import DragLayer from '../../containers/drag-layer.jsx';
 import ConnectionModal from '../../containers/connection-modal.jsx';
@@ -68,6 +69,7 @@ const GUIComponent = props => {
         blocksTabVisible,
         cardsVisible,
         irCardsVisible,
+        irDebuggerVisible,
         canChangeLanguage,
         canCreateNew,
         canEditTitle,
@@ -185,6 +187,11 @@ const GUIComponent = props => {
                 ) : null}
                 {irCardsVisible ? (
                     <IRCards
+                        vm={vm}
+                    />
+                ) : null}
+                {irDebuggerVisible ? (
+                    <IRDebugger
                         vm={vm}
                     />
                 ) : null}
@@ -383,6 +390,7 @@ GUIComponent.propTypes = {
     canUseCloud: PropTypes.bool,
     cardsVisible: PropTypes.bool,
     irCardsVisible: PropTypes.bool,
+    irDebuggerVisible: PropTypes.bool,
     children: PropTypes.node,
     costumeLibraryVisible: PropTypes.bool,
     costumesTabVisible: PropTypes.bool,

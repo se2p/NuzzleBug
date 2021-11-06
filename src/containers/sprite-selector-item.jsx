@@ -23,6 +23,7 @@ class SpriteSelectorItem extends React.PureComponent {
             'handleDelete',
             'handleDuplicate',
             'handleExport',
+            'handleOpenInterrogativeDebugger',
             'handleMouseEnter',
             'handleMouseLeave',
             'handleMouseDown',
@@ -102,6 +103,10 @@ class SpriteSelectorItem extends React.PureComponent {
         e.stopPropagation();
         this.props.onExportButtonClick(this.props.id);
     }
+    handleOpenInterrogativeDebugger (e) {
+        e.stopPropagation();
+        this.props.onInterrogativeButtonClick(this.props.id);
+    }
     handleMouseLeave () {
         this.props.dispatchSetHoveredSprite(null);
     }
@@ -122,6 +127,7 @@ class SpriteSelectorItem extends React.PureComponent {
             onDeleteButtonClick,
             onDuplicateButtonClick,
             onExportButtonClick,
+            onInterrogativeButtonClick,
             dragPayload,
             receivedBlocks,
             costumeURL,
@@ -138,6 +144,7 @@ class SpriteSelectorItem extends React.PureComponent {
                 onDeleteButtonClick={onDeleteButtonClick ? this.handleDelete : null}
                 onDuplicateButtonClick={onDuplicateButtonClick ? this.handleDuplicate : null}
                 onExportButtonClick={onExportButtonClick ? this.handleExport : null}
+                onInterrogativeButtonClick={onInterrogativeButtonClick ? this.handleOpenInterrogativeDebugger : null}
                 onMouseDown={this.handleMouseDown}
                 onMouseEnter={this.handleMouseEnter}
                 onMouseLeave={this.handleMouseLeave}
@@ -162,6 +169,7 @@ SpriteSelectorItem.propTypes = {
     onDrag: PropTypes.func.isRequired,
     onDuplicateButtonClick: PropTypes.func,
     onExportButtonClick: PropTypes.func,
+    onInterrogativeButtonClick: PropTypes.func,
     receivedBlocks: PropTypes.bool.isRequired,
     selected: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired
@@ -171,7 +179,10 @@ const mapStateToProps = (state, {id}) => ({
     dragging: state.scratchGui.assetDrag.dragging,
     receivedBlocks: state.scratchGui.hoveredTarget.receivedBlocks &&
             state.scratchGui.hoveredTarget.sprite === id,
-    vm: state.scratchGui.vm
+    vm: state.scratchGui.vm,
+    active: state.scratchGui.vmStatus.running,
+    paused: state.scratchGui.vmStatus.paused,
+    interrogationEnabled: state.scratchGui.irDebugger.enabled
 });
 const mapDispatchToProps = dispatch => ({
     dispatchSetHoveredSprite: spriteId => {

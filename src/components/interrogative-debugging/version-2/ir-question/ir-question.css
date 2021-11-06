@@ -1,0 +1,24 @@
+@import "../../../../css/colors.css";
+
+.question-text {
+    font-weight: normal;
+    font-size: 12px;
+    padding: 8px;
+}
+
+.question-background {
+    position: absolute; 
+    height: 100%; 
+    width: 100%; 
+    opacity: 0.3;
+    border-radius: 4px;
+    background-color: transparent;
+}
+
+.question-border {
+    position: absolute; 
+    height: 100%; 
+    width: 100%;
+    border-radius: 4px;
+    border: 1px solid $ui-black-transparent;
+}

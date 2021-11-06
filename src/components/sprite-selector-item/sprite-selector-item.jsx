@@ -5,7 +5,7 @@ import React from 'react';
 import DeleteButton from '../delete-button/delete-button.jsx';
 import styles from './sprite-selector-item.css';
 import {ContextMenuTrigger} from 'react-contextmenu';
-import {DangerousMenuItem, ContextMenu, MenuItem} from '../context-menu/context-menu.jsx';
+import {DangerousMenuItem, BorderedMenuItem, ContextMenu, MenuItem} from '../context-menu/context-menu.jsx';
 import {FormattedMessage} from 'react-intl';
 
 // react-contextmenu requires unique id to match trigger and context menu
@@ -73,6 +73,15 @@ const SpriteSelectorItem = props => (
                         />
                     </MenuItem>
                 ) : null }
+                {props.onInterrogativeButtonClick && props.interrogationEnabled && (!props.active || props.paused) ? (
+                    <BorderedMenuItem onClick={props.onInterrogativeButtonClick}>
+                        <FormattedMessage
+                            defaultMessage="Ask why..."
+                            description="Menu item to open the interrogative debugger for the selected item"
+                            id="gui.spriteSelectorItem.contextMenuInterrogate"
+                        />
+                    </BorderedMenuItem>
+                ) : null }
                 {props.onDeleteButtonClick ? (
                     <DangerousMenuItem onClick={props.onDeleteButtonClick}>
                         <FormattedMessage
@@ -98,11 +107,15 @@ SpriteSelectorItem.propTypes = {
     onDeleteButtonClick: PropTypes.func,
     onDuplicateButtonClick: PropTypes.func,
     onExportButtonClick: PropTypes.func,
+    onInterrogativeButtonClick: PropTypes.func,
     onMouseDown: PropTypes.func,
     onMouseEnter: PropTypes.func,
     onMouseLeave: PropTypes.func,
     preventContextMenu: PropTypes.bool,
-    selected: PropTypes.bool.isRequired
+    selected: PropTypes.bool.isRequired,
+    active: PropTypes.bool,
+    paused: PropTypes.bool,
+    interrogationEnabled: PropTypes.bool
 };
 
 export default SpriteSelectorItem;

@@ -1,0 +1,52 @@
+@import "../../../../css/colors.css";
+
+.overlay {
+    background: $ui-black-transparent;
+}
+
+.card {
+    border-width: 0px;
+}
+
+.body {
+    height: 500px;
+    width: 1000px;
+    background: white;
+    cursor: default;
+    font-size: 13px;
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    color: #575E75;
+}
+
+.question-hierarchy {
+    height: 500px;
+    width: 33%;
+    padding: 20px;
+    padding-right: 12px;
+    border-right: 2px solid $ui-white;
+    float: left;
+    overflow-y: scroll;
+}
+
+.question-hierarchy::-webkit-scrollbar-track {
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.question-hierarchy::-webkit-scrollbar {
+    width: 6px;
+}
+
+.question-hierarchy::-webkit-scrollbar-thumb {
+    background:#CECDCE;
+    border: 1px solid #CECDCE;
+    border-radius: 4px;
+}
+
+.answer {
+    height: 500px;
+    width: 67%;
+    padding: 20px;
+    float: left;
+    border-left: 1px solid hsla(0, 0%, 0%, 0.15);
+}

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, {Fragment} from 'react';
 import Draggable from 'react-draggable';
 import {injectIntl, intlShape, FormattedMessage} from 'react-intl';
-import {Question} from 'scratch-ir';
+import {Question_v1 as Question} from 'scratch-ir';
 
 import {StatementFormatter} from '../../../lib/libraries/ir-messages';
 import QuestionCategory from './ir-category.jsx';
@@ -70,7 +70,16 @@ NextPrevButtons.propTypes = {
     onPrevStep: PropTypes.func
 };
 
-const QuestionsCardHeader = ({intl, title, onRefreshView, onCloseCards, onShrinkExpandCards, totalSteps, step, expanded}) => (
+const QuestionsCardHeader = ({
+    intl,
+    title,
+    onRefreshView,
+    onCloseCards,
+    onShrinkExpandCards,
+    totalSteps,
+    step,
+    expanded
+}) => (
     <div
         className={expanded ?
             classNames(styles.headerButtons, irStyles.headerButtons) :

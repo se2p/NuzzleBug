@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import bindAll from 'lodash.bindall';
 
-import {Question} from 'scratch-ir';
+import {Question_v1 as Question} from 'scratch-ir';
 
 import irStyles from './ir-cards.css';
 

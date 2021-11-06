@@ -11,6 +11,8 @@
     display: flex;
     flex-basis: 72px;
     flex-shrink: 0;
+    height: 100%;
+    min-width: 72px;
 }
 
 [dir="ltr"] .stage-selector-wrapper {

@@ -2,7 +2,7 @@ import React from 'react';
 import bindAll from 'lodash.bindall';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import PropTypes from 'prop-types';
-import {Question} from 'scratch-ir';
+import {Question_v1 as Question} from 'scratch-ir';
 
 import {StatementFormatter} from '../../../lib/libraries/ir-messages.js';
 import IRAnswer from './ir-answer.jsx';
