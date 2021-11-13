@@ -139,7 +139,7 @@ class TargetPane extends React.Component {
                             <FormattedMessage
                                 defaultMessage="Ask why..."
                                 description="Menu item to open the interrogative debugger for the stage"
-                                id="gui.targetPane.contextMenuInterrogate"
+                                id="gui.ir-debugger.controls.open-debugger"
                             />
                         </MenuItem>
                     </ContextMenu>

@@ -20,7 +20,7 @@ class IRHeader extends React.Component {
 
     render () {
         const {
-            title,
+            targetName,
             expanded,
             onRefresh,
             onShrinkExpand,
@@ -34,7 +34,12 @@ class IRHeader extends React.Component {
                     classNames(cardStyles.headerButtons, cardStyles.headerButtonsHidden, styles.header)}
             >
                 <div className={styles.title}>
-                    <span>{title}</span>
+                    <FormattedMessage
+                        defaultMessage="Interrogative Debugger"
+                        description="Title of the interrogative debugger"
+                        id="gui.ir-debugger.header.title"
+                        values={{targetName: targetName}}
+                    />
                 </div>
                 <div className={cardStyles.headerButtonsRight}>
                     {expanded ? (
@@ -49,7 +54,7 @@ class IRHeader extends React.Component {
                             <FormattedMessage
                                 defaultMessage="Refresh"
                                 description="Title for button to refresh the interrogative debugger"
-                                id="gui.ir.debugger.refresh"
+                                id="gui.ir-debugger.header.refresh"
                             />
                         </div>
                     ) : null}
@@ -66,12 +71,12 @@ class IRHeader extends React.Component {
                             <FormattedMessage
                                 defaultMessage="Shrink"
                                 description="Title for button to shrink the interrogative debugger"
-                                id="gui.ir.debugger.shrink"
+                                id="gui.ir-debugger.header.shrink"
                             /> :
                             <FormattedMessage
                                 defaultMessage="Expand"
-                                description="Title for button to expand interrogative debugger"
-                                id="gui.ir.debugger.expand"
+                                description="Title for button to expand the interrogative debugger"
+                                id="gui.ir-debugger.header.expand"
                             />
                         }
                     </div>
@@ -86,7 +91,7 @@ class IRHeader extends React.Component {
                         <FormattedMessage
                             defaultMessage="Close"
                             description="Title for button to close the interrogative debugger"
-                            id="gui.ir.debugger.close"
+                            id="gui.ir-debugger.header.close"
                         />
                     </div>
                 </div>
@@ -96,7 +101,7 @@ class IRHeader extends React.Component {
 }
 
 IRHeader.propTypes = {
-    title: PropTypes.string.isRequired,
+    targetName: PropTypes.string.isRequired,
     expanded: PropTypes.bool.isRequired,
     onRefresh: PropTypes.func.isRequired,
     onShrinkExpand: PropTypes.func.isRequired,

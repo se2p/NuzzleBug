@@ -2,9 +2,10 @@ import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import bindAll from 'lodash.bindall';
+import {intlShape} from 'react-intl';
 
 import VirtualMachine from 'scratch-vm';
-import {computeQuestionHierarchy} from 'scratch-ir';
+import {QuestionProvider} from 'scratch-ir';
 
 import IRDebuggerComponent from '../../../components/interrogative-debugging/version-2/ir-debugger/ir-debugger.jsx';
 import {
@@ -43,7 +44,10 @@ class IRDebugger extends React.Component {
         }
 
         this.target = vm.runtime.targets.find(target => target.id === this.props.targetId);
-        this.questionHierarchy = computeQuestionHierarchy(vm);
+        const recordedTrace = vm.runtime.traceInfo.tracer.traces;
+        const translate = (id, values) => this.props.intl.formatMessage({id: `gui.ir-debugger.${id}`}, values);
+        const questionProvider = new QuestionProvider(vm, recordedTrace, this.target, translate);
+        this.questionHierarchy = questionProvider.generateQuestionHierarchy();
     }
 
     rerender () {
@@ -68,6 +72,7 @@ class IRDebugger extends React.Component {
 }
 
 IRDebugger.propTypes = {
+    intl: intlShape.isRequired,
     vm: PropTypes.instanceOf(VirtualMachine).isRequired,
     targetId: PropTypes.string.isRequired,
     visible: PropTypes.bool.isRequired,

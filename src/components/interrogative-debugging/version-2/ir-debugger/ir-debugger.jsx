@@ -55,48 +55,59 @@ class IRDebugger extends React.Component {
         }
     
         return (
-            <div
-                className={expanded ?
-                    classNames(cardStyles.cardContainerOverlay, styles.overlay) :
-                    cardStyles.cardContainerOverlay}
-                style={{
-                    width: `${window.innerWidth + (2 * cardHorizontalDragOffset)}px`,
-                    height: `${window.innerHeight - menuBarHeight + cardVerticalDragOffset}px`,
-                    top: `${menuBarHeight}px`,
-                    left: `${-cardHorizontalDragOffset}px`
-                }}
-            >
-                <Draggable
-                    bounds="parent"
-                    position={{x: x, y: y}}
-                    onDrag={onDrag}
-                    onStart={onStartDrag}
-                    onStop={onEndDrag}
+            <div>
+                {expanded ? (
+                    <div
+                        className={styles.overlay}
+                        style={{
+                            width: `${window.innerWidth + (2 * cardHorizontalDragOffset)}px`,
+                            height: `${window.innerHeight - menuBarHeight + cardVerticalDragOffset}px`,
+                            top: 0,
+                            left: 0
+                        }}
+                    />
+                ) : null}
+                <div
+                    className={cardStyles.cardContainerOverlay}
+                    style={{
+                        width: `${window.innerWidth + (2 * cardHorizontalDragOffset)}px`,
+                        height: `${window.innerHeight - menuBarHeight + cardVerticalDragOffset}px`,
+                        top: `${menuBarHeight}px`,
+                        left: `${-cardHorizontalDragOffset}px`
+                    }}
                 >
-                    <div className={cardStyles.cardContainer}>
-                        <div className={classNames(cardStyles.card, styles.card)}>
-                            <IRHeader
-                                title={`Interrogative Debugger for ${target.getName()}` /* @Adina ToDo: Translate */}
-                                expanded={expanded}
-                                onRefresh={handleRefresh}
-                                onClose={onClose}
-                                onShrinkExpand={onShrinkExpand}
-                            />
-                            <div className={expanded ? styles.body : cardStyles.hidden}>
-                                <div className={styles.questionHierarchy}>
-                                    <IRQuestionHierarchy
-                                        questionHierarchy={questionHierarchy}
-                                        selectedQuestion={this.state.selectedQuestion}
-                                        onQuestionClick={this.handleQuestionClick}
-                                    />
-                                </div>
-                                <div className={styles.answer}>
-                                    <IRAnswer selectedQuestion={this.state.selectedQuestion} />
+                    <Draggable
+                        bounds="parent"
+                        position={{x: x, y: y}}
+                        onDrag={onDrag}
+                        onStart={onStartDrag}
+                        onStop={onEndDrag}
+                    >
+                        <div className={cardStyles.cardContainer}>
+                            <div className={classNames(cardStyles.card, styles.card)}>
+                                <IRHeader
+                                    targetName={target.getName()}
+                                    expanded={expanded}
+                                    onRefresh={handleRefresh}
+                                    onClose={onClose}
+                                    onShrinkExpand={onShrinkExpand}
+                                />
+                                <div className={expanded ? styles.body : cardStyles.hidden}>
+                                    <div className={styles.questionHierarchy}>
+                                        <IRQuestionHierarchy
+                                            questionHierarchy={questionHierarchy}
+                                            selectedQuestion={this.state.selectedQuestion}
+                                            onQuestionClick={this.handleQuestionClick}
+                                        />
+                                    </div>
+                                    <div className={styles.answer}>
+                                        <IRAnswer selectedQuestion={this.state.selectedQuestion} />
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </Draggable>
+                    </Draggable>
+                </div>
             </div>
         );
     }

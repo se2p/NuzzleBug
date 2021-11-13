@@ -1,0 +1,44 @@
+{
+    "controls": {
+        "pause": "Pause", 
+        "resume": "Resume",
+        "step-over": "Step Over", 
+        "open-debugger": "ask why..."
+    },
+    "header": {
+        "title": "Interrogative Debugger for {targetName}",
+        "expand": "Expand",
+        "close": "Close", 
+        "shrink": "Shrink",
+        "refresh": "Refresh"
+    }, 
+    "category": {
+        "expand": "Expand category",
+        "close": "Close category", 
+        "type": {
+            "motion": "Motion",
+            "look": "Look",
+            "sound": "Sound",
+            "sensing": "Sensing", 
+            "comparisons": "Comparisons", 
+            "variables": "Variables", 
+            "events": "Events"
+        }
+    },
+    "question": {
+        "form": {
+            "why-did": "Why did ...?",
+            "why-did-not": "Why didn't ...?"
+        },
+        "look": {
+            "why-did-say": "Why did {target} say \"{message}\" ?", 
+            "why-did-not-say": "Why didn't {target} say \"{message}\" ?",
+            "why-did-think": "Why did {target} think \"{message}\" ?", 
+            "why-did-not-think": "Why didn't {target} think \"{message}\" ?"
+        },
+        "sensing": {
+            "why-did-ask": "Why did {target} ask \"{message}\" ?", 
+            "why-did-not-ask": "Why didn't {target} ask \"{message}\" ?"
+        }
+    }
+}

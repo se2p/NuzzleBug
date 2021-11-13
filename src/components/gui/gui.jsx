@@ -193,6 +193,7 @@ const GUIComponent = props => {
                 {irDebuggerVisible ? (
                     <IRDebugger
                         vm={vm}
+                        intl={intl}
                     />
                 ) : null}
                 {alertsVisible ? (

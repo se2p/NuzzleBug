@@ -19,17 +19,17 @@ const messages = defineMessages({
         description: 'Green flag button title'
     },
     pauseTitle: {
-        id: 'gui.ir.controls.pause',
+        id: 'gui.ir-debugger.controls.pause',
         defaultMessage: 'Pause',
         description: 'Pause button title'
     },
     resumeTitle: {
-        id: 'gui.ir.controls.resume',
+        id: 'gui.ir-debugger.controls.resume',
         defaultMessage: 'Resume',
         description: 'Resume button title'
     },
     stepOverTitle: {
-        id: 'gui.ir.controls.step-over',
+        id: 'gui.ir-debugger.controls.step-over',
         defaultMessage: 'Step Over',
         description: 'Step Over button title'
     },

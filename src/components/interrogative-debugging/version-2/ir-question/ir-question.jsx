@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {injectIntl} from 'react-intl';
 import bindAll from 'lodash.bindall';
 
 import {Question_v2 as Question} from 'scratch-ir';
@@ -59,4 +58,4 @@ IRQuestion.propTypes = {
     color: PropTypes.string.isRequired
 };
 
-export default injectIntl(IRQuestion);
+export default IRQuestion;

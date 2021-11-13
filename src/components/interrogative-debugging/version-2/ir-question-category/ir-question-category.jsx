@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import bindAll from 'lodash.bindall';
 import classNames from 'classnames';
-import {injectIntl} from 'react-intl';
+import {injectIntl, intlShape} from 'react-intl';
 
 import {QuestionCategory, Question_v2 as Question} from 'scratch-ir';
 
@@ -57,6 +57,7 @@ class IRQuestionCategory extends React.Component {
     
     render () {
         const {
+            intl,
             questionCategory,
             renderCategories,
             color
@@ -70,7 +71,18 @@ class IRQuestionCategory extends React.Component {
                 >
                     <button className={styles.arrowButton}>
                         <img
-                            title={this.state.expanded ? 'Close category' : 'Expand category'} // @Adina ToDo: Translate
+                            title={this.state.expanded ?
+                                intl.formatMessage({
+                                    defaultMessage: 'Close category',
+                                    description: 'Title for button to close the category',
+                                    id: 'gui.ir-debugger.category.close'
+                                }) :
+                                intl.formatMessage({
+                                    defaultMessage: 'Expand category',
+                                    description: 'Title for button to expand the category',
+                                    id: 'gui.ir-debugger.category.expand'
+                                })
+                            }
                             src={this.state.expanded ? iconArrowDown : iconArrowRight}
                             className={questionCategory.color ?
                                 classNames(styles.icon, styles.whiteIcon) :
@@ -95,6 +107,7 @@ class IRQuestionCategory extends React.Component {
 }
 
 IRQuestionCategory.propTypes = {
+    intl: intlShape.isRequired,
     questionCategory: PropTypes.instanceOf(QuestionCategory).isRequired,
     renderCategories: PropTypes.func.isRequired,
     selectedQuestion: PropTypes.instanceOf(Question),

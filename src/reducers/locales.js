@@ -2,9 +2,14 @@ import {addLocaleData} from 'react-intl';
 
 import {localeData} from 'scratch-l10n';
 import editorMessages from 'scratch-l10n/locales/editor-msgs';
+import {messagesEn} from '../translations/en/messages.js';
+import {messagesDe} from '../translations/de/messages.js';
 import {isRtl} from 'scratch-l10n';
+import {flatten} from 'flat';
 
 addLocaleData(localeData);
+editorMessages.en = Object.assign({}, editorMessages.en, flatten(messagesEn));
+editorMessages.de = Object.assign({}, editorMessages.de, flatten(messagesDe));
 
 const UPDATE_LOCALES = 'scratch-gui/locales/UPDATE_LOCALES';
 const SELECT_LOCALE = 'scratch-gui/locales/SELECT_LOCALE';

@@ -78,7 +78,7 @@ const SpriteSelectorItem = props => (
                         <FormattedMessage
                             defaultMessage="Ask why..."
                             description="Menu item to open the interrogative debugger for the selected item"
-                            id="gui.spriteSelectorItem.contextMenuInterrogate"
+                            id="gui.ir-debugger.controls.open-debugger"
                         />
                     </BorderedMenuItem>
                 ) : null }
