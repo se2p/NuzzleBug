@@ -36,6 +36,12 @@
             "why-did-think": "Why did {target} think \"{message}\" ?", 
             "why-did-not-think": "Why didn't {target} think \"{message}\" ?"
         },
+        "sound": {
+            "why-did-play": "Why did {target} play sound \"{sound}\" ?",
+            "why-did-not-play": "Why didn't {target} play sound \"{sound}\" ?",
+            "why-did-stop": "Why did {target} stop all sounds?",
+            "why-did-not-stop": "Why didn't {target} stop all sounds?"
+        },
         "sensing": {
             "why-did-ask": "Why did {target} ask \"{message}\" ?", 
             "why-did-not-ask": "Why didn't {target} ask \"{message}\" ?"
