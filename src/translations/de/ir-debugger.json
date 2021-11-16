@@ -30,6 +30,18 @@
             "why-did": "Warum ...?",
             "why-did-not": "Warum nicht ...?"
         },
+        "motion": {
+            "why-did-move": "Warum hat sich die Position von {target} verändert?",
+            "why-did-not-move": "Warum hat sich die Position von {target} nicht verändert?",
+            "why-did-move-right": "Warum hat sich {target} nach rechts bewegt?",
+            "why-did-not-move-right": "Warum hat sich {target} nicht nach rechts bewegt?",
+            "why-did-move-left": "Warum hat sich {target} nach links bewegt?",
+            "why-did-not-move-left": "Warum hat sich {target} nicht nach links bewegt?",
+            "why-did-move-up": "Warum hat sich {target} nach oben bewegt?",
+            "why-did-not-move-up": "Warum hat sich {target} nicht nach oben bewegt?",
+            "why-did-move-down": "Warum hat sich {target} nach unten bewegt?",
+            "why-did-not-move-down": "Warum hat sich {target} nicht nach unten bewegt?"
+        },
         "look": {
             "why-did-say": "Warum hat {target} \"{message}\" gesagt?", 
             "why-did-not-say": "Warum hat {target} nicht \"{message}\" gesagt?",

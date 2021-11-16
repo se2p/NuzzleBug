@@ -30,6 +30,18 @@
             "why-did": "Why did ...?",
             "why-did-not": "Why didn't ...?"
         },
+        "motion": {
+            "why-did-move": "Why did the position of {target} change?",
+            "why-did-not-move": "Why didn't the position of {target} change?",
+            "why-did-move-right": "Why did {target} move rightwards?",
+            "why-did-not-move-right": "Why didn't {target} move rightwards?",
+            "why-did-move-left": "Why did {target} move leftwards?",
+            "why-did-not-move-left": "Why didn't {target} move leftwards?",
+            "why-did-move-up": "Why did {target} move upwards?",
+            "why-did-not-move-up": "Why didn't {target} move upwards?",
+            "why-did-move-down": "Why did {target} move downwards?",
+            "why-did-not-move-down": "Why didn't {target} move downwards?"
+        },
         "look": {
             "why-did-say": "Why did {target} say \"{message}\" ?", 
             "why-did-not-say": "Why didn't {target} say \"{message}\" ?",
