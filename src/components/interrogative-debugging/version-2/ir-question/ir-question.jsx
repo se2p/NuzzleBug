@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import bindAll from 'lodash.bindall';
+import {FormattedHTMLMessage} from 'react-intl';
 
 import {Question_v2 as Question} from 'scratch-ir';
 
@@ -44,7 +45,10 @@ class IRQuestion extends React.Component {
                     className={styles.questionText}
                     style={isSelected ? {color: 'black'} : null}
                 >
-                    {question.text}
+                    <FormattedHTMLMessage
+                        tagName="div"
+                        {...question.message}
+                    />
                 </div>
             </div>
         );

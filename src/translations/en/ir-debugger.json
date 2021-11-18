@@ -3,10 +3,12 @@
         "pause": "Pause", 
         "resume": "Resume",
         "step-over": "Step Over", 
+        "ir-questions": "Show Questions",
         "open-debugger": "ask why..."
     },
     "header": {
-        "title": "Interrogative Debugger for {targetName}",
+        "title-sprite": "Interrogative Debugger for sprite <i>{sprite}</i>",
+        "title-stage": "Interrogative Debugger for the stage",
         "expand": "Expand",
         "close": "Close", 
         "shrink": "Shrink",
@@ -25,38 +27,47 @@
             "events": "Events"
         }
     },
+    "question-hierarchy": {
+        "empty": "No questions available."
+    },
     "question": {
         "form": {
             "why-did": "Why did ...?",
             "why-did-not": "Why didn't ...?"
         },
         "motion": {
-            "why-did-move": "Why did the position of {target} change?",
-            "why-did-not-move": "Why didn't the position of {target} change?",
-            "why-did-move-right": "Why did {target} move rightwards?",
-            "why-did-not-move-right": "Why didn't {target} move rightwards?",
-            "why-did-move-left": "Why did {target} move leftwards?",
-            "why-did-not-move-left": "Why didn't {target} move leftwards?",
-            "why-did-move-up": "Why did {target} move upwards?",
-            "why-did-not-move-up": "Why didn't {target} move upwards?",
-            "why-did-move-down": "Why did {target} move downwards?",
-            "why-did-not-move-down": "Why didn't {target} move downwards?"
+            "why-did-move": "Why did the position of sprite <i>{sprite}</i> change?",
+            "why-did-not-move": "Why didn't the position of sprite <i>{sprite}</i> change?",
+            "why-did-move-right": "Why did sprite <i>{sprite}</i> move rightwards?",
+            "why-did-not-move-right": "Why didn't sprite <i>{sprite}</i> move rightwards?",
+            "why-did-move-left": "Why did sprite <i>{sprite}</i> move leftwards?",
+            "why-did-not-move-left": "Why didn't sprite <i>{sprite}</i> move leftwards?",
+            "why-did-move-up": "Why did sprite <i>{sprite}</i> move upwards?",
+            "why-did-not-move-up": "Why didn't sprite <i>{sprite}</i> move upwards?",
+            "why-did-move-down": "Why did sprite <i>{sprite}</i> move downwards?",
+            "why-did-not-move-down": "Why didn't sprite <i>{sprite}</i> move downwards?"
         },
         "look": {
-            "why-did-say": "Why did {target} say \"{message}\" ?", 
-            "why-did-not-say": "Why didn't {target} say \"{message}\" ?",
-            "why-did-think": "Why did {target} think \"{message}\" ?", 
-            "why-did-not-think": "Why didn't {target} think \"{message}\" ?"
+            "why-did-say": "Why did sprite <i>{sprite}</i> say <i>\"{message}\"</i> ?", 
+            "why-did-not-say": "Why didn't sprite <i>{sprite}</i> say <i>\"{message}\"</i> ?",
+            "why-did-think": "Why did sprite <i>{sprite}</i> think <i>\"{message}\"</i> ?", 
+            "why-did-not-think": "Why didn't sprite <i>{sprite}</i> think <i>\"{message}\"</i> ?"
         },
         "sound": {
-            "why-did-play": "Why did {target} play sound \"{sound}\" ?",
-            "why-did-not-play": "Why didn't {target} play sound \"{sound}\" ?",
-            "why-did-stop": "Why did {target} stop all sounds?",
-            "why-did-not-stop": "Why didn't {target} stop all sounds?"
+            "why-did-sprite-play": "Why did sprite <i>{sprite}</i> play sound <i>{sound}</i>?",
+            "why-did-stage-play": "Why did the stage play sound <i>{sound}</i>?",
+            "why-did-not-sprite-play": "Why didn't sprite <i>{sprite}</i> play sound <i>{sound}</i>?",
+            "why-did-not-stage-play": "Why didn't the stage play sound <i>{sound}</i>?",
+            "why-did-sprite-stop": "Why did sprite <i>{sprite}</i> stop all sounds?",
+            "why-did-stage-stop": "Why did the stage stop all sounds?",
+            "why-did-not-sprite-stop": "Why didn't sprite <i>{sprite}</i> stop all sounds?",
+            "why-did-not-stage-stop": "Why didn't the stage stop all sounds?"
         },
         "sensing": {
-            "why-did-ask": "Why did {target} ask \"{message}\" ?", 
-            "why-did-not-ask": "Why didn't {target} ask \"{message}\" ?"
+            "why-did-sprite-ask": "Why did sprite <i>{sprite}</i> ask <i>\"{message}\"</i> ?", 
+            "why-did-stage-ask": "Why did the stage ask <i>\"{message}\"</i> ?", 
+            "why-did-not-sprite-ask": "Why didn't sprite <i>{sprite}</i> ask <i>\"{message}\"</i> ?",
+            "why-did-not-stage-ask": "Why didn't the stage ask <i>\"{message}\"</i> ?"
         }
     }
 }

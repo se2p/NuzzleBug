@@ -39,7 +39,7 @@ const messages = defineMessages({
         description: 'Stop button title'
     },
     irQuestionTitle: {
-        id: 'gui.ir.controls.ir-questions',
+        id: 'gui.ir-debugger.controls.ir-questions',
         defaultMessage: 'Show Questions',
         description: 'Show questions button title'
     }

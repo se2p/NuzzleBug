@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import bindAll from 'lodash.bindall';
-import {injectIntl, intlShape} from 'react-intl';
+import {FormattedMessage, injectIntl, intlShape} from 'react-intl';
 
 import {QuestionCategory, Question_v2 as Question} from 'scratch-ir';
 
@@ -53,7 +53,14 @@ class IRQuestionHierarchy extends React.Component {
         const {
             questionHierarchy
         } = this.props;
-        return this.renderCategories(questionHierarchy, hierarchyStyles, 'white');
+
+        return questionHierarchy.length ?
+            this.renderCategories(questionHierarchy, hierarchyStyles, 'white') :
+            <FormattedMessage
+                defaultMessage="No questions available"
+                description="Title of empty question hierarchy"
+                id="gui.ir-debugger.question-hierarchy.empty"
+            />;
     }
 }
 

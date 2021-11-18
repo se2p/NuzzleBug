@@ -90,7 +90,7 @@ class IRQuestionCategory extends React.Component {
                         />
                     </button>
                     <div className={styles.categoryText}>
-                        {questionCategory.name}
+                        {intl.formatMessage(questionCategory.message)}
                     </div>
                 </div>
                 {this.state.expanded ? (

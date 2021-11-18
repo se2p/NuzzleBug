@@ -86,7 +86,7 @@ class IRDebugger extends React.Component {
                         <div className={cardStyles.cardContainer}>
                             <div className={classNames(cardStyles.card, styles.card)}>
                                 <IRHeader
-                                    targetName={target.getName()}
+                                    target={target}
                                     expanded={expanded}
                                     onRefresh={handleRefresh}
                                     onClose={onClose}
@@ -116,7 +116,8 @@ class IRDebugger extends React.Component {
 IRDebugger.propTypes = {
     intl: intlShape.isRequired,
     target: PropTypes.shape({
-        getName: PropTypes.func.isRequired
+        getName: PropTypes.func.isRequired,
+        isStage: PropTypes.bool.isRequired
     }).isRequired,
     questionHierarchy: PropTypes.arrayOf(PropTypes.instanceOf(QuestionCategory)),
     expanded: PropTypes.bool.isRequired,

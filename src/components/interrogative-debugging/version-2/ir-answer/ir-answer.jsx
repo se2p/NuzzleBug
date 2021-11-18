@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {injectIntl} from 'react-intl';
+import {FormattedHTMLMessage} from 'react-intl';
 
 import {Question_v2 as Question} from 'scratch-ir';
 
@@ -22,7 +23,10 @@ class IRAnswer extends React.Component {
                 {selectedQuestion ? (
                     <div>
                         <span className={styles.selectedQuestion}>
-                            {selectedQuestion.text}
+                            <FormattedHTMLMessage
+                                tagName="div"
+                                {...selectedQuestion.message}
+                            />
                         </span>
                     </div>
                 ) : null}

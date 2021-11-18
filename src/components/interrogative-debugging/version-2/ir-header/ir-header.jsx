@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {injectIntl, FormattedMessage} from 'react-intl';
+import {injectIntl, FormattedMessage, FormattedHTMLMessage} from 'react-intl';
 
 import cardStyles from '../../../cards/card.css';
 import styles from './ir-header.css';
@@ -20,7 +20,7 @@ class IRHeader extends React.Component {
 
     render () {
         const {
-            targetName,
+            target,
             expanded,
             onRefresh,
             onShrinkExpand,
@@ -34,12 +34,21 @@ class IRHeader extends React.Component {
                     classNames(cardStyles.headerButtons, cardStyles.headerButtonsHidden, styles.header)}
             >
                 <div className={styles.title}>
-                    <FormattedMessage
-                        defaultMessage="Interrogative Debugger"
-                        description="Title of the interrogative debugger"
-                        id="gui.ir-debugger.header.title"
-                        values={{targetName: targetName}}
-                    />
+                    {target.isStage ?
+                        <FormattedHTMLMessage
+                            tagName="div"
+                            defaultMessage="Interrogative Debugger"
+                            description="Title of the interrogative debugger"
+                            id="gui.ir-debugger.header.title-stage"
+                        /> :
+                        <FormattedHTMLMessage
+                            tagName="div"
+                            defaultMessage="Interrogative Debugger"
+                            description="Title of the interrogative debugger"
+                            id="gui.ir-debugger.header.title-sprite"
+                            values={{sprite: target.getName()}}
+                        />
+                    }
                 </div>
                 <div className={cardStyles.headerButtonsRight}>
                     {expanded ? (
@@ -101,7 +110,10 @@ class IRHeader extends React.Component {
 }
 
 IRHeader.propTypes = {
-    targetName: PropTypes.string.isRequired,
+    target: PropTypes.shape({
+        getName: PropTypes.func.isRequired,
+        isStage: PropTypes.bool.isRequired
+    }).isRequired,
     expanded: PropTypes.bool.isRequired,
     onRefresh: PropTypes.func.isRequired,
     onShrinkExpand: PropTypes.func.isRequired,

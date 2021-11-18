@@ -45,8 +45,7 @@ class IRDebugger extends React.Component {
 
         this.target = vm.runtime.targets.find(target => target.id === this.props.targetId);
         const recordedTrace = vm.runtime.traceInfo.tracer.traces;
-        const translate = (id, values) => this.props.intl.formatMessage({id: `gui.ir-debugger.${id}`}, values);
-        const questionProvider = new QuestionProvider(vm, recordedTrace, this.target, translate);
+        const questionProvider = new QuestionProvider(vm, recordedTrace, this.target);
         this.questionHierarchy = questionProvider.generateQuestionHierarchy();
     }
 
