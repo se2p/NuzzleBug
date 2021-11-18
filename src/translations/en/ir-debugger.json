@@ -51,7 +51,13 @@
             "why-did-say": "Why did sprite <i>{sprite}</i> say <i>\"{message}\"</i> ?", 
             "why-did-not-say": "Why didn't sprite <i>{sprite}</i> say <i>\"{message}\"</i> ?",
             "why-did-think": "Why did sprite <i>{sprite}</i> think <i>\"{message}\"</i> ?", 
-            "why-did-not-think": "Why didn't sprite <i>{sprite}</i> think <i>\"{message}\"</i> ?"
+            "why-did-not-think": "Why didn't sprite <i>{sprite}</i> think <i>\"{message}\"</i> ?",
+            "why-did-size-change": "Why did the size of sprite <i>{sprite}</i> change?",
+            "why-did-not-size-change": "Why didn't the size of sprite <i>{sprite}</i> change?",
+            "why-did-size-increase": "Why did the size of sprite <i>{sprite}</i> increase?",
+            "why-did-not-size-increase": "Why didn't the size of sprite <i>{sprite}</i> increase?",
+            "why-did-size-decrease": "Why did the size of sprite <i>{sprite}</i> decrease?",
+            "why-did-not-size-decrease": "Why didn't the size of sprite <i>{sprite}</i> decrease?"
         },
         "sound": {
             "why-did-sprite-play": "Why did sprite <i>{sprite}</i> play sound <i>{sound}</i>?",
