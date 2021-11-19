@@ -52,8 +52,7 @@
 
 .question-list {
     list-style-type: none;
-    padding: 4px; 
-    padding-left: 20px;
+    padding: 4px 6px;
 }
 
 .question-list-item {

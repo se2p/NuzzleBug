@@ -57,7 +57,11 @@
             "why-did-size-increase": "Why did the size of sprite <i>{sprite}</i> increase?",
             "why-did-not-size-increase": "Why didn't the size of sprite <i>{sprite}</i> increase?",
             "why-did-size-decrease": "Why did the size of sprite <i>{sprite}</i> decrease?",
-            "why-did-not-size-decrease": "Why didn't the size of sprite <i>{sprite}</i> decrease?"
+            "why-did-not-size-decrease": "Why didn't the size of sprite <i>{sprite}</i> decrease?",
+            "why-did-costume-change": "Why did the costume of sprite <i>{sprite}</i> change?",
+            "why-did-not-costume-change": "Why didn't the costume of sprite <i>{sprite}</i> change?",
+            "why-did-costume-change-to": "Why did the costume of sprite <i>{sprite}</i> change to <i>{costume}</i>?",
+            "why-did-not-costume-change-to": "Why didn't the costume of sprite <i>{sprite}</i> change to <i>{costume}</i>?"
         },
         "sound": {
             "why-did-sprite-play": "Why did sprite <i>{sprite}</i> play sound <i>{sound}</i>?",
