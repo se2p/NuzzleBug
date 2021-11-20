@@ -261,7 +261,7 @@ const mapStateToProps = state => ({
     spriteLibraryVisible: state.scratchGui.modals.spriteLibrary,
     active: state.scratchGui.vmStatus.running,
     paused: state.scratchGui.vmStatus.paused,
-    interrogationEnabled: state.scratchGui.irDebugger.enabled
+    interrogationEnabled: state.scratchGui.irDebugger.enabled && state.scratchGui.irDebugger.supported
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -1,6 +1,7 @@
 const SET_PROJECT_CHANGED = 'scratch-gui/project-changed/SET_PROJECT_CHANGED';
 const BLOCK_DRAG_UPDATE = 'scratch-gui/block-drag/BLOCK_DRAG_UPDATE';
 const SET_RUNNING_STATE = 'scratch-gui/vm-status/SET_RUNNING_STATE';
+const SELECT_LOCALE = 'scratch-gui/locales/SELECT_LOCALE';
 
 const ENABLE = 'scratch-gui/ir-debugger/ENABLE';
 const DISABLE = 'scratch-gui/ir-debugger/DISABLE';
@@ -13,10 +14,13 @@ const START_DRAG = 'scratch-gui/ir-debugger/START_DRAG';
 const DRAG = 'scratch-gui/ir-debugger/DRAG';
 const END_DRAG = 'scratch-gui/ir-debugger/END_DRAG';
 
+const supportedLanguages = ['de', 'en'];
+
 const initialState = {
     targetId: null,
     visible: false,
     enabled: false,
+    supported: true,
     x: 0,
     y: 0,
     expanded: true,
@@ -40,6 +44,10 @@ const reducer = function (state, action) {
         }
         return Object.assign({}, state, {
             enabled: true
+        });
+    case SELECT_LOCALE:
+        return Object.assign({}, state, {
+            supported: supportedLanguages.includes(action.locale)
         });
     case ENABLE:
         return Object.assign({}, state, {

@@ -182,7 +182,7 @@ const mapStateToProps = (state, {id}) => ({
     vm: state.scratchGui.vm,
     active: state.scratchGui.vmStatus.running,
     paused: state.scratchGui.vmStatus.paused,
-    interrogationEnabled: state.scratchGui.irDebugger.enabled
+    interrogationEnabled: state.scratchGui.irDebugger.enabled && state.scratchGui.irDebugger.supported
 });
 const mapDispatchToProps = dispatch => ({
     dispatchSetHoveredSprite: spriteId => {
