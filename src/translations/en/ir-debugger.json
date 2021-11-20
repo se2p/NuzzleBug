@@ -45,7 +45,18 @@
             "why-did-move-up": "Why did sprite <i>{sprite}</i> move upwards?",
             "why-did-not-move-up": "Why didn't sprite <i>{sprite}</i> move upwards?",
             "why-did-move-down": "Why did sprite <i>{sprite}</i> move downwards?",
-            "why-did-not-move-down": "Why didn't sprite <i>{sprite}</i> move downwards?"
+            "why-did-not-move-down": "Why didn't sprite <i>{sprite}</i> move downwards?",
+            "why-did-direction-change-to": "Why did the direction of sprite <i>{sprite}</i> change to {direction}°?",
+            "why-did-not-direction-change-to": "Why did the direction of sprite <i>{sprite}</i> change to {direction}°?",
+            "why-did-not-direction-change": "Why didn't the direction of sprite <i>{sprite}</i> change?",
+            "why-did-turn-clockwise": "Why did sprite <i>{sprite}</i> turn clockwise?",
+            "why-did-not-turn-clockwise": "Why didn't sprite <i>{sprite}</i> turn clockwise?",
+            "why-did-turn-counterclockwise": "Why did sprite <i>{sprite}</i> turn counterclockwise?",
+            "why-did-not-turn-counterclockwise": "Why didn't sprite <i>{sprite}</i> turn counterclockwise?",
+            "why-did-turn-right": "Why did sprite <i>{sprite}</i> turn to the right?",
+            "why-did-not-turn-right": "Why didn't sprite <i>{sprite}</i> turn to the right?",
+            "why-did-turn-left": "Why did sprite <i>{sprite}</i> turn to the left?",
+            "why-did-not-turn-left": "Why didn't sprite <i>{sprite}</i> turn to the left?"
         },
         "look": {
             "why-did-say": "Why did sprite <i>{sprite}</i> say <i>\"{message}\"</i> ?", 

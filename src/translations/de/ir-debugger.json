@@ -45,7 +45,18 @@
             "why-did-move-up": "Warum hat sich die Figur <i>{sprite}</i> nach oben bewegt?",
             "why-did-not-move-up": "Warum hat sich die Figur <i>{sprite}</i> nicht nach oben bewegt?",
             "why-did-move-down": "Warum hat sich die Figur <i>{sprite}</i> nach unten bewegt?",
-            "why-did-not-move-down": "Warum hat sich die Figur <i>{sprite}</i> nicht nach unten bewegt?"
+            "why-did-not-move-down": "Warum hat sich die Figur <i>{sprite}</i> nicht nach unten bewegt?",
+            "why-did-direction-change-to": "Warum hat sich die Richtung von Figur <i>{sprite}</i> auf {direction}° geändert?",
+            "why-did-not-direction-change-to": "Warum hat sich die Richtung von Figur <i>{sprite}</i> nicht auf {direction}° geändert?",
+            "why-did-not-direction-change": "Warum hat sich die Richtung von Figur <i>{sprite}</i> nicht verändert?",
+            "why-did-turn-clockwise": "Warum hat sich die Figur <i>{sprite}</i> im Uhrzeigersinn gedreht?",
+            "why-did-not-turn-clockwise": "Warum hat sich die Figur <i>{sprite}</i> nicht im Uhrzeigersinn gedreht?",
+            "why-did-turn-counterclockwise": "Warum hat sich die Figur <i>{sprite}</i> gegen den Uhrzeigersinn gedreht?",
+            "why-did-not-turn-counterclockwise": "Warum hat sich die Figur <i>{sprite}</i> nicht gegen den Uhrzeigersinn gedreht?",
+            "why-did-turn-right": "Warum hat sich die Figur <i>{sprite}</i> nach rechts gedreht?",
+            "why-did-not-turn-right": "Warum hat sich die Figur <i>{sprite}</i> nicht nach rechts gedreht?",
+            "why-did-turn-left": "Warum hat sich die Figur <i>{sprite}</i> nach links gedreht?",
+            "why-did-not-turn-left": "Warum hat sich die Figur <i>{sprite}</i> nicht nach links gedreht?"
         },
         "look": {
             "why-did-say": "Warum hat die Figur <i>{sprite}</i> <i>\"{message}\"</i> gesagt?", 
