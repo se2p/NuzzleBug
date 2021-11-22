@@ -72,7 +72,15 @@
             "why-did-costume-change": "Why did the costume of sprite <i>{sprite}</i> change?",
             "why-did-not-costume-change": "Why didn't the costume of sprite <i>{sprite}</i> change?",
             "why-did-costume-change-to": "Why did the costume of sprite <i>{sprite}</i> change to <i>{costume}</i>?",
-            "why-did-not-costume-change-to": "Why didn't the costume of sprite <i>{sprite}</i> change to <i>{costume}</i>?"
+            "why-did-not-costume-change-to": "Why didn't the costume of sprite <i>{sprite}</i> change to <i>{costume}</i>?",
+            "why-did-backdrop-change": "Why did the backdrop change?",
+            "why-did-not-backdrop-change": "Why didn't the backdrop change?",
+            "why-did-backdrop-change-to": "Why did the backdrop change to <i>{backdrop}</i>?",
+            "why-did-not-backdrop-change-to": "Why didn't the backdrop change to <i>{backdrop}</i>?",
+            "why-did-sprite-change-backdrop": "Why did sprite <i>{sprite}</i> change the backdrop?",
+            "why-did-not-sprite-change-backdrop": "Why didn't sprite <i>{sprite}</i> change the backdrop?",
+            "why-did-sprite-change-backdrop-to": "Why did sprite <i>{sprite}</i> change the backdrop to <i>{backdrop}</i>?",
+            "why-did-not-sprite-change-backdrop-to": "Why didn't sprite <i>{sprite}</i> change the backdrop to <i>{backdrop}</i>?"
         },
         "sound": {
             "why-did-sprite-play": "Why did sprite <i>{sprite}</i> play sound <i>{sound}</i>?",

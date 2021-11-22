@@ -72,7 +72,15 @@
             "why-did-costume-change": "Warum hat sich das Kostüm von Figur <i>{sprite}</i> verändert?",
             "why-did-not-costume-change": "Warum hat sich das Kostüm von Figur <i>{sprite}</i> nicht verändert?",
             "why-did-costume-change-to": "Warum hat sich das Kostüm von Figur <i>{sprite}</i> zu Kostüm <i>{costume}</i> geändert?",
-            "why-did-not-costume-change-to": "Warum hat sich das Kostüm von Figur <i>{sprite}</i> nicht zu Kostüm <i>{costume}</i> geändert?"
+            "why-did-not-costume-change-to": "Warum hat sich das Kostüm von Figur <i>{sprite}</i> nicht zu Kostüm <i>{costume}</i> geändert?",
+            "why-did-backdrop-change": "Warum hat sich das Bühnenbild verändert?",
+            "why-did-not-backdrop-change": "Warum hat sich das Bühnenbild nicht verändert?",
+            "why-did-backdrop-change-to": "Warum hat sich das Bühnenbild zu <i>{backdrop}</i> geändert?",
+            "why-did-not-backdrop-change-to": "Warum hat sich das Bühnenbild nicht zu <i>{backdrop}</i> geändert?",
+            "why-did-sprite-change-backdrop": "Warum hat die Figur <i>{sprite}</i> das Bühnenbild verändert?",
+            "why-did-not-sprite-change-backdrop": "Warum hat die Figur <i>{sprite}</i> das Bühnenbild nicht verändert?",
+            "why-did-sprite-change-backdrop-to": "Warum hat die Figur <i>{sprite}</i> das Bühnenbild zu <i>{backdrop}</i> geändert?",
+            "why-did-not-sprite-change-backdrop-to": "Warum hat die Figur <i>{sprite}</i> das Bühnenbild nicht zu <i>{backdrop}</i> geändert?"
         },
         "sound": {
             "why-did-sprite-play": "Warum hat die Figur <i>{sprite}</i> den Klang <i>{sound}</i> abgespielt?",
