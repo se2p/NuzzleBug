@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import bindAll from 'lodash.bindall';
 import {FormattedMessage, injectIntl, intlShape} from 'react-intl';
 
-import {QuestionCategory, Question_v2 as Question} from 'scratch-ir';
+import {QuestionCategory, QuestionV2 as Question} from 'scratch-ir';
 
 import hierarchyStyles from './ir-question-hierarchy.css';
 import IRQuestionCategory from '../ir-question-category/ir-question-category.jsx';

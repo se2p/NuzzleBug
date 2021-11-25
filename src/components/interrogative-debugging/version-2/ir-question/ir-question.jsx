@@ -3,7 +3,7 @@ import React from 'react';
 import bindAll from 'lodash.bindall';
 import {FormattedHTMLMessage} from 'react-intl';
 
-import {Question_v2 as Question} from 'scratch-ir';
+import {QuestionV2 as Question} from 'scratch-ir';
 
 import styles from './ir-question.css';
 

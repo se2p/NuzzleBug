@@ -4,7 +4,7 @@ import bindAll from 'lodash.bindall';
 import classNames from 'classnames';
 import {injectIntl, intlShape} from 'react-intl';
 
-import {QuestionCategory, Question_v2 as Question} from 'scratch-ir';
+import {QuestionCategory, QuestionV2 as Question} from 'scratch-ir';
 
 import IRQuestion from '../ir-question/ir-question.jsx';
 import iconArrowRight from '../icons/icon--arrow-right.svg';
