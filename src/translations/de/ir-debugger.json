@@ -69,8 +69,6 @@
             "why-did-not-size-increase": "Warum hat sich die Figur <i>{sprite}</i> nicht vergrößert?",
             "why-did-size-decrease": "Warum hat sich die Figur <i>{sprite}</i> verkleinert?",
             "why-did-not-size-decrease": "Warum hat sich die Figur <i>{sprite}</i> nicht verkleinert?",
-            "why-did-visibility-change": "Warum hat sich die Sichtbarkeit von Figur <i>{sprite}</i> verändert?",
-            "why-did-not-visibility-change": "Warum hat sich die Sichtbarkeit von Figur <i>{sprite}</i> nicht verändert?",
             "why-did-sprite-show": "Warum hat sich die Figur <i>{sprite}</i> gezeigt?",
             "why-did-not-sprite-show": "Warum hat sich die Figur <i>{sprite}</i> nicht gezeigt?",
             "why-did-sprite-hide": "Warum hat sich die Figur <i>{sprite}</i> versteckt?",
