@@ -2,10 +2,12 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import bindAll from 'lodash.bindall';
 import {FormattedHTMLMessage} from 'react-intl';
+import classNames from 'classnames';
 
 import {QuestionV2 as Question} from 'scratch-ir';
 
 import styles from './ir-question.css';
+import irStyles from '../ir-styles.css';
 
 class IRQuestion extends React.Component {
 
@@ -42,7 +44,7 @@ class IRQuestion extends React.Component {
                     style={isSelected ? {borderColor: color} : null}
                 />
                 <div
-                    className={styles.questionText}
+                    className={classNames(styles.questionText, irStyles[`color-${question.color.replace('#', '')}`])}
                     style={isSelected ? {color: 'black'} : null}
                 >
                     <FormattedHTMLMessage

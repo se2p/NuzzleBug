@@ -100,7 +100,17 @@
             "why-did-sprite-ask": "Warum hat die Figur <i>{sprite}</i> <i>\"{message}\"</i> gefragt?", 
             "why-did-stage-ask": "Warum hat die Bühne <i>\"{message}\"</i> gefragt?", 
             "why-did-not-sprite-ask": "Warum hat die Figur <i>{sprite}</i> nicht <i>\"{message}\"</i> gefragt?",
-            "why-did-not-stage-ask": "Warum hat die Bühne nicht <i>\"{message}\"</i> gefragt?"
+            "why-did-not-stage-ask": "Warum hat die Bühne nicht <i>\"{message}\"</i> gefragt?",
+            "why-did-touch-sprite": "Warum war die Bedingung <b>wird <i>{sprite}</i> berührt?</b> wahr?",
+            "why-did-not-touch-sprite": "Warum war die Bedingung <b>wird <i>{sprite}</i> berührt?</b> nicht wahr?",
+            "why-did-touch-edge": "Warum war die Bedingung <b>wird <i>Rand</i> berührt?</b> wahr?",
+            "why-did-not-touch-edge": "Warum war die Bedingung <b>wird <i>Rand</i> berührt?</b> nicht wahr?",
+            "why-did-touch-mouse": "Warum war die Bedingung <b>wird <i>Mauszeiger</i> berührt?</b> wahr?",
+            "why-did-not-touch-mouse": "Warum war die Bedingung <b>wird <i>Mauszeiger</i> berührt?</b> nicht wahr?",
+            "why-did-touch-color": "Warum war die Bedingung <b>wird Farbe <span style=\"color: {color};\">⬤</span> berührt?</b> wahr?",
+            "why-did-not-touch-color": "Warum war die Bedingung <b>wird Farbe <span style=\"color: {color};\">⬤</span> berührt?</b> nicht wahr?",
+            "why-did-color-touch-color": "Warum war die Bedingung <b>Farbe <span style=\"color: {color1};\">⬤</span> berührt Farbe <span style=\"color: {color2};\">⬤</span> ?</b> wahr?",
+            "why-did-not-color-touch-color": "Warum war die Bedingung <b>Farbe <span style=\"color: {color1};\">⬤</span> berührt Farbe <span style=\"color: {color2};\">⬤</span> ?</b> nicht wahr?"
         }
     }
 }

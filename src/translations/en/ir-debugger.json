@@ -100,7 +100,17 @@
             "why-did-sprite-ask": "Why did sprite <i>{sprite}</i> ask <i>\"{message}\"</i> ?", 
             "why-did-stage-ask": "Why did the stage ask <i>\"{message}\"</i> ?", 
             "why-did-not-sprite-ask": "Why didn't sprite <i>{sprite}</i> ask <i>\"{message}\"</i> ?",
-            "why-did-not-stage-ask": "Why didn't the stage ask <i>\"{message}\"</i> ?"
+            "why-did-not-stage-ask": "Why didn't the stage ask <i>\"{message}\"</i> ?",
+            "why-did-touch-sprite": "Why did the condition <b>touching <i>{sprite}</i>?</b> evaluate to true?",
+            "why-did-not-touch-sprite": "Why didn't the condition <b>touching <i>{sprite}</i>?</b> evaluate to true?",
+            "why-did-touch-edge": "Why did the condition <b>touching <i>edge</i>?</b> evaluate to true?",
+            "why-did-not-touch-edge": "Why didn't the condition <b>touching <i>edge</i>?</b> evaluate to true?",
+            "why-did-touch-mouse": "Why did the condition <b>touching <i>mouse-pointer</i>?</b> evaluate to true?",
+            "why-did-not-touch-mouse": "Why didn't the condition <b>touching <i>mouse-pointer</i>?</b> evaluate to true?",
+            "why-did-touch-color": "Why did the condition <b>touching color <span style=\"color: {color};\">⬤</span> ?</b> evaluate to true?",
+            "why-did-not-touch-color": "Why didn't the condition <b>touching color <span style=\"color: {color};\">⬤</span> ?</b> evaluate to true?",
+            "why-did-color-touch-color": "Why did the condition <b>color <span style=\"color: {color1};\">⬤</span> is touching color <span style=\"color: {color2};\">⬤</span> ?</b> evaluate to true?",
+            "why-did-not-color-touch-color": "Why didn't the condition <b>color <span style=\"color: {color1};\">⬤</span> is touching color <span style=\"color: {color2};\">⬤</span> ?</b> evaluate to true?"
         }
     }
 }
