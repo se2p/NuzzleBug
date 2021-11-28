@@ -30,7 +30,7 @@ class IRQuestionCategory extends React.Component {
         }));
     }
 
-    renderQuestions (questions, color) {
+    renderQuestions (questions) {
         const {
             onQuestionClick,
             selectedQuestion
@@ -47,7 +47,6 @@ class IRQuestionCategory extends React.Component {
                             question={question}
                             selectedQuestion={selectedQuestion}
                             onQuestionClick={onQuestionClick}
-                            color={color}
                         />
                     </li>
                 ))}
@@ -59,8 +58,7 @@ class IRQuestionCategory extends React.Component {
         const {
             intl,
             questionCategory,
-            renderCategories,
-            color
+            renderCategories
         } = this.props;
 
         return (
@@ -96,9 +94,9 @@ class IRQuestionCategory extends React.Component {
                 {this.state.expanded ? (
                     <div>
                         {questionCategory.questionCategories && questionCategory.questionCategories.length ?
-                            renderCategories(questionCategory.questionCategories, styles, color) : null}
+                            renderCategories(questionCategory.questionCategories, styles) : null}
                         {questionCategory.questions && questionCategory.questions.length ?
-                            this.renderQuestions(questionCategory.questions, color) : null}
+                            this.renderQuestions(questionCategory.questions) : null}
                     </div>
                 ) : null}
             </div>
@@ -111,8 +109,7 @@ IRQuestionCategory.propTypes = {
     questionCategory: PropTypes.instanceOf(QuestionCategory).isRequired,
     renderCategories: PropTypes.func.isRequired,
     selectedQuestion: PropTypes.instanceOf(Question),
-    onQuestionClick: PropTypes.func.isRequired,
-    color: PropTypes.string.isRequired
+    onQuestionClick: PropTypes.func.isRequired
 };
 
 export default injectIntl(IRQuestionCategory);

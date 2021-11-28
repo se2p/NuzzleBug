@@ -17,7 +17,7 @@ class IRQuestionHierarchy extends React.Component {
         ]);
     }
 
-    renderCategories (categories, styles, color) {
+    renderCategories (categories, styles) {
         const {
             intl,
             onQuestionClick,
@@ -41,7 +41,6 @@ class IRQuestionHierarchy extends React.Component {
                             renderCategories={this.renderCategories}
                             selectedQuestion={selectedQuestion}
                             onQuestionClick={onQuestionClick}
-                            color={category.color ? category.color : color}
                         />
                     </li>
                 ))}
@@ -55,7 +54,7 @@ class IRQuestionHierarchy extends React.Component {
         } = this.props;
 
         return questionHierarchy.length ?
-            this.renderCategories(questionHierarchy, hierarchyStyles, 'white') :
+            this.renderCategories(questionHierarchy, hierarchyStyles) :
             <FormattedMessage
                 defaultMessage="No questions available"
                 description="Title of empty question hierarchy"

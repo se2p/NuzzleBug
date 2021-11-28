@@ -29,19 +29,18 @@ class IRQuestion extends React.Component {
     render () {
         const {
             question,
-            selectedQuestion,
-            color
+            selectedQuestion
         } = this.props;
         const isSelected = selectedQuestion && question.id === selectedQuestion.id;
         return (
             <div onClick={this.handleQuestionClick}>
                 <div
                     className={styles.questionBackground}
-                    style={isSelected ? {backgroundColor: color} : null}
+                    style={isSelected ? {backgroundColor: question.color} : null}
                 />
                 <div
                     className={styles.questionBorder}
-                    style={isSelected ? {borderColor: color} : null}
+                    style={isSelected ? {borderColor: question.color} : null}
                 />
                 <div
                     className={classNames(styles.questionText, irStyles[`color-${question.color.replace('#', '')}`])}
@@ -60,8 +59,7 @@ class IRQuestion extends React.Component {
 IRQuestion.propTypes = {
     question: PropTypes.instanceOf(Question).isRequired,
     selectedQuestion: PropTypes.instanceOf(Question),
-    onQuestionClick: PropTypes.func.isRequired,
-    color: PropTypes.string.isRequired
+    onQuestionClick: PropTypes.func.isRequired
 };
 
 export default IRQuestion;
