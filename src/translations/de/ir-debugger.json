@@ -96,6 +96,16 @@
             "why-did-not-sprite-stop": "Warum hat die Figur <i>{sprite}</i> nicht alle Klänge <b>gestoppt</b>?",
             "why-did-not-stage-stop": "Warum hat die Bühne nicht alle Klänge <b>gestoppt</b>?"
         },
+        "event": {
+            "why-did-sprite-send": "Warum hat die Figur <i>{sprite}</i> die Nachricht <b><i>{message}</i></b> gesendet?",
+            "why-did-stage-send": "Warum hat die Bühne die Nachricht <b><i>{message}</i></b> gesendet?",
+            "why-did-not-sprite-send": "Warum hat die Figur <i>{sprite}</i> die Nachricht <b><i>{message}</i></b> nicht gesendet?",
+            "why-did-not-stage-send": "Warum hat die Bühne die Nachricht <b><i>{message}</i></b> nicht gesendet?",
+            "why-did-sprite-receive": "Warum hat die Figur <i>{sprite}</i> die Nachricht <b><i>{message}</i></b> empfangen?",
+            "why-did-stage-receive": "Warum hat die Bühne die Nachricht <b><i>{message}</i></b> empfangen?",
+            "why-did-not-sprite-receive": "Warum hat die Figur <i>{sprite}</i> die Nachricht <b><i>{message}</i></b> nicht empfangen?",
+            "why-did-not-stage-receive": "Warum hat die Bühne die Nachricht <b><i>{message}</i></b> nicht empfangen?"
+        },
         "sensing": {
             "why-did-sprite-ask": "Warum hat die Figur <i>{sprite}</i> <b><i>\"{message}\"</i></b> gefragt?", 
             "why-did-stage-ask": "Warum hat die Bühne <b><i>\"{message}\"</i></b> gefragt?", 

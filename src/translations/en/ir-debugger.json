@@ -96,6 +96,16 @@
             "why-did-not-sprite-stop": "Why didn't sprite <i>{sprite}</i> <b>stop</b> all sounds?",
             "why-did-not-stage-stop": "Why didn't the stage <b>stop</b> all sounds?"
         },
+        "event": {
+            "why-did-sprite-send": "Why did sprite <i>{sprite}</i> broadcast the message <b><i>{message}</i></b> ?",
+            "why-did-stage-send": "Why did the stage broadcast the message <b><i>{message}</i></b> ?",
+            "why-did-not-sprite-send": "Why didn't sprite <i>{sprite}</i> broadcast the message <b><i>{message}</i></b> ?",
+            "why-did-not-stage-send": "Why didn't the stage broadcast the message <b><i>{message}</i></b> ?",
+            "why-did-sprite-receive": "Why did sprite <i>{sprite}</i> receive the message <b><i>{message}</i></b> ?",
+            "why-did-stage-receive": "Why did the stage receive the message <b><i>{message}</i></b> ?",
+            "why-did-not-sprite-receive": "Why didn't sprite <i>{sprite}</i> receive the message <b><i>{message}</i></b> ?",
+            "why-did-not-stage-receive": "Why didn't the stage receive the message <b><i>{message}</i></b> ?"
+        },
         "sensing": {
             "why-did-sprite-ask": "Why did sprite <i>{sprite}</i> ask <b><i>\"{message}\"</i></b> ?", 
             "why-did-stage-ask": "Why did the stage ask <b><i>\"{message}\"</i></b> ?", 
