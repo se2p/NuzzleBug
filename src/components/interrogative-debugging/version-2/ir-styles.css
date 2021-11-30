@@ -7,6 +7,12 @@
 .color-cf63cf > div > b {
     color: #cf63cf;
 }
+.color-ffbf00 > div > b {
+    color: #ffbf00;
+}
+.color-ffab19 > div > b {
+    color: #ffab19
+}
 .color-5cb1d6 > div > b {
     color: #5cb1d6
 }
@@ -15,7 +21,4 @@
 }
 .color-ff8c1a > div > b {
     color: #ff8c1a;
-}
-.color-ffbf00 > div > b {
-    color: #ffbf00;
 }

@@ -21,10 +21,11 @@
             "motion": "Bewegung",
             "look": "Aussehen",
             "sound": "Klang",
+            "events": "Ereignisse",
+            "control": "Steuerung",
             "sensing": "Fühlen", 
             "comparisons": "Vergleiche", 
-            "variables": "Variablen", 
-            "events": "Ereignisse"
+            "variables": "Variablen"
         }
     },
     "question-hierarchy": {
@@ -105,6 +106,14 @@
             "why-did-stage-receive": "Warum hat die Bühne die Nachricht <b><i>{message}</i></b> empfangen?",
             "why-did-not-sprite-receive": "Warum hat die Figur <i>{sprite}</i> die Nachricht <b><i>{message}</i></b> nicht empfangen?",
             "why-did-not-stage-receive": "Warum hat die Bühne die Nachricht <b><i>{message}</i></b> nicht empfangen?"
+        },
+        "control": {
+            "why-did-start-as-clone": "Warum wurde ein <b>Klon</b> von Figur <i>{sprite}</i> erzeugt?",
+            "why-did-not-start-as-clone": "Warum wurde kein <b>Klon</b> von Figur <i>{sprite}</i> erzeugt?",
+            "why-did-sprite-clone-sprite": "Warum hat die Figur <i>{sprite}</i> einen <b>Klon</b> von Figur <b><i>{clone}</i></b> erzeugt?",
+            "why-did-stage-clone-sprite": "Warum hat die Bühne einen <b>Klon</b> von Figur <b><i>{clone}</i></b> erzeugt?",
+            "why-did-not-sprite-clone-sprite": "Warum hat die Figur <i>{sprite}</i> keinen <b>Klon</b> von Figur <b><i>{clone}</i></b> erzeugt?",
+            "why-did-not-stage-clone-sprite": "Warum hat die Bühne keinen <b>Klon</b> von Figur <b><i>{clone}</i></b> erzeugt?"
         },
         "sensing": {
             "why-did-sprite-ask": "Warum hat die Figur <i>{sprite}</i> <b><i>\"{message}\"</i></b> gefragt?", 

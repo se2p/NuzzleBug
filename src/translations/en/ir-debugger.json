@@ -21,10 +21,11 @@
             "motion": "Motion",
             "look": "Look",
             "sound": "Sound",
+            "events": "Events",
+            "control": "Control",
             "sensing": "Sensing", 
             "comparisons": "Comparisons", 
-            "variables": "Variables", 
-            "events": "Events"
+            "variables": "Variables"
         }
     },
     "question-hierarchy": {
@@ -105,6 +106,14 @@
             "why-did-stage-receive": "Why did the stage receive the message <b><i>{message}</i></b> ?",
             "why-did-not-sprite-receive": "Why didn't sprite <i>{sprite}</i> receive the message <b><i>{message}</i></b> ?",
             "why-did-not-stage-receive": "Why didn't the stage receive the message <b><i>{message}</i></b> ?"
+        },
+        "control": {
+            "why-did-start-as-clone": "Why did sprite <i>{sprite}</i> start as a <b>clone</b>?",
+            "why-did-not-start-as-clone": "Why didn't sprite <i>{sprite}</i> start as a <b>clone</b>?",
+            "why-did-sprite-clone-sprite": "Why did sprite <i>{sprite}</i> create a <b>clone</b> of sprite <b><i>{clone}</i></b>?",
+            "why-did-stage-clone-sprite": "Why did the stage create a <b>clone</b> of sprite <b><i>{clone}</i></b>?",
+            "why-did-not-sprite-clone-sprite": "Why didn't sprite <i>{sprite}</i> create a <b>clone</b> of sprite <b><i>{clone}</i></b>?",
+            "why-did-not-stage-clone-sprite": "Why didn't the stage create a <b>clone</b> of sprite <b><i>{clone}</i></b>?"
         },
         "sensing": {
             "why-did-sprite-ask": "Why did sprite <i>{sprite}</i> ask <b><i>\"{message}\"</i></b> ?", 
