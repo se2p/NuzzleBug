@@ -23,8 +23,8 @@
             "sound": "Klang",
             "events": "Ereignisse",
             "control": "Steuerung",
-            "sensing": "Fühlen", 
-            "comparisons": "Vergleiche", 
+            "sensing": "Fühlen",
+            "operators": "Operatoren",
             "variables": "Variablen"
         }
     },
@@ -130,6 +130,25 @@
             "why-did-not-touch-color": "Warum war die Bedingung <b>wird Farbe <span style=\"color: {color};\">⬤</span> berührt?</b> nicht wahr?",
             "why-did-color-touch-color": "Warum war die Bedingung <b>Farbe <span style=\"color: {color1};\">⬤</span> berührt Farbe <span style=\"color: {color2};\">⬤</span> ?</b> wahr?",
             "why-did-not-color-touch-color": "Warum war die Bedingung <b>Farbe <span style=\"color: {color1};\">⬤</span> berührt Farbe <span style=\"color: {color2};\">⬤</span> ?</b> nicht wahr?"
+        },
+        "operator": {
+            "why-did-meet-compare-condition": "Warum war die Bedingung <b>{value1} {operator} {value2}</b> wahr?",
+            "why-did-not-meet-compare-condition": "Warum war die Bedingung <b>{value1} {operator} {value2}</b> nicht wahr?",
+            "why-did-contain": "Warum war die Bedingung <b>{value1} enthält {value2}?</b> wahr?",
+            "why-did-not-contain": "Warum war die Bedingung <b>{value1} enthält {value2}?</b> nicht wahr?"
         }
+    },
+    "variable": {
+        "x-position": "x-Position",
+        "y-position": "y-Position",
+        "direction": "Richtung",
+        "size": "Größe",
+        "backdrop-name": "Bühnenbild-Name",
+        "backdrop-number": "Bühnenbild-Nummer",
+        "costume-name": "Kostüm-Name",
+        "costume-number": "Kostüm-Nummer"
+    },
+    "operator": {
+        "round": "{operand} gerundet"
     }
 }

@@ -24,7 +24,7 @@
             "events": "Events",
             "control": "Control",
             "sensing": "Sensing", 
-            "comparisons": "Comparisons", 
+            "operators": "Operators", 
             "variables": "Variables"
         }
     },
@@ -130,6 +130,25 @@
             "why-did-not-touch-color": "Why didn't the condition <b>touching color <span style=\"color: {color};\">⬤</span> ?</b> evaluate to true?",
             "why-did-color-touch-color": "Why did the condition <b>color <span style=\"color: {color1};\">⬤</span> is touching color <span style=\"color: {color2};\">⬤</span> ?</b> evaluate to true?",
             "why-did-not-color-touch-color": "Why didn't the condition <b>color <span style=\"color: {color1};\">⬤</span> is touching color <span style=\"color: {color2};\">⬤</span> ?</b> evaluate to true?"
+        },
+        "operator": {
+            "why-did-meet-compare-condition": "Why did the condition <b>{value1} {operator} {value2}</b> evaluate to true?",
+            "why-did-not-meet-compare-condition": "Why didn't the condition <b>{value1} {operator} {value2}</b> evaluate to true?",
+            "why-did-contain": "Why did the condition <b>{value1} contains {value2}?</b> evaluate to true?",
+            "why-did-not-contain": "Why didn't the condition <b>{value1} contains {value2}?</b> evaluate to true?"
         }
+    },
+    "variable": {
+        "x-position": "x position",
+        "y-position": "y position",
+        "direction": "direction",
+        "size": "size",
+        "backdrop-name": "backdrop-name",
+        "backdrop-number": "backdrop-number",
+        "costume-name": "costume-name",
+        "costume-number": "costume-number"
+    },
+    "operator": {
+        "round": "round {operand}"
     }
 }
