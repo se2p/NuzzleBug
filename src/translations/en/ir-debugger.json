@@ -136,6 +136,10 @@
             "why-did-not-meet-compare-condition": "Why didn't the condition <b>{value1} {operator} {value2}</b> evaluate to true?",
             "why-did-contain": "Why did the condition <b>{value1} contains {value2}?</b> evaluate to true?",
             "why-did-not-contain": "Why didn't the condition <b>{value1} contains {value2}?</b> evaluate to true?"
+        },
+        "variable": {
+            "why-did-have-value": "Why did variable <b><i>{variable}</i></b> have the value <b>{value}</b>?",
+            "why-did-not-have-value": "Why didn't variable <b><i>{variable}</i></b> have the value <b>{value}</b>?"
         }
     },
     "variable": {

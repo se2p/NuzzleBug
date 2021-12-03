@@ -136,6 +136,10 @@
             "why-did-not-meet-compare-condition": "Warum war die Bedingung <b>{value1} {operator} {value2}</b> nicht wahr?",
             "why-did-contain": "Warum war die Bedingung <b>{value1} enthält {value2}?</b> wahr?",
             "why-did-not-contain": "Warum war die Bedingung <b>{value1} enthält {value2}?</b> nicht wahr?"
+        },
+        "variable": {
+            "why-did-have-value": "Warum hatte die Variable <b><i>{variable}</i></b> den Wert <b>{value}</b>?",
+            "why-did-not-have-value": "Warum hatte die Variable <b><i>{variable}</i></b> nicht den Wert <b>{value}</b>?"
         }
     },
     "variable": {
