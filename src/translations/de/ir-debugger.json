@@ -4,6 +4,8 @@
         "resume": "Fortsetzen",
         "step-over": "Nächsten Block ausführen", 
         "ir-questions": "Zeige Fragen",
+        "activate-question-generation": "Erzeugung von Fragen starten",
+        "deactivate-question-generation": "Erzeugung von Fragen stoppen",
         "open-debugger": "Frage warum..."
     },
     "header": {

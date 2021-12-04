@@ -44,9 +44,14 @@ class IRDebugger extends React.Component {
         }
 
         this.target = vm.runtime.targets.find(target => target.id === this.props.targetId);
-        const recordedTrace = vm.runtime.traceInfo.tracer.traces;
+        let trace = vm.runtime.traceInfo.tracer.traces;
+        if (vm.runtime.questionGeneration.active) {
+            trace = trace.slice(vm.runtime.questionGeneration.traceStart);
+        } else {
+            trace = trace.slice(vm.runtime.questionGeneration.traceStart, vm.runtime.questionGeneration.traceEnd);
+        }
         const translate = (id, values) => this.props.intl.formatMessage({id: `gui.ir-debugger.${id}`}, values);
-        const questionProvider = new QuestionProvider(vm, recordedTrace, this.target, translate);
+        const questionProvider = new QuestionProvider(vm, trace, this.target, translate);
         this.questionHierarchy = questionProvider.generateQuestionHierarchy();
     }
 

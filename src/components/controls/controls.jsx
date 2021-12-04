@@ -9,6 +9,8 @@ import StepOver from '../step-over/step-over.jsx';
 import StopAll from '../stop-all/stop-all.jsx';
 import TurboMode from '../turbo-mode/turbo-mode.jsx';
 import IRQuestions from '../interrogative-debugging/version-1/ir-questions/ir-question-button.jsx';
+import ToggleQuestionGeneration
+    from '../interrogative-debugging/version-2/toggle-question-generation/toggle-question-generation.jsx';
 
 import styles from './controls.css';
 
@@ -42,6 +44,16 @@ const messages = defineMessages({
         id: 'gui.ir-debugger.controls.ir-questions',
         defaultMessage: 'Show Questions',
         description: 'Show questions button title'
+    },
+    activateQuestionGeneration: {
+        id: 'gui.ir-debugger.controls.activate-question-generation',
+        defaultMessage: 'Activate question generation',
+        description: 'Activate question generation button title'
+    },
+    deactivateQuestionGeneration: {
+        id: 'gui.ir-debugger.controls.deactivate-question-generation',
+        defaultMessage: 'Deactivate question generation',
+        description: 'Deactivate question generation button title'
     }
 });
 
@@ -55,9 +67,12 @@ const Controls = function (props) {
         onStopAllClick,
         onStepOverClick,
         onIRQuestionsClick,
+        onToggleQuestionGenerationClick,
         irDisabled,
         paused,
         turbo,
+        interrogationEnabled,
+        questionGenerationActive,
         ...componentProps
     } = props;
     return (
@@ -93,6 +108,14 @@ const Controls = function (props) {
                 onClick={onIRQuestionsClick}
                 title={intl.formatMessage(messages.irQuestionTitle)}
             />
+            { interrogationEnabled && active ? (<ToggleQuestionGeneration
+                title={questionGenerationActive ?
+                    intl.formatMessage(messages.deactivateQuestionGeneration) :
+                    intl.formatMessage(messages.activateQuestionGeneration)
+                }
+                onClick={onToggleQuestionGenerationClick}
+                questionGenerationActive={questionGenerationActive}
+            />) : null}
         </div>
     );
 };
@@ -107,8 +130,11 @@ Controls.propTypes = {
     onStepOverClick: PropTypes.func.isRequired,
     onStopAllClick: PropTypes.func.isRequired,
     onIRQuestionsClick: PropTypes.func.isRequired,
+    onToggleQuestionGenerationClick: PropTypes.func.isRequired,
     irDisabled: PropTypes.bool,
-    turbo: PropTypes.bool
+    turbo: PropTypes.bool,
+    interrogationEnabled: PropTypes.bool,
+    questionGenerationActive: PropTypes.bool
 };
 
 Controls.defaultProps = {

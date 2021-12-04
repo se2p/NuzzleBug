@@ -4,6 +4,8 @@
         "resume": "Resume",
         "step-over": "Step Over", 
         "ir-questions": "Show Questions",
+        "activate-question-generation": "Activate question generation",
+        "deactivate-question-generation": "Deactivate question generation",
         "open-debugger": "ask why..."
     },
     "header": {

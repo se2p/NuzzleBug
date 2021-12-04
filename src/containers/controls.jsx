@@ -14,7 +14,8 @@ class Controls extends React.Component {
             'handleGreenFlagClick',
             'handlePauseResumeClick',
             'handleStepOver',
-            'handleStopAllClick'
+            'handleStopAllClick',
+            'handleToggleQuestionGenerationClick'
         ]);
     }
     handleGreenFlagClick (e) {
@@ -70,6 +71,10 @@ class Controls extends React.Component {
     resetPauseResume () {
         this.props.vm.resumeExecution();
     }
+    handleToggleQuestionGenerationClick (e) {
+        e.preventDefault();
+        this.props.vm.toggleQuestionGeneration();
+    }
     render () {
         const {
             vm, // eslint-disable-line no-unused-vars
@@ -79,6 +84,8 @@ class Controls extends React.Component {
             projectPaused,
             irDisabled,
             turbo,
+            interrogationEnabled,
+            questionGenerationActive,
             ...props
         } = this.props;
 
@@ -89,12 +96,15 @@ class Controls extends React.Component {
                 paused={projectPaused}
                 irDisabled={irDisabled}
                 turbo={turbo}
+                interrogationEnabled={interrogationEnabled}
+                questionGenerationActive={questionGenerationActive}
                 vm={vm}
                 onGreenFlagClick={this.handleGreenFlagClick}
                 onStepOverClick={this.handleStepOver}
                 onPauseResumeClick={this.handlePauseResumeClick}
                 onStopAllClick={this.handleStopAllClick}
                 onIRQuestionsClick={handleIRQuestionsClick}
+                onToggleQuestionGenerationClick={this.handleToggleQuestionGenerationClick}
             />
         );
     }
@@ -107,6 +117,8 @@ Controls.propTypes = {
     irDisabled: PropTypes.bool.isRequired,
     projectRunning: PropTypes.bool.isRequired,
     turbo: PropTypes.bool.isRequired,
+    interrogationEnabled: PropTypes.bool.isRequired,
+    questionGenerationActive: PropTypes.bool.isRequired,
     vm: PropTypes.instanceOf(VM)
 };
 
@@ -115,7 +127,9 @@ const mapStateToProps = state => ({
     projectPaused: state.scratchGui.vmStatus.paused,
     irDisabled: state.scratchGui.ircards.disabled,
     projectRunning: state.scratchGui.vmStatus.running,
-    turbo: state.scratchGui.vmStatus.turbo
+    turbo: state.scratchGui.vmStatus.turbo,
+    interrogationEnabled: state.scratchGui.irDebugger.enabled && state.scratchGui.irDebugger.supported,
+    questionGenerationActive: state.scratchGui.vmStatus.questionGenerationActive
 });
 
 const mapDispatchToProps = dispatch => ({

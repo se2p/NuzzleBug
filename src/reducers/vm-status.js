@@ -2,12 +2,14 @@ const SET_RUNNING_STATE = 'scratch-gui/vm-status/SET_RUNNING_STATE';
 const SET_PAUSE_STATE = 'scratch-gui/vm-status/SET_PAUSED_STATE';
 const SET_TURBO_STATE = 'scratch-gui/vm-status/SET_TURBO_STATE';
 const SET_STARTED_STATE = 'scratch-gui/vm-status/SET_STARTED_STATE';
+const SET_QUESTION_GENERATION_ACTIVE_STATE = 'scratch-gui/vm-status/SET_QUESTION_GENERATION_ACTIVE_STATE';
 
 const initialState = {
     running: false,
     started: false,
     paused: false,
-    turbo: false
+    turbo: false,
+    questionGenerationActive: false
 };
 
 const reducer = function (state, action) {
@@ -28,6 +30,10 @@ const reducer = function (state, action) {
     case SET_TURBO_STATE:
         return Object.assign({}, state, {
             turbo: action.turbo
+        });
+    case SET_QUESTION_GENERATION_ACTIVE_STATE:
+        return Object.assign({}, state, {
+            questionGenerationActive: action.questionGenerationActive
         });
     default:
         return state;
@@ -63,11 +69,19 @@ const setTurboState = function (turbo) {
     };
 };
 
+const setQuestionGenerationActiveState = function (questionGenerationActive) {
+    return {
+        type: SET_QUESTION_GENERATION_ACTIVE_STATE,
+        questionGenerationActive: questionGenerationActive
+    };
+};
+
 export {
     reducer as default,
     initialState as vmStatusInitialState,
     setRunningState,
     setStartedState,
     setTurboState,
-    setPauseState
+    setPauseState,
+    setQuestionGenerationActiveState
 };

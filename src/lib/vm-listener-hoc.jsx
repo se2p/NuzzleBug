@@ -9,7 +9,13 @@ import {updateTargets} from '../reducers/targets';
 import {updateBlockDrag} from '../reducers/block-drag';
 import {updateMonitors} from '../reducers/monitors';
 import {setProjectChanged, setProjectUnchanged} from '../reducers/project-changed';
-import {setRunningState, setPauseState, setTurboState, setStartedState} from '../reducers/vm-status';
+import {
+    setRunningState,
+    setPauseState,
+    setTurboState,
+    setStartedState,
+    setQuestionGenerationActiveState
+} from '../reducers/vm-status';
 import {showExtensionAlert} from '../reducers/alerts';
 import {updateMicIndicator} from '../reducers/mic-indicator';
 
@@ -48,6 +54,8 @@ const vmListenerHOC = function (WrappedComponent) {
             this.props.vm.on('PROJECT_START', this.props.onGreenFlag);
             this.props.vm.on('PERIPHERAL_CONNECTION_LOST_ERROR', this.props.onShowExtensionAlert);
             this.props.vm.on('MIC_LISTENING', this.props.onMicListeningUpdate);
+            this.props.vm.on('QUESTION_GENERATION_ACTIVE', this.props.onActivateQuestionGeneration);
+            this.props.vm.on('QUESTION_GENERATION_INACTIVE', this.props.onDeactivateQuestionGeneration);
 
         }
         componentDidMount () {
@@ -139,6 +147,8 @@ const vmListenerHOC = function (WrappedComponent) {
                 onTurboModeOff,
                 onTurboModeOn,
                 onShowExtensionAlert,
+                onActivateQuestionGeneration,
+                onDeactivateQuestionGeneration,
                 /* eslint-enable no-unused-vars */
                 ...props
             } = this.props;
@@ -164,6 +174,8 @@ const vmListenerHOC = function (WrappedComponent) {
         onTargetsUpdate: PropTypes.func.isRequired,
         onTurboModeOff: PropTypes.func.isRequired,
         onTurboModeOn: PropTypes.func.isRequired,
+        onActivateQuestionGeneration: PropTypes.func.isRequired,
+        onDeactivateQuestionGeneration: PropTypes.func.isRequired,
         projectChanged: PropTypes.bool,
         shouldUpdateTargets: PropTypes.bool,
         shouldUpdateProjectChanged: PropTypes.bool,
@@ -210,7 +222,9 @@ const vmListenerHOC = function (WrappedComponent) {
         },
         onMicListeningUpdate: listening => {
             dispatch(updateMicIndicator(listening));
-        }
+        },
+        onActivateQuestionGeneration: () => dispatch(setQuestionGenerationActiveState(true)),
+        onDeactivateQuestionGeneration: () => dispatch(setQuestionGenerationActiveState(false))
     });
     return connect(
         mapStateToProps,
