@@ -111,7 +111,7 @@
     "scratch-analysis": "file:../scratch-analysis",
     "scratch-ir": "file:../scratch-ir",
     "scratch-audio": "0.1.0-prerelease.20190925183642",
-    "scratch-blocks": "0.1.0-prerelease.20200512201140",
+    "scratch-blocks": "file:../scratch-blocks",
     "scratch-l10n": "3.9.20200512220101",
     "scratch-paint": "0.2.0-prerelease.20200516002830",
     "scratch-render": "0.1.0-prerelease.20200512203149",
