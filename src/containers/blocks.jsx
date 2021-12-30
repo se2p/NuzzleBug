@@ -65,6 +65,8 @@ class Blocks extends React.Component {
             'onScriptGlowOff',
             'onBlockGlowOn',
             'onBlockGlowOff',
+            'onBreakpointHit',
+            'onBreakpointResumed',
             'handleExtensionAdded',
             'handleBlocksInfoUpdate',
             'onTargetsUpdate',
@@ -256,6 +258,8 @@ class Blocks extends React.Component {
         this.props.vm.addListener('SCRIPT_GLOW_OFF', this.onScriptGlowOff);
         this.props.vm.addListener('BLOCK_GLOW_ON', this.onBlockGlowOn);
         this.props.vm.addListener('BLOCK_GLOW_OFF', this.onBlockGlowOff);
+        this.props.vm.addListener('BREAKPOINT_HIT', this.onBreakpointHit);
+        this.props.vm.addListener('BREAKPOINT_RESUMED', this.onBreakpointResumed);
         this.props.vm.addListener('VISUAL_REPORT', this.onVisualReport);
         this.props.vm.addListener('workspaceUpdate', this.onWorkspaceUpdate);
         this.props.vm.addListener('targetsUpdate', this.onTargetsUpdate);
@@ -269,6 +273,8 @@ class Blocks extends React.Component {
         this.props.vm.removeListener('SCRIPT_GLOW_OFF', this.onScriptGlowOff);
         this.props.vm.removeListener('BLOCK_GLOW_ON', this.onBlockGlowOn);
         this.props.vm.removeListener('BLOCK_GLOW_OFF', this.onBlockGlowOff);
+        this.props.vm.removeListener('BREAKPOINT_HIT', this.onBreakpointHit);
+        this.props.vm.removeListener('BREAKPOINT_RESUMED', this.onBreakpointResumed);
         this.props.vm.removeListener('VISUAL_REPORT', this.onVisualReport);
         this.props.vm.removeListener('workspaceUpdate', this.onWorkspaceUpdate);
         this.props.vm.removeListener('targetsUpdate', this.onTargetsUpdate);
@@ -322,6 +328,12 @@ class Blocks extends React.Component {
     }
     onBlockGlowOff (data) {
         this.workspace.glowBlock(data.id, false);
+    }
+    onBreakpointHit (data) {
+        this.workspace.setBreakpointHit(data, true);
+    }
+    onBreakpointResumed (data) {
+        this.workspace.setBreakpointHit(data, false);
     }
     onVisualReport (data) {
         this.workspace.reportValue(data.id, data.value);
