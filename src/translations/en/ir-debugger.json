@@ -16,6 +16,10 @@
         "shrink": "Shrink",
         "refresh": "Refresh"
     }, 
+    "target": {
+        "original": "Original",
+        "clone": "Clone {index}"
+    },
     "category": {
         "expand": "Expand category",
         "close": "Close category", 

@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
+import bindAll from 'lodash.bindall';
 import {injectIntl, FormattedMessage, FormattedHTMLMessage} from 'react-intl';
 
 import cardStyles from '../../../cards/card.css';
@@ -10,12 +11,46 @@ import shrinkIcon from '../../../cards/icon--shrink.svg';
 import expandIcon from '../../../cards/icon--expand.svg';
 import closeIcon from '../../../cards/icon--close.svg';
 import refreshIcon from '../icons/icon--refresh.svg';
+import iconArrowLeft from '../icons/icon--arrow-left.svg';
+import iconArrowDown from '../icons/icon--arrow-down.svg';
 
 class IRHeader extends React.Component {
 
     constructor (props) {
         super(props);
-        this.state = {};
+
+        this.state = {
+            showTargetOptions: false
+        };
+
+        bindAll(this, [
+            'handleDropdownButtonClick',
+            'handleTargetClick'
+        ]);
+    }
+
+    handleDropdownButtonClick () {
+        this.setState({
+            showTargetOptions: !this.state.showTargetOptions
+        });
+    }
+
+    handleTargetClick (event) {
+        const {
+            target,
+            targetOptions,
+            onTargetChange,
+            onRefresh
+        } = this.props;
+
+        const newTarget = targetOptions.find(option => option.id === event.target.id);
+        if (target.id !== newTarget.id) {
+            onTargetChange(newTarget);
+            onRefresh();
+        }
+        this.setState({
+            showTargetOptions: false
+        });
     }
 
     render () {
@@ -23,6 +58,7 @@ class IRHeader extends React.Component {
             target,
             expanded,
             onRefresh,
+            targetOptions,
             onShrinkExpand,
             onClose
         } = this.props;
@@ -33,22 +69,59 @@ class IRHeader extends React.Component {
                     classNames(cardStyles.headerButtons, styles.header) :
                     classNames(cardStyles.headerButtons, cardStyles.headerButtonsHidden, styles.header)}
             >
-                <div className={styles.title}>
-                    {target.isStage ?
-                        <FormattedHTMLMessage
-                            tagName="div"
-                            defaultMessage="Interrogative Debugger"
-                            description="Title of the interrogative debugger"
-                            id="gui.ir-debugger.header.title-stage"
-                        /> :
-                        <FormattedHTMLMessage
-                            tagName="div"
-                            defaultMessage="Interrogative Debugger"
-                            description="Title of the interrogative debugger"
-                            id="gui.ir-debugger.header.title-sprite"
-                            values={{sprite: target.getName()}}
-                        />
-                    }
+                <div className={styles.leftHeader}>
+                    <div className={styles.title}>
+                        {target.isStage ?
+                            <FormattedHTMLMessage
+                                tagName="div"
+                                defaultMessage="Interrogative Debugger"
+                                description="Title of the interrogative debugger"
+                                id="gui.ir-debugger.header.title-stage"
+                            /> :
+                            <FormattedHTMLMessage
+                                tagName="div"
+                                defaultMessage="Interrogative Debugger"
+                                description="Title of the interrogative debugger"
+                                id="gui.ir-debugger.header.title-sprite"
+                                values={{sprite: target.sprite.name}}
+                            />
+                        }
+                    </div>
+                    {targetOptions.length > 1 ? (
+                        <div className={styles.title}>
+                            <div className={styles.dropdown}>
+                                <div
+                                    className={styles.dropdownButton}
+                                    onClick={this.handleDropdownButtonClick}
+                                >
+                                    <div className={styles.selectedTarget}>
+                                        <span>{target.optionName}</span>
+                                    </div>
+                                    <img
+                                        src={this.state.showTargetOptions ? iconArrowDown : iconArrowLeft}
+                                        className={styles.icon}
+                                    />
+                                </div>
+                                {this.state.showTargetOptions ? (
+                                    <div className={styles.dropdownContent}>
+                                        {targetOptions.map(targetOption => (
+                                            <a
+                                                className={target.id === targetOption.id ?
+                                                    classNames(styles.targetOption, styles.selectedTargetOption) :
+                                                    styles.targetOption
+                                                }
+                                                id={targetOption.id}
+                                                key={targetOption.id}
+                                                onClick={this.handleTargetClick}
+                                            >
+                                                {targetOption.optionName}
+                                            </a>
+                                        ))}
+                                    </div>
+                                ) : null}
+                            </div>
+                        </div>
+                    ) : null}
                 </div>
                 <div className={cardStyles.headerButtonsRight}>
                     {expanded ? (
@@ -111,10 +184,19 @@ class IRHeader extends React.Component {
 
 IRHeader.propTypes = {
     target: PropTypes.shape({
-        getName: PropTypes.func.isRequired,
+        id: PropTypes.string.isRequired,
+        optionName: PropTypes.string.isRequired,
+        sprite: PropTypes.shape({
+            name: PropTypes.string.isRequired
+        }),
         isStage: PropTypes.bool.isRequired
     }).isRequired,
+    targetOptions: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        optionName: PropTypes.string.isRequired
+    })).isRequired,
     expanded: PropTypes.bool.isRequired,
+    onTargetChange: PropTypes.func.isRequired,
     onRefresh: PropTypes.func.isRequired,
     onShrinkExpand: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired

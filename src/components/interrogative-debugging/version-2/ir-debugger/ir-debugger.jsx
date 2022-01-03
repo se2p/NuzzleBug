@@ -34,8 +34,10 @@ class IRDebugger extends React.Component {
     render () {
         const {
             target,
+            targetOptions,
             questionHierarchy,
             expanded,
+            handleTargetChange,
             handleRefresh,
             onClose,
             onShrinkExpand,
@@ -87,8 +89,10 @@ class IRDebugger extends React.Component {
                             <div className={classNames(cardStyles.card, styles.card)}>
                                 <IRHeader
                                     target={target}
+                                    targetOptions={targetOptions}
                                     expanded={expanded}
                                     onRefresh={handleRefresh}
+                                    onTargetChange={handleTargetChange}
                                     onClose={onClose}
                                     onShrinkExpand={onShrinkExpand}
                                 />
@@ -116,13 +120,22 @@ class IRDebugger extends React.Component {
 IRDebugger.propTypes = {
     intl: intlShape.isRequired,
     target: PropTypes.shape({
-        getName: PropTypes.func.isRequired,
+        id: PropTypes.string.isRequired,
+        optionName: PropTypes.string.isRequired,
+        sprite: PropTypes.shape({
+            name: PropTypes.string.isRequired
+        }),
         isStage: PropTypes.bool.isRequired
     }).isRequired,
+    targetOptions: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        optionName: PropTypes.string.isRequired
+    })).isRequired,
     questionHierarchy: PropTypes.arrayOf(PropTypes.instanceOf(QuestionCategory)),
     expanded: PropTypes.bool.isRequired,
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
+    handleTargetChange: PropTypes.func.isRequired,
     handleRefresh: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
     onShrinkExpand: PropTypes.func.isRequired,

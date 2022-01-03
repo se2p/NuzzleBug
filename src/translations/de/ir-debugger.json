@@ -16,6 +16,10 @@
         "shrink": "Zuklappen",
         "refresh": "Aktualisieren"
     }, 
+    "target": {
+        "original": "Original",
+        "clone": "Klon {index}"
+    }, 
     "category": {
         "expand": "Kategorie aufklappen",
         "close": "Kategorie zuklappen", 

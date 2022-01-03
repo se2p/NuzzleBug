@@ -23,6 +23,7 @@ class IRDebugger extends React.Component {
         super(props);
         bindAll(this, [
             'calculateQuestionHierarchy',
+            'setTargetOption',
             'rerender'
         ]);
         this.cancel = false;
@@ -43,16 +44,67 @@ class IRDebugger extends React.Component {
             return;
         }
 
-        this.target = vm.runtime.targets.find(target => target.id === this.props.targetId);
+        this.targetOrigin = vm.runtime.targets.find(target => target.id === this.props.targetOriginId);
         let trace = vm.runtime.traceInfo.tracer.traces;
         if (vm.runtime.questionGeneration.active) {
             trace = trace.slice(vm.runtime.questionGeneration.traceStart);
         } else {
             trace = trace.slice(vm.runtime.questionGeneration.traceStart, vm.runtime.questionGeneration.traceEnd);
         }
+
+        this.targetOptions = this.calculateTargetOptions(trace);
+        if (!this.target) {
+            this.setTargetOption(this.targetOptions[0]);
+        }
+        if (!this.target.isOriginal) {
+            trace = trace.filter(t => t.targetsInfo[this.target.id]);
+        }
+
         const translate = (id, values) => this.props.intl.formatMessage({id: `gui.ir-debugger.${id}`}, values);
         const questionProvider = new QuestionProvider(vm, trace, this.target, translate);
         this.questionHierarchy = questionProvider.generateQuestionHierarchy();
+    }
+
+    calculateTargetOptions (trace) {
+        const targetOptions = [{
+            id: this.targetOrigin.id,
+            optionName: this.props.intl.formatMessage({id: 'gui.ir-debugger.target.original'}),
+            isOriginal: true
+        }];
+        let cloneIndex = 1;
+        for (const traceInfo of trace) {
+            const cloneIds = traceInfo.targetsInfo[this.targetOrigin.id].cloneIds;
+            if (cloneIds) {
+                for (const cloneId of cloneIds) {
+                    if (!targetOptions.some(option => option.id === cloneId)) {
+                        targetOptions.push({
+                            id: cloneId,
+                            optionName: this.props.intl.formatMessage(
+                                {id: 'gui.ir-debugger.target.clone'},
+                                {index: cloneIndex}
+                            ),
+                            isOriginal: false
+                        });
+                        cloneIndex++;
+                    }
+                }
+            }
+        }
+        return targetOptions;
+    }
+
+    setTargetOption (targetOption) {
+        this.target = {
+            id: targetOption.id,
+            optionName: targetOption.optionName,
+            name: targetOption.isOriginal ?
+                this.targetOrigin.getName() :
+                `${this.targetOrigin.getName()} - ${targetOption.optionName}`,
+            isOriginal: targetOption.isOriginal,
+            isStage: this.targetOrigin.isStage,
+            blocks: this.targetOrigin.blocks,
+            sprite: this.targetOrigin.sprite
+        };
     }
 
     rerender () {
@@ -68,7 +120,9 @@ class IRDebugger extends React.Component {
         return (
             <IRDebuggerComponent
                 target={this.target}
+                targetOptions={this.targetOptions}
                 questionHierarchy={this.questionHierarchy}
+                handleTargetChange={this.setTargetOption}
                 handleRefresh={this.rerender}
                 {...this.props}
             />
@@ -79,7 +133,7 @@ class IRDebugger extends React.Component {
 IRDebugger.propTypes = {
     intl: intlShape.isRequired,
     vm: PropTypes.instanceOf(VirtualMachine).isRequired,
-    targetId: PropTypes.string.isRequired,
+    targetOriginId: PropTypes.string.isRequired,
     visible: PropTypes.bool.isRequired,
     expanded: PropTypes.bool.isRequired,
     x: PropTypes.number.isRequired,
@@ -93,7 +147,7 @@ IRDebugger.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    targetId: state.scratchGui.irDebugger.targetId,
+    targetOriginId: state.scratchGui.irDebugger.targetId,
     visible: state.scratchGui.irDebugger.visible,
     expanded: state.scratchGui.irDebugger.expanded,
     x: state.scratchGui.irDebugger.x,

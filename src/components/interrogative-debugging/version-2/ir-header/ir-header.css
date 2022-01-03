@@ -6,11 +6,13 @@
     border-width: 0px;
 }
 
-.title {
+.left-header {
     font-size: 15px;
     margin: 15px;
     font-weight: bold;
     color: white;
+    display: flex;
+    flex-direction: row;
 }
 
 .header-button {
@@ -31,4 +33,94 @@
     height: 20px;
     margin: 2px 0;
     margin-left: 4px;
+}
+
+.title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.dropdown {
+    background-color: $motion-primary;
+    color: white;
+    font-family: inherit;
+    font-style: italic;
+    font-weight: bold;   
+}
+
+.dropdown-button  {
+    min-width: 100px;
+    margin-left: 10px;
+    height: 100%;
+    cursor: pointer;
+    border: 1px solid $ui-black-transparent;
+    border-radius: 4px;
+}
+
+.selected-target {
+    float: left;
+    display: table;
+    height: 100%;
+    text-align: center;
+}
+
+.selected-target span {
+    padding-left: 9px;
+    padding-right: 4px;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.icon {
+    width: 16px;
+    margin-right: 6px;
+    float: right;
+    filter: brightness(0) invert(1);
+}
+  
+.dropdown-content {
+    background-color: $motion-primary;
+    min-width: 100px;
+    max-height: 480px;
+    padding-top: 6px;
+    margin-left: 10px;
+    position: absolute;
+    float: left;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    overflow-y: scroll;
+}
+
+.dropdown-content::-webkit-scrollbar-track {
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.dropdown-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.dropdown-content::-webkit-scrollbar-thumb {
+    background:#CECDCE;
+    border: 1px solid #CECDCE;
+    border-radius: 4px;
+}
+  
+.target-option {
+    padding: 4px;
+    margin-left: 6px;
+    margin-bottom: 6px;
+    border-radius: 2px;
+    cursor: pointer;
+    display: block;
+}
+
+.target-option:hover {
+    background-color: hsla(0, 0%, 0%, 0.08);
+}
+
+.selected-target-option, .selected-target-option:hover {
+    background-color: $ui-black-transparent;
 }
