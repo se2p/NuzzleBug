@@ -5,12 +5,20 @@ import React from 'react';
 import icon from './icon--eye.svg';
 import styles from './toggle-question-generation.css';
 
+export const QuestionGenerationState = Object.freeze({
+    ACTIVE: 1,
+    INACTIVE: 2,
+    ACTIVATED: 3,
+    DEACTIVATED: 4
+});
+
 const ToggleQuestionGenerationComponent = function (props) {
     const {
         className,
         onClick,
         title,
-        questionGenerationActive,
+        state,
+        active,
         ...componentProps
     } = props;
     return (
@@ -19,7 +27,9 @@ const ToggleQuestionGenerationComponent = function (props) {
                 className,
                 styles.toggleQuestionGeneration,
                 {
-                    [styles.active]: questionGenerationActive
+                    [styles.active]: active,
+                    [styles.activated]: state === QuestionGenerationState.ACTIVATED,
+                    [styles.deactivated]: state === QuestionGenerationState.DEACTIVATED
                 }
             )}
             draggable={false}
@@ -35,7 +45,8 @@ ToggleQuestionGenerationComponent.propTypes = {
     className: PropTypes.string,
     onClick: PropTypes.func.isRequired,
     title: PropTypes.string,
-    questionGenerationActive: PropTypes.bool.isRequired
+    active: PropTypes.bool,
+    state: PropTypes.oneOf(Object.values(QuestionGenerationState)).isRequired
 };
 
 ToggleQuestionGenerationComponent.defaultProps = {

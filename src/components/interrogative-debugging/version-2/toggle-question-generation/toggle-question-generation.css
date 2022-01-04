@@ -19,10 +19,12 @@
     background-color: $motion-transparent;
 }
 
-.toggleQuestionGeneration:active {
+.toggleQuestionGeneration.activated {
     filter: invert(54%) sepia(98%) saturate(311%) hue-rotate(75deg) brightness(100%) contrast(85%);
+    background-color: $motion-transparent;
 }
 
-.toggleQuestionGeneration.active:active {
+.toggleQuestionGeneration.deactivated {
     filter: invert(79%) sepia(72%) saturate(7318%) hue-rotate(332deg) brightness(105%) contrast(85%);
+    background-color: $motion-transparent;
 }

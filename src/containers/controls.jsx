@@ -5,6 +5,8 @@ import VM from 'scratch-vm';
 import {connect} from 'react-redux';
 
 import ControlsComponent from '../components/controls/controls.jsx';
+import {QuestionGenerationState}
+    from '../components//interrogative-debugging/version-2/toggle-question-generation/toggle-question-generation.jsx';
 import {viewCards} from '../reducers/interrogative-debugging/version-1/ir-cards.js';
 
 class Controls extends React.Component {
@@ -17,6 +19,8 @@ class Controls extends React.Component {
             'handleStopAllClick',
             'handleToggleQuestionGenerationClick'
         ]);
+        this.questionGenerationState = props.questionGenerationActive ?
+            QuestionGenerationState.ACTIVE : QuestionGenerationState.INACTIVE;
     }
     handleGreenFlagClick (e) {
         e.preventDefault();
@@ -34,6 +38,7 @@ class Controls extends React.Component {
                 this.props.vm.start();
             }
             this.props.vm.greenFlag();
+            this.activateQuestionGeneration();
         }
     }
     handleStepOver (e) {
@@ -73,7 +78,25 @@ class Controls extends React.Component {
     }
     handleToggleQuestionGenerationClick (e) {
         e.preventDefault();
-        this.props.vm.toggleQuestionGeneration();
+        if (this.props.questionGenerationActive) {
+            this.deactivateQuestionGeneration();
+        } else {
+            this.activateQuestionGeneration();
+        }
+    }
+    activateQuestionGeneration () {
+        this.props.vm.activateQuestionGeneration();
+        this.setQuestionGenerationState(QuestionGenerationState.ACTIVATED);
+        setTimeout(() => this.setQuestionGenerationState(QuestionGenerationState.ACTIVE), 200);
+    }
+    deactivateQuestionGeneration () {
+        this.props.vm.deactivateQuestionGeneration();
+        this.setQuestionGenerationState(QuestionGenerationState.DEACTIVATED);
+        setTimeout(() => this.setQuestionGenerationState(QuestionGenerationState.INACTIVE), 200);
+    }
+    setQuestionGenerationState (state) {
+        this.questionGenerationState = state;
+        this.forceUpdate();
     }
     render () {
         const {
@@ -97,6 +120,7 @@ class Controls extends React.Component {
                 irDisabled={irDisabled}
                 turbo={turbo}
                 interrogationEnabled={interrogationEnabled}
+                questionGenerationState={this.questionGenerationState}
                 questionGenerationActive={questionGenerationActive}
                 vm={vm}
                 onGreenFlagClick={this.handleGreenFlagClick}
@@ -128,7 +152,7 @@ const mapStateToProps = state => ({
     irDisabled: state.scratchGui.ircards.disabled,
     projectRunning: state.scratchGui.vmStatus.running,
     turbo: state.scratchGui.vmStatus.turbo,
-    interrogationEnabled: state.scratchGui.irDebugger.enabled && state.scratchGui.irDebugger.supported,
+    interrogationEnabled: state.scratchGui.irDebugger.supported,
     questionGenerationActive: state.scratchGui.vmStatus.questionGenerationActive
 });
 

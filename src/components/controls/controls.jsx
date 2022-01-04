@@ -9,7 +9,7 @@ import StepOver from '../step-over/step-over.jsx';
 import StopAll from '../stop-all/stop-all.jsx';
 import TurboMode from '../turbo-mode/turbo-mode.jsx';
 import IRQuestions from '../interrogative-debugging/version-1/ir-questions/ir-question-button.jsx';
-import ToggleQuestionGeneration
+import ToggleQuestionGeneration, {QuestionGenerationState}
     from '../interrogative-debugging/version-2/toggle-question-generation/toggle-question-generation.jsx';
 
 import styles from './controls.css';
@@ -72,6 +72,7 @@ const Controls = function (props) {
         paused,
         turbo,
         interrogationEnabled,
+        questionGenerationState,
         questionGenerationActive,
         ...componentProps
     } = props;
@@ -108,13 +109,14 @@ const Controls = function (props) {
                 onClick={onIRQuestionsClick}
                 title={intl.formatMessage(messages.irQuestionTitle)}
             />
-            { interrogationEnabled && active ? (<ToggleQuestionGeneration
+            { interrogationEnabled ? (<ToggleQuestionGeneration
                 title={questionGenerationActive ?
                     intl.formatMessage(messages.deactivateQuestionGeneration) :
                     intl.formatMessage(messages.activateQuestionGeneration)
                 }
                 onClick={onToggleQuestionGenerationClick}
-                questionGenerationActive={questionGenerationActive}
+                state={questionGenerationState}
+                active={questionGenerationActive}
             />) : null}
         </div>
     );
@@ -134,6 +136,7 @@ Controls.propTypes = {
     irDisabled: PropTypes.bool,
     turbo: PropTypes.bool,
     interrogationEnabled: PropTypes.bool,
+    questionGenerationState: PropTypes.oneOf(Object.values(QuestionGenerationState)).isRequired,
     questionGenerationActive: PropTypes.bool
 };
 
