@@ -40,11 +40,9 @@ class IRDebugger extends React.Component {
             return;
         }
 
-        const valid = (props.targetOriginId && !props.blockId) ||
-            (!props.targetOriginId && props.blockId);
-        if (valid) {
-            this.isTargetDebugger = props.targetOriginId !== null;
-            this.isBlockDebugger = props.blockId !== null;
+        this.isTargetDebugger = props.targetOriginId && !props.blockId;
+        this.isBlockDebugger = !props.targetOriginId && props.blockId;
+        if (this.isTargetDebugger || this.isBlockDebugger) {
             this.calculate();
         } else {
             props.onClose();
