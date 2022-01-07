@@ -180,8 +180,6 @@ const mapStateToProps = (state, {id}) => ({
     receivedBlocks: state.scratchGui.hoveredTarget.receivedBlocks &&
             state.scratchGui.hoveredTarget.sprite === id,
     vm: state.scratchGui.vm,
-    active: state.scratchGui.vmStatus.running,
-    paused: state.scratchGui.vmStatus.paused,
     interrogationEnabled: state.scratchGui.irDebugger.enabled && state.scratchGui.irDebugger.supported
 });
 const mapDispatchToProps = dispatch => ({

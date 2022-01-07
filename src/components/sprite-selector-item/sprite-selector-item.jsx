@@ -73,7 +73,7 @@ const SpriteSelectorItem = props => (
                         />
                     </MenuItem>
                 ) : null }
-                {props.onInterrogativeButtonClick && props.interrogationEnabled && (!props.active || props.paused) ? (
+                {props.onInterrogativeButtonClick && props.interrogationEnabled ? (
                     <BorderedMenuItem onClick={props.onInterrogativeButtonClick}>
                         <FormattedMessage
                             defaultMessage="Ask why..."
@@ -113,8 +113,6 @@ SpriteSelectorItem.propTypes = {
     onMouseLeave: PropTypes.func,
     preventContextMenu: PropTypes.bool,
     selected: PropTypes.bool.isRequired,
-    active: PropTypes.bool,
-    paused: PropTypes.bool,
     interrogationEnabled: PropTypes.bool
 };
 

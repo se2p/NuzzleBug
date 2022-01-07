@@ -18,6 +18,7 @@ import {
 } from '../reducers/vm-status';
 import {showExtensionAlert} from '../reducers/alerts';
 import {updateMicIndicator} from '../reducers/mic-indicator';
+import {openBlockDebugger} from '../reducers/interrogative-debugging/version-2/ir-debugger';
 
 /*
  * Higher Order Component to manage events emitted by the VM
@@ -43,6 +44,7 @@ const vmListenerHOC = function (WrappedComponent) {
             this.props.vm.on('targetsUpdate', this.handleTargetsUpdate);
             this.props.vm.on('MONITORS_UPDATE', this.props.onMonitorsUpdate);
             this.props.vm.on('BLOCK_DRAG_UPDATE', this.props.onBlockDragUpdate);
+            this.props.vm.on('BLOCK_ASK_WHY', this.props.onBlockAskWhy);
             this.props.vm.on('TURBO_MODE_ON', this.props.onTurboModeOn);
             this.props.vm.on('TURBO_MODE_OFF', this.props.onTurboModeOff);
             this.props.vm.on('PROJECT_RUN_START', this.props.onProjectRunStart);
@@ -131,6 +133,7 @@ const vmListenerHOC = function (WrappedComponent) {
                 shouldUpdateTargets,
                 shouldUpdateProjectChanged,
                 onBlockDragUpdate,
+                onBlockAskWhy,
                 onGreenFlag,
                 onKeyDown,
                 onKeyUp,
@@ -158,6 +161,7 @@ const vmListenerHOC = function (WrappedComponent) {
     VMListener.propTypes = {
         attachKeyboardEvents: PropTypes.bool,
         onBlockDragUpdate: PropTypes.func.isRequired,
+        onBlockAskWhy: PropTypes.func.isRequired,
         onGreenFlag: PropTypes.func,
         onKeyDown: PropTypes.func,
         onKeyUp: PropTypes.func,
@@ -207,6 +211,9 @@ const vmListenerHOC = function (WrappedComponent) {
         },
         onBlockDragUpdate: areBlocksOverGui => {
             dispatch(updateBlockDrag(areBlocksOverGui));
+        },
+        onBlockAskWhy: blockId => {
+            dispatch(openBlockDebugger(blockId));
         },
         onProjectRunStart: () => dispatch(setRunningState(true)),
         onProjectRunStop: () => dispatch(setRunningState(false)),

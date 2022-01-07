@@ -5,8 +5,9 @@ import VM from 'scratch-vm';
 import {connect} from 'react-redux';
 
 import ControlsComponent from '../components/controls/controls.jsx';
-import {QuestionGenerationState}
-    from '../components//interrogative-debugging/version-2/toggle-question-generation/toggle-question-generation.jsx';
+import {
+    QuestionGenerationState
+} from '../components//interrogative-debugging/version-2/toggle-question-generation/toggle-question-generation.jsx';
 import {viewCards} from '../reducers/interrogative-debugging/version-1/ir-cards.js';
 
 class Controls extends React.Component {
@@ -107,7 +108,7 @@ class Controls extends React.Component {
             projectPaused,
             irDisabled,
             turbo,
-            interrogationEnabled,
+            interrogationSupported,
             questionGenerationActive,
             ...props
         } = this.props;
@@ -119,7 +120,7 @@ class Controls extends React.Component {
                 paused={projectPaused}
                 irDisabled={irDisabled}
                 turbo={turbo}
-                interrogationEnabled={interrogationEnabled}
+                interrogationSupported={interrogationSupported}
                 questionGenerationState={this.questionGenerationState}
                 questionGenerationActive={questionGenerationActive}
                 vm={vm}
@@ -141,7 +142,7 @@ Controls.propTypes = {
     irDisabled: PropTypes.bool.isRequired,
     projectRunning: PropTypes.bool.isRequired,
     turbo: PropTypes.bool.isRequired,
-    interrogationEnabled: PropTypes.bool.isRequired,
+    interrogationSupported: PropTypes.bool.isRequired,
     questionGenerationActive: PropTypes.bool.isRequired,
     vm: PropTypes.instanceOf(VM)
 };
@@ -152,7 +153,7 @@ const mapStateToProps = state => ({
     irDisabled: state.scratchGui.ircards.disabled,
     projectRunning: state.scratchGui.vmStatus.running,
     turbo: state.scratchGui.vmStatus.turbo,
-    interrogationEnabled: state.scratchGui.irDebugger.supported,
+    interrogationSupported: state.scratchGui.irDebugger.supported,
     questionGenerationActive: state.scratchGui.vmStatus.questionGenerationActive
 });
 

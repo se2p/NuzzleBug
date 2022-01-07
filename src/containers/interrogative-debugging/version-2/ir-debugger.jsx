@@ -22,70 +22,103 @@ class IRDebugger extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'calculateQuestionHierarchy',
             'setTargetOption',
-            'rerender'
+            'rerender',
+            'translate'
         ]);
         this.cancel = false;
-        this.calculateQuestionHierarchy();
-    }
 
-    calculateQuestionHierarchy () {
         if (!this.props.visible) {
             this.cancel = true;
             return;
         }
 
-        const vm = this.props.vm;
-        if (this.props.vm.runtime.traceInfo.isEmpty()) {
-            this.props.onClose();
-            this.props.onDisable();
+        if (props.vm.runtime.traceInfo.isEmpty()) {
+            props.onClose();
+            props.onDisable();
             this.cancel = true;
             return;
         }
 
-        this.targetOrigin = vm.runtime.targets.find(target => target.id === this.props.targetOriginId);
+        const valid = (props.targetOriginId && !props.blockId) ||
+            (!props.targetOriginId && props.blockId);
+        if (valid) {
+            this.isTargetDebugger = props.targetOriginId !== null;
+            this.isBlockDebugger = props.blockId !== null;
+            this.calculate();
+        } else {
+            props.onClose();
+            this.cancel = true;
+        }
+    }
+
+    calculate () {
+        this.trace = this.calculateTrace();
+        this.targetOrigin = this.getTargetOrigin();
+        this.targetOptions = this.calculateTargetOptions();
+        if (!this.target) {
+            this.setTargetOption(this.targetOptions[0]);
+        }
+        if (!this.target.isOriginal) {
+            this.trace = this.trace.filter(t => t.targetsInfo[this.target.id]);
+        }
+
+        if (this.isBlockDebugger) {
+            this.calculateBlock();
+        } else {
+            this.calculateQuestionHierarchy();
+        }
+    }
+
+    translate (id, values) {
+        return this.props.intl.formatMessage({id: `gui.ir-debugger.${id}`}, values);
+    }
+
+    calculateTrace () {
+        const vm = this.props.vm;
         let trace = vm.runtime.traceInfo.tracer.traces;
         if (vm.runtime.questionGeneration.active) {
             trace = trace.slice(vm.runtime.questionGeneration.traceStart);
         } else {
             trace = trace.slice(vm.runtime.questionGeneration.traceStart, vm.runtime.questionGeneration.traceEnd);
         }
-
-        this.targetOptions = this.calculateTargetOptions(trace);
-        if (!this.target) {
-            this.setTargetOption(this.targetOptions[0]);
-        }
-        if (!this.target.isOriginal) {
-            trace = trace.filter(t => t.targetsInfo[this.target.id]);
-        }
-
-        const translate = (id, values) => this.props.intl.formatMessage({id: `gui.ir-debugger.${id}`}, values);
-        const questionProvider = new QuestionProvider(vm, trace, this.target, translate);
-        this.questionHierarchy = questionProvider.generateQuestionHierarchy();
+        return trace;
     }
 
-    calculateTargetOptions (trace) {
+    getTargetOrigin () {
+        const {
+            vm,
+            targetOriginId,
+            blockId
+        } = this.props;
+
+        if (this.isBlockDebugger) {
+            return vm.runtime.targets.find(target =>
+                Object.values(target.blocks._blocks).some(block => block.id === blockId));
+        }
+        return vm.runtime.targets.find(target => target.id === targetOriginId);
+    }
+
+    calculateTargetOptions () {
         const targetOptions = [{
             id: this.targetOrigin.id,
-            optionName: this.props.intl.formatMessage({id: 'gui.ir-debugger.target.original'}),
+            optionName: this.translate('target.original', {}),
             isOriginal: true
         }];
-        let cloneIndex = 1;
-        for (const traceInfo of trace) {
-            const cloneIds = traceInfo.targetsInfo[this.targetOrigin.id].cloneIds;
-            if (cloneIds) {
-                for (const cloneId of cloneIds) {
-                    if (!targetOptions.some(option => option.id === cloneId)) {
-                        targetOptions.push({
-                            id: cloneId,
-                            optionName: this.props.intl.formatMessage(
-                                {id: 'gui.ir-debugger.target.clone'},
-                                {index: cloneIndex}
-                            ),
-                            isOriginal: false
-                        });
-                        cloneIndex++;
+        if (this.isTargetDebugger) {
+            let cloneIndex = 1;
+            for (const traceInfo of this.trace) {
+                const cloneIds = traceInfo.targetsInfo[this.targetOrigin.id].cloneIds;
+                if (cloneIds) {
+                    for (const cloneId of cloneIds) {
+                        if (!targetOptions.some(option => option.id === cloneId)) {
+                            targetOptions.push({
+                                id: cloneId,
+                                optionName: this.translate('target.clone', {index: cloneIndex}),
+                                isOriginal: false
+                            });
+                            cloneIndex++;
+                        }
                     }
                 }
             }
@@ -107,8 +140,21 @@ class IRDebugger extends React.Component {
         };
     }
 
+    calculateQuestionHierarchy () {
+        const questionProvider = new QuestionProvider(this.props.vm, this.trace, this.target, this.translate);
+        this.questionHierarchy = questionProvider.generateQuestionHierarchy();
+    }
+
+    calculateBlock () {
+        const executed = this.trace.some(trace => trace.id === this.props.blockId);
+        this.block = {
+            id: this.props.blockId,
+            executed: executed
+        };
+    }
+
     rerender () {
-        this.calculateQuestionHierarchy();
+        this.calculate();
         this.forceUpdate();
     }
 
@@ -122,6 +168,7 @@ class IRDebugger extends React.Component {
                 target={this.target}
                 targetOptions={this.targetOptions}
                 questionHierarchy={this.questionHierarchy}
+                block={this.block}
                 handleTargetChange={this.setTargetOption}
                 handleRefresh={this.rerender}
                 {...this.props}
@@ -133,7 +180,8 @@ class IRDebugger extends React.Component {
 IRDebugger.propTypes = {
     intl: intlShape.isRequired,
     vm: PropTypes.instanceOf(VirtualMachine).isRequired,
-    targetOriginId: PropTypes.string.isRequired,
+    targetOriginId: PropTypes.string,
+    blockId: PropTypes.string,
     visible: PropTypes.bool.isRequired,
     expanded: PropTypes.bool.isRequired,
     x: PropTypes.number.isRequired,
@@ -148,6 +196,7 @@ IRDebugger.propTypes = {
 
 const mapStateToProps = state => ({
     targetOriginId: state.scratchGui.irDebugger.targetId,
+    blockId: state.scratchGui.irDebugger.blockId,
     visible: state.scratchGui.irDebugger.visible,
     expanded: state.scratchGui.irDebugger.expanded,
     x: state.scratchGui.irDebugger.x,

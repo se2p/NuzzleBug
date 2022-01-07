@@ -69,8 +69,6 @@ class TargetPane extends React.Component {
             stageSize,
             sprites,
             vm,
-            active,
-            paused,
             interrogationEnabled,
             ...componentProps
         } = this.props;
@@ -133,7 +131,7 @@ class TargetPane extends React.Component {
                         </div>
                     </div>
                 </ContextMenuTrigger>
-                {onInterrogativeButtonClick && stage.id && interrogationEnabled && (!active || paused) ? (
+                {onInterrogativeButtonClick && stage.id && interrogationEnabled ? (
                     <ContextMenu id="stageContextMenu">
                         <MenuItem onClick={this.handleOpenIRStageDebugger}>
                             <FormattedMessage
@@ -204,8 +202,6 @@ TargetPane.propTypes = {
     stage: spriteShape,
     stageSize: PropTypes.oneOf(Object.keys(STAGE_DISPLAY_SIZES)).isRequired,
     vm: PropTypes.instanceOf(VM),
-    active: PropTypes.bool,
-    paused: PropTypes.bool,
     interrogationEnabled: PropTypes.bool
 };
 

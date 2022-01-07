@@ -150,6 +150,12 @@
         "variable": {
             "why-did-have-value": "Warum hatte die Variable <b><i>{variable}</i></b> den Wert <b>{value}</b>?",
             "why-did-not-have-value": "Warum hatte die Variable <b><i>{variable}</i></b> nicht den Wert <b>{value}</b>?"
+        },
+        "block": {
+            "why-did": "Warum wurde der Block",
+            "why-did-not": "Warum wurde der Block",
+            "execute": "ausgeführt?",
+            "not-execute": "nicht ausgeführt?"
         }
     },
     "variable": {

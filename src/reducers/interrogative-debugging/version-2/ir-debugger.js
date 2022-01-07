@@ -1,6 +1,9 @@
+import ScratchBlocks from 'scratch-blocks';
+
 const SET_PROJECT_CHANGED = 'scratch-gui/project-changed/SET_PROJECT_CHANGED';
 const BLOCK_DRAG_UPDATE = 'scratch-gui/block-drag/BLOCK_DRAG_UPDATE';
 const SET_RUNNING_STATE = 'scratch-gui/vm-status/SET_RUNNING_STATE';
+const SET_PAUSE_STATE = 'scratch-gui/vm-status/SET_PAUSED_STATE';
 const SELECT_LOCALE = 'scratch-gui/locales/SELECT_LOCALE';
 
 const ENABLE = 'scratch-gui/ir-debugger/ENABLE';
@@ -18,13 +21,26 @@ const supportedLanguages = ['de', 'en'];
 
 const initialState = {
     targetId: null,
+    blockId: null,
     visible: false,
     enabled: false,
     supported: true,
     x: 0,
     y: 0,
     expanded: true,
-    dragging: false
+    dragging: false,
+    projectRunning: false,
+    projectPaused: false
+};
+
+const forwardDebuggerEnabled = function (enabled) {
+    const workspace = ScratchBlocks.getMainWorkspace();
+    workspace.setInterrogativeDebuggerEnabled(enabled);
+};
+
+const forwardDebuggerSupported = function (supported, vm, workspace) {
+    vm.setInterrogativeDebuggerSupported(supported);
+    workspace.setInterrogativeDebuggerSupported(supported);
 };
 
 const reducer = function (state, action) {
@@ -33,34 +49,52 @@ const reducer = function (state, action) {
     }
     switch (action.type) {
     case SET_PROJECT_CHANGED:
-        return Object.assign({}, state, initialState);
+        forwardDebuggerEnabled(initialState.enabled);
+        return Object.assign({}, state, initialState, {
+            supported: state.supported
+        });
     case BLOCK_DRAG_UPDATE:
+        forwardDebuggerEnabled(false);
         return Object.assign({}, state, {
             enabled: false
         });
-    case SET_RUNNING_STATE:
-        if (!action.running) {
-            return state;
-        }
+    case SET_RUNNING_STATE: {
+        const enabled = !action.running || state.projectPaused;
+        forwardDebuggerEnabled(enabled);
         return Object.assign({}, state, {
-            enabled: true
+            projectRunning: action.running,
+            enabled: enabled
         });
-    case SELECT_LOCALE:
+    }
+    case SET_PAUSE_STATE: {
+        const enabled = action.paused || !state.projectRunning;
+        forwardDebuggerEnabled(enabled);
         return Object.assign({}, state, {
-            supported: supportedLanguages.includes(action.locale)
+            projectPaused: action.paused,
+            enabled: enabled
         });
+    }
+    case SELECT_LOCALE: {
+        const supported = supportedLanguages.includes(action.locale);
+        return Object.assign({}, state, {
+            supported: supported
+        });
+    }
     case ENABLE:
+        forwardDebuggerEnabled(true);
         return Object.assign({}, state, {
             enabled: true
         });
     case DISABLE:
+        forwardDebuggerEnabled(false);
         return Object.assign({}, state, {
             enabled: false
         });
     case OPEN:
         return Object.assign({}, state, {
             visible: true,
-            targetId: action.targetId
+            targetId: action.targetId,
+            blockId: action.blockId
         });
     case CLOSE:
         return Object.assign({}, state, {
@@ -97,8 +131,12 @@ const disableDebugger = function () {
     return {type: DISABLE};
 };
 
-const openDebugger = function (targetId) {
+const openTargetDebugger = function (targetId) {
     return {type: OPEN, targetId};
+};
+
+const openBlockDebugger = function (blockId) {
+    return {type: OPEN, blockId};
 };
 
 const closeDebugger = function () {
@@ -126,10 +164,12 @@ export {
     initialState as irDebuggerInitialState,
     enableDebugger,
     disableDebugger,
-    openDebugger,
+    openTargetDebugger,
+    openBlockDebugger,
     closeDebugger,
     shrinkExpandDebugger,
     startDragDebugger,
     dragDebugger,
-    endDragDebugger
+    endDragDebugger,
+    forwardDebuggerSupported
 };

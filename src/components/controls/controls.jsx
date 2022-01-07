@@ -10,7 +10,7 @@ import StopAll from '../stop-all/stop-all.jsx';
 import TurboMode from '../turbo-mode/turbo-mode.jsx';
 import IRQuestions from '../interrogative-debugging/version-1/ir-questions/ir-question-button.jsx';
 import ToggleQuestionGeneration, {QuestionGenerationState}
-    from '../interrogative-debugging/version-2/toggle-question-generation/toggle-question-generation.jsx';
+from '../interrogative-debugging/version-2/toggle-question-generation/toggle-question-generation.jsx';
 
 import styles from './controls.css';
 
@@ -71,7 +71,7 @@ const Controls = function (props) {
         irDisabled,
         paused,
         turbo,
-        interrogationEnabled,
+        interrogationSupported,
         questionGenerationState,
         questionGenerationActive,
         ...componentProps
@@ -86,12 +86,12 @@ const Controls = function (props) {
                 title={intl.formatMessage(messages.goTitle)}
                 onClick={onGreenFlagClick}
             />
-            <PauseResume
+            {interrogationSupported ? <PauseResume
                 active={active}
                 paused={paused}
                 title={intl.formatMessage(paused ? messages.resumeTitle : messages.pauseTitle)}
                 onClick={onPauseResumeClick}
-            />
+            /> : null}
             {paused ? (<StepOver
                 title={intl.formatMessage(messages.stepOverTitle)}
                 onClick={onStepOverClick}
@@ -104,12 +104,12 @@ const Controls = function (props) {
             {turbo ? (
                 <TurboMode />
             ) : null}
-            <IRQuestions
+            {interrogationSupported ? <IRQuestions
                 active={!irDisabled && (!active || paused)}
                 onClick={onIRQuestionsClick}
                 title={intl.formatMessage(messages.irQuestionTitle)}
-            />
-            { interrogationEnabled ? (<ToggleQuestionGeneration
+            /> : null}
+            {interrogationSupported ? (<ToggleQuestionGeneration
                 title={questionGenerationActive ?
                     intl.formatMessage(messages.deactivateQuestionGeneration) :
                     intl.formatMessage(messages.activateQuestionGeneration)
@@ -135,7 +135,7 @@ Controls.propTypes = {
     onToggleQuestionGenerationClick: PropTypes.func.isRequired,
     irDisabled: PropTypes.bool,
     turbo: PropTypes.bool,
-    interrogationEnabled: PropTypes.bool,
+    interrogationSupported: PropTypes.bool,
     questionGenerationState: PropTypes.oneOf(Object.values(QuestionGenerationState)).isRequired,
     questionGenerationActive: PropTypes.bool
 };
