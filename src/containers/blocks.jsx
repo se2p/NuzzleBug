@@ -25,7 +25,10 @@ import {activateColorPicker} from '../reducers/color-picker';
 import {closeExtensionLibrary, openSoundRecorder, openConnectionModal} from '../reducers/modals';
 import {activateCustomProcedures, deactivateCustomProcedures} from '../reducers/custom-procedures';
 import {setConnectionModalExtensionId} from '../reducers/connection-modal';
-import {forwardDebuggerSupported} from '../reducers/interrogative-debugging/version-2/ir-debugger';
+import {
+    forwardDebuggerEnabled,
+    forwardDebuggerSupported
+} from '../reducers/interrogative-debugging/version-2/ir-debugger';
 
 import {
     activateTab,
@@ -210,6 +213,7 @@ class Blocks extends React.Component {
                 this.withToolboxUpdates(() => {
                     this.workspace.getFlyout().setRecyclingEnabled(true);
                 });
+                forwardDebuggerEnabled(this.props.interrogationEnabled, this.workspace);
                 forwardDebuggerSupported(this.props.interrogationSupported, this.props.vm, this.workspace);
             });
     }
@@ -542,6 +546,7 @@ class Blocks extends React.Component {
             ...props
         } = this.props;
         /* eslint-enable no-unused-vars */
+        delete props.interrogationEnabled;
         delete props.interrogationSupported;
         return (
             <React.Fragment>
@@ -624,6 +629,7 @@ Blocks.propTypes = {
     toolboxXML: PropTypes.string,
     updateToolboxState: PropTypes.func,
     vm: PropTypes.instanceOf(VM).isRequired,
+    interrogationEnabled: PropTypes.bool,
     interrogationSupported: PropTypes.bool
 };
 
@@ -671,6 +677,7 @@ const mapStateToProps = state => ({
     messages: state.locales.messages,
     toolboxXML: state.scratchGui.toolbox.toolboxXML,
     customProceduresVisible: state.scratchGui.customProcedures.active,
+    interrogationEnabled: state.scratchGui.irDebugger.enabled,
     interrogationSupported: state.scratchGui.irDebugger.supported
 });
 

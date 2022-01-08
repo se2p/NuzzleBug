@@ -33,8 +33,10 @@ const initialState = {
     projectPaused: false
 };
 
-const forwardDebuggerEnabled = function (enabled) {
-    const workspace = ScratchBlocks.getMainWorkspace();
+const forwardDebuggerEnabled = function (enabled, workspace) {
+    if (!workspace) {
+        workspace = ScratchBlocks.getMainWorkspace();
+    }
     workspace.setInterrogativeDebuggerEnabled(enabled);
 };
 
@@ -171,5 +173,6 @@ export {
     startDragDebugger,
     dragDebugger,
     endDragDebugger,
+    forwardDebuggerEnabled,
     forwardDebuggerSupported
 };
