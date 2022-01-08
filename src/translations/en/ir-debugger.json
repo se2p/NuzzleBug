@@ -11,6 +11,7 @@
     "header": {
         "title-sprite": "Interrogative Debugger for sprite <i>{sprite}</i>",
         "title-stage": "Interrogative Debugger for the stage",
+        "title-block": "Interrogative Debugger for the block",
         "expand": "Expand",
         "close": "Close", 
         "shrink": "Shrink",
@@ -31,7 +32,8 @@
             "control": "Control",
             "sensing": "Sensing", 
             "operators": "Operators", 
-            "variables": "Variables"
+            "variables": "Variables",
+            "execution": "Execution"
         }
     },
     "question-hierarchy": {
@@ -151,11 +153,9 @@
             "why-did-have-value": "Why did variable <b><i>{variable}</i></b> have the value <b>{value}</b>?",
             "why-did-not-have-value": "Why didn't variable <b><i>{variable}</i></b> have the value <b>{value}</b>?"
         },
-        "block": {
-            "why-did": "Why did block",
-            "why-did-not": "Why didn't block",
-            "execute": "execute?",
-            "not-execute": "execute?"
+        "execution": {
+            "why-did-block-execute": "Why did the block execute?",
+            "why-did-not-block-execute": "Why didn't the block execute?"
         }
     },
     "variable": {

@@ -11,6 +11,7 @@
     "header": {
         "title-sprite": "Interrogative Debugger für die Figur <i>{sprite}</i>",
         "title-stage": "Interrogative Debugger für die Bühne",
+        "title-block": "Interrogative Debugger für den Block",
         "expand": "Aufklappen",
         "close": "Schließen",
         "shrink": "Zuklappen",
@@ -31,7 +32,8 @@
             "control": "Steuerung",
             "sensing": "Fühlen",
             "operators": "Operatoren",
-            "variables": "Variablen"
+            "variables": "Variablen",
+            "execution": "Ausführung"
         }
     },
     "question-hierarchy": {
@@ -151,11 +153,9 @@
             "why-did-have-value": "Warum hatte die Variable <b><i>{variable}</i></b> den Wert <b>{value}</b>?",
             "why-did-not-have-value": "Warum hatte die Variable <b><i>{variable}</i></b> nicht den Wert <b>{value}</b>?"
         },
-        "block": {
-            "why-did": "Warum wurde der Block",
-            "why-did-not": "Warum wurde der Block",
-            "execute": "ausgeführt?",
-            "not-execute": "nicht ausgeführt?"
+        "execution": {
+            "why-did-block-execute": "Warum wurde der Block ausgeführt?",
+            "why-did-not-block-execute": "Warum wurde der Block nicht ausgeführt?"
         }
     },
     "variable": {

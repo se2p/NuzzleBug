@@ -9,7 +9,6 @@ import {QuestionCategory} from 'scratch-ir';
 
 import IRHeader from '../ir-header/ir-header.jsx';
 import IRQuestionHierarchy from '../ir-question-hierarchy/ir-question-hierarchy.jsx';
-import IRBlockQuestion from '../ir-block-question/ir-block-question.jsx';
 import IRSelectedQuestion from '../ir-selected-question/ir-selected-question.jsx';
 import IRAnswer from '../ir-answer/ir-answer.jsx';
 import cardStyles from '../../../cards/card.css';
@@ -37,8 +36,8 @@ class IRDebugger extends React.Component {
         const {
             target,
             targetOptions,
+            blockId,
             questionHierarchy,
-            block,
             expanded,
             handleTargetChange,
             handleRefresh,
@@ -92,6 +91,7 @@ class IRDebugger extends React.Component {
                             <div className={classNames(cardStyles.card, styles.card)}>
                                 <IRHeader
                                     target={target}
+                                    blockId={blockId}
                                     targetOptions={targetOptions}
                                     expanded={expanded}
                                     onRefresh={handleRefresh}
@@ -99,25 +99,17 @@ class IRDebugger extends React.Component {
                                     onClose={onClose}
                                     onShrinkExpand={onShrinkExpand}
                                 />
-                                <div
-                                    style={{width: `${questionHierarchy ? 1000 : 670}px`}}
-                                    className={expanded ? styles.body : cardStyles.hidden}
-                                >
-                                    {questionHierarchy ? (
-                                        <div className={styles.questionHierarchy}>
-                                            <IRQuestionHierarchy
-                                                questionHierarchy={questionHierarchy}
-                                                selectedQuestion={this.state.selectedQuestion}
-                                                onQuestionClick={this.handleQuestionClick}
-                                            />
-                                        </div>
-                                    ) : null}
+                                <div className={expanded ? styles.body : cardStyles.hidden}>
+                                    <div className={styles.questionHierarchy}>
+                                        <IRQuestionHierarchy
+                                            questionHierarchy={questionHierarchy}
+                                            selectedQuestion={this.state.selectedQuestion}
+                                            onQuestionClick={this.handleQuestionClick}
+                                        />
+                                    </div>
                                     <div className={styles.answerArea}>
                                         <div className={styles.selectedQuestion}>
-                                            {block ?
-                                                <IRBlockQuestion block={block} /> :
-                                                <IRSelectedQuestion selectedQuestion={this.state.selectedQuestion} />
-                                            }
+                                            <IRSelectedQuestion selectedQuestion={this.state.selectedQuestion} />
                                         </div>
                                         <div className={styles.answer}>
                                             <IRAnswer />
@@ -147,11 +139,8 @@ IRDebugger.propTypes = {
         id: PropTypes.string.isRequired,
         optionName: PropTypes.string.isRequired
     })).isRequired,
-    questionHierarchy: PropTypes.arrayOf(PropTypes.instanceOf(QuestionCategory)),
-    block: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        executed: PropTypes.bool.isRequired
-    }),
+    blockId: PropTypes.string,
+    questionHierarchy: PropTypes.arrayOf(PropTypes.instanceOf(QuestionCategory)).isRequired,
     expanded: PropTypes.bool.isRequired,
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,

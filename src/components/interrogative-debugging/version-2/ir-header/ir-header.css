@@ -1,18 +1,24 @@
 @import "../../../../css/colors.css";
 
 .header {
-    background: $motion-primary;
+    background: #0FBD8C;
     cursor: default;
     border-width: 0px;
 }
 
 .left-header {
     font-size: 15px;
-    margin: 15px;
+    padding: 0 15px;
     font-weight: bold;
     color: white;
     display: flex;
     flex-direction: row;
+}
+
+.right-header {
+    display: flex;
+    flex-direction: row;
+    align-content: stretch;
 }
 
 .header-button {
@@ -25,25 +31,29 @@
     padding: 12px;
 }
 
-.header-button:hover {
-    background-color: $ui-black-transparent;
-}
-
 .icon {
     height: 20px;
     margin: 2px 0;
     margin-left: 4px;
 }
 
-.title {
+.header-item {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
+.right-header .header-item {
+    padding: 10px 0;
+}
+
+.right-header .header-item:hover {
+    background-color: $ui-black-transparent;
+}
+
 .dropdown {
-    background-color: $motion-primary;
+    background-color: #0FBD8C;
     color: white;
     font-family: inherit;
     font-style: italic;
@@ -81,7 +91,7 @@
 }
   
 .dropdown-content {
-    background-color: $motion-primary;
+    background-color: #0FBD8C;
     min-width: 100px;
     max-height: 480px;
     padding-top: 6px;
@@ -123,4 +133,10 @@
 
 .selected-target-option, .selected-target-option:hover {
     background-color: $ui-black-transparent;
+}
+
+.svgBlock {
+    position: relative;
+    float: left;
+    margin: 10px 10px 0 10px;
 }
