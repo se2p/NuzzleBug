@@ -153,6 +153,10 @@
             "why-did-have-value": "Why did variable <b><i>{variable}</i></b> have the value <b>{value}</b>?",
             "why-did-not-have-value": "Why didn't variable <b><i>{variable}</i></b> have the value <b>{value}</b>?"
         },
+        "list": {
+            "why-did-have-value": "Why did list <b><i>{list}</i></b> have the value <b>{value}</b>?",
+            "why-did-not-contain-item": "Why didn't list <b><i>{list}</i></b> contain <b><i>{item}</i></b>?"
+        },
         "execution": {
             "why-did-block-execute": "Why did the block execute?",
             "why-did-not-block-execute": "Why didn't the block execute?"
