@@ -136,7 +136,8 @@ class IRDebugger extends React.Component {
             isOriginal: targetOption.isOriginal,
             isStage: this.targetOrigin.isStage,
             blocks: this.targetOrigin.blocks,
-            sprite: this.targetOrigin.sprite
+            sprite: this.targetOrigin.sprite,
+            costumeUrl: this.props.costumeUrl
         };
     }
 
@@ -167,6 +168,7 @@ IRDebugger.propTypes = {
     intl: intlShape.isRequired,
     vm: PropTypes.instanceOf(VirtualMachine).isRequired,
     targetOriginId: PropTypes.string,
+    costumeUrl: PropTypes.string,
     blockId: PropTypes.string,
     visible: PropTypes.bool.isRequired,
     expanded: PropTypes.bool.isRequired,
@@ -182,6 +184,7 @@ IRDebugger.propTypes = {
 
 const mapStateToProps = state => ({
     targetOriginId: state.scratchGui.irDebugger.targetId,
+    costumeUrl: state.scratchGui.irDebugger.costumeUrl,
     blockId: state.scratchGui.irDebugger.blockId,
     visible: state.scratchGui.irDebugger.visible,
     expanded: state.scratchGui.irDebugger.expanded,

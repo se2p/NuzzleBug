@@ -148,7 +148,17 @@ class IRHeader extends React.Component {
                                 className={styles.svgBlock}
                             />
                         </div>
-                    ) : null}
+                    ) : (
+                        target.costumeUrl ? (
+                            <div className={styles.headerItem}>
+                                <img
+                                    className={styles.targetImage}
+                                    draggable={false}
+                                    src={target.costumeUrl}
+                                />
+                            </div>
+                        ) : null
+                    )}
                     {targetOptions.length > 1 ? (
                         <div className={styles.headerItem}>
                             <div className={styles.dropdown}>
@@ -257,7 +267,8 @@ IRHeader.propTypes = {
         sprite: PropTypes.shape({
             name: PropTypes.string.isRequired
         }),
-        isStage: PropTypes.bool.isRequired
+        isStage: PropTypes.bool.isRequired,
+        costumeUrl: PropTypes.string
     }).isRequired,
     targetOptions: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.string.isRequired,

@@ -133,7 +133,8 @@ IRDebugger.propTypes = {
         sprite: PropTypes.shape({
             name: PropTypes.string.isRequired
         }),
-        isStage: PropTypes.bool.isRequired
+        isStage: PropTypes.bool.isRequired,
+        costumeUrl: PropTypes.string
     }).isRequired,
     targetOptions: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.string.isRequired,

@@ -284,8 +284,8 @@ const mapDispatchToProps = dispatch => ({
     },
     onCloseImporting: () => dispatch(closeAlertWithId('importingAsset')),
     onShowImporting: () => dispatch(showStandardAlert('importingAsset')),
-    onInterrogativeButtonClick: targetId => {
-        dispatch(openTargetDebugger(targetId));
+    onInterrogativeButtonClick: (targetId, costumeUrl) => {
+        dispatch(openTargetDebugger(targetId, costumeUrl));
     }
 });
 

@@ -105,7 +105,7 @@ class SpriteSelectorItem extends React.PureComponent {
     }
     handleOpenInterrogativeDebugger (e) {
         e.stopPropagation();
-        this.props.onInterrogativeButtonClick(this.props.id);
+        this.props.onInterrogativeButtonClick(this.props.id, this.getCostumeData());
     }
     handleMouseLeave () {
         this.props.dispatchSetHoveredSprite(null);

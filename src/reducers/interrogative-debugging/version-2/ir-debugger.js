@@ -96,7 +96,8 @@ const reducer = function (state, action) {
         return Object.assign({}, state, {
             visible: true,
             targetId: action.targetId,
-            blockId: action.blockId
+            blockId: action.blockId,
+            costumeUrl: action.costumeUrl
         });
     case CLOSE:
         return Object.assign({}, state, {
@@ -133,12 +134,12 @@ const disableDebugger = function () {
     return {type: DISABLE};
 };
 
-const openTargetDebugger = function (targetId) {
-    return {type: OPEN, targetId};
+const openTargetDebugger = function (targetId, costumeUrl) {
+    return {type: OPEN, targetId, costumeUrl};
 };
 
-const openBlockDebugger = function (blockId) {
-    return {type: OPEN, blockId};
+const openBlockDebugger = function (blockId, costumeUrl) {
+    return {type: OPEN, blockId, costumeUrl};
 };
 
 const closeDebugger = function () {

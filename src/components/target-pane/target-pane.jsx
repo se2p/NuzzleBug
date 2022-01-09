@@ -8,6 +8,7 @@ import SpriteLibrary from '../../containers/sprite-library.jsx';
 import SpriteSelectorComponent from '../sprite-selector/sprite-selector.jsx';
 import StageSelector from '../../containers/stage-selector.jsx';
 import {STAGE_DISPLAY_SIZES} from '../../lib/layout-constants';
+import getCostumeUrl from '../../lib/get-costume-url';
 
 import {ContextMenuTrigger} from 'react-contextmenu';
 import {ContextMenu, MenuItem} from '../context-menu/context-menu.jsx';
@@ -35,7 +36,9 @@ class TargetPane extends React.Component {
             onInterrogativeButtonClick,
             stage
         } = this.props;
-        onInterrogativeButtonClick(stage.id);
+        const costumeUrl = stage.costume.asset ?
+            getCostumeUrl(stage.costume.asset) : null;
+        onInterrogativeButtonClick(stage.id, costumeUrl);
     }
 
     render () {

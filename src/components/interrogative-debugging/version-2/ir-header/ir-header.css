@@ -135,8 +135,15 @@
     background-color: $ui-black-transparent;
 }
 
-.svgBlock {
+.svg-block {
     position: relative;
     float: left;
     margin: 10px 10px 0 10px;
+}
+
+.target-image {
+    margin: 0 10px;
+    user-select: none;
+    pointer-events: none;
+    max-height: 32px;
 }
