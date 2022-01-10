@@ -134,6 +134,7 @@ class IRDebugger extends React.Component {
                 this.targetOrigin.getName() :
                 `${this.targetOrigin.getName()} - ${targetOption.optionName}`,
             isOriginal: targetOption.isOriginal,
+            origin: this.targetOrigin,
             isStage: this.targetOrigin.isStage,
             blocks: this.targetOrigin.blocks,
             sprite: this.targetOrigin.sprite,
