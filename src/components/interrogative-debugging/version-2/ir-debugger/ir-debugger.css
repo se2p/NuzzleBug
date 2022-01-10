@@ -14,7 +14,8 @@
 
 .body {
     height: 500px;
-    width: 1000px;
+    width: 100%;
+    min-width: 1000px;
     background: white;
     cursor: default;
     font-size: 13px;
@@ -24,7 +25,7 @@
 
 .question-hierarchy {
     height: 500px;
-    width: 330px;
+    width: 33%;
     padding: 20px;
     padding-right: 12px;
     border-right: 2px solid $ui-white;
@@ -49,12 +50,12 @@
 
 .answerArea {
     height: 500px;
-    width: 670px;
+    width: 67%;
     padding: 20px;
     float: left;
     border-left: 1px solid hsla(0, 0%, 0%, 0.15);
 }
 
 .selectedQuestion, .answer {
-    width: 630px;
+    width: 100%;
 }
