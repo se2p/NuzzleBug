@@ -57,9 +57,7 @@ class IRDebugger extends React.Component {
         if (!this.target) {
             this.setTargetOption(this.targetOptions[0]);
         }
-        if (!this.target.isOriginal) {
-            trace = trace.filter(t => t.targetsInfo[this.target.id]);
-        }
+        trace = this.filterTraceForTargetOption(trace);
         let block = null;
         if (this.isBlockDebugger) {
             block = Object.values(this.targetOrigin.blocks._blocks)
@@ -82,6 +80,27 @@ class IRDebugger extends React.Component {
         } else {
             trace = trace.slice(vm.runtime.questionGeneration.traceStart, vm.runtime.questionGeneration.traceEnd);
         }
+        return trace;
+    }
+
+    filterTraceForTargetOption (trace) {
+        const blocks = this.targetOrigin.blocks._blocks;
+        let eventToRemove = 'control_start_as_clone';
+        if (!this.target.isOriginal) {
+            trace = trace.filter(t => t.targetsInfo[this.target.id]);
+            eventToRemove = 'event_whenflagclicked';
+        }
+        trace = trace.filter(t => {
+            const block = blocks[t.id];
+            if (block) {
+                let hatBlock = block;
+                while (hatBlock.parent) {
+                    hatBlock = blocks[hatBlock.parent];
+                }
+                return hatBlock.opcode !== eventToRemove;
+            }
+            return true;
+        });
         return trace;
     }
 
