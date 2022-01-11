@@ -19,7 +19,8 @@ class IRDebugger extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'handleQuestionClick'
+            'handleQuestionClick',
+            'handleRefresh'
         ]);
         this.state = {
             selectedQuestion: null
@@ -32,6 +33,13 @@ class IRDebugger extends React.Component {
         }));
     }
 
+    handleRefresh () {
+        this.setState(() => ({
+            selectedQuestion: null
+        }));
+        this.props.handleRefresh();
+    }
+
     render () {
         const {
             target,
@@ -40,7 +48,6 @@ class IRDebugger extends React.Component {
             questionHierarchy,
             expanded,
             handleTargetChange,
-            handleRefresh,
             onClose,
             onShrinkExpand,
             onDrag,
@@ -94,7 +101,7 @@ class IRDebugger extends React.Component {
                                     blockId={blockId}
                                     targetOptions={targetOptions}
                                     expanded={expanded}
-                                    onRefresh={handleRefresh}
+                                    onRefresh={this.handleRefresh}
                                     onTargetChange={handleTargetChange}
                                     onClose={onClose}
                                     onShrinkExpand={onShrinkExpand}
