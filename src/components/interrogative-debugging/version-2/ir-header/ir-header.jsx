@@ -34,45 +34,11 @@ class IRHeader extends React.Component {
 
     componentDidMount () {
         if (this.svgBlock.current) {
-            const svgBlock = this.createSvgBlock();
+            const block = ScratchBlocks.getMainWorkspace().getBlockById(this.props.blockId);
+            const svgBlock = this.props.createSvgBlock(block);
             this.svgBlock.current.appendChild(svgBlock);
             this.forceUpdate();
         }
-    }
-
-    createSvgBlock () {
-        const NS = 'http://www.w3.org/2000/svg';
-        const scaleFactor = 0.7;
-
-        const block = ScratchBlocks.getMainWorkspace().getBlockById(this.props.blockId);
-        const blockWidth = block.width * scaleFactor;
-        let blockHeight = Math.min(block.height * scaleFactor, 40);
-
-        const svgGroup = block.getSvgRoot().cloneNode(true);
-        svgGroup.setAttribute('transform', `translate(0,0) scale(${scaleFactor})`);
-        for (const childNode of svgGroup.childNodes) {
-            const childId = childNode.getAttribute('data-id');
-            const childBlock = block.childBlocks_.find(b => b.id === childId);
-            if (childBlock) {
-                if (!childBlock.outputConnection && childBlock.previousConnection) {
-                    svgGroup.removeChild(childNode);
-                } else {
-                    const childHeight = childBlock.height * scaleFactor;
-                    blockHeight = Math.max(blockHeight, childHeight + 12);
-                }
-            }
-        }
-
-        const canvas = document.createElementNS(NS, 'g');
-        canvas.setAttribute('class', 'blocklyBlockCanvas');
-        canvas.setAttribute('transform', 'translate(0,0)');
-        canvas.appendChild(svgGroup);
-
-        const svgBlock = document.createElementNS(NS, 'svg');
-        svgBlock.setAttribute('style', `width: ${blockWidth}px; height: ${blockHeight}px;`);
-        svgBlock.appendChild(canvas);
-        
-        return svgBlock;
     }
 
     handleDropdownButtonClick () {
@@ -279,7 +245,8 @@ IRHeader.propTypes = {
     onTargetChange: PropTypes.func.isRequired,
     onRefresh: PropTypes.func.isRequired,
     onShrinkExpand: PropTypes.func.isRequired,
-    onClose: PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired,
+    createSvgBlock: PropTypes.func.isRequired
 };
 
 export default injectIntl(IRHeader);

@@ -1,0 +1,66 @@
+@import "../../../../css/colors.css";
+
+.text-area {
+  min-height: 100px;
+  width: 100%;
+  margin-top: -25px;
+  margin-bottom: 20px;
+}
+
+.speech-bubble-box {
+  width: calc(100% - 100px);
+  min-height: 65px;
+  padding: 10px;
+  margin-top: 24px;
+  margin-right: 25px;
+  border-radius: 10px;
+  color: #575E75;
+  background: $ui-secondary;
+  float: left;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+  
+.speech-bubble-triangle:before {
+  content: "";
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  border-left: 15px solid $ui-secondary;
+  border-right: 15px solid transparent;
+  border-top: 8px solid $ui-secondary;
+  border-bottom: 8px solid transparent;
+  right: -30px;
+  top: 24px;
+}
+
+.cat {
+  width: 75px;
+}
+
+.block-area {
+  width: 100%;
+  height: 320px;
+  padding: 10px;
+  border: 1px solid hsla(0, 0%, 0%, 0.15);
+  border-radius: 4px;
+  overflow-y: scroll;
+}
+
+.block-area::-webkit-scrollbar-track {
+  margin-top: 1px;
+  margin-bottom: 1px;
+}
+
+.block-area::-webkit-scrollbar {
+  width: 6px;
+}
+
+.block-area::-webkit-scrollbar-thumb {
+  background:#CECDCE;
+  border: 1px solid #CECDCE;
+  border-radius: 4px;
+}

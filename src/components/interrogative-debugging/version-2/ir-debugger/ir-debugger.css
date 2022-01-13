@@ -14,13 +14,13 @@
 
 .body {
     height: 500px;
-    width: 100%;
-    min-width: 1000px;
+    width: 1000px;
     background: white;
     cursor: default;
     font-size: 13px;
     font-family: "Helvetica Neue", Helvetica, sans-serif;
     color: #575E75;
+    word-wrap: break-word;
 }
 
 .question-hierarchy {

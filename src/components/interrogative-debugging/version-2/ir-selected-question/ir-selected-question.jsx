@@ -23,18 +23,16 @@ class IRSelectedQuestion extends React.Component {
         return (
             <div>
                 {selectedQuestion ? (
-                    <div>
-                        <span
-                            className={classNames(
-                                styles.selectedQuestion,
-                                irStyles[`color-${selectedQuestion.color.replace('#', '')}`]
-                            )}
-                        >
-                            <FormattedHTMLMessage
-                                tagName="div"
-                                {...selectedQuestion.message}
-                            />
-                        </span>
+                    <div
+                        className={classNames(
+                            styles.selectedQuestion,
+                            irStyles[`color-${selectedQuestion.color.replace('#', '')}`]
+                        )}
+                    >
+                        <FormattedHTMLMessage
+                            tagName="div"
+                            {...selectedQuestion.message}
+                        />
                     </div>
                 ) : null}
             </div>

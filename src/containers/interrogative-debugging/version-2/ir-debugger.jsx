@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import bindAll from 'lodash.bindall';
 import {intlShape} from 'react-intl';
+import ScratchBlocks from 'scratch-blocks';
 
 import VirtualMachine from 'scratch-vm';
 import {QuestionProvider} from 'scratch-ir';
@@ -66,6 +67,8 @@ class IRDebugger extends React.Component {
 
         const questionProvider = new QuestionProvider(this.props.vm, trace, this.target, block, this.translate);
         this.questionHierarchy = questionProvider.generateQuestionHierarchy();
+
+        this.answer = this.generateAnswer(trace);
     }
 
     translate (id, values) {
@@ -161,6 +164,24 @@ class IRDebugger extends React.Component {
         };
     }
 
+    generateAnswer (trace) {
+        const answer = {};
+        answer.text = `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, 
+            sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam 
+            erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.`;
+        answer.blocks = [];
+        for (const t of trace) {
+            if (t.opcode !== 'procedures_definition' && t.opcode !== 'procedures_call') {
+                const block = ScratchBlocks.getMainWorkspace().getBlockById(t.id);
+                if (block) {
+                    answer.blocks.push(block);
+                }
+            }
+        }
+        answer.blocks = answer.blocks.slice(0, 10);
+        return answer;
+    }
+
     rerender () {
         this.calculateQuestionHierarchy();
         this.forceUpdate();
@@ -176,6 +197,7 @@ class IRDebugger extends React.Component {
                 target={this.target}
                 targetOptions={this.targetOptions}
                 questionHierarchy={this.questionHierarchy}
+                answer={this.answer}
                 handleTargetChange={this.setTargetOption}
                 handleRefresh={this.rerender}
                 {...this.props}

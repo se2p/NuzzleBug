@@ -40,12 +40,50 @@ class IRDebugger extends React.Component {
         this.props.handleRefresh();
     }
 
+    createSvgBlock (block) {
+        const NS = 'http://www.w3.org/2000/svg';
+        const scaleFactor = 0.7;
+
+        const blockWidth = block.width * scaleFactor;
+        let blockHeight = block.startHat_ ?
+            (block.height + 19) * scaleFactor :
+            Math.min(block.height * scaleFactor, 40);
+
+        const svgGroup = block.getSvgRoot().cloneNode(true);
+        svgGroup.setAttribute('transform',
+            `translate(0,${block.startHat_ ? '12' : '0'}) scale(${scaleFactor})`);
+        for (const childNode of svgGroup.childNodes) {
+            const childId = childNode.getAttribute('data-id');
+            const childBlock = block.childBlocks_.find(b => b.id === childId);
+            if (childBlock) {
+                if (!childBlock.outputConnection && childBlock.previousConnection) {
+                    svgGroup.removeChild(childNode);
+                } else {
+                    const childHeight = childBlock.height * scaleFactor;
+                    blockHeight = Math.max(blockHeight, childHeight + 12);
+                }
+            }
+        }
+
+        const canvas = document.createElementNS(NS, 'g');
+        canvas.setAttribute('class', 'blocklyBlockCanvas');
+        canvas.setAttribute('transform', 'translate(0,0)');
+        canvas.appendChild(svgGroup);
+
+        const svgBlock = document.createElementNS(NS, 'svg');
+        svgBlock.setAttribute('style', `width: ${blockWidth}px; height: ${blockHeight}px;`);
+        svgBlock.appendChild(canvas);
+        
+        return svgBlock;
+    }
+
     render () {
         const {
             target,
             targetOptions,
             blockId,
             questionHierarchy,
+            answer,
             expanded,
             handleTargetChange,
             onClose,
@@ -105,6 +143,7 @@ class IRDebugger extends React.Component {
                                     onTargetChange={handleTargetChange}
                                     onClose={onClose}
                                     onShrinkExpand={onShrinkExpand}
+                                    createSvgBlock={this.createSvgBlock}
                                 />
                                 <div className={expanded ? styles.body : cardStyles.hidden}>
                                     <div className={styles.questionHierarchy}>
@@ -115,12 +154,21 @@ class IRDebugger extends React.Component {
                                         />
                                     </div>
                                     <div className={styles.answerArea}>
-                                        <div className={styles.selectedQuestion}>
-                                            <IRSelectedQuestion selectedQuestion={this.state.selectedQuestion} />
-                                        </div>
-                                        <div className={styles.answer}>
-                                            <IRAnswer />
-                                        </div>
+                                        {this.state.selectedQuestion ? (
+                                            <div>
+                                                <div className={styles.selectedQuestion}>
+                                                    <IRSelectedQuestion
+                                                        selectedQuestion={this.state.selectedQuestion}
+                                                    />
+                                                </div>
+                                                <div className={styles.answer}>
+                                                    <IRAnswer
+                                                        answer={answer}
+                                                        createSvgBlock={this.createSvgBlock}
+                                                    />
+                                                </div>
+                                            </div>
+                                        ) : null}
                                     </div>
                                 </div>
                             </div>
@@ -149,6 +197,10 @@ IRDebugger.propTypes = {
     })).isRequired,
     blockId: PropTypes.string,
     questionHierarchy: PropTypes.arrayOf(PropTypes.instanceOf(QuestionCategory)).isRequired,
+    answer: PropTypes.shape({
+        text: PropTypes.string,
+        blocks: PropTypes.arrayOf(PropTypes.object)
+    }),
     expanded: PropTypes.bool.isRequired,
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
