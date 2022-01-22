@@ -5,7 +5,11 @@ import Draggable from 'react-draggable';
 import {injectIntl, intlShape} from 'react-intl';
 import bindAll from 'lodash.bindall';
 
-import {QuestionCategory} from 'scratch-ir';
+import {
+    QuestionCategory,
+    QuestionV2 as Question,
+    AnswerV2 as Answer
+} from 'scratch-ir';
 
 import IRHeader from '../ir-header/ir-header.jsx';
 import IRQuestionHierarchy from '../ir-question-hierarchy/ir-question-hierarchy.jsx';
@@ -19,32 +23,13 @@ class IRDebugger extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'handleQuestionClick',
-            'handleRefresh'
+            'createSvgBlock'
         ]);
-        this.state = {
-            selectedQuestion: null
-        };
     }
 
-    handleQuestionClick (question) {
-        this.setState(() => ({
-            selectedQuestion: question
-        }));
-    }
-
-    handleRefresh () {
-        this.setState(() => ({
-            selectedQuestion: null
-        }));
-        this.props.handleRefresh();
-    }
-
-    createSvgBlock (block) {
+    createSvgBlock (block, scaleFactor, executionInfo) {
         const NS = 'http://www.w3.org/2000/svg';
-        const scaleFactor = 0.7;
 
-        const blockWidth = block.width * scaleFactor;
         let blockHeight = block.startHat_ ?
             (block.height + 19) * scaleFactor :
             Math.min(block.height * scaleFactor, 40);
@@ -52,7 +37,15 @@ class IRDebugger extends React.Component {
         const svgGroup = block.getSvgRoot().cloneNode(true);
         svgGroup.setAttribute('transform',
             `translate(0,${block.startHat_ ? '12' : '0'}) scale(${scaleFactor})`);
-        for (const childNode of svgGroup.childNodes) {
+        if (executionInfo) {
+            svgGroup.setAttribute('opacity', `${executionInfo.executed ? '1' : '0.5'}`);
+        }
+        this.setCursorOfNode(svgGroup, 'default');
+        for (const childNode of Array.from(svgGroup.childNodes)) {
+            if (childNode.getAttribute('class')?.includes('breakpointGroup')) {
+                svgGroup.removeChild(childNode);
+                continue;
+            }
             const childId = childNode.getAttribute('data-id');
             const childBlock = block.childBlocks_.find(b => b.id === childId);
             if (childBlock) {
@@ -65,16 +58,33 @@ class IRDebugger extends React.Component {
             }
         }
 
+        const backgroundPath = Array.from(svgGroup.childNodes)
+            .find(n => n.getAttribute('class')?.includes('blocklyBlockBackground'));
+        const pathData = backgroundPath.getAttribute('d');
+        const relevantPathData = pathData.split('H')[block.startHat_ ? 1 : 2].split('v')[0].split('a');
+        const horizontalLineEnd = Number(relevantPathData[0]);
+        const arcWidth = Number(relevantPathData[1].split(' ')[4].split(',')[0]);
+        const maximalXCoordinate = horizontalLineEnd + arcWidth;
+        const blockWidth = maximalXCoordinate * scaleFactor;
+
         const canvas = document.createElementNS(NS, 'g');
         canvas.setAttribute('class', 'blocklyBlockCanvas');
         canvas.setAttribute('transform', 'translate(0,0)');
         canvas.appendChild(svgGroup);
 
         const svgBlock = document.createElementNS(NS, 'svg');
-        svgBlock.setAttribute('style', `width: ${blockWidth}px; height: ${blockHeight}px;`);
+        svgBlock.setAttribute('height', `${blockHeight}px`);
+        svgBlock.setAttribute('width', `${blockWidth}px`);
         svgBlock.appendChild(canvas);
         
         return svgBlock;
+    }
+
+    setCursorOfNode (node, value) {
+        node.setAttribute('style', `cursor: ${value}`);
+        for (const child of node.children) {
+            this.setCursorOfNode(child, value);
+        }
     }
 
     render () {
@@ -83,9 +93,12 @@ class IRDebugger extends React.Component {
             targetOptions,
             blockId,
             questionHierarchy,
+            selectedQuestion,
             answer,
             expanded,
+            handleRefresh,
             handleTargetChange,
+            onQuestionClick,
             onClose,
             onShrinkExpand,
             onDrag,
@@ -139,7 +152,7 @@ class IRDebugger extends React.Component {
                                     blockId={blockId}
                                     targetOptions={targetOptions}
                                     expanded={expanded}
-                                    onRefresh={this.handleRefresh}
+                                    onRefresh={handleRefresh}
                                     onTargetChange={handleTargetChange}
                                     onClose={onClose}
                                     onShrinkExpand={onShrinkExpand}
@@ -149,16 +162,16 @@ class IRDebugger extends React.Component {
                                     <div className={styles.questionHierarchy}>
                                         <IRQuestionHierarchy
                                             questionHierarchy={questionHierarchy}
-                                            selectedQuestion={this.state.selectedQuestion}
-                                            onQuestionClick={this.handleQuestionClick}
+                                            selectedQuestion={selectedQuestion}
+                                            onQuestionClick={onQuestionClick}
                                         />
                                     </div>
                                     <div className={styles.answerArea}>
-                                        {this.state.selectedQuestion ? (
+                                        {selectedQuestion ? (
                                             <div>
                                                 <div className={styles.selectedQuestion}>
                                                     <IRSelectedQuestion
-                                                        selectedQuestion={this.state.selectedQuestion}
+                                                        selectedQuestion={selectedQuestion}
                                                     />
                                                 </div>
                                                 <div className={styles.answer}>
@@ -197,15 +210,14 @@ IRDebugger.propTypes = {
     })).isRequired,
     blockId: PropTypes.string,
     questionHierarchy: PropTypes.arrayOf(PropTypes.instanceOf(QuestionCategory)).isRequired,
-    answer: PropTypes.shape({
-        text: PropTypes.string,
-        blocks: PropTypes.arrayOf(PropTypes.object)
-    }),
+    selectedQuestion: PropTypes.instanceOf(Question),
+    answer: PropTypes.instanceOf(Answer),
     expanded: PropTypes.bool.isRequired,
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
     handleTargetChange: PropTypes.func.isRequired,
     handleRefresh: PropTypes.func.isRequired,
+    onQuestionClick: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
     onShrinkExpand: PropTypes.func.isRequired,
     onStartDrag: PropTypes.func,

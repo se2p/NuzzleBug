@@ -174,5 +174,9 @@
     },
     "operator": {
         "round": "round {operand}"
+    },
+    "condition": {
+        "true": "true",
+        "false": "false"
     }
 }

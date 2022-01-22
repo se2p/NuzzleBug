@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import bindAll from 'lodash.bindall';
 import {injectIntl, intlShape} from 'react-intl';
 
-import {Answer} from 'scratch-ir';
+import {AnswerV1 as Answer} from 'scratch-ir';
 
 import styles from './ir-cards.css';
 import Box from '../../box/box.jsx';

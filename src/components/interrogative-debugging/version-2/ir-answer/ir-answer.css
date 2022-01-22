@@ -56,6 +56,7 @@
 }
 
 .block-area::-webkit-scrollbar {
+  height: 6px;
   width: 6px;
 }
 
@@ -63,4 +64,23 @@
   background:#CECDCE;
   border: 1px solid #CECDCE;
   border-radius: 4px;
+}
+
+.zoom-button {
+  position: fixed;
+  bottom: 25px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.zoom-button:hover {
+  filter: brightness(62%);
+}
+
+.zoom-in-button {
+  right: 60px;
+}
+
+.zoom-out-button {
+  right: 30px;
 }

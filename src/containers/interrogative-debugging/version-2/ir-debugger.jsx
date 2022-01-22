@@ -4,9 +4,17 @@ import PropTypes from 'prop-types';
 import bindAll from 'lodash.bindall';
 import {intlShape} from 'react-intl';
 import ScratchBlocks from 'scratch-blocks';
-
 import VirtualMachine from 'scratch-vm';
-import {QuestionProvider} from 'scratch-ir';
+
+import {
+    QuestionProvider,
+    AnswerProviderV2 as AnswerProvider
+} from 'scratch-ir';
+
+import {
+    generateCDG,
+    generateCFG
+} from 'scratch-analysis';
 
 import IRDebuggerComponent from '../../../components/interrogative-debugging/version-2/ir-debugger/ir-debugger.jsx';
 import {
@@ -24,6 +32,7 @@ class IRDebugger extends React.Component {
         super(props);
         bindAll(this, [
             'setTargetOption',
+            'handleQuestionClick',
             'rerender',
             'translate'
         ]);
@@ -40,35 +49,54 @@ class IRDebugger extends React.Component {
             this.cancel = true;
             return;
         }
+        
+        try {
+            this.cfg = generateCFG(props.vm);
+            this.cdg = generateCDG(this.cfg);
+        } catch (e) {
+            props.onClose();
+            props.onDisable();
+            this.cancel = true;
+            return;
+        }
 
         this.isTargetDebugger = props.targetOriginId && !props.blockId;
         this.isBlockDebugger = !props.targetOriginId && props.blockId;
         if (this.isTargetDebugger || this.isBlockDebugger) {
+            this.updateAbstractWorkspace();
             this.targetOrigin = this.getTargetOrigin();
             this.calculateQuestionHierarchy();
+            this.answerProvider = new AnswerProvider(props.vm, this.cdg, this.cfg, this.trace, this.target);
         } else {
             props.onClose();
             this.cancel = true;
         }
     }
 
+    updateAbstractWorkspace () {
+        const targets = this.props.vm.runtime.targets;
+        const xmlBlocks = targets.map(target => target.blocks.toXML()).join('');
+        const xmlWorkspace = `<xml xmlns="http://www.w3.org/1999/xhtml">${xmlBlocks}</xml>`;
+        const dom = ScratchBlocks.Xml.textToDom(xmlWorkspace);
+        ScratchBlocks.Xml.clearWorkspaceAndLoadFromXml(dom, ScratchBlocks.getAbstractWorkspace());
+    }
+
     calculateQuestionHierarchy () {
-        let trace = this.calculateTrace();
-        this.targetOptions = this.calculateTargetOptions(trace);
+        this.trace = this.calculateTrace();
+        this.targetOptions = this.calculateTargetOptions(this.trace);
         if (!this.target) {
             this.setTargetOption(this.targetOptions[0]);
         }
-        trace = this.filterTraceForTargetOption(trace);
+        this.trace = this.filterTraceForTargetOption(this.trace);
         let block = null;
         if (this.isBlockDebugger) {
             block = Object.values(this.targetOrigin.blocks._blocks)
                 .find(b => b.id === this.props.blockId);
         }
 
-        const questionProvider = new QuestionProvider(this.props.vm, trace, this.target, block, this.translate);
+        const questionProvider = new QuestionProvider(this.props.vm, this.trace, this.target,
+            block, this.translate);
         this.questionHierarchy = questionProvider.generateQuestionHierarchy();
-
-        this.answer = this.generateAnswer(trace);
     }
 
     translate (id, values) {
@@ -164,26 +192,16 @@ class IRDebugger extends React.Component {
         };
     }
 
-    generateAnswer (trace) {
-        const answer = {};
-        answer.text = `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, 
-            sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam 
-            erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.`;
-        answer.blocks = [];
-        for (const t of trace) {
-            if (t.opcode !== 'procedures_definition' && t.opcode !== 'procedures_call') {
-                const block = ScratchBlocks.getMainWorkspace().getBlockById(t.id);
-                if (block) {
-                    answer.blocks.push(block);
-                }
-            }
-        }
-        answer.blocks = answer.blocks.slice(0, 10);
-        return answer;
+    handleQuestionClick (question) {
+        this.selectedQuestion = question;
+        this.answer = this.answerProvider.generateAnswer(this.selectedQuestion);
+        this.forceUpdate();
     }
 
     rerender () {
+        this.selectedQuestion = null;
         this.calculateQuestionHierarchy();
+        this.answerProvider = new AnswerProvider(this.props.vm, this.cdg, this.cfg, this.trace, this.target);
         this.forceUpdate();
     }
 
@@ -197,8 +215,10 @@ class IRDebugger extends React.Component {
                 target={this.target}
                 targetOptions={this.targetOptions}
                 questionHierarchy={this.questionHierarchy}
+                selectedQuestion={this.selectedQuestion}
                 answer={this.answer}
                 handleTargetChange={this.setTargetOption}
+                onQuestionClick={this.handleQuestionClick}
                 handleRefresh={this.rerender}
                 {...this.props}
             />

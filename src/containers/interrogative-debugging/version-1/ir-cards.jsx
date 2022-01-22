@@ -5,7 +5,7 @@ import bindAll from 'lodash.bindall';
 
 import VirtualMachine from 'scratch-vm';
 import {generateCDG, generateCFG} from 'scratch-analysis';
-import {AnswerProvider, computeQuestions, createTraceMap} from 'scratch-ir';
+import {AnswerProviderV1 as AnswerProvider, computeQuestions, createTraceMap} from 'scratch-ir';
 
 import {
     closeCards,

@@ -136,8 +136,7 @@
 }
 
 .svg-block {
-    position: relative;
-    float: left;
+    display: unset;
     margin: 10px 10px 0 10px;
 }
 

@@ -174,5 +174,9 @@
     },
     "operator": {
         "round": "{operand} gerundet"
+    },
+    "condition": {
+        "true": "wahr",
+        "false": "falsch"
     }
 }
