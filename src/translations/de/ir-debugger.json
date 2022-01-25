@@ -15,7 +15,8 @@
         "expand": "Aufklappen",
         "close": "Schließen",
         "shrink": "Zuklappen",
-        "refresh": "Aktualisieren"
+        "refresh": "Aktualisieren",
+        "back": "Zurück"
     }, 
     "target": {
         "original": "Original",

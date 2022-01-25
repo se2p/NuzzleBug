@@ -12,6 +12,7 @@ import shrinkIcon from '../../../cards/icon--shrink.svg';
 import expandIcon from '../../../cards/icon--expand.svg';
 import closeIcon from '../../../cards/icon--close.svg';
 import refreshIcon from '../icons/icon--refresh.svg';
+import backIcon from '../icons/icon--back.svg';
 import iconArrowLeft from '../icons/icon--arrow-left.svg';
 import iconArrowDown from '../icons/icon--arrow-down.svg';
 
@@ -33,12 +34,32 @@ class IRHeader extends React.Component {
     }
 
     componentDidMount () {
+        this._appendSvgBlock();
+        this.forceUpdate();
+    }
+
+    componentDidUpdate (prevProps) {
+        if (prevProps.blockId !== this.props.blockId) {
+            this._removeSvgBlock();
+            this._appendSvgBlock();
+            this.forceUpdate();
+        }
+    }
+
+    _appendSvgBlock () {
         if (this.svgBlock.current) {
             const block = ScratchBlocks.getMainWorkspace().getBlockById(this.props.blockId);
             const scaleFactor = 0.7;
             const svgBlock = this.props.createSvgBlock(block, scaleFactor);
             this.svgBlock.current.appendChild(svgBlock);
-            this.forceUpdate();
+        }
+    }
+
+    _removeSvgBlock () {
+        if (this.svgBlock.current) {
+            for (const child of this.svgBlock.current.childNodes) {
+                this.svgBlock.current.removeChild(child);
+            }
         }
     }
 
@@ -74,7 +95,8 @@ class IRHeader extends React.Component {
             onRefresh,
             targetOptions,
             onShrinkExpand,
-            onClose
+            onClose,
+            onBack
         } = this.props;
 
         return (
@@ -163,6 +185,24 @@ class IRHeader extends React.Component {
                     ) : null}
                 </div>
                 <div className={styles.rightHeader}>
+                    {expanded && onBack ? (
+                        <div className={styles.headerItem}>
+                            <div
+                                className={styles.headerButton}
+                                onClick={onBack}
+                            >
+                                <img
+                                    className={styles.icon}
+                                    src={backIcon}
+                                />
+                                <FormattedMessage
+                                    defaultMessage="Back"
+                                    description="Title for button to go back"
+                                    id="gui.ir-debugger.header.back"
+                                />
+                            </div>
+                        </div>
+                    ) : null}
                     {expanded ? (
                         <div className={styles.headerItem}>
                             <div
@@ -247,6 +287,7 @@ IRHeader.propTypes = {
     onRefresh: PropTypes.func.isRequired,
     onShrinkExpand: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
+    onBack: PropTypes.func,
     createSvgBlock: PropTypes.func.isRequired
 };
 

@@ -24,6 +24,31 @@ class IRQuestionCategory extends React.Component {
         };
     }
 
+    componentDidMount () {
+        if (this.props.selectedQuestion && !this.state.expanded) {
+            const questionId = this.props.selectedQuestion.id;
+            const category = this.props.questionCategory;
+            if (this._containsQuestion(category, questionId)) {
+                this.handleToggleExpansion();
+            }
+        }
+    }
+
+    _containsQuestion (category, questionId) {
+        if (category.questions &&
+            category.questions.some(question => question.id === questionId)) {
+            return true;
+        }
+        if (category.questionCategories) {
+            for (const childCategory of category.questionCategories) {
+                if (this._containsQuestion(childCategory, questionId)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     handleToggleExpansion () {
         this.setState(state => ({
             expanded: !state.expanded

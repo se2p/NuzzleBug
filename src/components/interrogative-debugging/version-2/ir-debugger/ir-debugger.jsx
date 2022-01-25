@@ -23,7 +23,8 @@ class IRDebugger extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'createSvgBlock'
+            'createSvgBlock',
+            'setCursorOfBlock'
         ]);
     }
 
@@ -37,10 +38,10 @@ class IRDebugger extends React.Component {
         const svgGroup = block.getSvgRoot().cloneNode(true);
         svgGroup.setAttribute('transform',
             `translate(0,${block.startHat_ ? '12' : '0'}) scale(${scaleFactor})`);
+        this.setCursorOfBlock(svgGroup, 'default');
         if (executionInfo) {
             svgGroup.setAttribute('opacity', `${executionInfo.executed ? '1' : '0.5'}`);
         }
-        this.setCursorOfNode(svgGroup, 'default');
         for (const childNode of Array.from(svgGroup.childNodes)) {
             if (childNode.getAttribute('class')?.includes('breakpointGroup')) {
                 svgGroup.removeChild(childNode);
@@ -76,14 +77,14 @@ class IRDebugger extends React.Component {
         svgBlock.setAttribute('height', `${blockHeight}px`);
         svgBlock.setAttribute('width', `${blockWidth}px`);
         svgBlock.appendChild(canvas);
-        
+
         return svgBlock;
     }
 
-    setCursorOfNode (node, value) {
+    setCursorOfBlock (node, value) {
         node.setAttribute('style', `cursor: ${value}`);
         for (const child of node.children) {
-            this.setCursorOfNode(child, value);
+            this.setCursorOfBlock(child, value);
         }
     }
 
@@ -99,7 +100,9 @@ class IRDebugger extends React.Component {
             handleRefresh,
             handleTargetChange,
             onQuestionClick,
+            onGraphNodeClick,
             onClose,
+            onBack,
             onShrinkExpand,
             onDrag,
             onStartDrag,
@@ -155,6 +158,7 @@ class IRDebugger extends React.Component {
                                     onRefresh={handleRefresh}
                                     onTargetChange={handleTargetChange}
                                     onClose={onClose}
+                                    onBack={onBack}
                                     onShrinkExpand={onShrinkExpand}
                                     createSvgBlock={this.createSvgBlock}
                                 />
@@ -178,6 +182,8 @@ class IRDebugger extends React.Component {
                                                     <IRAnswer
                                                         answer={answer}
                                                         createSvgBlock={this.createSvgBlock}
+                                                        onGraphNodeClick={onGraphNodeClick}
+                                                        setCursorOfBlock={this.setCursorOfBlock}
                                                     />
                                                 </div>
                                             </div>
@@ -218,7 +224,9 @@ IRDebugger.propTypes = {
     handleTargetChange: PropTypes.func.isRequired,
     handleRefresh: PropTypes.func.isRequired,
     onQuestionClick: PropTypes.func.isRequired,
+    onGraphNodeClick: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
+    onBack: PropTypes.func,
     onShrinkExpand: PropTypes.func.isRequired,
     onStartDrag: PropTypes.func,
     onDrag: PropTypes.func,

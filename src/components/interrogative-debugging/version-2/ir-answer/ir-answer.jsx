@@ -30,9 +30,12 @@ class IRAnswer extends React.Component {
     }
 
     componentDidMount () {
-        if (this.graphDiv.current) {
+        this._drawGraph();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.answer !== this.props.answer) {
             this._drawGraph();
-            this._initGraphSize();
         }
     }
 
@@ -47,6 +50,7 @@ class IRAnswer extends React.Component {
         this._removeGraphTitle(svgGraphChildren);
         this._adaptGraphNodes(svgGraphChildren, graphNodes);
         this._adaptGraphEdges(svgGraphChildren);
+        this._initGraphSize();
         
         this.forceUpdate();
     }
@@ -112,6 +116,11 @@ class IRAnswer extends React.Component {
                     this._addEdgeForActualConditionValue(svgGraphNode, actualValue, block, scaleFactor);
                 }
             }
+            if (!block.isHatBlock) {
+                const svgBlock = svgGraphNode.children[0];
+                svgBlock.addEventListener('click', () => this.props.onGraphNodeClick(block.id));
+                this.props.setCursorOfBlock(svgBlock, 'pointer');
+            }
         }
     }
 
@@ -134,7 +143,7 @@ class IRAnswer extends React.Component {
         const width = Number(svgBlock.getAttribute('width').split('px')[0]);
         const height = Number(svgBlock.getAttribute('height').split('px')[0]);
         svgGraphNode.appendChild(svgBlock);
-        return {width, height};
+        return {id: blockId, width, height, isHatBlock: block.startHat_};
     }
 
     _extractEllipseAttributes (ellipseNode) {
@@ -350,7 +359,9 @@ class IRAnswer extends React.Component {
 IRAnswer.propTypes = {
     intl: intlShape.isRequired,
     answer: PropTypes.instanceOf(Answer),
-    createSvgBlock: PropTypes.func.isRequired
+    createSvgBlock: PropTypes.func.isRequired,
+    onGraphNodeClick: PropTypes.func.isRequired,
+    setCursorOfBlock: PropTypes.func.isRequired
 };
 
 export default injectIntl(IRAnswer);

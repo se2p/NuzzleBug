@@ -33,42 +33,75 @@ class IRDebugger extends React.Component {
         bindAll(this, [
             'setTargetOption',
             'handleQuestionClick',
+            'handleGraphNodeClick',
+            'handleBackButtonClick',
             'rerender',
             'translate'
         ]);
         this.cancel = false;
+        this.previousBlocks = [];
+        this.currentBlockId = props.initialBlockId;
+        this.init();
+    }
 
-        if (!this.props.visible) {
+    init () {
+        const {
+            visible,
+            vm,
+            onClose,
+            onDisable
+        } = this.props;
+
+        if (!visible) {
             this.cancel = true;
             return;
         }
 
-        if (props.vm.runtime.traceInfo.isEmpty()) {
-            props.onClose();
-            props.onDisable();
+        if (vm.runtime.traceInfo.isEmpty()) {
+            onClose();
+            onDisable();
             this.cancel = true;
             return;
         }
         
         try {
-            this.cfg = generateCFG(props.vm);
+            this.cfg = generateCFG(vm);
             this.cdg = generateCDG(this.cfg);
         } catch (e) {
-            props.onClose();
-            props.onDisable();
+            onClose();
+            onDisable();
             this.cancel = true;
             return;
         }
 
-        this.isTargetDebugger = props.targetOriginId && !props.blockId;
-        this.isBlockDebugger = !props.targetOriginId && props.blockId;
+        this.updateAbstractWorkspace();
+        this.update();
+    }
+
+    update () {
+        this.isBlockDebugger = typeof this.currentBlockId !== 'undefined';
+        this.isTargetDebugger = this.props.targetOriginId && !this.isBlockDebugger;
         if (this.isTargetDebugger || this.isBlockDebugger) {
-            this.updateAbstractWorkspace();
             this.targetOrigin = this.getTargetOrigin();
+            this.trace = this.calculateTrace();
+            this.targetOptions = this.calculateTargetOptions(this.trace);
+            if (!this.target) {
+                this.setTargetOption(this.targetOptions[0]);
+            }
+            if (this.isTargetDebugger) {
+                this.trace = this.filterTraceForTargetOption(this.trace);
+            }
+            this.block = null;
+            if (this.isBlockDebugger) {
+                this.block = Object.values(this.targetOrigin.blocks._blocks)
+                    .find(b => b.id === this.currentBlockId);
+            }
+            this.currentTrace = this.trace;
+            this.updateCurrentTrace();
             this.calculateQuestionHierarchy();
-            this.answerProvider = new AnswerProvider(props.vm, this.cdg, this.cfg, this.trace, this.target);
+            this.initAnswerProvider();
         } else {
-            props.onClose();
+            this.props.onClose();
             this.cancel = true;
         }
     }
@@ -82,21 +115,26 @@ class IRDebugger extends React.Component {
     }
 
     calculateQuestionHierarchy () {
-        this.trace = this.calculateTrace();
-        this.targetOptions = this.calculateTargetOptions(this.trace);
-        if (!this.target) {
-            this.setTargetOption(this.targetOptions[0]);
-        }
-        this.trace = this.filterTraceForTargetOption(this.trace);
-        let block = null;
-        if (this.isBlockDebugger) {
-            block = Object.values(this.targetOrigin.blocks._blocks)
-                .find(b => b.id === this.props.blockId);
-        }
-
-        const questionProvider = new QuestionProvider(this.props.vm, this.trace, this.target,
-            block, this.translate);
+        const questionProvider = new QuestionProvider(this.props.vm, this.currentTrace, this.target,
+            this.block, this.translate);
         this.questionHierarchy = questionProvider.generateQuestionHierarchy();
+    }
+
+    initAnswerProvider () {
+        this.answerProvider = new AnswerProvider(
+            this.props.vm,
+            this.cdg,
+            this.cfg,
+            this.currentTrace,
+            this.target,
+            this.currentBlockId
+        );
+    }
+
+    updateAnswerProvider () {
+        this.answerProvider.setTrace(this.currentTrace);
+        this.answerProvider.target = this.target;
+        this.answerProvider.blockId = this.currentBlockId;
     }
 
     translate (id, values) {
@@ -138,13 +176,12 @@ class IRDebugger extends React.Component {
     getTargetOrigin () {
         const {
             vm,
-            targetOriginId,
-            blockId
+            targetOriginId
         } = this.props;
 
         if (this.isBlockDebugger) {
             return vm.runtime.targets.find(target =>
-                Object.values(target.blocks._blocks).some(block => block.id === blockId));
+                Object.values(target.blocks._blocks).some(block => block.id === this.currentBlockId));
         }
         return vm.runtime.targets.find(target => target.id === targetOriginId);
     }
@@ -194,14 +231,52 @@ class IRDebugger extends React.Component {
 
     handleQuestionClick (question) {
         this.selectedQuestion = question;
+        this.updateAnswerProvider();
         this.answer = this.answerProvider.generateAnswer(this.selectedQuestion);
         this.forceUpdate();
     }
 
+    updateCurrentTrace (endIndex) {
+        if (endIndex === null) {
+            const blockTraces = this.currentTrace.filter(trace => trace.id === this.currentBlockId);
+            if (blockTraces.length) {
+                const lastBlockTrace = blockTraces[blockTraces.length - 1];
+                endIndex = this.currentTrace.lastIndexOf(lastBlockTrace) + 1;
+            }
+        }
+        if (endIndex) {
+            this.currentTrace = this.trace.slice(0, endIndex);
+        }
+    }
+
+    handleGraphNodeClick (blockId) {
+        if (this.currentBlockId !== blockId) {
+            this.previousBlocks.push({
+                id: this.currentBlockId,
+                selectedQuestion: this.selectedQuestion,
+                traceLength: this.currentTrace.length
+            });
+            this.currentBlockId = blockId;
+            this.selectedQuestion = null;
+            this.update();
+            this.forceUpdate();
+        }
+    }
+
+    handleBackButtonClick () {
+        if (this.previousBlocks.length > 0) {
+            const previousBlock = this.previousBlocks.pop();
+            this.currentBlockId = previousBlock.id;
+            this.updateCurrentTrace(previousBlock.traceLength);
+            this.update();
+            this.handleQuestionClick(previousBlock.selectedQuestion);
+            this.forceUpdate();
+        }
+    }
+
     rerender () {
         this.selectedQuestion = null;
-        this.calculateQuestionHierarchy();
-        this.answerProvider = new AnswerProvider(this.props.vm, this.cdg, this.cfg, this.trace, this.target);
+        this.init();
         this.forceUpdate();
     }
 
@@ -214,12 +289,15 @@ class IRDebugger extends React.Component {
             <IRDebuggerComponent
                 target={this.target}
                 targetOptions={this.targetOptions}
+                blockId={this.currentBlockId}
                 questionHierarchy={this.questionHierarchy}
                 selectedQuestion={this.selectedQuestion}
                 answer={this.answer}
                 handleTargetChange={this.setTargetOption}
                 onQuestionClick={this.handleQuestionClick}
+                onGraphNodeClick={this.handleGraphNodeClick}
                 handleRefresh={this.rerender}
+                onBack={this.previousBlocks.length ? this.handleBackButtonClick : null}
                 {...this.props}
             />
         );
@@ -231,7 +309,7 @@ IRDebugger.propTypes = {
     vm: PropTypes.instanceOf(VirtualMachine).isRequired,
     targetOriginId: PropTypes.string,
     costumeUrl: PropTypes.string,
-    blockId: PropTypes.string,
+    initialBlockId: PropTypes.string,
     visible: PropTypes.bool.isRequired,
     expanded: PropTypes.bool.isRequired,
     x: PropTypes.number.isRequired,
@@ -247,7 +325,7 @@ IRDebugger.propTypes = {
 const mapStateToProps = state => ({
     targetOriginId: state.scratchGui.irDebugger.targetId,
     costumeUrl: state.scratchGui.irDebugger.costumeUrl,
-    blockId: state.scratchGui.irDebugger.blockId,
+    initialBlockId: state.scratchGui.irDebugger.blockId,
     visible: state.scratchGui.irDebugger.visible,
     expanded: state.scratchGui.irDebugger.expanded,
     x: state.scratchGui.irDebugger.x,

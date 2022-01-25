@@ -15,7 +15,8 @@
         "expand": "Expand",
         "close": "Close", 
         "shrink": "Shrink",
-        "refresh": "Refresh"
+        "refresh": "Refresh",
+        "back": "Back"
     }, 
     "target": {
         "original": "Original",
