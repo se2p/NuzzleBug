@@ -10,16 +10,16 @@ import {AnswerV2 as Answer} from 'scratch-ir';
 
 import styles from './ir-answer.css';
 import cat from './cat.png';
-import zoomInIcon from '../icons/icon--plus.svg'
-import zoomOutIcon from '../icons/icon--minus.svg'
+import zoomInIcon from '../icons/icon--plus.svg';
+import zoomOutIcon from '../icons/icon--minus.svg';
 
 class IRAnswer extends React.Component {
 
     constructor (props) {
         super(props);
         bindAll(this, [
-            'zoomGraphIn',
-            'zoomGraphOut'
+            'handleZoomGraphIn',
+            'handleZoomGraphOut'
         ]);
     
         this.graphDiv = React.createRef();
@@ -33,7 +33,7 @@ class IRAnswer extends React.Component {
         this._drawGraph();
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate (prevProps) {
         if (prevProps.answer !== this.props.answer) {
             this._drawGraph();
         }
@@ -64,7 +64,7 @@ class IRAnswer extends React.Component {
 
     _initGraphSize () {
         const svgNode = this.graphDiv.current.children[0];
-        const height =  Number(svgNode.getAttribute('height').split('pt')[0]);
+        const height = Number(svgNode.getAttribute('height').split('pt')[0]);
         const width = Number(svgNode.getAttribute('width').split('pt')[0]);
         this.graphSize = {height, width};
         let zoomFactor = 1;
@@ -159,7 +159,7 @@ class IRAnswer extends React.Component {
 
     _transformNode (svgGraphNode, block, ellipse, scaleFactor) {
         const transform = this._calculateBlockTransformation(ellipse, block, scaleFactor);
-        svgGraphNode.setAttribute('transform', 
+        svgGraphNode.setAttribute('transform',
             `translate(${transform.x},${transform.y}) scale(${transform.scaleFactor})`);
         return transform.scaleFactor;
     }
@@ -173,8 +173,8 @@ class IRAnswer extends React.Component {
         }
         const width = block.width * scaleFactor;
         const height = block.height * scaleFactor;
-        const x = ellipse.center.x - width / 2;                        
-        const y = ellipse.center.y - height / 2;
+        const x = ellipse.center.x - (width / 2);
+        const y = ellipse.center.y - (height / 2);
         return {x, y, scaleFactor};
     }
 
@@ -190,7 +190,7 @@ class IRAnswer extends React.Component {
         const text = this._translate(`condition.${value}`);
         const fontSize = 10 / scaleFactor;
         const textPosition = {x: block.width + 10, y: fontSize};
-        svgGraphNode.innerHTML += this._createHtmlText(text, textPosition, fontSize, this.gray);
+        svgGraphNode.innerHTML += this._createHtmlText(text, textPosition, fontSize, this.gray, 'start');
     }
 
     _adaptGraphEdges (svgGraphChildren) {
@@ -205,13 +205,27 @@ class IRAnswer extends React.Component {
             
             this._updateEdgeColor(pathNode, polygonNode, executionInfo);
             
+            const edge = this._extractEdgeAttributes(pathNode, polygonNode);
             if (executionInfo.condition) {
-                const edgeLine = this._extractLineAttributes(pathNode);
                 if (!executionInfo.executed) {
                     this._dashPath(pathNode);
-                    this._addCrossOutLine(svgGraphEdge, edgeLine);
+                    this._addCrossOutLine(svgGraphEdge, edge.line);
                 }
-                this._addConditionLabel(svgGraphEdge, edgeLine, executionInfo);
+                this._addConditionLabel(svgGraphEdge, edge, executionInfo);
+            }
+
+            if (executionInfo.stopped || executionInfo.paused || executionInfo.observationStopped) {
+                this._dashPath(pathNode);
+                this._addCrossOutLine(svgGraphEdge, edge.line);
+                if (executionInfo.stopped) {
+                    this._addExecutionStoppedLabel(svgGraphEdge, edge);
+                }
+                if (executionInfo.paused) {
+                    this._addExecutionPausedLabel(svgGraphEdge, edge);
+                }
+                if (executionInfo.observationStopped) {
+                    this._addOberservationStoppedLabel(svgGraphEdge, edge);
+                }
             }
         }
     }
@@ -236,23 +250,32 @@ class IRAnswer extends React.Component {
         polygonNode.setAttribute('fill', edgeColor);
     }
 
-    _extractLineAttributes (pathNode) {
+    _extractEdgeAttributes (pathNode, polygonNode) {
         const path = pathNode.getAttribute('d');
-        const startValues = path.split('M')[1].split('C')[0].split(',');
-        const start = {x: Number(startValues[0]), y: Number(startValues[1])};
-        const endValues = path.split(' ')[path.split(' ').length - 1].split(',');
-        const end = {x: Number(endValues[0]), y: Number(endValues[1])};
-        return {start, end};
+        const pathStartValues = path.split('M')[1].split('C')[0].split(',');
+        const pathStart = {x: Number(pathStartValues[0]), y: Number(pathStartValues[1])};
+        const pathEndValues = path.split(' ')[path.split(' ').length - 1].split(',');
+        const pathEnd = {x: Number(pathEndValues[0]), y: Number(pathEndValues[1])};
+        const line = {start: pathStart, end: pathEnd};
+        
+        const polygonPoints = polygonNode.getAttribute('points');
+        const arrowTipValues = polygonPoints.split(' ')[1].split(',');
+        const arrowTip = {x: Number(arrowTipValues[0]), y: Number(arrowTipValues[1])};
+        
+        const start = pathStart;
+        const end = arrowTip;
+        const center = {
+            x: start.x + ((end.x - start.x) / 2),
+            y: start.y + ((end.y - start.y) / 2)
+        };
+        return {start, end, center, line};
     }
 
-    _addConditionLabel (svgGraphEdge, edgeLine, executionInfo) {
+    _addConditionLabel (svgGraphEdge, edge, executionInfo) {
         const text = this._translate(`condition.${executionInfo.condition.requiredValue}`);
-        const edgeWidth = edgeLine.end.x - edgeLine.start.x + 7;
-        const x = edgeLine.start.x + edgeWidth / 2 + 5;
-        const edgeHeight = edgeLine.end.y - edgeLine.start.y + 10;
-        const y = edgeLine.start.y + edgeHeight / 2;
+        const position = {x: edge.center.x + 10, y: edge.center.y};
         const edgeColor = executionInfo.executed ? this.gray : this.lightGray;
-        svgGraphEdge.innerHTML += this._createHtmlText(text, {x, y}, 10, edgeColor);
+        svgGraphEdge.innerHTML += this._createHtmlText(text, position, 10, edgeColor, 'start');
     }
 
     _dashPath (pathNode) {
@@ -265,10 +288,10 @@ class IRAnswer extends React.Component {
         svgGraphEdge.innerHTML += this._createHtmlLine(lineStart, lineEnd, 'red');
     }
 
-    _createHtmlText (text, position, size, color) {
+    _createHtmlText (text, position, size, color, textAnchor) {
         const html =
             `<text
-                text-anchor="start" 
+                text-anchor="${textAnchor}"
                 x="${position.x}"
                 y="${position.y}"
                 font-family=""Helvetica Neue", Helvetica, sans-serif;"
@@ -286,7 +309,7 @@ class IRAnswer extends React.Component {
     }
 
     _createHtmlArrow (position, length, scale, color) {
-        const html = 
+        const html =
             `<g transform="translate(${position.x},${position.y}) scale(${scale})">
                 <path
                     fill="none"
@@ -298,20 +321,93 @@ class IRAnswer extends React.Component {
                     stroke="${color}"
                     points="${length},-3.5 ${length + 10},0 ${length},3.5 ${length},-3.5"
                 />
-            </g>`
+            </g>`;
         return html;
+    }
+
+    _addExecutionStoppedLabel (svgGraphEdge, edge) {
+        const text = this._translate('execution.stopped');
+        const textPosition = {x: edge.center.x - 35, y: edge.center.y};
+        svgGraphEdge.innerHTML += this._createHtmlText(text, textPosition, 10, 'red', 'end');
+
+        const iconScaleFactor = 18 / 18.17;
+        const iconPosition = {x: edge.center.x - 30, y: edge.center.y - 10};
+        svgGraphEdge.innerHTML += this._createStopIcon(iconPosition, iconScaleFactor);
+    }
+
+    _addExecutionPausedLabel (svgGraphEdge, edge) {
+        const text = this._translate('execution.paused');
+        const textPosition = {x: edge.center.x - 30, y: edge.center.y};
+        svgGraphEdge.innerHTML += this._createHtmlText(text, textPosition, 10, 'red', 'end');
+
+        const iconScaleFactor = 18 / 19.56;
+        const iconPosition = {x: edge.center.x - 30, y: edge.center.y - 14};
+        svgGraphEdge.innerHTML += this._createPauseIcon(iconPosition, iconScaleFactor);
+    }
+
+    _addOberservationStoppedLabel (svgGraphEdge, edge) {
+        const text = this._translate('observation.stopped');
+        const textPosition = {x: edge.center.x - 35, y: edge.center.y};
+        svgGraphEdge.innerHTML += this._createHtmlText(text, textPosition, 10, 'red', 'end');
+
+        const iconScaleFactor = 18 / 1155.57;
+        const iconPosition = {x: edge.center.x - 30, y: edge.center.y - 11};
+        svgGraphEdge.innerHTML += this._createEyeIcon(iconPosition, iconScaleFactor);
+    }
+
+    _createStopIcon (position, scale) {
+        return `<g transform="translate(${position.x},${position.y}) scale(${scale})">
+                    <polygon
+                        fill="red"
+                        stroke="#cc0000"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-miterlimit="10"
+                        points="4.3,0.5 9.7,0.5 13.5,4.3 13.5,9.7 9.7,13.5 4.3,13.5 0.5,9.7 0.5,4.3"
+                    />
+                </g>`;
+    }
+    
+    _createPauseIcon (position, scale) {
+        return `<g transform="translate(${position.x},${position.y}) scale(${scale})">
+                    <path
+                        fill="red"
+                        stroke="#cc0000"
+                        d="M8 5v14l11-7z"
+                    />
+                    <path
+                        fill="none"
+                        d="M0 0h24v24H0z"
+                    />
+                </g>`;
+    }
+
+    _createEyeIcon (position, scale) {
+        return `<g transform="translate(${position.x},${position.y}) scale(${scale})">
+                    <path 
+                        fill="red"
+                        stroke="#cc0000"
+                        d="M500,163.1c-183.8,0-398.1,122.5-490,367.5c91.9,183.8,275.6,306.3,490,306.3
+                        s398.1-122.5,490-306.3C898.1,285.6,683.8,163.1,500,163.1z M500,775.6c-183.8,0
+                        -336.9-122.5-367.5-245c30.6-122.5,183.8-245,367.5-245s336.9,122.5,367.5,245
+                        C836.9,653.1,683.8,775.6,500,775.6z M500,346.9c-19.1,0-36.4,3.8-53.6,8.6c31.6,
+                        14.4,53.6,45.9,53.6,83.3c0,50.7-41.2,91.9-91.9,91.9c-37.3,0-68.9-22-83.3-53.6
+                        c-4.8,17.2-8.6,34.5-8.6,53.6c0,101.4,82.3,183.8,183.8,183.8s183.8-82.3,183.8
+                        -183.8S601.4,346.9,500,346.9z"
+                    />
+                </g>`;
     }
 
     _translate (key) {
         return this.props.intl.formatMessage({id: `gui.ir-debugger.${key}`});
     }
 
-    zoomGraphIn () {
+    handleZoomGraphIn () {
         const zoomFactor = this.zoomFactor + this.zoomStepSize;
         this._zoomGraph(zoomFactor);
     }
 
-    zoomGraphOut () {
+    handleZoomGraphOut () {
         const zoomFactor = this.zoomFactor - this.zoomStepSize;
         this._zoomGraph(zoomFactor);
     }
@@ -336,18 +432,18 @@ class IRAnswer extends React.Component {
                     />
                 </div>
                 <div className={styles.blockArea}>
-                    <div 
+                    <div
                         id="graph"
                         ref={this.graphDiv}
                     />
                     <img
                         className={classNames(styles.zoomButton, styles.zoomInButton)}
-                        onClick={this.zoomGraphIn}
+                        onClick={this.handleZoomGraphIn}
                         src={zoomInIcon}
                     />
                     <img
                         className={classNames(styles.zoomButton, styles.zoomOutButton)}
-                        onClick={this.zoomGraphOut}
+                        onClick={this.handleZoomGraphOut}
                         src={zoomOutIcon}
                     />
                 </div>

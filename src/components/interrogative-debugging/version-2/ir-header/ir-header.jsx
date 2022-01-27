@@ -48,7 +48,7 @@ class IRHeader extends React.Component {
 
     _appendSvgBlock () {
         if (this.svgBlock.current) {
-            const block = ScratchBlocks.getMainWorkspace().getBlockById(this.props.blockId);
+            const block = ScratchBlocks.getAbstractWorkspace().getBlockById(this.props.blockId);
             const scaleFactor = 0.7;
             const svgBlock = this.props.createSvgBlock(block, scaleFactor);
             this.svgBlock.current.appendChild(svgBlock);

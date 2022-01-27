@@ -179,5 +179,12 @@
     "condition": {
         "true": "true",
         "false": "false"
+    },
+    "execution": {
+        "stopped": "execution stopped",
+        "paused": "execution paused"
+    },
+    "observation": {
+        "stopped": "observation stopped"
     }
 }
