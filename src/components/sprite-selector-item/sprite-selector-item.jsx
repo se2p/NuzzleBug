@@ -55,14 +55,23 @@ const SpriteSelectorItem = props => (
         ) : null }
         {props.onDuplicateButtonClick || props.onDeleteButtonClick || props.onExportButtonClick ? (
             <ContextMenu id={`${props.name}-${contextMenuId++}`}>
+                {props.onInterrogativeButtonClick && props.interrogationEnabled ? (
+                    <MenuItem onClick={props.onInterrogativeButtonClick}>
+                        <FormattedMessage
+                            defaultMessage="Ask why..."
+                            description="Menu item to open the interrogative debugger for the selected item"
+                            id="gui.ir-debugger.controls.open-debugger"
+                        />
+                    </MenuItem>
+                ) : null }
                 {props.onDuplicateButtonClick ? (
-                    <MenuItem onClick={props.onDuplicateButtonClick}>
+                    <BorderedMenuItem onClick={props.onDuplicateButtonClick}>
                         <FormattedMessage
                             defaultMessage="duplicate"
                             description="Menu item to duplicate in the right click menu"
                             id="gui.spriteSelectorItem.contextMenuDuplicate"
                         />
-                    </MenuItem>
+                    </BorderedMenuItem>
                 ) : null}
                 {props.onExportButtonClick ? (
                     <MenuItem onClick={props.onExportButtonClick}>
@@ -72,15 +81,6 @@ const SpriteSelectorItem = props => (
                             id="gui.spriteSelectorItem.contextMenuExport"
                         />
                     </MenuItem>
-                ) : null }
-                {props.onInterrogativeButtonClick && props.interrogationEnabled ? (
-                    <BorderedMenuItem onClick={props.onInterrogativeButtonClick}>
-                        <FormattedMessage
-                            defaultMessage="Ask why..."
-                            description="Menu item to open the interrogative debugger for the selected item"
-                            id="gui.ir-debugger.controls.open-debugger"
-                        />
-                    </BorderedMenuItem>
                 ) : null }
                 {props.onDeleteButtonClick ? (
                     <DangerousMenuItem onClick={props.onDeleteButtonClick}>
