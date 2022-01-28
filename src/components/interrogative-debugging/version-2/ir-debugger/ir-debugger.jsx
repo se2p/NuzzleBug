@@ -41,6 +41,9 @@ class IRDebugger extends React.Component {
         this.setCursorOfBlock(svgGroup, 'default');
         if (executionInfo) {
             svgGroup.setAttribute('opacity', `${executionInfo.executed ? '1' : '0.5'}`);
+            if (executionInfo.executed) {
+                this._addInputTooltips(svgGroup, executionInfo);
+            }
         }
         for (const childNode of Array.from(svgGroup.childNodes)) {
             if (childNode.getAttribute('class')?.includes('breakpointGroup')) {
@@ -85,6 +88,24 @@ class IRDebugger extends React.Component {
         node.setAttribute('style', `cursor: ${value}`);
         for (const child of node.children) {
             this.setCursorOfBlock(child, value);
+        }
+    }
+
+    _addInputTooltips (node, executionInfo) {
+        const isValueInput = node.getAttribute('data-shapes') === 'reporter round';
+        const isBooleanInput = node.getAttribute('data-shapes') === 'reporter boolean';
+        if (isValueInput || isBooleanInput) {
+            const blockId = node.getAttribute('data-id');
+            let value = executionInfo.inputValues[blockId];
+            if (typeof value !== 'undefined') {
+                if (isBooleanInput) {
+                    value = this.props.intl.formatMessage({id: `gui.ir-debugger.condition.${value}`});
+                }
+                node.innerHTML += `<title>${value}</title>`;
+            }
+        }
+        for (const child of node.children) {
+            this._addInputTooltips(child, executionInfo);
         }
     }
 
