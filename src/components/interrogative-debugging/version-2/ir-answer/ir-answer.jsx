@@ -27,6 +27,7 @@ class IRAnswer extends React.Component {
         this.zoomStepSize = 0.1;
         this.gray = '#575E75';
         this.lightGray = '#ABAEBA';
+        this.labelSize = 8;
     }
 
     componentDidMount () {
@@ -107,15 +108,7 @@ class IRAnswer extends React.Component {
             const ellipse = this._extractEllipseAttributes(children.ellipse);
 
             scaleFactor = this._transformNode(svgGraphNode, block, ellipse, scaleFactor);
-            
-            const executionInfo = this._getNodeExecutionInfo(graphNode);
-            if (executionInfo.condition) {
-                const actualValue = executionInfo.condition.actualValue;
-                const requiredValue = executionInfo.condition.requiredValue;
-                if (actualValue !== requiredValue) {
-                    this._addEdgeForActualConditionValue(svgGraphNode, actualValue, block, scaleFactor);
-                }
-            }
+
             if (!block.isHatBlock) {
                 const svgBlock = svgGraphNode.children[0];
                 svgBlock.addEventListener('click', () => this.props.onGraphNodeClick(block.id));
@@ -188,7 +181,7 @@ class IRAnswer extends React.Component {
         svgGraphNode.innerHTML += this._createHtmlArrow(arrowPosition, arrowLength, 1 / scaleFactor, this.gray);
 
         const text = this._translate(`condition.${value}`);
-        const fontSize = 10 / scaleFactor;
+        const fontSize = this.labelSize / scaleFactor;
         const textPosition = {x: block.width + 10, y: fontSize};
         svgGraphNode.innerHTML += this._createHtmlText(text, textPosition, fontSize, this.gray, 'start');
     }
@@ -211,7 +204,12 @@ class IRAnswer extends React.Component {
                     this._dashPath(pathNode);
                     this._addCrossOutLine(svgGraphEdge, edge.line);
                 }
-                this._addConditionLabel(svgGraphEdge, edge, executionInfo);
+                const text = this._translate(`condition.${executionInfo.condition.requiredValue}`);
+                this._addEdgeLabel(svgGraphEdge, edge, text, executionInfo, true);
+            }
+            if (executionInfo.times > 1) {
+                const text = `${executionInfo.times}x`;
+                this._addEdgeLabel(svgGraphEdge, edge, text, executionInfo, false);
             }
 
             if (executionInfo.stopped || executionInfo.paused || executionInfo.observationStopped) {
@@ -271,11 +269,32 @@ class IRAnswer extends React.Component {
         return {start, end, center, line};
     }
 
-    _addConditionLabel (svgGraphEdge, edge, executionInfo) {
-        const text = this._translate(`condition.${executionInfo.condition.requiredValue}`);
-        const position = {x: edge.center.x + 10, y: edge.center.y};
+    _addEdgeLabel (svgGraphEdge, edge, text, executionInfo, isRightLabel) {
+        const position = this._calculateEdgeLabelPosition(edge, 5, isRightLabel);
         const edgeColor = executionInfo.executed ? this.gray : this.lightGray;
-        svgGraphEdge.innerHTML += this._createHtmlText(text, position, 10, edgeColor, 'start');
+        const textAnchor = isRightLabel ? 'start' : 'end';
+        svgGraphEdge.innerHTML += this._createHtmlText(text, position, this.labelSize, edgeColor, textAnchor);
+    }
+
+    _calculateEdgeLabelPosition (edge, edgeDistance, isRightLabel) {
+        const xVariance = edge.end.x - edge.start.x;
+        if (!xVariance) {
+            const x = edge.center.x + (isRightLabel ? edgeDistance : edgeDistance * -1);
+            const y = edge.center.y;
+            return {x, y};
+        }
+        const yVariance = edge.end.y - edge.start.y;
+        const edgeGradient = yVariance / xVariance;
+        const gradient = -1 / edgeGradient;
+        const yIntercept = (-1 * edge.center.x * gradient) + edge.center.y;
+        const orthogonalLine = x => (gradient * x) + yIntercept;
+        const xDistance = Math.sqrt(Math.pow(edgeDistance, 2) / (1 + Math.pow(gradient, 2)));
+        const x = edge.center.x + (isRightLabel ? xDistance : xDistance * -1);
+        let y = orthogonalLine(x);
+        if ((gradient > 0 && isRightLabel) || (gradient < 0 && !isRightLabel)) {
+            y += this.labelSize / 2;
+        }
+        return {x, y};
     }
 
     _dashPath (pathNode) {
@@ -326,32 +345,35 @@ class IRAnswer extends React.Component {
     }
 
     _addExecutionStoppedLabel (svgGraphEdge, edge) {
+        const position = this._calculateEdgeLabelPosition(edge, 5, false);
         const text = this._translate('execution.stopped');
-        const textPosition = {x: edge.center.x - 35, y: edge.center.y};
-        svgGraphEdge.innerHTML += this._createHtmlText(text, textPosition, 10, 'red', 'end');
+        const textPosition = {x: position.x - 25, y: position.y};
+        svgGraphEdge.innerHTML += this._createHtmlText(text, textPosition, this.labelSize, 'red', 'end');
 
         const iconScaleFactor = 18 / 18.17;
-        const iconPosition = {x: edge.center.x - 30, y: edge.center.y - 10};
+        const iconPosition = {x: position.x - 20, y: position.y - 10};
         svgGraphEdge.innerHTML += this._createStopIcon(iconPosition, iconScaleFactor);
     }
 
     _addExecutionPausedLabel (svgGraphEdge, edge) {
+        const position = this._calculateEdgeLabelPosition(edge, 5, false);
         const text = this._translate('execution.paused');
-        const textPosition = {x: edge.center.x - 30, y: edge.center.y};
-        svgGraphEdge.innerHTML += this._createHtmlText(text, textPosition, 10, 'red', 'end');
+        const textPosition = {x: position.x - 20, y: position.y};
+        svgGraphEdge.innerHTML += this._createHtmlText(text, textPosition, this.labelSize, 'red', 'end');
 
         const iconScaleFactor = 18 / 19.56;
-        const iconPosition = {x: edge.center.x - 30, y: edge.center.y - 14};
+        const iconPosition = {x: position.x - 20, y: position.y - 14};
         svgGraphEdge.innerHTML += this._createPauseIcon(iconPosition, iconScaleFactor);
     }
 
     _addOberservationStoppedLabel (svgGraphEdge, edge) {
+        const position = this._calculateEdgeLabelPosition(edge, 5, false);
         const text = this._translate('observation.stopped');
-        const textPosition = {x: edge.center.x - 35, y: edge.center.y};
-        svgGraphEdge.innerHTML += this._createHtmlText(text, textPosition, 10, 'red', 'end');
+        const textPosition = {x: position.x - 25, y: position.y};
+        svgGraphEdge.innerHTML += this._createHtmlText(text, textPosition, this.labelSize, 'red', 'end');
 
         const iconScaleFactor = 18 / 1155.57;
-        const iconPosition = {x: edge.center.x - 30, y: edge.center.y - 11};
+        const iconPosition = {x: position.x - 20, y: position.y - 11};
         svgGraphEdge.innerHTML += this._createEyeIcon(iconPosition, iconScaleFactor);
     }
 
