@@ -4,7 +4,7 @@
   min-height: 100px;
   width: 100%;
   margin-top: -25px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .speech-bubble-box {
@@ -42,7 +42,7 @@
 }
 
 .block-area {
-  width: 100%;
+  width: calc(100% - 40px);
   height: 320px;
   padding: 10px;
   border: 1px solid hsla(0, 0%, 0%, 0.15);
@@ -50,17 +50,27 @@
   overflow-y: scroll;
 }
 
-.block-area::-webkit-scrollbar-track {
+.responsible-targets {
+  position: fixed;
+  bottom: 90px;
+  right: 12px;
+  height: 250px;
+  width: 42px;
+  padding-top: 5px;
+  overflow-y: scroll;
+}
+
+.block-area::-webkit-scrollbar-track, .responsible-targets::-webkit-scrollbar-track {
   margin-top: 1px;
   margin-bottom: 1px;
 }
 
-.block-area::-webkit-scrollbar {
+.block-area::-webkit-scrollbar, .responsible-targets::-webkit-scrollbar {
   height: 6px;
   width: 6px;
 }
 
-.block-area::-webkit-scrollbar-thumb {
+.block-area::-webkit-scrollbar-thumb, .responsible-targets::-webkit-scrollbar-thumb {
   background:#CECDCE;
   border: 1px solid #CECDCE;
   border-radius: 4px;
@@ -68,7 +78,7 @@
 
 .zoom-button {
   position: fixed;
-  bottom: 25px;
+  right: 25px;
   height: 24px;
   cursor: pointer;
 }
@@ -78,9 +88,9 @@
 }
 
 .zoom-in-button {
-  right: 60px;
+  bottom: 55px;
 }
 
 .zoom-out-button {
-  right: 30px;
+  bottom: 25px;
 }

@@ -19,6 +19,7 @@
         "back": "Zurück"
     }, 
     "target": {
+        "stage": "Bühne",
         "original": "Original",
         "clone": "Klon {index}"
     }, 

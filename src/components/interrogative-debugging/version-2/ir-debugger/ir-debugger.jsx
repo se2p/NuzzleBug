@@ -4,6 +4,7 @@ import React from 'react';
 import Draggable from 'react-draggable';
 import {injectIntl, intlShape} from 'react-intl';
 import bindAll from 'lodash.bindall';
+import VirtualMachine from 'scratch-vm';
 
 import {
     QuestionCategory,
@@ -28,7 +29,7 @@ class IRDebugger extends React.Component {
         ]);
     }
 
-    createSvgBlock (block, scaleFactor, executionInfo) {
+    createSvgBlock (block, scaleFactor, executionInfo, backgroundColor) {
         const NS = 'http://www.w3.org/2000/svg';
 
         let blockHeight = block.startHat_ ?
@@ -71,14 +72,32 @@ class IRDebugger extends React.Component {
         const maximalXCoordinate = horizontalLineEnd + arcWidth;
         const blockWidth = maximalXCoordinate * scaleFactor;
 
+        const svgBlock = document.createElementNS(NS, 'svg');
+        const blockBorder = {width: 2, radius: 5};
+        const blockMargin = blockBorder.width + blockBorder.radius;
+        svgBlock.setAttribute('height', `${blockHeight + (2 * blockMargin)}px`);
+        svgBlock.setAttribute('width', `${blockWidth + (2 * blockMargin)}px`);
+
+        if (backgroundColor) {
+            const rect = document.createElementNS(NS, 'rect');
+            rect.setAttribute('fill', `${backgroundColor}`);
+            rect.setAttribute('fill-opacity', executionInfo && !executionInfo.executed ? '0.2' : '0.5');
+            rect.setAttribute('stroke', `${backgroundColor}`);
+            rect.setAttribute('stroke-width', `${blockBorder.width}`);
+            rect.setAttribute('stroke-linecap', `round`);
+            rect.setAttribute('height', `${blockHeight + (2 * blockBorder.radius)}px`);
+            rect.setAttribute('width', `${blockWidth + (2 * blockBorder.radius)}px`);
+            rect.setAttribute('x', `${blockBorder.width}`);
+            rect.setAttribute('y', `${blockBorder.width}`);
+            rect.setAttribute('rx', `${blockBorder.radius}`);
+            rect.setAttribute('ry', `${blockBorder.radius}`);
+            svgBlock.appendChild(rect);
+        }
+        
         const canvas = document.createElementNS(NS, 'g');
         canvas.setAttribute('class', 'blocklyBlockCanvas');
-        canvas.setAttribute('transform', 'translate(0,0)');
+        canvas.setAttribute('transform', `translate(${(blockMargin)},${(blockMargin)})`);
         canvas.appendChild(svgGroup);
-
-        const svgBlock = document.createElementNS(NS, 'svg');
-        svgBlock.setAttribute('height', `${blockHeight}px`);
-        svgBlock.setAttribute('width', `${blockWidth}px`);
         svgBlock.appendChild(canvas);
 
         return svgBlock;
@@ -111,6 +130,7 @@ class IRDebugger extends React.Component {
 
     render () {
         const {
+            vm,
             target,
             targetOptions,
             blockId,
@@ -202,6 +222,7 @@ class IRDebugger extends React.Component {
                                                 <div className={styles.answer}>
                                                     <IRAnswer
                                                         answer={answer}
+                                                        vm={vm}
                                                         createSvgBlock={this.createSvgBlock}
                                                         onGraphNodeClick={onGraphNodeClick}
                                                         setCursorOfBlock={this.setCursorOfBlock}
@@ -222,6 +243,7 @@ class IRDebugger extends React.Component {
 
 IRDebugger.propTypes = {
     intl: intlShape.isRequired,
+    vm: PropTypes.instanceOf(VirtualMachine).isRequired,
     target: PropTypes.shape({
         id: PropTypes.string.isRequired,
         optionName: PropTypes.string.isRequired,

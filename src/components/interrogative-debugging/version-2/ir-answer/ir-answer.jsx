@@ -5,8 +5,12 @@ import {injectIntl, intlShape} from 'react-intl';
 import Viz from 'viz.js';
 import bindAll from 'lodash.bindall';
 
+import {ControlFilter} from 'scratch-analysis';
+import VirtualMachine from 'scratch-vm';
 import ScratchBlocks from 'scratch-blocks';
-import {AnswerV2 as Answer} from 'scratch-ir';
+import {AnswerV2 as Answer, targetForBlockId} from 'scratch-ir';
+
+import getCostumeUrl from '../../../../lib/get-costume-url';
 
 import styles from './ir-answer.css';
 import cat from './cat.png';
@@ -23,20 +27,26 @@ class IRAnswer extends React.Component {
         ]);
     
         this.graphDiv = React.createRef();
+        this.targetsDiv = React.createRef();
         this.zoomFactor = 1;
         this.zoomStepSize = 0.1;
         this.gray = '#575E75';
         this.lightGray = '#ABAEBA';
         this.labelSize = 8;
+        this.targets = props.vm.runtime.targets;
+        this.targetColors = ['#F898A4', '#9BE0F1', '#F7FAA1', '#B4F6A4',
+            '#FCDA9C', '#A2ACEB', '#F081E5', '#76F5CF'];
     }
 
     componentDidMount () {
         this._drawGraph();
+        this._addResponsibleTargetImages();
     }
 
     componentDidUpdate (prevProps) {
         if (prevProps.answer !== this.props.answer) {
             this._drawGraph();
+            this._addResponsibleTargetImages();
         }
     }
 
@@ -132,11 +142,24 @@ class IRAnswer extends React.Component {
         const blockId = graphNode.block.id;
         const block = ScratchBlocks.getAbstractWorkspace().getBlockById(blockId);
         const executionInfo = this._getNodeExecutionInfo(graphNode);
-        const svgBlock = this.props.createSvgBlock(block, scaleFactor, executionInfo);
+        let backgroundColor;
+        if (this._blockBelongsToCertainTarget(graphNode.block)) {
+            const targetForBlock = targetForBlockId(this.targets, blockId);
+            const targetIndex = this.targets.indexOf(targetForBlock);
+            backgroundColor = this.targetColors[targetIndex % this.targetColors.length];
+        }
+        const svgBlock = this.props.createSvgBlock(block, scaleFactor, executionInfo, backgroundColor);
         const width = Number(svgBlock.getAttribute('width').split('px')[0]);
         const height = Number(svgBlock.getAttribute('height').split('px')[0]);
         svgGraphNode.appendChild(svgBlock);
         return {id: blockId, width, height, isHatBlock: block.startHat_};
+    }
+
+    _blockBelongsToCertainTarget (block) {
+        return !ControlFilter.hatBlock(block) ||
+            block.opcode === 'event_whenthisspriteclicked' ||
+            block.opcode === 'event_whenstageclicked' ||
+            block.opcode === 'control_start_as_clone';
     }
 
     _extractEllipseAttributes (ellipseNode) {
@@ -420,6 +443,60 @@ class IRAnswer extends React.Component {
                 </g>`;
     }
 
+    _addResponsibleTargetImages () {
+        this.targetsDiv.current.innerHTML = '';
+        for (const target of this.targets) {
+            if (this.props.answer.responsibleTargetIds.has(target.id)) {
+                const targetIndex = this.targets.indexOf(target);
+                const color = this.targetColors[targetIndex % this.targetColors.length];
+                this._addTargetImage(target, 34, 2, 2, color);
+            }
+        }
+        this.forceUpdate();
+    }
+
+    _addTargetImage (target, sideLength, padding, border, color) {
+        const drawable = target.renderer.extractDrawable(target.drawableID, 0, 0);
+        const costume = target.sprite.costumes_[target.currentCostume];
+        const image = document.createElement('img');
+        const src = costume.asset ? getCostumeUrl(costume.asset) : null;
+        image.setAttribute('src', src);
+        let imageWidth = sideLength - (2 * (padding + border));
+        let imageHeight = imageWidth;
+        if (drawable.width < drawable.height) {
+            imageWidth *= drawable.width / drawable.height;
+        }
+        if (drawable.width > drawable.height) {
+            imageHeight *= drawable.height / drawable.width;
+        }
+        const marginTopBottom = (Math.max(imageHeight, imageWidth) - imageHeight) / 2;
+        const marginLeftRight = (Math.max(imageHeight, imageWidth) - imageWidth) / 2;
+        image.setAttribute('style', `width: ${imageWidth}px; height: ${imageHeight}px;
+            margin: ${marginTopBottom}px ${marginLeftRight}px;`);
+
+        const imageDiv = document.createElement('div');
+        const targetName = target.isStage ? this._translate('target.stage') : target.getName();
+        imageDiv.setAttribute('title', targetName);
+        imageDiv.setAttribute('style', `height: ${sideLength}px; width: ${sideLength}px; 
+            padding: ${padding}px; margin-bottom: 5px; 
+            border-radius: 4px; border: ${border}px solid ${color}; 
+            background-color: ${this._hexToRgba(color, 0.5)};`
+        );
+        imageDiv.appendChild(image);
+        this.targetsDiv.current.appendChild(imageDiv);
+    }
+
+    _hexToRgba (hex, a) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        if (result) {
+            const r = parseInt(result[1], 16);
+            const g = parseInt(result[2], 16);
+            const b = parseInt(result[3], 16);
+            return `rgb(${r}, ${g}, ${b}, ${a})`;
+        }
+        return null;
+    }
+
     _translate (key) {
         return this.props.intl.formatMessage({id: `gui.ir-debugger.${key}`});
     }
@@ -458,6 +535,11 @@ class IRAnswer extends React.Component {
                         id="graph"
                         ref={this.graphDiv}
                     />
+                    <div
+                        id="targets"
+                        className={styles.responsibleTargets}
+                        ref={this.targetsDiv}
+                    />
                     <img
                         className={classNames(styles.zoomButton, styles.zoomInButton)}
                         onClick={this.handleZoomGraphIn}
@@ -477,6 +559,7 @@ class IRAnswer extends React.Component {
 IRAnswer.propTypes = {
     intl: intlShape.isRequired,
     answer: PropTypes.instanceOf(Answer),
+    vm: PropTypes.instanceOf(VirtualMachine).isRequired,
     createSvgBlock: PropTypes.func.isRequired,
     onGraphNodeClick: PropTypes.func.isRequired,
     setCursorOfBlock: PropTypes.func.isRequired
