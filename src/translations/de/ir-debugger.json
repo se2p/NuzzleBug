@@ -181,6 +181,12 @@
         "true": "wahr",
         "false": "falsch"
     },
+    "block": {
+        "from": {
+            "sprite": "Block von \"{sprite}\"",
+            "stage": "Block von der Bühne"
+        }
+    },
     "execution": {
         "stopped": "Ausführung gestoppt",
         "paused": "Ausführung pausiert"

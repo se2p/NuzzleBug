@@ -181,6 +181,12 @@
         "true": "true",
         "false": "false"
     },
+    "block": {
+        "from": {
+            "sprite": "Block from \"{sprite}\"",
+            "stage": "Block from the stage"
+        }
+    },
     "execution": {
         "stopped": "execution stopped",
         "paused": "execution paused"

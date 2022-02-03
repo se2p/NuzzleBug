@@ -29,7 +29,7 @@ class IRDebugger extends React.Component {
         ]);
     }
 
-    createSvgBlock (block, scaleFactor, executionInfo, backgroundColor) {
+    createSvgBlock (block, scaleFactor, executionInfo, background) {
         const NS = 'http://www.w3.org/2000/svg';
 
         let blockHeight = block.startHat_ ?
@@ -78,11 +78,11 @@ class IRDebugger extends React.Component {
         svgBlock.setAttribute('height', `${blockHeight + (2 * blockMargin)}px`);
         svgBlock.setAttribute('width', `${blockWidth + (2 * blockMargin)}px`);
 
-        if (backgroundColor) {
+        if (background) {
             const rect = document.createElementNS(NS, 'rect');
-            rect.setAttribute('fill', `${backgroundColor}`);
+            rect.setAttribute('fill', `${background.color}`);
             rect.setAttribute('fill-opacity', executionInfo && !executionInfo.executed ? '0.2' : '0.5');
-            rect.setAttribute('stroke', `${backgroundColor}`);
+            rect.setAttribute('stroke', `${background.color}`);
             rect.setAttribute('stroke-width', `${blockBorder.width}`);
             rect.setAttribute('stroke-linecap', `round`);
             rect.setAttribute('height', `${blockHeight + (2 * blockBorder.radius)}px`);
@@ -91,6 +91,8 @@ class IRDebugger extends React.Component {
             rect.setAttribute('y', `${blockBorder.width}`);
             rect.setAttribute('rx', `${blockBorder.radius}`);
             rect.setAttribute('ry', `${blockBorder.radius}`);
+            rect.innerHTML += `<title>${background.title}</title>`;
+            backgroundPath.innerHTML += `<title>${background.title}</title>`;
             svgBlock.appendChild(rect);
         }
         

@@ -142,13 +142,17 @@ class IRAnswer extends React.Component {
         const blockId = graphNode.block.id;
         const block = ScratchBlocks.getAbstractWorkspace().getBlockById(blockId);
         const executionInfo = this._getNodeExecutionInfo(graphNode);
-        let backgroundColor;
+        let background;
         if (this._blockBelongsToCertainTarget(graphNode.block)) {
             const targetForBlock = targetForBlockId(this.targets, blockId);
             const targetIndex = this.targets.indexOf(targetForBlock);
-            backgroundColor = this.targetColors[targetIndex % this.targetColors.length];
+            const color = this.targetColors[targetIndex % this.targetColors.length];
+            const title = targetForBlock.isStage ?
+                this._translate('block.from.stage') :
+                this._translate('block.from.sprite', {sprite: targetForBlock.getName()});
+            background = {color, title};
         }
-        const svgBlock = this.props.createSvgBlock(block, scaleFactor, executionInfo, backgroundColor);
+        const svgBlock = this.props.createSvgBlock(block, scaleFactor, executionInfo, background);
         const width = Number(svgBlock.getAttribute('width').split('px')[0]);
         const height = Number(svgBlock.getAttribute('height').split('px')[0]);
         svgGraphNode.appendChild(svgBlock);
@@ -497,8 +501,8 @@ class IRAnswer extends React.Component {
         return null;
     }
 
-    _translate (key) {
-        return this.props.intl.formatMessage({id: `gui.ir-debugger.${key}`});
+    _translate (key, values) {
+        return this.props.intl.formatMessage({id: `gui.ir-debugger.${key}`}, values);
     }
 
     handleZoomGraphIn () {
