@@ -65,13 +65,13 @@ const SpriteSelectorItem = props => (
                     </MenuItem>
                 ) : null }
                 {props.onDuplicateButtonClick ? (
-                    <BorderedMenuItem onClick={props.onDuplicateButtonClick}>
+                    <MenuItem onClick={props.onDuplicateButtonClick}>
                         <FormattedMessage
                             defaultMessage="duplicate"
                             description="Menu item to duplicate in the right click menu"
                             id="gui.spriteSelectorItem.contextMenuDuplicate"
                         />
-                    </BorderedMenuItem>
+                    </MenuItem>
                 ) : null}
                 {props.onExportButtonClick ? (
                     <MenuItem onClick={props.onExportButtonClick}>
