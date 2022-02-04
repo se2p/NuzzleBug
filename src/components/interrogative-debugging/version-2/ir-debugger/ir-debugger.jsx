@@ -95,12 +95,18 @@ class IRDebugger extends React.Component {
             backgroundPath.innerHTML += `<title>${background.title}</title>`;
             svgBlock.appendChild(rect);
         }
-        
+
         const canvas = document.createElementNS(NS, 'g');
         canvas.setAttribute('class', 'blocklyBlockCanvas');
-        canvas.setAttribute('transform', `translate(${(blockMargin)},${(blockMargin)})`);
         canvas.appendChild(svgGroup);
-        svgBlock.appendChild(canvas);
+        
+        const svgCanvas = document.createElementNS(NS, 'svg');
+        svgCanvas.setAttribute('x', `${blockMargin}`);
+        svgCanvas.setAttribute('y', `${blockMargin}`);
+        svgCanvas.setAttribute('height', `${blockHeight}px`);
+        svgCanvas.setAttribute('width', `${blockWidth}px`);
+        svgCanvas.appendChild(canvas);
+        svgBlock.appendChild(svgCanvas);
 
         return svgBlock;
     }
