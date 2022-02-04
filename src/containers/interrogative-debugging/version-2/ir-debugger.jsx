@@ -31,73 +31,78 @@ class IRDebugger extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'setTargetOption',
+            'handleTargetChange',
             'handleQuestionClick',
             'handleGraphNodeClick',
             'handleBackButtonClick',
             'rerender',
             'translate'
         ]);
-        this.cancel = false;
-        this.previousBlocks = [];
-        this.currentBlockId = props.initialBlockId;
         this.init();
     }
 
     init () {
-        const {
-            visible,
-            vm,
-            onClose,
-            onDisable
-        } = this.props;
+        this.initProperties();
 
-        if (!visible) {
+        if (!this.props.visible) {
             this.cancel = true;
             return;
         }
 
-        if (vm.runtime.traceInfo.isEmpty()) {
-            onClose();
-            onDisable();
-            this.cancel = true;
+        if (this.props.vm.runtime.traceInfo.isEmpty()) {
+            this.closeAndDisable();
             return;
         }
         
         try {
-            this.cfg = generateCFG(vm);
+            this.cfg = generateCFG(this.props.vm);
             this.cdg = generateCDG(this.cfg);
         } catch (e) {
-            onClose();
-            onDisable();
-            this.cancel = true;
+            this.closeAndDisable();
             return;
         }
 
         this.updateAbstractWorkspace();
+        this.initTrace();
         this.update();
+    }
+
+    initProperties () {
+        this.cancel = false;
+        this.target = null;
+        this.currentBlockId = this.props.initialBlockId;
+        this.previousBlocks = [];
+        this.selectedQuestion = null;
+        this.answer = null;
+    }
+
+    closeAndDisable () {
+        this.props.onClose();
+        this.props.onDisable();
+        this.cancel = true;
+    }
+
+    initTrace () {
+        this.observedTrace = this.calculateObservedTrace();
+        this.relevantTrace = this.observedTrace;
     }
 
     update () {
         this.isBlockDebugger = typeof this.currentBlockId !== 'undefined';
         this.isTargetDebugger = this.props.targetOriginId && !this.isBlockDebugger;
         if (this.isTargetDebugger || this.isBlockDebugger) {
+
             this.targetOrigin = this.getTargetOrigin();
-            this.trace = this.calculateTrace();
-            this.targetOptions = this.calculateTargetOptions(this.trace);
-            if (!this.target) {
+            this.targetOptions = this.calculateTargetOptions(this.observedTrace);
+            if (!this.target || this.target.origin.id !== this.targetOrigin.id) {
                 this.setTargetOption(this.targetOptions[0]);
             }
-            if (this.isTargetDebugger) {
-                this.trace = this.filterTraceForTargetOption(this.trace);
-            }
-            this.block = null;
-            if (this.isBlockDebugger) {
-                this.block = Object.values(this.targetOrigin.blocks._blocks)
-                    .find(b => b.id === this.currentBlockId);
-            }
-            this.currentTrace = this.trace;
-            this.updateCurrentTrace();
+
+            this.block = this.isBlockDebugger ?
+                Object.values(this.targetOrigin.blocks._blocks).find(b => b.id === this.currentBlockId) :
+                null;
+
+            this.updateRelevantTrace();
             this.calculateQuestionHierarchy();
             this.initAnswerProvider();
         } else {
@@ -114,8 +119,16 @@ class IRDebugger extends React.Component {
         ScratchBlocks.Xml.clearWorkspaceAndLoadFromXml(dom, ScratchBlocks.getAbstractWorkspace());
     }
 
+    updateRelevantTrace () {
+        if (this.isTargetDebugger) {
+            this.relevantTrace = this.filterTraceForTargetOption(this.observedTrace);
+        } else {
+            this.relevantTrace = this.filterTraceForBlock(this.relevantTrace, this.block);
+        }
+    }
+
     calculateQuestionHierarchy () {
-        const questionProvider = new QuestionProvider(this.props.vm, this.currentTrace, this.target,
+        const questionProvider = new QuestionProvider(this.props.vm, this.relevantTrace, this.target,
             this.block, this.translate);
         this.questionHierarchy = questionProvider.generateQuestionHierarchy();
     }
@@ -125,14 +138,14 @@ class IRDebugger extends React.Component {
             this.props.vm,
             this.cdg,
             this.cfg,
-            this.currentTrace,
+            this.relevantTrace,
             this.target,
             this.currentBlockId
         );
     }
 
     updateAnswerProvider () {
-        this.answerProvider.setTrace(this.currentTrace);
+        this.answerProvider.setTrace(this.relevantTrace);
         this.answerProvider.target = this.target;
         this.answerProvider.blockId = this.currentBlockId;
     }
@@ -141,7 +154,7 @@ class IRDebugger extends React.Component {
         return this.props.intl.formatMessage({id: `gui.ir-debugger.${id}`}, values);
     }
 
-    calculateTrace () {
+    calculateObservedTrace () {
         const vm = this.props.vm;
         let trace = vm.runtime.traceInfo.tracer.traces;
         if (vm.runtime.questionGeneration.active) {
@@ -170,6 +183,16 @@ class IRDebugger extends React.Component {
             }
             return true;
         });
+        return trace;
+    }
+
+    filterTraceForBlock (trace, block) {
+        const blockTraces = trace.filter(t => t.id === block.id);
+        if (blockTraces.length) {
+            const lastBlockTrace = blockTraces[blockTraces.length - 1];
+            const endIndex = trace.lastIndexOf(lastBlockTrace) + 1;
+            return trace.slice(0, endIndex);
+        }
         return trace;
     }
 
@@ -213,6 +236,16 @@ class IRDebugger extends React.Component {
         return targetOptions;
     }
 
+    handleTargetChange (targetOption) {
+        if (this.target.id !== targetOption.id) {
+            this.setTargetOption(targetOption);
+            this.selectedQuestion = null;
+            this.answer = null;
+            this.update();
+            this.forceUpdate();
+        }
+    }
+
     setTargetOption (targetOption) {
         this.target = {
             id: targetOption.id,
@@ -236,28 +269,17 @@ class IRDebugger extends React.Component {
         this.forceUpdate();
     }
 
-    updateCurrentTrace (endIndex) {
-        if (endIndex === null) {
-            const blockTraces = this.currentTrace.filter(trace => trace.id === this.currentBlockId);
-            if (blockTraces.length) {
-                const lastBlockTrace = blockTraces[blockTraces.length - 1];
-                endIndex = this.currentTrace.lastIndexOf(lastBlockTrace) + 1;
-            }
-        }
-        if (endIndex) {
-            this.currentTrace = this.trace.slice(0, endIndex);
-        }
-    }
-
     handleGraphNodeClick (blockId) {
         if (this.currentBlockId !== blockId) {
             this.previousBlocks.push({
                 id: this.currentBlockId,
                 selectedQuestion: this.selectedQuestion,
-                traceLength: this.currentTrace.length
+                traceLength: this.relevantTrace.length,
+                target: this.target
             });
             this.currentBlockId = blockId;
             this.selectedQuestion = null;
+            this.answer = null;
             this.update();
             this.forceUpdate();
         }
@@ -267,7 +289,8 @@ class IRDebugger extends React.Component {
         if (this.previousBlocks.length > 0) {
             const previousBlock = this.previousBlocks.pop();
             this.currentBlockId = previousBlock.id;
-            this.updateCurrentTrace(previousBlock.traceLength);
+            this.target = previousBlock.target;
+            this.relevantTrace = this.observedTrace.slice(0, previousBlock.traceLength);
             this.update();
             this.handleQuestionClick(previousBlock.selectedQuestion);
             this.forceUpdate();
@@ -275,7 +298,6 @@ class IRDebugger extends React.Component {
     }
 
     rerender () {
-        this.selectedQuestion = null;
         this.init();
         this.forceUpdate();
     }
@@ -293,7 +315,7 @@ class IRDebugger extends React.Component {
                 questionHierarchy={this.questionHierarchy}
                 selectedQuestion={this.selectedQuestion}
                 answer={this.answer}
-                handleTargetChange={this.setTargetOption}
+                onTargetChange={this.handleTargetChange}
                 onQuestionClick={this.handleQuestionClick}
                 onGraphNodeClick={this.handleGraphNodeClick}
                 handleRefresh={this.rerender}

@@ -141,7 +141,7 @@ class IRDebugger extends React.Component {
             answer,
             expanded,
             handleRefresh,
-            handleTargetChange,
+            onTargetChange,
             onQuestionClick,
             onGraphNodeClick,
             onClose,
@@ -199,7 +199,7 @@ class IRDebugger extends React.Component {
                                     targetOptions={targetOptions}
                                     expanded={expanded}
                                     onRefresh={handleRefresh}
-                                    onTargetChange={handleTargetChange}
+                                    onTargetChange={onTargetChange}
                                     onClose={onClose}
                                     onBack={onBack}
                                     onShrinkExpand={onShrinkExpand}
@@ -266,7 +266,7 @@ IRDebugger.propTypes = {
     expanded: PropTypes.bool.isRequired,
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
-    handleTargetChange: PropTypes.func.isRequired,
+    onTargetChange: PropTypes.func.isRequired,
     handleRefresh: PropTypes.func.isRequired,
     onQuestionClick: PropTypes.func.isRequired,
     onGraphNodeClick: PropTypes.func.isRequired,
