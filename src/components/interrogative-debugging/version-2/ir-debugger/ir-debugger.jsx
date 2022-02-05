@@ -31,6 +31,7 @@ class IRDebugger extends React.Component {
 
     createSvgBlock (block, scaleFactor, executionInfo, background) {
         const NS = 'http://www.w3.org/2000/svg';
+        const blockStrokeWidth = 1;
 
         let blockHeight = block.startHat_ ?
             (block.height + 19) * scaleFactor :
@@ -38,7 +39,7 @@ class IRDebugger extends React.Component {
 
         const svgGroup = block.getSvgRoot().cloneNode(true);
         svgGroup.setAttribute('transform',
-            `translate(0,${block.startHat_ ? '12' : '0'}) scale(${scaleFactor})`);
+            `translate(${blockStrokeWidth},${blockStrokeWidth + (block.startHat_ ? 11 : 0)}) scale(${scaleFactor})`);
         this.setCursorOfBlock(svgGroup, 'default');
         if (executionInfo) {
             svgGroup.setAttribute('opacity', `${executionInfo.executed ? '1' : '0.5'}`);
@@ -70,7 +71,10 @@ class IRDebugger extends React.Component {
         const horizontalLineEnd = Number(relevantPathData[0]);
         const arcWidth = Number(relevantPathData[1].split(' ')[4].split(',')[0]);
         const maximalXCoordinate = horizontalLineEnd + arcWidth;
-        const blockWidth = maximalXCoordinate * scaleFactor;
+        let blockWidth = maximalXCoordinate * scaleFactor;
+
+        blockHeight += 2 * blockStrokeWidth;
+        blockWidth += 2 * blockStrokeWidth;
 
         const svgBlock = document.createElementNS(NS, 'svg');
         const blockBorder = {width: 2, radius: 5};
