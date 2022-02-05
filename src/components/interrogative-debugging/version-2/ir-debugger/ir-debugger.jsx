@@ -27,6 +27,12 @@ class IRDebugger extends React.Component {
             'createSvgBlock',
             'setCursorOfBlock'
         ]);
+        this.questionHierarchy = React.createRef();
+    }
+
+    componentDidMount () {
+        const questionHierarchyWidth = this.questionHierarchy.current.clientWidth;
+        this.questionHierarchy.current.setAttribute('style', `width: ${questionHierarchyWidth}px`);
     }
 
     createSvgBlock (block, scaleFactor, executionInfo, background) {
@@ -216,7 +222,10 @@ class IRDebugger extends React.Component {
                                     createSvgBlock={this.createSvgBlock}
                                 />
                                 <div className={expanded ? styles.body : cardStyles.hidden}>
-                                    <div className={styles.questionHierarchy}>
+                                    <div
+                                        ref={this.questionHierarchy}
+                                        className={styles.questionHierarchy}
+                                    >
                                         <IRQuestionHierarchy
                                             questionHierarchy={questionHierarchy}
                                             selectedQuestion={selectedQuestion}
