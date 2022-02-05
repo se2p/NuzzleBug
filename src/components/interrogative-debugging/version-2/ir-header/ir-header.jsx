@@ -50,7 +50,11 @@ class IRHeader extends React.Component {
         if (this.svgBlock.current) {
             const block = ScratchBlocks.getAbstractWorkspace().getBlockById(this.props.blockId);
             const scaleFactor = 0.7;
-            const svgBlock = this.props.createSvgBlock(block, scaleFactor);
+            let svgBlock = this.props.createSvgBlock(block, scaleFactor);
+            const blockWidth = Number(svgBlock.getAttribute('width').split('px')[0]);
+            if (blockWidth > 600) {
+                svgBlock = this.props.createSvgBlock(block, scaleFactor * 600 / blockWidth);
+            }
             this.svgBlock.current.appendChild(svgBlock);
         }
     }

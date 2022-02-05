@@ -10,11 +10,13 @@
 
 .card {
     border-width: 0px;
+    min-width: 1000px;
+    max-width: 1400px;
 }
 
 .body {
     height: 500px;
-    width: 1000px;
+    width: 100%;
     background: white;
     cursor: default;
     font-size: 13px;
