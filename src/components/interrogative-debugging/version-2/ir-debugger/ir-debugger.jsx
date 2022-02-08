@@ -50,7 +50,7 @@ class IRDebugger extends React.Component {
         if (executionInfo) {
             svgGroup.setAttribute('opacity', `${executionInfo.executed ? '1' : '0.5'}`);
             if (executionInfo.executed) {
-                this._addInputTooltips(svgGroup, executionInfo);
+                this._addTooltipValues(svgGroup, executionInfo);
             }
         }
         for (const childNode of Array.from(svgGroup.childNodes)) {
@@ -102,7 +102,6 @@ class IRDebugger extends React.Component {
             rect.setAttribute('rx', `${blockBorder.radius}`);
             rect.setAttribute('ry', `${blockBorder.radius}`);
             rect.innerHTML += `<title>${background.title}</title>`;
-            backgroundPath.innerHTML += `<title>${background.title}</title>`;
             svgBlock.appendChild(rect);
         }
 
@@ -128,12 +127,14 @@ class IRDebugger extends React.Component {
         }
     }
 
-    _addInputTooltips (node, executionInfo) {
-        const isValueInput = node.getAttribute('data-shapes') === 'reporter round';
-        const isBooleanInput = node.getAttribute('data-shapes') === 'reporter boolean';
-        if (isValueInput || isBooleanInput) {
+    _addTooltipValues (node, executionInfo) {
+        const dataShapes = node.getAttribute('data-shapes');
+        const isStackBlock = dataShapes === 'stack';
+        const isValueInput = dataShapes === 'reporter round';
+        const isBooleanInput = dataShapes === 'reporter boolean';
+        if (isStackBlock || isValueInput || isBooleanInput) {
             const blockId = node.getAttribute('data-id');
-            let value = executionInfo.inputValues[blockId];
+            let value = executionInfo.tooltips[blockId];
             if (typeof value !== 'undefined') {
                 if (isBooleanInput) {
                     value = this.props.intl.formatMessage({id: `gui.ir-debugger.condition.${value}`});
@@ -142,7 +143,7 @@ class IRDebugger extends React.Component {
             }
         }
         for (const child of node.children) {
-            this._addInputTooltips(child, executionInfo);
+            this._addTooltipValues(child, executionInfo);
         }
     }
 
