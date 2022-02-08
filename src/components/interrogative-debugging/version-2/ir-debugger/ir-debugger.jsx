@@ -241,13 +241,21 @@ class IRDebugger extends React.Component {
                                                     />
                                                 </div>
                                                 <div className={styles.answer}>
-                                                    <IRAnswer
-                                                        answer={answer}
-                                                        vm={vm}
-                                                        createSvgBlock={this.createSvgBlock}
-                                                        onGraphNodeClick={onGraphNodeClick}
-                                                        setCursorOfBlock={this.setCursorOfBlock}
-                                                    />
+                                                    {answer ?
+                                                        <IRAnswer
+                                                            answer={answer}
+                                                            vm={vm}
+                                                            createSvgBlock={this.createSvgBlock}
+                                                            onGraphNodeClick={onGraphNodeClick}
+                                                            setCursorOfBlock={this.setCursorOfBlock}
+                                                        /> :
+                                                        <div className={styles.loaderDiv}>
+                                                            <div
+                                                                className={styles.loader}
+                                                                style={{borderTop: `8px solid ${selectedQuestion.color}`}}
+                                                            />
+                                                        </div>
+                                                    }
                                                 </div>
                                             </div>
                                         ) : null}
