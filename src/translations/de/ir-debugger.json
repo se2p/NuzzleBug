@@ -187,11 +187,8 @@
             "stage": "Block von der Bühne"
         }
     },
-    "execution": {
-        "stopped": "Ausführung gestoppt",
-        "paused": "Ausführung pausiert"
-    },
-    "observation": {
-        "stopped": "Beobachtung gestoppt"
-    }
+    "execution":"Ausführung",
+    "execution-stopped": "Ausführung gestoppt",
+    "execution-paused": "Ausführung pausiert",
+    "observation-stopped": "Beobachtung gestoppt"
 }

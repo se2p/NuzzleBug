@@ -32,6 +32,7 @@ class IRDebugger extends React.Component {
         super(props);
         bindAll(this, [
             'handleTargetChange',
+            'handleSelectedBlockExecutionChange',
             'handleQuestionClick',
             'handleGraphNodeClick',
             'handleBackButtonClick',
@@ -101,6 +102,11 @@ class IRDebugger extends React.Component {
             this.block = this.isBlockDebugger ?
                 Object.values(this.targetOrigin.blocks._blocks).find(b => b.id === this.currentBlockId) :
                 null;
+
+            this.calculateBlockExecutionOptions();
+            if (this.isBlockDebugger && !this.selectedBlockExecution && this.blockExecutionOptions.length > 0) {
+                this.selectedBlockExecution = this.blockExecutionOptions[0];
+            }
 
             this.updateRelevantTrace();
             this.calculateQuestionHierarchy();
@@ -262,6 +268,30 @@ class IRDebugger extends React.Component {
         };
     }
 
+    handleSelectedBlockExecutionChange (blockExecution) {
+        this.selectedBlockExecution = blockExecution;
+        const traceIndex = this.observedTrace.indexOf(blockExecution);
+        this.relevantTrace = this.observedTrace.slice(0, traceIndex + 1);
+        this.answer = null;
+        this.update();
+        if (this.selectedQuestion) {
+            this.updateAnswerProvider();
+            this.answer = this.answerProvider.generateAnswer(this.selectedQuestion);
+        }
+        this.forceUpdate();
+    }
+
+    calculateBlockExecutionOptions () {
+        this.blockExecutionOptions = [];
+        if (this.currentBlockId) {
+            this.blockExecutionOptions = this.observedTrace.filter(t => t.id === this.currentBlockId);
+            for (let i = 0; i < this.blockExecutionOptions.length; i++) {
+                this.blockExecutionOptions[i].optionName = `${i + 1}. ${this.translate('execution')}`;
+            }
+            this.blockExecutionOptions.reverse();
+        }
+    }
+
     handleQuestionClick (question) {
         this.selectedQuestion = question;
         this.updateAnswerProvider();
@@ -312,10 +342,13 @@ class IRDebugger extends React.Component {
                 target={this.target}
                 targetOptions={this.targetOptions}
                 blockId={this.currentBlockId}
+                selectedBlockExecution={this.selectedBlockExecution}
+                blockExecutionOptions={this.blockExecutionOptions}
                 questionHierarchy={this.questionHierarchy}
                 selectedQuestion={this.selectedQuestion}
                 answer={this.answer}
                 onTargetChange={this.handleTargetChange}
+                onBlockExecutionChange={this.handleSelectedBlockExecutionChange}
                 onQuestionClick={this.handleQuestionClick}
                 onGraphNodeClick={this.handleGraphNodeClick}
                 handleRefresh={this.rerender}

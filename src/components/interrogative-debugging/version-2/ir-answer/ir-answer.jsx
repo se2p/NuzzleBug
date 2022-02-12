@@ -375,7 +375,7 @@ class IRAnswer extends React.Component {
 
     _addExecutionStoppedLabel (svgGraphEdge, edge) {
         const position = this._calculateEdgeLabelPosition(edge, 5, false);
-        const text = this._translate('execution.stopped');
+        const text = this._translate('execution-stopped');
         const textPosition = {x: position.x - 25, y: position.y};
         svgGraphEdge.innerHTML += this._createHtmlText(text, textPosition, this.labelSize, 'red', 'end');
 
@@ -386,7 +386,7 @@ class IRAnswer extends React.Component {
 
     _addExecutionPausedLabel (svgGraphEdge, edge) {
         const position = this._calculateEdgeLabelPosition(edge, 5, false);
-        const text = this._translate('execution.paused');
+        const text = this._translate('execution-paused');
         const textPosition = {x: position.x - 20, y: position.y};
         svgGraphEdge.innerHTML += this._createHtmlText(text, textPosition, this.labelSize, 'red', 'end');
 
@@ -397,7 +397,7 @@ class IRAnswer extends React.Component {
 
     _addOberservationStoppedLabel (svgGraphEdge, edge) {
         const position = this._calculateEdgeLabelPosition(edge, 5, false);
-        const text = this._translate('observation.stopped');
+        const text = this._translate('observation-stopped');
         const textPosition = {x: position.x - 25, y: position.y};
         svgGraphEdge.innerHTML += this._createHtmlText(text, textPosition, this.labelSize, 'red', 'end');
 

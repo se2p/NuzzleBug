@@ -69,14 +69,14 @@
     border-radius: 4px;
 }
 
-.selected-target {
+.selected-option {
     float: left;
     display: table;
     height: 100%;
     text-align: center;
 }
 
-.selected-target span {
+.selected-option span {
     padding-left: 9px;
     padding-right: 4px;
     display: table-cell;
@@ -118,7 +118,7 @@
     border-radius: 4px;
 }
   
-.target-option {
+.dropdown-option {
     padding: 4px;
     margin-left: 6px;
     margin-bottom: 6px;
@@ -127,11 +127,11 @@
     display: block;
 }
 
-.target-option:hover {
+.dropdown-option:hover {
     background-color: hsla(0, 0%, 0%, 0.08);
 }
 
-.selected-target-option, .selected-target-option:hover {
+.selected-dropdown-option, .selected-dropdown-option:hover {
     background-color: $ui-black-transparent;
 }
 

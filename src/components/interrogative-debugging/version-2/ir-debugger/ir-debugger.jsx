@@ -152,6 +152,8 @@ class IRDebugger extends React.Component {
             vm,
             target,
             targetOptions,
+            selectedBlockExecution,
+            blockExecutionOptions,
             blockId,
             questionHierarchy,
             selectedQuestion,
@@ -159,6 +161,7 @@ class IRDebugger extends React.Component {
             expanded,
             handleRefresh,
             onTargetChange,
+            onBlockExecutionChange,
             onQuestionClick,
             onGraphNodeClick,
             onClose,
@@ -213,10 +216,13 @@ class IRDebugger extends React.Component {
                                 <IRHeader
                                     target={target}
                                     blockId={blockId}
+                                    selectedBlockExecution={selectedBlockExecution}
                                     targetOptions={targetOptions}
+                                    blockExecutionOptions={blockExecutionOptions}
                                     expanded={expanded}
                                     onRefresh={handleRefresh}
                                     onTargetChange={onTargetChange}
+                                    onBlockExecutionChange={onBlockExecutionChange}
                                     onClose={onClose}
                                     onBack={onBack}
                                     onShrinkExpand={onShrinkExpand}
@@ -287,6 +293,14 @@ IRDebugger.propTypes = {
         id: PropTypes.string.isRequired,
         optionName: PropTypes.string.isRequired
     })).isRequired,
+    selectedBlockExecution: PropTypes.shape({
+        uniqueId: PropTypes.string.isRequired,
+        optionName: PropTypes.string.isRequired
+    }),
+    blockExecutionOptions: PropTypes.arrayOf(PropTypes.shape({
+        uniqueId: PropTypes.string.isRequired,
+        optionName: PropTypes.string.isRequired
+    })).isRequired,
     blockId: PropTypes.string,
     questionHierarchy: PropTypes.arrayOf(PropTypes.instanceOf(QuestionCategory)).isRequired,
     selectedQuestion: PropTypes.instanceOf(Question),
@@ -295,6 +309,7 @@ IRDebugger.propTypes = {
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
     onTargetChange: PropTypes.func.isRequired,
+    onBlockExecutionChange: PropTypes.func.isRequired,
     handleRefresh: PropTypes.func.isRequired,
     onQuestionClick: PropTypes.func.isRequired,
     onGraphNodeClick: PropTypes.func.isRequired,

@@ -187,11 +187,8 @@
             "stage": "Block from the stage"
         }
     },
-    "execution": {
-        "stopped": "execution stopped",
-        "paused": "execution paused"
-    },
-    "observation": {
-        "stopped": "observation stopped"
-    }
+    "execution": "execution",
+    "execution-stopped": "execution stopped",
+    "execution-paused": "execution paused",
+    "observation-stopped": "observation stopped"
 }

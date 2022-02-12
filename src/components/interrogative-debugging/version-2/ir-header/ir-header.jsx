@@ -22,14 +22,19 @@ class IRHeader extends React.Component {
         super(props);
 
         this.state = {
-            showTargetOptions: false
+            showTargetOptions: false,
+            showBlockExecutionOptions: false
         };
 
         this.svgBlock = React.createRef();
 
         bindAll(this, [
-            'handleDropdownButtonClick',
-            'handleTargetClick'
+            'handleTargetDropdownButtonClick',
+            'handleCloseTargetDropdown',
+            'handleTargetClick',
+            'handleBlockExecutionDropdownButtonClick',
+            'handleCloseBlockExecutionDropdown',
+            'handleBlockExecutionClick'
         ]);
     }
 
@@ -67,9 +72,27 @@ class IRHeader extends React.Component {
         }
     }
 
-    handleDropdownButtonClick () {
+    handleTargetDropdownButtonClick () {
         this.setState({
             showTargetOptions: !this.state.showTargetOptions
+        });
+    }
+
+    handleCloseTargetDropdown () {
+        this.setState({
+            showTargetOptions: false
+        });
+    }
+
+    handleBlockExecutionDropdownButtonClick () {
+        this.setState({
+            showBlockExecutionOptions: !this.state.showBlockExecutionOptions
+        });
+    }
+
+    handleCloseBlockExecutionDropdown () {
+        this.setState({
+            showBlockExecutionOptions: false
         });
     }
 
@@ -91,13 +114,31 @@ class IRHeader extends React.Component {
         });
     }
 
+    handleBlockExecutionClick (event) {
+        const {
+            selectedBlockExecution,
+            blockExecutionOptions,
+            onBlockExecutionChange
+        } = this.props;
+
+        const blockExecution = blockExecutionOptions.find(option => option.uniqueId === event.target.id);
+        if (selectedBlockExecution.uniqueId !== blockExecution.uniqueId) {
+            onBlockExecutionChange(blockExecution);
+        }
+        this.setState({
+            showBlockExecutionOptions: false
+        });
+    }
+
     render () {
         const {
             target,
             blockId,
+            selectedBlockExecution,
             expanded,
             onRefresh,
             targetOptions,
+            blockExecutionOptions,
             onShrinkExpand,
             onClose,
             onBack
@@ -153,13 +194,16 @@ class IRHeader extends React.Component {
                         ) : null
                     )}
                     {targetOptions.length > 1 ? (
-                        <div className={styles.headerItem}>
+                        <div
+                            className={styles.headerItem}
+                            onMouseLeave={this.handleCloseTargetDropdown}
+                        >
                             <div className={styles.dropdown}>
                                 <div
                                     className={styles.dropdownButton}
-                                    onClick={this.handleDropdownButtonClick}
+                                    onClick={this.handleTargetDropdownButtonClick}
                                 >
-                                    <div className={styles.selectedTarget}>
+                                    <div className={styles.selectedOption}>
                                         <span>{target.optionName}</span>
                                     </div>
                                     <img
@@ -172,14 +216,52 @@ class IRHeader extends React.Component {
                                         {targetOptions.map(targetOption => (
                                             <a
                                                 className={target.id === targetOption.id ?
-                                                    classNames(styles.targetOption, styles.selectedTargetOption) :
-                                                    styles.targetOption
+                                                    classNames(styles.dropdownOption, styles.selectedDropdownOption) :
+                                                    styles.dropdownOption
                                                 }
                                                 id={targetOption.id}
                                                 key={targetOption.id}
                                                 onClick={this.handleTargetClick}
                                             >
                                                 {targetOption.optionName}
+                                            </a>
+                                        ))}
+                                    </div>
+                                ) : null}
+                            </div>
+                        </div>
+                    ) : null}
+                    {blockExecutionOptions.length > 1 ? (
+                        <div
+                            className={styles.headerItem}
+                            onMouseLeave={this.handleCloseBlockExecutionDropdown}
+                        >
+                            <div className={styles.dropdown}>
+                                <div
+                                    className={styles.dropdownButton}
+                                    onClick={this.handleBlockExecutionDropdownButtonClick}
+                                >
+                                    <div className={styles.selectedOption}>
+                                        <span>{selectedBlockExecution.optionName}</span>
+                                    </div>
+                                    <img
+                                        src={this.state.showBlockExecutionOptions ? iconArrowDown : iconArrowLeft}
+                                        className={styles.icon}
+                                    />
+                                </div>
+                                {this.state.showBlockExecutionOptions ? (
+                                    <div className={styles.dropdownContent}>
+                                        {blockExecutionOptions.map(blockExecution => (
+                                            <a
+                                                className={blockExecution.uniqueId === selectedBlockExecution.uniqueId ?
+                                                    classNames(styles.dropdownOption, styles.selectedDropdownOption) :
+                                                    styles.dropdownOption
+                                                }
+                                                id={blockExecution.uniqueId}
+                                                key={blockExecution.uniqueId}
+                                                onClick={this.handleBlockExecutionClick}
+                                            >
+                                                {blockExecution.optionName}
                                             </a>
                                         ))}
                                     </div>
@@ -285,9 +367,18 @@ IRHeader.propTypes = {
         id: PropTypes.string.isRequired,
         optionName: PropTypes.string.isRequired
     })).isRequired,
+    selectedBlockExecution: PropTypes.shape({
+        uniqueId: PropTypes.string.isRequired,
+        optionName: PropTypes.string.isRequired
+    }),
+    blockExecutionOptions: PropTypes.arrayOf(PropTypes.shape({
+        uniqueId: PropTypes.string.isRequired,
+        optionName: PropTypes.string.isRequired
+    })).isRequired,
     blockId: PropTypes.string,
     expanded: PropTypes.bool.isRequired,
     onTargetChange: PropTypes.func.isRequired,
+    onBlockExecutionChange: PropTypes.func.isRequired,
     onRefresh: PropTypes.func.isRequired,
     onShrinkExpand: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
