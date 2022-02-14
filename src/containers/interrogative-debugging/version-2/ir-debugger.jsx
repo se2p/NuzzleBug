@@ -12,6 +12,7 @@ import {
 } from 'scratch-ir';
 
 import {
+    EventFilter,
     generateCDG,
     generateCFG
 } from 'scratch-analysis';
@@ -173,23 +174,39 @@ class IRDebugger extends React.Component {
 
     filterTraceForTargetOption (trace) {
         const blocks = this.targetOrigin.blocks._blocks;
-        let eventToRemove = 'control_start_as_clone';
-        if (!this.target.isOriginal) {
-            trace = trace.filter(t => t.targetsInfo[this.target.id]);
-            eventToRemove = 'event_whenflagclicked';
-        }
+
+        // Remove all traces of blocks attached to irrelevant events.
+        const eventToRemove = this.target.isOriginal ? 'control_start_as_clone' : 'event_whenflagclicked';
         trace = trace.filter(t => {
             const block = blocks[t.id];
             if (block) {
-                let hatBlock = block;
-                while (hatBlock.parent) {
-                    hatBlock = blocks[hatBlock.parent];
-                }
+                const hatBlock = this.getHatBlockOfBlock(block, blocks);
                 return hatBlock.opcode !== eventToRemove;
             }
             return true;
         });
+
+        if (!this.target.isOriginal) {
+            // Remove traces where the clone did not exist.
+            trace = trace.filter((t, index) =>
+                t.targetsInfo[this.target.id] ||
+                (EventFilter.cloneStart(t) && trace[index + 1].targetsInfo[this.target.id])
+            );
+
+            // Overwrite the targetsInfo of the 'control_start_as_clone' trace
+            // with the targetsInfo of the 'control_create_clone_of' trace.
+            trace[0].targetsInfo = trace[1].targetsInfo;
+        }
+
         return trace;
+    }
+
+    getHatBlockOfBlock (block, blocks) {
+        let hatBlock = block;
+        while (hatBlock.parent) {
+            hatBlock = blocks[hatBlock.parent];
+        }
+        return hatBlock;
     }
 
     filterTraceForBlock (trace, block) {
