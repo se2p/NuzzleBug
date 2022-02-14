@@ -147,7 +147,8 @@ class IRDebugger extends React.Component {
             this.cfg,
             this.relevantTrace,
             this.target,
-            this.currentBlockId
+            this.currentBlockId,
+            this.translate
         );
     }
 

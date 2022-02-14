@@ -77,7 +77,7 @@ class IRAnswer extends React.Component {
 
     _initGraphSize () {
         const svgNode = this.graphDiv.current.children[0];
-        const height = Number(svgNode.getAttribute('height').split('pt')[0]);
+        const height = Number(svgNode.getAttribute('height').split('pt')[0]) + 20;
         const width = Number(svgNode.getAttribute('width').split('pt')[0]);
         this.graphSize = {height, width};
         let zoomFactor = 1;
@@ -121,6 +121,8 @@ class IRAnswer extends React.Component {
 
             scaleFactor = this._transformNode(svgGraphNode, block, ellipse, scaleFactor);
 
+            this._addRelevantValueBeforeAndAfterExecution(graphNode, svgGraphNode, block, scaleFactor);
+            
             if (!block.isHatBlock) {
                 const svgBlock = svgGraphNode.children[0];
                 svgBlock.addEventListener('click', () => this.props.onGraphNodeClick(block.id));
@@ -213,6 +215,31 @@ class IRAnswer extends React.Component {
         const fontSize = this.labelSize / scaleFactor;
         const textPosition = {x: block.width + 10, y: fontSize};
         svgGraphNode.innerHTML += this._createHtmlText(text, textPosition, fontSize, this.gray, 'start');
+    }
+
+    _addRelevantValueBeforeAndAfterExecution (graphNode, svgGraphNode, block, scaleFactor) {
+        const executionInfo = this._getNodeExecutionInfo(graphNode);
+        if (executionInfo.relevantValue) {
+            const labelSize = this.labelSize / scaleFactor;
+            if (typeof executionInfo.relevantValue.before !== 'undefined') {
+                const text = executionInfo.relevantValue.before;
+                const position = {x: 3, y: block.height + labelSize};
+                svgGraphNode.innerHTML += this._createHtmlText(text, position, labelSize, this.gray, 'start');
+            }
+            if (typeof executionInfo.relevantValue.after !== 'undefined') {
+                const text = executionInfo.relevantValue.after;
+                const position = {x: block.width - 3, y: block.height + labelSize};
+                svgGraphNode.innerHTML += this._createHtmlText(text, position, labelSize, this.gray, 'end');
+            }
+            const maxTextLength = (block.width / 2) - 5;
+            svgGraphNode.childNodes.forEach(node => {
+                if (node.nodeName === 'text') {
+                    const initialTextLength = node.textLength.baseVal.value;
+                    const textLength = initialTextLength > maxTextLength ? maxTextLength : initialTextLength;
+                    node.setAttribute('textLength', `${textLength}`);
+                }
+            });
+        }
     }
 
     _adaptGraphEdges (svgGraphChildren) {
@@ -331,7 +358,7 @@ class IRAnswer extends React.Component {
     }
 
     _addCrossOutLine (svgGraphEdge, edgeLine) {
-        const lineStart = {x: edgeLine.start.x + 15, y: edgeLine.start.y};
+        const lineStart = {x: edgeLine.start.x + 15, y: edgeLine.start.y + 3};
         const lineEnd = {x: edgeLine.end.x - 15, y: edgeLine.end.y};
         svgGraphEdge.innerHTML += this._createHtmlLine(lineStart, lineEnd, 'red');
     }
@@ -345,6 +372,7 @@ class IRAnswer extends React.Component {
                 font-family=""Helvetica Neue", Helvetica, sans-serif;"
                 font-size="${size}" 
                 fill="${color}"
+                lengthAdjust="spacingAndGlyphs"
             >
                 ${text}
             </text>`;
