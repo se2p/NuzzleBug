@@ -33,16 +33,13 @@ const initialState = {
     projectPaused: false
 };
 
-const forwardDebuggerEnabled = function (enabled, workspace) {
-    if (!workspace) {
-        workspace = ScratchBlocks.getMainWorkspace();
-    }
-    workspace.setInterrogativeDebuggerEnabled(enabled);
+const forwardDebuggerEnabled = function (enabled) {
+    ScratchBlocks.setInterrogativeDebuggerEnabled(enabled);
 };
 
-const forwardDebuggerSupported = function (supported, vm, workspace) {
+const forwardDebuggerSupported = function (supported, vm) {
     vm.setInterrogativeDebuggerSupported(supported);
-    workspace.setInterrogativeDebuggerSupported(supported);
+    ScratchBlocks.setInterrogativeDebuggerSupported(supported);
 };
 
 const reducer = function (state, action) {
