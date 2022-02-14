@@ -100,14 +100,12 @@ class IRHeader extends React.Component {
         const {
             target,
             targetOptions,
-            onTargetChange,
-            onRefresh
+            onTargetChange
         } = this.props;
 
         const newTarget = targetOptions.find(option => option.id === event.target.id);
         if (target.id !== newTarget.id) {
             onTargetChange(newTarget);
-            onRefresh();
         }
         this.setState({
             showTargetOptions: false
