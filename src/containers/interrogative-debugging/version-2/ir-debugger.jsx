@@ -294,6 +294,14 @@ class IRDebugger extends React.Component {
 
     handleQuestionClick (question) {
         this.selectedQuestion = question;
+        this.answer = null;
+        this.forceUpdate();
+        setTimeout(() => {
+            this.answerQuestion();
+        }, 200);
+    }
+
+    answerQuestion () {
         this.updateAnswerProvider();
         this.answer = this.answerProvider.generateAnswer(this.selectedQuestion);
         this.forceUpdate();
