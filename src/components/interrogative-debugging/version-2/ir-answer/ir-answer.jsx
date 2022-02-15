@@ -35,20 +35,24 @@ class IRAnswer extends React.Component {
         this.lightGray = '#ABAEBA';
         this.labelSize = 8;
         this.targets = props.vm.runtime.targets;
-        this.targetColors = ['#F898A4', '#9BE0F1', '#F7FAA1', '#B4F6A4',
-            '#FCDA9C', '#A2ACEB', '#F081E5', '#76F5CF'];
+        this.target = this.targets.find(t => t.id === this.props.target.origin.id);
+        this.otherTargets = this.targets.filter(t => t.id !== this.props.target.origin.id);
+        this.targetColor = '#96EBD3';
+        this.otherTargetColors = ['#EDB7E8', '#9BE0F1', '#C3B5F5', '#C6F79E', '#F2B2A7'];
+        this.eventColor = '#FFDE7A';
+        this.targetColors = {};
     }
 
     componentDidMount () {
-        this._drawGraph();
         this._addResponsibleTargetImages();
+        this._drawGraph();
         this.answerDiv.current.setAttribute('style', `width: ${this.answerDiv.current.clientWidth}px`);
     }
 
     componentDidUpdate (prevProps) {
         if (prevProps.answer !== this.props.answer) {
-            this._drawGraph();
             this._addResponsibleTargetImages();
+            this._drawGraph();
         }
     }
 
@@ -149,12 +153,13 @@ class IRAnswer extends React.Component {
         let background;
         if (this._blockBelongsToCertainTarget(graphNode.block)) {
             const targetForBlock = targetForBlockId(this.targets, blockId);
-            const targetIndex = this.targets.indexOf(targetForBlock);
-            const color = this.targetColors[targetIndex % this.targetColors.length];
+            const color = this.targetColors[targetForBlock.id];
             const title = targetForBlock.isStage ?
                 this._translate('block.from.stage') :
                 this._translate('block.from.sprite', {sprite: targetForBlock.getName()});
             background = {color, title};
+        } else {
+            background = {color: this.eventColor, title: this._translate('block.general-event')};
         }
         const svgBlock = this.props.createSvgBlock(block, scaleFactor, executionInfo, background);
         const width = Number(svgBlock.getAttribute('width').split('px')[0]);
@@ -479,14 +484,22 @@ class IRAnswer extends React.Component {
 
     _addResponsibleTargetImages () {
         this.targetsDiv.current.innerHTML = '';
-        for (const target of this.targets) {
+        const targets = [this.target].concat(this.otherTargets);
+        this.targetColors = {};
+        let colorIndex = 0;
+        for (const target of targets) {
             if (this.props.answer.responsibleTargetIds.has(target.id)) {
-                const targetIndex = this.targets.indexOf(target);
-                const color = this.targetColors[targetIndex % this.targetColors.length];
+                let color;
+                if (target.id === this.target.id) {
+                    color = this.targetColor;
+                } else {
+                    color = this.otherTargetColors[colorIndex % this.otherTargetColors.length];
+                    colorIndex++;
+                }
+                this.targetColors[target.id] = color;
                 this._addTargetImage(target, 34, 2, 2, color);
             }
         }
-        this.forceUpdate();
     }
 
     _addTargetImage (target, sideLength, padding, border, color) {
@@ -593,6 +606,11 @@ IRAnswer.propTypes = {
     intl: intlShape.isRequired,
     answer: PropTypes.instanceOf(Answer),
     vm: PropTypes.instanceOf(VirtualMachine).isRequired,
+    target: PropTypes.shape({
+        origin: PropTypes.shape({
+            id: PropTypes.string.isRequired
+        })
+    }).isRequired,
     createSvgBlock: PropTypes.func.isRequired,
     onGraphNodeClick: PropTypes.func.isRequired,
     setCursorOfBlock: PropTypes.func.isRequired

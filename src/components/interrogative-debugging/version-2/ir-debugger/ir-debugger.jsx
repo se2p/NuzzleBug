@@ -95,6 +95,7 @@ class IRDebugger extends React.Component {
             rect.setAttribute('stroke', `${background.color}`);
             rect.setAttribute('stroke-width', `${blockBorder.width}`);
             rect.setAttribute('stroke-linecap', `round`);
+            rect.setAttribute('stroke-opacity', executionInfo && !executionInfo.executed ? '0.5' : '1');
             rect.setAttribute('height', `${blockHeight + (2 * blockBorder.radius)}px`);
             rect.setAttribute('width', `${blockWidth + (2 * blockBorder.radius)}px`);
             rect.setAttribute('x', `${blockBorder.width}`);
@@ -252,6 +253,7 @@ class IRDebugger extends React.Component {
                                                         <IRAnswer
                                                             answer={answer}
                                                             vm={vm}
+                                                            target={target}
                                                             createSvgBlock={this.createSvgBlock}
                                                             onGraphNodeClick={onGraphNodeClick}
                                                             setCursorOfBlock={this.setCursorOfBlock}
@@ -287,6 +289,9 @@ IRDebugger.propTypes = {
             name: PropTypes.string.isRequired
         }),
         isStage: PropTypes.bool.isRequired,
+        origin: PropTypes.shape({
+            id: PropTypes.string.isRequired
+        }),
         costumeUrl: PropTypes.string
     }).isRequired,
     targetOptions: PropTypes.arrayOf(PropTypes.shape({

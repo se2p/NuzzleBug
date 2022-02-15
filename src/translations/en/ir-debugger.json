@@ -185,7 +185,8 @@
         "from": {
             "sprite": "Block from \"{sprite}\"",
             "stage": "Block from the stage"
-        }
+        },
+        "general-event": "General event"
     },
     "execution": "execution",
     "execution-stopped": "execution stopped",

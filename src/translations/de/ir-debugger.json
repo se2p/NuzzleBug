@@ -185,7 +185,8 @@
         "from": {
             "sprite": "Block von \"{sprite}\"",
             "stage": "Block von der Bühne"
-        }
+        },
+        "general-event": "Allgemeines Ereignis"
     },
     "execution":"Ausführung",
     "execution-stopped": "Ausführung gestoppt",
