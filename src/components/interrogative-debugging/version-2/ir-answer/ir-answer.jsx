@@ -229,12 +229,14 @@ class IRAnswer extends React.Component {
             if (typeof executionInfo.relevantValue.before !== 'undefined') {
                 const text = executionInfo.relevantValue.before;
                 const position = {x: 3, y: block.height + labelSize};
-                svgGraphNode.innerHTML += this._createHtmlText(text, position, labelSize, this.gray, 'start');
+                const color = this._hexToRgba(executionInfo.relevantValue.color, 0.5);
+                svgGraphNode.innerHTML += this._createHtmlText(text, position, labelSize, color, 'start');
             }
             if (typeof executionInfo.relevantValue.after !== 'undefined') {
                 const text = executionInfo.relevantValue.after;
                 const position = {x: block.width - 3, y: block.height + labelSize};
-                svgGraphNode.innerHTML += this._createHtmlText(text, position, labelSize, this.gray, 'end');
+                const color = executionInfo.relevantValue.color;
+                svgGraphNode.innerHTML += this._createHtmlText(text, position, labelSize, color, 'end');
             }
             const maxTextLength = (block.width / 2) - 5;
             svgGraphNode.childNodes.forEach(node => {
@@ -242,6 +244,7 @@ class IRAnswer extends React.Component {
                     const initialTextLength = node.textLength.baseVal.value;
                     const textLength = initialTextLength > maxTextLength ? maxTextLength : initialTextLength;
                     node.setAttribute('textLength', `${textLength}`);
+                    node.setAttribute('font-weight', 'bold');
                 }
             });
         }
