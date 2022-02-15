@@ -196,7 +196,12 @@ class IRDebugger extends React.Component {
 
             // Overwrite the targetsInfo of the 'control_start_as_clone' trace
             // with the targetsInfo of the 'control_create_clone_of' trace.
-            trace[0].targetsInfo = trace[1].targetsInfo;
+            const startAsCloneTrace = trace[0];
+            const createCloneTrace = trace[1];
+            startAsCloneTrace.targetsInfo = createCloneTrace.targetsInfo;
+
+            // Remove the 'control_create_clone_of' trace.
+            trace.splice(1, 1);
         }
 
         return trace;
