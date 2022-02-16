@@ -26,6 +26,17 @@ class IRQuestion extends React.Component {
         onQuestionClick(question);
     }
 
+    _hexToRgba (hex, a) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        if (result) {
+            const r = parseInt(result[1], 16);
+            const g = parseInt(result[2], 16);
+            const b = parseInt(result[3], 16);
+            return `rgb(${r}, ${g}, ${b}, ${a})`;
+        }
+        return null;
+    }
+
     render () {
         const {
             question,
@@ -35,16 +46,12 @@ class IRQuestion extends React.Component {
         return (
             <div onClick={this.handleQuestionClick}>
                 <div
-                    className={styles.questionBackground}
-                    style={isSelected ? {backgroundColor: question.color} : null}
-                />
-                <div
-                    className={styles.questionBorder}
-                    style={isSelected ? {borderColor: question.color} : null}
-                />
-                <div
                     className={classNames(styles.questionText, irStyles[`color-${question.color.replace('#', '')}`])}
-                    style={isSelected ? {color: 'black'} : null}
+                    style={isSelected ? {
+                        color: 'black',
+                        borderColor: question.color,
+                        backgroundColor: this._hexToRgba(question.color, 0.3)
+                    } : null}
                 >
                     <FormattedHTMLMessage
                         tagName="div"
