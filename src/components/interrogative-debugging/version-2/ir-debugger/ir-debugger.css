@@ -14,6 +14,10 @@
     max-width: 1400px;
 }
 
+.header {
+    min-width: 1000px;
+}
+
 .body {
     height: 500px;
     width: 100%;

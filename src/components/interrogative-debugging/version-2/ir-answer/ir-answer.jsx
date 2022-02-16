@@ -26,7 +26,6 @@ class IRAnswer extends React.Component {
             'handleZoomGraphOut'
         ]);
     
-        this.answerDiv = React.createRef();
         this.graphDiv = React.createRef();
         this.targetsDiv = React.createRef();
         this.zoomFactor = 1;
@@ -46,7 +45,6 @@ class IRAnswer extends React.Component {
     componentDidMount () {
         this._addResponsibleTargetImages();
         this._drawGraph();
-        this.answerDiv.current.setAttribute('style', `width: ${this.answerDiv.current.clientWidth}px`);
     }
 
     componentDidUpdate (prevProps) {
@@ -569,7 +567,7 @@ class IRAnswer extends React.Component {
 
     render () {
         return (
-            <div ref={this.answerDiv}>
+            <div>
                 <div className={styles.textArea}>
                     <div className={classNames(styles.speechBubbleBox, styles.speechBubbleTriangle)}>
                         {this.props.answer.text}

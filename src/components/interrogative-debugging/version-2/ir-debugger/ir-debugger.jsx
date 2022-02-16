@@ -27,12 +27,23 @@ class IRDebugger extends React.Component {
             'createSvgBlock',
             'setCursorOfBlock'
         ]);
-        this.questionHierarchy = React.createRef();
+        this.header = React.createRef();
+        this.body = React.createRef();
     }
 
     componentDidMount () {
-        const questionHierarchyWidth = this.questionHierarchy.current.clientWidth;
-        this.questionHierarchy.current.setAttribute('style', `width: ${questionHierarchyWidth}px`);
+        this._updateWidth();
+    }
+
+    componentDidUpdate (prevProps) {
+        if (prevProps.blockId !== this.props.blockId) {
+            this._updateWidth();
+        }
+    }
+
+    _updateWidth () {
+        const headerWidth = this.header.current.clientWidth;
+        this.body.current.setAttribute('style', `width: ${headerWidth}px`);
     }
 
     createSvgBlock (block, scaleFactor, executionInfo, background) {
@@ -214,26 +225,31 @@ class IRDebugger extends React.Component {
                     >
                         <div className={cardStyles.cardContainer}>
                             <div className={classNames(cardStyles.card, styles.card)}>
-                                <IRHeader
-                                    target={target}
-                                    blockId={blockId}
-                                    selectedBlockExecution={selectedBlockExecution}
-                                    targetOptions={targetOptions}
-                                    blockExecutionOptions={blockExecutionOptions}
-                                    expanded={expanded}
-                                    onRefresh={handleRefresh}
-                                    onTargetChange={onTargetChange}
-                                    onBlockExecutionChange={onBlockExecutionChange}
-                                    onClose={onClose}
-                                    onBack={onBack}
-                                    onShrinkExpand={onShrinkExpand}
-                                    createSvgBlock={this.createSvgBlock}
-                                />
-                                <div className={expanded ? styles.body : cardStyles.hidden}>
-                                    <div
-                                        ref={this.questionHierarchy}
-                                        className={styles.questionHierarchy}
-                                    >
+                                <div
+                                    ref={this.header}
+                                    className={styles.header}
+                                >
+                                    <IRHeader
+                                        target={target}
+                                        blockId={blockId}
+                                        selectedBlockExecution={selectedBlockExecution}
+                                        targetOptions={targetOptions}
+                                        blockExecutionOptions={blockExecutionOptions}
+                                        expanded={expanded}
+                                        onRefresh={handleRefresh}
+                                        onTargetChange={onTargetChange}
+                                        onBlockExecutionChange={onBlockExecutionChange}
+                                        onClose={onClose}
+                                        onBack={onBack}
+                                        onShrinkExpand={onShrinkExpand}
+                                        createSvgBlock={this.createSvgBlock}
+                                    />
+                                </div>
+                                <div
+                                    className={expanded ? styles.body : cardStyles.hidden}
+                                    ref={this.body}
+                                >
+                                    <div className={styles.questionHierarchy}>
                                         <IRQuestionHierarchy
                                             questionHierarchy={questionHierarchy}
                                             selectedQuestion={selectedQuestion}
@@ -261,7 +277,9 @@ class IRDebugger extends React.Component {
                                                         <div className={styles.loaderDiv}>
                                                             <div
                                                                 className={styles.loader}
-                                                                style={{borderTop: `8px solid ${selectedQuestion.color}`}}
+                                                                style={{
+                                                                    borderTop: `8px solid ${selectedQuestion.color}`
+                                                                }}
                                                             />
                                                         </div>
                                                     }
