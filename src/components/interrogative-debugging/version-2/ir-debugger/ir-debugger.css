@@ -37,6 +37,8 @@
     border-right: 2px solid $ui-white;
     float: left;
     overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: #CECDCE transparent;
 }
 
 .question-hierarchy::-webkit-scrollbar-track {

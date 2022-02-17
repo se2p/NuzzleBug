@@ -48,6 +48,8 @@
   border: 1px solid hsla(0, 0%, 0%, 0.15);
   border-radius: 4px;
   overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: #CECDCE transparent;
 }
 
 .responsible-targets {
@@ -58,6 +60,8 @@
   width: 42px;
   padding-top: 5px;
   overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: #CECDCE transparent;
 }
 
 .block-area::-webkit-scrollbar-track, .responsible-targets::-webkit-scrollbar-track {
