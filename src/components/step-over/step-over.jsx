@@ -7,6 +7,8 @@ import styles from './step-over.css';
 
 const StepOverComponent = function (props) {
     const {
+        active,
+        paused,
         className,
         onClick,
         title,
@@ -16,7 +18,10 @@ const StepOverComponent = function (props) {
         <img
             className={classNames(
                 className,
-                styles.stopOver
+                styles.stopOver,
+                {
+                    [styles.enabled]: !active || (active && paused)
+                }
             )}
             draggable={false}
             src={icon}
@@ -28,12 +33,16 @@ const StepOverComponent = function (props) {
 };
 
 StepOverComponent.propTypes = {
+    active: PropTypes.bool,
+    paused: PropTypes.bool,
     className: PropTypes.string,
     onClick: PropTypes.func.isRequired,
     title: PropTypes.string
 };
 
 StepOverComponent.defaultProps = {
+    active: false,
+    paused: false,
     title: 'Step Over'
 };
 

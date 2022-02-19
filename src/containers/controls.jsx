@@ -45,8 +45,13 @@ class Controls extends React.Component {
     handleStepOver (e) {
         e.preventDefault();
 
-        if (this.props.projectPaused) {
+        if (this.props.projectPaused && this.props.projectRunning) {
             this.props.vm.stepOver();
+        }
+        if (!this.props.projectRunning) {
+            this.props.vm.runtime.oneStep = true;
+            this.handleGreenFlagClick(e);
+            this.props.vm.haltExecution();
         }
     }
     handlePauseResumeClick (e) {

@@ -22,11 +22,11 @@ const PauseResumeComponent = function (props) {
                 styles.pauseResume,
                 {
                     [styles.isActive]: active,
-                    [styles.paused]: paused
+                    [styles.paused]: paused && active
                 }
             )}
             draggable={false}
-            src={paused ? iconResume : iconPause}
+            src={paused && active ? iconResume : iconPause}
             title={title}
             onClick={onClick}
             {...componentProps}

@@ -92,7 +92,9 @@ const Controls = function (props) {
                 title={intl.formatMessage(paused ? messages.resumeTitle : messages.pauseTitle)}
                 onClick={onPauseResumeClick}
             /> : null}
-            {paused ? (<StepOver
+            {interrogationSupported ? (<StepOver
+                active={active}
+                paused={paused}
                 title={intl.formatMessage(messages.stepOverTitle)}
                 onClick={onStepOverClick}
             />) : null}
