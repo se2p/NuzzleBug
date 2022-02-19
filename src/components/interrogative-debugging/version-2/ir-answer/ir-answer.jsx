@@ -304,7 +304,12 @@ class IRAnswer extends React.Component {
     }
 
     _updateEdgeColor (pathNode, polygonNode, executionInfo) {
-        const edgeColor = executionInfo.executed ? this.gray : this.lightGray;
+        let edgeColor;
+        if (executionInfo.color) {
+            edgeColor = executionInfo.color;
+        } else {
+            edgeColor = executionInfo.executed ? this.gray : this.lightGray;
+        }
         pathNode.setAttribute('stroke', edgeColor);
         polygonNode.setAttribute('stroke', edgeColor);
         polygonNode.setAttribute('fill', edgeColor);
