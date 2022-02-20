@@ -59,12 +59,19 @@ class IRAnswer extends React.Component {
         const graphNodes = graph.getAllNodes();
 
         this.graphDiv.current.innerHTML = this._createGraphSvg(graph);
-        const svgGraphNode = this.graphDiv.current.children[0];
-        const svgGraphChildren = Array.from(svgGraphNode.children[0].children);
-
-        this._removeGraphTitle(svgGraphChildren);
-        this._adaptGraphNodes(svgGraphChildren, graphNodes);
-        this._adaptGraphEdges(svgGraphChildren);
+        const svgGraphNode = this.graphDiv.current.children[0].children[0];
+        const svgGraphChildren = Array.from(svgGraphNode.children);
+        
+        const svgGraphEdges = this._adaptGraphEdges(svgGraphChildren);
+        const svgGraphNodes = this._adaptGraphNodes(svgGraphChildren, graphNodes);
+        svgGraphNode.innerHTML = '';
+        for (const node of svgGraphEdges) {
+            svgGraphNode.appendChild(node);
+        }
+        for (const node of svgGraphNodes) {
+            svgGraphNode.appendChild(node);
+        }
+        
         this._initGraphSize();
         
         this.forceUpdate();
@@ -131,6 +138,7 @@ class IRAnswer extends React.Component {
                 this.props.setCursorOfBlock(svgBlock, 'pointer');
             }
         }
+        return svgGraphNodes;
     }
 
     _getAndRemoveAllNodeChildren (svgGraphNode) {
@@ -237,14 +245,31 @@ class IRAnswer extends React.Component {
                 svgGraphNode.innerHTML += this._createHtmlText(text, position, labelSize, color, 'end');
             }
             const maxTextLength = (block.width / 2) - 5;
+            const textBackgrounds = [];
             svgGraphNode.childNodes.forEach(node => {
                 if (node.nodeName === 'text') {
                     const initialTextLength = node.textLength.baseVal.value;
                     const textLength = initialTextLength > maxTextLength ? maxTextLength : initialTextLength;
                     node.setAttribute('textLength', `${textLength}`);
                     node.setAttribute('font-weight', 'bold');
+
+                    const textBackground = document.createElement('rect');
+                    let x = node.getAttribute('x');
+                    if (node.getAttribute('text-anchor') === 'end') {
+                        x -= textLength;
+                    }
+                    const fontSize = +node.getAttribute('font-size');
+                    const y = node.getAttribute('y') - fontSize + 1;
+                    textBackground.setAttribute('transform', `translate(${x}, ${y})`);
+                    textBackground.setAttribute('height', `${fontSize + 3}px`);
+                    textBackground.setAttribute('width', `${textLength}px`);
+                    textBackground.setAttribute('fill', 'white');
+                    textBackgrounds.push(textBackground);
                 }
             });
+            for (const textBackground of textBackgrounds) {
+                svgGraphNode.innerHTML = textBackground.outerHTML + svgGraphNode.innerHTML;
+            }
         }
     }
 
@@ -288,6 +313,7 @@ class IRAnswer extends React.Component {
                 }
             }
         }
+        return svgGraphEdges;
     }
 
     _getEdgeChildren (svgGraphEdge) {
