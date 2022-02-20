@@ -162,6 +162,9 @@
         "execution": {
             "why-did-block-execute": "Warum wurde der Block ausgeführt?",
             "why-did-not-block-execute": "Warum wurde der Block nicht ausgeführt?"
+        },
+        "input": {
+            "why-did-have-value": "Warum hatte <b><i>{input}</i></b> den Wert <b>{value}</b>?"
         }
     },
     "variable": {
