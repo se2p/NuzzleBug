@@ -167,6 +167,24 @@
             "why-did-have-value": "Warum hatte <b><i>{input}</i></b> den Wert <b>{value}</b>?"
         }
     },
+    "answer": {
+        "sensing": {
+            "touching-sprite-edge": "Die Figur <i>{sprite}</i> befand sich auf Position ({spriteX},{spriteY}). <br> Dadurch hat die Figur den <i>Rand</i> an den im Bild rot markierten Stellen berührt.",
+            "touching-sprite-mouse": "Die Figur <i>{sprite}</i> befand sich auf Position ({spriteX},{spriteY}), der <i>Mauszeiger</i> auf Position ({mouseX},{mouseY}). <br> Dadurch hat die Figur den <i>Mauszeiger</i> wie im Bild gezeigt berührt.",
+            "touching-sprite-sprite": "Die Figur <i>{sprite1}</i> befand sich auf Position ({sprite1X},{sprite1Y}), die Figur <i>{sprite2}</i> auf Position ({sprite2X},{sprite2Y}).  <br> Dadurch haben sich die Figuren an den im Bild hervorgehobenen Stellen berührt.",
+            "touching-sprite-color": "Die Figur <i>{sprite}</i> befand sich auf Position ({spriteX},{spriteY}). <br> Dadurch hat die Figur die Farbe an den im Bild hervorgehobenen Stellen berührt.",
+            "touching-color-color": "Die Farben haben sich an den im Bild hervorgehobenen Stellen berührt.",
+            "distance-sprite-edge": "Die Figur <i>{sprite}</i> befand sich auf Position ({spriteX},{spriteY}). <br> Dadurch war der minimale Abstand zum <i>Rand</i> <span style=\"color: red;\"><b>{distance}</b></span>.",
+            "distance-sprite-mouse": "Die Figur <i>{sprite}</i> befand sich auf Position ({spriteX},{spriteY}), der <i>Mauszeiger</i> auf Position ({mouseX},{mouseY}). <br> Dadurch war der minimale Abstand zum <i>Mauszeiger</i> <span style=\"color: red;\"><b>{distance}</b></span>.",
+            "distance-sprite-sprite": "Die Figur <i>{sprite1}</i> befand sich auf Position ({sprite1X},{sprite1Y}), die Figur <i>{sprite2}</i> auf Position ({sprite2X},{sprite2Y}). <br> Dadurch war der minimale Abstand der Figuren <span style=\"color: red;\"><b>{distance}</b></span>.",
+            "distance-sprite-color": "Die Figur <i>{sprite}</i> befand sich auf Position ({spriteX},{spriteY}). <br> Dadurch war der minimale Abstand zur ausgewählten Farbe <span style=\"color: red;\"><b>{distance}</b></span>.",
+            "distance-color-color": "Der minimale Abstand der Farben war <span style=\"color: red;\"><b>{distance}</b></span>.",
+            "sprite-invisible": "Die Figur <i>{sprite}</i> ist nicht sichtbar und kann deshalb nicht berührt werden!",
+            "sprites-invisible": "Die Figur <i>{sprite1}</i> und die Figur <i>{sprite2}</i> sind nicht sichtbar und können sich deshalb nicht berühren!",
+            "nonexistent-color": "Die Farbe <span style=\"color: {color};\">⬤</span> kommt nicht vor! <br> Versuche die gewünschte Farbe mit der Pipette auszuwählen.",
+            "nonexistent-colors": "Die Farben <span style=\"color: {color1};\">⬤</span> und <span style=\"color: {color2};\">⬤</span> kommen nicht vor! <br> Versuche die gewünschten Farben mit der Pipette auszuwählen."
+        }
+    },
     "variable": {
         "x-position": "x-Position",
         "y-position": "y-Position",

@@ -76,6 +76,7 @@ class IRDebugger extends React.Component {
         this.previousBlocks = [];
         this.selectedQuestion = null;
         this.answer = null;
+        this.selectedBlockExecution = null;
     }
 
     closeAndDisable () {
@@ -297,11 +298,31 @@ class IRDebugger extends React.Component {
         this.relevantTrace = this.observedTrace.slice(0, traceIndex + 1);
         this.answer = null;
         this.update();
-        if (this.selectedQuestion) {
+        if (this.selectedQuestion && this.categoriesContainQuestion(this.selectedQuestion, this.questionHierarchy)) {
             this.updateAnswerProvider();
             this.answer = this.answerProvider.generateAnswer(this.selectedQuestion);
+        } else {
+            this.selectedQuestion = null;
         }
         this.forceUpdate();
+    }
+
+    categoriesContainQuestion (selectedQuestion, questionCategories) {
+        for (const questionCategory of questionCategories) {
+            if (questionCategory.questionCategories) {
+                if (this.categoriesContainQuestion(selectedQuestion, questionCategory.questionCategories)) {
+                    return true;
+                }
+            }
+            if (questionCategory.questions) {
+                for (const question of questionCategory.questions) {
+                    if (question.id === selectedQuestion.id) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     calculateBlockExecutionOptions () {

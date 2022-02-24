@@ -43,7 +43,7 @@
 
 .block-area {
   width: calc(100% - 40px);
-  height: 320px;
+  height: 360px;
   padding: 10px;
   border: 1px solid hsla(0, 0%, 0%, 0.15);
   border-radius: 4px;
@@ -56,7 +56,7 @@
   position: fixed;
   bottom: 90px;
   right: 12px;
-  height: 250px;
+  height: 290px;
   width: 42px;
   padding-top: 5px;
   overflow-y: scroll;
@@ -97,4 +97,15 @@
 
 .zoom-out-button {
   bottom: 25px;
+}
+
+.stage, .distance-path, .mouse-pointer {
+  position: fixed;
+  bottom: 20px;
+  left: calc(33% + 20px);
+}
+
+.stage {
+  border-radius: 10px;
+  border: 1px solid #ABAEBA;
 }

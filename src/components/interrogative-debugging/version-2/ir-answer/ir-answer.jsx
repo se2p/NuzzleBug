@@ -1,19 +1,21 @@
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {injectIntl, intlShape} from 'react-intl';
+import {injectIntl, intlShape, FormattedHTMLMessage} from 'react-intl';
 import Viz from 'viz.js';
 import bindAll from 'lodash.bindall';
 
 import {ControlFilter} from 'scratch-analysis';
 import VirtualMachine from 'scratch-vm';
 import ScratchBlocks from 'scratch-blocks';
-import {AnswerV2 as Answer, targetForBlockId} from 'scratch-ir';
+import {AnswerV2 as Answer, QuestionV2 as Question, targetForBlockId} from 'scratch-ir';
 
 import getCostumeUrl from '../../../../lib/get-costume-url';
 
 import styles from './ir-answer.css';
+import irStyles from '../ir-styles.css';
 import cat from './cat.png';
+import mousePointer from '../icons/icon--mouse.svg';
 import zoomInIcon from '../icons/icon--plus.svg';
 import zoomOutIcon from '../icons/icon--minus.svg';
 
@@ -28,6 +30,7 @@ class IRAnswer extends React.Component {
     
         this.graphDiv = React.createRef();
         this.targetsDiv = React.createRef();
+        this.stage = React.createRef();
         this.zoomFactor = 1;
         this.zoomStepSize = 0.1;
         this.gray = '#575E75';
@@ -40,18 +43,98 @@ class IRAnswer extends React.Component {
         this.otherTargetColors = ['#EDB7E8', '#9BE0F1', '#C3B5F5', '#C6F79E', '#F2B2A7'];
         this.eventColor = '#FFDE7A';
         this.targetColors = {};
+        this.state = {
+            distancePath: null,
+            mousePosition: null,
+            edgePositions: []
+        };
     }
 
     componentDidMount () {
-        this._addResponsibleTargetImages();
-        this._drawGraph();
-    }
-
-    componentDidUpdate (prevProps) {
-        if (prevProps.answer !== this.props.answer) {
+        if (this.graphDiv.current) {
             this._addResponsibleTargetImages();
             this._drawGraph();
         }
+        if (this.stage.current) {
+            this._drawStage();
+        }
+    }
+
+    componentDidUpdate (prevProps) {
+        if (prevProps.answer !== this.props.answer && this.graphDiv.current) {
+            this._addResponsibleTargetImages();
+            this._drawGraph();
+        }
+    }
+
+    _drawStage () {
+        const answer = this.props.answer;
+        const runtime = this.props.vm.runtime;
+        const renderer = this.props.vm.renderer;
+        renderer.draw();
+        const stage = this.stage.current;
+        const stageContext = stage.getContext('2d');
+        const scaleFactor = 1;
+        stage.width = runtime.constructor.STAGE_WIDTH * scaleFactor;
+        stage.height = runtime.constructor.STAGE_HEIGHT * scaleFactor;
+        stageContext.drawImage(renderer.canvas, 0, 0, stage.width, stage.height);
+        if (answer.stage.distance && answer.stage.distance.path) {
+            const path = answer.stage.distance.path;
+            const start = this._transformScratchPositionToCanvasPosition(path.start, stage, scaleFactor);
+            const end = this._transformScratchPositionToCanvasPosition(path.end, stage, scaleFactor);
+            const distancePath = `M${start.x},${start.y} L${end.x},${end.y}`;
+            this.setState({distancePath});
+        }
+        if (answer.stage.mousePosition) {
+            const mousePosition = this._transformScratchPositionToCanvasPosition(
+                answer.stage.mousePosition, stage, scaleFactor);
+            mousePosition.x -= 6;
+            mousePosition.y -= 3;
+            this.setState({mousePosition});
+        }
+        if (answer.stage.edgePositions) {
+            const edgePositions = [];
+            for (const scratchPosition of answer.stage.edgePositions) {
+                const position = this._transformScratchPositionToCanvasPosition(scratchPosition, stage, scaleFactor);
+                edgePositions.push(position);
+            }
+            this.setState({edgePositions});
+        }
+        if (answer.stage.relevantPositions) {
+            this._highlightRelevantPositions(answer.stage.relevantPositions, stage, stageContext, scaleFactor);
+        }
+    }
+
+    _transformScratchPositionToCanvasPosition (position, stage, scaleFactor) {
+        return {
+            x: (stage.width / 2) + (position.x * scaleFactor),
+            y: (stage.height / 2) - (position.y * scaleFactor)
+        };
+    }
+
+    _highlightRelevantPositions (relevantScratchPositions, stage, stageContext, scaleFactor) {
+        const imageData = stageContext.getImageData(0, 0, stage.width, stage.height);
+        for (let x = 0; x < stage.width; x++) {
+            for (let y = 0; y < stage.height; y++) {
+                const colorIndices = this._getColorIndicesForPosition(x, y, stage.width);
+                const alphaIndex = colorIndices[3];
+                imageData.data[alphaIndex] = imageData.data[alphaIndex] * 0.1;
+            }
+        }
+        for (const scratchPosition of relevantScratchPositions) {
+            const position = this._transformScratchPositionToCanvasPosition(scratchPosition, stage, scaleFactor);
+            position.x = Math.round(position.x);
+            position.y = Math.round(position.y);
+            const colorIndices = this._getColorIndicesForPosition(position.x, position.y, stage.width);
+            const alphaIndex = colorIndices[3];
+            imageData.data[alphaIndex] = 255;
+        }
+        stageContext.putImageData(imageData, 0, 0);
+    }
+
+    _getColorIndicesForPosition (x, y, width) {
+        const red = (y * (width * 4)) + (x * 4);
+        return [red, red + 1, red + 2, red + 3];
     }
 
     _drawGraph () {
@@ -597,38 +680,109 @@ class IRAnswer extends React.Component {
     }
 
     render () {
+        const {
+            answer,
+            selectedQuestion
+        } = this.props;
+
         return (
             <div>
                 <div className={styles.textArea}>
-                    <div className={classNames(styles.speechBubbleBox, styles.speechBubbleTriangle)}>
-                        {this.props.answer.text}
+                    <div
+                        className={classNames(styles.speechBubbleBox, styles.speechBubbleTriangle,
+                            irStyles[`color-${selectedQuestion.color.replace('#', '')}`])}
+                    >
+                        <FormattedHTMLMessage
+                            tagName="div"
+                            {...answer.text}
+                        />
                     </div>
                     <img
                         className={styles.cat}
                         src={cat}
                     />
                 </div>
-                <div className={styles.blockArea}>
-                    <div
-                        id="graph"
-                        ref={this.graphDiv}
-                    />
-                    <div
-                        id="targets"
-                        className={styles.responsibleTargets}
-                        ref={this.targetsDiv}
-                    />
-                    <img
-                        className={classNames(styles.zoomButton, styles.zoomInButton)}
-                        onClick={this.handleZoomGraphIn}
-                        src={zoomInIcon}
-                    />
-                    <img
-                        className={classNames(styles.zoomButton, styles.zoomOutButton)}
-                        onClick={this.handleZoomGraphOut}
-                        src={zoomOutIcon}
-                    />
-                </div>
+                {answer.graph ? (
+                    <div className={styles.blockArea}>
+                        <div
+                            id="graph"
+                            ref={this.graphDiv}
+                        />
+                        <div
+                            id="targets"
+                            className={styles.responsibleTargets}
+                            ref={this.targetsDiv}
+                        />
+                        <img
+                            className={classNames(styles.zoomButton, styles.zoomInButton)}
+                            onClick={this.handleZoomGraphIn}
+                            src={zoomInIcon}
+                        />
+                        <img
+                            className={classNames(styles.zoomButton, styles.zoomOutButton)}
+                            onClick={this.handleZoomGraphOut}
+                            src={zoomOutIcon}
+                        />
+                    </div>
+                ) : null}
+                {answer.stage ? (
+                    <div>
+                        <canvas
+                            ref={this.stage}
+                            className={styles.stage}
+                        />
+                        {this.stage.current ? (
+                            <svg
+                                className={styles.distancePath}
+                                width={this.stage.current.width}
+                                height={this.stage.current.height}
+                            >
+                                {this.state.distancePath ? (
+                                    <path
+                                        fill="none"
+                                        stroke="red"
+                                        strokeWidth="4"
+                                        strokeLinecap="round"
+                                        d={this.state.distancePath}
+                                    />
+                                ) : null}
+                                {this.state.edgePositions.length ? (
+                                    <g>
+                                        {this.state.edgePositions.map(position => (
+                                            <circle
+                                                key={`C(${position.x},${position.y})`}
+                                                fill="red"
+                                                stroke="red"
+                                                cx={position.x}
+                                                cy={position.y}
+                                                r={4}
+                                            />
+                                        ))}
+                                    </g>
+                                ) : null}
+                            </svg>
+                        ) : null}
+                        {this.state.mousePosition ? (
+                            <div
+                                className={styles.mousePointer}
+                                style={{
+                                    width: `${this.stage.current.width}px`,
+                                    height: `${this.stage.current.height}px`
+                                }}
+                            >
+                                <img
+                                    src={mousePointer}
+                                    width="24"
+                                    height="24"
+                                    style={{
+                                        marginLeft: `${this.state.mousePosition.x}px`,
+                                        marginTop: `${this.state.mousePosition.y}px`
+                                    }}
+                                />
+                            </div>
+                        ) : null}
+                    </div>
+                ) : null}
             </div>
         );
     }
@@ -637,6 +791,7 @@ class IRAnswer extends React.Component {
 IRAnswer.propTypes = {
     intl: intlShape.isRequired,
     answer: PropTypes.instanceOf(Answer),
+    selectedQuestion: PropTypes.instanceOf(Question),
     vm: PropTypes.instanceOf(VirtualMachine).isRequired,
     target: PropTypes.shape({
         origin: PropTypes.shape({

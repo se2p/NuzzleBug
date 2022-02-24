@@ -187,11 +187,11 @@ class IRDebugger extends React.Component {
     
         let {x, y} = posProps;
         const cardHorizontalDragOffset = 800; // ~80% of card width
-        const cardVerticalDragOffset = expanded ? 400 : 0; // ~80% of card height
+        const cardVerticalDragOffset = expanded ? 432 : 0; // ~80% of card height
         const menuBarHeight = 48;
         if (x === 0 && y === 0) {
-            x = 292 + cardHorizontalDragOffset;
-            y = 50;
+            x = 280 + cardHorizontalDragOffset;
+            y = 36;
         }
     
         return (
@@ -268,6 +268,7 @@ class IRDebugger extends React.Component {
                                                     {answer ?
                                                         <IRAnswer
                                                             answer={answer}
+                                                            selectedQuestion={selectedQuestion}
                                                             vm={vm}
                                                             target={target}
                                                             createSvgBlock={this.createSvgBlock}
