@@ -5,7 +5,6 @@ import {injectIntl, intlShape, FormattedHTMLMessage} from 'react-intl';
 import Viz from 'viz.js';
 import bindAll from 'lodash.bindall';
 
-import {ControlFilter} from 'scratch-analysis';
 import VirtualMachine from 'scratch-vm';
 import ScratchBlocks from 'scratch-blocks';
 import {AnswerV2 as Answer, QuestionV2 as Question, targetForBlockId} from 'scratch-ir';
@@ -239,29 +238,17 @@ class IRAnswer extends React.Component {
         const blockId = graphNode.block.id;
         const block = ScratchBlocks.getAbstractWorkspace().getBlockById(blockId);
         const executionInfo = this._getNodeExecutionInfo(graphNode);
-        let background;
-        if (this._blockBelongsToCertainTarget(graphNode.block)) {
-            const targetForBlock = targetForBlockId(this.targets, blockId);
-            const color = this.targetColors[targetForBlock.id];
-            const title = targetForBlock.isStage ?
-                this._translate('block.from.stage') :
-                this._translate('block.from.sprite', {sprite: targetForBlock.getName()});
-            background = {color, title};
-        } else {
-            background = {color: this.eventColor, title: this._translate('block.general-event')};
-        }
+        const targetForBlock = targetForBlockId(this.targets, blockId);
+        const color = this.targetColors[targetForBlock.id];
+        const title = targetForBlock.isStage ?
+            this._translate('block.from.stage') :
+            this._translate('block.from.sprite', {sprite: targetForBlock.getName()});
+        const background = {color, title};
         const svgBlock = this.props.createSvgBlock(block, scaleFactor, executionInfo, background);
         const width = Number(svgBlock.getAttribute('width').split('px')[0]);
         const height = Number(svgBlock.getAttribute('height').split('px')[0]);
         svgGraphNode.appendChild(svgBlock);
         return {id: blockId, width, height, isHatBlock: block.startHat_};
-    }
-
-    _blockBelongsToCertainTarget (block) {
-        return !ControlFilter.hatBlock(block) ||
-            block.opcode === 'event_whenthisspriteclicked' ||
-            block.opcode === 'event_whenstageclicked' ||
-            block.opcode === 'control_start_as_clone';
     }
 
     _extractEllipseAttributes (ellipseNode) {
