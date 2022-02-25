@@ -71,22 +71,27 @@ class IRAnswer extends React.Component {
         const runtime = this.props.vm.runtime;
         const renderer = this.props.vm.renderer;
         renderer.draw();
-        const stage = this.stage.current;
-        const stageContext = stage.getContext('2d');
-        const scaleFactor = 1;
-        stage.width = runtime.constructor.STAGE_WIDTH * scaleFactor;
-        stage.height = runtime.constructor.STAGE_HEIGHT * scaleFactor;
-        stageContext.drawImage(renderer.canvas, 0, 0, stage.width, stage.height);
+        const stageCanvas = this.stage.current;
+        stageCanvas.width = runtime.constructor.STAGE_WIDTH;
+        stageCanvas.height = runtime.constructor.STAGE_HEIGHT;
+        const scaleFactor = 1 / 0.5;
+        const tmpCanvas = document.createElement('canvas');
+        tmpCanvas.width = stageCanvas.width * scaleFactor;
+        tmpCanvas.height = stageCanvas.height * scaleFactor;
+        const tmpContext = tmpCanvas.getContext('2d');
+        tmpContext.drawImage(renderer.canvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
+        const stageContext = stageCanvas.getContext('2d');
+        stageContext.drawImage(tmpCanvas, 0, 0, stageCanvas.width, stageCanvas.height);
         if (answer.stage.distance && answer.stage.distance.path) {
             const path = answer.stage.distance.path;
-            const start = this._transformScratchPositionToCanvasPosition(path.start, stage, scaleFactor);
-            const end = this._transformScratchPositionToCanvasPosition(path.end, stage, scaleFactor);
+            const start = this._transformScratchPositionToCanvasPosition(path.start, stageCanvas);
+            const end = this._transformScratchPositionToCanvasPosition(path.end, stageCanvas);
             const distancePath = `M${start.x},${start.y} L${end.x},${end.y}`;
             this.setState({distancePath});
         }
         if (answer.stage.mousePosition) {
             const mousePosition = this._transformScratchPositionToCanvasPosition(
-                answer.stage.mousePosition, stage, scaleFactor);
+                answer.stage.mousePosition, stageCanvas);
             mousePosition.x -= 6;
             mousePosition.y -= 3;
             this.setState({mousePosition});
@@ -94,41 +99,45 @@ class IRAnswer extends React.Component {
         if (answer.stage.edgePositions) {
             const edgePositions = [];
             for (const scratchPosition of answer.stage.edgePositions) {
-                const position = this._transformScratchPositionToCanvasPosition(scratchPosition, stage, scaleFactor);
+                const position = this._transformScratchPositionToCanvasPosition(scratchPosition, stageCanvas);
                 edgePositions.push(position);
             }
             this.setState({edgePositions});
         }
         if (answer.stage.relevantPositions) {
-            this._highlightRelevantPositions(answer.stage.relevantPositions, stage, stageContext, scaleFactor);
+            this._highlightRelevantPositions(answer.stage.relevantPositions, stageCanvas, tmpCanvas,
+                stageContext, tmpContext, scaleFactor);
         }
     }
 
-    _transformScratchPositionToCanvasPosition (position, stage, scaleFactor) {
+    _transformScratchPositionToCanvasPosition (position, stage) {
         return {
-            x: (stage.width / 2) + (position.x * scaleFactor),
-            y: (stage.height / 2) - (position.y * scaleFactor)
+            x: (stage.width / 2) + position.x,
+            y: (stage.height / 2) - position.y
         };
     }
 
-    _highlightRelevantPositions (relevantScratchPositions, stage, stageContext, scaleFactor) {
-        const imageData = stageContext.getImageData(0, 0, stage.width, stage.height);
-        for (let x = 0; x < stage.width; x++) {
-            for (let y = 0; y < stage.height; y++) {
-                const colorIndices = this._getColorIndicesForPosition(x, y, stage.width);
+    _highlightRelevantPositions (relevantScratchPositions, stageCanvas, tmpCanvas,
+        stageContext, tmpContext, scaleFactor) {
+        const imageData = tmpContext.getImageData(0, 0, tmpCanvas.width, tmpCanvas.height);
+        for (let x = 0; x < tmpCanvas.width; x++) {
+            for (let y = 0; y < tmpCanvas.height; y++) {
+                const colorIndices = this._getColorIndicesForPosition(x, y, tmpCanvas.width);
                 const alphaIndex = colorIndices[3];
                 imageData.data[alphaIndex] = imageData.data[alphaIndex] * 0.1;
             }
         }
         for (const scratchPosition of relevantScratchPositions) {
-            const position = this._transformScratchPositionToCanvasPosition(scratchPosition, stage, scaleFactor);
-            position.x = Math.round(position.x);
-            position.y = Math.round(position.y);
-            const colorIndices = this._getColorIndicesForPosition(position.x, position.y, stage.width);
+            const position = this._transformScratchPositionToCanvasPosition(scratchPosition, stageCanvas);
+            position.x = Math.round(position.x * scaleFactor);
+            position.y = Math.round(position.y * scaleFactor);
+            const colorIndices = this._getColorIndicesForPosition(position.x, position.y, tmpCanvas.width);
             const alphaIndex = colorIndices[3];
             imageData.data[alphaIndex] = 255;
         }
-        stageContext.putImageData(imageData, 0, 0);
+        tmpContext.putImageData(imageData, 0, 0);
+        stageContext.clearRect(0, 0, stageCanvas.width, stageCanvas.height);
+        stageContext.drawImage(tmpCanvas, 0, 0, stageCanvas.width, stageCanvas.height);
     }
 
     _getColorIndicesForPosition (x, y, width) {
