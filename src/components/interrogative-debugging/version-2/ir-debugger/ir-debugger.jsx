@@ -49,6 +49,7 @@ class IRDebugger extends React.Component {
     createSvgBlock (block, scaleFactor, executionInfo, background) {
         const NS = 'http://www.w3.org/2000/svg';
         const blockStrokeWidth = 1;
+        const svgBlock = document.createElementNS(NS, 'svg');
 
         let blockHeight = block.startHat_ ?
             (block.height + 19) * scaleFactor :
@@ -81,19 +82,25 @@ class IRDebugger extends React.Component {
             }
         }
 
-        const backgroundPath = Array.from(svgGroup.childNodes)
-            .find(n => n.getAttribute('class')?.includes('blocklyBlockBackground'));
-        const pathData = backgroundPath.getAttribute('d');
-        const relevantPathData = pathData.split('H')[block.startHat_ ? 1 : 2].split('v')[0].split('a');
-        const horizontalLineEnd = Number(relevantPathData[0]);
-        const arcWidth = Number(relevantPathData[1].split(' ')[4].split(',')[0]);
-        const maximalXCoordinate = horizontalLineEnd + arcWidth;
-        let blockWidth = maximalXCoordinate * scaleFactor;
+        let blockWidth;
+        if (svgGroup.getAttribute('data-shapes') === 'reporter round') {
+            this._addGreenFlag(svgGroup);
+            blockWidth = (block.width * scaleFactor) + 25;
+            svgBlock.setAttribute('y', '5');
+        } else {
+            const backgroundPath = Array.from(svgGroup.childNodes)
+                .find(n => n.getAttribute('class')?.includes('blocklyBlockBackground'));
+            const pathData = backgroundPath.getAttribute('d');
+            const relevantPathData = pathData.split('H')[block.startHat_ ? 1 : 2].split('v')[0].split('a');
+            const horizontalLineEnd = Number(relevantPathData[0]);
+            const arcWidth = Number(relevantPathData[1].split(' ')[4].split(',')[0]);
+            const maximalXCoordinate = horizontalLineEnd + arcWidth;
+            blockWidth = maximalXCoordinate * scaleFactor;
+        }
 
         blockHeight += 2 * blockStrokeWidth;
         blockWidth += 2 * blockStrokeWidth;
 
-        const svgBlock = document.createElementNS(NS, 'svg');
         const blockBorder = {width: 2, radius: 5};
         const blockMargin = blockBorder.width + blockBorder.radius;
         svgBlock.setAttribute('height', `${blockHeight + (2 * blockMargin)}px`);
@@ -156,6 +163,54 @@ class IRDebugger extends React.Component {
         }
         for (const child of node.children) {
             this._addTooltipValues(child, executionInfo);
+        }
+    }
+
+    _addGreenFlag (svgGroup) {
+        const greenFlag = document.createElement('g');
+        greenFlag.setAttribute('transform', 'translate(16, 6)');
+        const greenFlagImage = document.createElement('image');
+        greenFlagImage.setAttribute('xlink:href', './static/blocks-media/green-flag.svg');
+        greenFlagImage.setAttribute('width', '26px');
+        greenFlagImage.setAttribute('height', '26px');
+        greenFlag.appendChild(greenFlagImage);
+        svgGroup.innerHTML += greenFlag.outerHTML;
+
+        const greenFlagOffset = 35;
+        this._addOffsetToBackground(svgGroup, greenFlagOffset);
+        this._addOffsetToTextNodes(svgGroup, greenFlagOffset);
+        Array.from(svgGroup.childNodes).forEach(childNode => this._addOffsetToTextNodes(childNode, greenFlagOffset));
+        this._addOffsetToDropDownNodes(svgGroup, greenFlagOffset);
+    }
+
+    _addOffsetToBackground (svgGroup, offset) {
+        const backgroundPath = Array.from(svgGroup.childNodes)
+            .find(n => n.getAttribute('class')?.includes('blocklyBlockBackground'));
+        const pathData = backgroundPath.getAttribute('d');
+        const pathDataA = pathData.split('a');
+        let pathWidth = Number(pathDataA[0].split('H')[1]);
+        pathWidth += offset;
+        const newPathData = `${pathData.split('H')[0]} H ${pathWidth} a ${pathDataA[1]} a ${pathDataA[2]}`;
+        backgroundPath.setAttribute('d', newPathData);
+    }
+
+    _addOffsetToTextNodes (svgGroup, offset) {
+        const textNodes = Array.from(svgGroup.childNodes).filter(node => node.nodeName === 'text');
+        for (const text of textNodes) {
+            const x = Number(text.getAttribute('x'));
+            text.setAttribute('x', x + offset);
+        }
+    }
+
+    _addOffsetToDropDownNodes (svgGroup, offset) {
+        const dropDownNodes = Array.from(svgGroup.childNodes)
+            .filter(node => node.getAttribute('data-argument-type') === 'dropdown');
+        for (const dropDownNode of dropDownNodes) {
+            const transform = dropDownNode.getAttribute('transform');
+            const x = Number(transform.split('(')[1].split(',')[0]);
+            const y = Number(transform.split('(')[1].split(',')[1]);
+            const newTransform = `translate(${x + offset},${y})`;
+            dropDownNode.setAttribute('transform', newTransform);
         }
     }
 

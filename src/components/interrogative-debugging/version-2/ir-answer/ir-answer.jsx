@@ -245,9 +245,12 @@ class IRAnswer extends React.Component {
 
     _appendSvgBlock (svgGraphNode, graphNode, scaleFactor) {
         const blockId = graphNode.block.id;
-        const block = ScratchBlocks.getAbstractWorkspace().getBlockById(blockId);
+        const block = this._getScratchBlock(blockId);
         const executionInfo = this._getNodeExecutionInfo(graphNode);
-        const targetForBlock = targetForBlockId(this.targets, blockId);
+        let targetForBlock = targetForBlockId(this.targets, blockId);
+        if (!targetForBlock) {
+            targetForBlock = this.target;
+        }
         const color = this.targetColors[targetForBlock.id];
         const title = targetForBlock.isStage ?
             this._translate('block.from.stage') :
@@ -258,6 +261,17 @@ class IRAnswer extends React.Component {
         const height = Number(svgBlock.getAttribute('height').split('px')[0]);
         svgGraphNode.appendChild(svgBlock);
         return {id: blockId, width, height, isHatBlock: block.startHat_};
+    }
+
+    _getScratchBlock (blockId) {
+        const workspaces = Object.values(ScratchBlocks.Workspace.WorkspaceDB_);
+        for (const workspace of workspaces) {
+            const block = workspace.getBlockById(blockId);
+            if (block) {
+                return block;
+            }
+        }
+        return null;
     }
 
     _extractEllipseAttributes (ellipseNode) {
