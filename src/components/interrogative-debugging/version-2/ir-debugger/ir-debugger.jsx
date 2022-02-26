@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Draggable from 'react-draggable';
-import {injectIntl, intlShape} from 'react-intl';
+import {injectIntl, intlShape, FormattedMessage} from 'react-intl';
 import bindAll from 'lodash.bindall';
 import VirtualMachine from 'scratch-vm';
 
@@ -170,6 +170,7 @@ class IRDebugger extends React.Component {
             questionHierarchy,
             selectedQuestion,
             answer,
+            answerLoading,
             expanded,
             handleRefresh,
             onTargetChange,
@@ -182,6 +183,7 @@ class IRDebugger extends React.Component {
             onDrag,
             onStartDrag,
             onEndDrag,
+            crashed,
             ...posProps
         } = this.props;
     
@@ -249,13 +251,23 @@ class IRDebugger extends React.Component {
                                     className={expanded ? styles.body : cardStyles.hidden}
                                     ref={this.body}
                                 >
-                                    <div className={styles.questionHierarchy}>
-                                        <IRQuestionHierarchy
-                                            questionHierarchy={questionHierarchy}
-                                            selectedQuestion={selectedQuestion}
-                                            onQuestionClick={onQuestionClick}
-                                        />
-                                    </div>
+                                    {questionHierarchy ? (
+                                        <div className={styles.questionHierarchy}>
+                                            <IRQuestionHierarchy
+                                                questionHierarchy={questionHierarchy}
+                                                selectedQuestion={selectedQuestion}
+                                                onQuestionClick={onQuestionClick}
+                                            />
+                                        </div>
+                                    ) : (crashed ? (
+                                        <div className={styles.debuggerCrashMessage}>
+                                            <FormattedMessage
+                                                defaultMessage="Oops! Something went wrong."
+                                                description="Crash Message title"
+                                                id="gui.crashMessage.label"
+                                            />
+                                        </div>
+                                    ) : null)}
                                     <div className={styles.answerArea}>
                                         {selectedQuestion ? (
                                             <div>
@@ -265,7 +277,7 @@ class IRDebugger extends React.Component {
                                                     />
                                                 </div>
                                                 <div className={styles.answer}>
-                                                    {answer ?
+                                                    {answer ? (
                                                         <IRAnswer
                                                             answer={answer}
                                                             selectedQuestion={selectedQuestion}
@@ -274,7 +286,8 @@ class IRDebugger extends React.Component {
                                                             createSvgBlock={this.createSvgBlock}
                                                             onGraphNodeClick={onGraphNodeClick}
                                                             setCursorOfBlock={this.setCursorOfBlock}
-                                                        /> :
+                                                        />
+                                                    ) : (answerLoading ? (
                                                         <div className={styles.loaderDiv}>
                                                             <div
                                                                 className={styles.loader}
@@ -283,7 +296,15 @@ class IRDebugger extends React.Component {
                                                                 }}
                                                             />
                                                         </div>
-                                                    }
+                                                    ) : (crashed ? (
+                                                        <div className={styles.answerCrashMessage}>
+                                                            <FormattedMessage
+                                                                defaultMessage="Oops! Something went wrong."
+                                                                description="Crash Message title"
+                                                                id="gui.crashMessage.label"
+                                                            />
+                                                        </div>
+                                                    ) : null))}
                                                 </div>
                                             </div>
                                         ) : null}
@@ -312,11 +333,11 @@ IRDebugger.propTypes = {
             id: PropTypes.string.isRequired
         }),
         costumeUrl: PropTypes.string
-    }).isRequired,
+    }),
     targetOptions: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.string.isRequired,
         optionName: PropTypes.string.isRequired
-    })).isRequired,
+    })),
     selectedBlockExecution: PropTypes.shape({
         uniqueId: PropTypes.string.isRequired,
         optionName: PropTypes.string.isRequired
@@ -324,10 +345,11 @@ IRDebugger.propTypes = {
     blockExecutionOptions: PropTypes.arrayOf(PropTypes.shape({
         uniqueId: PropTypes.string.isRequired,
         optionName: PropTypes.string.isRequired
-    })).isRequired,
+    })),
     blockId: PropTypes.string,
-    questionHierarchy: PropTypes.arrayOf(PropTypes.instanceOf(QuestionCategory)).isRequired,
+    questionHierarchy: PropTypes.arrayOf(PropTypes.instanceOf(QuestionCategory)),
     selectedQuestion: PropTypes.instanceOf(Question),
+    answerLoading: PropTypes.bool.isRequired,
     answer: PropTypes.instanceOf(Answer),
     expanded: PropTypes.bool.isRequired,
     x: PropTypes.number.isRequired,
@@ -342,7 +364,8 @@ IRDebugger.propTypes = {
     onShrinkExpand: PropTypes.func.isRequired,
     onStartDrag: PropTypes.func,
     onDrag: PropTypes.func,
-    onEndDrag: PropTypes.func
+    onEndDrag: PropTypes.func,
+    crashed: PropTypes.bool.isRequired
 };
 
 export default injectIntl(IRDebugger);

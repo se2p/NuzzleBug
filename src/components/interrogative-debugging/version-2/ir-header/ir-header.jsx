@@ -150,26 +150,35 @@ class IRHeader extends React.Component {
             >
                 <div className={styles.leftHeader}>
                     <div className={styles.headerItem}>
-                        {blockId ? (
+                        {target ? (
+                            blockId ? (
+                                <FormattedHTMLMessage
+                                    tagName="div"
+                                    defaultMessage="Interrogative Debugger"
+                                    description="Title of the interrogative debugger"
+                                    id="gui.ir-debugger.header.title-block"
+                                />
+                            ) : (target.isStage ?
+                                <FormattedHTMLMessage
+                                    tagName="div"
+                                    defaultMessage="Interrogative Debugger"
+                                    description="Title of the interrogative debugger"
+                                    id="gui.ir-debugger.header.title-stage"
+                                /> :
+                                <FormattedHTMLMessage
+                                    tagName="div"
+                                    defaultMessage="Interrogative Debugger"
+                                    description="Title of the interrogative debugger"
+                                    id="gui.ir-debugger.header.title-sprite"
+                                    values={{sprite: target.sprite.name}}
+                                />
+                            )
+                        ) : (
                             <FormattedHTMLMessage
                                 tagName="div"
                                 defaultMessage="Interrogative Debugger"
                                 description="Title of the interrogative debugger"
-                                id="gui.ir-debugger.header.title-block"
-                            />
-                        ) : (target.isStage ?
-                            <FormattedHTMLMessage
-                                tagName="div"
-                                defaultMessage="Interrogative Debugger"
-                                description="Title of the interrogative debugger"
-                                id="gui.ir-debugger.header.title-stage"
-                            /> :
-                            <FormattedHTMLMessage
-                                tagName="div"
-                                defaultMessage="Interrogative Debugger"
-                                description="Title of the interrogative debugger"
-                                id="gui.ir-debugger.header.title-sprite"
-                                values={{sprite: target.sprite.name}}
+                                id="gui.ir-debugger.header.title"
                             />
                         )}
                     </div>
@@ -181,7 +190,7 @@ class IRHeader extends React.Component {
                             />
                         </div>
                     ) : (
-                        target.costumeUrl ? (
+                        target && target.costumeUrl ? (
                             <div className={styles.headerItem}>
                                 <img
                                     className={styles.targetImage}
@@ -191,7 +200,7 @@ class IRHeader extends React.Component {
                             </div>
                         ) : null
                     )}
-                    {targetOptions.length > 1 ? (
+                    {targetOptions && targetOptions.length > 1 ? (
                         <div
                             className={styles.headerItem}
                             onMouseLeave={this.handleCloseTargetDropdown}
@@ -229,7 +238,7 @@ class IRHeader extends React.Component {
                             </div>
                         </div>
                     ) : null}
-                    {blockExecutionOptions.length > 1 ? (
+                    {blockExecutionOptions && blockExecutionOptions.length > 1 ? (
                         <div
                             className={styles.headerItem}
                             onMouseLeave={this.handleCloseBlockExecutionDropdown}
@@ -360,11 +369,11 @@ IRHeader.propTypes = {
         }),
         isStage: PropTypes.bool.isRequired,
         costumeUrl: PropTypes.string
-    }).isRequired,
+    }),
     targetOptions: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.string.isRequired,
         optionName: PropTypes.string.isRequired
-    })).isRequired,
+    })),
     selectedBlockExecution: PropTypes.shape({
         uniqueId: PropTypes.string.isRequired,
         optionName: PropTypes.string.isRequired
@@ -372,7 +381,7 @@ IRHeader.propTypes = {
     blockExecutionOptions: PropTypes.arrayOf(PropTypes.shape({
         uniqueId: PropTypes.string.isRequired,
         optionName: PropTypes.string.isRequired
-    })).isRequired,
+    })),
     blockId: PropTypes.string,
     expanded: PropTypes.bool.isRequired,
     onTargetChange: PropTypes.func.isRequired,

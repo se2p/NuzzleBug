@@ -12,6 +12,7 @@
         "title-sprite": "Interrogative Debugger für die Figur <i>{sprite}</i>",
         "title-stage": "Interrogative Debugger für die Bühne",
         "title-block": "Interrogative Debugger für den Block",
+        "title": "Interrogative Debugger",
         "expand": "Aufklappen",
         "close": "Schließen",
         "shrink": "Zuklappen",

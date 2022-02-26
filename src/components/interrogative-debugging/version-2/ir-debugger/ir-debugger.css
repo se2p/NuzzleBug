@@ -93,3 +93,20 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+.debugger-crash-message, .answer-crash-message {
+    text-align: center;
+    color: red;
+}
+
+.debugger-crash-message {
+    height: 540px;
+    width: 1000px;
+    padding-top: 230px;
+    font-size: 15px;
+}
+
+.answer-crash-message {
+    padding-top: 180px;
+    font-size: 14px;
+}

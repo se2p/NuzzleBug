@@ -60,7 +60,7 @@ class IRDebugger extends React.Component {
             this.cfg = generateCFG(this.props.vm);
             this.cdg = generateCDG(this.cfg);
         } catch (e) {
-            this.closeAndDisable();
+            this.crashed = true;
             return;
         }
 
@@ -71,11 +71,13 @@ class IRDebugger extends React.Component {
 
     initProperties () {
         this.cancel = false;
+        this.crashed = false;
         this.target = null;
         this.currentBlockId = this.props.initialBlockId;
         this.previousBlocks = [];
         this.selectedQuestion = null;
         this.answer = null;
+        this.answerLoading = false;
         this.selectedBlockExecution = null;
     }
 
@@ -137,15 +139,20 @@ class IRDebugger extends React.Component {
     }
 
     calculateQuestionHierarchy () {
-        const questionProvider = new QuestionProvider(
-            this.props.vm,
-            this.allTraces,
-            this.relevantObservedTraces,
-            this.target,
-            this.block,
-            this.translate
-        );
-        this.questionHierarchy = questionProvider.generateQuestionHierarchy();
+        try {
+            this.crashed = false;
+            const questionProvider = new QuestionProvider(
+                this.props.vm,
+                this.allTraces,
+                this.relevantObservedTraces,
+                this.target,
+                this.block,
+                this.translate
+            );
+            this.questionHierarchy = questionProvider.generateQuestionHierarchy();
+        } catch {
+            this.crashed = true;
+        }
     }
 
     initAnswerProvider () {
@@ -307,8 +314,8 @@ class IRDebugger extends React.Component {
         this.answer = null;
         this.update();
         if (this.selectedQuestion && this.categoriesContainQuestion(this.selectedQuestion, this.questionHierarchy)) {
-            this.updateAnswerProvider();
-            this.answer = this.answerProvider.generateAnswer(this.selectedQuestion);
+            this.answerLoading = true;
+            this.answerQuestion();
         } else {
             this.selectedQuestion = null;
         }
@@ -347,6 +354,7 @@ class IRDebugger extends React.Component {
     handleQuestionClick (question) {
         this.selectedQuestion = question;
         this.answer = null;
+        this.answerLoading = true;
         this.forceUpdate();
         setTimeout(() => {
             this.answerQuestion();
@@ -354,8 +362,14 @@ class IRDebugger extends React.Component {
     }
 
     answerQuestion () {
-        this.updateAnswerProvider();
-        this.answer = this.answerProvider.generateAnswer(this.selectedQuestion);
+        try {
+            this.crashed = false;
+            this.updateAnswerProvider();
+            this.answer = this.answerProvider.generateAnswer(this.selectedQuestion);
+        } catch {
+            this.crashed = true;
+        }
+        this.answerLoading = false;
         this.forceUpdate();
     }
 
@@ -407,12 +421,14 @@ class IRDebugger extends React.Component {
                 questionHierarchy={this.questionHierarchy}
                 selectedQuestion={this.selectedQuestion}
                 answer={this.answer}
+                answerLoading={this.answerLoading}
                 onTargetChange={this.handleTargetChange}
                 onBlockExecutionChange={this.handleSelectedBlockExecutionChange}
                 onQuestionClick={this.handleQuestionClick}
                 onGraphNodeClick={this.handleGraphNodeClick}
                 handleRefresh={this.rerender}
                 onBack={this.previousBlocks.length ? this.handleBackButtonClick : null}
+                crashed={this.crashed}
                 {...this.props}
             />
         );

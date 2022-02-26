@@ -12,6 +12,7 @@
         "title-sprite": "Interrogative Debugger for sprite <i>{sprite}</i>",
         "title-stage": "Interrogative Debugger for the stage",
         "title-block": "Interrogative Debugger for the block",
+        "title": "Interrogative Debugger",
         "expand": "Expand",
         "close": "Close", 
         "shrink": "Shrink",
