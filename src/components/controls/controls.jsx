@@ -76,6 +76,9 @@ const Controls = function (props) {
         questionGenerationActive,
         ...componentProps
     } = props;
+
+    const showQuestionButton = false;
+
     return (
         <div
             className={classNames(styles.controlsContainer, className)}
@@ -106,7 +109,7 @@ const Controls = function (props) {
             {turbo ? (
                 <TurboMode />
             ) : null}
-            {interrogationSupported ? <IRQuestions
+            {interrogationSupported && showQuestionButton ? <IRQuestions
                 active={!irDisabled && (!active || paused)}
                 onClick={onIRQuestionsClick}
                 title={intl.formatMessage(messages.irQuestionTitle)}
