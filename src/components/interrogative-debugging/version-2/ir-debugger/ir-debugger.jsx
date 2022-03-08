@@ -179,7 +179,11 @@ class IRDebugger extends React.Component {
         const greenFlagOffset = 35;
         this._addOffsetToBackground(svgGroup, greenFlagOffset);
         this._addOffsetToTextNodes(svgGroup, greenFlagOffset);
-        Array.from(svgGroup.childNodes).forEach(childNode => this._addOffsetToTextNodes(childNode, greenFlagOffset));
+        Array.from(svgGroup.childNodes).forEach(childNode => {
+            if (childNode.getAttribute('data-argument-type') !== 'dropdown') {
+                this._addOffsetToTextNodes(childNode, greenFlagOffset);
+            }
+        });
         this._addOffsetToDropDownNodes(svgGroup, greenFlagOffset);
     }
 
@@ -208,7 +212,7 @@ class IRDebugger extends React.Component {
         for (const dropDownNode of dropDownNodes) {
             const transform = dropDownNode.getAttribute('transform');
             const x = Number(transform.split('(')[1].split(',')[0]);
-            const y = Number(transform.split('(')[1].split(',')[1]);
+            const y = Number(transform.split(')')[0].split(',')[1]);
             const newTransform = `translate(${x + offset},${y})`;
             dropDownNode.setAttribute('transform', newTransform);
         }

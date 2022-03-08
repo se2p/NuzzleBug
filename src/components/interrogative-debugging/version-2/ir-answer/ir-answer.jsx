@@ -223,8 +223,8 @@ class IRAnswer extends React.Component {
 
             this._addRelevantValueBeforeAndAfterExecution(graphNode, svgGraphNode, block, scaleFactor);
             
-            if (!block.isHatBlock) {
-                const svgBlock = svgGraphNode.children[0];
+            if (block.isStackBlock) {
+                const svgBlock = Array.from(svgGraphNode.children).find(n => n.nodeName === 'svg');
                 svgBlock.addEventListener('click', () => this.props.onGraphNodeClick(block.id));
                 this.props.setCursorOfBlock(svgBlock, 'pointer');
             }
@@ -260,13 +260,17 @@ class IRAnswer extends React.Component {
         const width = Number(svgBlock.getAttribute('width').split('px')[0]);
         const height = Number(svgBlock.getAttribute('height').split('px')[0]);
         svgGraphNode.appendChild(svgBlock);
-        return {id: blockId, width, height, isHatBlock: block.startHat_};
+        return {id: blockId, width, height, isStackBlock: !block.outputConnection && block.previousConnection};
     }
 
     _getScratchBlock (blockId) {
+        let block = ScratchBlocks.getAbstractWorkspace().getBlockById(blockId);
+        if (block) {
+            return block;
+        }
         const workspaces = Object.values(ScratchBlocks.Workspace.WorkspaceDB_);
         for (const workspace of workspaces) {
-            const block = workspace.getBlockById(blockId);
+            block = workspace.getBlockById(blockId);
             if (block) {
                 return block;
             }
@@ -697,15 +701,20 @@ class IRAnswer extends React.Component {
 
         return (
             <div>
-                <div className={styles.textArea}>
+                <div>
                     <div
                         className={classNames(styles.speechBubbleBox, styles.speechBubbleTriangle,
                             irStyles[`color-${selectedQuestion.color.replace('#', '')}`])}
                     >
-                        <FormattedHTMLMessage
-                            tagName="div"
-                            {...answer.text}
-                        />
+                        <div className={styles.answerMessages}>
+                            {answer.messages.map((message, index) => (
+                                <FormattedHTMLMessage
+                                    key={index}
+                                    tagName="span"
+                                    {...message}
+                                />
+                            ))}
+                        </div>
                     </div>
                     <img
                         className={styles.cat}

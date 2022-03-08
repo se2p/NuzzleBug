@@ -1,29 +1,23 @@
 @import "../../../../css/colors.css";
 
-.text-area {
-  min-height: 100px;
-  width: 100%;
-  margin-top: -25px;
-  margin-bottom: 15px;
-}
-
 .speech-bubble-box {
-  width: calc(100% - 100px);
-  min-height: 65px;
-  padding: 10px;
-  margin-top: 24px;
+  position: fixed;
+  bottom: 400px;
+  left: calc(33% + 20px);
+  width: calc(66% - 130px);
+  min-height: 85px;
+  max-height: 85px;
   margin-right: 25px;
+  padding-right: 3px;
   border-radius: 10px;
   color: #575E75;
   background: $ui-secondary;
-  float: left;
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
 }
-  
+
 .speech-bubble-triangle:before {
   content: "";
   width: 0px;
@@ -34,15 +28,29 @@
   border-top: 8px solid $ui-secondary;
   border-bottom: 8px solid transparent;
   right: -30px;
-  top: 24px;
+  bottom: 25px;
+}
+
+.answer-messages {
+  padding: 10px;
+  max-height: 85px;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: #CECDCE transparent;
 }
 
 .cat {
   width: 75px;
+  position: fixed;
+  bottom: 400px;
+  right: 20px;
 }
 
 .block-area {
-  width: calc(100% - 40px);
+  position: fixed;
+  bottom: 20px;
+  left: calc(33% + 20px);
+  width: calc(66% - 70px);
   height: 360px;
   padding: 10px;
   border: 1px solid hsla(0, 0%, 0%, 0.15);
@@ -64,17 +72,23 @@
   scrollbar-color: #CECDCE transparent;
 }
 
-.block-area::-webkit-scrollbar-track, .responsible-targets::-webkit-scrollbar-track {
+.block-area::-webkit-scrollbar-track,
+.responsible-targets::-webkit-scrollbar-track,
+.answer-messages::-webkit-scrollbar-track {
   margin-top: 1px;
   margin-bottom: 1px;
 }
 
-.block-area::-webkit-scrollbar, .responsible-targets::-webkit-scrollbar {
+.block-area::-webkit-scrollbar,
+.responsible-targets::-webkit-scrollbar,
+.answer-messages::-webkit-scrollbar {
   height: 6px;
   width: 6px;
 }
 
-.block-area::-webkit-scrollbar-thumb, .responsible-targets::-webkit-scrollbar-thumb {
+.block-area::-webkit-scrollbar-thumb,
+.responsible-targets::-webkit-scrollbar-thumb,
+.answer-messages::-webkit-scrollbar-thumb {
   background:#CECDCE;
   border: 1px solid #CECDCE;
   border-radius: 4px;
