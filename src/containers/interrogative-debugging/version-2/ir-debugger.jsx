@@ -192,17 +192,6 @@ class IRDebugger extends React.Component {
     filterTracesForTargetOption (traces) {
         const blocks = this.targetOrigin.blocks._blocks;
 
-        // Remove all traces of blocks attached to irrelevant events.
-        const eventToRemove = this.target.isOriginal ? 'control_start_as_clone' : 'event_whenflagclicked';
-        traces = traces.filter(t => {
-            const block = blocks[t.id];
-            if (block) {
-                const hatBlock = this.getHatBlockOfBlock(block, blocks);
-                return hatBlock.opcode !== eventToRemove;
-            }
-            return true;
-        });
-
         if (!this.target.isOriginal) {
             // Remove traces where the clone did not exist.
             traces = traces.filter((t, index) =>
@@ -219,6 +208,17 @@ class IRDebugger extends React.Component {
             // Remove the 'control_create_clone_of' trace.
             traces.splice(1, 1);
         }
+
+        // Remove all traces of blocks attached to irrelevant events.
+        const eventToRemove = this.target.isOriginal ? 'control_start_as_clone' : 'event_whenflagclicked';
+        traces = traces.filter(t => {
+            const block = blocks[t.id];
+            if (block) {
+                const hatBlock = this.getHatBlockOfBlock(block, blocks);
+                return hatBlock.opcode !== eventToRemove;
+            }
+            return true;
+        });
 
         return traces;
     }
