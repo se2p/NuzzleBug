@@ -68,6 +68,8 @@ class Blocks extends React.Component {
             'onBlockGlowOff',
             'onBreakpointHit',
             'onBreakpointResumed',
+            'onAddBlockArrow',
+            'onRemoveBlockArrow',
             'handleExtensionAdded',
             'handleBlocksInfoUpdate',
             'onTargetsUpdate',
@@ -262,6 +264,8 @@ class Blocks extends React.Component {
         this.props.vm.addListener('BLOCK_GLOW_OFF', this.onBlockGlowOff);
         this.props.vm.addListener('BREAKPOINT_HIT', this.onBreakpointHit);
         this.props.vm.addListener('BREAKPOINT_RESUMED', this.onBreakpointResumed);
+        this.props.vm.addListener('ADD_BLOCK_ARROW', this.onAddBlockArrow);
+        this.props.vm.addListener('REMOVE_BLOCK_ARROW', this.onRemoveBlockArrow);
         this.props.vm.addListener('VISUAL_REPORT', this.onVisualReport);
         this.props.vm.addListener('workspaceUpdate', this.onWorkspaceUpdate);
         this.props.vm.addListener('targetsUpdate', this.onTargetsUpdate);
@@ -277,6 +281,8 @@ class Blocks extends React.Component {
         this.props.vm.removeListener('BLOCK_GLOW_OFF', this.onBlockGlowOff);
         this.props.vm.removeListener('BREAKPOINT_HIT', this.onBreakpointHit);
         this.props.vm.removeListener('BREAKPOINT_RESUMED', this.onBreakpointResumed);
+        this.props.vm.removeListener('ADD_BLOCK_ARROW', this.onAddBlockArrow);
+        this.props.vm.removeListener('REMOVE_BLOCK_ARROW', this.onRemoveBlockArrow);
         this.props.vm.removeListener('VISUAL_REPORT', this.onVisualReport);
         this.props.vm.removeListener('workspaceUpdate', this.onWorkspaceUpdate);
         this.props.vm.removeListener('targetsUpdate', this.onTargetsUpdate);
@@ -336,6 +342,12 @@ class Blocks extends React.Component {
     }
     onBreakpointResumed (data) {
         this.workspace.setBreakpointHit(data, false);
+    }
+    onAddBlockArrow (data) {
+        this.workspace.setArrowVisibility(data, true);
+    }
+    onRemoveBlockArrow (data) {
+        this.workspace.setArrowVisibility(data, false);
     }
     onVisualReport (data) {
         this.workspace.reportValue(data.id, data.value);
