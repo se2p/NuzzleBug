@@ -24,7 +24,8 @@ class IRAnswer extends React.Component {
         super(props);
         bindAll(this, [
             'handleZoomGraphIn',
-            'handleZoomGraphOut'
+            'handleZoomGraphOut',
+            'handleSelectedBlockChange'
         ]);
     
         this.graphDiv = React.createRef();
@@ -43,6 +44,8 @@ class IRAnswer extends React.Component {
         this.eventColor = '#FFDE7A';
         this.targetColors = {};
         this.state = {
+            messages: props.answer.messages,
+            selectedBlockId: null,
             distancePath: null,
             mousePosition: null,
             edgePositions: []
@@ -61,6 +64,7 @@ class IRAnswer extends React.Component {
 
     componentDidUpdate (prevProps) {
         if (prevProps.answer !== this.props.answer && this.graphDiv.current) {
+            this.graphSize = null;
             this._addResponsibleTargetImages();
             this._drawGraph();
         }
@@ -163,7 +167,11 @@ class IRAnswer extends React.Component {
             svgGraphNode.appendChild(node);
         }
         
-        this._initGraphSize();
+        if (this.graphSize) {
+            this._updateGraphSize(this.graphDiv.current.children[0]);
+        } else {
+            this._initGraphSize();
+        }
         
         this.forceUpdate();
     }
@@ -221,12 +229,32 @@ class IRAnswer extends React.Component {
 
             scaleFactor = this._transformNode(svgGraphNode, block, ellipse, scaleFactor);
 
+            if (this.props.answer.blockMessages[block.id]) {
+                if (this.state.selectedBlockId === block.id) {
+                    this._addRedBorderToBlock(block, svgGraphNode);
+                    this._addQuestionButtonToBlock(block, svgGraphNode, scaleFactor, 'red');
+                } else {
+                    this._addQuestionButtonToBlock(block, svgGraphNode, scaleFactor, this.lightGray);
+                }
+            }
+
             this._addRelevantValueBeforeAndAfterExecution(graphNode, svgGraphNode, block, scaleFactor);
             
+            const svgGraphNodeChildren = Array.from(svgGraphNode.children);
             if (block.isStackBlock) {
-                const svgBlock = Array.from(svgGraphNode.children).find(n => n.nodeName === 'svg');
+                const svgBlock = svgGraphNodeChildren.find(n => n.nodeName === 'svg');
                 svgBlock.addEventListener('click', () => this.props.onGraphNodeClick(block.id));
                 this.props.setCursorOfBlock(svgBlock, 'pointer');
+                const redBlockBorder = svgGraphNodeChildren.find(n => n.id === 'red-block-border');
+                if (redBlockBorder) {
+                    redBlockBorder.addEventListener('click', () => this.props.onGraphNodeClick(block.id));
+                    this.props.setCursorOfBlock(redBlockBorder, 'pointer');
+                }
+            }
+            const questionButton = svgGraphNodeChildren.find(n => n.getAttribute('id') === 'question-button');
+            if (questionButton) {
+                questionButton.addEventListener('click', () => this.handleSelectedBlockChange(block.id));
+                this.props.setCursorOfBlock(questionButton, 'pointer');
             }
         }
         return svgGraphNodes;
@@ -368,6 +396,48 @@ class IRAnswer extends React.Component {
                 svgGraphNode.innerHTML = textBackground.outerHTML + svgGraphNode.innerHTML;
             }
         }
+    }
+
+    _addRedBorderToBlock (block, svgGraphNode) {
+        const rect = document.createElement('rect');
+        rect.setAttribute('id', 'red-block-border');
+        rect.setAttribute('stroke', 'red');
+        rect.setAttribute('stroke-width', '4');
+        rect.setAttribute('stroke-linecap', `round`);
+        rect.setAttribute('fill-opacity', '0');
+        rect.setAttribute('height', `${block.height - 4}px`);
+        rect.setAttribute('width', `${block.width - 4}px`);
+        rect.setAttribute('x', '2');
+        rect.setAttribute('y', '2');
+        rect.setAttribute('rx', '5');
+        rect.setAttribute('ry', '5');
+        svgGraphNode.innerHTML += rect.outerHTML;
+    }
+
+    _addQuestionButtonToBlock (block, svgGraphNode, scaleFactor, color) {
+        const labelSize = this.labelSize / scaleFactor;
+        const radius = 8 / scaleFactor;
+        const questionMarkPosition = {
+            x: block.width + radius - 0.2,
+            y: (block.height / 2) + (labelSize * 0.38)
+        };
+        const questionMark = this._createHtmlText('?', questionMarkPosition, labelSize, color, 'start');
+        svgGraphNode.innerHTML += questionMark;
+
+        const circle = document.createElement('rect');
+        circle.setAttribute('id', 'question-button');
+        circle.setAttribute('fill', `${color}`);
+        circle.setAttribute('stroke', `${color}`);
+        circle.setAttribute('fill-opacity', '0.2');
+        circle.setAttribute('stroke-width', '2');
+        circle.setAttribute('stroke-linecap', `round`);
+        circle.setAttribute('height', `${radius * 2}px`);
+        circle.setAttribute('width', `${radius * 2}px`);
+        circle.setAttribute('x', `${block.width + 3}`);
+        circle.setAttribute('y', `${(block.height / 2) - radius}`);
+        circle.setAttribute('rx', `${radius}`);
+        circle.setAttribute('ry', `${radius}`);
+        svgGraphNode.innerHTML += circle.outerHTML;
     }
 
     _adaptGraphEdges (svgGraphChildren) {
@@ -693,6 +763,24 @@ class IRAnswer extends React.Component {
         this._updateGraphSize(svgGraphNode);
     }
 
+    handleSelectedBlockChange (blockId) {
+        if (this.state.selectedBlockId === blockId) {
+            this.setState({
+                messages: this.props.answer.messages,
+                selectedBlockId: null
+            });
+        } else {
+            this.setState({
+                messages: this.props.answer.blockMessages[blockId],
+                selectedBlockId: blockId
+            });
+        }
+        const scrollLeft = this.graphDiv.current.parentElement.scrollLeft;
+        const scrollTop = this.graphDiv.current.parentElement.scrollTop;
+        this._drawGraph();
+        this.graphDiv.current.parentElement.scrollTo(scrollLeft, scrollTop);
+    }
+
     render () {
         const {
             answer,
@@ -707,7 +795,7 @@ class IRAnswer extends React.Component {
                             irStyles[`color-${selectedQuestion.color.replace('#', '')}`])}
                     >
                         <div className={styles.answerMessages}>
-                            {answer.messages.map((message, index) => (
+                            {this.state.messages.map((message, index) => (
                                 <FormattedHTMLMessage
                                     key={index}
                                     tagName="span"
