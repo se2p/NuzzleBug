@@ -7,7 +7,7 @@ import ScratchBlocks from 'scratch-blocks';
 import VirtualMachine from 'scratch-vm';
 
 import {
-    QuestionProvider,
+    QuestionHierarchyProvider,
     AnswerProviderV2 as AnswerProvider
 } from 'scratch-ir';
 
@@ -141,7 +141,7 @@ class IRDebugger extends React.Component {
     calculateQuestionHierarchy () {
         try {
             this.crashed = false;
-            const questionProvider = new QuestionProvider(
+            const questionHierarchyProvider = new QuestionHierarchyProvider(
                 this.props.vm,
                 this.allTraces,
                 this.relevantObservedTraces,
@@ -149,7 +149,7 @@ class IRDebugger extends React.Component {
                 this.block,
                 this.translate
             );
-            this.questionHierarchy = questionProvider.generateQuestionHierarchy();
+            this.questionHierarchy = questionHierarchyProvider.generateQuestionHierarchy();
         } catch {
             this.crashed = true;
         }
