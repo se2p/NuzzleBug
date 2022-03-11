@@ -243,11 +243,11 @@ class IRAnswer extends React.Component {
             const svgGraphNodeChildren = Array.from(svgGraphNode.children);
             if (block.isStackBlock) {
                 const svgBlock = svgGraphNodeChildren.find(n => n.nodeName === 'svg');
-                svgBlock.addEventListener('click', () => this.props.onGraphNodeClick(block.id));
+                svgBlock.addEventListener('click', () => this.props.onGraphNodeClick(graphNode));
                 this.props.setCursorOfBlock(svgBlock, 'pointer');
                 const redBlockBorder = svgGraphNodeChildren.find(n => n.id === 'red-block-border');
                 if (redBlockBorder) {
-                    redBlockBorder.addEventListener('click', () => this.props.onGraphNodeClick(block.id));
+                    redBlockBorder.addEventListener('click', () => this.props.onGraphNodeClick(graphNode));
                     this.props.setCursorOfBlock(redBlockBorder, 'pointer');
                 }
             }
@@ -809,7 +809,7 @@ class IRAnswer extends React.Component {
                         src={cat}
                     />
                 </div>
-                {answer.graph ? (
+                {answer.graph && answer.graph.getAllNodes().length > 0 ? (
                     <div className={styles.blockArea}>
                         <div
                             id="graph"

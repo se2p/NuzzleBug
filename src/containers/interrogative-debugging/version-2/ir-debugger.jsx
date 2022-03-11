@@ -373,18 +373,24 @@ class IRDebugger extends React.Component {
         this.forceUpdate();
     }
 
-    handleGraphNodeClick (blockId) {
-        if (this.currentBlockId !== blockId) {
+    handleGraphNodeClick (graphNode) {
+        if (this.currentBlockId !== graphNode.block.id) {
             this.previousBlocks.push({
                 id: this.currentBlockId,
                 selectedQuestion: this.selectedQuestion,
                 traceCount: this.relevantObservedTraces.length,
+                selectedBlockExecution: this.selectedBlockExecution,
                 target: this.target
             });
-            this.currentBlockId = blockId;
+            this.currentBlockId = graphNode.block.id;
             this.selectedQuestion = null;
+            this.selectedBlockExecution = null;
             this.answer = null;
             this.update();
+            if (graphNode.trace) {
+                const blockExecution = this.blockExecutionOptions.find(o => o.uniqueId === graphNode.trace.uniqueId);
+                this.handleSelectedBlockExecutionChange(blockExecution);
+            }
             this.forceUpdate();
         }
     }
@@ -393,6 +399,7 @@ class IRDebugger extends React.Component {
         if (this.previousBlocks.length > 0) {
             const previousBlock = this.previousBlocks.pop();
             this.currentBlockId = previousBlock.id;
+            this.selectedBlockExecution = previousBlock.selectedBlockExecution;
             this.target = previousBlock.target;
             this.relevantObservedTraces = this.allObservedTraces.slice(0, previousBlock.traceCount);
             this.update();
