@@ -279,7 +279,7 @@ class IRAnswer extends React.Component {
         if (!targetForBlock) {
             targetForBlock = this.target;
         }
-        const color = this.targetColors[targetForBlock.id];
+        const color = this.targetColors[targetForBlock.id] ? this.targetColors[targetForBlock.id] : 'transparent';
         const title = targetForBlock.isStage ?
             this._translate('block.from.stage') :
             this._translate('block.from.sprite', {sprite: targetForBlock.getName()});

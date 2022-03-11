@@ -296,6 +296,7 @@
         "next" :  ", next ",
         "and-then" :  " and afterwards ",
         "and-thereby": " and thereby ",
+        "and-because" :  " and because ",
         "dot": ".",
         "comma": ", ",
         "draw-attention-to-block-answers": "<br>Do you need an explanation for a block? Then click on the <div style=\"display: inline-block; margin-top: 3px; padding: 0 4.5px; border: 1.4px solid #575E75; border-radius: 15px;\">?</div> next to it!",
@@ -403,7 +404,8 @@
         "list-replace": "the item at position {index} was replaced by {item}",
         "list-delete-at": "the item at position {index} was deleted",
         "list-delete-all": "all items were deleted",
-        "initial-value": "the initial value was {initialValue}"
+        "initial-value": "the initial value was {initialValue}",
+        "initial-visibility": "the initial visibility was <i>{initialVisibility}</i>"
     },
     "variable": {
         "x-position": "x position",
@@ -413,7 +415,8 @@
         "backdrop-name": "backdrop-name",
         "backdrop-number": "backdrop-number",
         "costume-name": "costume-name",
-        "costume-number": "costume-number"
+        "costume-number": "costume-number",
+        "visibility": "visibility"
     },
     "attribute": {
         "position": "the position",
@@ -491,6 +494,10 @@
         "closing-bracket": ")",
         "compare": "<i>{operand1} {operator} {operand2}</i>",
         "contains": "<i>{operand1} contains {operand2}?</i>"
+    },
+    "visibility": {
+        "visible": "visible",
+        "invisible": "invisible"
     },
     "block": {
         "from": {

@@ -84,8 +84,13 @@ class IRDebugger extends React.Component {
 
         let blockWidth;
         if (svgGroup.getAttribute('data-shapes') === 'reporter round') {
-            this._addGreenFlag(svgGroup);
             blockWidth = (block.width * scaleFactor) + 25;
+            if (svgGroup.getAttribute('id') === 'visibility') {
+                this._addOffsetToBackground(svgGroup, 35);
+                this._addOffsetToTextNodes(svgGroup, 17.5);
+                blockWidth += 25;
+            }
+            this._addGreenFlag(svgGroup);
             svgBlock.setAttribute('y', '5');
         } else {
             const backgroundPath = Array.from(svgGroup.childNodes)

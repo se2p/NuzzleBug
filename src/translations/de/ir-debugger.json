@@ -296,6 +296,7 @@
         "next" :  ", danach ",
         "and-then" :  " und anschließend ",
         "and-thereby": " und dadurch ",
+        "and-because" :  " und weil ",
         "dot": ".",
         "comma": ", ",
         "draw-attention-to-block-answers": "<br>Brauchst du eine Erklärung für einen Block? Dann klicke auf das <div style=\"display: inline-block; margin-top: 3px; padding: 0 4.5px; border: 1.4px solid #575E75; border-radius: 15px;\">?</div> daneben!",
@@ -403,7 +404,8 @@
         "list-replace": "das {index}. Element durch {item} ersetzt wurde",
         "list-delete-at": "das {index}. Element gelöscht wurde",
         "list-delete-all": "alle Elemente gelöscht wurden",
-        "initial-value": "der Wert am Anfang {initialValue} war"
+        "initial-value": "der Wert am Anfang {initialValue} war",
+        "initial-visibility": "die Sichtbarkeit am Anfang <i>{initialVisibility}</i> war"
     },
     "variable": {
         "x-position": "x-Position",
@@ -413,7 +415,8 @@
         "backdrop-name": "Bühnenbild-Name",
         "backdrop-number": "Bühnenbild-Nummer",
         "costume-name": "Kostüm-Name",
-        "costume-number": "Kostüm-Nummer"
+        "costume-number": "Kostüm-Nummer",
+        "visibility": "Sichtbarkeit"
     },
     "attribute": {
         "position": "die Position",
@@ -491,6 +494,10 @@
         "closing-bracket": ")",
         "compare": "<i>{operand1} {operator} {operand2}</i>",
         "contains": "<i>{operand1} enthält {operand2}?</i>"
+    },
+    "visibility": {
+        "visible": "sichtbar",
+        "invisible": "unsichtbar"
     },
     "block": {
         "from": {
