@@ -409,7 +409,8 @@
         "clone-start-value": "der Wert bei der Erzeugung des Klons {initialValue} war",
         "clone-start-visibility": "die ursprüngliche Figur <i>{initialVisibility}</i> war, als der Klon erzeugt wurde und der Klon diese Eigenschaft übernommen hat",
         "observation-start-value": "der Wert zu Beginn der Beobachtung {initialValue} war",    
-        "observation-start-visibility": "die Sichtbarkeit zu Beginn der Beobachtung <i>{initialVisibility}</i> war"
+        "observation-start-visibility": "die Sichtbarkeit zu Beginn der Beobachtung <i>{initialVisibility}</i> war",
+        "procedure-call": "dein eigener Block <i>{proccode}</i> aufgerufen wurde"
     },
     "variable": {
         "x-position": "x-Position",

@@ -409,7 +409,8 @@
         "clone-start-value": "the value was {initialValue} when the clone was created",
         "clone-start-visibility": "the original sprite was <i>{initialVisibility}</i> when the clone was created and the clone inherited this property",
         "observation-start-value": "the value at the observation start was {initialValue}",
-        "observation-start-visibility": "the visibility at the observation start was <i>{initialVisibility}</i>"
+        "observation-start-visibility": "the visibility at the observation start was <i>{initialVisibility}</i>",
+        "procedure-call": "the procedure <i>{proccode}</i> was called"
     },
     "variable": {
         "x-position": "x position",
