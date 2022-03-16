@@ -115,7 +115,9 @@ class IRDebugger extends React.Component {
 
             this.updateRelevantObservedTraces();
             this.calculateQuestionHierarchy();
-            this.initAnswerProvider();
+            if (this.questionHierarchy.length) {
+                this.initAnswerProvider();
+            }
         } else {
             this.props.onClose();
             this.cancel = true;
@@ -193,20 +195,26 @@ class IRDebugger extends React.Component {
         const blocks = this.targetOrigin.blocks._blocks;
 
         if (!this.target.isOriginal) {
-            // Remove traces where the clone did not exist.
-            traces = traces.filter((t, index) =>
-                t.targetsInfo[this.target.id] ||
-                (EventFilter.cloneStart(t) && traces[index + 1].targetsInfo[this.target.id])
-            );
+            const createCloneTrace = traces.find(trace =>
+                EventFilter.cloneCreate(trace) && trace.targetsInfo[this.target.id]);
+            let firstCloneTraceIndex = traces.indexOf(createCloneTrace);
+            const startAsCloneTrace = traces.find((trace, index) =>
+                EventFilter.cloneStart(trace) && traces[index + 1].uniqueId === createCloneTrace.uniqueId);
+            if (startAsCloneTrace) {
+                // Overwrite the targetsInfo of the 'control_start_as_clone' trace
+                // with the targetsInfo of the 'control_create_clone_of' trace,
+                // because it is empty otherwise.
+                startAsCloneTrace.targetsInfo = createCloneTrace.targetsInfo;
+                
+                firstCloneTraceIndex = traces.indexOf(startAsCloneTrace);
+            }
 
-            // Overwrite the targetsInfo of the 'control_start_as_clone' trace
-            // with the targetsInfo of the 'control_create_clone_of' trace.
-            const startAsCloneTrace = traces[0];
-            const createCloneTrace = traces[1];
-            startAsCloneTrace.targetsInfo = createCloneTrace.targetsInfo;
+            // Remove traces where the clone did not exist.
+            traces = traces.filter((trace, index) =>
+                index >= firstCloneTraceIndex && trace.targetsInfo[this.target.id]);
 
             // Remove the 'control_create_clone_of' trace.
-            traces.splice(1, 1);
+            traces = traces.filter(trace => trace.uniqueId !== createCloneTrace.uniqueId);
         }
 
         // Remove all traces of blocks attached to irrelevant events.

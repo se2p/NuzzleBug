@@ -405,7 +405,11 @@
         "list-delete-at": "das {index}. Element gelöscht wurde",
         "list-delete-all": "alle Elemente gelöscht wurden",
         "initial-value": "der Wert am Anfang {initialValue} war",
-        "initial-visibility": "die Sichtbarkeit am Anfang <i>{initialVisibility}</i> war"
+        "initial-visibility": "die Sichtbarkeit am Anfang <i>{initialVisibility}</i> war",
+        "clone-start-value": "der Wert bei der Erzeugung des Klons {initialValue} war",
+        "clone-start-visibility": "die ursprüngliche Figur <i>{initialVisibility}</i> war, als der Klon erzeugt wurde und der Klon diese Eigenschaft übernommen hat",
+        "observation-start-value": "der Wert zu Beginn der Beobachtung {initialValue} war",    
+        "observation-start-visibility": "die Sichtbarkeit zu Beginn der Beobachtung <i>{initialVisibility}</i> war"
     },
     "variable": {
         "x-position": "x-Position",

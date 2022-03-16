@@ -38,8 +38,9 @@ class Controls extends React.Component {
             if (!this.props.isStarted) {
                 this.props.vm.start();
             }
-            this.props.vm.greenFlag();
             this.activateQuestionGeneration();
+            this.props.vm.runtime.questionGeneration.traceStart = 0;
+            this.props.vm.greenFlag();
         }
     }
     handleStepOver (e) {
