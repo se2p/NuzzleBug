@@ -303,7 +303,11 @@
         "positive": {
             "block-executed": " und dadurch der <i>{blockType}-Block</i> ausgeführt wurde.",
             "block-executed-with-value": " und dadurch der <i>{blockType}-Block</i> mit dem Wert <i>{value}</i> ausgeführt wurde.",
-            "multiple-behavior-blocks": ", weil die Ausführung von {count} <i>{blockType}-Blöcken</i> dazu geführt hat."
+            "block-executed-with-rotation-style": " und dadurch der <i>{blockType}-Block</i> mit dem Drehtyp <i>{rotationStyle}</i> ausgeführt wurde.",
+            "block-executed-with-value-with-rotation-style": " und dadurch der <i>{blockType}-Block</i> mit dem Wert <i>{value}</i> und dem Drehtyp <i>{rotationStyle}</i> ausgeführt wurde.",
+            "multiple-behavior-blocks": ", weil die Ausführung von {count} <i>{blockType}-Blöcken</i> dazu geführt hat.",
+            "turn-right": "der <i>{blockType}-Block</i> zu einer Änderung der Richtung von einem negativen zu einem positiven Wert geführt hat und weil der Drehtyp 'links-rechts' war. ",
+            "turn-left": "der <i>{blockType}-Block</i> zu einer Änderung der Richtung von einem positiven zu einem negativen Wert geführt hat und weil der Drehtyp 'links-rechts' war. "
         },
         "negative": {
             "execution-stopped": ", weil die Ausführung gestoppt wurde",
@@ -320,6 +324,12 @@
             "some-behavior-blocks-executed-wrong-input": ", weil alle ausgeführten <i>{blockType}-Blöcke</i> nicht mit dem Wert <i>{expectedInput}</i> aufgerufen wurden.",
             "one-behavior-block-executed-no-change": ", weil der ausgeführte <i>{blockType}-Block</i> {attribute} nicht verändert hat.",
             "some-behavior-blocks-executed-no-change": ", weil alle ausgeführten <i>{blockType}-Blöcke</i> {attribute} nicht verändert haben.",
+            "one-behavior-block-executed-not-turn-positive": ", weil der <i>{blockType}-Block</i> nicht mit einem positiven Wert ausgeführt wurde.",
+            "one-behavior-block-executed-not-turn-negative": ", weil der <i>{blockType}-Block</i> nicht mit einem negativen Wert ausgeführt wurde.",
+            "one-behavior-block-executed-rotation-style": ", weil der <i>{blockType}-Block</i> mit dem Drehtyp <i>{rotationStyle}</i> ausgeführt wurde.",
+            "one-behavior-block-executed-wrong-rotation-style": ", weil der <i>{blockType}-Block</i> nicht mit dem Drehtyp <i>{rotationStyle}</i> ausgeführt wurde.",
+            "one-behavior-block-executed-no-left-to-right-direction-change": ", weil der ausgeführte <i>{blockType}-Block</i> die Richtung nicht von einem negativen zu einem positiven Wert geändert hat.",
+            "one-behavior-block-executed-no-right-to-left-direction-change": ", weil der ausgeführte <i>{blockType}-Block</i> die Richtung nicht von einem positiven zu einem negativen Wert geändert hat.",
             "one-behavior-block-unexecuted": " Ein anderer <i>{blockType}-Block</i>, der dazu führen würde, wurde nicht ausgeführt.",
             "one-possible-behavior-block-unexecuted": " Ein anderer <i>{blockType}-Block</i>, der dazu führen könnte, wurde nicht ausgeführt.",
             "some-behavior-blocks-unexecuted": " {count} andere <i>{blockType}-Blöcke</i>, die dazu führen würden, wurden nicht ausgeführt.",
@@ -458,6 +468,7 @@
         "set-direction": "setze-Richtung",
         "point-towards": "drehe-dich",
         "turn": "drehe-dich",
+        "set-rotation-style": "setze-Drehtyp",
         "say": "sage",
         "think": "denke",
         "ask": "frage",
@@ -510,6 +521,11 @@
             "stage": "Block von der Bühne"
         },
         "general-event": "Allgemeines Ereignis"
+    },
+    "rotation-style": {
+        "all-around": "rundherum",
+        "left-right": "links-rechts",
+        "no-rotation": "nicht drehen"
     },
     "execution":"Ausführung",
     "execution-stopped": "Ausführung gestoppt",

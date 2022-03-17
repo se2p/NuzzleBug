@@ -302,8 +302,12 @@
         "draw-attention-to-block-answers": "<br>Do you need an explanation for a block? Then click on the <div style=\"display: inline-block; margin-top: 3px; padding: 0 4.5px; border: 1.4px solid #575E75; border-radius: 15px;\">?</div> next to it!",
         "positive": {
             "block-executed": " and thereby the <i>{blockType}-block</i> was executed.",
-            "block-executed-with-value": " and thereby the <i>{blockType}-block</i> with value <i>{value}</i> was executed.",
-            "multiple-behavior-blocks": ", because the execution of {count} <i>{blockType}-blocks</i> caused this behavior."
+            "block-executed-with-value": " and thereby the <i>{blockType}-block</i> was executed with value <i>{value}</i>.",
+            "block-executed-with-rotation-style": " and thereby the <i>{blockType}-block</i> was executed with rotation style <i>{rotationStyle}</i>.",
+            "block-executed-with-value-with-rotation-style": " and thereby the <i>{blockType}-block</i> was executed with value <i>{value}</i> and with rotation style <i>{rotationStyle}</i>.",
+            "multiple-behavior-blocks": ", because the execution of {count} <i>{blockType}-blocks</i> caused this behavior.",
+            "turn-right": "the <i>{blockType}-block</i> changed the direction from a negative to a positive value and because the rotation style was 'left-right'. ",
+            "turn-left": "the <i>{blockType}-block</i> changed the direction from a positive to a negative value and because the rotation style was 'left-right'. "
         },
         "negative": {
             "execution-stopped": ", because the execution was stopped",
@@ -320,6 +324,12 @@
             "some-behavior-blocks-executed-wrong-input": ", because none of the executed <i>{blockType}-blocks</i> was called with value <i>{expectedInput}</i>.",
             "one-behavior-block-executed-no-change": ", because the executed <i>{blockType}-block</i> didn't change {attribute}.",
             "some-behavior-blocks-executed-no-change": ", because none of the executed <i>{blockType}-blocks</i> changed {attribute}.",
+            "one-behavior-block-executed-not-turn-positive": ", because the <i>{blockType}-block</i> wasn't executed with a positive value.",
+            "one-behavior-block-executed-not-turn-negative": ", because the <i>{blockType}-block</i> wasn't executed with a negative value.",
+            "one-behavior-block-executed-rotation-style": ", because the <i>{blockType}-block</i> was executed with the rotation style <i>{rotationStyle}</i>.",
+            "one-behavior-block-executed-wrong-rotation-style": ", because the <i>{blockType}-block</i> was not executed with the rotation style <i>{rotationStyle}</i>.",
+            "one-behavior-block-executed-no-left-to-right-direction-change": ", because the executed <i>{blockType}-block</i> didn't change the direction from a negative to a positive value.",
+            "one-behavior-block-executed-no-right-to-left-direction-change": ", because the executed <i>{blockType}-block</i> didn't change the direction from a positive to a negative value.",
             "one-behavior-block-unexecuted": " Another <i>{blockType}-block</i> that would lead to the behavior was not executed.",
             "one-possible-behavior-block-unexecuted": " Another <i>{blockType}-block</i> that could lead to the behavior was not executed.",
             "some-behavior-blocks-unexecuted": " {count} other <i>{blockType}-blocks</i> that would lead to the behavior were not executed.",
@@ -458,6 +468,7 @@
         "set-direction": "point-in-direction",
         "point-towards": "point-towards",
         "turn": "turn",
+        "set-rotation-style": "set-rotation-style",
         "say": "say",
         "think": "think",
         "ask": "ask",
@@ -510,6 +521,11 @@
             "stage": "Block from the stage"
         },
         "general-event": "General event"
+    },
+    "rotation-style": {
+        "all-around": "all around",
+        "left-right": "left-right",
+        "no-rotation": "don't rotate"
     },
     "execution": "execution",
     "execution-stopped": "execution stopped",
