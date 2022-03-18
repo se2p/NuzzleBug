@@ -344,10 +344,10 @@ class Blocks extends React.Component {
         this.workspace.setBreakpointHit(data, false);
     }
     onAddBlockArrow (data) {
-        this.workspace.setArrowVisibility(data, true);
+        this.workspace.setArrowVisibility(data.blockId, true, data.color);
     }
     onRemoveBlockArrow (data) {
-        this.workspace.setArrowVisibility(data, false);
+        this.workspace.setArrowVisibility(data.blockId, false, data.color);
     }
     onVisualReport (data) {
         this.workspace.reportValue(data.id, data.value);
