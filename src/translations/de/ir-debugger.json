@@ -364,6 +364,7 @@
     "reason": {
         "flag-clicked": "die grüne Flagge angeklickt wurde",
         "not-flag-clicked": "die grüne Flagge nicht angeklickt wurde",
+        "not-flag-clicked-irrelevant": "ein Klon nicht auf das Event <i>Wenn die grüne Flagge angeklickt wird</i> reagiert",
         "sprite-clicked": "die Figur <i>{sprite}</i> angeklickt wurde",
         "not-sprite-clicked": "die Figur <i>{sprite}</i> nicht angeklickt wurde",
         "stage-clicked": "die Bühne angeklickt wurde",
@@ -378,6 +379,7 @@
         "not-clone-created": "kein Klon von Figur <i>{sprite}</i> erzeugt wurde",
         "clone-started": "die Figur <i>{sprite}</i> als Klon entstanden ist",
         "not-clone-started": "die Figur <i>{sprite}</i> nicht als Klon entstanden ist",
+        "not-clone-started-irrelevant": "eine Original-Figur nicht auf das Event <i>Wenn ich als Klon entstehe</i> reagiert",
         "backdrop-switched": "das Bühnenbild zu <i>{backdrop}</i> gewechselt hat",
         "not-backdrop-switched": "das Bühnenbild nicht zu <i>{backdrop}</i> gewechselt hat",
         "loudness-greater-than": "die Lautstärke größer als {value} war",

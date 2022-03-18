@@ -364,6 +364,7 @@
     "reason": {
         "flag-clicked": "the green flag was clicked",
         "not-flag-clicked": "the green flag wasn't clicked",
+        "not-flag-clicked-irrelevant": "a clone does not react to the event <i>when green flag clicked</i>",
         "sprite-clicked": "the sprite <i>{sprite}</i> was clicked",
         "not-sprite-clicked": "the sprite <i>{sprite}</i> wasn't clicked",
         "stage-clicked": "the stage was clicked",
@@ -378,6 +379,7 @@
         "not-clone-created": "a clone of sprite <i>{sprite}</i> wasn't created",
         "clone-started": "the sprite <i>{sprite}</i> started as a clone",
         "not-clone-started": "the sprite <i>{sprite}</i> didn't start as a clone",
+        "not-clone-started-irrelevant": "an original sprite does not react to the event <i>when I start as a clone</i>",
         "backdrop-switched": "the backdrop switched to <i>{backdrop}</i>",
         "not-backdrop-switched": "the backdrop didn't switch to <i>{backdrop}</i>",
         "loudness-greater-than": "the loudness was greater than {value}",
