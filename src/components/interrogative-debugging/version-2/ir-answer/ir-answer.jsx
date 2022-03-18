@@ -275,14 +275,15 @@ class IRAnswer extends React.Component {
         const blockId = graphNode.block.id;
         const block = this._getScratchBlock(blockId);
         const executionInfo = this._getNodeExecutionInfo(graphNode);
-        let targetForBlock = targetForBlockId(this.targets, blockId);
-        if (!targetForBlock) {
-            targetForBlock = this.target;
+        const targetForBlock = targetForBlockId(this.targets, blockId);
+        let color = 'transparent';
+        let title = '';
+        if (targetForBlock) {
+            color = this.targetColors[targetForBlock.id] ? this.targetColors[targetForBlock.id] : 'transparent';
+            title = targetForBlock.isStage ?
+                this._translate('block.from.stage') :
+                this._translate('block.from.sprite', {sprite: targetForBlock.getName()});
         }
-        const color = this.targetColors[targetForBlock.id] ? this.targetColors[targetForBlock.id] : 'transparent';
-        const title = targetForBlock.isStage ?
-            this._translate('block.from.stage') :
-            this._translate('block.from.sprite', {sprite: targetForBlock.getName()});
         const background = {color, title};
         const svgBlock = this.props.createSvgBlock(block, scaleFactor, executionInfo, background);
         const width = Number(svgBlock.getAttribute('width').split('px')[0]);
@@ -458,8 +459,10 @@ class IRAnswer extends React.Component {
                     this._dashPath(pathNode);
                     this._addCrossOutLine(svgGraphEdge, edge.line);
                 }
-                const text = this._translate(`condition.${executionInfo.condition.requiredValue}`);
-                this._addEdgeLabel(svgGraphEdge, edge, text, executionInfo, true);
+                if (executionInfo.condition.requiredValue) {
+                    const text = this._translate(`condition.${executionInfo.condition.requiredValue}`);
+                    this._addEdgeLabel(svgGraphEdge, edge, text, executionInfo, true);
+                }
             }
             if (executionInfo.times > 1) {
                 const text = `${executionInfo.times}x`;

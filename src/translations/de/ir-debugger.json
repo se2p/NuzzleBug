@@ -335,7 +335,9 @@
             "some-behavior-blocks-unexecuted": " {count} andere <i>{blockType}-Blöcke</i>, die dazu führen würden, wurden nicht ausgeführt.",
             "some-possible-behavior-blocks-unexecuted": " {count} andere <i>{blockType}-Blöcke</i>, die dazu führen könnten, wurden nicht ausgeführt.",
             "variable-value-set-but-changed-afterwards": "Die Variable wurde auf {value} gesetzt, aber danach wieder verändert.",
-            "list-item-removed": "<i>{item}</i> war in der Liste enthalten, wurde aber gelöscht."
+            "list-item-removed": "<i>{item}</i> war in der Liste enthalten, wurde aber gelöscht.",
+            "block-not-reachable": ", weil der Block, der dazu führen könnte, nicht erreichbar ist!",
+            "blocks-not-reachable": ", weil kein Block, der dazu führen könnte, erreichbar ist!"
         },
         "operator": {
             "variable-have-value": "<i>{variable}<i> den Wert <i>{value}</i> hatte",
