@@ -305,7 +305,7 @@
             "block-executed-with-value": " and thereby the <i>{blockType}-block</i> was executed with value <i>{value}</i>.",
             "block-executed-with-rotation-style": " and thereby the <i>{blockType}-block</i> was executed with rotation style <i>{rotationStyle}</i>.",
             "block-executed-with-value-with-rotation-style": " and thereby the <i>{blockType}-block</i> was executed with value <i>{value}</i> and with rotation style <i>{rotationStyle}</i>.",
-            "multiple-behavior-blocks": ", because the execution of {count} <i>{blockType}-blocks</i> caused this behavior.",
+            "multiple-behavior-blocks": "the execution of {count} <i>{blockType}-blocks</i> caused this behavior.",
             "turn-right": "the <i>{blockType}-block</i> changed the direction from a negative to a positive value and because the rotation style was 'left-right'. ",
             "turn-left": "the <i>{blockType}-block</i> changed the direction from a positive to a negative value and because the rotation style was 'left-right'. "
         },
