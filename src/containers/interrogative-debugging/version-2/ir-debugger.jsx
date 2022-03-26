@@ -170,12 +170,6 @@ class IRDebugger extends React.Component {
         );
     }
 
-    updateAnswerProvider () {
-        this.answerProvider.setRelevantTraces(this.relevantObservedTraces);
-        this.answerProvider.target = this.target;
-        this.answerProvider.blockId = this.currentBlockId;
-    }
-
     translate (id, values) {
         return this.props.intl.formatMessage({id: `gui.ir-debugger.${id}`}, values);
     }
@@ -372,7 +366,6 @@ class IRDebugger extends React.Component {
     answerQuestion () {
         try {
             this.crashed = false;
-            this.updateAnswerProvider();
             this.answer = this.answerProvider.generateAnswer(this.selectedQuestion);
         } catch {
             this.crashed = true;
