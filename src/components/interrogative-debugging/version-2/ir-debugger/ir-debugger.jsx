@@ -86,9 +86,12 @@ class IRDebugger extends React.Component {
         if (svgGroup.getAttribute('data-shapes') === 'reporter round') {
             blockWidth = (block.width * scaleFactor) + 25;
             if (svgGroup.getAttribute('id') === 'visibility') {
-                this._addOffsetToBackground(svgGroup, 35);
-                this._addOffsetToTextNodes(svgGroup, 17.5);
-                blockWidth += 25;
+                const dropDownNodes = Array.from(svgGroup.childNodes)
+                    .filter(node => node.getAttribute('data-argument-type') === 'dropdown');
+                dropDownNodes.forEach(dropDownNode => svgGroup.removeChild(dropDownNode));
+                this._addOffsetToBackground(svgGroup, -110);
+                this._addOffsetToTextNodes(svgGroup, 0);
+                blockWidth -= 75;
             }
             this._addStartValueIcon(svgGroup, executionInfo);
             svgBlock.setAttribute('y', '5');
