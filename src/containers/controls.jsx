@@ -16,6 +16,7 @@ class Controls extends React.Component {
         bindAll(this, [
             'handleGreenFlagClick',
             'handlePauseResumeClick',
+            'handleStepBack',
             'handleStepOver',
             'handleStopAllClick',
             'handleToggleQuestionGenerationClick'
@@ -41,6 +42,12 @@ class Controls extends React.Component {
             this.activateQuestionGeneration();
             this.props.vm.runtime.questionGeneration.traceStart = 0;
             this.props.vm.greenFlag();
+        }
+    }
+    handleStepBack (e) {
+        e.preventDefault();
+        if ((this.props.projectRunning && this.props.projectPaused) || !this.props.projectRunning) {
+            this.props.vm.stepBack();
         }
     }
     handleStepOver (e) {
@@ -131,6 +138,7 @@ class Controls extends React.Component {
                 questionGenerationActive={questionGenerationActive}
                 vm={vm}
                 onGreenFlagClick={this.handleGreenFlagClick}
+                onStepBackClick={this.handleStepBack}
                 onStepOverClick={this.handleStepOver}
                 onPauseResumeClick={this.handlePauseResumeClick}
                 onStopAllClick={this.handleStopAllClick}

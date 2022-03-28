@@ -2,15 +2,17 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import VM from 'scratch-vm';
 
 import GreenFlag from '../green-flag/green-flag.jsx';
 import PauseResume from '../pause-resume/pause-resume.jsx';
 import StepOver from '../step-over/step-over.jsx';
+import StepBack from '../step-back/step-back.jsx';
 import StopAll from '../stop-all/stop-all.jsx';
 import TurboMode from '../turbo-mode/turbo-mode.jsx';
 import IRQuestions from '../interrogative-debugging/version-1/ir-questions/ir-question-button.jsx';
 import ToggleQuestionGeneration, {QuestionGenerationState}
-from '../interrogative-debugging/version-2/toggle-question-generation/toggle-question-generation.jsx';
+    from '../interrogative-debugging/version-2/toggle-question-generation/toggle-question-generation.jsx';
 
 import styles from './controls.css';
 
@@ -29,6 +31,11 @@ const messages = defineMessages({
         id: 'gui.ir-debugger.controls.resume',
         defaultMessage: 'Resume',
         description: 'Resume button title'
+    },
+    stepBackTitle: {
+        id: 'gui.ir-debugger.controls.step-back',
+        defaultMessage: 'Step back',
+        description: 'Step back button title'
     },
     stepOverTitle: {
         id: 'gui.ir-debugger.controls.step-over',
@@ -65,10 +72,12 @@ const Controls = function (props) {
         onGreenFlagClick,
         onPauseResumeClick,
         onStopAllClick,
+        onStepBackClick,
         onStepOverClick,
         onIRQuestionsClick,
         onToggleQuestionGenerationClick,
         irDisabled,
+        vm,
         paused,
         turbo,
         interrogationSupported,
@@ -95,6 +104,13 @@ const Controls = function (props) {
                 title={intl.formatMessage(paused ? messages.resumeTitle : messages.pauseTitle)}
                 onClick={onPauseResumeClick}
             /> : null}
+            {interrogationSupported ? (<StepBack
+                vm={vm}
+                active={active}
+                paused={paused}
+                title={intl.formatMessage(messages.stepBackTitle)}
+                onClick={onStepBackClick}
+            />) : null}
             {interrogationSupported ? (<StepOver
                 active={active}
                 paused={paused}
@@ -134,6 +150,7 @@ Controls.propTypes = {
     intl: intlShape.isRequired,
     onGreenFlagClick: PropTypes.func.isRequired,
     onPauseResumeClick: PropTypes.func.isRequired,
+    onStepBackClick: PropTypes.func.isRequired,
     onStepOverClick: PropTypes.func.isRequired,
     onStopAllClick: PropTypes.func.isRequired,
     onIRQuestionsClick: PropTypes.func.isRequired,
@@ -141,6 +158,7 @@ Controls.propTypes = {
     irDisabled: PropTypes.bool,
     turbo: PropTypes.bool,
     interrogationSupported: PropTypes.bool,
+    vm: PropTypes.instanceOf(VM),
     questionGenerationState: PropTypes.oneOf(Object.values(QuestionGenerationState)).isRequired,
     questionGenerationActive: PropTypes.bool
 };

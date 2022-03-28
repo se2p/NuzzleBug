@@ -2,7 +2,8 @@
     "controls": {
         "pause": "Pause", 
         "resume": "Fortsetzen",
-        "step-over": "Nächsten Block ausführen", 
+        "step-back": "Schritt zurück", 
+        "step-over": "Schritt vorwärts", 
         "ir-questions": "Zeige Fragen",
         "activate-question-generation": "Beobachtung starten",
         "deactivate-question-generation": "Beobachtung stoppen",

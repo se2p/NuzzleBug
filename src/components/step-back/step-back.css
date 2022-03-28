@@ -1,0 +1,19 @@
+@import "../../css/colors.css";
+
+.stepBack {
+    width: 2rem;
+    height: 2rem;
+    padding: 0.375rem;
+    border-radius: 0.25rem;
+    user-select: none;
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+.stepBack:hover {
+    background-color: $motion-light-transparent;
+}
+
+.stepBack.enabled {
+    opacity: 1;
+}

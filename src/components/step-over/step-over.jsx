@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import icon from './icon--paw-steps.svg';
+import icon from './icon--step-over.svg';
 import styles from './step-over.css';
 
 const StepOverComponent = function (props) {
