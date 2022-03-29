@@ -37,9 +37,11 @@ class IRDebugger extends React.Component {
             'handleQuestionClick',
             'handleGraphNodeClick',
             'handleBackButtonClick',
+            'handleClose',
             'rerender',
             'translate'
         ]);
+        props.vm.storeLastTrace();
         this.init();
     }
 
@@ -82,9 +84,14 @@ class IRDebugger extends React.Component {
     }
 
     closeAndDisable () {
-        this.props.onClose();
+        this.handleClose();
         this.props.onDisable();
         this.cancel = true;
+    }
+
+    handleClose () {
+        this.props.vm.resetLastTrace();
+        this.props.onCloseDebugger();
     }
 
     initTraces () {
@@ -112,6 +119,9 @@ class IRDebugger extends React.Component {
             if (this.isBlockDebugger && !this.selectedBlockExecution && this.blockExecutionOptions.length > 0) {
                 this.selectedBlockExecution = this.blockExecutionOptions[0];
             }
+            if (this.selectedBlockExecution) {
+                this.props.vm.rewindToTrace(this.selectedBlockExecution);
+            }
 
             this.updateRelevantObservedTraces();
             this.calculateQuestionHierarchy();
@@ -119,7 +129,7 @@ class IRDebugger extends React.Component {
                 this.initAnswerProvider();
             }
         } else {
-            this.props.onClose();
+            this.handleClose();
             this.cancel = true;
         }
     }
@@ -317,7 +327,9 @@ class IRDebugger extends React.Component {
         this.update();
         if (this.selectedQuestion && this.categoriesContainQuestion(this.selectedQuestion, this.questionHierarchy)) {
             this.answerLoading = true;
-            this.answerQuestion();
+            setTimeout(() => {
+                this.answerQuestion();
+            }, 200);
         } else {
             this.selectedQuestion = null;
         }
@@ -437,6 +449,7 @@ class IRDebugger extends React.Component {
                 handleRefresh={this.rerender}
                 onBack={this.previousBlocks.length ? this.handleBackButtonClick : null}
                 crashed={this.crashed}
+                onClose={this.handleClose}
                 {...this.props}
             />
         );
@@ -454,7 +467,7 @@ IRDebugger.propTypes = {
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
     onDisable: PropTypes.func.isRequired,
-    onClose: PropTypes.func.isRequired,
+    onCloseDebugger: PropTypes.func.isRequired,
     onShrinkExpand: PropTypes.func.isRequired,
     onStartDrag: PropTypes.func.isRequired,
     onDrag: PropTypes.func.isRequired,
@@ -473,7 +486,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     onDisable: () => dispatch(disableDebugger()),
-    onClose: () => dispatch(closeDebugger()),
+    onCloseDebugger: () => dispatch(closeDebugger()),
     onShrinkExpand: () => dispatch(shrinkExpandDebugger()),
     onStartDrag: () => dispatch(startDragDebugger()),
     onDrag: (e_, data) => dispatch(dragDebugger(data.x, data.y)),
