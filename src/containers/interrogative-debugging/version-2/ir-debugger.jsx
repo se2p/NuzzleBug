@@ -8,7 +8,8 @@ import VirtualMachine from 'scratch-vm';
 
 import {
     QuestionHierarchyProvider,
-    AnswerProviderV2 as AnswerProvider
+    AnswerProviderV2 as AnswerProvider,
+    QuestionCategoryType
 } from 'scratch-ir';
 
 import {
@@ -43,6 +44,20 @@ class IRDebugger extends React.Component {
         ]);
         props.vm.storeLastTrace();
         this.init();
+    }
+
+    componentDidMount () {
+        this.mounted = true;
+    }
+
+    componentWillUnmount () {
+        this.mounted = false;
+    }
+
+    forceUpdateIfMounted () {
+        if (this.mounted) {
+            this.forceUpdate();
+        }
     }
 
     init () {
@@ -127,6 +142,9 @@ class IRDebugger extends React.Component {
             this.calculateQuestionHierarchy();
             if (this.questionHierarchy.length) {
                 this.initAnswerProvider();
+                if (this.isBlockDebugger && !this.selectedQuestion) {
+                    this.selectBlockExecutionQuestion();
+                }
             }
         } else {
             this.handleClose();
@@ -331,7 +349,7 @@ class IRDebugger extends React.Component {
                 this.answerQuestion();
             }, 200);
         } else {
-            this.selectedQuestion = null;
+            this.selectBlockExecutionQuestion();
         }
         this.forceUpdate();
     }
@@ -369,10 +387,19 @@ class IRDebugger extends React.Component {
         this.selectedQuestion = question;
         this.answer = null;
         this.answerLoading = true;
-        this.forceUpdate();
+        this.forceUpdateIfMounted();
         setTimeout(() => {
             this.answerQuestion();
         }, 200);
+    }
+
+    selectBlockExecutionQuestion () {
+        const executionCategory = this.questionHierarchy
+            .find(category => category.type === QuestionCategoryType.EXECUTION);
+        if (executionCategory) {
+            const executionQuestion = executionCategory.questionCategories[0].questions[0];
+            this.handleQuestionClick(executionQuestion);
+        }
     }
 
     answerQuestion () {
@@ -383,7 +410,7 @@ class IRDebugger extends React.Component {
             this.crashed = true;
         }
         this.answerLoading = false;
-        this.forceUpdate();
+        this.forceUpdateIfMounted();
     }
 
     handleGraphNodeClick (graphNode) {
