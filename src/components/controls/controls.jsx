@@ -11,8 +11,8 @@ import StepBack from '../step-back/step-back.jsx';
 import StopAll from '../stop-all/stop-all.jsx';
 import TurboMode from '../turbo-mode/turbo-mode.jsx';
 import IRQuestions from '../interrogative-debugging/version-1/ir-questions/ir-question-button.jsx';
-import ToggleQuestionGeneration, {QuestionGenerationState}
-    from '../interrogative-debugging/version-2/toggle-question-generation/toggle-question-generation.jsx';
+import ToggleObservation, {ObservationState}
+    from '../interrogative-debugging/version-2/toggle-observation/toggle-observation.jsx';
 
 import styles from './controls.css';
 
@@ -52,15 +52,15 @@ const messages = defineMessages({
         defaultMessage: 'Show Questions',
         description: 'Show questions button title'
     },
-    activateQuestionGeneration: {
-        id: 'gui.ir-debugger.controls.activate-question-generation',
-        defaultMessage: 'Activate question generation',
-        description: 'Activate question generation button title'
+    activateObservation: {
+        id: 'gui.ir-debugger.controls.activate-observation',
+        defaultMessage: 'Activate observation',
+        description: 'Activate observation button title'
     },
-    deactivateQuestionGeneration: {
-        id: 'gui.ir-debugger.controls.deactivate-question-generation',
-        defaultMessage: 'Deactivate question generation',
-        description: 'Deactivate question generation button title'
+    deactivateObservation: {
+        id: 'gui.ir-debugger.controls.deactivate-observation',
+        defaultMessage: 'Deactivate observation',
+        description: 'Deactivate observation button title'
     }
 });
 
@@ -75,14 +75,14 @@ const Controls = function (props) {
         onStepBackClick,
         onStepOverClick,
         onIRQuestionsClick,
-        onToggleQuestionGenerationClick,
+        onToggleObservationClick,
         irDisabled,
         vm,
         paused,
         turbo,
         interrogationSupported,
-        questionGenerationState,
-        questionGenerationActive,
+        observationState,
+        observationActive,
         ...componentProps
     } = props;
 
@@ -130,14 +130,14 @@ const Controls = function (props) {
                 onClick={onIRQuestionsClick}
                 title={intl.formatMessage(messages.irQuestionTitle)}
             /> : null}
-            {interrogationSupported ? (<ToggleQuestionGeneration
-                title={questionGenerationActive ?
-                    intl.formatMessage(messages.deactivateQuestionGeneration) :
-                    intl.formatMessage(messages.activateQuestionGeneration)
+            {interrogationSupported ? (<ToggleObservation
+                title={observationActive ?
+                    intl.formatMessage(messages.deactivateObservation) :
+                    intl.formatMessage(messages.activateObservation)
                 }
-                onClick={onToggleQuestionGenerationClick}
-                state={questionGenerationState}
-                active={questionGenerationActive}
+                onClick={onToggleObservationClick}
+                state={observationState}
+                active={observationActive}
             />) : null}
         </div>
     );
@@ -154,13 +154,13 @@ Controls.propTypes = {
     onStepOverClick: PropTypes.func.isRequired,
     onStopAllClick: PropTypes.func.isRequired,
     onIRQuestionsClick: PropTypes.func.isRequired,
-    onToggleQuestionGenerationClick: PropTypes.func.isRequired,
+    onToggleObservationClick: PropTypes.func.isRequired,
     irDisabled: PropTypes.bool,
     turbo: PropTypes.bool,
     interrogationSupported: PropTypes.bool,
     vm: PropTypes.instanceOf(VM),
-    questionGenerationState: PropTypes.oneOf(Object.values(QuestionGenerationState)).isRequired,
-    questionGenerationActive: PropTypes.bool
+    observationState: PropTypes.oneOf(Object.values(ObservationState)).isRequired,
+    observationActive: PropTypes.bool
 };
 
 Controls.defaultProps = {

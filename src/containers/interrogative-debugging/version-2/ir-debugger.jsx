@@ -205,10 +205,10 @@ class IRDebugger extends React.Component {
     calculateAllObservedTraces () {
         const vm = this.props.vm;
         let traces = this.allTraces;
-        if (vm.runtime.questionGeneration.active) {
-            traces = traces.slice(vm.runtime.questionGeneration.traceStart);
+        if (vm.runtime.observation.active) {
+            traces = traces.slice(vm.runtime.observation.traceStart);
         } else {
-            traces = traces.slice(vm.runtime.questionGeneration.traceStart, vm.runtime.questionGeneration.traceEnd);
+            traces = traces.slice(vm.runtime.observation.traceStart, vm.runtime.observation.traceEnd);
         }
         return traces;
     }

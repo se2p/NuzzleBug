@@ -6,8 +6,8 @@ import {connect} from 'react-redux';
 
 import ControlsComponent from '../components/controls/controls.jsx';
 import {
-    QuestionGenerationState
-} from '../components//interrogative-debugging/version-2/toggle-question-generation/toggle-question-generation.jsx';
+    ObservationState
+} from '../components//interrogative-debugging/version-2/toggle-observation/toggle-observation.jsx';
 import {viewCards} from '../reducers/interrogative-debugging/version-1/ir-cards.js';
 
 class Controls extends React.Component {
@@ -19,10 +19,10 @@ class Controls extends React.Component {
             'handleStepBack',
             'handleStepOver',
             'handleStopAllClick',
-            'handleToggleQuestionGenerationClick'
+            'handleToggleObservationClick'
         ]);
-        this.questionGenerationState = props.questionGenerationActive ?
-            QuestionGenerationState.ACTIVE : QuestionGenerationState.INACTIVE;
+        this.observationState = props.observationActive ?
+            ObservationState.ACTIVE : ObservationState.INACTIVE;
     }
     handleGreenFlagClick (e) {
         e.preventDefault();
@@ -39,8 +39,8 @@ class Controls extends React.Component {
             if (!this.props.isStarted) {
                 this.props.vm.start();
             }
-            this.activateQuestionGeneration();
-            this.props.vm.runtime.questionGeneration.traceStart = 0;
+            this.activateObservation();
+            this.props.vm.runtime.observation.traceStart = 0;
             this.props.vm.greenFlag();
         }
     }
@@ -90,26 +90,26 @@ class Controls extends React.Component {
     resetPauseResume () {
         this.props.vm.resumeExecution();
     }
-    handleToggleQuestionGenerationClick (e) {
+    handleToggleObservationClick (e) {
         e.preventDefault();
-        if (this.props.questionGenerationActive) {
-            this.deactivateQuestionGeneration();
+        if (this.props.observationActive) {
+            this.deactivateObservation();
         } else {
-            this.activateQuestionGeneration();
+            this.activateObservation();
         }
     }
-    activateQuestionGeneration () {
-        this.props.vm.activateQuestionGeneration();
-        this.setQuestionGenerationState(QuestionGenerationState.ACTIVATED);
-        setTimeout(() => this.setQuestionGenerationState(QuestionGenerationState.ACTIVE), 200);
+    activateObservation () {
+        this.props.vm.activateObservation();
+        this.setObservationState(ObservationState.ACTIVATED);
+        setTimeout(() => this.setObservationState(ObservationState.ACTIVE), 200);
     }
-    deactivateQuestionGeneration () {
-        this.props.vm.deactivateQuestionGeneration();
-        this.setQuestionGenerationState(QuestionGenerationState.DEACTIVATED);
-        setTimeout(() => this.setQuestionGenerationState(QuestionGenerationState.INACTIVE), 200);
+    deactivateObservation () {
+        this.props.vm.deactivateObservation();
+        this.setObservationState(ObservationState.DEACTIVATED);
+        setTimeout(() => this.setObservationState(ObservationState.INACTIVE), 200);
     }
-    setQuestionGenerationState (state) {
-        this.questionGenerationState = state;
+    setObservationState (state) {
+        this.observationState = state;
         this.forceUpdate();
     }
     render () {
@@ -122,7 +122,7 @@ class Controls extends React.Component {
             irDisabled,
             turbo,
             interrogationSupported,
-            questionGenerationActive,
+            observationActive,
             ...props
         } = this.props;
 
@@ -134,8 +134,8 @@ class Controls extends React.Component {
                 irDisabled={irDisabled}
                 turbo={turbo}
                 interrogationSupported={interrogationSupported}
-                questionGenerationState={this.questionGenerationState}
-                questionGenerationActive={questionGenerationActive}
+                observationState={this.observationState}
+                observationActive={observationActive}
                 vm={vm}
                 onGreenFlagClick={this.handleGreenFlagClick}
                 onStepBackClick={this.handleStepBack}
@@ -143,7 +143,7 @@ class Controls extends React.Component {
                 onPauseResumeClick={this.handlePauseResumeClick}
                 onStopAllClick={this.handleStopAllClick}
                 onIRQuestionsClick={handleIRQuestionsClick}
-                onToggleQuestionGenerationClick={this.handleToggleQuestionGenerationClick}
+                onToggleObservationClick={this.handleToggleObservationClick}
             />
         );
     }
@@ -157,7 +157,7 @@ Controls.propTypes = {
     projectRunning: PropTypes.bool.isRequired,
     turbo: PropTypes.bool.isRequired,
     interrogationSupported: PropTypes.bool.isRequired,
-    questionGenerationActive: PropTypes.bool.isRequired,
+    observationActive: PropTypes.bool.isRequired,
     vm: PropTypes.instanceOf(VM)
 };
 
@@ -168,7 +168,7 @@ const mapStateToProps = state => ({
     projectRunning: state.scratchGui.vmStatus.running,
     turbo: state.scratchGui.vmStatus.turbo,
     interrogationSupported: state.scratchGui.irDebugger.supported,
-    questionGenerationActive: state.scratchGui.vmStatus.questionGenerationActive
+    observationActive: state.scratchGui.vmStatus.observationActive
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -1,6 +1,6 @@
 @import "../../../../css/colors.css";
 
-.toggleQuestionGeneration {
+.toggleObservation {
     width: 2rem;
     height: 2rem;
     padding: 0.375rem;
@@ -10,21 +10,21 @@
     opacity: 1;
 }
 
-.toggleQuestionGeneration:hover {
+.toggleObservation:hover {
     background-color: $motion-light-transparent;
 }
 
-.toggleQuestionGeneration.active:hover, 
-.toggleQuestionGeneration.active {
+.toggleObservation.active:hover, 
+.toggleObservation.active {
     background-color: $motion-transparent;
 }
 
-.toggleQuestionGeneration.activated {
+.toggleObservation.activated {
     filter: invert(54%) sepia(98%) saturate(311%) hue-rotate(75deg) brightness(100%) contrast(85%);
     background-color: $motion-transparent;
 }
 
-.toggleQuestionGeneration.deactivated {
+.toggleObservation.deactivated {
     filter: invert(79%) sepia(72%) saturate(7318%) hue-rotate(332deg) brightness(105%) contrast(85%);
     background-color: $motion-transparent;
 }

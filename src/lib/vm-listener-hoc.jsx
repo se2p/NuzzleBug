@@ -14,7 +14,7 @@ import {
     setPauseState,
     setTurboState,
     setStartedState,
-    setQuestionGenerationActiveState
+    setObservationActiveState
 } from '../reducers/vm-status';
 import {showExtensionAlert} from '../reducers/alerts';
 import {updateMicIndicator} from '../reducers/mic-indicator';
@@ -56,8 +56,8 @@ const vmListenerHOC = function (WrappedComponent) {
             this.props.vm.on('PROJECT_START', this.props.onGreenFlag);
             this.props.vm.on('PERIPHERAL_CONNECTION_LOST_ERROR', this.props.onShowExtensionAlert);
             this.props.vm.on('MIC_LISTENING', this.props.onMicListeningUpdate);
-            this.props.vm.on('QUESTION_GENERATION_ACTIVE', this.props.onActivateQuestionGeneration);
-            this.props.vm.on('QUESTION_GENERATION_INACTIVE', this.props.onDeactivateQuestionGeneration);
+            this.props.vm.on('OBSERVATION_ACTIVE', this.props.onActivateObservation);
+            this.props.vm.on('OBSERVATION_INACTIVE', this.props.onDeactivateObservation);
 
         }
         componentDidMount () {
@@ -150,8 +150,8 @@ const vmListenerHOC = function (WrappedComponent) {
                 onTurboModeOff,
                 onTurboModeOn,
                 onShowExtensionAlert,
-                onActivateQuestionGeneration,
-                onDeactivateQuestionGeneration,
+                onActivateObservation,
+                onDeactivateObservation,
                 /* eslint-enable no-unused-vars */
                 ...props
             } = this.props;
@@ -178,8 +178,8 @@ const vmListenerHOC = function (WrappedComponent) {
         onTargetsUpdate: PropTypes.func.isRequired,
         onTurboModeOff: PropTypes.func.isRequired,
         onTurboModeOn: PropTypes.func.isRequired,
-        onActivateQuestionGeneration: PropTypes.func.isRequired,
-        onDeactivateQuestionGeneration: PropTypes.func.isRequired,
+        onActivateObservation: PropTypes.func.isRequired,
+        onDeactivateObservation: PropTypes.func.isRequired,
         projectChanged: PropTypes.bool,
         shouldUpdateTargets: PropTypes.bool,
         shouldUpdateProjectChanged: PropTypes.bool,
@@ -230,8 +230,8 @@ const vmListenerHOC = function (WrappedComponent) {
         onMicListeningUpdate: listening => {
             dispatch(updateMicIndicator(listening));
         },
-        onActivateQuestionGeneration: () => dispatch(setQuestionGenerationActiveState(true)),
-        onDeactivateQuestionGeneration: () => dispatch(setQuestionGenerationActiveState(false))
+        onActivateObservation: () => dispatch(setObservationActiveState(true)),
+        onDeactivateObservation: () => dispatch(setObservationActiveState(false))
     });
     return connect(
         mapStateToProps,

@@ -3,16 +3,16 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import icon from './icon--eye.svg';
-import styles from './toggle-question-generation.css';
+import styles from './toggle-observation.css';
 
-export const QuestionGenerationState = Object.freeze({
+export const ObservationState = Object.freeze({
     ACTIVE: 1,
     INACTIVE: 2,
     ACTIVATED: 3,
     DEACTIVATED: 4
 });
 
-const ToggleQuestionGenerationComponent = function (props) {
+const ToggleObservationComponent = function (props) {
     const {
         className,
         onClick,
@@ -25,11 +25,11 @@ const ToggleQuestionGenerationComponent = function (props) {
         <img
             className={classNames(
                 className,
-                styles.toggleQuestionGeneration,
+                styles.toggleObservation,
                 {
                     [styles.active]: active,
-                    [styles.activated]: state === QuestionGenerationState.ACTIVATED,
-                    [styles.deactivated]: state === QuestionGenerationState.DEACTIVATED
+                    [styles.activated]: state === ObservationState.ACTIVATED,
+                    [styles.deactivated]: state === ObservationState.DEACTIVATED
                 }
             )}
             draggable={false}
@@ -41,16 +41,16 @@ const ToggleQuestionGenerationComponent = function (props) {
     );
 };
 
-ToggleQuestionGenerationComponent.propTypes = {
+ToggleObservationComponent.propTypes = {
     className: PropTypes.string,
     onClick: PropTypes.func.isRequired,
     title: PropTypes.string,
     active: PropTypes.bool,
-    state: PropTypes.oneOf(Object.values(QuestionGenerationState)).isRequired
+    state: PropTypes.oneOf(Object.values(ObservationState)).isRequired
 };
 
-ToggleQuestionGenerationComponent.defaultProps = {
-    title: 'Toggle question generation'
+ToggleObservationComponent.defaultProps = {
+    title: 'Toggle observation'
 };
 
-export default ToggleQuestionGenerationComponent;
+export default ToggleObservationComponent;

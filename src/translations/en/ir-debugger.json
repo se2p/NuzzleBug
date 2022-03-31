@@ -5,8 +5,8 @@
         "step-back": "Step back", 
         "step-over": "Step over", 
         "ir-questions": "Show Questions",
-        "activate-question-generation": "Activate observation",
-        "deactivate-question-generation": "Deactivate observation",
+        "activate-observation": "Activate observation",
+        "deactivate-observation": "Deactivate observation",
         "open-debugger": "ask why..."
     },
     "header": {

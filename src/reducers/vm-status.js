@@ -2,14 +2,14 @@ const SET_RUNNING_STATE = 'scratch-gui/vm-status/SET_RUNNING_STATE';
 const SET_PAUSE_STATE = 'scratch-gui/vm-status/SET_PAUSED_STATE';
 const SET_TURBO_STATE = 'scratch-gui/vm-status/SET_TURBO_STATE';
 const SET_STARTED_STATE = 'scratch-gui/vm-status/SET_STARTED_STATE';
-const SET_QUESTION_GENERATION_ACTIVE_STATE = 'scratch-gui/vm-status/SET_QUESTION_GENERATION_ACTIVE_STATE';
+const SET_OBSERVATION_ACTIVE_STATE = 'scratch-gui/vm-status/SET_OBSERVATION_ACTIVE_STATE';
 
 const initialState = {
     running: false,
     started: false,
     paused: false,
     turbo: false,
-    questionGenerationActive: false
+    observationActive: false
 };
 
 const reducer = function (state, action) {
@@ -31,9 +31,9 @@ const reducer = function (state, action) {
         return Object.assign({}, state, {
             turbo: action.turbo
         });
-    case SET_QUESTION_GENERATION_ACTIVE_STATE:
+    case SET_OBSERVATION_ACTIVE_STATE:
         return Object.assign({}, state, {
-            questionGenerationActive: action.questionGenerationActive
+            observationActive: action.observationActive
         });
     default:
         return state;
@@ -69,10 +69,10 @@ const setTurboState = function (turbo) {
     };
 };
 
-const setQuestionGenerationActiveState = function (questionGenerationActive) {
+const setObservationActiveState = function (observationActive) {
     return {
-        type: SET_QUESTION_GENERATION_ACTIVE_STATE,
-        questionGenerationActive: questionGenerationActive
+        type: SET_OBSERVATION_ACTIVE_STATE,
+        observationActive: observationActive
     };
 };
 
@@ -83,5 +83,5 @@ export {
     setStartedState,
     setTurboState,
     setPauseState,
-    setQuestionGenerationActiveState
+    setObservationActiveState
 };
