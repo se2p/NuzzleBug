@@ -135,7 +135,7 @@ class IRDebugger extends React.Component {
                 this.selectedBlockExecution = this.blockExecutionOptions[0];
             }
             if (this.selectedBlockExecution) {
-                this.props.vm.rewindToTrace(this.selectedBlockExecution);
+                this.props.vm.rewindToTrace(this.selectedBlockExecution, false);
             }
 
             this.updateRelevantObservedTraces();
