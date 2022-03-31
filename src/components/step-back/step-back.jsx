@@ -22,7 +22,8 @@ const StepBackComponent = function (props) {
         const traces = vm.runtime.traceInfo.tracer.traces;
         if (active && paused) {
             const newLastTrace = vm.runtime.newLastTrace;
-            enabled = traces.length > 1 && (!newLastTrace || newLastTrace.index > 0);
+            const newLastTraceIndex = traces.indexOf(newLastTrace);
+            enabled = traces.length > 1 && (!newLastTrace || newLastTraceIndex > 0);
         } else if (!active) {
             enabled = traces.length > 1;
         }
