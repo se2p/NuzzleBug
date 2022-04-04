@@ -376,6 +376,8 @@ class IRDebugger extends React.Component {
         this.blockExecutionOptions = [];
         if (this.currentBlockId) {
             this.blockExecutionOptions = this.allObservedTraces.filter(t => t.id === this.currentBlockId);
+            this.blockExecutionOptions = this.blockExecutionOptions.filter((t, index) =>
+                !t.argValues.INITIAL_EXECUTION || index === this.blockExecutionOptions.length - 1);
             for (let i = 0; i < this.blockExecutionOptions.length; i++) {
                 this.blockExecutionOptions[i].optionName = `${i + 1}. ${this.translate('execution')}`;
             }
