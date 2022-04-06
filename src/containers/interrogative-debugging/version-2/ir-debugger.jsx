@@ -43,6 +43,7 @@ class IRDebugger extends React.Component {
             'translate'
         ]);
         props.vm.storeLastTrace();
+        props.vm.storeEditingTarget();
         this.init();
     }
 
@@ -106,6 +107,7 @@ class IRDebugger extends React.Component {
 
     handleClose () {
         this.props.vm.resetLastTrace();
+        this.props.vm.resetEditingTarget();
         this.props.onCloseDebugger();
     }
 
