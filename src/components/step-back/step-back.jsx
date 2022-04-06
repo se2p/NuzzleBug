@@ -11,6 +11,7 @@ const StepBackComponent = function (props) {
         vm,
         active,
         paused,
+        interrogationEnabled,
         className,
         onClick,
         title,
@@ -18,7 +19,7 @@ const StepBackComponent = function (props) {
     } = props;
 
     let enabled = false;
-    if (vm.runtime) {
+    if (vm.runtime && interrogationEnabled) {
         const traces = vm.runtime.traceInfo.tracer.traces;
         if (active && paused) {
             const newLastTrace = vm.runtime.newLastTrace;
@@ -51,6 +52,7 @@ StepBackComponent.propTypes = {
     vm: PropTypes.instanceOf(VM),
     active: PropTypes.bool,
     paused: PropTypes.bool,
+    interrogationEnabled: PropTypes.bool,
     className: PropTypes.string,
     onClick: PropTypes.func.isRequired,
     title: PropTypes.string

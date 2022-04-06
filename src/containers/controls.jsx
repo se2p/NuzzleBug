@@ -122,6 +122,7 @@ class Controls extends React.Component {
             irDisabled,
             turbo,
             interrogationSupported,
+            interrogationEnabled,
             observationActive,
             ...props
         } = this.props;
@@ -134,6 +135,7 @@ class Controls extends React.Component {
                 irDisabled={irDisabled}
                 turbo={turbo}
                 interrogationSupported={interrogationSupported}
+                interrogationEnabled={interrogationEnabled}
                 observationState={this.observationState}
                 observationActive={observationActive}
                 vm={vm}
@@ -157,6 +159,7 @@ Controls.propTypes = {
     projectRunning: PropTypes.bool.isRequired,
     turbo: PropTypes.bool.isRequired,
     interrogationSupported: PropTypes.bool.isRequired,
+    interrogationEnabled: PropTypes.bool.isRequired,
     observationActive: PropTypes.bool.isRequired,
     vm: PropTypes.instanceOf(VM)
 };
@@ -168,6 +171,7 @@ const mapStateToProps = state => ({
     projectRunning: state.scratchGui.vmStatus.running,
     turbo: state.scratchGui.vmStatus.turbo,
     interrogationSupported: state.scratchGui.irDebugger.supported,
+    interrogationEnabled: state.scratchGui.irDebugger.enabled,
     observationActive: state.scratchGui.vmStatus.observationActive
 });
 

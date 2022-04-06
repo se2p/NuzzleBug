@@ -20,7 +20,8 @@ class RewindExecutionSlider extends React.Component {
     }
 
     componentDidUpdate (prevProps) {
-        if ((!prevProps.paused && this.props.paused) || (prevProps.active !== this.props.active)) {
+        if ((!prevProps.paused && this.props.paused) || (prevProps.active !== this.props.active) ||
+            (!prevProps.enabled && this.props.enabled)) {
             this.updateRange();
             this.updateValue();
             this.forceUpdate();
@@ -63,14 +64,18 @@ class RewindExecutionSlider extends React.Component {
 
     render () {
         return (
-            <RewindExecutionSliderComponent
-                active={this.props.active}
-                paused={this.props.paused}
-                min={this.min}
-                max={this.max}
-                value={this.value}
-                onSliderUpdate={this.handleSliderUpdate}
-            />
+            <div>
+                {this.props.enabled ?
+                    <RewindExecutionSliderComponent
+                        active={this.props.active}
+                        paused={this.props.paused}
+                        min={this.min}
+                        max={this.max}
+                        value={this.value}
+                        onSliderUpdate={this.handleSliderUpdate}
+                    /> : null
+                }
+            </div>
         );
     }
 }
@@ -78,12 +83,14 @@ class RewindExecutionSlider extends React.Component {
 RewindExecutionSlider.propTypes = {
     active: PropTypes.bool,
     paused: PropTypes.bool,
+    enabled: PropTypes.bool,
     vm: PropTypes.instanceOf(VM)
 };
 
 const mapStateToProps = state => ({
     active: state.scratchGui.vmStatus.running,
     paused: state.scratchGui.vmStatus.paused,
+    enabled: state.scratchGui.irDebugger.enabled && state.scratchGui.irDebugger.supported,
     vm: state.scratchGui.vm
 });
 

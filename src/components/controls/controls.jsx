@@ -81,6 +81,7 @@ const Controls = function (props) {
         paused,
         turbo,
         interrogationSupported,
+        interrogationEnabled,
         observationState,
         observationActive,
         ...componentProps
@@ -108,6 +109,7 @@ const Controls = function (props) {
                 vm={vm}
                 active={active}
                 paused={paused}
+                interrogationEnabled={interrogationEnabled}
                 title={intl.formatMessage(messages.stepBackTitle)}
                 onClick={onStepBackClick}
             />) : null}
@@ -158,6 +160,7 @@ Controls.propTypes = {
     irDisabled: PropTypes.bool,
     turbo: PropTypes.bool,
     interrogationSupported: PropTypes.bool,
+    interrogationEnabled: PropTypes.bool,
     vm: PropTypes.instanceOf(VM),
     observationState: PropTypes.oneOf(Object.values(ObservationState)).isRequired,
     observationActive: PropTypes.bool
