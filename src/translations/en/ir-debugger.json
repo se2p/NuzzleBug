@@ -337,8 +337,9 @@
             "some-possible-behavior-blocks-unexecuted": " {count} other <i>{blockType}-blocks</i> that could lead to the behavior were not executed.",
             "variable-value-set-but-changed-afterwards": "The variable was set to {value}, but changed afterwards.",
             "list-item-removed": "The list contained the item <i>{item}</i>, but it was deleted.",
-            "block-not-reachable": ", because the block that could lead to the behavior is not reachable!",
-            "blocks-not-reachable": ", because none of the blocks that could lead to the behavior is reachable!"
+            "block-not-reachable": ", because the block is not reachable!",
+            "behavior-block-not-reachable": ", because the <i>{blockType}-block</i> that would lead to the behavior is not reachable!",
+            "possible-behavior-block-not-reachable": ", because the <i>{blockType}-block</i> that could lead to the behavior is not reachable!"
         },
         "operator": {
             "variable-have-value": "<i>{variable}<i> had the value <i>{value}</i>",
