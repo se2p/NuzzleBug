@@ -154,7 +154,15 @@ class IRDebugger extends React.Component {
 
     updateAbstractWorkspace () {
         const targets = this.props.vm.runtime.targets;
-        const xmlBlocks = targets.map(target => target.blocks.toXML()).join('');
+        let xmlBlocks = targets.map(target => target.blocks.toXML()).join('');
+        // Add blocks to the workspace, that are needed for some answers although they are not used in the project.
+        xmlBlocks += `,
+            <block type="event_whenflagclicked" id="abstract_flag_clicked"></block>,
+            <block type="control_start_as_clone" id="abstract_clone_start"></block>,
+            <block type="event_whenthisspriteclicked" id="abstract_sprite_clicked"></block>,
+            <block type="looks_backdropnumbername" id="abstract_backdrop_input">
+                <field name="NUMBER_NAME">number</field>
+            </block>`;
         const xmlWorkspace = `<xml xmlns="http://www.w3.org/1999/xhtml">${xmlBlocks}</xml>`;
         const dom = ScratchBlocks.Xml.textToDom(xmlWorkspace);
         ScratchBlocks.Xml.clearWorkspaceAndLoadFromXml(dom, ScratchBlocks.getAbstractWorkspace());
