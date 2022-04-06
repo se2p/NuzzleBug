@@ -356,10 +356,10 @@
             "distance-sprite-sprite": "Der minimale Abstand von Figur <i>{sprite1}</i> zu Figur <i>{sprite2}</i> war <span style=\"color: red;\"><b>{distance}</b></span>.",
             "distance-sprite-color": "Der minimale Abstand von Figur <i>{sprite}</i> zur ausgewählten Farbe war <span style=\"color: red;\"><b>{distance}</b></span>.",
             "distance-color-color": "Der minimale Abstand der Farben war <span style=\"color: red;\"><b>{distance}</b></span>.",
-            "sprite-invisible": "Die Figur <i>{sprite}</i> ist nicht sichtbar und kann deshalb nicht berührt werden!",
-            "sprites-invisible": "Die Figur <i>{sprite1}</i> und die Figur <i>{sprite2}</i> sind nicht sichtbar und können sich deshalb nicht berühren!",
-            "nonexistent-color": "Die Farbe <span style=\"color: {color};\">⬤</span> kommt nicht vor! <br> Versuche die gewünschte Farbe mit der Pipette auszuwählen.",
-            "nonexistent-colors": "Die Farben <span style=\"color: {color1};\">⬤</span> und <span style=\"color: {color2};\">⬤</span> kommen nicht vor! <br> Versuche die gewünschten Farben mit der Pipette auszuwählen."
+            "sprite-invisible": "Die Figur <i>{sprite}</i> war nicht sichtbar und konnte deshalb nicht berührt werden!",
+            "sprites-invisible": "Die Figur <i>{sprite1}</i> und die Figur <i>{sprite2}</i> waren nicht sichtbar und konnten sich deshalb nicht berühren!",
+            "nonexistent-color": "Die Farbe <span style=\"color: {color};\">⬤</span> kam nicht vor! <br> Versuche die gewünschte Farbe mit der Pipette auszuwählen.",
+            "nonexistent-colors": "Die Farben <span style=\"color: {color1};\">⬤</span> und <span style=\"color: {color2};\">⬤</span> kamen nicht vor! <br> Versuche die gewünschten Farben mit der Pipette auszuwählen."
         }
     },
     "reason": {

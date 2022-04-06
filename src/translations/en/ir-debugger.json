@@ -356,10 +356,10 @@
             "distance-sprite-sprite": "The minimal distance from sprite <i>{sprite1}</i> to sprite <i>{sprite2}</i> was <span style=\"color: red;\"><b>{distance}</b></span>.",
             "distance-sprite-color": "The minimal distance from sprite <i>{sprite}</i> to the selected color was <span style=\"color: red;\"><b>{distance}</b></span>.",
             "distance-color-color": "The minimal distance of the colors was <span style=\"color: red;\"><b>{distance}</b></span>.",
-            "sprite-invisible": "Sprite <i>{sprite}</i> can not be touched, because it is invisible!",
-            "sprites-invisible": "Sprite <i>{sprite1}</i> and sprite <i>{sprite2}</i> can not touch each other, because they are invisible!",
-            "nonexistent-color": "The color <span style=\"color: {color};\">⬤</span> does not occur! <br> Try to select the desired color with the color picker.",
-            "nonexistent-colors": "The colors <span style=\"color: {color1};\">⬤</span> and <span style=\"color: {color2};\">⬤</span> do not occur! <br> Try to select the desired colors with the color picker."
+            "sprite-invisible": "Sprite <i>{sprite}</i> could not be touched, because it was invisible!",
+            "sprites-invisible": "Sprite <i>{sprite1}</i> and sprite <i>{sprite2}</i> could not touch each other, because they were invisible!",
+            "nonexistent-color": "The color <span style=\"color: {color};\">⬤</span> did not occur! <br> Try to select the desired color with the color picker.",
+            "nonexistent-colors": "The colors <span style=\"color: {color1};\">⬤</span> and <span style=\"color: {color2};\">⬤</span> did not occur! <br> Try to select the desired colors with the color picker."
         }
     },
     "reason": {
