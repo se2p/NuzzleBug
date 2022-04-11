@@ -275,7 +275,10 @@ class IRAnswer extends React.Component {
         const blockId = graphNode.block.id;
         const block = this._getScratchBlock(blockId);
         const executionInfo = this._getNodeExecutionInfo(graphNode);
-        const targetForBlock = targetForBlockId(this.targets, blockId);
+        let targetForBlock = targetForBlockId(this.targets, blockId);
+        if (!targetForBlock) {
+            targetForBlock = this.target;
+        }
         let color = 'transparent';
         let title = '';
         if (targetForBlock) {
