@@ -432,7 +432,7 @@
         "list-delete-all": "all items were deleted",
         "initial-value": "the initial value was {initialValue}",
         "initial-visibility": "the initial visibility was <i>{initialVisibility}</i>",
-        "clone-start-value": "the value was {initialValue} when the clone was created",
+        "clone-start-value": "the value of the original sprite was <i>{initialValue}</i> when the clone was created and the clone inherited this property",
         "clone-start-visibility": "the original sprite was <i>{initialVisibility}</i> when the clone was created and the clone inherited this property",
         "observation-start-value": "the value at the observation start was {initialValue}",
         "observation-start-visibility": "the visibility at the observation start was <i>{initialVisibility}</i>",
