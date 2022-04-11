@@ -135,6 +135,7 @@ class IRDebugger extends React.Component {
             this.calculateBlockExecutionOptions();
             if (this.isBlockDebugger && !this.selectedBlockExecution && this.blockExecutionOptions.length > 0) {
                 this.selectedBlockExecution = this.blockExecutionOptions[0];
+                this.setTargetOptionOfTrace(this.selectedBlockExecution);
             }
             if (this.selectedBlockExecution) {
                 this.props.vm.rewindToTrace(this.selectedBlockExecution, false);
@@ -196,12 +197,14 @@ class IRDebugger extends React.Component {
     }
 
     initAnswerProvider () {
+        const relevantTraces = this.isBlockDebugger ?
+            this.filterTracesForTargetOption(this.relevantObservedTraces) : this.relevantObservedTraces;
         this.answerProvider = new AnswerProvider(
             this.props.vm,
             this.cdg,
             this.cfg,
             this.allTraces,
-            this.relevantObservedTraces,
+            relevantTraces,
             this.target,
             this.currentBlockId,
             this.translate
@@ -227,26 +230,31 @@ class IRDebugger extends React.Component {
         const blocks = this.targetOrigin.blocks._blocks;
 
         if (!this.target.isOriginal) {
+            let firstCloneTraceIndex = 0;
             const createCloneTrace = traces.find(trace =>
                 EventFilter.cloneCreate(trace) && trace.targetsInfo[this.target.id]);
-            let firstCloneTraceIndex = traces.indexOf(createCloneTrace);
-            const startAsCloneTrace = traces.find((trace, index) =>
-                EventFilter.cloneStart(trace) && traces[index + 1].uniqueId === createCloneTrace.uniqueId);
-            if (startAsCloneTrace) {
-                // Overwrite the targetsInfo of the 'control_start_as_clone' trace
-                // with the targetsInfo of the 'control_create_clone_of' trace,
-                // because it is empty otherwise.
-                startAsCloneTrace.targetsInfo = createCloneTrace.targetsInfo;
-                
-                firstCloneTraceIndex = traces.indexOf(startAsCloneTrace);
+            if (createCloneTrace) {
+                firstCloneTraceIndex = traces.indexOf(createCloneTrace);
+                const startAsCloneTrace = traces.find((trace, index) =>
+                    EventFilter.cloneStart(trace) && traces[index + 1].uniqueId === createCloneTrace.uniqueId);
+                if (startAsCloneTrace) {
+                    // Overwrite the targetsInfo of the 'control_start_as_clone' trace
+                    // with the targetsInfo of the 'control_create_clone_of' trace,
+                    // because it is empty otherwise.
+                    startAsCloneTrace.targetsInfo = createCloneTrace.targetsInfo;
+                    
+                    firstCloneTraceIndex = traces.indexOf(startAsCloneTrace);
+                }
             }
 
             // Remove traces where the clone did not exist.
             traces = traces.filter((trace, index) =>
                 index >= firstCloneTraceIndex && trace.targetsInfo[this.target.id]);
-
+            
             // Remove the 'control_create_clone_of' trace.
-            traces = traces.filter(trace => trace.uniqueId !== createCloneTrace.uniqueId);
+            if (createCloneTrace) {
+                traces = traces.filter(trace => trace.uniqueId !== createCloneTrace.uniqueId);
+            }
         }
 
         // Remove all traces of blocks attached to irrelevant events.
@@ -349,6 +357,7 @@ class IRDebugger extends React.Component {
 
     handleSelectedBlockExecutionChange (blockExecution) {
         this.selectedBlockExecution = blockExecution;
+        this.setTargetOptionOfTrace(blockExecution);
         const traceIndex = this.allObservedTraces.indexOf(blockExecution);
         this.relevantObservedTraces = this.allObservedTraces.slice(0, traceIndex + 1);
         this.answer = null;
@@ -362,6 +371,14 @@ class IRDebugger extends React.Component {
             this.selectBlockExecutionQuestion();
         }
         this.forceUpdate();
+    }
+
+    setTargetOptionOfTrace (trace) {
+        this.setTargetOption({
+            id: trace.targetId,
+            optionName: '',
+            isOriginal: this.targetOrigin.id === trace.targetId
+        });
     }
 
     categoriesContainQuestion (selectedQuestion, questionCategories) {
