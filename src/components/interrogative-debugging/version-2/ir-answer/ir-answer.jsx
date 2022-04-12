@@ -373,6 +373,12 @@ class IRAnswer extends React.Component {
                 const color = executionInfo.relevantValue.color;
                 svgGraphNode.innerHTML += this._createHtmlText(text, position, labelSize, color, 'end');
             }
+            if (typeof executionInfo.relevantValue.input !== 'undefined') {
+                const text = executionInfo.relevantValue.input;
+                const position = {x: (block.width / 2) + 10, y: -3};
+                const color = this.gray;
+                svgGraphNode.innerHTML += this._createHtmlText(text, position, labelSize, color, 'start');
+            }
             const maxTextLength = (block.width / 2) - 5;
             const textBackgrounds = [];
             svgGraphNode.childNodes.forEach(node => {
