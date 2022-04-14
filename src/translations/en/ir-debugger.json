@@ -432,7 +432,7 @@
         "list-delete-at-times": "the item at position {index} was deleted {times} times",
         "list-delete-all": "all items were deleted",
         "initial-value": "the initial value was {initialValue}",
-        "initial-visibility": "the initial visibility was <i>{initialVisibility}</i>",
+        "initial-visibility": "it already was <i>{initialVisibility}</i> when the green flag was clicked",
         "clone-start-value": "the value of the original sprite was <i>{initialValue}</i> when the clone was created and the clone inherited this property",
         "clone-start-visibility": "the original sprite was <i>{initialVisibility}</i> when the clone was created and the clone inherited this property",
         "observation-start-value": "the value at the observation start was {initialValue}",
