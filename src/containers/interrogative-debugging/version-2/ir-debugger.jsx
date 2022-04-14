@@ -112,7 +112,7 @@ class IRDebugger extends React.Component {
     }
 
     initTraces () {
-        this.allTraces = this.props.vm.runtime.traceInfo.tracer.traces;
+        this.allTraces = this.calculateAllTraces();
         this.allObservedTraces = this.calculateAllObservedTraces();
         this.relevantObservedTraces = this.allObservedTraces;
     }
@@ -215,6 +215,17 @@ class IRDebugger extends React.Component {
         return this.props.intl.formatMessage({id: `gui.ir-debugger.${id}`}, values);
     }
 
+    calculateAllTraces () {
+        const vm = this.props.vm;
+        let traces = vm.runtime.traceInfo.tracer.traces;
+        const newLastTrace = vm.runtime.newLastTrace;
+        if (newLastTrace) {
+            const newLastTraceIndex = traces.indexOf(newLastTrace);
+            traces = traces.slice(0, newLastTraceIndex + 1);
+        }
+        return traces;
+    }
+    
     calculateAllObservedTraces () {
         const vm = this.props.vm;
         let traces = this.allTraces;
