@@ -308,7 +308,8 @@
             "block-executed-with-value-with-rotation-style": " and thereby the <i>{blockType}-block</i> was executed with value <i>{value}</i> and with rotation style <i>{rotationStyle}</i>.",
             "multiple-behavior-blocks": "the execution of {count} <i>{blockType}-blocks</i> caused this behavior.",
             "turn-right": "the <i>{blockType}-block</i> changed the direction from a negative to a positive value and because the rotation style was 'left-right'. ",
-            "turn-left": "the <i>{blockType}-block</i> changed the direction from a positive to a negative value and because the rotation style was 'left-right'. "
+            "turn-left": "the <i>{blockType}-block</i> changed the direction from a positive to a negative value and because the rotation style was 'left-right'. ",
+            "hard-coded-comparison": ", because none of the inputs is variable and therefore the comparison is always true."
         },
         "negative": {
             "execution-stopped": ", because the execution was stopped",
@@ -341,7 +342,8 @@
             "block-not-reachable": ", because the block is not reachable!",
             "behavior-block-not-reachable": ", because the <i>{blockType}-block</i> that would lead to the behavior is not reachable!",
             "possible-behavior-block-not-reachable": ", because the <i>{blockType}-block</i> that could lead to the behavior is not reachable!",
-            "no-broadcast-send-block": ", because there is no block broadcasting this message!"
+            "no-broadcast-send-block": ", because there is no block broadcasting this message!",
+            "hard-coded-comparison": ", because none of the inputs is variable and therefore the comparison is always false."
         },
         "operator": {
             "variable-have-value": "<i>{variable}<i> had the value <i>{value}</i>",
