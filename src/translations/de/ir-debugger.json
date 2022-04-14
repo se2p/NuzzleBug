@@ -313,6 +313,7 @@
         "negative": {
             "execution-stopped": ", weil die Ausführung gestoppt wurde",
             "execution-paused": ", weil die Ausführung pausiert wurde",
+            "breakpoint-paused-execution": ", weil die Ausführung wegen eines Haltepunkts pausiert wurde",
             "observation-stopped": ", weil die Beobachtung gestoppt wurde",
             "single-behavior-block-unexecuted": " und dadurch der <i>{blockType}-Block</i> nicht ausgeführt wurde.",
             "single-possible-behavior-block-unexecuted": " und dadurch der <i>{blockType}-Block</i>, der dazu führen könnte, nicht ausgeführt wurde.",
