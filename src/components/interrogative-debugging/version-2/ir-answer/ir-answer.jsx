@@ -349,7 +349,9 @@ class IRAnswer extends React.Component {
     _addEdgeForActualConditionValue (svgGraphNode, value, block, scaleFactor) {
         const arrowPosition = {x: block.width + 10, y: block.height / 2};
         const arrowLength = 40;
-        svgGraphNode.innerHTML += this._createHtmlArrow(arrowPosition, arrowLength, 1 / scaleFactor, this.gray);
+        const triangleLength = 10;
+        svgGraphNode.innerHTML +=
+            this._createHtmlArrow(arrowPosition, arrowLength, triangleLength, 1 / scaleFactor, 0, this.gray);
 
         const text = this._translate(`condition.${value}`);
         const fontSize = this.labelSize / scaleFactor;
@@ -373,11 +375,21 @@ class IRAnswer extends React.Component {
                 const color = executionInfo.relevantValue.color;
                 svgGraphNode.innerHTML += this._createHtmlText(text, position, labelSize, color, 'end');
             }
-            if (typeof executionInfo.relevantValue.input !== 'undefined') {
-                const text = executionInfo.relevantValue.input;
-                const position = {x: (block.width / 2) + 10, y: -3};
-                const color = this.gray;
-                svgGraphNode.innerHTML += this._createHtmlText(text, position, labelSize, color, 'start');
+            if (typeof executionInfo.relevantValue.direction !== 'undefined') {
+                const direction = executionInfo.relevantValue.direction;
+                const color = executionInfo.relevantValue.color;
+                const text = `${direction}°`;
+                const textPosition = {x: -5, y: labelSize + 5};
+                svgGraphNode.innerHTML += this._createHtmlText(text, textPosition, labelSize, color, 'end');
+
+                const arrowLineLength = 12;
+                const arrowTriangleLength = 7;
+                const arrowLength = (arrowLineLength + arrowTriangleLength) * scaleFactor;
+                const arrowPosition = {x: textPosition.x - arrowLength, y: textPosition.y + arrowLength + 5};
+                const circleColor = this._hexToRgba(color, 0.2);
+                svgGraphNode.innerHTML += this._createHtmlCircle(arrowPosition, arrowLength + 1, circleColor, circleColor);
+                svgGraphNode.innerHTML += this._createHtmlArrow(arrowPosition, arrowLineLength,
+                    arrowTriangleLength, scaleFactor, direction - 90, color);
             }
             const maxTextLength = (block.width / 2) - 5;
             const textBackgrounds = [];
@@ -600,20 +612,32 @@ class IRAnswer extends React.Component {
         return `<path stroke="${color}" d="${d}" />`;
     }
 
-    _createHtmlArrow (position, length, scale, color) {
+    _createHtmlArrow (position, lineLength, triangleLength, scale, rotate, color) {
         const html =
-            `<g transform="translate(${position.x},${position.y}) scale(${scale})">
+            `<g transform="translate(${position.x},${position.y}) scale(${scale}) rotate(${rotate})">
                 <path
                     fill="none"
                     stroke="${color}"
-                    d="M0,0 H ${length}"
+                    d="M0,0 H ${lineLength}"
                 />
                 <polygon
                     fill="${color}"
                     stroke="${color}"
-                    points="${length},-3.5 ${length + 10},0 ${length},3.5 ${length},-3.5"
+                    points="${lineLength},-3.5 ${lineLength + triangleLength},0 ${lineLength},3.5 ${lineLength},-3.5"
                 />
             </g>`;
+        return html;
+    }
+
+    _createHtmlCircle (position, radius, fillColor, strokeColor) {
+        const html =
+            `<circle
+                cx="${position.x}"
+                cy="${position.y}"
+                r="${radius}"
+                fill="${fillColor}"
+                stroke="${strokeColor}"
+            />`;
         return html;
     }
 
