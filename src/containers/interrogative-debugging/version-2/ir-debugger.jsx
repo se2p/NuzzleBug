@@ -308,20 +308,18 @@ class IRDebugger extends React.Component {
             optionName: this.translate('target.original', {}),
             isOriginal: true
         }];
-        if (this.isTargetDebugger) {
-            let cloneIndex = 1;
-            for (const trace of traces) {
-                const cloneIds = trace.targetsInfo[this.targetOrigin.id].cloneIds;
-                if (cloneIds) {
-                    for (const cloneId of cloneIds) {
-                        if (!targetOptions.some(option => option.id === cloneId)) {
-                            targetOptions.push({
-                                id: cloneId,
-                                optionName: this.translate('target.clone', {index: cloneIndex}),
-                                isOriginal: false
-                            });
-                            cloneIndex++;
-                        }
+        let cloneIndex = 1;
+        for (const trace of traces) {
+            const cloneIds = trace.targetsInfo[this.targetOrigin.id].cloneIds;
+            if (cloneIds) {
+                for (const cloneId of cloneIds) {
+                    if (!targetOptions.some(option => option.id === cloneId)) {
+                        targetOptions.push({
+                            id: cloneId,
+                            optionName: this.translate('target.clone', {index: cloneIndex}),
+                            isOriginal: false
+                        });
+                        cloneIndex++;
                     }
                 }
             }
@@ -357,11 +355,11 @@ class IRDebugger extends React.Component {
 
     handleSelectedBlockExecutionChange (blockExecution) {
         this.selectedBlockExecution = blockExecution;
-        this.setTargetOptionOfTrace(blockExecution);
         const traceIndex = this.allObservedTraces.indexOf(blockExecution);
         this.relevantObservedTraces = this.allObservedTraces.slice(0, traceIndex + 1);
         this.answer = null;
         this.update();
+        this.setTargetOptionOfTrace(blockExecution);
         if (this.selectedQuestion && this.categoriesContainQuestion(this.selectedQuestion, this.questionHierarchy)) {
             this.answerLoading = true;
             setTimeout(() => {
@@ -374,11 +372,8 @@ class IRDebugger extends React.Component {
     }
 
     setTargetOptionOfTrace (trace) {
-        this.setTargetOption({
-            id: trace.targetId,
-            optionName: '',
-            isOriginal: this.targetOrigin.id === trace.targetId
-        });
+        const targetOption = this.targetOptions.find(o => o.id === trace.targetId);
+        this.setTargetOption(targetOption);
     }
 
     categoriesContainQuestion (selectedQuestion, questionCategories) {
@@ -490,7 +485,7 @@ class IRDebugger extends React.Component {
         return (
             <IRDebuggerComponent
                 target={this.target}
-                targetOptions={this.targetOptions}
+                targetOptions={this.isTargetDebugger ? this.targetOptions : []}
                 blockId={this.currentBlockId}
                 selectedBlockExecution={this.selectedBlockExecution}
                 blockExecutionOptions={this.blockExecutionOptions}
