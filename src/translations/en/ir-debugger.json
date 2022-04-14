@@ -339,7 +339,8 @@
             "list-item-removed": "The list contained the item <i>{item}</i>, but it was deleted.",
             "block-not-reachable": ", because the block is not reachable!",
             "behavior-block-not-reachable": ", because the <i>{blockType}-block</i> that would lead to the behavior is not reachable!",
-            "possible-behavior-block-not-reachable": ", because the <i>{blockType}-block</i> that could lead to the behavior is not reachable!"
+            "possible-behavior-block-not-reachable": ", because the <i>{blockType}-block</i> that could lead to the behavior is not reachable!",
+            "no-broadcast-send-block": ", because there is no block broadcasting this message!"
         },
         "operator": {
             "variable-have-value": "<i>{variable}<i> had the value <i>{value}</i>",

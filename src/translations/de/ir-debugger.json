@@ -339,7 +339,8 @@
             "list-item-removed": "<i>{item}</i> war in der Liste enthalten, wurde aber gelöscht.",
             "block-not-reachable": ", weil der Block nicht erreichbar ist!",
             "behavior-block-not-reachable": ", weil der <i>{blockType}-Block</i>, der dazu führen würde, nicht erreichbar ist!",
-            "possible-behavior-block-not-reachable": ", weil der <i>{blockType}-Block</i>, der dazu führen könnte, nicht erreichbar ist!"
+            "possible-behavior-block-not-reachable": ", weil der <i>{blockType}-Block</i>, der dazu führen könnte, nicht erreichbar ist!",
+            "no-broadcast-send-block": ", weil es keinen Block gibt, der diese Nachricht sendet!"
         },
         "operator": {
             "variable-have-value": "<i>{variable}<i> den Wert <i>{value}</i> hatte",
