@@ -468,7 +468,7 @@ class IRAnswer extends React.Component {
                     this._dashPath(pathNode);
                     this._addCrossOutLine(svgGraphEdge, edge.line);
                 }
-                if (executionInfo.condition.requiredValue) {
+                if (typeof executionInfo.condition.requiredValue !== 'undefined') {
                     const text = this._translate(`condition.${executionInfo.condition.requiredValue}`);
                     this._addEdgeLabel(svgGraphEdge, edge, text, executionInfo, true);
                 }
