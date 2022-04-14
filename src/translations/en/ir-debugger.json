@@ -284,7 +284,7 @@
             "not-contain-item": "The list didn't contain <i>{item}</i>"
         },
         "execution": {
-            "block-execute": "The block did execute",
+            "block-execute": "The block executed",
             "not-block-execute": "The block didn't execute"
         },
         "input": {
