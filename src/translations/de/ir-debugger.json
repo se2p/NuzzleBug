@@ -301,6 +301,8 @@
         "dot": ".",
         "comma": ", ",
         "draw-attention-to-block-answers": "<br>Brauchst du eine Erklärung für einen Block? Dann klicke auf das <div style=\"display: inline-block; margin-top: 3px; padding: 0 4.5px; border: 1.4px solid #575E75; border-radius: 15px;\">?</div> daneben!",
+        "all-reasons-unobserved": ", aber es wurde nicht beobachtet warum!",
+        "some-reasons-unobserved": "<br>Nicht alle verantwortlichen Blöcke wurden beobachtet!",
         "positive": {
             "block-executed": " und dadurch der <i>{blockType}-Block</i> ausgeführt wurde.",
             "block-executed-with-value": " und dadurch der <i>{blockType}-Block</i> mit dem Wert <i>{value}</i> ausgeführt wurde.",

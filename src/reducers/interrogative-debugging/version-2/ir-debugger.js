@@ -4,6 +4,7 @@ const SET_PROJECT_CHANGED = 'scratch-gui/project-changed/SET_PROJECT_CHANGED';
 const BLOCK_DRAG_UPDATE = 'scratch-gui/block-drag/BLOCK_DRAG_UPDATE';
 const SET_RUNNING_STATE = 'scratch-gui/vm-status/SET_RUNNING_STATE';
 const SET_PAUSE_STATE = 'scratch-gui/vm-status/SET_PAUSED_STATE';
+const SET_OBSERVATION_ACTIVE_STATE = 'scratch-gui/vm-status/SET_OBSERVATION_ACTIVE_STATE';
 const SELECT_LOCALE = 'scratch-gui/locales/SELECT_LOCALE';
 
 const ENABLE = 'scratch-gui/ir-debugger/ENABLE';
@@ -30,7 +31,8 @@ const initialState = {
     expanded: true,
     dragging: false,
     projectRunning: false,
-    projectPaused: false
+    projectPaused: false,
+    observationActive: false
 };
 
 const forwardDebuggerEnabled = function (enabled) {
@@ -58,7 +60,7 @@ const reducer = function (state, action) {
             enabled: false
         });
     case SET_RUNNING_STATE: {
-        const enabled = !action.running || state.projectPaused;
+        const enabled = state.observationActive && (!action.running || state.projectPaused);
         forwardDebuggerEnabled(enabled);
         return Object.assign({}, state, {
             projectRunning: action.running,
@@ -66,7 +68,7 @@ const reducer = function (state, action) {
         });
     }
     case SET_PAUSE_STATE: {
-        const enabled = action.paused || !state.projectRunning;
+        const enabled = state.observationActive && (action.paused || !state.projectRunning);
         forwardDebuggerEnabled(enabled);
         return Object.assign({}, state, {
             projectPaused: action.paused,
@@ -117,6 +119,10 @@ const reducer = function (state, action) {
     case END_DRAG:
         return Object.assign({}, state, {
             dragging: false
+        });
+    case SET_OBSERVATION_ACTIVE_STATE:
+        return Object.assign({}, state, {
+            observationActive: action.observationActive
         });
     default:
         return state;

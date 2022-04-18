@@ -18,7 +18,10 @@ import {
 } from '../reducers/vm-status';
 import {showExtensionAlert} from '../reducers/alerts';
 import {updateMicIndicator} from '../reducers/mic-indicator';
-import {openBlockDebugger} from '../reducers/interrogative-debugging/version-2/ir-debugger';
+import {
+    openBlockDebugger,
+    disableDebugger
+} from '../reducers/interrogative-debugging/version-2/ir-debugger';
 
 /*
  * Higher Order Component to manage events emitted by the VM
@@ -231,7 +234,10 @@ const vmListenerHOC = function (WrappedComponent) {
             dispatch(updateMicIndicator(listening));
         },
         onActivateObservation: () => dispatch(setObservationActiveState(true)),
-        onDeactivateObservation: () => dispatch(setObservationActiveState(false))
+        onDeactivateObservation: () => {
+            dispatch(setObservationActiveState(false));
+            dispatch(disableDebugger());
+        }
     });
     return connect(
         mapStateToProps,

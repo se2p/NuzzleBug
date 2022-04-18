@@ -113,8 +113,7 @@ class IRDebugger extends React.Component {
 
     initTraces () {
         this.allTraces = this.calculateAllTraces();
-        this.allObservedTraces = this.calculateAllObservedTraces();
-        this.relevantObservedTraces = this.allObservedTraces;
+        this.relevantTraces = this.allTraces;
     }
 
     update () {
@@ -123,7 +122,7 @@ class IRDebugger extends React.Component {
         if (this.isTargetDebugger || this.isBlockDebugger) {
 
             this.targetOrigin = this.getTargetOrigin();
-            this.targetOptions = this.calculateTargetOptions(this.allObservedTraces);
+            this.targetOptions = this.calculateTargetOptions(this.allTraces);
             if (!this.target || this.target.origin.id !== this.targetOrigin.id) {
                 this.setTargetOption(this.targetOptions[0]);
             }
@@ -140,7 +139,7 @@ class IRDebugger extends React.Component {
                 this.setTargetOptionOfBlockExecutionOption(this.selectedBlockExecution);
             }
 
-            this.updateRelevantObservedTraces();
+            this.updateRelevantTraces();
             this.calculateQuestionHierarchy();
             if (this.questionHierarchy.length) {
                 this.initAnswerProvider();
@@ -170,11 +169,11 @@ class IRDebugger extends React.Component {
         ScratchBlocks.Xml.clearWorkspaceAndLoadFromXml(dom, ScratchBlocks.getAbstractWorkspace());
     }
 
-    updateRelevantObservedTraces () {
+    updateRelevantTraces () {
         if (this.isTargetDebugger) {
-            this.relevantObservedTraces = this.filterTracesForTargetOption(this.allObservedTraces);
+            this.relevantTraces = this.filterTracesForTargetOption(this.allTraces);
         } else {
-            this.relevantObservedTraces = this.filterTracesForBlock(this.relevantObservedTraces);
+            this.relevantTraces = this.filterTracesForBlock(this.relevantTraces);
         }
     }
 
@@ -184,7 +183,7 @@ class IRDebugger extends React.Component {
             const questionHierarchyProvider = new QuestionHierarchyProvider(
                 this.props.vm,
                 this.allTraces,
-                this.relevantObservedTraces,
+                this.relevantTraces,
                 this.target,
                 this.block,
                 this.translate
@@ -197,7 +196,7 @@ class IRDebugger extends React.Component {
 
     initAnswerProvider () {
         const relevantTraces = this.isBlockDebugger ?
-            this.filterTracesForTargetOption(this.relevantObservedTraces) : this.relevantObservedTraces;
+            this.filterTracesForTargetOption(this.relevantTraces) : this.relevantTraces;
         this.answerProvider = new AnswerProvider(
             this.props.vm,
             this.cdg,
@@ -221,17 +220,6 @@ class IRDebugger extends React.Component {
         if (newLastTrace) {
             const newLastTraceIndex = traces.indexOf(newLastTrace);
             traces = traces.slice(0, newLastTraceIndex + 1);
-        }
-        return traces;
-    }
-    
-    calculateAllObservedTraces () {
-        const vm = this.props.vm;
-        let traces = this.allTraces;
-        if (vm.runtime.observation.active) {
-            traces = traces.slice(vm.runtime.observation.traceStart);
-        } else {
-            traces = traces.slice(vm.runtime.observation.traceStart, vm.runtime.observation.traceEnd);
         }
         return traces;
     }
@@ -336,7 +324,7 @@ class IRDebugger extends React.Component {
     }
 
     udpateTargetOptions () {
-        this.targetOptions = this.calculateTargetOptions(this.allObservedTraces);
+        this.targetOptions = this.calculateTargetOptions(this.allTraces);
         if (this.selectedBlockExecution) {
             this.setTargetOptionOfBlockExecutionOption(this.selectedBlockExecution);
         }
@@ -373,8 +361,8 @@ class IRDebugger extends React.Component {
 
     handleSelectedBlockExecutionChange (blockExecution) {
         this.selectedBlockExecution = blockExecution;
-        const traceIndex = this.allObservedTraces.indexOf(blockExecution.lastTrace);
-        this.relevantObservedTraces = this.allObservedTraces.slice(0, traceIndex + 1);
+        const traceIndex = this.allTraces.indexOf(blockExecution.lastTrace);
+        this.relevantTraces = this.allTraces.slice(0, traceIndex + 1);
         this.answer = null;
         this.update();
         if (this.selectedQuestion && this.categoriesContainQuestion(this.selectedQuestion, this.questionHierarchy)) {
@@ -414,7 +402,7 @@ class IRDebugger extends React.Component {
     calculateBlockExecutionOptions () {
         this.blockExecutionOptions = [];
         if (this.currentBlockId) {
-            const blockTraces = this.allObservedTraces.filter(t => t.id === this.currentBlockId);
+            const blockTraces = this.allTraces.filter(t => t.id === this.currentBlockId);
             if (blockTraces.length) {
                 this.blockExecutionOptions = [];
                 for (const [index, blockTrace] of blockTraces.entries()) {
@@ -428,10 +416,10 @@ class IRDebugger extends React.Component {
                             !blockTraces.some((t, i) => i > index && t.targetId === blockTrace.targetId);
                         if (isLastBlockTraceForTarget) {
                             if (this.block.opcode === 'control_wait_until') {
-                                const blockTraceIndex = this.allObservedTraces.indexOf(blockTrace);
+                                const blockTraceIndex = this.allTraces.indexOf(blockTrace);
                                 // Find the last trace with 'waitUntilOps' for the wait block execution.
-                                const lastTrace = this.allObservedTraces
-                                    .slice(blockTraceIndex, this.allObservedTraces.length)
+                                const lastTrace = this.allTraces
+                                    .slice(blockTraceIndex, this.allTraces.length)
                                     .reverse()
                                     .find(trace =>
                                         trace.waitUntilOps &&
@@ -504,7 +492,7 @@ class IRDebugger extends React.Component {
             this.previousBlocks.push({
                 id: this.currentBlockId,
                 selectedQuestion: this.selectedQuestion,
-                traceCount: this.relevantObservedTraces.length,
+                traceCount: this.relevantTraces.length,
                 selectedBlockExecution: this.selectedBlockExecution,
                 target: this.target
             });
@@ -527,7 +515,7 @@ class IRDebugger extends React.Component {
             this.currentBlockId = previousBlock.id;
             this.selectedBlockExecution = previousBlock.selectedBlockExecution;
             this.target = previousBlock.target;
-            this.relevantObservedTraces = this.allObservedTraces.slice(0, previousBlock.traceCount);
+            this.relevantTraces = this.allTraces.slice(0, previousBlock.traceCount);
             this.update();
             this.handleQuestionClick(previousBlock.selectedQuestion);
             this.forceUpdate();
