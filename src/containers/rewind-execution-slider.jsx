@@ -27,13 +27,11 @@ class RewindExecutionSlider extends React.Component {
             this.forceUpdate();
         }
         const newLastTrace = this.props.vm.runtime.newLastTrace;
-        if (newLastTrace) {
-            const traces = this.props.vm.runtime.traceInfo.tracer.traces;
-            const newLastTraceIndex = traces.indexOf(newLastTrace);
-            if (this.value !== newLastTraceIndex) {
-                this.value = newLastTraceIndex;
-                this.forceUpdate();
-            }
+        const traces = this.props.vm.runtime.traceInfo.tracer.traces;
+        const newLastTraceIndex = newLastTrace ? traces.indexOf(newLastTrace) : traces.length - 1;
+        if (this.value !== newLastTraceIndex) {
+            this.value = newLastTraceIndex;
+            this.forceUpdate();
         }
     }
 
