@@ -137,7 +137,7 @@ class IRDebugger extends React.Component {
                 this.selectedBlockExecution = this.blockExecutionOptions[0];
             }
             if (this.selectedBlockExecution) {
-                this.setTargetOptionOfTrace(this.selectedBlockExecution);
+                this.setTargetOptionOfBlockExecutionOption(this.selectedBlockExecution);
             }
 
             this.updateRelevantObservedTraces();
@@ -291,7 +291,7 @@ class IRDebugger extends React.Component {
 
     filterTracesForBlock (traces) {
         if (this.selectedBlockExecution) {
-            const endIndex = traces.indexOf(this.selectedBlockExecution) + 1;
+            const endIndex = traces.indexOf(this.selectedBlockExecution.lastTrace) + 1;
             return traces.slice(0, endIndex);
         }
         return traces;
@@ -335,6 +335,16 @@ class IRDebugger extends React.Component {
         return targetOptions;
     }
 
+    udpateTargetOptions () {
+        this.targetOptions = this.calculateTargetOptions(this.allObservedTraces);
+        if (this.selectedBlockExecution) {
+            this.setTargetOptionOfBlockExecutionOption(this.selectedBlockExecution);
+        }
+        if (!this.target || !this.targetOptions.some(o => o.id === this.target.id)) {
+            this.setTargetOption(this.targetOptions[0]);
+        }
+    }
+
     handleTargetChange (targetOption) {
         if (this.target.id !== targetOption.id) {
             this.setTargetOption(targetOption);
@@ -363,7 +373,7 @@ class IRDebugger extends React.Component {
 
     handleSelectedBlockExecutionChange (blockExecution) {
         this.selectedBlockExecution = blockExecution;
-        const traceIndex = this.allObservedTraces.indexOf(blockExecution);
+        const traceIndex = this.allObservedTraces.indexOf(blockExecution.lastTrace);
         this.relevantObservedTraces = this.allObservedTraces.slice(0, traceIndex + 1);
         this.answer = null;
         this.update();
@@ -378,9 +388,8 @@ class IRDebugger extends React.Component {
         this.forceUpdate();
     }
 
-    setTargetOptionOfTrace (trace) {
-        const targetId = trace.id === this.currentBlockId ? trace.targetId : trace.optionTargetId;
-        const targetOption = this.targetOptions.find(o => o.id === targetId);
+    setTargetOptionOfBlockExecutionOption (blockExecutionOption) {
+        const targetOption = this.targetOptions.find(o => o.id === blockExecutionOption.blockTrace.targetId);
         this.setTargetOption(targetOption);
     }
 
@@ -405,21 +414,40 @@ class IRDebugger extends React.Component {
     calculateBlockExecutionOptions () {
         this.blockExecutionOptions = [];
         if (this.currentBlockId) {
-            this.blockExecutionOptions = this.allObservedTraces.filter(t => t.id === this.currentBlockId);
-            if (this.blockExecutionOptions.length) {
-                this.blockExecutionOptions = this.blockExecutionOptions.filter((t, index) =>
-                    !t.argValues.INITIAL_EXECUTION || index === this.blockExecutionOptions.length - 1);
-                const lastOption = this.blockExecutionOptions[this.blockExecutionOptions.length - 1];
-                if (lastOption.argValues.INITIAL_EXECUTION && this.block.opcode === 'control_wait_until') {
-                    const lastOptionIndex = this.allObservedTraces.indexOf(lastOption);
-                    // Find the last trace with 'waitUntilOps' for the wait block execution.
-                    const newLastOption = this.allObservedTraces
-                        .slice(lastOptionIndex, this.allObservedTraces.length)
-                        .reverse()
-                        .find(trace => trace.waitUntilOps && trace.waitUntilOps[this.currentBlockId]);
-                    if (newLastOption) {
-                        newLastOption.optionTargetId = lastOption.targetId;
-                        this.blockExecutionOptions[this.blockExecutionOptions.length - 1] = newLastOption;
+            const blockTraces = this.allObservedTraces.filter(t => t.id === this.currentBlockId);
+            if (blockTraces.length) {
+                this.blockExecutionOptions = [];
+                for (const [index, blockTrace] of blockTraces.entries()) {
+                    const blockExecutionOption = {
+                        uniqueId: blockTrace.uniqueId,
+                        lastTrace: blockTrace,
+                        blockTrace: blockTrace
+                    };
+                    if (blockTrace.argValues.INITIAL_EXECUTION) {
+                        const isLastBlockTraceForTarget =
+                            !blockTraces.some((t, i) => i > index && t.targetId === blockTrace.targetId);
+                        if (isLastBlockTraceForTarget) {
+                            if (this.block.opcode === 'control_wait_until') {
+                                const blockTraceIndex = this.allObservedTraces.indexOf(blockTrace);
+                                // Find the last trace with 'waitUntilOps' for the wait block execution.
+                                const lastTrace = this.allObservedTraces
+                                    .slice(blockTraceIndex, this.allObservedTraces.length)
+                                    .reverse()
+                                    .find(trace =>
+                                        trace.waitUntilOps &&
+                                        trace.waitUntilOps[blockTrace.targetId] &&
+                                        trace.waitUntilOps[blockTrace.targetId][this.currentBlockId]
+                                    );
+                                if (lastTrace) {
+                                    blockExecutionOption.lastTrace = lastTrace;
+                                }
+                                this.blockExecutionOptions.push(blockExecutionOption);
+                            } else {
+                                this.blockExecutionOptions.push(blockExecutionOption);
+                            }
+                        }
+                    } else {
+                        this.blockExecutionOptions.push(blockExecutionOption);
                     }
                 }
                 for (let i = 0; i < this.blockExecutionOptions.length; i++) {
@@ -452,10 +480,16 @@ class IRDebugger extends React.Component {
     answerQuestion () {
         try {
             this.crashed = false;
-            this.props.vm.resetLastTrace();
-            if (this.isRewindToTraceRequired()) {
-                this.props.vm.storeLastTrace();
-                this.props.vm.rewindToTrace(this.selectedBlockExecution, false);
+            const newLastTrace = this.isBlockDebugger &&
+                this.selectedQuestion.category === QuestionCategoryType.SENSING ?
+                this.selectedBlockExecution.lastTrace : this.props.vm.storedLastTrace;
+            const traces = this.props.vm.runtime.traceInfo.tracer.traces;
+            const lastTrace = this.props.vm.runtime.newLastTrace ?
+                this.props.vm.runtime.newLastTrace : traces[traces.length - 1];
+            if (newLastTrace.uniqueId !== lastTrace.uniqueId) {
+                this.props.vm.rewindToTrace(newLastTrace, false);
+                this.udpateTargetOptions();
+                this.initAnswerProvider();
             }
             this.answer = this.answerProvider.generateAnswer(this.selectedQuestion);
         } catch {
@@ -463,19 +497,6 @@ class IRDebugger extends React.Component {
         }
         this.answerLoading = false;
         this.forceUpdateIfMounted();
-    }
-
-    isRewindToTraceRequired () {
-        if (this.isBlockDebugger && this.selectedQuestion.category === QuestionCategoryType.SENSING) {
-            if (this.block.opcode === 'control_wait_until') {
-                if (this.selectedBlockExecution.id !== this.currentBlockId ||
-                    !this.selectedBlockExecution.argValues.DONE) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        return false;
     }
 
     handleGraphNodeClick (graphNode) {
