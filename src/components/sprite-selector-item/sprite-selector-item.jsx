@@ -5,7 +5,7 @@ import React from 'react';
 import DeleteButton from '../delete-button/delete-button.jsx';
 import styles from './sprite-selector-item.css';
 import {ContextMenuTrigger} from 'react-contextmenu';
-import {DangerousMenuItem, BorderedMenuItem, ContextMenu, MenuItem} from '../context-menu/context-menu.jsx';
+import {DangerousMenuItem, ContextMenu, MenuItem} from '../context-menu/context-menu.jsx';
 import {FormattedMessage} from 'react-intl';
 
 // react-contextmenu requires unique id to match trigger and context menu

@@ -738,7 +738,7 @@ class IRAnswer extends React.Component {
     }
 
     _addTargetImage (target, sideLength, padding, border, color) {
-        const drawable = target.renderer.extractDrawable(target.drawableID, 0, 0);
+        const drawable = target.renderer.extractDrawableScreenSpace(target.drawableID);
         const costume = target.sprite.costumes_[target.currentCostume];
         const image = document.createElement('img');
         const src = costume.asset ? getCostumeUrl(costume.asset) : null;

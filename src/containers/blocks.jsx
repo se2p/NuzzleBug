@@ -14,7 +14,7 @@ import ExtensionLibrary from './extension-library.jsx';
 import extensionData from '../lib/libraries/extensions/index.jsx';
 import CustomProcedures from './custom-procedures.jsx';
 import errorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
-import {STAGE_DISPLAY_SIZES} from '../lib/layout-constants';
+import {BLOCKS_DEFAULT_SCALE, STAGE_DISPLAY_SIZES} from '../lib/layout-constants';
 import DropAreaHOC from '../lib/drop-area-hoc.jsx';
 import DragConstants from '../lib/drag-constants';
 import defineDynamicBlock from '../lib/define-dynamic-block';
@@ -27,6 +27,7 @@ import {activateCustomProcedures, deactivateCustomProcedures} from '../reducers/
 import {setConnectionModalExtensionId} from '../reducers/connection-modal';
 import {forwardDebuggerSupported} from '../reducers/interrogative-debugging/version-2/ir-debugger';
 import {highlightTarget} from '../reducers/targets';
+import {updateMetrics} from '../reducers/workspace-metrics';
 
 import {
     activateTab,
@@ -35,8 +36,8 @@ import {
 
 const addFunctionListener = (object, property, callback) => {
     const oldFn = object[property];
-    object[property] = function () {
-        const result = oldFn.apply(this, arguments);
+    object[property] = function (...args) {
+        const result = oldFn.apply(this, args);
         callback.apply(this, result);
         return result;
     };
@@ -71,6 +72,7 @@ class Blocks extends React.Component {
             'onBreakpointResumed',
             'onAddBlockArrow',
             'onRemoveBlockArrow',
+            'handleMonitorsUpdate',
             'handleExtensionAdded',
             'handleBlocksInfoUpdate',
             'onTargetsUpdate',
@@ -85,7 +87,6 @@ class Blocks extends React.Component {
         this.ScratchBlocks.recordSoundCallback = this.handleOpenSoundRecorder;
 
         this.state = {
-            workspaceMetrics: {},
             prompt: null
         };
         this.onTargetsUpdate = debounce(this.onTargetsUpdate, 100);
@@ -271,6 +272,7 @@ class Blocks extends React.Component {
         this.props.vm.addListener('workspaceUpdate', this.onWorkspaceUpdate);
         this.props.vm.addListener('targetsUpdate', this.onTargetsUpdate);
         this.props.vm.addListener('HIGHLIGHT_TARGET', this.props.onHighlightTarget);
+        this.props.vm.addListener('MONITORS_UPDATE', this.handleMonitorsUpdate);
         this.props.vm.addListener('EXTENSION_ADDED', this.handleExtensionAdded);
         this.props.vm.addListener('BLOCKSINFO_UPDATE', this.handleBlocksInfoUpdate);
         this.props.vm.addListener('PERIPHERAL_CONNECTED', this.handleStatusButtonUpdate);
@@ -289,6 +291,7 @@ class Blocks extends React.Component {
         this.props.vm.removeListener('workspaceUpdate', this.onWorkspaceUpdate);
         this.props.vm.removeListener('targetsUpdate', this.onTargetsUpdate);
         this.props.vm.removeListener('HIGHLIGHT_TARGET', this.props.onHighlightTarget);
+        this.props.vm.removeListener('MONITORS_UPDATE', this.handleMonitorsUpdate);
         this.props.vm.removeListener('EXTENSION_ADDED', this.handleExtensionAdded);
         this.props.vm.removeListener('BLOCKSINFO_UPDATE', this.handleBlocksInfoUpdate);
         this.props.vm.removeListener('PERIPHERAL_CONNECTED', this.handleStatusButtonUpdate);
@@ -318,14 +321,17 @@ class Blocks extends React.Component {
     onWorkspaceMetricsChange () {
         const target = this.props.vm.editingTarget;
         if (target && target.id) {
-            const workspaceMetrics = Object.assign({}, this.state.workspaceMetrics, {
-                [target.id]: {
+            // Dispatch updateMetrics later, since onWorkspaceMetricsChange may be (very indirectly)
+            // called from a reducer, i.e. when you create a custom procedure.
+            // TODO: Is this a vehement hack?
+            setTimeout(() => {
+                this.props.updateMetrics({
+                    targetID: target.id,
                     scrollX: this.workspace.scrollX,
                     scrollY: this.workspace.scrollY,
                     scale: this.workspace.scale
-                }
-            });
-            this.setState({workspaceMetrics});
+                });
+            }, 0);
         }
     }
     onScriptGlowOn (data) {
@@ -367,8 +373,8 @@ class Blocks extends React.Component {
             const stageCostumes = stage.getCostumes();
             const targetCostumes = target.getCostumes();
             const targetSounds = target.getSounds();
-            const dynamicBlocksXML = this.props.vm.runtime.getBlocksXML();
-            return makeToolboxXML(target.isStage, target.id, dynamicBlocksXML,
+            const dynamicBlocksXML = this.props.vm.runtime.getBlocksXML(target);
+            return makeToolboxXML(false, target.isStage, target.id, dynamicBlocksXML,
                 targetCostumes[targetCostumes.length - 1].name,
                 stageCostumes[stageCostumes.length - 1].name,
                 targetSounds.length > 0 ? targetSounds[targetSounds.length - 1].name : ''
@@ -384,7 +390,7 @@ class Blocks extends React.Component {
             this.props.updateToolboxState(toolboxXML);
         }
 
-        if (this.props.vm.editingTarget && !this.state.workspaceMetrics[this.props.vm.editingTarget.id]) {
+        if (this.props.vm.editingTarget && !this.props.workspaceMetrics.targets[this.props.vm.editingTarget.id]) {
             this.onWorkspaceMetricsChange();
         }
 
@@ -410,8 +416,8 @@ class Blocks extends React.Component {
         }
         this.workspace.addChangeListener(this.props.vm.blockListener);
 
-        if (this.props.vm.editingTarget && this.state.workspaceMetrics[this.props.vm.editingTarget.id]) {
-            const {scrollX, scrollY, scale} = this.state.workspaceMetrics[this.props.vm.editingTarget.id];
+        if (this.props.vm.editingTarget && this.props.workspaceMetrics.targets[this.props.vm.editingTarget.id]) {
+            const {scrollX, scrollY, scale} = this.props.workspaceMetrics.targets[this.props.vm.editingTarget.id];
             this.workspace.scrollX = scrollX;
             this.workspace.scrollY = scrollY;
             this.workspace.scale = scale;
@@ -422,6 +428,24 @@ class Blocks extends React.Component {
         // fresh workspace and we don't want any changes made to another sprites
         // workspace to be 'undone' here.
         this.workspace.clearUndo();
+    }
+    handleMonitorsUpdate (monitors) {
+        // Update the checkboxes of the relevant monitors.
+        // TODO: What about monitors that have fields? See todo in scratch-vm blocks.js changeBlock:
+        // https://github.com/LLK/scratch-vm/blob/2373f9483edaf705f11d62662f7bb2a57fbb5e28/src/engine/blocks.js#L569-L576
+        const flyout = this.workspace.getFlyout();
+        for (const monitor of monitors.values()) {
+            const blockId = monitor.get('id');
+            const isVisible = monitor.get('visible');
+            flyout.setCheckboxState(blockId, isVisible);
+            // We also need to update the isMonitored flag for this block on the VM, since it's used to determine
+            // whether the checkbox is activated or not when the checkbox is re-displayed (e.g. local variables/blocks
+            // when switching between sprites).
+            const block = this.props.vm.runtime.monitorBlocks.getBlock(blockId);
+            if (block) {
+                block.isMonitored = isVisible;
+            }
+        }
     }
     handleExtensionAdded (categoryInfo) {
         const defineBlocks = blockInfoArray => {
@@ -555,6 +579,8 @@ class Blocks extends React.Component {
             onRequestCloseExtensionLibrary,
             onRequestCloseCustomProcedures,
             toolboxXML,
+            updateMetrics: updateMetricsProp,
+            workspaceMetrics,
             ...props
         } = this.props;
         /* eslint-enable no-unused-vars */
@@ -570,6 +596,7 @@ class Blocks extends React.Component {
                     <Prompt
                         defaultValue={this.state.prompt.defaultValue}
                         isStage={vm.runtime.getEditingTarget().isStage}
+                        showListMessage={this.state.prompt.varType === this.ScratchBlocks.LIST_VARIABLE_TYPE}
                         label={this.state.prompt.message}
                         showCloudOption={this.state.prompt.showCloudOption}
                         showVariableOptions={this.state.prompt.showVariableOptions}
@@ -639,16 +666,20 @@ Blocks.propTypes = {
     }),
     stageSize: PropTypes.oneOf(Object.keys(STAGE_DISPLAY_SIZES)).isRequired,
     toolboxXML: PropTypes.string,
+    updateMetrics: PropTypes.func,
     updateToolboxState: PropTypes.func,
     vm: PropTypes.instanceOf(VM).isRequired,
-    interrogationSupported: PropTypes.bool
+    interrogationSupported: PropTypes.bool,
+    workspaceMetrics: PropTypes.shape({
+        targets: PropTypes.objectOf(PropTypes.object)
+    })
 };
 
 Blocks.defaultOptions = {
     zoom: {
         controls: true,
         wheel: true,
-        startScale: 0.675
+        startScale: BLOCKS_DEFAULT_SCALE
     },
     grid: {
         spacing: 40,
@@ -688,7 +719,8 @@ const mapStateToProps = state => ({
     messages: state.locales.messages,
     toolboxXML: state.scratchGui.toolbox.toolboxXML,
     customProceduresVisible: state.scratchGui.customProcedures.active,
-    interrogationSupported: state.scratchGui.irDebugger.supported
+    interrogationSupported: state.scratchGui.irDebugger.supported,
+    workspaceMetrics: state.scratchGui.workspaceMetrics
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -713,6 +745,9 @@ const mapDispatchToProps = dispatch => ({
     },
     onHighlightTarget: targetId => {
         dispatch(highlightTarget(targetId));
+    },
+    updateMetrics: metrics => {
+        dispatch(updateMetrics(metrics));
     }
 });
 
