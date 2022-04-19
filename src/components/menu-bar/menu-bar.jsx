@@ -13,6 +13,7 @@ import Box from '../box/box.jsx';
 import Button from '../button/button.jsx';
 import CommunityButton from './community-button.jsx';
 import ShareButton from './share-button.jsx';
+import Scratch1984Button from './scratch1984-button.jsx';
 import {ComingSoonTooltip} from '../coming-soon/coming-soon.jsx';
 import Divider from '../divider/divider.jsx';
 import LanguageSelector from '../../containers/language-selector.jsx';
@@ -171,7 +172,8 @@ class MenuBar extends React.Component {
             'handleLanguageMouseUp',
             'handleRestoreOption',
             'getSaveToComputerHandler',
-            'restoreOptionMessage'
+            'restoreOptionMessage',
+            'handleFinishExperiment'
         ]);
     }
     componentDidMount () {
@@ -226,6 +228,20 @@ class MenuBar extends React.Component {
             } else {
                 waitForUpdate(false); // immediately transition to project page
             }
+        }
+    }
+    handleFinishExperiment () {
+        const experimentId = new URL(window.location.href).searchParams.get('expid');
+        const userId = new URL(window.location.href).searchParams.get('uid');
+        if (experimentId && userId) {
+            this.props.saveProjectSb3().then(content => {
+                if (this.props.onSaveFinished) {
+                    this.props.onSaveFinished();
+                }
+                this.props.saveProjectBeforeFinish(content);
+                window.location.href =
+                    `http://localhost:8090/participant/stop?user=${userId}&experiment=${experimentId}`;
+            });
         }
     }
     handleRestoreOption (restoreFun) {
@@ -625,6 +641,12 @@ class MenuBar extends React.Component {
                             <SaveStatus />
                         )}
                     </div>
+                    <div>
+                        <Scratch1984Button
+                            className={styles.menuBarButton}
+                            onClick={this.handleFinishExperiment}
+                        />
+                    </div>
                     {this.props.sessionExists ? (
                         this.props.username ? (
                             // ************ user is logged in ************
@@ -823,7 +845,10 @@ MenuBar.propTypes = {
     showComingSoon: PropTypes.bool,
     userOwnsProject: PropTypes.bool,
     username: PropTypes.string,
-    vm: PropTypes.instanceOf(VM).isRequired
+    vm: PropTypes.instanceOf(VM).isRequired,
+    saveProjectBeforeFinish: PropTypes.func,
+    saveProjectSb3: PropTypes.func,
+    onSaveFinished: PropTypes.func
 };
 
 MenuBar.defaultProps = {
@@ -850,7 +875,9 @@ const mapStateToProps = (state, ownProps) => {
         username: user ? user.username : null,
         userOwnsProject: ownProps.authorUsername && user &&
             (ownProps.authorUsername === user.username),
-        vm: state.scratchGui.vm
+        vm: state.scratchGui.vm,
+        saveProjectBeforeFinish: state.scratchGui.vm.saveProjectBeforeFinish,
+        saveProjectSb3: state.scratchGui.vm.saveProjectSb3.bind(state.scratchGui.vm)
     };
 };
 

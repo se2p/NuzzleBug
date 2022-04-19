@@ -1,0 +1,9 @@
+@import "../../css/colors.css";
+
+.scratch1984-button {
+    background: $data-primary;
+}
+
+.scratch1984-button-not-experiment {
+    visibility: hidden;
+}

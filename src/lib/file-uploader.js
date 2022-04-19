@@ -3,6 +3,9 @@ import randomizeSpritePosition from './randomize-sprite-position.js';
 import bmpConverter from './bmp-converter';
 import gifDecoder from './gif-decoder';
 
+// Only works with npm link settings
+import logging from '../../node_modules/scratch-vm/src/util/logging.js';
+
 /**
  * Extract the file name given a string of the form fileName + ext
  * @param {string} nameExt File name + extension (e.g. 'my_image.png')
@@ -38,6 +41,10 @@ const handleFileUpload = function (fileInput, onload, onerror) {
             const fileName = extractFileName(file.name);
             onload(reader.result, fileType, fileName, i, files.length);
             readFile(i + 1, files);
+
+            if (logging.isActive()) {
+                logging.logFile(file.name, file.type, file, new Date());
+            }
         };
         reader.onerror = onerror;
         reader.readAsArrayBuffer(file);
