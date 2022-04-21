@@ -476,7 +476,9 @@ class IRAnswer extends React.Component {
             
             const edge = this._extractEdgeAttributes(pathNode, polygonNode);
             if (executionInfo.condition) {
-                if (!executionInfo.executed) {
+                const fromNodeId = titleNode.innerHTML.split('-&gt;')[0];
+                const fromNodeExecuted = this.props.answer.executionInfo.blocks[fromNodeId].executed;
+                if (fromNodeExecuted && !executionInfo.executed) {
                     this._dashPath(pathNode);
                     this._addCrossOutLine(svgGraphEdge, edge.line);
                 }
