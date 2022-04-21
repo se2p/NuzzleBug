@@ -444,19 +444,25 @@ class IRAnswer extends React.Component {
     }
 
     _addRedBorderToBlock (block, svgGraphNode) {
-        const rect = document.createElement('rect');
-        rect.setAttribute('id', 'red-block-border');
-        rect.setAttribute('stroke', 'red');
-        rect.setAttribute('stroke-width', '4');
-        rect.setAttribute('stroke-linecap', `round`);
-        rect.setAttribute('fill-opacity', '0');
-        rect.setAttribute('height', `${block.height - 4}px`);
-        rect.setAttribute('width', `${block.width - 4}px`);
-        rect.setAttribute('x', '2');
-        rect.setAttribute('y', '2');
-        rect.setAttribute('rx', '5');
-        rect.setAttribute('ry', '5');
-        svgGraphNode.innerHTML += rect.outerHTML;
+        const path = document.createElement('path');
+        path.setAttribute('id', 'red-block-border');
+        path.setAttribute('stroke', 'red');
+        path.setAttribute('stroke-width', '4');
+        path.setAttribute('fill', 'none');
+        const width = block.width - 12;
+        const height = block.height - 12;
+        path.setAttribute('d', `
+            M 6,2
+            h ${width}
+            a 4,4 0 0,1 4,4
+            v ${height}
+            a 4,4 0 0,1 -4,4 
+            h ${-width}
+            a 4,4 0 0,1 -4,-4 
+            v ${-height}
+            a 4,4 0 0,1 4,-4 
+            Z`);
+        svgGraphNode.innerHTML += path.outerHTML;
     }
 
     _addQuestionButtonToBlock (block, svgGraphNode, scaleFactor, color) {
