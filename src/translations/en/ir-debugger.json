@@ -372,7 +372,7 @@
     "reason": {
         "flag-clicked": "the green flag was clicked",
         "not-flag-clicked": "the green flag wasn't clicked",
-        "not-flag-clicked-during-lifetime": "the green flag wasn't clicked during the lifetime of the clone",
+        "not-flag-clicked-during-lifetime": "a clone does not react to the event <i>click on green flag</i>",
         "sprite-clicked": "the sprite <i>{sprite}</i> was clicked",
         "not-sprite-clicked": "the sprite <i>{sprite}</i> wasn't clicked",
         "stage-clicked": "the stage was clicked",
@@ -388,7 +388,7 @@
         "not-clone-created": "a clone of sprite <i>{sprite}</i> wasn't created",
         "clone-started": "the sprite <i>{sprite}</i> started as a clone",
         "not-clone-started": "the sprite <i>{sprite}</i> didn't start as a clone",
-        "not-clone-started-irrelevant": "an original sprite does not react to the event <i>when I start as a clone</i>",
+        "not-clone-started-irrelevant": "the event <i>I start as a clone</i> can not occur for an original sprite",
         "backdrop-switched": "the backdrop switched to <i>{backdrop}</i>",
         "not-backdrop-switched": "the backdrop didn't switch to <i>{backdrop}</i>",
         "not-backdrop-switched-during-lifetime": "the backdrop didn't switch to <i>{backdrop}</i> during the lifetime of the clone",
