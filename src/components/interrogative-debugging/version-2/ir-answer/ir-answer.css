@@ -23,8 +23,8 @@
   width: 0px;
   height: 0px;
   position: absolute;
-  border-left: 15px solid $ui-secondary;
-  border-right: 15px solid transparent;
+  border-left: 16px solid $ui-secondary;
+  border-right: 16px solid transparent;
   border-top: 8px solid $ui-secondary;
   border-bottom: 8px solid transparent;
   right: -30px;
