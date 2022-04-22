@@ -133,6 +133,9 @@ class IRAnswer extends React.Component {
         }
         for (const scratchPosition of relevantScratchPositions) {
             const position = this._transformScratchPositionToCanvasPosition(scratchPosition, stageCanvas);
+            if (position.x < 0 || position.x > stageCanvas.width || position.y < 0 || position.y > stageCanvas.height) {
+                continue;
+            }
             position.x = Math.round(position.x * scaleFactor);
             position.y = Math.round(position.y * scaleFactor);
             const colorIndices = this._getColorIndicesForPosition(position.x, position.y, tmpCanvas.width);
