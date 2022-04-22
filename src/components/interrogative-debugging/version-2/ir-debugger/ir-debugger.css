@@ -1,11 +1,17 @@
 @import "../../../../css/colors.css";
 @import "../../../../css/z-index.css";
 
-.overlay {
+.expanded-overlay {
     background: $ui-black-transparent;
     position: fixed;
+    pointer-events: all;
+    z-index: $z-index-ir-debugger;
+}
+
+.overlay {
+    position: fixed;
     pointer-events: none;
-    z-index: $z-index-card;
+    z-index: $z-index-ir-debugger;
 }
 
 .card {

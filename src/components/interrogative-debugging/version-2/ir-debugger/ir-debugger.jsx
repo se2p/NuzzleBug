@@ -328,17 +328,17 @@ class IRDebugger extends React.Component {
             <div>
                 {expanded ? (
                     <div
-                        className={styles.overlay}
+                        className={styles.expandedOverlay}
                         style={{
                             width: `${window.innerWidth + (2 * cardHorizontalDragOffset)}px`,
-                            height: `${window.innerHeight - menuBarHeight + cardVerticalDragOffset}px`,
+                            height: `${window.innerHeight + cardVerticalDragOffset}px`,
                             top: 0,
                             left: 0
                         }}
                     />
                 ) : null}
                 <div
-                    className={cardStyles.cardContainerOverlay}
+                    className={styles.overlay}
                     style={{
                         width: `${window.innerWidth + (2 * cardHorizontalDragOffset)}px`,
                         height: `${window.innerHeight - menuBarHeight + cardVerticalDragOffset}px`,
