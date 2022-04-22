@@ -401,7 +401,10 @@ class IRAnswer extends React.Component {
             let afterValueTextLength;
             svgGraphNode.childNodes.forEach(node => {
                 if (node.nodeName === 'text') {
-                    const initialTextLength = node.textLength.baseVal.value;
+                    let initialTextLength = node.textLength.baseVal.value;
+                    if (initialTextLength === 0) {
+                        initialTextLength = node.getBoundingClientRect().width;
+                    }
                     let textLength = initialTextLength > maxTextLength ? maxTextLength : initialTextLength;
                     node.setAttribute('textLength', `${textLength}`);
                     node.setAttribute('font-weight', 'bold');
