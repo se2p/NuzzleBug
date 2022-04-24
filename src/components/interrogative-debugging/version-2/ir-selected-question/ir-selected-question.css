@@ -2,5 +2,42 @@
     font-size: 14px;
     font-weight: bold;
     min-height: 50px;
-    width: calc(100% - 75px);
+    float: left;
+}
+
+.think-bubble {
+    float: left;
+    height: 14px;
+    cursor: pointer;
+    padding: 0 5px;
+    filter: invert(37%) sepia(21%) saturate(463%) hue-rotate(188deg) brightness(92%) contrast(90%);
+}
+  
+.feedback .feedback-button {
+    display: none;
+}  
+
+.feedback:hover .feedback-button {
+    display: block;
+}
+ 
+.feedback-button {
+    float: left;
+    height: 26px;
+    cursor: pointer;
+    opacity: 0.3;
+    margin-top: -6px;
+    padding: 0 2px;
+}
+  
+.feedback-button:hover {
+    opacity: 0.8;
+}
+  
+.selected-feedback-button, .feedback-button:active {
+    opacity: 1;
+}
+  
+.feedback-button:active {
+    transform: scale(1.25);
 }
