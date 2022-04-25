@@ -43,6 +43,18 @@ class IRSelectedQuestion extends React.Component {
         this.forceUpdate();
     }
 
+    getFeedbackIcon (feedback) {
+        if (feedback === Feedback.POSITIVE) {
+            return positiveFeedback;
+        }
+        if (feedback === Feedback.NEUTRAL) {
+            return neutralFeedback;
+        }
+        if (feedback === Feedback.NEGATIVE) {
+            return negativeFeedback;
+        }
+    }
+
     handlePositiveFeedback () {
         this.handleFeedback(Feedback.POSITIVE);
     }
@@ -77,10 +89,6 @@ class IRSelectedQuestion extends React.Component {
 
                         <div className={styles.feedback}>
                             <img
-                                className={classNames(styles.thinkBubble)}
-                                src={thinkBubble}
-                            />
-                            <img
                                 className={selectedQuestion.feedback === Feedback.POSITIVE ?
                                     classNames(styles.selectedFeedbackButton, styles.feedbackButton) :
                                     classNames(styles.feedbackButton)}
@@ -101,6 +109,16 @@ class IRSelectedQuestion extends React.Component {
                                 onClick={this.handleNegativeFeedback}
                                 src={negativeFeedback}
                             />
+                            <img
+                                className={classNames(styles.thinkBubble)}
+                                src={thinkBubble}
+                            />
+                            {typeof selectedQuestion.feedback === 'undefined' ? null : (
+                                <img
+                                    className={styles.selectedFeedbackButtonSmall}
+                                    src={this.getFeedbackIcon(selectedQuestion.feedback)}
+                                />
+                            )}
                         </div>
                     </div>
                 ) : null}
