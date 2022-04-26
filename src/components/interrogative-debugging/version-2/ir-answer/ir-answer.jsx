@@ -14,6 +14,7 @@ import getCostumeUrl from '../../../../lib/get-costume-url';
 import styles from './ir-answer.css';
 import irStyles from '../ir-styles.css';
 import cat from './cat.png';
+import unicorn from './unicorn.gif';
 import mousePointer from '../icons/icon--mouse.svg';
 import zoomInIcon from '../icons/icon--plus.svg';
 import zoomOutIcon from '../icons/icon--minus.svg';
@@ -27,6 +28,8 @@ const Feedback = Object.freeze({
     NEUTRAL: 0,
     NEGATIVE: -1
 });
+
+let initCount = 0;
 
 class IRAnswer extends React.Component {
 
@@ -66,6 +69,7 @@ class IRAnswer extends React.Component {
             mousePosition: null,
             edgePositions: []
         };
+        initCount += 1;
     }
 
     componentDidMount () {
@@ -1044,7 +1048,11 @@ class IRAnswer extends React.Component {
                         className={classNames(styles.speechBubbleBox, styles.speechBubbleTriangle,
                             irStyles[`color-${selectedQuestion.color.replace('#', '')}`])}
                     >
-                        <div className={styles.answerMessages}>
+                        <div
+                            className={initCount % 10 === 0 ?
+                                classNames(styles.answerMessages, styles.rainbowText) :
+                                classNames(styles.answerMessages)}
+                        >
                             {this.state.messages.map((message, index) => (
                                 <FormattedHTMLMessage
                                     key={index}
@@ -1077,10 +1085,16 @@ class IRAnswer extends React.Component {
                             src={negativeFeedback}
                         />
                     </div>
-                    <img
-                        className={styles.cat}
-                        src={cat}
-                    />
+                    {initCount % 10 === 0 ?
+                        <img
+                            className={styles.unicorn}
+                            src={unicorn}
+                        /> :
+                        <img
+                            className={styles.cat}
+                            src={cat}
+                        />
+                    }
                 </div>
                 {answer.graph && answer.graph.getAllNodes().length > 0 ? (
                     <div className={styles.blockArea}>

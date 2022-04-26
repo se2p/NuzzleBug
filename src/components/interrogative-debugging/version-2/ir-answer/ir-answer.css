@@ -39,10 +39,23 @@
   scrollbar-color: #CECDCE transparent;
 }
 
+.rainbow-text {
+  background: linear-gradient(53.13deg,#FFD33D 0,#FB8532 16.02%,#EA4A5A 28.06%,#8A63D2 56.92%,#2188FF 72.93%,#34D058 84%,#FFD33D 100%);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
 .cat {
   width: 70px;
   position: fixed;
   bottom: 400px;
+  right: 20px;
+}
+
+.unicorn {
+  width: 80px;
+  position: fixed;
+  bottom: 412px;
   right: 20px;
 }
 
