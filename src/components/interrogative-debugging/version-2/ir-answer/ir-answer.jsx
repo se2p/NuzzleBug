@@ -18,6 +18,16 @@ import mousePointer from '../icons/icon--mouse.svg';
 import zoomInIcon from '../icons/icon--plus.svg';
 import zoomOutIcon from '../icons/icon--minus.svg';
 
+import positiveFeedback from '../icons/icon--positive-feedback.svg';
+import neutralFeedback from '../icons/icon--neutral-feedback.svg';
+import negativeFeedback from '../icons/icon--negative-feedback.svg';
+
+const Feedback = Object.freeze({
+    POSITIVE: 1,
+    NEUTRAL: 0,
+    NEGATIVE: -1
+});
+
 class IRAnswer extends React.Component {
 
     constructor (props) {
@@ -25,7 +35,11 @@ class IRAnswer extends React.Component {
         bindAll(this, [
             'handleZoomGraphIn',
             'handleZoomGraphOut',
-            'handleSelectedBlockChange'
+            'handleSelectedBlockChange',
+            'handleFeedback',
+            'handlePositiveFeedback',
+            'handleNeutralFeedback',
+            'handleNegativeFeedback'
         ]);
     
         this.graphDiv = React.createRef();
@@ -983,6 +997,39 @@ class IRAnswer extends React.Component {
         const percentage = ((slider.value.index - slider.min) * 100) / (slider.max - slider.min);
         this.sliderValueLabel.current.style.left = `calc(${percentage}% + (${9.5 - (percentage * 0.2)}px))`;
     }
+   
+    handleFeedback (value) {
+        if (this.props.selectedQuestion.feedback === value) {
+            this.props.selectedQuestion.feedback = null;
+        } else {
+            this.props.selectedQuestion.feedback = value;
+        }
+        this.forceUpdate();
+    }
+
+    getFeedbackIcon (feedback) {
+        if (feedback === Feedback.POSITIVE) {
+            return positiveFeedback;
+        }
+        if (feedback === Feedback.NEUTRAL) {
+            return neutralFeedback;
+        }
+        if (feedback === Feedback.NEGATIVE) {
+            return negativeFeedback;
+        }
+    }
+
+    handlePositiveFeedback () {
+        this.handleFeedback(Feedback.POSITIVE);
+    }
+
+    handleNeutralFeedback () {
+        this.handleFeedback(Feedback.NEUTRAL);
+    }
+
+    handleNegativeFeedback () {
+        this.handleFeedback(Feedback.NEGATIVE);
+    }
 
     render () {
         const {
@@ -1006,6 +1053,29 @@ class IRAnswer extends React.Component {
                                 />
                             ))}
                         </div>
+                    </div>
+                    <div className={styles.feedback}>
+                        <img
+                            className={selectedQuestion.feedback === Feedback.POSITIVE ?
+                                classNames(styles.selectedFeedbackButton, styles.feedbackButton) :
+                                classNames(styles.feedbackButton)}
+                            onClick={this.handlePositiveFeedback}
+                            src={positiveFeedback}
+                        />
+                        <img
+                            className={selectedQuestion.feedback === Feedback.NEUTRAL ?
+                                classNames(styles.selectedFeedbackButton, styles.feedbackButton) :
+                                classNames(styles.feedbackButton)}
+                            onClick={this.handleNeutralFeedback}
+                            src={neutralFeedback}
+                        />
+                        <img
+                            className={selectedQuestion.feedback === Feedback.NEGATIVE ?
+                                classNames(styles.selectedFeedbackButton, styles.feedbackButton) :
+                                classNames(styles.feedbackButton)}
+                            onClick={this.handleNegativeFeedback}
+                            src={negativeFeedback}
+                        />
                     </div>
                     <img
                         className={styles.cat}

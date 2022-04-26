@@ -40,7 +40,7 @@
 }
 
 .cat {
-  width: 75px;
+  width: 70px;
   position: fixed;
   bottom: 400px;
   right: 20px;
@@ -182,4 +182,30 @@
   background: red;
   bottom: -4px;
   left: 50%;
+}
+
+.feedback {
+  position: fixed;
+  bottom: 500px;
+  right: 20px;
+}
+
+.feedback-button {
+  float: left;
+  height: 21px;
+  cursor: pointer;
+  opacity: 0.3;
+  padding-left: 3px;
+}
+
+.feedback-button:hover {
+  opacity: 0.8;
+}
+
+.selected-feedback-button, .feedback-button:active {
+  opacity: 1;
+}
+
+.feedback-button:active {
+  transform: scale(1.25);
 }
