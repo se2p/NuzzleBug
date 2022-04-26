@@ -14,6 +14,7 @@
         "title-stage": "Interrogative Debugger for the stage",
         "title-block": "Interrogative Debugger for the block",
         "title": "Interrogative Debugger",
+        "of": "of",
         "expand": "Expand",
         "close": "Close", 
         "shrink": "Shrink",

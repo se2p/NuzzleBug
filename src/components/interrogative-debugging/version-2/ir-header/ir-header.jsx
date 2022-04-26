@@ -276,6 +276,26 @@ class IRHeader extends React.Component {
                             </div>
                         </div>
                     ) : null}
+                    {blockExecutionOptions && blockExecutionOptions.length > 0 ? (
+                        <div
+                            className={styles.headerItem}
+                            style={{paddingLeft: '8px'}}
+                        >
+                            <FormattedHTMLMessage
+                                tagName="div"
+                                defaultMessage="of"
+                                id="gui.ir-debugger.header.of"
+                            />
+                        </div>
+                    ) : null}
+                    {blockExecutionOptions && blockExecutionOptions.length > 0 ? (
+                        <div
+                            className={styles.headerItem}
+                            style={{paddingLeft: '5px'}}
+                        >
+                            {blockExecutionOptions.length}
+                        </div>
+                    ) : null}
                 </div>
                 <div className={styles.rightHeader}>
                     {expanded && onBack ? (

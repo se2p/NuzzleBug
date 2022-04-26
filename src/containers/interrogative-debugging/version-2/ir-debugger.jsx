@@ -439,8 +439,13 @@ class IRDebugger extends React.Component {
                         this.blockExecutionOptions.push(blockExecutionOption);
                     }
                 }
+                const maxIndex = `${this.blockExecutionOptions.length}`;
                 for (let i = 0; i < this.blockExecutionOptions.length; i++) {
-                    this.blockExecutionOptions[i].optionName = `${i + 1}. ${this.translate('execution')}`;
+                    let index = `${i + 1}`;
+                    while (index.length < maxIndex.length) {
+                        index = `0${index}`;
+                    }
+                    this.blockExecutionOptions[i].optionName = `${index}. ${this.translate('execution')}`;
                 }
                 this.blockExecutionOptions.reverse();
             }
