@@ -238,7 +238,7 @@ class IRHeader extends React.Component {
                             </div>
                         </div>
                     ) : null}
-                    {blockExecutionOptions && blockExecutionOptions.length > 1 ? (
+                    {blockExecutionOptions && blockExecutionOptions.length > 0 ? (
                         <div
                             className={styles.headerItem}
                             onMouseLeave={this.handleCloseBlockExecutionDropdown}
