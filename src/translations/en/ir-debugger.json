@@ -7,7 +7,7 @@
         "ir-questions": "Show Questions",
         "activate-observation": "Activate observation",
         "deactivate-observation": "Deactivate observation",
-        "open-debugger": "ask why..."
+        "open-debugger": "open questions"
     },
     "header": {
         "title-sprite": "Interrogative Debugger for sprite <i>{sprite}</i>",

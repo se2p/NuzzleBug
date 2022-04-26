@@ -7,13 +7,13 @@
         "ir-questions": "Zeige Fragen",
         "activate-observation": "Beobachtung starten",
         "deactivate-observation": "Beobachtung stoppen",
-        "open-debugger": "Frage warum..."
+        "open-debugger": "Fragen öffnen"
     },
     "header": {
-        "title-sprite": "Interrogative Debugger für die Figur <i>{sprite}</i>",
-        "title-stage": "Interrogative Debugger für die Bühne",
-        "title-block": "Interrogative Debugger für den Block",
-        "title": "Interrogative Debugger",
+        "title-sprite": "Interrogativer Debugger für die Figur <i>{sprite}</i>",
+        "title-stage": "Interrogativer Debugger für die Bühne",
+        "title-block": "Interrogativer Debugger für den Block",
+        "title": "Interrogativer Debugger",
         "expand": "Aufklappen",
         "close": "Schließen",
         "shrink": "Zuklappen",
