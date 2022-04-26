@@ -31,6 +31,8 @@ class IRAnswer extends React.Component {
         this.graphDiv = React.createRef();
         this.targetsDiv = React.createRef();
         this.stage = React.createRef();
+        this.slider = React.createRef();
+        this.sliderValueLabel = React.createRef();
         this.zoomFactor = 1;
         this.zoomStepSize = 0.1;
         this.gray = '#575E75';
@@ -59,6 +61,9 @@ class IRAnswer extends React.Component {
         }
         if (this.stage.current) {
             this._drawStage();
+        }
+        if (this.slider.current && this.sliderValueLabel.current) {
+            this.updateSliderValueLabel();
         }
     }
 
@@ -972,6 +977,13 @@ class IRAnswer extends React.Component {
         this.graphDiv.current.parentElement.scrollTo(scrollLeft, scrollTop);
     }
 
+    updateSliderValueLabel () {
+        const slider = this.props.answer.stage.slider;
+        this.sliderValueLabel.current.innerHTML = slider.value.label;
+        const percentage = ((slider.value.index - slider.min) * 100) / (slider.max - slider.min);
+        this.sliderValueLabel.current.style.left = `calc(${percentage}% + (${9.5 - (percentage * 0.2)}px))`;
+    }
+
     render () {
         const {
             answer,
@@ -1076,6 +1088,23 @@ class IRAnswer extends React.Component {
                                         marginLeft: `${this.state.mousePosition.x}px`,
                                         marginTop: `${this.state.mousePosition.y}px`
                                     }}
+                                />
+                            </div>
+                        ) : null}
+                        {answer.stage.slider ? (
+                            <div className={styles.sliderContainer}>
+                                <input
+                                    readOnly
+                                    ref={this.slider}
+                                    className={styles.slider}
+                                    type="range"
+                                    min={answer.stage.slider.min}
+                                    max={answer.stage.slider.max}
+                                    value={answer.stage.slider.value.index}
+                                />
+                                <output
+                                    ref={this.sliderValueLabel}
+                                    className={styles.sliderValueLabel}
                                 />
                             </div>
                         ) : null}

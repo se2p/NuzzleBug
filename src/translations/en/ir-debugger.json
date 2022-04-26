@@ -46,7 +46,8 @@
     "question": {
         "form": {
             "why-did": "Why did ...?",
-            "why-did-not": "Why didn't ...?"
+            "why-did-not": "Why didn't ...?",
+            "when-did": "When did ...?"
         },
         "motion": {
             "why-did-move": "Why did the <b>position</b> of sprite <i>{sprite}</i> change?",
@@ -164,7 +165,8 @@
         },
         "execution": {
             "why-did-block-execute": "Why did the block execute?",
-            "why-did-not-block-execute": "Why didn't the block execute?"
+            "why-did-not-block-execute": "Why didn't the block execute?",
+            "when-did-block-execute": "When did the block execute?"
         },
         "input": {
             "why-did-have-value": "Why did <b><i>{input}</i></b> have the value <b>{value}</b>?"
@@ -369,6 +371,10 @@
             "sprites-invisible": "Sprite <i>{sprite1}</i> and sprite <i>{sprite2}</i> could not touch each other, because they were invisible!",
             "nonexistent-color": "The color <span style=\"color: {color};\">⬤</span> did not occur! <br> Try to select the desired color with the color picker.",
             "nonexistent-colors": "The colors <span style=\"color: {color1};\">⬤</span> and <span style=\"color: {color2};\">⬤</span> did not occur! <br> Try to select the desired colors with the color picker."
+        },
+        "time": {
+            "block-executed-seconds-after-green-flag": "The block executed <span style=\"color: red;\"><b>{timeElapsed}</b></span> seconds after clicking the green flag.",
+            "block-executed-seconds-after-observation-start": "The block executed <span style=\"color: red;\"><b>{timeElapsed}</b></span> seconds after starting the observation."
         }
     },
     "reason": {

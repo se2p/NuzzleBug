@@ -27,6 +27,7 @@ import {
     dragDebugger,
     endDragDebugger
 } from '../../../reducers/interrogative-debugging/version-2/ir-debugger';
+import {QuestionContent} from 'scratch-ir/src/version-2/questions/question';
 
 class IRDebugger extends React.Component {
 
@@ -469,12 +470,14 @@ class IRDebugger extends React.Component {
         try {
             this.crashed = false;
             const newLastTrace = this.isBlockDebugger &&
-                this.selectedQuestion.category === QuestionCategoryType.SENSING ?
+                (this.selectedQuestion.category === QuestionCategoryType.SENSING ||
+                    this.selectedQuestion.content === QuestionContent.BLOCK_EXECUTION_TIME) ?
                 this.selectedBlockExecution.lastTrace : this.props.vm.storedLastTrace;
             const traces = this.props.vm.runtime.traceInfo.tracer.traces;
             const lastTrace = this.props.vm.runtime.newLastTrace ?
                 this.props.vm.runtime.newLastTrace : traces[traces.length - 1];
-            if (newLastTrace.uniqueId !== lastTrace.uniqueId) {
+            if (newLastTrace.uniqueId !== lastTrace.uniqueId ||
+                this.selectedQuestion.content === QuestionContent.BLOCK_EXECUTION_TIME) {
                 this.props.vm.rewindToTrace(newLastTrace, false);
                 this.udpateTargetOptions();
                 this.initAnswerProvider();
