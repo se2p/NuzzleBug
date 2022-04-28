@@ -502,6 +502,7 @@
         "point-towards": "drehe-dich",
         "turn": "drehe-dich",
         "set-rotation-style": "setze-Drehtyp",
+        "if-on-edge-bounce": "pralle-vom-Rand-ab",
         "say": "sage",
         "think": "denke",
         "ask": "frage",

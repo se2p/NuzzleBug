@@ -502,6 +502,7 @@
         "point-towards": "point-towards",
         "turn": "turn",
         "set-rotation-style": "set-rotation-style",
+        "if-on-edge-bounce": "if-on-edge-bounce",
         "say": "say",
         "think": "think",
         "ask": "ask",
