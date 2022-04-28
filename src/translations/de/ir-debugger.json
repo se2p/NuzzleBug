@@ -336,8 +336,6 @@
             "some-behavior-blocks-executed-no-change": ", weil keiner der ausgeführten <i>{blockType}-Blöcke</i> {attribute} verändert hat.",
             "one-behavior-block-executed-not-turn-positive": ", weil der <i>{blockType}-Block</i> nicht mit einem positiven Wert ausgeführt wurde.",
             "one-behavior-block-executed-not-turn-negative": ", weil der <i>{blockType}-Block</i> nicht mit einem negativen Wert ausgeführt wurde.",
-            "one-behavior-block-executed-rotation-style": ", weil der <i>{blockType}-Block</i> mit dem Drehtyp <i>{rotationStyle}</i> ausgeführt wurde.",
-            "one-behavior-block-executed-wrong-rotation-style": ", weil der <i>{blockType}-Block</i> nicht mit dem Drehtyp <i>{rotationStyle}</i> ausgeführt wurde.",
             "one-behavior-block-executed-no-left-to-right-direction-change": ", weil der ausgeführte <i>{blockType}-Block</i> die Richtung nicht von einem negativen zu einem positiven Wert geändert hat.",
             "one-behavior-block-executed-no-right-to-left-direction-change": ", weil der ausgeführte <i>{blockType}-Block</i> die Richtung nicht von einem positiven zu einem negativen Wert geändert hat.",
             "one-behavior-block-unexecuted": " Ein anderer <i>{blockType}-Block</i>, der dazu führen würde, wurde nicht ausgeführt.",
