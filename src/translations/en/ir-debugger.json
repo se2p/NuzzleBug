@@ -290,11 +290,9 @@
         "positive": {
             "block-executed": " and thereby the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block was executed.",
             "block-executed-with-value": " and thereby the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block was executed with value <code class=\"scratchBlock\">({value} :: #ffffff)</code>.",
-            "block-executed-with-rotation-style": " and thereby the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block was executed with rotation style <i>{rotationStyle}</i>.",
-            "block-executed-with-value-with-rotation-style": " and thereby the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block was executed with value <code class=\"scratchBlock\">({value} :: #ffffff)</code> and with rotation style <i>{rotationStyle}</i>.",
             "multiple-behavior-blocks": "the execution of {count} <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> blocks caused this behavior.",
-            "turn-right": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block changed the direction from a negative to a positive value and because the rotation style was 'left-right'. ",
-            "turn-left": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block changed the direction from a positive to a negative value and because the rotation style was 'left-right'. "
+            "turn-right": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block changed the direction from a negative to a positive value. ",
+            "turn-left": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block changed the direction from a positive to a negative value. "
         },
         "negative": {
             "execution-stopped": ", because the execution was stopped",

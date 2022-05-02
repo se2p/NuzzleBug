@@ -290,11 +290,9 @@
         "positive": {
             "block-executed": " und dadurch der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block ausgeführt wurde.",
             "block-executed-with-value": " und dadurch der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block mit dem Wert <code class=\"scratchBlock\">({value} :: #ffffff)</code> ausgeführt wurde.",
-            "block-executed-with-rotation-style": " und dadurch der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block mit dem Drehtyp <i>{rotationStyle}</i> ausgeführt wurde.",
-            "block-executed-with-value-with-rotation-style": " und dadurch der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block mit dem Wert <code class=\"scratchBlock\">({value} :: #ffffff)</code> und dem Drehtyp <i>{rotationStyle}</i> ausgeführt wurde.",
             "multiple-behavior-blocks": "die Ausführung von {count} <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Blöcken dazu geführt hat.",
-            "turn-right": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block zu einer Änderung der Richtung von einem negativen zu einem positiven Wert geführt hat und weil der Drehtyp 'links-rechts' war. ",
-            "turn-left": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block zu einer Änderung der Richtung von einem positiven zu einem negativen Wert geführt hat und weil der Drehtyp 'links-rechts' war. "
+            "turn-right": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block zu einer Änderung der Richtung von einem negativen zu einem positiven Wert geführt hat. ",
+            "turn-left": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block zu einer Änderung der Richtung von einem positiven zu einem negativen Wert geführt hat. "
         },
         "negative": {
             "execution-stopped": ", weil die Ausführung gestoppt wurde",
