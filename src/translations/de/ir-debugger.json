@@ -294,8 +294,7 @@
             "block-executed-with-value-with-rotation-style": " und dadurch der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block mit dem Wert <code class=\"scratchBlock\">({value} :: #ffffff)</code> und dem Drehtyp <i>{rotationStyle}</i> ausgeführt wurde.",
             "multiple-behavior-blocks": "die Ausführung von {count} <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Blöcken dazu geführt hat.",
             "turn-right": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block zu einer Änderung der Richtung von einem negativen zu einem positiven Wert geführt hat und weil der Drehtyp 'links-rechts' war. ",
-            "turn-left": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block zu einer Änderung der Richtung von einem positiven zu einem negativen Wert geführt hat und weil der Drehtyp 'links-rechts' war. ",
-            "hard-coded-comparison": ", weil keine der Eingaben variabel ist und der Vergleich deshalb immer wahr ist."
+            "turn-left": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block zu einer Änderung der Richtung von einem positiven zu einem negativen Wert geführt hat und weil der Drehtyp 'links-rechts' war. "
         },
         "negative": {
             "execution-stopped": ", weil die Ausführung gestoppt wurde",
@@ -326,13 +325,21 @@
             "block-not-reachable": ", weil der Block nicht erreichbar ist!",
             "behavior-block-not-reachable": ", weil der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block, der dazu führen würde, nicht erreichbar ist!",
             "possible-behavior-block-not-reachable": ", weil der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block, der dazu führen könnte, nicht erreichbar ist!",
-            "no-broadcast-send-block": ", weil es keinen Block gibt, der diese Nachricht sendet!",
-            "hard-coded-comparison": ", weil keine der Eingaben variabel ist und der Vergleich deshalb immer falsch ist."
+            "no-broadcast-send-block": ", weil es keinen Block gibt, der diese Nachricht sendet!"
         },
         "operator": {
             "variable-have-value": "<code class=\"scratchBlock\">{variable}</code> den Wert <code class=\"scratchBlock\">({value} :: #ffffff)</code> hatte",
             "condition-true": " wahr ist.",
-            "condition-false": " nicht wahr ist."
+            "condition-false": " nicht wahr ist.",
+            "smaller-than": ", weil <code class=\"scratchBlock\">{input1}</code> kleiner als <code class=\"scratchBlock\">{input2}</code> ist. ",
+            "not-smaller-than": ", weil <code class=\"scratchBlock\">{input1}</code> nicht kleiner als <code class=\"scratchBlock\">{input2}</code> ist. ",
+            "greater-than": ", weil <code class=\"scratchBlock\">{input1}</code> größer als <code class=\"scratchBlock\">{input2}</code> ist. ",
+            "not-greater-than": ", weil <code class=\"scratchBlock\">{input1}</code> nicht größer als <code class=\"scratchBlock\">{input2}</code> ist. ",
+            "equal": ", weil <code class=\"scratchBlock\">{input1}</code> und <code class=\"scratchBlock\">{input2}</code> gleich sind. ",
+            "not-equal": ", weil <code class=\"scratchBlock\">{input1}</code> und <code class=\"scratchBlock\">{input2}</code> nicht gleich sind. ",
+            "contained": ", weil <code class=\"scratchBlock\">{input2}</code> in <code class=\"scratchBlock\">{input1}</code> enthalten ist. ",
+            "not-contained": ", weil <code class=\"scratchBlock\">{input2}</code> nicht in <code class=\"scratchBlock\">{input1}</code> enthalten ist. ",
+            "hard-coded-comparison": "Die Bedingung ist <b style=\"color: red;\">immer {value}</b>, weil keiner der Blöcke eine <code class=\"scratchBlock\">(Variable)</code> ist. "
         },
         "sensing": {
             "touching-sprite-edge": "Die Figur <i>{sprite}</i> hat den <i>Rand</i> an den im Bild rot markierten Stellen berührt.",

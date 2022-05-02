@@ -294,8 +294,7 @@
             "block-executed-with-value-with-rotation-style": " and thereby the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block was executed with value <code class=\"scratchBlock\">({value} :: #ffffff)</code> and with rotation style <i>{rotationStyle}</i>.",
             "multiple-behavior-blocks": "the execution of {count} <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> blocks caused this behavior.",
             "turn-right": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block changed the direction from a negative to a positive value and because the rotation style was 'left-right'. ",
-            "turn-left": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block changed the direction from a positive to a negative value and because the rotation style was 'left-right'. ",
-            "hard-coded-comparison": ", because none of the inputs is variable and therefore the comparison is always true."
+            "turn-left": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block changed the direction from a positive to a negative value and because the rotation style was 'left-right'. "
         },
         "negative": {
             "execution-stopped": ", because the execution was stopped",
@@ -326,13 +325,21 @@
             "block-not-reachable": ", because the block is not reachable!",
             "behavior-block-not-reachable": ", because the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block that would lead to the behavior is not reachable!",
             "possible-behavior-block-not-reachable": ", because the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block that could lead to the behavior is not reachable!",
-            "no-broadcast-send-block": ", because there is no block broadcasting this message!",
-            "hard-coded-comparison": ", because none of the inputs is variable and therefore the comparison is always false."
+            "no-broadcast-send-block": ", because there is no block broadcasting this message!"
         },
         "operator": {
             "variable-have-value": "<code class=\"scratchBlock\">{variable}</code> had the value <code class=\"scratchBlock\">({value} :: #ffffff)</code>",
             "condition-true": " is true.",
-            "condition-false": " is not true."
+            "condition-false": " is not true.",
+            "smaller-than": ", because <code class=\"scratchBlock\">{input1}</code> is smaller than <code class=\"scratchBlock\">{input2}</code>. ",
+            "not-smaller-than": ", because <code class=\"scratchBlock\">{input1}</code> is not smaller than <code class=\"scratchBlock\">{input2}</code>. ",
+            "greater-than": ", because <code class=\"scratchBlock\">{input1}</code> is greater than <code class=\"scratchBlock\">{input2}</code>. ",
+            "not-greater-than": ", because <code class=\"scratchBlock\">{input1}</code> is not greater than <code class=\"scratchBlock\">{input2}</code>. ",
+            "equal": ", because <code class=\"scratchBlock\">{input1}</code> and <code class=\"scratchBlock\">{input2}</code> are equal. ",
+            "not-equal": ", because <code class=\"scratchBlock\">{input1}</code> and <code class=\"scratchBlock\">{input2}</code> are not equal. ",
+            "contained": ", because <code class=\"scratchBlock\">{input1}</code> contains <code class=\"scratchBlock\">{input2}</code>. ",
+            "not-contained": ", because <code class=\"scratchBlock\">{input1}</code> does not contain <code class=\"scratchBlock\">{input2}</code>. ",
+            "hard-coded-comparison": "The condition is <b style=\"color: red;\">always {value}</b>, because none of the blocks is a <code class=\"scratchBlock\">(variable)</code>. "
         },
         "sensing": {
             "touching-sprite-edge": "Sprite <i>{sprite}</i> touched the <i>edge</i> at the positions highlighted in red in the picture.",
