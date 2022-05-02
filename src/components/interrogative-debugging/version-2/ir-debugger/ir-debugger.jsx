@@ -6,6 +6,10 @@ import {injectIntl, intlShape, FormattedMessage} from 'react-intl';
 import bindAll from 'lodash.bindall';
 import VirtualMachine from 'scratch-vm';
 
+import scratchblocks from 'scratchblocks';
+import de from 'scratchblocks/locales/de.json';
+scratchblocks.loadLanguages({de});
+
 import {
     QuestionCategory,
     QuestionV2 as Question,

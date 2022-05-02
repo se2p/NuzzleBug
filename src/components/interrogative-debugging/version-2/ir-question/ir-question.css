@@ -10,3 +10,15 @@
     border: 1px solid $ui-black-transparent;
     border-radius: 4px;
 }
+
+.question-text svg {
+    margin: 0 4px 0 4px;
+}
+
+.scratch-block-container svg {
+    margin: 4px;
+}
+
+.question-text svg rect[fill="#ffffff"] ~ text {
+    fill: #575E75 !important;
+}

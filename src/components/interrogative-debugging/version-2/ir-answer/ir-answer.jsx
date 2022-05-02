@@ -7,7 +7,9 @@ import bindAll from 'lodash.bindall';
 
 import VirtualMachine from 'scratch-vm';
 import ScratchBlocks from 'scratch-blocks';
-import {AnswerV2 as Answer, QuestionV2 as Question, targetForBlockId} from 'scratch-ir';
+import {AnswerV2 as Answer, QuestionV2 as Question, targetForBlockId, QuestionCategoryType} from 'scratch-ir';
+
+import scratchblocks from 'scratchblocks';
 
 import getCostumeUrl from '../../../../lib/get-costume-url';
 
@@ -83,6 +85,7 @@ class IRAnswer extends React.Component {
         if (this.slider.current && this.sliderValueLabel.current) {
             this.updateSliderValueLabel();
         }
+        this._renderScratchBlocks();
     }
 
     componentDidUpdate (prevProps) {
@@ -91,6 +94,16 @@ class IRAnswer extends React.Component {
             this._addResponsibleTargetImages();
             this._drawGraph();
         }
+    }
+
+    _renderScratchBlocks () {
+        const scale = this.props.selectedQuestion.category === QuestionCategoryType.OPERATORS ? 0.6 : 0.5;
+        scratchblocks.renderMatching('#answerMessages code.scratchBlock', {
+            inline: true,
+            style: 'scratch3',
+            languages: ['en', 'de'],
+            scale: scale
+        });
     }
 
     _drawStage () {
@@ -985,6 +998,10 @@ class IRAnswer extends React.Component {
             });
         } else {
             this.setState({
+                messages: this.props.answer.messages,
+                selectedBlockId: null
+            });
+            this.setState({
                 messages: this.props.answer.blockMessages[blockId],
                 selectedBlockId: blockId
             });
@@ -993,6 +1010,7 @@ class IRAnswer extends React.Component {
         const scrollTop = this.graphDiv.current.parentElement.scrollTop;
         this._drawGraph();
         this.graphDiv.current.parentElement.scrollTo(scrollLeft, scrollTop);
+        this._renderScratchBlocks();
     }
 
     updateSliderValueLabel () {
@@ -1047,18 +1065,28 @@ class IRAnswer extends React.Component {
                     <div
                         className={classNames(styles.speechBubbleBox, styles.speechBubbleTriangle,
                             irStyles[`color-${selectedQuestion.color.replace('#', '')}`])}
+                        style={(!answer.graph || !answer.graph.getAllNodes().length) && !answer.stage ? {maxHeight: '465px'} : {}}
                     >
                         <div
+                            id="answerMessages"
                             className={initCount % 10 === 0 ?
                                 classNames(styles.answerMessages, styles.rainbowText) :
                                 classNames(styles.answerMessages)}
+                            style={(!answer.graph || !answer.graph.getAllNodes().length) && !answer.stage ? {maxHeight: '465px'} : {}}
                         >
                             {this.state.messages.map((message, index) => (
-                                <FormattedHTMLMessage
-                                    key={index}
-                                    tagName="span"
-                                    {...message}
-                                />
+                                message.scratchBlock ?
+                                    <code
+                                        key={index}
+                                        className="scratchBlock"
+                                    >
+                                        {message.scratchBlock}
+                                    </code> :
+                                    <FormattedHTMLMessage
+                                        key={index}
+                                        tagName="span"
+                                        {...message}
+                                    />
                             ))}
                         </div>
                     </div>

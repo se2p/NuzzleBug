@@ -4,6 +4,8 @@ import bindAll from 'lodash.bindall';
 import {FormattedHTMLMessage} from 'react-intl';
 import classNames from 'classnames';
 
+import scratchblocks from 'scratchblocks';
+
 import {QuestionV2 as Question} from 'scratch-ir';
 
 import styles from './ir-question.css';
@@ -16,6 +18,26 @@ class IRQuestion extends React.Component {
         bindAll(this, [
             'handleQuestionClick'
         ]);
+        this.id = this.generateRandomId();
+    }
+
+    componentDidMount () {
+        this.renderScratchBlocks();
+    }
+
+    generateRandomId () {
+        const array = new Uint32Array(1);
+        window.crypto.getRandomValues(array);
+        return array.toString();
+    }
+
+    renderScratchBlocks () {
+        scratchblocks.renderMatching(`#question-${this.id} code.scratchBlock`, {
+            inline: true,
+            style: 'scratch3',
+            languages: ['en', 'de'],
+            scale: 0.55
+        });
     }
 
     handleQuestionClick () {
@@ -46,6 +68,7 @@ class IRQuestion extends React.Component {
         return (
             <div onClick={this.handleQuestionClick}>
                 <div
+                    id={`question-${this.id}`}
                     className={classNames(styles.questionText, irStyles[`color-${question.color.replace('#', '')}`])}
                     style={isSelected ? {
                         color: 'black',
@@ -53,10 +76,22 @@ class IRQuestion extends React.Component {
                         backgroundColor: this._hexToRgba(question.color, 0.3)
                     } : null}
                 >
-                    <FormattedHTMLMessage
-                        tagName="div"
-                        {...question.message}
-                    />
+                    {question.messages.map((message, index) => (
+                        message.scratchBlock ?
+                            <span
+                                key={index}
+                                className={styles.scratchBlockContainer}
+                            >
+                                <code className="scratchBlock">
+                                    {message.scratchBlock}
+                                </code>
+                            </span> :
+                            <FormattedHTMLMessage
+                                key={index}
+                                tagName="span"
+                                {...message}
+                            />
+                    ))}
                 </div>
             </div>
         );

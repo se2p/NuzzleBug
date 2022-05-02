@@ -2,7 +2,7 @@
 
 .speech-bubble-box {
   position: fixed;
-  bottom: 400px;
+  top: calc(100% - 485px);
   left: calc(33% + 20px);
   width: calc(66% - 130px);
   min-height: 85px;
@@ -28,12 +28,13 @@
   border-top: 8px solid $ui-secondary;
   border-bottom: 8px solid transparent;
   right: -30px;
-  bottom: 25px;
+  top: 44px;
 }
 
 .answer-messages {
   padding: 10px;
   max-height: 85px;
+  width: 100%;
   overflow-y: scroll;
   scrollbar-width: thin;
   scrollbar-color: #CECDCE transparent;
@@ -221,4 +222,67 @@
 
 .feedback-button:active {
   transform: scale(1.25);
+}
+
+.answer-messages svg {
+  margin: 0 4px 0 4px;
+}
+
+.answer-messages svg rect[fill="#ffffff"] ~ text {
+  fill: #575E75 !important;
+}
+
+span[blockType=stack], span[blockType=reporter] {
+  display: inline-block;
+  vertical-align: middle;
+  color: white;
+  font-size: 10px;
+  padding: 3px 6px;
+  margin: 2px 5px 3px 5px;
+  white-space: nowrap;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+span[blockType=stack] {
+  border-radius: 3px;
+}
+
+span[blockType=reporter] {
+  border-radius: 10px;
+}
+
+span[blockCategory=motion] {
+  background-color: #4c97ff;
+}
+
+span[blockCategory=look] {
+  background-color: #9966ff;
+}
+
+span[blockCategory=sound] {
+  background-color: #cf63cf;
+}
+
+span[blockCategory=events] {
+  background-color: #ffbf00;
+}
+
+span[blockCategory=control] {
+  background-color: #FFAB19;
+}
+
+span[blockCategory=sensing] {
+  background-color: #5cb1d6;
+}
+
+span[blockCategory=operators] {
+  background-color: #59c059;
+}
+
+span[blockCategory=variables] {
+  background-color: #ff8c1a;
+}
+
+span[blockCategory=procedure] {
+  background-color: #FF6680;
 }

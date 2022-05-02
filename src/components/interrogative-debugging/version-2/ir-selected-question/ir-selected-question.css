@@ -5,3 +5,11 @@
     float: left;
     max-width: calc(100% - 100px);
 }
+
+.selected-question svg {
+    margin: 0 4px 0 4px;
+}
+
+.selected-question svg rect[fill="#ffffff"] ~ text {
+    fill: #575E75 !important;
+}
