@@ -38,6 +38,7 @@
             "sensing": "Sensing", 
             "operators": "Operators", 
             "variables": "Variables",
+            "lists": "Lists",
             "execution": "Execution"
         }
     },

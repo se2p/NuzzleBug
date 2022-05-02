@@ -283,6 +283,10 @@ span[blockCategory=variables] {
   background-color: #ff8c1a;
 }
 
+span[blockCategory=lists] {
+  background-color: #ff661a;
+}
+
 span[blockCategory=procedure] {
   background-color: #FF6680;
 }
