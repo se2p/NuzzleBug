@@ -1069,25 +1069,25 @@ class IRAnswer extends React.Component {
                     >
                         <div
                             id="answerMessages"
-                            className={initCount % 10 === 0 ?
-                                classNames(styles.answerMessages, styles.rainbowText) :
-                                classNames(styles.answerMessages)}
+                            className={styles.answerMessages}
                             style={(!answer.graph || !answer.graph.getAllNodes().length) && !answer.stage ? {maxHeight: '465px'} : {}}
                         >
-                            {this.state.messages.map((message, index) => (
-                                message.scratchBlock ?
-                                    <code
-                                        key={index}
-                                        className="scratchBlock"
-                                    >
-                                        {message.scratchBlock}
-                                    </code> :
-                                    <FormattedHTMLMessage
-                                        key={index}
-                                        tagName="span"
-                                        {...message}
-                                    />
-                            ))}
+                            <div className={initCount % 10 === 0 ? classNames(styles.rainbowText) : classNames()}>
+                                {this.state.messages.map((message, index) => (
+                                    message.scratchBlock ?
+                                        <code
+                                            key={index}
+                                            className="scratchBlock"
+                                        >
+                                            {message.scratchBlock}
+                                        </code> :
+                                        <FormattedHTMLMessage
+                                            key={index}
+                                            tagName="span"
+                                            {...message}
+                                        />
+                                ))}
+                            </div>
                         </div>
                     </div>
                     <div className={styles.feedback}>
