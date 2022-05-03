@@ -351,7 +351,8 @@ class IRAnswer extends React.Component {
 
     _extractEllipseAttributes (ellipseNode) {
         const ellipse = {};
-        ellipse.width = Number(ellipseNode.getAttribute('rx')) * 2;
+        // actual width - diameter for circles on both sides of the block (e.g. for move direction)
+        ellipse.width = (Number(ellipseNode.getAttribute('rx')) * 2) - (16 * 2);
         ellipse.height = Number(ellipseNode.getAttribute('ry')) * 2;
         ellipse.center = {
             x: Number(ellipseNode.getAttribute('cx')),
