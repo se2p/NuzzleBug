@@ -228,6 +228,10 @@
   margin: 2px 4px 0 4px;
 }
 
+.answer-messages span {
+  display: contents;
+}
+
 .answer-messages svg rect[fill="#ffffff"] ~ text {
   fill: #575E75 !important;
 }
