@@ -304,7 +304,7 @@
             "executed-with-value": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block was executed with value <code class=\"scratchBlock\">({value} :: #ffffff)</code>",
             "unexecuted": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block was not executed",        
             "executed-wrong-behavior": "the executed <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block didn't lead to that behavior",
-            "executed-wrong-input": "the executed <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block wasn't called with value <code class=\"scratchBlock\">({expectedInput} :: #ffffff)</code>",
+            "executed-wrong-input": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block wasn't executed with value <code class=\"scratchBlock\">({expectedInput} :: #ffffff)</code>",
             "executed-no-change": "the executed <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block didn't change {attribute}",
             "executed-not-turn-positive": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block wasn't executed with a positive value",
             "executed-not-turn-negative": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block wasn't executed with a negative value",
@@ -321,8 +321,8 @@
         "multiple-behavior-blocks": {
             "executed": "the execution of {count} <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> blocks caused this behavior",
             "all-unexecuted": "none of the {count} <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> blocks was executed",
-            "one-executed": "the executed <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block didn't lead to that behavior",
-            "some-executed": "the executed <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> blocks didn't lead to that behavior",
+            "one-executed-wrong-behavior": "the executed <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block didn't lead to that behavior",
+            "some-executed-wrong-behavior": "the executed <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> blocks didn't lead to that behavior",
             "one-unexecuted": "another <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block that would lead to the behavior was not executed",
             "some-unexecuted": "{count} other <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> blocks that would lead to the behavior were not executed"
         },
@@ -395,7 +395,7 @@
             "not-repeat": "the <span blockType=\"stack\" blockCategory=\"control\">repeat</span> block wasn't executed",
             "repeat-forever": "the <span blockType=\"stack\" blockCategory=\"control\">forever</span> block was executed",
             "not-repeat-forever": "the <span blockType=\"stack\" blockCategory=\"control\">forever</span> block wasn't executed",
-            "procedure-call": "the procedure <span blockType=\"stack\" blockCategory=\"procedure\">{proccode}</span> was called"
+            "procedure-call": "the procedure <span blockType=\"stack\" blockCategory=\"procedure\">{proccode}</span> was executed"
         },
         "variable": {
             "value-set": "the value was set to <code class=\"scratchBlock\">{value}</code>",

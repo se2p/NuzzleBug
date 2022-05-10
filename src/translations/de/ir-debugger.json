@@ -304,7 +304,7 @@
             "executed-with-value": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block mit dem Wert <code class=\"scratchBlock\">({value} :: #ffffff)</code> ausgeführt wurde",
             "unexecuted": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block nicht ausgeführt wurde",
             "executed-wrong-behavior": "der ausgeführte <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block nicht dazu geführt hat",
-            "executed-wrong-input": "der ausgeführte <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block nicht mit dem Wert <code class=\"scratchBlock\">({expectedInput} :: #ffffff)</code> aufgerufen wurde",
+            "executed-wrong-input": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block nicht mit dem Wert <code class=\"scratchBlock\">({expectedInput} :: #ffffff)</code> ausgeführt wurde",
             "executed-no-change": "der ausgeführte <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block {attribute} nicht verändert hat",
             "executed-not-turn-positive": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block nicht mit einem positiven Wert ausgeführt wurde",
             "executed-not-turn-negative": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block nicht mit einem negativen Wert ausgeführt wurde",
@@ -321,8 +321,8 @@
         "multiple-behavior-blocks": {
             "executed": "die Ausführung von {count} <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Blöcken dazu geführt hat",
             "all-unexecuted": "keiner der {count} <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Blöcke ausgeführt wurde",
-            "one-executed": "der ausgeführte <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block nicht dazu geführt hat",
-            "some-executed": "die ausgeführten <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Blöcke nicht dazu geführt haben",
+            "one-executed-wrong-behavior": "der ausgeführte <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block nicht dazu geführt hat",
+            "some-executed-wrong-behavior": "die ausgeführten <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Blöcke nicht dazu geführt haben",
             "one-unexecuted": "ein anderer <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block, der dazu führen würde, nicht ausgeführt wurde",
             "some-unexecuted": "{count} andere <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Blöcke, die dazu führen würden, nicht ausgeführt wurden"
         },
@@ -395,7 +395,7 @@
             "not-repeat": "der <span blockType=\"stack\" blockCategory=\"control\">wiederhole</span> Block nicht ausgeführt wurde",
             "repeat-forever": "der <span blockType=\"stack\" blockCategory=\"control\">wiederhole fortlaufend</span> Block ausgeführt wurde",
             "not-repeat-forever": "der <span blockType=\"stack\" blockCategory=\"control\">wiederhole fortlaufend</span> Block nicht ausgeführt wurde",
-            "procedure-call": "dein eigener Block <span blockType=\"stack\" blockCategory=\"procedure\">{proccode}</span> aufgerufen wurde"
+            "procedure-call": "dein eigener Block <span blockType=\"stack\" blockCategory=\"procedure\">{proccode}</span> ausgeführt wurde"
         },
         "variable": {
             "value-set": "der Wert auf <code class=\"scratchBlock\">{value}</code> gesetzt wurde",

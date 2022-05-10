@@ -211,7 +211,7 @@ class IRDebugger extends React.Component {
     }
 
     translate (id, values) {
-        return this.props.intl.formatMessage({id: `gui.ir-debugger.${id}`}, values);
+        return this.props.intl.formatMessage({id}, values);
     }
 
     calculateAllTraces () {
@@ -302,7 +302,7 @@ class IRDebugger extends React.Component {
     calculateTargetOptions (traces) {
         const targetOptions = [{
             id: this.targetOrigin.id,
-            optionName: this.translate('target.original', {}),
+            optionName: this.translate('gui.ir-debugger.target.original', {}),
             isOriginal: true
         }];
         let cloneIndex = 1;
@@ -313,7 +313,7 @@ class IRDebugger extends React.Component {
                     if (!targetOptions.some(option => option.id === cloneId)) {
                         targetOptions.push({
                             id: cloneId,
-                            optionName: this.translate('target.clone', {index: cloneIndex}),
+                            optionName: this.translate('gui.ir-debugger.target.clone', {index: cloneIndex}),
                             isOriginal: false
                         });
                         cloneIndex++;
@@ -445,7 +445,7 @@ class IRDebugger extends React.Component {
                     while (index.length < maxIndex.length) {
                         index = `0${index}`;
                     }
-                    this.blockExecutionOptions[i].optionName = `${index}. ${this.translate('execution')}`;
+                    this.blockExecutionOptions[i].optionName = `${index}. ${this.translate('gui.ir-debugger.execution')}`;
                 }
                 this.blockExecutionOptions.reverse();
             }

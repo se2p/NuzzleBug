@@ -383,7 +383,7 @@ class IRAnswer extends React.Component {
     }
 
     _getNodeExecutionInfo (graphNode) {
-        return this.props.answer.executionInfo.blocks[graphNode.id];
+        return this.props.answer.graph.executionInfo.blocks[graphNode.id];
     }
     
     _addEdgeForActualConditionValue (svgGraphNode, value, block, scaleFactor) {
@@ -549,7 +549,7 @@ class IRAnswer extends React.Component {
             const edge = this._extractEdgeAttributes(pathNode, polygonNode);
             if (executionInfo.condition) {
                 const fromNodeId = titleNode.innerHTML.split('-&gt;')[0];
-                const fromNodeExecuted = this.props.answer.executionInfo.blocks[fromNodeId].executed;
+                const fromNodeExecuted = this.props.answer.graph.executionInfo.blocks[fromNodeId].executed;
                 if (fromNodeExecuted && !executionInfo.executed) {
                     this._dashPath(pathNode);
                     this._addCrossOutLine(svgGraphEdge, edge.line);
@@ -591,7 +591,7 @@ class IRAnswer extends React.Component {
 
     _getEdgeExecutionInfo (titleNode) {
         const edgeTitle = titleNode.innerHTML;
-        return this.props.answer.executionInfo.edges[edgeTitle];
+        return this.props.answer.graph.executionInfo.edges[edgeTitle];
     }
 
     _updateEdgeColor (pathNode, polygonNode, executionInfo) {
@@ -915,7 +915,7 @@ class IRAnswer extends React.Component {
         this.targetColors = {};
         let colorIndex = 0;
         for (const target of targets) {
-            if (this.props.answer.responsibleTargetIds.has(target.id)) {
+            if (this.props.answer.graph.responsibleTargetIds.has(target.id)) {
                 let color;
                 if (target.id === this.target.id) {
                     color = this.targetColor;
