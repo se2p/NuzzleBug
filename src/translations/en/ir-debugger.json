@@ -342,7 +342,7 @@
         "event": {
             "flag-clicked": "<code class=\"scratchBlock\">@greenFlag :: events reporter</code> was clicked",
             "not-flag-clicked": "<code class=\"scratchBlock\">@greenFlag :: events reporter</code> wasn't clicked",
-            "not-flag-clicked-during-lifetime": "a clone does not react to the event <i>click on</i> <code class=\"scratchBlock\">@greenFlag :: events reporter</code>",
+            "not-flag-clicked-during-lifetime": "a clone does not react to the event <b style=\"color: #ffab19\"><i>click on</i></b> <code class=\"scratchBlock\">@greenFlag :: events reporter</code>",
             "sprite-clicked": "the sprite <b style=\"color: #ffbf00\"><i>{sprite}</i> was clicked</b>",
             "not-sprite-clicked": "the sprite <b style=\"color: #ffbf00\"><i>{sprite}</i> wasn't clicked</b>",
             "stage-clicked": "the <b style=\"color: #ffbf00\">stage was clicked</b>",
