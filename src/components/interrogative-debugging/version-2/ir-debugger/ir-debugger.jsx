@@ -322,7 +322,7 @@ class IRDebugger extends React.Component {
         let {x, y} = posProps;
         const cardHorizontalDragOffset = 800; // ~80% of card width
         const cardVerticalDragOffset = expanded ? 432 : 0; // ~80% of card height
-        const menuBarHeight = 48;
+        const menuBarHeight = 10;
         if (x === 0 && y === 0) {
             x = 280 + cardHorizontalDragOffset;
             y = 36;

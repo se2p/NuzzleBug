@@ -2,11 +2,11 @@
 
 .speech-bubble-box {
   position: fixed;
-  top: calc(100% - 485px);
+  top: calc(100% - 495px);
   left: calc(33% + 20px);
   width: calc(66% - 130px);
-  min-height: 85px;
-  max-height: 85px;
+  min-height: 95px;
+  max-height: 95px;
   margin-right: 25px;
   padding-right: 3px;
   border-radius: 10px;
@@ -28,12 +28,12 @@
   border-top: 8px solid $ui-secondary;
   border-bottom: 8px solid transparent;
   right: -30px;
-  top: 44px;
+  top: 54px;
 }
 
 .answer-messages {
   padding: 10px;
-  max-height: 85px;
+  max-height: 95px;
   width: 100%;
   overflow-y: scroll;
   scrollbar-width: thin;
@@ -47,7 +47,7 @@
 }
 
 .cat {
-  width: 70px;
+  width: 77px;
   position: fixed;
   bottom: 400px;
   right: 20px;
@@ -200,7 +200,7 @@
 
 .feedback {
   position: fixed;
-  bottom: 500px;
+  bottom: 515px;
   right: 20px;
 }
 
