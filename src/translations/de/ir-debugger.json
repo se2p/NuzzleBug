@@ -395,7 +395,8 @@
             "not-repeat": "der <span blockType=\"stack\" blockCategory=\"control\">wiederhole</span> Block nicht ausgeführt wurde",
             "repeat-forever": "der <span blockType=\"stack\" blockCategory=\"control\">wiederhole fortlaufend</span> Block ausgeführt wurde",
             "not-repeat-forever": "der <span blockType=\"stack\" blockCategory=\"control\">wiederhole fortlaufend</span> Block nicht ausgeführt wurde",
-            "procedure-call": "dein eigener Block <span blockType=\"stack\" blockCategory=\"procedure\">{proccode}</span> ausgeführt wurde"
+            "procedure-call": "dein eigener Block <span blockType=\"stack\" blockCategory=\"procedure\">{proccode}</span> ausgeführt wurde",
+            "not-procedure-call": "dein eigener Block <span blockType=\"stack\" blockCategory=\"procedure\">{proccode}</span> nicht ausgeführt wurde"
         },
         "variable": {
             "value-set": "der Wert auf <code class=\"scratchBlock\">{value}</code> gesetzt wurde",

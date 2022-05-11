@@ -395,7 +395,8 @@
             "not-repeat": "the <span blockType=\"stack\" blockCategory=\"control\">repeat</span> block wasn't executed",
             "repeat-forever": "the <span blockType=\"stack\" blockCategory=\"control\">forever</span> block was executed",
             "not-repeat-forever": "the <span blockType=\"stack\" blockCategory=\"control\">forever</span> block wasn't executed",
-            "procedure-call": "the procedure <span blockType=\"stack\" blockCategory=\"procedure\">{proccode}</span> was executed"
+            "procedure-call": "the procedure <span blockType=\"stack\" blockCategory=\"procedure\">{proccode}</span> was executed",
+            "not-procedure-call": "the procedure <span blockType=\"stack\" blockCategory=\"procedure\">{proccode}</span> wasn't executed"
         },
         "variable": {
             "value-set": "the value was set to <code class=\"scratchBlock\">{value}</code>",
