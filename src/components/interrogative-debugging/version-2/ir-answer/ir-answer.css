@@ -63,8 +63,8 @@
 .block-area {
   position: fixed;
   bottom: 20px;
-  left: calc(33% + 20px);
-  width: calc(66% - 70px);
+  right: 20px;
+  width: calc(66% - 30px);
   height: 360px;
   padding: 10px;
   border: 1px solid hsla(0, 0%, 0%, 0.15);
@@ -76,28 +76,35 @@
 
 .responsible-targets {
   position: fixed;
-  bottom: 90px;
-  right: 12px;
-  height: 290px;
-  width: 42px;
-  padding-top: 5px;
+  bottom: 100px;
+  right: 27px;
+  height: 280px;
+  width: 37px;
+  padding-top: 10px;
   overflow-y: scroll;
   scrollbar-width: thin;
   scrollbar-color: #CECDCE transparent;
 }
 
 .block-area::-webkit-scrollbar-track,
-.responsible-targets::-webkit-scrollbar-track,
 .answer-messages::-webkit-scrollbar-track {
   margin-top: 1px;
   margin-bottom: 1px;
 }
 
+.responsible-targets::-webkit-scrollbar-track {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
 .block-area::-webkit-scrollbar,
-.responsible-targets::-webkit-scrollbar,
 .answer-messages::-webkit-scrollbar {
   height: 6px;
   width: 6px;
+}
+
+.responsible-targets::-webkit-scrollbar {
+  width: 2px;
 }
 
 .block-area::-webkit-scrollbar-thumb,
@@ -110,7 +117,7 @@
 
 .zoom-button {
   position: fixed;
-  right: 25px;
+  right: 30px;
   height: 24px;
   cursor: pointer;
 }
@@ -120,11 +127,11 @@
 }
 
 .zoom-in-button {
-  bottom: 55px;
+  bottom: 60px;
 }
 
 .zoom-out-button {
-  bottom: 25px;
+  bottom: 30px;
 }
 
 .stage, .distance-path, .mouse-pointer {

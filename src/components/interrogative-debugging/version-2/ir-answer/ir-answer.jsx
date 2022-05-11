@@ -954,7 +954,7 @@ class IRAnswer extends React.Component {
         imageDiv.setAttribute('style', `height: ${sideLength}px; width: ${sideLength}px; 
             padding: ${padding}px; margin-bottom: 5px; 
             border-radius: 4px; border: ${border}px solid ${color}; 
-            background-color: ${this._hexToRgba(color, 0.5)};`
+            background-color: ${this._hexToRgb(color, 0.5)};`
         );
         imageDiv.appendChild(image);
         this.targetsDiv.current.appendChild(imageDiv);
@@ -967,6 +967,17 @@ class IRAnswer extends React.Component {
             const g = parseInt(result[2], 16);
             const b = parseInt(result[3], 16);
             return `rgb(${r}, ${g}, ${b}, ${a})`;
+        }
+        return null;
+    }
+
+    _hexToRgb (hex, alpha) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        if (result) {
+            const r = ((1 - alpha) * 255) + (alpha * parseInt(result[1], 16));
+            const g = ((1 - alpha) * 255) + (alpha * parseInt(result[2], 16));
+            const b = ((1 - alpha) * 255) + (alpha * parseInt(result[3], 16));
+            return `rgb(${r}, ${g}, ${b})`;
         }
         return null;
     }
@@ -1126,9 +1137,10 @@ class IRAnswer extends React.Component {
                     }
                 </div>
                 {answer.graph && answer.graph.getAllNodes().length > 0 ? (
-                    <div className={styles.blockArea}>
+                    <div>
                         <div
                             id="graph"
+                            className={styles.blockArea}
                             ref={this.graphDiv}
                         />
                         <div
