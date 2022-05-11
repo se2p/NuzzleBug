@@ -28,7 +28,8 @@ const base = {
         chunkFilename: 'chunks/[name].js'
     },
     resolve: {
-        symlinks: false
+        symlinks: true, // avoid unreadable symlinks to make debugging easier
+        extensions: ['.ts', '.js'], // including typescript is necessary as whisker includes some
     },
     module: {
         rules: [{
@@ -53,6 +54,11 @@ const base = {
                     }]],
                 presets: ['@babel/preset-env', '@babel/preset-react']
             }
+        },
+        {
+            test: /\.tsx?/,
+            use: 'ts-loader',
+            exclude: /node_modules/,
         },
         {
             test: /\.css$/,
