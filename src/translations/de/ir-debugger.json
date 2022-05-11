@@ -302,6 +302,7 @@
         "behavior-block": {
             "executed": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block ausgeführt wurde",
             "executed-with-value": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block mit dem Wert <code class=\"scratchBlock\">({value} :: #ffffff)</code> ausgeführt wurde",
+            "executed-with-coordinates": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block mit den Werten x:<code class=\"scratchBlock\">({x} :: #ffffff)</code>und y:<code class=\"scratchBlock\">({y} :: #ffffff)</code>ausgeführt wurde",
             "unexecuted": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block nicht ausgeführt wurde",
             "executed-wrong-behavior": "der ausgeführte <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block nicht dazu geführt hat",
             "executed-wrong-input": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block nicht mit dem Wert <code class=\"scratchBlock\">({expectedInput} :: #ffffff)</code> ausgeführt wurde",
