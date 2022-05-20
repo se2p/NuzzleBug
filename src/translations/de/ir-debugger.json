@@ -4,6 +4,7 @@
         "resume": "Fortsetzen",
         "step-back": "Schritt zurück", 
         "step-over": "Schritt vorwärts", 
+        "initial-step": "Erster Schritt",
         "ir-questions": "Zeige Fragen",
         "activate-observation": "Beobachtung starten",
         "deactivate-observation": "Beobachtung stoppen",

@@ -18,6 +18,7 @@ class Controls extends React.Component {
             'handlePauseResumeClick',
             'handleStepBack',
             'handleStepOver',
+            'handleInitialStep',
             'handleStopAllClick',
             'handleToggleObservationClick'
         ]);
@@ -54,11 +55,13 @@ class Controls extends React.Component {
         if (this.props.projectPaused && this.props.projectRunning) {
             this.props.vm.stepOver();
         }
-        if (!this.props.projectRunning) {
-            this.props.vm.runtime.oneStep = true;
-            this.handleGreenFlagClick(e);
-            this.props.vm.haltExecution();
-        }
+    }
+    handleInitialStep (e) {
+        e.preventDefault();
+
+        this.props.vm.runtime.oneStep = true;
+        this.handleGreenFlagClick(e);
+        this.props.vm.haltExecution();
     }
     handlePauseResumeClick (e) {
         e.preventDefault();
@@ -140,6 +143,7 @@ class Controls extends React.Component {
                 onGreenFlagClick={this.handleGreenFlagClick}
                 onStepBackClick={this.handleStepBack}
                 onStepOverClick={this.handleStepOver}
+                onInitialStepClick={this.handleInitialStep}
                 onPauseResumeClick={this.handlePauseResumeClick}
                 onStopAllClick={this.handleStopAllClick}
                 onIRQuestionsClick={handleIRQuestionsClick}

@@ -7,12 +7,13 @@ import VM from 'scratch-vm';
 import GreenFlag from '../green-flag/green-flag.jsx';
 import PauseResume from '../pause-resume/pause-resume.jsx';
 import StepOver from '../step-over/step-over.jsx';
+import InitialStep from '../initial-step/initial-step.jsx';
 import StepBack from '../step-back/step-back.jsx';
 import StopAll from '../stop-all/stop-all.jsx';
 import TurboMode from '../turbo-mode/turbo-mode.jsx';
 import IRQuestions from '../interrogative-debugging/version-1/ir-questions/ir-question-button.jsx';
 import ToggleObservation, {ObservationState}
-    from '../interrogative-debugging/version-2/toggle-observation/toggle-observation.jsx';
+from '../interrogative-debugging/version-2/toggle-observation/toggle-observation.jsx';
 
 import styles from './controls.css';
 
@@ -41,6 +42,11 @@ const messages = defineMessages({
         id: 'gui.ir-debugger.controls.step-over',
         defaultMessage: 'Step Over',
         description: 'Step Over button title'
+    },
+    initialStepTitle: {
+        id: 'gui.ir-debugger.controls.initial-step',
+        defaultMessage: 'Initial Step',
+        description: 'Initial Step button title'
     },
     stopTitle: {
         id: 'gui.controls.stop',
@@ -74,6 +80,7 @@ const Controls = function (props) {
         onStopAllClick,
         onStepBackClick,
         onStepOverClick,
+        onInitialStepClick,
         onIRQuestionsClick,
         onToggleObservationClick,
         irDisabled,
@@ -99,6 +106,10 @@ const Controls = function (props) {
                 title={intl.formatMessage(messages.goTitle)}
                 onClick={onGreenFlagClick}
             />
+            {interrogationSupported ? (<InitialStep
+                title={intl.formatMessage(messages.initialStepTitle)}
+                onClick={onInitialStepClick}
+            />) : null}
             {interrogationSupported ? <PauseResume
                 active={active}
                 paused={paused}
@@ -154,6 +165,7 @@ Controls.propTypes = {
     onPauseResumeClick: PropTypes.func.isRequired,
     onStepBackClick: PropTypes.func.isRequired,
     onStepOverClick: PropTypes.func.isRequired,
+    onInitialStepClick: PropTypes.func.isRequired,
     onStopAllClick: PropTypes.func.isRequired,
     onIRQuestionsClick: PropTypes.func.isRequired,
     onToggleObservationClick: PropTypes.func.isRequired,

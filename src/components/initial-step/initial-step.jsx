@@ -2,13 +2,11 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import icon from './icon--step-over.svg';
-import styles from './step-over.css';
+import icon from './icon--initial-step.svg';
+import styles from './initial-step.css';
 
-const StepOverComponent = function (props) {
+const InitialStepComponent = function (props) {
     const {
-        active,
-        paused,
         className,
         onClick,
         title,
@@ -18,10 +16,7 @@ const StepOverComponent = function (props) {
         <img
             className={classNames(
                 className,
-                styles.stopOver,
-                {
-                    [styles.enabled]: active && paused
-                }
+                styles.initialStep
             )}
             draggable={false}
             src={icon}
@@ -32,18 +27,14 @@ const StepOverComponent = function (props) {
     );
 };
 
-StepOverComponent.propTypes = {
-    active: PropTypes.bool,
-    paused: PropTypes.bool,
+InitialStepComponent.propTypes = {
     className: PropTypes.string,
     onClick: PropTypes.func.isRequired,
     title: PropTypes.string
 };
 
-StepOverComponent.defaultProps = {
-    active: false,
-    paused: false,
-    title: 'Step Over'
+InitialStepComponent.defaultProps = {
+    title: 'Initial Step'
 };
 
-export default StepOverComponent;
+export default InitialStepComponent;
