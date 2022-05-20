@@ -32,7 +32,7 @@ const initialState = {
     dragging: false,
     projectRunning: false,
     projectPaused: false,
-    observationActive: false
+    observationActive: true
 };
 
 const forwardDebuggerEnabled = function (enabled) {

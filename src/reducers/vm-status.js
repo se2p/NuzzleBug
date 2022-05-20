@@ -9,7 +9,7 @@ const initialState = {
     started: false,
     paused: false,
     turbo: false,
-    observationActive: false
+    observationActive: true
 };
 
 const reducer = function (state, action) {

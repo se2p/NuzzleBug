@@ -39,7 +39,6 @@ class Controls extends React.Component {
             if (!this.props.isStarted) {
                 this.props.vm.start();
             }
-            this.activateObservation();
             this.props.vm.greenFlag();
         }
     }
