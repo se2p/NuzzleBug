@@ -38,21 +38,29 @@ const vmManagerHOC = function (WrappedComponent) {
             if (!this.props.isPlayerOnly && !this.props.isStarted) {
                 this.props.vm.start();
             }
+            window.addEventListener('message', event => {
+                if (event.data.project) {
+                    this.loadProject(event.data.project);
+                }
+            });
+            if (window.opener) {
+                window.opener.postMessage('loaded', '*');
+            }
         }
         componentDidUpdate (prevProps) {
             // if project is in loading state, AND fonts are loaded,
             // and they weren't both that way until now... load project!
             if (this.props.isLoadingWithId && this.props.fontsLoaded &&
                 (!prevProps.isLoadingWithId || !prevProps.fontsLoaded)) {
-                this.loadProject();
+                this.loadProject(this.props.projectData);
             }
             // Start the VM if entering editor mode with an unstarted vm
             if (!this.props.isPlayerOnly && !this.props.isStarted) {
                 this.props.vm.start();
             }
         }
-        loadProject () {
-            return this.props.vm.loadProject(this.props.projectData)
+        loadProject (projectData) {
+            return this.props.vm.loadProject(projectData)
                 .then(() => {
                     this.props.onLoadedProject(this.props.loadingState, this.props.canSave);
                     // Wrap in a setTimeout because skin loading in
