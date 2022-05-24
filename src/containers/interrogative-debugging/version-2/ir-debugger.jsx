@@ -412,7 +412,7 @@ class IRDebugger extends React.Component {
                         lastTrace: blockTrace,
                         blockTrace: blockTrace
                     };
-                    if (blockTrace.argValues.INITIAL_EXECUTION) {
+                    if (blockTrace.argValues.INITIAL_EXECUTION && !blockTrace.argValues.DONE) {
                         const isLastBlockTraceForTarget =
                             !blockTraces.some((t, i) => i > index && t.targetId === blockTrace.targetId);
                         if (isLastBlockTraceForTarget) {
