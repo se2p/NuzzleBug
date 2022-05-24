@@ -7,6 +7,7 @@ import VM from 'scratch-vm';
 import AudioEngine from 'scratch-audio';
 
 import {setProjectUnchanged} from '../reducers/project-changed';
+import {setProjectTitle} from '../reducers/project-title';
 import {
     LoadingStates,
     getIsLoadingWithId,
@@ -40,7 +41,7 @@ const vmManagerHOC = function (WrappedComponent) {
             }
             window.addEventListener('message', event => {
                 if (event.data.project) {
-                    this.loadProject(event.data.project);
+                    this.loadProject(event.data.project, event.data.projectFileName);
                 }
             });
             if (window.opener) {
@@ -59,9 +60,12 @@ const vmManagerHOC = function (WrappedComponent) {
                 this.props.vm.start();
             }
         }
-        loadProject (projectData) {
+        loadProject (projectData, projectFileName) {
             return this.props.vm.loadProject(projectData)
                 .then(() => {
+                    if (projectFileName) {
+                        this.props.onSetProjectTitle(this.getProjectTitleFromFileName(projectFileName));
+                    }
                     this.props.onLoadedProject(this.props.loadingState, this.props.canSave);
                     // Wrap in a setTimeout because skin loading in
                     // the renderer can be async.
@@ -81,6 +85,14 @@ const vmManagerHOC = function (WrappedComponent) {
                 .catch(e => {
                     this.props.onError(e);
                 });
+        }
+        getProjectTitleFromFileName (fileName) {
+            if (!fileName) return '';
+            // only parse title with valid scratch project extensions
+            // (.sb, .sb2, and .sb3)
+            const matches = fileName.match(/^(.*)\.sb[23]?$/);
+            if (!matches) return '';
+            return matches[1].substring(0, 100); // truncate project title to max 100 chars
         }
         render () {
             const {
@@ -122,6 +134,7 @@ const vmManagerHOC = function (WrappedComponent) {
         onError: PropTypes.func,
         onLoadedProject: PropTypes.func,
         onSetProjectUnchanged: PropTypes.func,
+        onSetProjectTitle: PropTypes.func,
         projectData: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
         projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         username: PropTypes.string,
@@ -147,7 +160,8 @@ const vmManagerHOC = function (WrappedComponent) {
         onError: error => dispatch(projectError(error)),
         onLoadedProject: (loadingState, canSave) =>
             dispatch(onLoadedProject(loadingState, canSave, true)),
-        onSetProjectUnchanged: () => dispatch(setProjectUnchanged())
+        onSetProjectUnchanged: () => dispatch(setProjectUnchanged()),
+        onSetProjectTitle: title => dispatch(setProjectTitle(title))
     });
 
     // Allow incoming props to override redux-provided props. Used to mock in tests.
