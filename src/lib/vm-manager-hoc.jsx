@@ -51,7 +51,7 @@ const vmManagerHOC = function (WrappedComponent) {
         componentDidUpdate (prevProps) {
             // if project is in loading state, AND fonts are loaded,
             // and they weren't both that way until now... load project!
-            if (this.props.isLoadingWithId && this.props.fontsLoaded &&
+            if (!this.isProjectLoading && this.props.isLoadingWithId && this.props.fontsLoaded &&
                 (!prevProps.isLoadingWithId || !prevProps.fontsLoaded)) {
                 this.loadProject(this.props.projectData);
             }
@@ -61,11 +61,13 @@ const vmManagerHOC = function (WrappedComponent) {
             }
         }
         loadProject (projectData, projectFileName) {
+            this.isProjectLoading = true;
             return this.props.vm.loadProject(projectData)
                 .then(() => {
                     if (projectFileName) {
                         this.props.onSetProjectTitle(this.getProjectTitleFromFileName(projectFileName));
                     }
+                    this.isProjectLoading = false;
                     this.props.onLoadedProject(this.props.loadingState, this.props.canSave);
                     // Wrap in a setTimeout because skin loading in
                     // the renderer can be async.
