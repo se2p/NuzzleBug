@@ -257,42 +257,42 @@
             "not-stage-ask": "Die Bühne hat nicht <i>\"{message}\"</i> gefragt"
         },
         "operator": {
-            "meet-condition": "Die Bedingung war wahr",
-            "not-meet-condition": "Die Bedingung war nicht wahr"
+            "meet-condition": "Als der Block ausgeführt wurde, war die Bedingung wahr",
+            "not-meet-condition": "Als der Block ausgeführt wurde, war die Bedingung nicht wahr"
         },
         "variable": {
-            "have-value": "Die Variable hatte den Wert <code class=\"scratchBlock\">({value} :: #ffffff)</code>",
-            "not-have-value": "Die Variable hatte nicht den Wert <code class=\"scratchBlock\">({value} :: #ffffff)</code>"
+            "have-value": "Als der Block ausgeführt wurde, hatte die Variable den Wert <code class=\"scratchBlock\">({value} :: #ffffff)</code>",
+            "not-have-value": "Als der Block ausgeführt wurde, hatte die Variable nicht den Wert <code class=\"scratchBlock\">({value} :: #ffffff)</code>"
         },
         "list": {
-            "have-value": "Die Liste hatte den Wert <code class=\"scratchBlock\">({value} :: #ffffff)</code>",
-            "not-contain-item": "<code class=\"scratchBlock\">({item} :: #ffffff)</code> war nicht in der Liste enthalten"
+            "have-value": "Als der Block ausgeführt wurde, hatte die Liste den Wert <code class=\"scratchBlock\">({value} :: #ffffff)</code>",
+            "not-contain-item": "Als der Block ausgeführt wurde, war <code class=\"scratchBlock\">({item} :: #ffffff)</code> nicht in der Liste enthalten"
         },
         "execution": {
             "block-execute": "Der Block wurde ausgeführt",
             "not-block-execute": "Der Block wurde nicht ausgeführt"
         },
         "input": {
-            "have-value": "<code class=\"scratchBlock\">{input}</code> hatte den Wert <code class=\"scratchBlock\">({value} :: #ffffff)</code>"
+            "have-value": "Als der Block ausgeführt wurde, hatte <code class=\"scratchBlock\">{input}</code> den Wert <code class=\"scratchBlock\">({value} :: #ffffff)</code>"
         }
     },
     "answer": {
         "draw-attention-to-block-answers": "Brauchst du eine Erklärung für einen Block? Dann klicke auf das <div style=\"display: inline-block; margin-top: 3px; padding: 0 4.5px; border: 1.4px solid #575E75; border-radius: 15px;\">?</div> daneben! ",
         "sensing": {
-            "touching-sprite-edge": "Die Figur <i>{sprite}</i> hat den <i>Rand</i> an den im Bild rot markierten Stellen berührt. ",
-            "touching-sprite-mouse": "Die Figur <i>{sprite}</i> hat den <i>Mauszeiger</i> wie im Bild gezeigt berührt. <br> Der <i>Mauszeiger</i> befand sich auf Position ({mouseX},{mouseY}). ",
-            "touching-sprite-sprite": "Figur <i>{sprite1}</i> und Figur <i>{sprite2}</i> haben sich an den im Bild hervorgehobenen Stellen berührt. ",
-            "touching-sprite-color": "Die Figur <i>{sprite}</i> hat die ausgewählte Farbe an den im Bild hervorgehobenen Stellen berührt. ",
-            "touching-color-color": "Die Farben haben sich an den im Bild hervorgehobenen Stellen berührt. ",
-            "distance-sprite-edge": "Der minimale Abstand von Figur <i>{sprite}</i> zum <i>Rand</i> war <span style=\"color: red;\"><b>{distance}</b></span>. ",
-            "distance-sprite-mouse": "Der minimale Abstand von Figur <i>{sprite}</i> zum <i>Mauszeiger</i> auf Position ({mouseX},{mouseY}) war <span style=\"color: red;\"><b>{distance}</b></span>. ",
-            "distance-sprite-sprite": "Der minimale Abstand von Figur <i>{sprite1}</i> zu Figur <i>{sprite2}</i> war <span style=\"color: red;\"><b>{distance}</b></span>. ",
-            "distance-sprite-color": "Der minimale Abstand von Figur <i>{sprite}</i> zur ausgewählten Farbe war <span style=\"color: red;\"><b>{distance}</b></span>. ",
-            "distance-color-color": "Der minimale Abstand der Farben war <span style=\"color: red;\"><b>{distance}</b></span>. ",
-            "sprite-invisible": "Die Figur <i>{sprite}</i> war nicht sichtbar und konnte deshalb nicht berührt werden!",
-            "sprites-invisible": "Die Figur <i>{sprite1}</i> und die Figur <i>{sprite2}</i> waren nicht sichtbar und konnten sich deshalb nicht berühren!",
-            "nonexistent-color": "Die Farbe <span style=\"color: {color}; background-color: {color}; padding: 0 3px; border-radius: 10px\">⬤</span> kam nicht vor! <br> Versuche die gewünschte Farbe mit der Pipette auszuwählen. ",
-            "nonexistent-colors": "Die Farben <span style=\"color: {color1}; background-color: {color1}; padding: 0 3px; border-radius: 10px\">⬤</span> und <span style=\"color: {color2}; background-color: {color2}; padding: 0 3px; border-radius: 10px\">⬤</span> kamen nicht vor! <br> Versuche die gewünschten Farben mit der Pipette auszuwählen. "
+            "touching-sprite-edge": "Die Figur <i>{sprite}</i> hat den <i>Rand</i> an den im Bild rot markierten Stellen berührt, als der Block ausgeführt wurde. ",
+            "touching-sprite-mouse": "Die Figur <i>{sprite}</i> hat den <i>Mauszeiger</i> wie im Bild gezeigt berührt, als der Block ausgeführt wurde. <br> Der <i>Mauszeiger</i> befand sich auf Position ({mouseX},{mouseY}). ",
+            "touching-sprite-sprite": "Figur <i>{sprite1}</i> und Figur <i>{sprite2}</i> haben sich an den im Bild hervorgehobenen Stellen berührt, als der Block ausgeführt wurde. ",
+            "touching-sprite-color": "Die Figur <i>{sprite}</i> hat die ausgewählte Farbe an den im Bild hervorgehobenen Stellen berührt, als der Block ausgeführt wurde. ",
+            "touching-color-color": "Die Farben haben sich an den im Bild hervorgehobenen Stellen berührt, als der Block ausgeführt wurde. ",
+            "distance-sprite-edge": "Der Abstand von Figur <i>{sprite}</i> zum <i>Rand</i> war <span style=\"color: red;\"><b>{distance}</b></span>, als der Block ausgeführt wurde. ",
+            "distance-sprite-mouse": "Der Abstand von Figur <i>{sprite}</i> zum <i>Mauszeiger</i> auf Position ({mouseX},{mouseY}) war <span style=\"color: red;\"><b>{distance}</b></span>, als der Block ausgeführt wurde . ",
+            "distance-sprite-sprite": "Der Abstand von Figur <i>{sprite1}</i> zu Figur <i>{sprite2}</i> war <span style=\"color: red;\"><b>{distance}</b></span>, als der Block ausgeführt wurde. ",
+            "distance-sprite-color": "Der Abstand von Figur <i>{sprite}</i> zur ausgewählten Farbe war <span style=\"color: red;\"><b>{distance}</b></span>, als der Block ausgeführt wurde. ",
+            "distance-color-color": "Der Abstand der Farben war <span style=\"color: red;\"><b>{distance}</b></span>, als der Block ausgeführt wurde. ",
+            "sprite-invisible": "Die Figur <i>{sprite}</i> war nicht sichtbar als der Block ausgeführt wurde und konnte deshalb nicht berührt werden!",
+            "sprites-invisible": "Die Figur <i>{sprite1}</i> und die Figur <i>{sprite2}</i> waren nicht sichtbar als der Block ausgeführt wurde und konnten sich deshalb nicht berühren!",
+            "nonexistent-color": "Die Farbe <span style=\"color: {color}; background-color: {color}; padding: 0 3px; border-radius: 10px\">⬤</span> kam nicht vor, als der Block ausgeführt wurde! <br> Versuche die gewünschte Farbe mit der Pipette auszuwählen. ",
+            "nonexistent-colors": "Die Farben <span style=\"color: {color1}; background-color: {color1}; padding: 0 3px; border-radius: 10px\">⬤</span> und <span style=\"color: {color2}; background-color: {color2}; padding: 0 3px; border-radius: 10px\">⬤</span> kamen nicht vor, als der Block ausgeführt wurde! <br> Versuche die gewünschten Farben mit der Pipette auszuwählen. "
         },
         "time": {
             "block-executed-seconds-after-green-flag": "Der Block wurde <span style=\"color: red;\"><b>{timeElapsed}</b></span> Sekunden nach Klicken der grünen Flagge ausgeführt. ",
