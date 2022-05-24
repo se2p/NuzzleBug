@@ -86,6 +86,14 @@
   scrollbar-color: #CECDCE transparent;
 }
 
+@-moz-document url-prefix() {
+  .responsible-targets {
+    bottom: 99px;
+    width: 42px;
+    right: 22px;
+  }
+}
+
 .block-area::-webkit-scrollbar-track,
 .answer-messages::-webkit-scrollbar-track {
   margin-top: 1px;
@@ -132,6 +140,20 @@
 
 .zoom-out-button {
   bottom: 30px;
+}
+
+@-moz-document url-prefix() {
+  .zoom-button {
+    right: 31px;
+  }
+  
+  .zoom-in-button {
+    bottom: 61px;
+  }
+  
+  .zoom-out-button {
+    bottom: 31px;
+  }
 }
 
 .stage, .distance-path, .mouse-pointer {
