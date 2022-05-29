@@ -3,11 +3,14 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import VM from 'scratch-vm';
+import Test from 'whisker-main/whisker-main/src/test-runner/test';
 
 import GreenFlag from '../green-flag/green-flag.jsx';
+import RunTest from '../run-test/run-test.jsx';
 import PauseResume from '../pause-resume/pause-resume.jsx';
 import StepOver from '../step-over/step-over.jsx';
 import InitialStep from '../initial-step/initial-step.jsx';
+import InitialTestStep from '../initial-test-step/initial-test-step.jsx';
 import StepBack from '../step-back/step-back.jsx';
 import StopAll from '../stop-all/stop-all.jsx';
 import TurboMode from '../turbo-mode/turbo-mode.jsx';
@@ -22,6 +25,11 @@ const messages = defineMessages({
         id: 'gui.controls.go',
         defaultMessage: 'Go',
         description: 'Green flag button title'
+    },
+    runTestTitle: {
+        id: 'gui.ir-debugger.controls.run-test',
+        defaultMessage: 'Run test',
+        description: 'Run test button title'
     },
     pauseTitle: {
         id: 'gui.ir-debugger.controls.pause',
@@ -47,6 +55,11 @@ const messages = defineMessages({
         id: 'gui.ir-debugger.controls.initial-step',
         defaultMessage: 'Initial Step',
         description: 'Initial Step button title'
+    },
+    initialTestStepTitle: {
+        id: 'gui.ir-debugger.controls.initial-test-step',
+        defaultMessage: 'Initial Test Step',
+        description: 'Initial Test Step button title'
     },
     stopTitle: {
         id: 'gui.controls.stop',
@@ -76,11 +89,13 @@ const Controls = function (props) {
         className,
         intl,
         onGreenFlagClick,
+        onRunTestClick,
         onPauseResumeClick,
         onStopAllClick,
         onStepBackClick,
         onStepOverClick,
         onInitialStepClick,
+        onInitialTestStepClick,
         onIRQuestionsClick,
         onToggleObservationClick,
         irDisabled,
@@ -91,6 +106,7 @@ const Controls = function (props) {
         interrogationEnabled,
         observationState,
         observationActive,
+        whiskerTest,
         ...componentProps
     } = props;
 
@@ -102,13 +118,23 @@ const Controls = function (props) {
             {...componentProps}
         >
             <GreenFlag
-                active={active && !paused}
+                active={active && !paused && !whiskerTest?.isRunning}
                 title={intl.formatMessage(messages.goTitle)}
                 onClick={onGreenFlagClick}
             />
+            {whiskerTest ? <RunTest
+                testResult={whiskerTest.resultStatus}
+                active={active && !paused && whiskerTest.isRunning}
+                title={intl.formatMessage(messages.runTestTitle, {name: whiskerTest.name})}
+                onClick={onRunTestClick}
+            /> : null}
             {interrogationSupported ? (<InitialStep
                 title={intl.formatMessage(messages.initialStepTitle)}
                 onClick={onInitialStepClick}
+            />) : null}
+            {whiskerTest && interrogationSupported ? (<InitialTestStep
+                title={intl.formatMessage(messages.initialTestStepTitle, {name: whiskerTest.name})}
+                onClick={onInitialTestStepClick}
             />) : null}
             {interrogationSupported ? <PauseResume
                 active={active}
@@ -162,10 +188,12 @@ Controls.propTypes = {
     className: PropTypes.string,
     intl: intlShape.isRequired,
     onGreenFlagClick: PropTypes.func.isRequired,
+    onRunTestClick: PropTypes.func.isRequired,
     onPauseResumeClick: PropTypes.func.isRequired,
     onStepBackClick: PropTypes.func.isRequired,
     onStepOverClick: PropTypes.func.isRequired,
     onInitialStepClick: PropTypes.func.isRequired,
+    onInitialTestStepClick: PropTypes.func.isRequired,
     onStopAllClick: PropTypes.func.isRequired,
     onIRQuestionsClick: PropTypes.func.isRequired,
     onToggleObservationClick: PropTypes.func.isRequired,
@@ -175,7 +203,8 @@ Controls.propTypes = {
     interrogationEnabled: PropTypes.bool,
     vm: PropTypes.instanceOf(VM),
     observationState: PropTypes.oneOf(Object.values(ObservationState)).isRequired,
-    observationActive: PropTypes.bool
+    observationActive: PropTypes.bool,
+    whiskerTest: PropTypes.instanceOf(Test)
 };
 
 Controls.defaultProps = {

@@ -5,6 +5,8 @@
         "step-back": "Schritt zurück", 
         "step-over": "Schritt vorwärts", 
         "initial-step": "Erster Schritt",
+        "run-test": "Test \"{name}\" starten",
+        "initial-test-step": "Erster Schritt des Tests",
         "ir-questions": "Zeige Fragen",
         "activate-observation": "Beobachtung starten",
         "deactivate-observation": "Beobachtung stoppen",

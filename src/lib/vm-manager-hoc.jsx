@@ -15,6 +15,8 @@ import {
     projectError
 } from '../reducers/project-state';
 
+import {setWhiskerTest} from '../reducers/vm-status';
+import Test from 'whisker-main/whisker-main/src/test-runner/test';
 /*
  * Higher Order Component to manage events emitted by the VM
  * @param {React.Component} WrappedComponent component to manage VM events for
@@ -40,8 +42,14 @@ const vmManagerHOC = function (WrappedComponent) {
                 this.props.vm.start();
             }
             window.addEventListener('message', event => {
-                if (event.data.project) {
-                    this.loadProject(event.data.project, event.data.projectFileName);
+                if (event.data.test) {
+                    this.loadProject(event.data.test.project, event.data.test.props.projectName);
+                    const test = new Test({});
+                    test.fromJSON(event.data.test);
+                    test.isRunning = false;
+                    test.testResultSign = null;
+                    test.skip = false;
+                    this.props.onReceivedWhiskerTest(test);
                 }
             });
             if (window.opener) {
@@ -64,11 +72,11 @@ const vmManagerHOC = function (WrappedComponent) {
             this.isProjectLoading = true;
             return this.props.vm.loadProject(projectData)
                 .then(() => {
+                    this.props.onLoadedProject(this.props.loadingState, this.props.canSave);
                     if (projectFileName) {
                         this.props.onSetProjectTitle(this.getProjectTitleFromFileName(projectFileName));
                     }
                     this.isProjectLoading = false;
-                    this.props.onLoadedProject(this.props.loadingState, this.props.canSave);
                     // Wrap in a setTimeout because skin loading in
                     // the renderer can be async.
                     setTimeout(() => this.props.onSetProjectUnchanged());
@@ -113,6 +121,9 @@ const vmManagerHOC = function (WrappedComponent) {
                 vm,
                 ...componentProps
             } = this.props;
+
+            delete componentProps.onReceivedWhiskerTest;
+            
             return (
                 <WrappedComponent
                     isLoading={isLoadingWithIdProp}
@@ -137,6 +148,7 @@ const vmManagerHOC = function (WrappedComponent) {
         onLoadedProject: PropTypes.func,
         onSetProjectUnchanged: PropTypes.func,
         onSetProjectTitle: PropTypes.func,
+        onReceivedWhiskerTest: PropTypes.func,
         projectData: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
         projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         username: PropTypes.string,
@@ -163,7 +175,8 @@ const vmManagerHOC = function (WrappedComponent) {
         onLoadedProject: (loadingState, canSave) =>
             dispatch(onLoadedProject(loadingState, canSave, true)),
         onSetProjectUnchanged: () => dispatch(setProjectUnchanged()),
-        onSetProjectTitle: title => dispatch(setProjectTitle(title))
+        onSetProjectTitle: title => dispatch(setProjectTitle(title)),
+        onReceivedWhiskerTest: test => dispatch(setWhiskerTest(test))
     });
 
     // Allow incoming props to override redux-provided props. Used to mock in tests.

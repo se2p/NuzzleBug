@@ -3,13 +3,15 @@ const SET_PAUSE_STATE = 'scratch-gui/vm-status/SET_PAUSED_STATE';
 const SET_TURBO_STATE = 'scratch-gui/vm-status/SET_TURBO_STATE';
 const SET_STARTED_STATE = 'scratch-gui/vm-status/SET_STARTED_STATE';
 const SET_OBSERVATION_ACTIVE_STATE = 'scratch-gui/vm-status/SET_OBSERVATION_ACTIVE_STATE';
+const SET_WHISKER_TEST = 'scratch-gui/vm-status/SET_WHISKER_TEST';
 
 const initialState = {
     running: false,
     started: false,
     paused: false,
     turbo: false,
-    observationActive: true
+    observationActive: true,
+    whiskerTest: null
 };
 
 const reducer = function (state, action) {
@@ -34,6 +36,10 @@ const reducer = function (state, action) {
     case SET_OBSERVATION_ACTIVE_STATE:
         return Object.assign({}, state, {
             observationActive: action.observationActive
+        });
+    case SET_WHISKER_TEST:
+        return Object.assign({}, state, {
+            whiskerTest: action.whiskerTest
         });
     default:
         return state;
@@ -76,6 +82,13 @@ const setObservationActiveState = function (observationActive) {
     };
 };
 
+const setWhiskerTest = function (whiskerTest) {
+    return {
+        type: SET_WHISKER_TEST,
+        whiskerTest: whiskerTest
+    };
+};
+
 export {
     reducer as default,
     initialState as vmStatusInitialState,
@@ -83,5 +96,6 @@ export {
     setStartedState,
     setTurboState,
     setPauseState,
-    setObservationActiveState
+    setObservationActiveState,
+    setWhiskerTest
 };

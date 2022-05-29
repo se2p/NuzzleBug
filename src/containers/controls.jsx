@@ -10,20 +10,35 @@ import {
 } from '../components//interrogative-debugging/version-2/toggle-observation/toggle-observation.jsx';
 import {viewCards} from '../reducers/interrogative-debugging/version-1/ir-cards.js';
 
+import Test from 'whisker-main/whisker-main/src/test-runner/test';
+import TestRunner from 'whisker-main/whisker-main/dist/src/test-runner/test-runner';
+import {ModelTester} from 'whisker-main/whisker-main/dist/src/whisker/model/ModelTester';
+
 class Controls extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
             'handleGreenFlagClick',
+            'handleRunTestClick',
             'handlePauseResumeClick',
             'handleStepBack',
             'handleStepOver',
             'handleInitialStep',
+            'handleInitialTestStep',
             'handleStopAllClick',
-            'handleToggleObservationClick'
+            'handleToggleObservationClick',
+            'onTestDone'
         ]);
         this.observationState = props.observationActive ?
             ObservationState.ACTIVE : ObservationState.INACTIVE;
+
+        this.testRunner = new TestRunner();
+        this.testRunner.on(TestRunner.TEST_PASS, this.onTestDone);
+        this.testRunner.on(TestRunner.TEST_FAIL, this.onTestDone);
+        this.testRunner.on(TestRunner.TEST_ERROR, this.onTestDone);
+        this.testRunner.on(TestRunner.TEST_SKIP, this.onTestDone);
+
+        this.modelTester = new ModelTester();
     }
     handleGreenFlagClick (e) {
         e.preventDefault();
@@ -38,10 +53,41 @@ class Controls extends React.Component {
             this.props.vm.setTurboMode(!this.props.turbo);
         } else {
             if (!this.props.isStarted) {
+                clearInterval(this.props.vm.runtime._steppingInterval);
+                this.props.vm.runtime._steppingInterval = null;
                 this.props.vm.start();
             }
             this.props.vm.greenFlag();
         }
+    }
+    handleRunTestClick (e) {
+        e.preventDefault();
+
+        if (this.props.whiskerTest) {
+            if (this.props.projectPaused) {
+                // Resets the state of the VM back to normal.
+                // Otherwise we could not start execution again.
+                this.resetPauseResume();
+            }
+            const test = this.props.whiskerTest;
+            test.isRunning = true;
+            test.resultStatus = null;
+            this.forceUpdate();
+            this.testRunner.runTests(
+                this.props.vm,
+                test.project,
+                [test],
+                this.modelTester,
+                test.props,
+                test.modelProps
+            );
+        }
+    }
+    onTestDone (result) {
+        const test = this.props.whiskerTest;
+        test.isRunning = false;
+        test.resultStatus = result.status;
+        this.forceUpdate();
     }
     handleStepBack (e) {
         e.preventDefault();
@@ -61,6 +107,13 @@ class Controls extends React.Component {
 
         this.props.vm.runtime.oneStep = true;
         this.handleGreenFlagClick(e);
+        this.props.vm.haltExecution();
+    }
+    handleInitialTestStep (e) {
+        e.preventDefault();
+
+        this.props.vm.runtime.oneStep = true;
+        this.handleRunTestClick(e);
         this.props.vm.haltExecution();
     }
     handlePauseResumeClick (e) {
@@ -125,6 +178,7 @@ class Controls extends React.Component {
             interrogationSupported,
             interrogationEnabled,
             observationActive,
+            whiskerTest,
             ...props
         } = this.props;
 
@@ -140,10 +194,13 @@ class Controls extends React.Component {
                 observationState={this.observationState}
                 observationActive={observationActive}
                 vm={vm}
+                whiskerTest={whiskerTest}
                 onGreenFlagClick={this.handleGreenFlagClick}
+                onRunTestClick={this.handleRunTestClick}
                 onStepBackClick={this.handleStepBack}
                 onStepOverClick={this.handleStepOver}
                 onInitialStepClick={this.handleInitialStep}
+                onInitialTestStepClick={this.handleInitialTestStep}
                 onPauseResumeClick={this.handlePauseResumeClick}
                 onStopAllClick={this.handleStopAllClick}
                 onIRQuestionsClick={handleIRQuestionsClick}
@@ -163,7 +220,8 @@ Controls.propTypes = {
     interrogationSupported: PropTypes.bool.isRequired,
     interrogationEnabled: PropTypes.bool.isRequired,
     observationActive: PropTypes.bool.isRequired,
-    vm: PropTypes.instanceOf(VM)
+    vm: PropTypes.instanceOf(VM),
+    whiskerTest: PropTypes.instanceOf(Test)
 };
 
 const mapStateToProps = state => ({
@@ -174,7 +232,8 @@ const mapStateToProps = state => ({
     turbo: state.scratchGui.vmStatus.turbo,
     interrogationSupported: state.scratchGui.irDebugger.supported,
     interrogationEnabled: state.scratchGui.irDebugger.enabled,
-    observationActive: state.scratchGui.vmStatus.observationActive
+    observationActive: state.scratchGui.vmStatus.observationActive,
+    whiskerTest: state.scratchGui.vmStatus.whiskerTest
 });
 
 const mapDispatchToProps = dispatch => ({

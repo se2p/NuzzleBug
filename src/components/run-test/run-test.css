@@ -1,0 +1,51 @@
+@import "../../css/colors.css";
+
+.run-test-div {
+    width: 2rem;
+    height: 2rem;
+    padding: 0.375rem;
+    border-radius: 0.25rem;
+    user-select: none;
+    user-drag: none;
+    cursor: pointer;
+}
+
+.run-test-div:hover {
+    background-color: $motion-light-transparent;
+}
+
+.run-test-div.is-active {
+    background-color: $motion-transparent;
+}
+
+.run-test {
+    width: 1.25rem;
+    height: 1.25rem;
+    user-select: none;
+    user-drag: none;
+    cursor: pointer;
+}
+
+.pass, .fail {
+    width: 1.75rem;
+    height: 1.75rem;
+    margin-top: -1.75rem;
+    margin-left: -0.27rem;
+    border-radius: 0.875rem;
+}
+
+@-moz-document url-prefix() {
+    .pass, .fail {
+        margin-left: -0.25rem;
+    }
+}
+
+.pass {
+    border: 0.1rem solid rgba(76, 191, 86, 0.3);
+    background-color: rgba(76, 191, 86, 0.3);
+}
+
+.fail {
+    border: 0.1rem solid rgba(255, 0, 0, 0.3);
+    background-color: rgba(255, 0, 0, 0.3);
+}

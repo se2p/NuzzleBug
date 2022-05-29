@@ -5,6 +5,8 @@
         "step-back": "Step back", 
         "step-over": "Step over", 
         "initial-step": "First step",
+        "run-test": "Run test \"{name}\"",
+        "initial-test-step": "First test step",
         "ir-questions": "Show Questions",
         "activate-observation": "Activate observation",
         "deactivate-observation": "Deactivate observation",
