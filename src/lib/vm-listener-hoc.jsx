@@ -20,7 +20,8 @@ import {showExtensionAlert} from '../reducers/alerts';
 import {updateMicIndicator} from '../reducers/mic-indicator';
 import {
     openBlockDebugger,
-    disableDebugger
+    disableDebugger,
+    enableDebugger
 } from '../reducers/interrogative-debugging/version-2/ir-debugger';
 
 /*
@@ -89,8 +90,13 @@ const vmListenerHOC = function (WrappedComponent) {
             }
         }
         handleProjectChanged () {
-            if (this.props.shouldUpdateProjectChanged && !this.props.projectChanged) {
-                this.props.onProjectChanged();
+            if (this.props.shouldUpdateProjectChanged) {
+                if (this.props.projectChanged) {
+                    this.props.onProjectSaved();
+                    this.props.onProjectChanged();
+                } else {
+                    this.props.onProjectChanged();
+                }
             }
         }
         handleTargetsUpdate (data) {
@@ -233,7 +239,10 @@ const vmListenerHOC = function (WrappedComponent) {
         onMicListeningUpdate: listening => {
             dispatch(updateMicIndicator(listening));
         },
-        onActivateObservation: () => dispatch(setObservationActiveState(true)),
+        onActivateObservation: () => {
+            dispatch(setObservationActiveState(true));
+            dispatch(enableDebugger());
+        },
         onDeactivateObservation: () => {
             dispatch(setObservationActiveState(false));
             dispatch(disableDebugger());

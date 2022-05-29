@@ -21,7 +21,7 @@ class RewindExecutionSlider extends React.Component {
 
     componentDidUpdate (prevProps) {
         if ((!prevProps.paused && this.props.paused) || (prevProps.active !== this.props.active) ||
-            (!prevProps.enabled && this.props.enabled)) {
+            (!prevProps.enabled && this.props.enabled) || prevProps.projectChanged !== this.props.projectChanged) {
             this.updateRange();
             this.updateValue();
             this.forceUpdate();
@@ -82,6 +82,7 @@ RewindExecutionSlider.propTypes = {
     active: PropTypes.bool,
     paused: PropTypes.bool,
     enabled: PropTypes.bool,
+    projectChanged: PropTypes.bool,
     vm: PropTypes.instanceOf(VM)
 };
 
@@ -89,7 +90,8 @@ const mapStateToProps = state => ({
     active: state.scratchGui.vmStatus.running,
     paused: state.scratchGui.vmStatus.paused,
     enabled: state.scratchGui.irDebugger.enabled && state.scratchGui.irDebugger.supported,
-    vm: state.scratchGui.vm
+    vm: state.scratchGui.vm,
+    projectChanged: state.scratchGui.projectChanged
 });
 
 export default connect(mapStateToProps)(RewindExecutionSlider);

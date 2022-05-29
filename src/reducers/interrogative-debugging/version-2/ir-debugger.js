@@ -1,7 +1,6 @@
 import ScratchBlocks from 'scratch-blocks';
 
 const SET_PROJECT_CHANGED = 'scratch-gui/project-changed/SET_PROJECT_CHANGED';
-const BLOCK_DRAG_UPDATE = 'scratch-gui/block-drag/BLOCK_DRAG_UPDATE';
 const SET_RUNNING_STATE = 'scratch-gui/vm-status/SET_RUNNING_STATE';
 const SET_PAUSE_STATE = 'scratch-gui/vm-status/SET_PAUSED_STATE';
 const SET_OBSERVATION_ACTIVE_STATE = 'scratch-gui/vm-status/SET_OBSERVATION_ACTIVE_STATE';
@@ -24,7 +23,7 @@ const initialState = {
     targetId: null,
     blockId: null,
     visible: false,
-    enabled: false,
+    enabled: true,
     supported: true,
     x: 0,
     y: 0,
@@ -47,32 +46,21 @@ const forwardDebuggerSupported = function (supported, vm) {
 const reducer = function (state, action) {
     if (typeof state === 'undefined') {
         state = initialState;
+        forwardDebuggerEnabled(initialState.enabled);
     }
     switch (action.type) {
     case SET_PROJECT_CHANGED:
-        forwardDebuggerEnabled(initialState.enabled);
         return Object.assign({}, state, initialState, {
             supported: state.supported
         });
-    case BLOCK_DRAG_UPDATE:
-        forwardDebuggerEnabled(false);
-        return Object.assign({}, state, {
-            enabled: false
-        });
     case SET_RUNNING_STATE: {
-        const enabled = state.observationActive && (!action.running || state.projectPaused);
-        forwardDebuggerEnabled(enabled);
         return Object.assign({}, state, {
-            projectRunning: action.running,
-            enabled: enabled
+            projectRunning: action.running
         });
     }
     case SET_PAUSE_STATE: {
-        const enabled = state.observationActive && (action.paused || !state.projectRunning);
-        forwardDebuggerEnabled(enabled);
         return Object.assign({}, state, {
-            projectPaused: action.paused,
-            enabled: enabled
+            projectPaused: action.paused
         });
     }
     case SELECT_LOCALE: {

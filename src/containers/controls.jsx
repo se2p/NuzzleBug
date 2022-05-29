@@ -220,6 +220,7 @@ Controls.propTypes = {
     interrogationSupported: PropTypes.bool.isRequired,
     interrogationEnabled: PropTypes.bool.isRequired,
     observationActive: PropTypes.bool.isRequired,
+    projectChanged: PropTypes.bool.isRequired,
     vm: PropTypes.instanceOf(VM),
     whiskerTest: PropTypes.instanceOf(Test)
 };
@@ -233,6 +234,7 @@ const mapStateToProps = state => ({
     interrogationSupported: state.scratchGui.irDebugger.supported,
     interrogationEnabled: state.scratchGui.irDebugger.enabled,
     observationActive: state.scratchGui.vmStatus.observationActive,
+    projectChanged: state.scratchGui.projectChanged,
     whiskerTest: state.scratchGui.vmStatus.whiskerTest
 });
 

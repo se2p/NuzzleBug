@@ -20,7 +20,6 @@ import {
 
 import IRDebuggerComponent from '../../../components/interrogative-debugging/version-2/ir-debugger/ir-debugger.jsx';
 import {
-    disableDebugger,
     closeDebugger,
     shrinkExpandDebugger,
     startDragDebugger,
@@ -43,6 +42,9 @@ class IRDebugger extends React.Component {
             'rerender',
             'translate'
         ]);
+        if (!props.vm.runtime.paused && props.vm.runtime.active) {
+            props.vm.haltExecution();
+        }
         props.vm.storeLastTrace();
         props.vm.storeEditingTarget();
         this.init();
@@ -69,11 +71,6 @@ class IRDebugger extends React.Component {
             this.cancel = true;
             return;
         }
-
-        if (this.props.vm.runtime.traceInfo.isEmpty()) {
-            this.closeAndDisable();
-            return;
-        }
         
         try {
             this.cfg = generateCFG(this.props.vm);
@@ -98,12 +95,6 @@ class IRDebugger extends React.Component {
         this.answer = null;
         this.answerLoading = false;
         this.selectedBlockExecution = null;
-    }
-
-    closeAndDisable () {
-        this.handleClose();
-        this.props.onDisable();
-        this.cancel = true;
     }
 
     handleClose () {
@@ -575,7 +566,6 @@ IRDebugger.propTypes = {
     expanded: PropTypes.bool.isRequired,
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
-    onDisable: PropTypes.func.isRequired,
     onCloseDebugger: PropTypes.func.isRequired,
     onShrinkExpand: PropTypes.func.isRequired,
     onStartDrag: PropTypes.func.isRequired,
@@ -594,7 +584,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    onDisable: () => dispatch(disableDebugger()),
     onCloseDebugger: () => dispatch(closeDebugger()),
     onShrinkExpand: () => dispatch(shrinkExpandDebugger()),
     onStartDrag: () => dispatch(startDragDebugger()),
