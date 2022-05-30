@@ -43,13 +43,17 @@ const vmManagerHOC = function (WrappedComponent) {
             }
             window.addEventListener('message', event => {
                 if (event.data.test) {
-                    this.loadProject(event.data.test.project, event.data.test.props.projectName);
-                    const test = new Test({});
-                    test.fromJSON(event.data.test);
-                    test.isRunning = false;
-                    test.testResultSign = null;
-                    test.skip = false;
-                    this.props.onReceivedWhiskerTest(test);
+                    if (this.isProjectLoading) {
+                        setTimeout(() => window.postMessage(event.data, '*'), 100);
+                    } else {
+                        this.loadProject(event.data.test.project, event.data.test.props.projectName);
+                        const test = new Test({});
+                        test.fromJSON(event.data.test);
+                        test.isRunning = false;
+                        test.testResultSign = null;
+                        test.skip = false;
+                        this.props.onReceivedWhiskerTest(test);
+                    }
                 }
             });
             if (window.opener) {
