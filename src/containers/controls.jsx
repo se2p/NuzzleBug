@@ -28,7 +28,8 @@ class Controls extends React.Component {
             'handleStopAllClick',
             'handleToggleObservationClick',
             'onTestStart',
-            'onTestDone'
+            'onTestDone',
+            'onTestRunEnd'
         ]);
         this.observationState = props.observationActive ?
             ObservationState.ACTIVE : ObservationState.INACTIVE;
@@ -39,6 +40,7 @@ class Controls extends React.Component {
         this.testRunner.on(TestRunner.TEST_FAIL, this.onTestDone);
         this.testRunner.on(TestRunner.TEST_ERROR, this.onTestDone);
         this.testRunner.on(TestRunner.TEST_SKIP, this.onTestDone);
+        this.testRunner.on(TestRunner.RUN_END, this.onTestRunEnd);
 
         this.modelTester = new ModelTester();
     }
@@ -97,6 +99,9 @@ class Controls extends React.Component {
         test.isRunning = false;
         test.resultStatus = result.status;
         this.forceUpdate();
+    }
+    onTestRunEnd () {
+        this.props.vm.stopAll();
     }
     handleStepBack (e) {
         e.preventDefault();
