@@ -1,3 +1,32 @@
 .controls-container {
     display: flex;
 }
+
+.loader {
+    border: 2px solid #e5f0ff;
+    border-radius: 50%;
+    border-top: 2px solid #4D97FF;
+    width: 29px;
+    height: 29px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+    margin-left: -31px;
+    margin-top: 1px;
+    margin-right: 2px;
+}
+
+@-moz-document url-prefix() {
+    .loader {
+        margin-left: -30.5px;
+    }
+}
+
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+  
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

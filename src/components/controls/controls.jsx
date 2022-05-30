@@ -128,6 +128,9 @@ const Controls = function (props) {
                 title={intl.formatMessage(messages.runTestTitle, {name: whiskerTest.name})}
                 onClick={onRunTestClick}
             /> : null}
+            {whiskerTest && whiskerTest.isLoading ? (
+                <div className={styles.loader} />
+            ) : null}
             {interrogationSupported ? (<InitialStep
                 title={intl.formatMessage(messages.initialStepTitle)}
                 onClick={onInitialStepClick}

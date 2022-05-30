@@ -27,12 +27,14 @@ class Controls extends React.Component {
             'handleInitialTestStep',
             'handleStopAllClick',
             'handleToggleObservationClick',
+            'onTestStart',
             'onTestDone'
         ]);
         this.observationState = props.observationActive ?
             ObservationState.ACTIVE : ObservationState.INACTIVE;
 
         this.testRunner = new TestRunner();
+        this.testRunner.on(TestRunner.TEST_START, this.onTestStart);
         this.testRunner.on(TestRunner.TEST_PASS, this.onTestDone);
         this.testRunner.on(TestRunner.TEST_FAIL, this.onTestDone);
         this.testRunner.on(TestRunner.TEST_ERROR, this.onTestDone);
@@ -70,7 +72,8 @@ class Controls extends React.Component {
                 this.resetPauseResume();
             }
             const test = this.props.whiskerTest;
-            test.isRunning = true;
+            test.isLoading = true;
+            test.isRunning = false;
             test.resultStatus = null;
             this.forceUpdate();
             this.testRunner.runTests(
@@ -82,6 +85,12 @@ class Controls extends React.Component {
                 test.modelProps
             );
         }
+    }
+    onTestStart () {
+        const test = this.props.whiskerTest;
+        test.isLoading = false;
+        test.isRunning = true;
+        this.forceUpdate();
     }
     onTestDone (result) {
         const test = this.props.whiskerTest;
@@ -181,6 +190,8 @@ class Controls extends React.Component {
             whiskerTest,
             ...props
         } = this.props;
+
+        delete props.projectChanged;
 
         return (
             <ControlsComponent
