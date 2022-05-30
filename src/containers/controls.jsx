@@ -101,7 +101,13 @@ class Controls extends React.Component {
         this.forceUpdate();
     }
     onTestRunEnd () {
+        if (this.props.projectPaused) {
+            // Resets the state of the VM back to normal.
+            // Otherwise we could not stop execution.
+            this.resetPauseResume();
+        }
         this.props.vm.stopAll();
+        this.props.vm.runtime._executeStep();
     }
     handleStepBack (e) {
         e.preventDefault();
