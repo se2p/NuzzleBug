@@ -80,11 +80,12 @@ class GUI extends React.Component {
             fetchingProject,
             isLoading,
             loadingStateVisible,
+            isWhiskerProjectLoading,
             ...componentProps
         } = this.props;
         return (
             <GUIComponent
-                loading={fetchingProject || isLoading || loadingStateVisible}
+                loading={fetchingProject || isLoading || loadingStateVisible || isWhiskerProjectLoading}
                 {...componentProps}
             >
                 {children}
@@ -102,6 +103,7 @@ GUI.propTypes = {
     intl: intlShape,
     isError: PropTypes.bool,
     isLoading: PropTypes.bool,
+    isWhiskerProjectLoading: PropTypes.bool,
     isScratchDesktop: PropTypes.bool,
     isShowingProject: PropTypes.bool,
     loadingStateVisible: PropTypes.bool,
@@ -144,6 +146,7 @@ const mapStateToProps = state => {
         isRtl: state.locales.isRtl,
         isShowingProject: getIsShowingProject(loadingState),
         loadingStateVisible: state.scratchGui.modals.loadingProject,
+        isWhiskerProjectLoading: state.scratchGui.vmStatus.isWhiskerProjectLoading,
         projectId: state.scratchGui.projectState.projectId,
         soundsTabVisible: state.scratchGui.editorTab.activeTabIndex === SOUNDS_TAB_INDEX,
         telemetryModalVisible: state.scratchGui.modals.telemetryModal,

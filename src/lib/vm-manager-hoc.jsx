@@ -15,7 +15,11 @@ import {
     projectError
 } from '../reducers/project-state';
 
-import {setWhiskerTest} from '../reducers/vm-status';
+import {
+    setWhiskerTest,
+    setIsWhiskerProjectLoading
+} from '../reducers/vm-status';
+
 import Test from 'whisker-main/whisker-main/src/test-runner/test';
 /*
  * Higher Order Component to manage events emitted by the VM
@@ -46,7 +50,7 @@ const vmManagerHOC = function (WrappedComponent) {
                     if (this.isProjectLoading) {
                         setTimeout(() => window.postMessage(event.data, '*'), 100);
                     } else {
-                        this.loadProject(event.data.test.project, event.data.test.props.projectName);
+                        this.loadProject(event.data.test.project, event.data.test.props.projectName, true);
                         const test = new Test({});
                         test.fromJSON(event.data.test);
                         test.isRunning = false;
@@ -72,8 +76,11 @@ const vmManagerHOC = function (WrappedComponent) {
                 this.props.vm.start();
             }
         }
-        loadProject (projectData, projectFileName) {
+        loadProject (projectData, projectFileName, isWhiskerProject) {
             this.isProjectLoading = true;
+            if (isWhiskerProject) {
+                this.props.onWhiskerProjectLoading();
+            }
             return this.props.vm.loadProject(projectData)
                 .then(() => {
                     this.props.onLoadedProject(this.props.loadingState, this.props.canSave);
@@ -90,10 +97,15 @@ const vmManagerHOC = function (WrappedComponent) {
                     // which closely matches the 2.0 behavior, except for monitors–
                     // 2.0 runs monitors and shows updates (e.g. timer monitor)
                     // before the VM starts running other hat blocks.
-                    if (!this.props.isStarted) {
+                    if (!this.props.isStarted || isWhiskerProject) {
                         // Wrap in a setTimeout because skin loading in
                         // the renderer can be async.
-                        setTimeout(() => this.props.vm.renderer.draw());
+                        setTimeout(() => {
+                            this.props.vm.renderer.draw();
+                            if (isWhiskerProject) {
+                                this.props.onWhiskerProjectLoaded();
+                            }
+                        });
                     }
                 })
                 .catch(e => {
@@ -127,6 +139,8 @@ const vmManagerHOC = function (WrappedComponent) {
             } = this.props;
 
             delete componentProps.onReceivedWhiskerTest;
+            delete componentProps.onWhiskerProjectLoading;
+            delete componentProps.onWhiskerProjectLoaded;
             
             return (
                 <WrappedComponent
@@ -153,6 +167,8 @@ const vmManagerHOC = function (WrappedComponent) {
         onSetProjectUnchanged: PropTypes.func,
         onSetProjectTitle: PropTypes.func,
         onReceivedWhiskerTest: PropTypes.func,
+        onWhiskerProjectLoading: PropTypes.func,
+        onWhiskerProjectLoaded: PropTypes.func,
         projectData: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
         projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         username: PropTypes.string,
@@ -180,6 +196,8 @@ const vmManagerHOC = function (WrappedComponent) {
             dispatch(onLoadedProject(loadingState, canSave, true)),
         onSetProjectUnchanged: () => dispatch(setProjectUnchanged()),
         onSetProjectTitle: title => dispatch(setProjectTitle(title)),
+        onWhiskerProjectLoading: () => dispatch(setIsWhiskerProjectLoading(true)),
+        onWhiskerProjectLoaded: () => dispatch(setIsWhiskerProjectLoading(false)),
         onReceivedWhiskerTest: test => dispatch(setWhiskerTest(test))
     });
 
