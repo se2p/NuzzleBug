@@ -6,8 +6,10 @@ import Viz from 'viz.js';
 import bindAll from 'lodash.bindall';
 
 import VirtualMachine from 'scratch-vm';
+import logging from 'scratch-vm/src/util/logging.js';
 import ScratchBlocks from 'scratch-blocks';
 import {AnswerV2 as Answer, QuestionV2 as Question, targetForBlockId, QuestionCategoryType} from 'scratch-ir';
+import {getContentMessageKey} from 'scratch-ir/src/version-2/questions/question';
 
 import scratchblocks from 'scratchblocks';
 
@@ -1039,6 +1041,24 @@ class IRAnswer extends React.Component {
             this.props.selectedQuestion.feedback = value;
         }
         this.forceUpdate();
+
+        if (logging.isActive()) {
+            const question = this.props.selectedQuestion;
+            logging.logDebuggerEvent({
+                event: 'RATE_QUESTION',
+                feedback: question.feedback,
+                question: {
+                    type: getContentMessageKey(question.content, question.values),
+                    category: question.category,
+                    form: question.form,
+                    values: Object.values(question.values),
+                    block: this.props.block ? {
+                        id: this.props.block.id,
+                        opcode: this.props.block.opcode
+                    } : null
+                }
+            });
+        }
     }
 
     getFeedbackIcon (feedback) {
@@ -1077,12 +1097,14 @@ class IRAnswer extends React.Component {
                     <div
                         className={classNames(styles.speechBubbleBox, styles.speechBubbleTriangle,
                             irStyles[`color-${selectedQuestion.color.replace('#', '')}`])}
-                        style={(!answer.graph || !answer.graph.getAllNodes().length) && !answer.stage ? {maxHeight: '465px'} : {}}
+                        style={(!answer.graph || !answer.graph.getAllNodes().length) && !answer.stage ?
+                            {maxHeight: '465px'} : {}}
                     >
                         <div
                             id="answerMessages"
                             className={styles.answerMessages}
-                            style={(!answer.graph || !answer.graph.getAllNodes().length) && !answer.stage ? {maxHeight: '465px'} : {}}
+                            style={(!answer.graph || !answer.graph.getAllNodes().length) && !answer.stage ?
+                                {maxHeight: '465px'} : {}}
                         >
                             <div className={initCount % 10 === 0 ? classNames(styles.rainbowText) : classNames()}>
                                 {this.state.messages.map((message, index) => (
@@ -1250,6 +1272,10 @@ IRAnswer.propTypes = {
             id: PropTypes.string.isRequired
         })
     }).isRequired,
+    block: PropTypes.shape({
+        id: PropTypes.string,
+        opcode: PropTypes.string
+    }),
     createSvgBlock: PropTypes.func.isRequired,
     onGraphNodeClick: PropTypes.func.isRequired,
     setCursorOfBlock: PropTypes.func.isRequired

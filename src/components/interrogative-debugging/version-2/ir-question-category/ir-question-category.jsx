@@ -4,6 +4,8 @@ import bindAll from 'lodash.bindall';
 import classNames from 'classnames';
 import {injectIntl, intlShape} from 'react-intl';
 
+import logging from 'scratch-vm/src/util/logging.js';
+
 import {QuestionCategory, QuestionV2 as Question} from 'scratch-ir';
 
 import IRQuestion from '../ir-question/ir-question.jsx';
@@ -49,7 +51,14 @@ class IRQuestionCategory extends React.Component {
         return false;
     }
 
-    handleToggleExpansion () {
+    handleToggleExpansion (event) {
+        if (event && logging.isActive()) {
+            logging.logDebuggerEvent({
+                event: this.state.expanded ? 'CLOSE_QUESTION_CATEGORY' : 'OPEN_QUESTION_CATEGORY',
+                category: this.props.questionCategory.type,
+                form: this.props.questionCategory.form
+            });
+        }
         this.setState(state => ({
             expanded: !state.expanded
         }));

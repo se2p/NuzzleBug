@@ -40,7 +40,7 @@ class IRDebugger extends React.Component {
     }
 
     componentDidUpdate (prevProps) {
-        if (prevProps.blockId !== this.props.blockId) {
+        if (prevProps.block?.id !== this.props.block?.id) {
             this._updateWidth();
         }
     }
@@ -298,7 +298,7 @@ class IRDebugger extends React.Component {
             targetOptions,
             selectedBlockExecution,
             blockExecutionOptions,
-            blockId,
+            block,
             questionHierarchy,
             selectedQuestion,
             answer,
@@ -365,7 +365,7 @@ class IRDebugger extends React.Component {
                                 >
                                     <IRHeader
                                         target={target}
-                                        blockId={blockId}
+                                        blockId={block?.id}
                                         selectedBlockExecution={selectedBlockExecution}
                                         targetOptions={targetOptions}
                                         blockExecutionOptions={blockExecutionOptions}
@@ -415,6 +415,7 @@ class IRDebugger extends React.Component {
                                                             selectedQuestion={selectedQuestion}
                                                             vm={vm}
                                                             target={target}
+                                                            block={block}
                                                             createSvgBlock={this.createSvgBlock}
                                                             onGraphNodeClick={onGraphNodeClick}
                                                             setCursorOfBlock={this.setCursorOfBlock}
@@ -478,7 +479,10 @@ IRDebugger.propTypes = {
         uniqueId: PropTypes.string.isRequired,
         optionName: PropTypes.string.isRequired
     })),
-    blockId: PropTypes.string,
+    block: PropTypes.shape({
+        id: PropTypes.string,
+        opcode: PropTypes.string
+    }),
     questionHierarchy: PropTypes.arrayOf(PropTypes.instanceOf(QuestionCategory)),
     selectedQuestion: PropTypes.instanceOf(Question),
     answerLoading: PropTypes.bool.isRequired,

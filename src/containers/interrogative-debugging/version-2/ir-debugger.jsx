@@ -5,6 +5,7 @@ import bindAll from 'lodash.bindall';
 import {intlShape} from 'react-intl';
 import ScratchBlocks from 'scratch-blocks';
 import VirtualMachine from 'scratch-vm';
+import logging from 'scratch-vm/src/util/logging.js';
 
 import {
     QuestionHierarchyProvider,
@@ -26,7 +27,11 @@ import {
     dragDebugger,
     endDragDebugger
 } from '../../../reducers/interrogative-debugging/version-2/ir-debugger';
-import {QuestionContent} from 'scratch-ir/src/version-2/questions/question';
+
+import {
+    QuestionContent,
+    getContentMessageKey
+} from 'scratch-ir/src/version-2/questions/question';
 
 class IRDebugger extends React.Component {
 
@@ -48,6 +53,20 @@ class IRDebugger extends React.Component {
         props.vm.storeLastTrace();
         props.vm.storeEditingTarget();
         this.init();
+
+        if (logging.isActive()) {
+            if (this.block) {
+                logging.logDebuggerEvent({
+                    event: 'OPEN_BLOCK_DEBUGGER',
+                    block: {id: this.block.id, opcode: this.block.opcode}
+                });
+            } else {
+                logging.logDebuggerEvent({
+                    event: 'OPEN_TARGET_DEBUGGER',
+                    target: {id: this.targetOrigin.id, name: this.targetOrigin.getName()}
+                });
+            }
+        }
     }
 
     componentDidMount () {
@@ -101,6 +120,9 @@ class IRDebugger extends React.Component {
         this.props.vm.resetLastTrace();
         this.props.vm.resetEditingTarget();
         this.props.onCloseDebugger();
+        if (logging.isActive()) {
+            logging.logEvent('CLOSE_DEBUGGER');
+        }
     }
 
     initTraces () {
@@ -332,6 +354,17 @@ class IRDebugger extends React.Component {
             this.answer = null;
             this.update();
             this.forceUpdate();
+
+            if (logging.isActive()) {
+                logging.logDebuggerEvent({
+                    event: 'SELECT_SPRITE_INSTANCE',
+                    target: {
+                        id: targetOption.id,
+                        name: this.targetOrigin.getName(),
+                        isOriginal: targetOption.isOriginal
+                    }
+                });
+            }
         }
     }
 
@@ -351,7 +384,7 @@ class IRDebugger extends React.Component {
         };
     }
 
-    handleSelectedBlockExecutionChange (blockExecution) {
+    setSelectedBlockExecution (blockExecution) {
         this.selectedBlockExecution = blockExecution;
         const traceIndex = this.allTraces.indexOf(blockExecution.lastTrace);
         this.relevantTraces = this.allTraces.slice(0, traceIndex + 1);
@@ -366,6 +399,21 @@ class IRDebugger extends React.Component {
             this.selectBlockExecutionQuestion();
         }
         this.forceUpdate();
+    }
+
+    handleSelectedBlockExecutionChange (blockExecution) {
+        this.setSelectedBlockExecution(blockExecution);
+
+        if (logging.isActive()) {
+            logging.logDebuggerEvent({
+                event: 'SELECT_BLOCK_EXECUTION',
+                block: {
+                    id: blockExecution.blockTrace.id,
+                    opcode: blockExecution.blockTrace.opcode
+                },
+                execution: blockExecution.execution
+            });
+        }
     }
 
     setTargetOptionOfBlockExecutionOption (blockExecutionOption) {
@@ -436,14 +484,16 @@ class IRDebugger extends React.Component {
                     while (index.length < maxIndex.length) {
                         index = `0${index}`;
                     }
-                    this.blockExecutionOptions[i].optionName = `${index}. ${this.translate('gui.ir-debugger.execution')}`;
+                    this.blockExecutionOptions[i].execution = i + 1;
+                    this.blockExecutionOptions[i].optionName =
+                        `${index}. ${this.translate('gui.ir-debugger.execution')}`;
                 }
                 this.blockExecutionOptions.reverse();
             }
         }
     }
 
-    handleQuestionClick (question) {
+    setSelectedQuestion (question) {
         this.selectedQuestion = question;
         this.answer = null;
         this.answerLoading = true;
@@ -453,12 +503,30 @@ class IRDebugger extends React.Component {
         }, 200);
     }
 
+    handleQuestionClick (question) {
+        this.setSelectedQuestion(question);
+
+        if (logging.isActive()) {
+            logging.logDebuggerEvent({
+                event: 'SELECT_QUESTION',
+                type: getContentMessageKey(question.content, question.values),
+                category: question.category,
+                form: question.form,
+                values: Object.values(question.values),
+                block: this.block ? {
+                    id: this.block.id,
+                    opcode: this.block.opcode
+                } : null
+            });
+        }
+    }
+
     selectBlockExecutionQuestion () {
         const executionCategory = this.questionHierarchy
             .find(category => category.type === QuestionCategoryType.EXECUTION);
         if (executionCategory) {
             const executionQuestion = executionCategory.questionCategories[0].questions[0];
-            this.handleQuestionClick(executionQuestion);
+            this.setSelectedQuestion(executionQuestion);
         }
     }
 
@@ -502,9 +570,20 @@ class IRDebugger extends React.Component {
             this.update();
             if (graphNode.trace) {
                 const blockExecution = this.blockExecutionOptions.find(o => o.uniqueId === graphNode.trace.uniqueId);
-                this.handleSelectedBlockExecutionChange(blockExecution);
+                this.setSelectedBlockExecution(blockExecution);
             }
             this.forceUpdate();
+            
+            if (logging.isActive()) {
+                logging.logDebuggerEvent({
+                    event: 'ROUTE_TO_BLOCK_DEBUGGER',
+                    block: {
+                        id: graphNode.block.id,
+                        opcode: graphNode.block.opcode
+                    },
+                    execution: this.selectedBlockExecution.execution
+                });
+            }
         }
     }
 
@@ -516,7 +595,7 @@ class IRDebugger extends React.Component {
             this.target = previousBlock.target;
             this.relevantTraces = this.allTraces.slice(0, previousBlock.traceCount);
             this.update();
-            this.handleQuestionClick(previousBlock.selectedQuestion);
+            this.setSelectedQuestion(previousBlock.selectedQuestion);
             this.forceUpdate();
         }
     }
@@ -535,7 +614,7 @@ class IRDebugger extends React.Component {
             <IRDebuggerComponent
                 target={this.target}
                 targetOptions={this.isTargetDebugger ? this.targetOptions : []}
-                blockId={this.currentBlockId}
+                block={this.block}
                 selectedBlockExecution={this.selectedBlockExecution}
                 blockExecutionOptions={this.blockExecutionOptions}
                 questionHierarchy={this.questionHierarchy}

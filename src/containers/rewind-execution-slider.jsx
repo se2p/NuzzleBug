@@ -2,6 +2,7 @@ import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
 import VM from 'scratch-vm';
+import logging from 'scratch-vm/src/util/logging.js';
 import {connect} from 'react-redux';
 
 import RewindExecutionSliderComponent from '../components/rewind-execution-slider/rewind-execution-slider.jsx';
@@ -58,6 +59,9 @@ class RewindExecutionSlider extends React.Component {
     handleSliderUpdate (e) {
         this.value = Number(e.target.value);
         this.props.vm.rewindExecution(this.value);
+        if (logging.isActive()) {
+            logging.logEvent('REWIND_EXECUTION_SLIDER_CHANGE');
+        }
     }
 
     render () {

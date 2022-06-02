@@ -2,6 +2,7 @@ import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
 import VM from 'scratch-vm';
+import logging from 'scratch-vm/src/util/logging.js';
 import {connect} from 'react-redux';
 
 import ControlsComponent from '../components/controls/controls.jsx';
@@ -63,6 +64,9 @@ class Controls extends React.Component {
             }
             this.props.vm.greenFlag();
         }
+        if (logging.isActive()) {
+            logging.logEvent('GREEN_FLAG');
+        }
     }
     handleRunTestClick (e) {
         e.preventDefault();
@@ -113,6 +117,9 @@ class Controls extends React.Component {
         e.preventDefault();
         if ((this.props.projectRunning && this.props.projectPaused) || !this.props.projectRunning) {
             this.props.vm.stepBack();
+            if (logging.isActive()) {
+                logging.logEvent('STEP_BACK');
+            }
         }
     }
     handleStepOver (e) {
@@ -120,6 +127,9 @@ class Controls extends React.Component {
 
         if (this.props.projectPaused && this.props.projectRunning) {
             this.props.vm.stepOver();
+            if (logging.isActive()) {
+                logging.logEvent('STEP_OVER');
+            }
         }
     }
     handleInitialStep (e) {
@@ -128,6 +138,9 @@ class Controls extends React.Component {
         this.props.vm.runtime.oneStep = true;
         this.handleGreenFlagClick(e);
         this.props.vm.haltExecution();
+        if (logging.isActive()) {
+            logging.logEvent('PAUSE_EXECUTION');
+        }
     }
     handleInitialTestStep (e) {
         e.preventDefault();
@@ -146,8 +159,14 @@ class Controls extends React.Component {
 
         if (this.props.projectPaused) {
             this.resetPauseResume();
+            if (logging.isActive()) {
+                logging.logEvent('RESUME_EXECUTION');
+            }
         } else {
             this.props.vm.haltExecution();
+            if (logging.isActive()) {
+                logging.logEvent('PAUSE_EXECUTION');
+            }
         }
     }
     handleStopAllClick (e) {
@@ -160,6 +179,9 @@ class Controls extends React.Component {
         }
 
         this.props.vm.stopAll();
+        if (logging.isActive()) {
+            logging.logEvent('STOP_ALL');
+        }
     }
     resetPauseResume () {
         this.props.vm.resumeExecution();
@@ -168,8 +190,14 @@ class Controls extends React.Component {
         e.preventDefault();
         if (this.props.observationActive) {
             this.deactivateObservation();
+            if (logging.isActive()) {
+                logging.logEvent('DEACTIVATE_OBSERVATION');
+            }
         } else {
             this.activateObservation();
+            if (logging.isActive()) {
+                logging.logEvent('ACTIVATE_OBSERVATION');
+            }
         }
     }
     activateObservation () {
