@@ -82,14 +82,14 @@ class Controls extends React.Component {
             test.isRunning = false;
             test.resultStatus = null;
             this.forceUpdate();
-            this.testRunner.runTests(
+            setTimeout(() => this.testRunner.runTests(
                 this.props.vm,
                 test.project,
                 [test],
                 this.modelTester,
                 test.props,
                 test.modelProps
-            );
+            ), 100);
         }
     }
     onTestStart () {

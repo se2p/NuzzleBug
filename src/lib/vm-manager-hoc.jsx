@@ -20,7 +20,7 @@ import {
     setIsWhiskerProjectLoading
 } from '../reducers/vm-status';
 
-import Test from 'whisker-main/whisker-main/src/test-runner/test';
+import TestRunner from 'whisker-main/whisker-main/dist/src/test-runner/test-runner';
 /*
  * Higher Order Component to manage events emitted by the VM
  * @param {React.Component} WrappedComponent component to manage VM events for
@@ -46,16 +46,18 @@ const vmManagerHOC = function (WrappedComponent) {
                 this.props.vm.start();
             }
             window.addEventListener('message', event => {
-                if (event.data.test) {
+                if (event.data.hasOwnProperty('testIndex') && event.data.tests &&
+                    event.data.props && event.data.modelProps && event.data.project) {
                     if (this.isProjectLoading) {
                         setTimeout(() => window.postMessage(event.data, '*'), 100);
                     } else {
-                        this.loadProject(event.data.test.project, event.data.test.props.projectName, true);
-                        const test = new Test({});
-                        test.fromJSON(event.data.test);
-                        test.isRunning = false;
-                        test.testResultSign = null;
-                        test.skip = false;
+                        this.loadProject(event.data.project, event.data.props.projectName, true);
+                        /* eslint-disable-next-line no-eval */
+                        const tests = TestRunner.convertTests(eval(`${event.data.tests};module.exports;`));
+                        const test = tests[event.data.testIndex];
+                        test.project = event.data.project;
+                        test.props = event.data.props;
+                        test.modelProps = event.data.modelProps;
                         this.props.onReceivedWhiskerTest(test);
                     }
                 }
