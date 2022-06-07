@@ -93,6 +93,11 @@ class Controls extends React.Component {
         }
     }
     onTestStart () {
+        if (this.haltAfterFirstTestStep) {
+            this.props.vm.haltExecution();
+            this.props.vm.runtime.oneStep = true;
+            this.haltAfterFirstTestStep = false;
+        }
         const test = this.props.whiskerTest;
         test.isLoading = false;
         test.isRunning = true;
@@ -145,9 +150,8 @@ class Controls extends React.Component {
     handleInitialTestStep (e) {
         e.preventDefault();
 
-        this.props.vm.runtime.oneStep = true;
+        this.haltAfterFirstTestStep = true;
         this.handleRunTestClick(e);
-        this.props.vm.haltExecution();
     }
     handlePauseResumeClick (e) {
         e.preventDefault();
