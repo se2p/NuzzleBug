@@ -37,6 +37,7 @@ const vmListenerHOC = function (WrappedComponent) {
                 'handleKeyDown',
                 'handleKeyUp',
                 'handleProjectChanged',
+                'handleBlockDragUpdate',
                 'handleTargetsUpdate'
             ]);
             // We have to start listening to the vm here rather than in
@@ -47,7 +48,7 @@ const vmListenerHOC = function (WrappedComponent) {
             // we need to start listening before mounting the wrapped component.
             this.props.vm.on('targetsUpdate', this.handleTargetsUpdate);
             this.props.vm.on('MONITORS_UPDATE', this.props.onMonitorsUpdate);
-            this.props.vm.on('BLOCK_DRAG_UPDATE', this.props.onBlockDragUpdate);
+            this.props.vm.on('BLOCK_DRAG_UPDATE', this.handleBlockDragUpdate);
             this.props.vm.on('BLOCK_ASK_WHY', this.props.onBlockAskWhy);
             this.props.vm.on('TURBO_MODE_ON', this.props.onTurboModeOn);
             this.props.vm.on('TURBO_MODE_OFF', this.props.onTurboModeOff);
@@ -90,14 +91,18 @@ const vmListenerHOC = function (WrappedComponent) {
             }
         }
         handleProjectChanged () {
-            if (this.props.shouldUpdateProjectChanged) {
-                if (this.props.projectChanged) {
-                    this.props.onProjectSaved();
-                    this.props.onProjectChanged();
-                } else {
-                    this.props.onProjectChanged();
-                }
+            if (this.props.shouldUpdateProjectChanged && !this.props.projectChanged) {
+                this.props.onProjectChanged();
             }
+        }
+        handleBlockDragUpdate (areBlocksOverGui) {
+            if (this.props.projectChanged) {
+                this.props.onProjectSaved();
+                this.props.onProjectChanged();
+            } else {
+                this.props.onProjectChanged();
+            }
+            this.props.onBlockDragUpdate(areBlocksOverGui);
         }
         handleTargetsUpdate (data) {
             if (this.props.shouldUpdateTargets) {

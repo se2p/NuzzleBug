@@ -1,5 +1,6 @@
 import bindAll from 'lodash.bindall';
 import React from 'react';
+import Renderer from 'scratch-render';
 import PropTypes from 'prop-types';
 import {defineMessages, intlShape, injectIntl} from 'react-intl';
 import {connect} from 'react-redux';
@@ -166,6 +167,7 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                         // go back to step 7: whether project loading succeeded
                         // or failed, reset file objects
                         this.removeFileObjects();
+                        this.props.vm.renderer.draw();
                     });
             }
         }
@@ -223,7 +225,8 @@ const SBFileUploaderHOC = function (WrappedComponent) {
         requestProjectUpload: PropTypes.func,
         userOwnsProject: PropTypes.bool,
         vm: PropTypes.shape({
-            loadProject: PropTypes.func
+            loadProject: PropTypes.func,
+            renderer: PropTypes.instanceOf(Renderer)
         })
     };
     const mapStateToProps = (state, ownProps) => {
