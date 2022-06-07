@@ -183,6 +183,9 @@ class Controls extends React.Component {
         }
 
         this.props.vm.stopAll();
+        if (this.testRunner.vmWrapper) {
+            this.testRunner.vmWrapper.end();
+        }
         if (logging.isActive()) {
             logging.logEvent('STOP_ALL');
         }
