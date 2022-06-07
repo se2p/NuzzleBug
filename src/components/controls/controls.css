@@ -3,7 +3,7 @@
 }
 
 .loader {
-    border: 2px solid #e5f0ff;
+    border: 2px solid transparent;
     border-radius: 50%;
     border-top: 2px solid #4D97FF;
     width: 29px;
