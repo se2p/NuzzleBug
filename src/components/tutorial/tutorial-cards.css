@@ -13,10 +13,6 @@
 .card-title-header:active {
     cursor: grabbing;
 }
-.steps-list {
-    padding-left: 20px;
-}
-
 .step-body {
     overflow-y: auto;
     height: 350px;

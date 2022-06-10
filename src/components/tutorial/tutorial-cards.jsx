@@ -84,7 +84,7 @@ const TutorialHeader = props => {
                 classNames(styles.headerButtons, tutorialStyles.headerButtons, styles.headerButtonsHidden)}
         >
             {totalSteps > 1 && !isMenuVisible ? (
-                <div className={styles.stepsList}>
+                <div className={styles.stepsList} style={{marginLeft: '18px'}}>
                     {Array(totalSteps).fill(0)
                         .map((_, i) => (
                             <div
