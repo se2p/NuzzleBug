@@ -259,8 +259,11 @@
 }
 
 .step-testing {
-    display: block ruby;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: 60px;
+
 }
 
 .step-testing-button {
@@ -314,7 +317,8 @@
     line-height: 30px;
     color: hsla(225, 15%, 40%, 1);
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    margin: 20px 0 0 0;
+    margin-left: 0;
+    margin-right: 29px;
 }
 
 .step-solution-header {
