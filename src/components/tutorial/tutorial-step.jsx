@@ -74,7 +74,12 @@ const TestingComponent = props => {
                 (currentlyTesting ?
                     <p className={styles.stepTestingLoading}>
                         <img
-                            style={{height: '20px', verticalAlign: 'middle'}}
+                            style={{
+                                height: '20px',
+                                verticalAlign: 'middle',
+                                marginRight: 10,
+                                marginBottom: 4.5
+                            }}
                             src={loading}
                             draggable={false}
                             alt={'loading arrows'}
