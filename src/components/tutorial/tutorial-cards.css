@@ -25,6 +25,8 @@
     flex-direction: column;
     justify-content: flex-start;
     cursor: grab;
+    resize: both;
+    min-width: 480px;
 }
 .step-body:active {
     cursor: grabbing;
