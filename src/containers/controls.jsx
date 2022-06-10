@@ -11,7 +11,7 @@ import {
 } from '../components//interrogative-debugging/version-2/toggle-observation/toggle-observation.jsx';
 import {viewCards} from '../reducers/interrogative-debugging/version-1/ir-cards.js';
 
-import Test from 'whisker-main/whisker-main/src/test-runner/test';
+import Test from 'whisker-main/whisker-main/dist/src/test-runner/test';
 import TestRunner from 'whisker-main/whisker-main/dist/src/test-runner/test-runner';
 import {ModelTester} from 'whisker-main/whisker-main/dist/src/whisker/model/ModelTester';
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import VM from 'scratch-vm';
-import Test from 'whisker-main/whisker-main/src/test-runner/test';
+import Test from 'whisker-main/whisker-main/dist/src/test-runner/test';
 
 import GreenFlag from '../green-flag/green-flag.jsx';
 import RunTest from '../run-test/run-test.jsx';
