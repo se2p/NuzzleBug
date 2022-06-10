@@ -84,16 +84,26 @@ const TestingComponent = props => {
                     (success ?
                         <p className={styles.stepTestingSuccess}>
                             <img
-                                style={{height: '20px', verticalAlign: 'middle'}}
+                                style={{
+                                    height: '20px',
+                                    verticalAlign: 'middle',
+                                    marginRight: 10,
+                                    marginBottom: 4.5
+                                }}
                                 src={checkmark}
                                 draggable={false}
                                 alt={'Checkmark'}
                             />
                             {successMsg}
                         </p> :
-                        <p className={styles.stepTestingFail}>
+                        <p className={styles.stepTestingFailShort}>
                             <img
-                                style={{height: '20px', verticalAlign: 'middle'}}
+                                style={{
+                                    height: '20px',
+                                    verticalAlign: 'middle',
+                                    marginRight: 10,
+                                    marginBottom: 4.5
+                                }}
                                 src={crossMark}
                                 draggable={false}
                                 alt={'Cross mark'}

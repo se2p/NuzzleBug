@@ -296,7 +296,16 @@
     line-height: 30px;
     color: #cb4335;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    margin: 20px 0 0 0;
+    margin-left: 29px;
+    margin-right: 29px;
+}
+
+.step-testing-fail-short {
+    line-height: 30px;
+    color: #cb4335;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin-left: 0;
+    margin-right: 29px;
 }
 
 .step-testing-loading {
