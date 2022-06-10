@@ -63,6 +63,10 @@ const TestingComponent = props => {
                 <div
                     className={styles.stepTestingButton}
                     onClick={onTest}
+                    style={{
+                        pointerEvents: currentlyTesting? 'none' : 'auto',
+                        opacity: currentlyTesting ? 0.5 : 1
+                    }}
                 >
                     <span className={styles.stepTestingButtonTitle}>{testButtonTitle}</span>
                 </div> : null}
