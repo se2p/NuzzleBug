@@ -8,8 +8,11 @@
     text-align: center;
     font-weight: bold;
     color: $ui-primary;
+    cursor: grab;
 }
-
+.card-title-header:active {
+    cursor: grabbing;
+}
 .steps-list {
     padding-left: 20px;
 }
@@ -21,6 +24,10 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    cursor: grab;
+}
+.step-body:active {
+    cursor: grabbing;
 }
 .step-body::-webkit-scrollbar {
     width: 0.4rem;
@@ -49,8 +56,11 @@
 .header-buttons {
     background: $motion-primary;
     border-bottom: 1px solid $motion-tertiary;
+    cursor: grab;
 }
-
+.header-buttons:active {
+    cursor: grabbing;
+}
 .home-button {
     cursor: pointer;
     color: white;
@@ -76,8 +86,11 @@
     background-color: hsla(215, 100%, 65%, 1);
     border-top: 1px solid hsla(215, 60%, 50%, 1);
     display: block ruby;
+    cursor: grab;
 }
-
+.footer:active {
+    cursor: grabbing;
+}
 .footer-text {
     text-align: center;
     color: hsla(215, 100%, 95%, 1);
