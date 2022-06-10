@@ -83,7 +83,8 @@
     text-align: center;
     background-color: hsla(215, 100%, 65%, 1);
     border-top: 1px solid hsla(215, 60%, 50%, 1);
-    display: block ruby;
+    display: flex;
+    justify-content: center;
     cursor: grab;
 }
 .footer:active {
@@ -99,6 +100,7 @@
     color: hsla(215, 100%, 95%, 1);
     text-decoration: underline;
     cursor: pointer;
+    margin-top: 8px;
 }
 
 .footer-link:hover {
