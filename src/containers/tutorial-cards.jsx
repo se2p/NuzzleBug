@@ -33,20 +33,20 @@ class TutorialCards extends React.Component {
     processTutorials () {
         const rows = [];
         for (let i = 0; i < Object.values(tutorials).length; i++) {
-            const element = Object.values(tutorials)[i];
+            const tutorial = Object.values(tutorials)[i];
 
-            let messages = element[`messages${this.props.locale.toUpperCase()}`];
+            let messages = tutorial[`messages${this.props.locale.toUpperCase()}`];
             if (typeof messages === 'undefined') {
-                messages = element.messagesEN;
+                messages = tutorial.messagesEN;
             }
             const tutorialMsg = messages.default;
             rows.push({
-                id: element.id,
+                id: tutorial.id,
                 title: tutorialMsg.title,
-                img: element.img,
-                difficulty: element.difficulty,
+                img: tutorial.img,
+                difficulty: tutorial.difficulty,
                 difficultyMsg: tutorialMsg.difficulty,
-                totalSteps: element.totalSteps
+                totalSteps: tutorial.totalSteps
             }
             );
         }
