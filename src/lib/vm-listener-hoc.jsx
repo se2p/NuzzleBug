@@ -14,6 +14,7 @@ import {
     setPauseState,
     setTurboState,
     setStartedState,
+    setTestRunningState,
     setObservationActiveState
 } from '../reducers/vm-status';
 import {showExtensionAlert} from '../reducers/alerts';
@@ -63,7 +64,8 @@ const vmListenerHOC = function (WrappedComponent) {
             this.props.vm.on('MIC_LISTENING', this.props.onMicListeningUpdate);
             this.props.vm.on('OBSERVATION_ACTIVE', this.props.onActivateObservation);
             this.props.vm.on('OBSERVATION_INACTIVE', this.props.onDeactivateObservation);
-
+            this.props.vm.on('TEST_RUN_START', this.props.onTestRunStart);
+            this.props.vm.on('TEST_RUN_END', this.props.onTestRunEnd);
         }
         componentDidMount () {
             if (this.props.attachKeyboardEvents) {
@@ -169,6 +171,10 @@ const vmListenerHOC = function (WrappedComponent) {
                 /* eslint-enable no-unused-vars */
                 ...props
             } = this.props;
+
+            delete props.onTestRunStart;
+            delete props.onTestRunEnd;
+
             return <WrappedComponent {...props} />;
         }
     }
@@ -194,6 +200,8 @@ const vmListenerHOC = function (WrappedComponent) {
         onTurboModeOn: PropTypes.func.isRequired,
         onActivateObservation: PropTypes.func.isRequired,
         onDeactivateObservation: PropTypes.func.isRequired,
+        onTestRunStart: PropTypes.func.isRequired,
+        onTestRunEnd: PropTypes.func.isRequired,
         projectChanged: PropTypes.bool,
         shouldUpdateTargets: PropTypes.bool,
         shouldUpdateProjectChanged: PropTypes.bool,
@@ -251,7 +259,9 @@ const vmListenerHOC = function (WrappedComponent) {
         onDeactivateObservation: () => {
             dispatch(setObservationActiveState(false));
             dispatch(disableDebugger());
-        }
+        },
+        onTestRunStart: () => dispatch(setTestRunningState(true)),
+        onTestRunEnd: () => dispatch(setTestRunningState(false))
     });
     return connect(
         mapStateToProps,

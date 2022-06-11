@@ -5,6 +5,7 @@ const SET_STARTED_STATE = 'scratch-gui/vm-status/SET_STARTED_STATE';
 const SET_OBSERVATION_ACTIVE_STATE = 'scratch-gui/vm-status/SET_OBSERVATION_ACTIVE_STATE';
 const SET_WHISKER_TEST = 'scratch-gui/vm-status/SET_WHISKER_TEST';
 const SET_IS_WHISKER_PROJECT_LOADING = 'scratch-gui/vm-status/SET_IS_WHISKER_PROJECT_LOADING';
+const SET_TEST_RUNNING_STATE = 'scratch-gui/vm-status/SET_TEST_RUNNING_STATE';
 
 const initialState = {
     running: false,
@@ -13,6 +14,7 @@ const initialState = {
     turbo: false,
     observationActive: true,
     isWhiskerProjectLoading: false,
+    testRunning: false,
     whiskerTest: null
 };
 
@@ -46,6 +48,10 @@ const reducer = function (state, action) {
     case SET_IS_WHISKER_PROJECT_LOADING:
         return Object.assign({}, state, {
             isWhiskerProjectLoading: action.isWhiskerProjectLoading
+        });
+    case SET_TEST_RUNNING_STATE:
+        return Object.assign({}, state, {
+            testRunning: action.testRunning
         });
     default:
         return state;
@@ -102,6 +108,13 @@ const setIsWhiskerProjectLoading = function (isWhiskerProjectLoading) {
     };
 };
 
+const setTestRunningState = function (testRunning) {
+    return {
+        type: SET_TEST_RUNNING_STATE,
+        testRunning: testRunning
+    };
+};
+
 export {
     reducer as default,
     initialState as vmStatusInitialState,
@@ -111,5 +124,6 @@ export {
     setPauseState,
     setObservationActiveState,
     setIsWhiskerProjectLoading,
-    setWhiskerTest
+    setWhiskerTest,
+    setTestRunningState
 };

@@ -10,6 +10,7 @@ import {
     ObservationState
 } from '../components//interrogative-debugging/version-2/toggle-observation/toggle-observation.jsx';
 import {viewCards} from '../reducers/interrogative-debugging/version-1/ir-cards.js';
+import {setTestRunningState} from '../reducers/vm-status.js';
 
 import Test from 'whisker-main/whisker-main/dist/src/test-runner/test';
 import TestRunner from 'whisker-main/whisker-main/dist/src/test-runner/test-runner';
@@ -72,6 +73,8 @@ class Controls extends React.Component {
         e.preventDefault();
 
         if (this.props.whiskerTest) {
+            this.props.onTestStart();
+            
             if (this.props.projectPaused) {
                 // Resets the state of the VM back to normal.
                 // Otherwise we could not start execution again.
@@ -107,6 +110,7 @@ class Controls extends React.Component {
         const test = this.props.whiskerTest;
         test.isRunning = false;
         test.resultStatus = result.status;
+        this.props.onTestEnd();
         this.forceUpdate();
     }
     onTestRunEnd () {
@@ -238,6 +242,8 @@ class Controls extends React.Component {
         } = this.props;
 
         delete props.projectChanged;
+        delete props.onTestStart;
+        delete props.onTestEnd;
 
         return (
             <ControlsComponent
@@ -269,6 +275,8 @@ class Controls extends React.Component {
 
 Controls.propTypes = {
     isStarted: PropTypes.bool.isRequired,
+    onTestStart: PropTypes.func.isRequired,
+    onTestEnd: PropTypes.func.isRequired,
     handleIRQuestionsClick: PropTypes.func.isRequired,
     projectPaused: PropTypes.bool.isRequired,
     irDisabled: PropTypes.bool.isRequired,
@@ -296,6 +304,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+    onTestStart: () => dispatch(setTestRunningState(true)),
+    onTestEnd: () => dispatch(setTestRunningState(false)),
     handleIRQuestionsClick: () => dispatch(viewCards())
 });
 

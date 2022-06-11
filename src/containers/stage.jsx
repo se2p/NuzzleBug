@@ -251,40 +251,42 @@ class Stage extends React.Component {
         }
     }
     onMouseDown (e) {
-        this.updateRect();
-        const {x, y} = getEventXY(e);
-        const mousePosition = [x - this.rect.left, y - this.rect.top];
-        if (this.props.isColorPicking) {
-            // Set the pickX/Y for the color picker loop to pick up
-            this.pickX = mousePosition[0];
-            this.pickY = mousePosition[1];
-            // Immediately update the color picker info
-            this.setState({colorInfo: this.getColorInfo(this.pickX, this.pickY)});
-        } else {
-            if (e.button === 0 || (window.TouchEvent && e instanceof TouchEvent)) {
-                this.setState({
-                    mouseDown: true,
-                    mouseDownPosition: mousePosition,
-                    mouseDownTimeoutId: setTimeout(
-                        this.onStartDrag.bind(this, mousePosition[0], mousePosition[1]),
-                        400
-                    )
-                });
-            }
-            const data = {
-                isDown: true,
-                x: mousePosition[0],
-                y: mousePosition[1],
-                canvasWidth: this.rect.width,
-                canvasHeight: this.rect.height
-            };
-            this.props.vm.postIOData('mouse', data);
-            if (e.preventDefault) {
-                // Prevent default to prevent touch from dragging page
-                e.preventDefault();
-                // But we do want any active input to be blurred
-                if (document.activeElement && document.activeElement.blur) {
-                    document.activeElement.blur();
+        if (!this.props.testRunning) {
+            this.updateRect();
+            const {x, y} = getEventXY(e);
+            const mousePosition = [x - this.rect.left, y - this.rect.top];
+            if (this.props.isColorPicking) {
+                // Set the pickX/Y for the color picker loop to pick up
+                this.pickX = mousePosition[0];
+                this.pickY = mousePosition[1];
+                // Immediately update the color picker info
+                this.setState({colorInfo: this.getColorInfo(this.pickX, this.pickY)});
+            } else {
+                if (e.button === 0 || (window.TouchEvent && e instanceof TouchEvent)) {
+                    this.setState({
+                        mouseDown: true,
+                        mouseDownPosition: mousePosition,
+                        mouseDownTimeoutId: setTimeout(
+                            this.onStartDrag.bind(this, mousePosition[0], mousePosition[1]),
+                            400
+                        )
+                    });
+                }
+                const data = {
+                    isDown: true,
+                    x: mousePosition[0],
+                    y: mousePosition[1],
+                    canvasWidth: this.rect.width,
+                    canvasHeight: this.rect.height
+                };
+                this.props.vm.postIOData('mouse', data);
+                if (e.preventDefault) {
+                    // Prevent default to prevent touch from dragging page
+                    e.preventDefault();
+                    // But we do want any active input to be blurred
+                    if (document.activeElement && document.activeElement.blur) {
+                        document.activeElement.blur();
+                    }
                 }
             }
         }
@@ -429,6 +431,7 @@ Stage.propTypes = {
     isColorPicking: PropTypes.bool,
     isFullScreen: PropTypes.bool.isRequired,
     isStarted: PropTypes.bool,
+    testRunning: PropTypes.bool,
     micIndicator: PropTypes.bool,
     onActivateColorPicker: PropTypes.func,
     onDeactivateColorPicker: PropTypes.func,
@@ -445,6 +448,7 @@ const mapStateToProps = state => ({
     isColorPicking: state.scratchGui.colorPicker.active,
     isFullScreen: state.scratchGui.mode.isFullScreen,
     isStarted: state.scratchGui.vmStatus.started,
+    testRunning: state.scratchGui.vmStatus.testRunning,
     micIndicator: state.scratchGui.micIndicator,
     // Do not use editor drag style in fullscreen or player mode.
     useEditorDragStyle: !(state.scratchGui.mode.isFullScreen || state.scratchGui.mode.isPlayerOnly)
