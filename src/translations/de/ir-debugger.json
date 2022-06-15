@@ -421,13 +421,15 @@
                 "go-to-related-random": "die Figur zu einer <code class=\"scratchBlock\">(Zufallsposition :: motion)</code> gegangen ist"
             },
             "direction": {
-                "turn-left": "um <code class=\"scratchBlock\">{degrees}</code> Grad gegen den Uhrzeigersinn gedreht hat",
-                "turn-left-times": "{times} mal um <code class=\"scratchBlock\">{degrees}</code> Grad gegen den Uhrzeigersinn gedreht hat",
-                "turn-right": "um <code class=\"scratchBlock\">{degrees}</code> Grad im Uhrzeigersinn gedreht hat",
-                "turn-right-times": "{times} mal um <code class=\"scratchBlock\">{degrees}</code> Grad im Uhrzeigersinn gedreht hat",
+                "turn-left": "die Figur sich um <code class=\"scratchBlock\">{degrees}</code> Grad gegen den Uhrzeigersinn gedreht hat",
+                "turn-left-times": "die Figur sich {times} mal um <code class=\"scratchBlock\">{degrees}</code> Grad gegen den Uhrzeigersinn gedreht hat",
+                "turn-right": "die Figur sich um <code class=\"scratchBlock\">{degrees}</code> Grad im Uhrzeigersinn gedreht hat",
+                "turn-right-times": "die Figur sich {times} mal um <code class=\"scratchBlock\">{degrees}</code> Grad im Uhrzeigersinn gedreht hat",
                 "set-related-mouse": "sich die Figur zum <code class=\"scratchBlock\">(Mauszeiger :: motion)</code> gedreht hat",
                 "set-related-sprite": "sich die Figur zur Figur <code class=\"scratchBlock\">{towards}</code> gedreht hat",
-                "set-related": "sich die Figur zu <code class=\"scratchBlock\">{towards}</code> gedreht hat"
+                "set-related": "sich die Figur zu <code class=\"scratchBlock\">{towards}</code> gedreht hat",
+                "bounce": "die Figur vom Rand abgeprallt ist",
+                "bounce-times": "die Figur {times} mal vom Rand abgeprallt ist"
             },
             "costume": {
                 "set": "das Kostüm auf <code class=\"scratchBlock\">{value}</code> gesetzt wurde",

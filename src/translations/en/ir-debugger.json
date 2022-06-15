@@ -421,13 +421,15 @@
                 "go-to-related-random": "the sprite went to <code class=\"scratchBlock\">(random position :: motion)</code>"
             },
             "direction": {
-                "turn-left": "turned <code class=\"scratchBlock\">{degrees}</code> degrees counterclockwise",
-                "turn-left-times": "turned <code class=\"scratchBlock\">{degrees}</code> degrees counterclockwise {times} times",
-                "turn-right": "turned <code class=\"scratchBlock\">{degrees}</code> degrees clockwise",
-                "turn-right-times": "turned <code class=\"scratchBlock\">{degrees}</code> degrees clockwise {times} times",
+                "turn-left": "the sprite turned <code class=\"scratchBlock\">{degrees}</code> degrees counterclockwise",
+                "turn-left-times": "the sprite turned <code class=\"scratchBlock\">{degrees}</code> degrees counterclockwise {times} times",
+                "turn-right": "the sprite turned <code class=\"scratchBlock\">{degrees}</code> degrees clockwise",
+                "turn-right-times": "the sprite turned <code class=\"scratchBlock\">{degrees}</code> degrees clockwise {times} times",
                 "set-related-mouse": "the sprite pointed towards the <code class=\"scratchBlock\">(mouse-pointer :: motion)</code>",
                 "set-related-sprite": "the sprite pointed towards sprite <code class=\"scratchBlock\">{towards}</code>",
-                "set-related": "the sprite pointed towards <code class=\"scratchBlock\">{towards}</code>"
+                "set-related": "the sprite pointed towards <code class=\"scratchBlock\">{towards}</code>",
+                "bounce": "the sprite bounced off the edge",
+                "bounce-times": "the sprite bounced off the edge {times} times"
             },
             "costume": {
                 "set": "the costume switched to <code class=\"scratchBlock\">{value}</code>",
