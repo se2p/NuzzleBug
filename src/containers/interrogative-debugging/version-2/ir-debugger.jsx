@@ -56,15 +56,25 @@ class IRDebugger extends React.Component {
 
         if (logging.isActive()) {
             if (this.block) {
-                logging.logDebuggerEvent({
-                    event: 'OPEN_BLOCK_DEBUGGER',
-                    block: {id: this.block.id, opcode: this.block.opcode}
-                });
+                logging.logDebuggerEvent(
+                    'BLOCK',
+                    new Date(),
+                    'OPEN_BLOCK',
+                    this.block.id,
+                    this.block.opcode,
+                    null,
+                    null
+                );
             } else {
-                logging.logDebuggerEvent({
-                    event: 'OPEN_TARGET_DEBUGGER',
-                    target: {id: this.targetOrigin.id, name: this.targetOrigin.getName()}
-                });
+                logging.logDebuggerEvent(
+                    'TARGET',
+                    new Date(),
+                    'OPEN_DEBUGGER',
+                    this.targetOrigin.id,
+                    this.targetOrigin.getName(),
+                    null,
+                    null
+                );
             }
         }
     }
@@ -121,7 +131,7 @@ class IRDebugger extends React.Component {
         this.props.vm.resetEditingTarget();
         this.props.onCloseDebugger();
         if (logging.isActive()) {
-            logging.logEvent('CLOSE_DEBUGGER');
+            logging.logClickEvent('BUTTON', new Date(), 'CLOSE_DEBUGGER', null);
         }
     }
 
@@ -356,14 +366,15 @@ class IRDebugger extends React.Component {
             this.forceUpdate();
 
             if (logging.isActive()) {
-                logging.logDebuggerEvent({
-                    event: 'SELECT_SPRITE_INSTANCE',
-                    target: {
-                        id: targetOption.id,
-                        name: this.targetOrigin.getName(),
-                        isOriginal: targetOption.isOriginal
-                    }
-                });
+                logging.logDebuggerEvent(
+                    'SPRITE',
+                    new Date(),
+                    'SELECT_SPRITE',
+                    targetOption.id,
+                    this.targetOrigin.getName(),
+                    targetOption.isOriginal ? '1' : '0',
+                    null
+                );
             }
         }
     }
@@ -405,14 +416,15 @@ class IRDebugger extends React.Component {
         this.setSelectedBlockExecution(blockExecution);
 
         if (logging.isActive()) {
-            logging.logDebuggerEvent({
-                event: 'SELECT_BLOCK_EXECUTION',
-                block: {
-                    id: blockExecution.blockTrace.id,
-                    opcode: blockExecution.blockTrace.opcode
-                },
-                execution: blockExecution.execution
-            });
+            logging.logDebuggerEvent(
+                'BLOCK',
+                new Date(),
+                'SELECT_BLOCK_EXECUTION',
+                blockExecution.blockTrace.id,
+                blockExecution.blockTrace.opcode,
+                null,
+                blockExecution.execution
+            );
         }
     }
 
@@ -507,17 +519,18 @@ class IRDebugger extends React.Component {
         this.setSelectedQuestion(question);
 
         if (logging.isActive()) {
-            logging.logDebuggerEvent({
-                event: 'SELECT_QUESTION',
-                type: getContentMessageKey(question.content, question.values),
-                category: question.category,
-                form: question.form,
-                values: Object.values(question.values),
-                block: this.block ? {
-                    id: this.block.id,
-                    opcode: this.block.opcode
-                } : null
-            });
+            logging.logQuestionEvent(
+                'QUESTION',
+                new Date(),
+                'SELECT',
+                this.block ? this.block.id : null,
+                null,
+                getContentMessageKey(question.content, question.values),
+                Object.values(question.values).join(', '),
+                question.category,
+                question.form,
+                this.block ? this.block.opcode : null
+            );
         }
     }
 
@@ -575,14 +588,15 @@ class IRDebugger extends React.Component {
             this.forceUpdate();
             
             if (logging.isActive()) {
-                logging.logDebuggerEvent({
-                    event: 'ROUTE_TO_BLOCK_DEBUGGER',
-                    block: {
-                        id: graphNode.block.id,
-                        opcode: graphNode.block.opcode
-                    },
-                    execution: this.selectedBlockExecution.execution
-                });
+                logging.logDebuggerEvent(
+                    'BLOCK',
+                    new Date(),
+                    'ROUTE_TO_BLOCK',
+                    graphNode.block.id,
+                    graphNode.block.opcode,
+                    null,
+                    this.selectedBlockExecution.execution
+                );
             }
         }
     }

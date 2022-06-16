@@ -60,7 +60,7 @@ class RewindExecutionSlider extends React.Component {
         this.value = Number(e.target.value);
         this.props.vm.rewindExecution(this.value);
         if (logging.isActive()) {
-            logging.logEvent('REWIND_EXECUTION_SLIDER_CHANGE');
+            logging.logClickEvent('BUTTON', new Date(), 'REWIND_EXECUTION_SLIDER_CHANGE', null);
         }
     }
 

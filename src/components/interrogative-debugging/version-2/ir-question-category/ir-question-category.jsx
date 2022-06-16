@@ -53,11 +53,18 @@ class IRQuestionCategory extends React.Component {
 
     handleToggleExpansion (event) {
         if (event && logging.isActive()) {
-            logging.logDebuggerEvent({
-                event: this.state.expanded ? 'CLOSE_QUESTION_CATEGORY' : 'OPEN_QUESTION_CATEGORY',
-                category: this.props.questionCategory.type,
-                form: this.props.questionCategory.form
-            });
+            logging.logQuestionEvent(
+                'QUESTION_CATEGORY',
+                new Date(),
+                this.state.expanded ? 'CLOSE_CATEGORY' : 'OPEN_CATEGORY',
+                null,
+                null,
+                null,
+                null,
+                this.props.questionCategory.type,
+                this.props.questionCategory.form,
+                null
+            );
         }
         this.setState(state => ({
             expanded: !state.expanded

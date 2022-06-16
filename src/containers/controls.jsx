@@ -66,7 +66,7 @@ class Controls extends React.Component {
             this.props.vm.greenFlag();
         }
         if (logging.isActive()) {
-            logging.logEvent('GREEN_FLAG');
+            logging.logClickEvent('ICON', new Date(), 'GREENFLAG', null);
         }
     }
     handleRunTestClick (e) {
@@ -127,7 +127,7 @@ class Controls extends React.Component {
         if ((this.props.projectRunning && this.props.projectPaused) || !this.props.projectRunning) {
             this.props.vm.stepBack();
             if (logging.isActive()) {
-                logging.logEvent('STEP_BACK');
+                logging.logClickEvent('BUTTON', new Date(), 'STEP_BACK', null);
             }
         }
     }
@@ -137,7 +137,7 @@ class Controls extends React.Component {
         if (this.props.projectPaused && this.props.projectRunning) {
             this.props.vm.stepOver();
             if (logging.isActive()) {
-                logging.logEvent('STEP_OVER');
+                logging.logClickEvent('BUTTON', new Date(), 'STEP_OVER', null);
             }
         }
     }
@@ -148,7 +148,7 @@ class Controls extends React.Component {
         this.handleGreenFlagClick(e);
         this.props.vm.haltExecution();
         if (logging.isActive()) {
-            logging.logEvent('PAUSE_EXECUTION');
+            logging.logClickEvent('BUTTON', new Date(), 'PAUSE_EXECUTION', null);
         }
     }
     handleInitialTestStep (e) {
@@ -168,12 +168,12 @@ class Controls extends React.Component {
         if (this.props.projectPaused) {
             this.resetPauseResume();
             if (logging.isActive()) {
-                logging.logEvent('RESUME_EXECUTION');
+                logging.logClickEvent('BUTTON', new Date(), 'RESUME_EXECUTION', null);
             }
         } else {
             this.props.vm.haltExecution();
             if (logging.isActive()) {
-                logging.logEvent('PAUSE_EXECUTION');
+                logging.logClickEvent('BUTTON', new Date(), 'PAUSE_EXECUTION', null);
             }
         }
     }
@@ -191,7 +191,7 @@ class Controls extends React.Component {
             this.testRunner.vmWrapper.end();
         }
         if (logging.isActive()) {
-            logging.logEvent('STOP_ALL');
+            logging.logClickEvent('ICON', new Date(), 'STOPALL', null);
         }
     }
     resetPauseResume () {
@@ -202,12 +202,12 @@ class Controls extends React.Component {
         if (this.props.observationActive) {
             this.deactivateObservation();
             if (logging.isActive()) {
-                logging.logEvent('DEACTIVATE_OBSERVATION');
+                logging.logClickEvent('BUTTON', new Date(), 'DEACTIVATE_OBSERVATION', null);
             }
         } else {
             this.activateObservation();
             if (logging.isActive()) {
-                logging.logEvent('ACTIVATE_OBSERVATION');
+                logging.logClickEvent('BUTTON', new Date(), 'ACTIVATE_OBSERVATION', null);
             }
         }
     }

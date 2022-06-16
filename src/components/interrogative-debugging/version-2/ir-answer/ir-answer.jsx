@@ -1044,20 +1044,18 @@ class IRAnswer extends React.Component {
 
         if (logging.isActive()) {
             const question = this.props.selectedQuestion;
-            logging.logDebuggerEvent({
-                event: 'RATE_QUESTION',
-                feedback: question.feedback,
-                question: {
-                    type: getContentMessageKey(question.content, question.values),
-                    category: question.category,
-                    form: question.form,
-                    values: Object.values(question.values),
-                    block: this.props.block ? {
-                        id: this.props.block.id,
-                        opcode: this.props.block.opcode
-                    } : null
-                }
-            });
+            logging.logQuestionEvent(
+                'QUESTION',
+                new Date(),
+                'RATE',
+                this.props.block ? this.props.block.id : null,
+                question.feedback,
+                getContentMessageKey(question.content, question.values),
+                Object.values(question.values).join(', '),
+                question.category,
+                question.form,
+                this.props.block ? this.props.block.opcode : null
+            );
         }
     }
 
