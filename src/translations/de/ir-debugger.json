@@ -395,6 +395,9 @@
         },
         "block": {
             "not-reachable": "der Block nicht erreichbar ist",
+            "no-broadcast-send-block": "Dein Projekt beinhaltet keinen Block, der die Nachricht <i>{message}</i> versenden könnte",
+            "no-create-clone-block": "Dein Projekt beinhaltet keinen Block, der einen Klon von Figur <i>{sprite}</i> erzeugen könnte",
+            "no-backdrop-change-block": "Dein Projekt beinhaltet keinen Block, der das Bühnenbild zu <i>{backdrop}</i> ändern könnte",
             "repeat": "der <span blockType=\"stack\" blockCategory=\"control\">wiederhole</span> Block ausgeführt wurde",
             "not-repeat": "der <span blockType=\"stack\" blockCategory=\"control\">wiederhole</span> Block nicht ausgeführt wurde",
             "repeat-forever": "der <span blockType=\"stack\" blockCategory=\"control\">wiederhole fortlaufend</span> Block ausgeführt wurde",

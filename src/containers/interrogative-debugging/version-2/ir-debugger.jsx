@@ -187,7 +187,8 @@ class IRDebugger extends React.Component {
             <block type="event_whenthisspriteclicked" id="abstract_sprite_clicked"></block>,
             <block type="looks_backdropnumbername" id="abstract_backdrop_input">
                 <field name="NUMBER_NAME">number</field>
-            </block>`;
+            </block>
+            <block type="event_broadcast" id="abstract_send_block"></block>,`;
         const xmlWorkspace = `<xml xmlns="http://www.w3.org/1999/xhtml">${xmlBlocks}</xml>`;
         const dom = ScratchBlocks.Xml.textToDom(xmlWorkspace);
         ScratchBlocks.Xml.clearWorkspaceAndLoadFromXml(dom, ScratchBlocks.getAbstractWorkspace());
@@ -219,14 +220,12 @@ class IRDebugger extends React.Component {
     }
 
     initAnswerProvider () {
-        const relevantTraces = this.isBlockDebugger ?
-            this.filterTracesForTargetOption(this.relevantTraces) : this.relevantTraces;
         this.answerProvider = new AnswerProvider(
             this.props.vm,
             this.cdg,
             this.cfg,
             this.allTraces,
-            relevantTraces,
+            this.relevantTraces,
             this.target,
             this.currentBlockId,
             this.translate
@@ -257,8 +256,8 @@ class IRDebugger extends React.Component {
                 EventFilter.cloneCreate(trace) && trace.targetsInfo[this.target.id]);
             if (createCloneTrace) {
                 firstCloneTraceIndex = traces.indexOf(createCloneTrace);
-                const startAsCloneTrace = traces.find((trace, index) =>
-                    EventFilter.cloneStart(trace) && traces[index + 1].uniqueId === createCloneTrace.uniqueId);
+                const startAsCloneTrace = traces.find((trace, index) => EventFilter.cloneStart(trace) &&
+                    index > 0 && traces[index - 1].uniqueId === createCloneTrace.uniqueId);
                 if (startAsCloneTrace) {
                     // Overwrite the targetsInfo of the 'control_start_as_clone' trace
                     // with the targetsInfo of the 'control_create_clone_of' trace,
