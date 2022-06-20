@@ -92,8 +92,13 @@ class TutorialStep extends React.Component {
             if (result.passed) {
                 this.props.succeeded();
             } else {
+                console.log(`Failed test: ${result.messageId}`);
                 this.setFailureMessages(result.step, result.messageId);
             }
+        }).catch((error) => {
+            console.log(`Test execution crashed: ${error}`);
+            this.props.unlockVM();
+            this.props.testStopped();
         });
     }
 
