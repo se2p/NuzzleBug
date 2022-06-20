@@ -172,7 +172,7 @@ const Controls = function (props) {
                 onClick={onIRQuestionsClick}
                 title={intl.formatMessage(messages.irQuestionTitle)}
             /> : null}
-            {interrogationSupported ? (<ToggleObservation
+            {/* interrogationSupported ? (<ToggleObservation
                 title={observationActive ?
                     intl.formatMessage(messages.deactivateObservation) :
                     intl.formatMessage(messages.activateObservation)
@@ -180,7 +180,7 @@ const Controls = function (props) {
                 onClick={onToggleObservationClick}
                 state={observationState}
                 active={observationActive}
-            />) : null}
+            />) : null*/}
         </div>
     );
 };
