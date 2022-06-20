@@ -115,6 +115,8 @@ const vmListenerHOC = function (WrappedComponent) {
             // Don't capture keys intended for Blockly inputs.
             if (e.target !== document && e.target !== document.body) return;
 
+            if (this.props.testRunning) return;
+
             const key = (!e.key || e.key === 'Dead') ? e.keyCode : e.key;
             this.props.vm.postIOData('keyboard', {
                 key: key,
@@ -128,6 +130,8 @@ const vmListenerHOC = function (WrappedComponent) {
             }
         }
         handleKeyUp (e) {
+            if (this.props.testRunning) return;
+            
             // Always capture up events,
             // even those that have switched to other targets.
             const key = (!e.key || e.key === 'Dead') ? e.keyCode : e.key;
@@ -205,6 +209,7 @@ const vmListenerHOC = function (WrappedComponent) {
         projectChanged: PropTypes.bool,
         shouldUpdateTargets: PropTypes.bool,
         shouldUpdateProjectChanged: PropTypes.bool,
+        testRunning: PropTypes.bool,
         username: PropTypes.string,
         vm: PropTypes.instanceOf(VM).isRequired
     };
@@ -221,6 +226,7 @@ const vmListenerHOC = function (WrappedComponent) {
         // Do not update the projectChanged state in fullscreen or player only mode
         shouldUpdateProjectChanged: !state.scratchGui.mode.isFullScreen && !state.scratchGui.mode.isPlayerOnly,
         vm: state.scratchGui.vm,
+        testRunning: state.scratchGui.vmStatus.testRunning,
         username: state.session && state.session.session && state.session.session.user ?
             state.session.session.user.username : ''
     });

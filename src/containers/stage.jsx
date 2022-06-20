@@ -172,6 +172,8 @@ class Stage extends React.Component {
         this.props.vm.setEditingTarget(targetId);
     }
     onMouseMove (e) {
+        if (this.props.testRunning) return;
+
         const {x, y} = getEventXY(e);
         const mousePosition = [x - this.rect.left, y - this.rect.top];
 
@@ -214,6 +216,8 @@ class Stage extends React.Component {
         this.props.vm.postIOData('mouse', coordinates);
     }
     onMouseUp (e) {
+        if (this.props.testRunning) return;
+
         const {x, y} = getEventXY(e);
         const mousePosition = [x - this.rect.left, y - this.rect.top];
         this.cancelMouseDownTimeout();
@@ -251,47 +255,49 @@ class Stage extends React.Component {
         }
     }
     onMouseDown (e) {
-        if (!this.props.testRunning) {
-            this.updateRect();
-            const {x, y} = getEventXY(e);
-            const mousePosition = [x - this.rect.left, y - this.rect.top];
-            if (this.props.isColorPicking) {
-                // Set the pickX/Y for the color picker loop to pick up
-                this.pickX = mousePosition[0];
-                this.pickY = mousePosition[1];
-                // Immediately update the color picker info
-                this.setState({colorInfo: this.getColorInfo(this.pickX, this.pickY)});
-            } else {
-                if (e.button === 0 || (window.TouchEvent && e instanceof TouchEvent)) {
-                    this.setState({
-                        mouseDown: true,
-                        mouseDownPosition: mousePosition,
-                        mouseDownTimeoutId: setTimeout(
-                            this.onStartDrag.bind(this, mousePosition[0], mousePosition[1]),
-                            400
-                        )
-                    });
-                }
-                const data = {
-                    isDown: true,
-                    x: mousePosition[0],
-                    y: mousePosition[1],
-                    canvasWidth: this.rect.width,
-                    canvasHeight: this.rect.height
-                };
-                this.props.vm.postIOData('mouse', data);
-                if (e.preventDefault) {
-                    // Prevent default to prevent touch from dragging page
-                    e.preventDefault();
-                    // But we do want any active input to be blurred
-                    if (document.activeElement && document.activeElement.blur) {
-                        document.activeElement.blur();
-                    }
+        if (this.props.testRunning) return;
+        
+        this.updateRect();
+        const {x, y} = getEventXY(e);
+        const mousePosition = [x - this.rect.left, y - this.rect.top];
+        if (this.props.isColorPicking) {
+            // Set the pickX/Y for the color picker loop to pick up
+            this.pickX = mousePosition[0];
+            this.pickY = mousePosition[1];
+            // Immediately update the color picker info
+            this.setState({colorInfo: this.getColorInfo(this.pickX, this.pickY)});
+        } else {
+            if (e.button === 0 || (window.TouchEvent && e instanceof TouchEvent)) {
+                this.setState({
+                    mouseDown: true,
+                    mouseDownPosition: mousePosition,
+                    mouseDownTimeoutId: setTimeout(
+                        this.onStartDrag.bind(this, mousePosition[0], mousePosition[1]),
+                        400
+                    )
+                });
+            }
+            const data = {
+                isDown: true,
+                x: mousePosition[0],
+                y: mousePosition[1],
+                canvasWidth: this.rect.width,
+                canvasHeight: this.rect.height
+            };
+            this.props.vm.postIOData('mouse', data);
+            if (e.preventDefault) {
+                // Prevent default to prevent touch from dragging page
+                e.preventDefault();
+                // But we do want any active input to be blurred
+                if (document.activeElement && document.activeElement.blur) {
+                    document.activeElement.blur();
                 }
             }
         }
     }
     onWheel (e) {
+        if (this.props.testRunning) return;
+        
         const data = {
             deltaX: e.deltaX,
             deltaY: e.deltaY
