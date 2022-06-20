@@ -395,7 +395,7 @@
         },
         "block": {
             "not-reachable": "der Block nicht erreichbar ist",
-            "no-broadcast-send-block": "Dein Projekt beinhaltet keinen Block, der die Nachricht <i>{message}</i> versenden könnte",
+            "no-broadcast-send-block": "Die Nachricht <i>{message}</i>, die hier empfangen werden soll, wird nie gesendet. Das liegt daran, dass dein Projekt keinen <span blockType=\"stack\" blockCategory=\"events\">sende</span> Block mit der passenden Nachricht hat",
             "no-create-clone-block": "Dein Projekt beinhaltet keinen Block, der einen Klon von Figur <i>{sprite}</i> erzeugen könnte",
             "no-backdrop-change-block": "Dein Projekt beinhaltet keinen Block, der das Bühnenbild zu <i>{backdrop}</i> ändern könnte",
             "repeat": "der <span blockType=\"stack\" blockCategory=\"control\">wiederhole</span> Block ausgeführt wurde",

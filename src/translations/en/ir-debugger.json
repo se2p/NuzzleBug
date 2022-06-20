@@ -395,7 +395,7 @@
         },
         "block": {
             "not-reachable": "the block is not reachable",
-            "no-broadcast-send-block": "Your project does not contain any block that could send the message <i>{message}</i>",
+            "no-broadcast-send-block": "The message <i>{message}</i> can't be sent, because your project doesn't contain a <span blockType=\"stack\" blockCategory=\"events\">broadcast</span> block sending this message",
             "no-create-clone-block": "Your project does not contain any block that could create a clone of the sprite <i>{sprite}</i>",
             "no-backdrop-change-block": "Your project does not contain any block that could change the backdrop to <i>{backdrop}</i>",
             "repeat": "the <span blockType=\"stack\" blockCategory=\"control\">repeat</span> block was executed",
