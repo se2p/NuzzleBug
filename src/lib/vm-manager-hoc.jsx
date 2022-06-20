@@ -85,6 +85,9 @@ const vmManagerHOC = function (WrappedComponent) {
             }
             return this.props.vm.loadProject(projectData)
                 .then(() => {
+                    if (isWhiskerProject) {
+                        this.props.onWhiskerProjectLoaded();
+                    }
                     this.props.onLoadedProject(this.props.loadingState, this.props.canSave);
                     if (projectFileName) {
                         this.props.onSetProjectTitle(this.getProjectTitleFromFileName(projectFileName));
@@ -104,9 +107,6 @@ const vmManagerHOC = function (WrappedComponent) {
                         // the renderer can be async.
                         setTimeout(() => {
                             this.props.vm.renderer.draw();
-                            if (isWhiskerProject) {
-                                this.props.onWhiskerProjectLoaded();
-                            }
                         });
                     }
                 })
