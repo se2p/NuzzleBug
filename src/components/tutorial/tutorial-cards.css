@@ -233,6 +233,12 @@
     background-color: #ff9c6d;
 }
 
+.skip-link {
+    color: white;
+    font-size: small;
+    margin-bottom: -5px;
+}
+
 .step-title {
     margin: 20px auto 0;
     font-weight: 400;

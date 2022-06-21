@@ -17,6 +17,7 @@ import * as tutorials from 'tutorial-tests/src/tutorials';
 
 import successImageEN from '../components/tutorial/greatDoneEN.png';
 import successImageDE from '../components/tutorial/greatDoneDE.png';
+import styles from '../components/tutorial/tutorial-cards.css';
 
 class TutorialStep extends React.Component {
     constructor (props) {
@@ -140,16 +141,20 @@ class TutorialStep extends React.Component {
 
         return (
             this.props.step + 1 === this.props.totalSteps ?
-                <Success
-                    content={{
-                        title: this.props.tutorialMessages.successTitle,
-                        message: this.props.tutorialMessages.successMsg,
-                        img: this.props.locale === 'de' ? successImageDE : successImageEN
-                    }}
-                    onHome={this.handleHome}
-                    homeButtonTitle={guiMessages.homeButtonTitle}
-                /> :
                 <>
+                    <div onClick={this.next} className={styles.skipLink}>skip</div>
+                    <Success
+                        content={{
+                            title: this.props.tutorialMessages.successTitle,
+                            message: this.props.tutorialMessages.successMsg,
+                            img: this.props.locale === 'de' ? successImageDE : successImageEN
+                        }}
+                        onHome={this.handleHome}
+                        homeButtonTitle={guiMessages.homeButtonTitle}
+                    />
+                </> :
+                <>
+                    <div onClick={this.next} className={styles.skipLink}>skip</div>
                     {this.props.step === 0 ?
                         <Intro
                             content={downloads}

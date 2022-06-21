@@ -179,7 +179,6 @@ const TutorialStep = props => {
                     success={success}
                     currentlyTesting={currentlyTesting}
                 />
-                <p onClick={props.nextStep} style={{color: 'white'}}>skip</p>
             </div>
         </div>
     );
