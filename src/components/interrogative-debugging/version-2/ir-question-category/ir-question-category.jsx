@@ -62,7 +62,7 @@ class IRQuestionCategory extends React.Component {
                 null,
                 null,
                 this.props.questionCategory.type,
-                this.props.questionCategory.form,
+                this.props.questionCategory.form ? this.props.questionCategory.form : '',
                 null
             );
         }
