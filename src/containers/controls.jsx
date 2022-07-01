@@ -104,12 +104,16 @@ class Controls extends React.Component {
         const test = this.props.whiskerTest;
         test.isLoading = false;
         test.isRunning = true;
+        this.props.vm.runtime.whiskerTestRunning = true;
         this.forceUpdate();
     }
     onTestDone (result) {
         const test = this.props.whiskerTest;
         test.isRunning = false;
         test.resultStatus = result.status;
+        this.props.vm.runtime.whiskerTestRunning = false;
+        const traces = this.props.vm.runtime.traceInfo.tracer.traces;
+        traces[traces.length - 1].whiskerTestEnd = true;
         this.props.onTestEnd();
         this.forceUpdate();
     }
