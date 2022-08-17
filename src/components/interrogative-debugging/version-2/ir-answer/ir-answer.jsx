@@ -566,7 +566,7 @@ class IRAnswer extends React.Component {
                 this._addEdgeLabel(svgGraphEdge, edge, text, executionInfo, false);
             }
 
-            if (executionInfo.stopped || executionInfo.paused || executionInfo.observationStopped) {
+            if (executionInfo.stopped || executionInfo.paused || executionInfo.tracingStopped) {
                 this._dashPath(pathNode);
                 this._addCrossOutLine(svgGraphEdge, edge.line);
                 if (executionInfo.stopped) {
@@ -575,7 +575,7 @@ class IRAnswer extends React.Component {
                 if (executionInfo.paused) {
                     this._addExecutionPausedLabel(svgGraphEdge, edge);
                 }
-                if (executionInfo.observationStopped) {
+                if (executionInfo.tracingStopped) {
                     this._addOberservationStoppedLabel(svgGraphEdge, edge);
                 }
             }
@@ -742,7 +742,7 @@ class IRAnswer extends React.Component {
 
     _addOberservationStoppedLabel (svgGraphEdge, edge) {
         const position = this._calculateEdgeLabelPosition(edge, 5, false);
-        const text = this._translate('observation-stopped');
+        const text = this._translate('tracing-stopped');
         const textPosition = {x: position.x - 25, y: position.y};
         svgGraphEdge.innerHTML += this._createHtmlText(text, textPosition, this.labelSize, 'red', 'end');
 

@@ -6,9 +6,7 @@ import logging from 'scratch-vm/src/util/logging.js';
 import {connect} from 'react-redux';
 
 import ControlsComponent from '../components/controls/controls.jsx';
-import {
-    ObservationState
-} from '../components//interrogative-debugging/version-2/toggle-observation/toggle-observation.jsx';
+import {TracingState} from '../components/toggle-tracing/toggle-tracing.jsx';
 import {viewCards} from '../reducers/interrogative-debugging/version-1/ir-cards.js';
 import {setTestRunningState} from '../reducers/vm-status.js';
 
@@ -28,13 +26,13 @@ class Controls extends React.Component {
             'handleInitialStep',
             'handleInitialTestStep',
             'handleStopAllClick',
-            'handleToggleObservationClick',
+            'handleToggleTracingClick',
             'onTestStart',
             'onTestDone',
             'onTestRunEnd'
         ]);
-        this.observationState = props.observationActive ?
-            ObservationState.ACTIVE : ObservationState.INACTIVE;
+        this.tracingState = props.tracingActive ?
+            TracingState.ACTIVE : TracingState.INACTIVE;
 
         this.testRunner = new TestRunner();
         this.testRunner.on(TestRunner.TEST_START, this.onTestStart);
@@ -201,32 +199,32 @@ class Controls extends React.Component {
     resetPauseResume () {
         this.props.vm.resumeExecution();
     }
-    handleToggleObservationClick (e) {
+    handleToggleTracingClick (e) {
         e.preventDefault();
-        if (this.props.observationActive) {
-            this.deactivateObservation();
+        if (this.props.tracingActive) {
+            this.deactivateTracing();
             if (logging.isActive()) {
                 logging.logClickEvent('BUTTON', new Date(), 'DEACTIVATE_OBSERVATION', null);
             }
         } else {
-            this.activateObservation();
+            this.activateTracing();
             if (logging.isActive()) {
                 logging.logClickEvent('BUTTON', new Date(), 'ACTIVATE_OBSERVATION', null);
             }
         }
     }
-    activateObservation () {
-        this.props.vm.activateObservation();
-        this.setObservationState(ObservationState.ACTIVATED);
-        setTimeout(() => this.setObservationState(ObservationState.ACTIVE), 200);
+    activateTracing () {
+        this.props.vm.activateTracing();
+        this.setTracingState(TracingState.ACTIVATED);
+        setTimeout(() => this.setTracingState(TracingState.ACTIVE), 200);
     }
-    deactivateObservation () {
-        this.props.vm.deactivateObservation();
-        this.setObservationState(ObservationState.DEACTIVATED);
-        setTimeout(() => this.setObservationState(ObservationState.INACTIVE), 200);
+    deactivateTracing () {
+        this.props.vm.deactivateTracing();
+        this.setTracingState(TracingState.DEACTIVATED);
+        setTimeout(() => this.setTracingState(TracingState.INACTIVE), 200);
     }
-    setObservationState (state) {
-        this.observationState = state;
+    setTracingState (state) {
+        this.tracingState = state;
         this.forceUpdate();
     }
     render () {
@@ -240,7 +238,7 @@ class Controls extends React.Component {
             turbo,
             interrogationSupported,
             interrogationEnabled,
-            observationActive,
+            tracingActive,
             whiskerTest,
             ...props
         } = this.props;
@@ -258,8 +256,8 @@ class Controls extends React.Component {
                 turbo={turbo}
                 interrogationSupported={interrogationSupported}
                 interrogationEnabled={interrogationEnabled}
-                observationState={this.observationState}
-                observationActive={observationActive}
+                tracingState={this.tracingState}
+                tracingActive={tracingActive}
                 vm={vm}
                 whiskerTest={whiskerTest}
                 onGreenFlagClick={this.handleGreenFlagClick}
@@ -271,7 +269,7 @@ class Controls extends React.Component {
                 onPauseResumeClick={this.handlePauseResumeClick}
                 onStopAllClick={this.handleStopAllClick}
                 onIRQuestionsClick={handleIRQuestionsClick}
-                onToggleObservationClick={this.handleToggleObservationClick}
+                onToggleTracingClick={this.handleToggleTracingClick}
             />
         );
     }
@@ -288,7 +286,7 @@ Controls.propTypes = {
     turbo: PropTypes.bool.isRequired,
     interrogationSupported: PropTypes.bool.isRequired,
     interrogationEnabled: PropTypes.bool.isRequired,
-    observationActive: PropTypes.bool.isRequired,
+    tracingActive: PropTypes.bool.isRequired,
     projectChanged: PropTypes.bool.isRequired,
     vm: PropTypes.instanceOf(VM),
     whiskerTest: PropTypes.instanceOf(Test)
@@ -302,7 +300,7 @@ const mapStateToProps = state => ({
     turbo: state.scratchGui.vmStatus.turbo,
     interrogationSupported: state.scratchGui.irDebugger.supported,
     interrogationEnabled: state.scratchGui.irDebugger.enabled,
-    observationActive: state.scratchGui.vmStatus.observationActive,
+    tracingActive: state.scratchGui.vmStatus.tracingActive,
     projectChanged: state.scratchGui.projectChanged,
     whiskerTest: state.scratchGui.vmStatus.whiskerTest
 });

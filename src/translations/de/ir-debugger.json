@@ -8,8 +8,8 @@
         "run-test": "Test \"{name}\" starten",
         "initial-test-step": "Erster Schritt des Tests",
         "ir-questions": "Zeige Fragen",
-        "activate-observation": "Beobachtung starten",
-        "deactivate-observation": "Beobachtung stoppen",
+        "activate-tracing": "Aufzeichnung starten",
+        "deactivate-tracing": "Aufzeichnung stoppen",
         "open-debugger": "Fragen öffnen"
     },
     "header": {
@@ -298,7 +298,7 @@
         },
         "time": {
             "block-executed-seconds-after-green-flag": "Der Block wurde <span style=\"color: red;\"><b>{timeElapsed}</b></span> Sekunden nach Klicken der grünen Flagge ausgeführt. ",
-            "block-executed-seconds-after-observation-start": "Der Block wurde <span style=\"color: red;\"><b>{timeElapsed}</b></span> Sekunden nach Starten der Beobachtung ausgeführt. "
+            "block-executed-seconds-after-tracing-start": "Der Block wurde <span style=\"color: red;\"><b>{timeElapsed}</b></span> Sekunden nach Starten der Aufzeichnung ausgeführt. "
         }
     },
     "reason": {
@@ -411,7 +411,7 @@
             "value-change-by-times": "{times} mal um <code class=\"scratchBlock\">{change}</code> verändert wurde",
             "initial-value": "der Wert als <code class=\"scratchBlock\">@greenFlag :: events reporter</code> geklickt wurde <code class=\"scratchBlock\">({initialValue} :: #ffffff)</code> war",
             "clone-start-value": "der Wert der ursprünglichen Figur <code class=\"scratchBlock\">({initialValue} :: #ffffff)</code> war, als der Klon erzeugt wurde und der Klon diese Eigenschaft übernommen hat",
-            "observation-start-value": "der Wert zu Beginn der Beobachtung <code class=\"scratchBlock\">({initialValue} :: #ffffff)</code> war",
+            "tracing-start-value": "der Wert zu Beginn der Aufzeichnung <code class=\"scratchBlock\">({initialValue} :: #ffffff)</code> war",
             "have-value": "<code class=\"scratchBlock\">{variable}</code> den Wert <code class=\"scratchBlock\">({value} :: #ffffff)</code> hatte",
             "value-set-but-changed-afterwards": "Die Variable wurde auf <code class=\"scratchBlock\">({value} :: #ffffff)</code> gesetzt, aber danach wieder verändert. ",
             "position": {
@@ -459,7 +459,7 @@
             "visibility": {
                 "initial-visibility": "sie bereits <i>{initialVisibility}</i> war als <code class=\"scratchBlock\">@greenFlag :: events reporter</code> geklickt wurde",
                 "clone-start-visibility": "die ursprüngliche Figur <i>{initialVisibility}</i> war, als der Klon erzeugt wurde und der Klon diese Eigenschaft übernommen hat",
-                "observation-start-visibility": "sie bereits <i>{initialVisibility}</i> war als die Beobachtung gestartet wurde"
+                "tracing-start-visibility": "sie bereits <i>{initialVisibility}</i> war als die Aufzeichnung gestartet wurde"
             }
         },
         "unobserved": {
@@ -574,7 +574,7 @@
     "execution":"Ausführung",
     "execution-stopped": "Ausführung gestoppt",
     "execution-paused": "Ausführung pausiert",
-    "observation-stopped": "Beobachtung gestoppt",
+    "tracing-stopped": "Aufzeichnung gestoppt",
     "new-line": "<br>",
     "because" :  ", weil ",
     "then" :  ", dann ",

@@ -239,7 +239,7 @@ class IRDebugger extends React.Component {
         let startValueIcon;
         if (executionInfo.isCloneStartValue) {
             startValueIcon = this._getCloneIcon();
-        } else if (executionInfo.isObservationStartValue) {
+        } else if (executionInfo.isTracingStartValue) {
             startValueIcon = this._getEyeIcon();
         } else {
             startValueIcon = this._getGreenFlagIcon();

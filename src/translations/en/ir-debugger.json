@@ -8,8 +8,8 @@
         "run-test": "Run test \"{name}\"",
         "initial-test-step": "First test step",
         "ir-questions": "Show Questions",
-        "activate-observation": "Activate observation",
-        "deactivate-observation": "Deactivate observation",
+        "activate-tracing": "Activate recording",
+        "deactivate-tracing": "Deactivate recording",
         "open-debugger": "open questions"
     },
     "header": {
@@ -298,7 +298,7 @@
         },
         "time": {
             "block-executed-seconds-after-green-flag": "The block executed <span style=\"color: red;\"><b>{timeElapsed}</b></span> seconds after clicking the green flag. ",
-            "block-executed-seconds-after-observation-start": "The block executed <span style=\"color: red;\"><b>{timeElapsed}</b></span> seconds after starting the observation. "
+            "block-executed-seconds-after-tracing-start": "The block executed <span style=\"color: red;\"><b>{timeElapsed}</b></span> seconds after starting the recording. "
         }
     },
     "reason": {
@@ -411,7 +411,7 @@
             "value-change-by-times": "was changed {times} times by <code class=\"scratchBlock\">{change}</code>",
             "initial-value": "the initial value was <code class=\"scratchBlock\">({initialValue} :: #ffffff)</code>",
             "clone-start-value": "the value of the original sprite was <code class=\"scratchBlock\">({initialValue} :: #ffffff)</code> when the clone was created and the clone inherited this property",
-            "observation-start-value": "the value at the observation start was <code class=\"scratchBlock\">({initialValue} :: #ffffff)</code>",
+            "tracing-start-value": "the value was <code class=\"scratchBlock\">({initialValue} :: #ffffff)</code> when the recording started",
             "have-value": "<code class=\"scratchBlock\">{variable}</code> had the value <code class=\"scratchBlock\">({value} :: #ffffff)</code>",
             "value-set-but-changed-afterwards": "The variable was set to <code class=\"scratchBlock\">({value} :: #ffffff)</code>, but changed afterwards. ",
             "position": {
@@ -459,7 +459,7 @@
             "visibility": {
                 "initial-visibility": "it already was <i>{initialVisibility}</i> when <code class=\"scratchBlock\">@greenFlag :: events reporter</code> was clicked",
                 "clone-start-visibility": "the original sprite was <i>{initialVisibility}</i> when the clone was created and the clone inherited this property",
-                "observation-start-visibility": "it already was <i>{initialVisibility}</i> when the observation started"
+                "tracing-start-visibility": "it already was <i>{initialVisibility}</i> when the recording started"
             }
         },
         "unobserved": {
@@ -574,7 +574,7 @@
     "execution": "execution",
     "execution-stopped": "execution stopped",
     "execution-paused": "execution paused",
-    "observation-stopped": "observation stopped",
+    "tracing-stopped": "recording stopped",
     "new-line": "<br>",
     "because" :  ", because ",
     "then" :  ", then ",

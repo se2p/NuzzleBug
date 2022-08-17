@@ -3,7 +3,7 @@ import ScratchBlocks from 'scratch-blocks';
 const SET_PROJECT_CHANGED = 'scratch-gui/project-changed/SET_PROJECT_CHANGED';
 const SET_RUNNING_STATE = 'scratch-gui/vm-status/SET_RUNNING_STATE';
 const SET_PAUSE_STATE = 'scratch-gui/vm-status/SET_PAUSED_STATE';
-const SET_OBSERVATION_ACTIVE_STATE = 'scratch-gui/vm-status/SET_OBSERVATION_ACTIVE_STATE';
+const SET_TRACING_ACTIVE_STATE = 'scratch-gui/vm-status/SET_TRACING_ACTIVE_STATE';
 const SELECT_LOCALE = 'scratch-gui/locales/SELECT_LOCALE';
 
 const ENABLE = 'scratch-gui/ir-debugger/ENABLE';
@@ -31,7 +31,7 @@ const initialState = {
     dragging: false,
     projectRunning: false,
     projectPaused: false,
-    observationActive: true
+    tracingActive: true
 };
 
 const forwardDebuggerEnabled = function (enabled) {
@@ -108,9 +108,9 @@ const reducer = function (state, action) {
         return Object.assign({}, state, {
             dragging: false
         });
-    case SET_OBSERVATION_ACTIVE_STATE:
+    case SET_TRACING_ACTIVE_STATE:
         return Object.assign({}, state, {
-            observationActive: action.observationActive
+            tracingActive: action.tracingActive
         });
     default:
         return state;

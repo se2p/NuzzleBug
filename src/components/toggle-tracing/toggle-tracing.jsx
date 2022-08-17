@@ -3,16 +3,16 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import icon from './icon--eye.svg';
-import styles from './toggle-observation.css';
+import styles from './toggle-tracing.css';
 
-export const ObservationState = Object.freeze({
+export const TracingState = Object.freeze({
     ACTIVE: 1,
     INACTIVE: 2,
     ACTIVATED: 3,
     DEACTIVATED: 4
 });
 
-const ToggleObservationComponent = function (props) {
+const ToggleTracingComponent = function (props) {
     const {
         className,
         onClick,
@@ -25,11 +25,11 @@ const ToggleObservationComponent = function (props) {
         <img
             className={classNames(
                 className,
-                styles.toggleObservation,
+                styles.toggleTracing,
                 {
                     [styles.active]: active,
-                    [styles.activated]: state === ObservationState.ACTIVATED,
-                    [styles.deactivated]: state === ObservationState.DEACTIVATED
+                    [styles.activated]: state === TracingState.ACTIVATED,
+                    [styles.deactivated]: state === TracingState.DEACTIVATED
                 }
             )}
             draggable={false}
@@ -41,16 +41,16 @@ const ToggleObservationComponent = function (props) {
     );
 };
 
-ToggleObservationComponent.propTypes = {
+ToggleTracingComponent.propTypes = {
     className: PropTypes.string,
     onClick: PropTypes.func.isRequired,
     title: PropTypes.string,
     active: PropTypes.bool,
-    state: PropTypes.oneOf(Object.values(ObservationState)).isRequired
+    state: PropTypes.oneOf(Object.values(TracingState)).isRequired
 };
 
-ToggleObservationComponent.defaultProps = {
-    title: 'Toggle observation'
+ToggleTracingComponent.defaultProps = {
+    title: 'Toggle tracing'
 };
 
-export default ToggleObservationComponent;
+export default ToggleTracingComponent;

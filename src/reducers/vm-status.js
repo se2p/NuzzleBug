@@ -2,7 +2,7 @@ const SET_RUNNING_STATE = 'scratch-gui/vm-status/SET_RUNNING_STATE';
 const SET_PAUSE_STATE = 'scratch-gui/vm-status/SET_PAUSED_STATE';
 const SET_TURBO_STATE = 'scratch-gui/vm-status/SET_TURBO_STATE';
 const SET_STARTED_STATE = 'scratch-gui/vm-status/SET_STARTED_STATE';
-const SET_OBSERVATION_ACTIVE_STATE = 'scratch-gui/vm-status/SET_OBSERVATION_ACTIVE_STATE';
+const SET_TRACING_ACTIVE_STATE = 'scratch-gui/vm-status/SET_TRACING_ACTIVE_STATE';
 const SET_WHISKER_TEST = 'scratch-gui/vm-status/SET_WHISKER_TEST';
 const SET_IS_WHISKER_PROJECT_LOADING = 'scratch-gui/vm-status/SET_IS_WHISKER_PROJECT_LOADING';
 const SET_TEST_RUNNING_STATE = 'scratch-gui/vm-status/SET_TEST_RUNNING_STATE';
@@ -12,7 +12,7 @@ const initialState = {
     started: false,
     paused: false,
     turbo: false,
-    observationActive: true,
+    tracingActive: true,
     isWhiskerProjectLoading: false,
     testRunning: false,
     whiskerTest: null
@@ -37,9 +37,9 @@ const reducer = function (state, action) {
         return Object.assign({}, state, {
             turbo: action.turbo
         });
-    case SET_OBSERVATION_ACTIVE_STATE:
+    case SET_TRACING_ACTIVE_STATE:
         return Object.assign({}, state, {
-            observationActive: action.observationActive
+            tracingActive: action.tracingActive
         });
     case SET_WHISKER_TEST:
         return Object.assign({}, state, {
@@ -87,10 +87,10 @@ const setTurboState = function (turbo) {
     };
 };
 
-const setObservationActiveState = function (observationActive) {
+const setTracingActiveState = function (tracingActive) {
     return {
-        type: SET_OBSERVATION_ACTIVE_STATE,
-        observationActive: observationActive
+        type: SET_TRACING_ACTIVE_STATE,
+        tracingActive: tracingActive
     };
 };
 
@@ -122,7 +122,7 @@ export {
     setStartedState,
     setTurboState,
     setPauseState,
-    setObservationActiveState,
+    setTracingActiveState,
     setIsWhiskerProjectLoading,
     setWhiskerTest,
     setTestRunningState

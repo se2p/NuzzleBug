@@ -15,7 +15,7 @@ import {
     setTurboState,
     setStartedState,
     setTestRunningState,
-    setObservationActiveState
+    setTracingActiveState
 } from '../reducers/vm-status';
 import {showExtensionAlert} from '../reducers/alerts';
 import {updateMicIndicator} from '../reducers/mic-indicator';
@@ -62,8 +62,8 @@ const vmListenerHOC = function (WrappedComponent) {
             this.props.vm.on('PROJECT_START', this.props.onGreenFlag);
             this.props.vm.on('PERIPHERAL_CONNECTION_LOST_ERROR', this.props.onShowExtensionAlert);
             this.props.vm.on('MIC_LISTENING', this.props.onMicListeningUpdate);
-            this.props.vm.on('OBSERVATION_ACTIVE', this.props.onActivateObservation);
-            this.props.vm.on('OBSERVATION_INACTIVE', this.props.onDeactivateObservation);
+            this.props.vm.on('TRACING_ACTIVE', this.props.onActivateTracing);
+            this.props.vm.on('TRACING_INACTIVE', this.props.onDeactivateTracing);
             this.props.vm.on('TEST_RUN_START', this.props.onTestRunStart);
             this.props.vm.on('TEST_RUN_END', this.props.onTestRunEnd);
         }
@@ -170,8 +170,8 @@ const vmListenerHOC = function (WrappedComponent) {
                 onTurboModeOff,
                 onTurboModeOn,
                 onShowExtensionAlert,
-                onActivateObservation,
-                onDeactivateObservation,
+                onActivateTracing,
+                onDeactivateTracing,
                 /* eslint-enable no-unused-vars */
                 ...props
             } = this.props;
@@ -202,8 +202,8 @@ const vmListenerHOC = function (WrappedComponent) {
         onTargetsUpdate: PropTypes.func.isRequired,
         onTurboModeOff: PropTypes.func.isRequired,
         onTurboModeOn: PropTypes.func.isRequired,
-        onActivateObservation: PropTypes.func.isRequired,
-        onDeactivateObservation: PropTypes.func.isRequired,
+        onActivateTracing: PropTypes.func.isRequired,
+        onDeactivateTracing: PropTypes.func.isRequired,
         onTestRunStart: PropTypes.func.isRequired,
         onTestRunEnd: PropTypes.func.isRequired,
         projectChanged: PropTypes.bool,
@@ -258,12 +258,12 @@ const vmListenerHOC = function (WrappedComponent) {
         onMicListeningUpdate: listening => {
             dispatch(updateMicIndicator(listening));
         },
-        onActivateObservation: () => {
-            dispatch(setObservationActiveState(true));
+        onActivateTracing: () => {
+            dispatch(setTracingActiveState(true));
             dispatch(enableDebugger());
         },
-        onDeactivateObservation: () => {
-            dispatch(setObservationActiveState(false));
+        onDeactivateTracing: () => {
+            dispatch(setTracingActiveState(false));
             dispatch(disableDebugger());
         },
         onTestRunStart: () => dispatch(setTestRunningState(true)),

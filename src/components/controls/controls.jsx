@@ -15,8 +15,7 @@ import StepBack from '../step-back/step-back.jsx';
 import StopAll from '../stop-all/stop-all.jsx';
 import TurboMode from '../turbo-mode/turbo-mode.jsx';
 import IRQuestions from '../interrogative-debugging/version-1/ir-questions/ir-question-button.jsx';
-import ToggleObservation, {ObservationState}
-from '../interrogative-debugging/version-2/toggle-observation/toggle-observation.jsx';
+import ToggleTracing, {TracingState} from '../toggle-tracing/toggle-tracing.jsx';
 
 import styles from './controls.css';
 
@@ -71,15 +70,15 @@ const messages = defineMessages({
         defaultMessage: 'Show Questions',
         description: 'Show questions button title'
     },
-    activateObservation: {
-        id: 'gui.ir-debugger.controls.activate-observation',
-        defaultMessage: 'Activate observation',
-        description: 'Activate observation button title'
+    activateTracing: {
+        id: 'gui.ir-debugger.controls.activate-tracing',
+        defaultMessage: 'Activate tracing',
+        description: 'Activate tracing button title'
     },
-    deactivateObservation: {
-        id: 'gui.ir-debugger.controls.deactivate-observation',
-        defaultMessage: 'Deactivate observation',
-        description: 'Deactivate observation button title'
+    deactivateTracing: {
+        id: 'gui.ir-debugger.controls.deactivate-tracing',
+        defaultMessage: 'Deactivate tracing',
+        description: 'Deactivate tracing button title'
     }
 });
 
@@ -97,15 +96,15 @@ const Controls = function (props) {
         onInitialStepClick,
         onInitialTestStepClick,
         onIRQuestionsClick,
-        onToggleObservationClick,
+        onToggleTracingClick,
         irDisabled,
         vm,
         paused,
         turbo,
         interrogationSupported,
         interrogationEnabled,
-        observationState,
-        observationActive,
+        tracingState,
+        tracingActive,
         whiskerTest,
         ...componentProps
     } = props;
@@ -172,14 +171,14 @@ const Controls = function (props) {
                 onClick={onIRQuestionsClick}
                 title={intl.formatMessage(messages.irQuestionTitle)}
             /> : null}
-            {interrogationSupported ? (<ToggleObservation
-                title={observationActive ?
-                    intl.formatMessage(messages.deactivateObservation) :
-                    intl.formatMessage(messages.activateObservation)
+            {interrogationSupported ? (<ToggleTracing
+                title={tracingActive ?
+                    intl.formatMessage(messages.deactivateTracing) :
+                    intl.formatMessage(messages.activateTracing)
                 }
-                onClick={onToggleObservationClick}
-                state={observationState}
-                active={observationActive}
+                onClick={onToggleTracingClick}
+                state={tracingState}
+                active={tracingActive}
             />) : null}
         </div>
     );
@@ -199,14 +198,14 @@ Controls.propTypes = {
     onInitialTestStepClick: PropTypes.func.isRequired,
     onStopAllClick: PropTypes.func.isRequired,
     onIRQuestionsClick: PropTypes.func.isRequired,
-    onToggleObservationClick: PropTypes.func.isRequired,
+    onToggleTracingClick: PropTypes.func.isRequired,
     irDisabled: PropTypes.bool,
     turbo: PropTypes.bool,
     interrogationSupported: PropTypes.bool,
     interrogationEnabled: PropTypes.bool,
     vm: PropTypes.instanceOf(VM),
-    observationState: PropTypes.oneOf(Object.values(ObservationState)).isRequired,
-    observationActive: PropTypes.bool,
+    tracingState: PropTypes.oneOf(Object.values(TracingState)).isRequired,
+    tracingActive: PropTypes.bool,
     whiskerTest: PropTypes.instanceOf(Test)
 };
 
