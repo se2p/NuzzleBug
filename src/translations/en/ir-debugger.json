@@ -271,8 +271,8 @@
             "not-contain-item": "When the block was executed, the list didn't contain <code class=\"scratchBlock\">({item} :: #ffffff)</code>"
         },
         "execution": {
-            "block-execute": "The block executed",
-            "not-block-execute": "The block didn't execute"
+            "block-execute": "The block was executed",
+            "not-block-execute": "The block wasn't executed"
         },
         "input": {
             "have-value": "When the block was executed, <code class=\"scratchBlock\">{input}</code> had the value <code class=\"scratchBlock\">({value} :: #ffffff)</code>"
@@ -297,8 +297,8 @@
             "nonexistent-colors": "The colors <span style=\"color: {color1}; background-color: {color1}; padding: 0 3px; border-radius: 10px\">⬤</span> and <span style=\"color: {color2}; background-color: {color2}; padding: 0 3px; border-radius: 10px\">⬤</span> did not occur when the block was executed! <br> Try to select the desired colors with the color picker. "
         },
         "time": {
-            "block-executed-seconds-after-green-flag": "The block executed <span style=\"color: red;\"><b>{timeElapsed}</b></span> seconds after clicking the green flag. ",
-            "block-executed-seconds-after-tracing-start": "The block executed <span style=\"color: red;\"><b>{timeElapsed}</b></span> seconds after starting the recording. "
+            "block-executed-seconds-after-green-flag": "The block was executed <span style=\"color: red;\"><b>{timeElapsed}</b></span> seconds after clicking the green flag. ",
+            "block-executed-seconds-after-tracing-start": "The block was executed <span style=\"color: red;\"><b>{timeElapsed}</b></span> seconds after starting the recording. "
         }
     },
     "reason": {
