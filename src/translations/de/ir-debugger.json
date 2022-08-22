@@ -341,7 +341,8 @@
             "breakpoint-paused": "die Ausführung wegen eines Haltepunkts pausiert wurde"
         },
         "control-flow": {
-            "interrupted": "alle darauffolgenden Blöcke, die dazu führen könnten, nicht ausgeführt wurden"
+            "interrupted-for-block": "alle darauffolgenden Blöcke, die dazu führen könnten, nicht ausgeführt wurden",
+            "interrupted-for-behavior": "alle darauffolgenden Blöcke, die dazu führen könnten, nicht ausgeführt wurden"
         },
         "event": {
             "flag-clicked": "<code class=\"scratchBlock\">@greenFlag :: events reporter</code> angeklickt wurde",
