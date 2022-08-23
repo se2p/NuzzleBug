@@ -4,6 +4,7 @@ import React from 'react';
 import VM from 'scratch-vm';
 import logging from 'scratch-vm/src/util/logging.js';
 import {connect} from 'react-redux';
+import {injectIntl, intlShape} from 'react-intl';
 
 import ControlsComponent from '../components/controls/controls.jsx';
 import {TracingState} from '../components/toggle-tracing/toggle-tracing.jsx';
@@ -215,8 +216,13 @@ class Controls extends React.Component {
     }
     activateTracing () {
         this.props.vm.activateTracing();
-        this.setTracingState(TracingState.ACTIVATED);
-        setTimeout(() => this.setTracingState(TracingState.ACTIVE), 200);
+        if (this.props.vm.runtime.tracingActive) {
+            this.setTracingState(TracingState.ACTIVATED);
+            setTimeout(() => this.setTracingState(TracingState.ACTIVE), 200);
+        } else {
+            // eslint-disable-next-line no-alert
+            alert(this.props.intl.formatMessage({id: 'gui.ir-debugger.tracing.impossible'}));
+        }
     }
     deactivateTracing () {
         this.props.vm.deactivateTracing();
@@ -276,6 +282,7 @@ class Controls extends React.Component {
 }
 
 Controls.propTypes = {
+    intl: intlShape.isRequired,
     isStarted: PropTypes.bool.isRequired,
     onTestStart: PropTypes.func.isRequired,
     onTestEnd: PropTypes.func.isRequired,
@@ -311,4 +318,4 @@ const mapDispatchToProps = dispatch => ({
     handleIRQuestionsClick: () => dispatch(viewCards())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Controls);
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Controls));

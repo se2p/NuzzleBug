@@ -12,6 +12,11 @@
         "deactivate-tracing": "Aufzeichnung stoppen",
         "open-debugger": "Fragen öffnen"
     },
+    "tracing": {
+        "limit-reached": "Die Ausführung wurde gestoppt, da für die Aufzeichnung kein Speicherplatz mehr verfügbar ist!",
+        "deactivated": "Die Aufzeichnung wurde deaktiviert, da kein Speicherplatz verfügbar ist!",
+        "impossible": "Eine Aufzeichnung ist nicht möglich, da kein Speicherplatz verfügbar ist!"
+    },
     "header": {
         "title-sprite": "Interrogativer Debugger für die Figur <i>{sprite}</i>",
         "title-stage": "Interrogativer Debugger für die Bühne",

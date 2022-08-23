@@ -12,6 +12,11 @@
         "deactivate-tracing": "Deactivate recording",
         "open-debugger": "open questions"
     },
+    "tracing": {
+        "limit-reached": "The execution was stopped, because there is no more memory space available!",
+        "deactivated": "The recording was deactivated, because there is no more memory space available!",
+        "impossible": "Recording is not possible, because there is not enough memory space available!"
+    },
     "header": {
         "title-sprite": "Interrogative Debugger for sprite <i>{sprite}</i>",
         "title-stage": "Interrogative Debugger for the stage",

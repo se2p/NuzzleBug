@@ -5,6 +5,8 @@ import VM from 'scratch-vm';
 
 import {connect} from 'react-redux';
 
+import {injectIntl, intlShape} from 'react-intl';
+
 import {updateTargets} from '../reducers/targets';
 import {updateBlockDrag} from '../reducers/block-drag';
 import {updateMonitors} from '../reducers/monitors';
@@ -38,6 +40,8 @@ const vmListenerHOC = function (WrappedComponent) {
                 'handleKeyDown',
                 'handleKeyUp',
                 'handleProjectChanged',
+                'handleTracingLimitReached',
+                'handleTracingDeactivated',
                 'handleBlockDragUpdate',
                 'handleTargetsUpdate'
             ]);
@@ -64,6 +68,8 @@ const vmListenerHOC = function (WrappedComponent) {
             this.props.vm.on('MIC_LISTENING', this.props.onMicListeningUpdate);
             this.props.vm.on('TRACING_ACTIVE', this.props.onActivateTracing);
             this.props.vm.on('TRACING_INACTIVE', this.props.onDeactivateTracing);
+            this.props.vm.on('TRACING_LIMIT_REACHED', this.handleTracingLimitReached);
+            this.props.vm.on('TRACING_DEACTIVATED', this.handleTracingDeactivated);
             this.props.vm.on('TEST_RUN_START', this.props.onTestRunStart);
             this.props.vm.on('TEST_RUN_END', this.props.onTestRunEnd);
         }
@@ -87,6 +93,8 @@ const vmListenerHOC = function (WrappedComponent) {
         }
         componentWillUnmount () {
             this.props.vm.removeListener('PERIPHERAL_CONNECTION_LOST_ERROR', this.props.onShowExtensionAlert);
+            this.props.vm.removeListener('TRACING_LIMIT_REACHED', this.handleTracingLimitReached);
+            this.props.vm.removeListener('TRACING_DEACTIVATED', this.handleTracingDeactivated);
             if (this.props.attachKeyboardEvents) {
                 document.removeEventListener('keydown', this.handleKeyDown);
                 document.removeEventListener('keyup', this.handleKeyUp);
@@ -96,6 +104,14 @@ const vmListenerHOC = function (WrappedComponent) {
             if (this.props.shouldUpdateProjectChanged && !this.props.projectChanged) {
                 this.props.onProjectChanged();
             }
+        }
+        handleTracingLimitReached () {
+            // eslint-disable-next-line no-alert
+            alert(this.props.intl.formatMessage({id: 'gui.ir-debugger.tracing.limit-reached'}));
+        }
+        handleTracingDeactivated () {
+            // eslint-disable-next-line no-alert
+            alert(this.props.intl.formatMessage({id: 'gui.ir-debugger.tracing.deactivated'}));
         }
         handleBlockDragUpdate (areBlocksOverGui) {
             if (this.props.projectChanged) {
@@ -183,6 +199,7 @@ const vmListenerHOC = function (WrappedComponent) {
         }
     }
     VMListener.propTypes = {
+        intl: intlShape.isRequired,
         attachKeyboardEvents: PropTypes.bool,
         onBlockDragUpdate: PropTypes.func.isRequired,
         onBlockAskWhy: PropTypes.func.isRequired,
@@ -269,10 +286,10 @@ const vmListenerHOC = function (WrappedComponent) {
         onTestRunStart: () => dispatch(setTestRunningState(true)),
         onTestRunEnd: () => dispatch(setTestRunningState(false))
     });
-    return connect(
+    return injectIntl(connect(
         mapStateToProps,
         mapDispatchToProps
-    )(VMListener);
+    )(VMListener));
 };
 
 export default vmListenerHOC;
