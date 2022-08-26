@@ -370,7 +370,7 @@
             "not-clone-created": "a <b style=\"color: #ffab19\">clone</b> of sprite <i>{sprite}</i> <b style=\"color: #ffab19\">wasn't created</b>",
             "clone-started": "the sprite <i>{sprite}</i> <b style=\"color: #ffab19\">started as a clone</b>",
             "not-clone-started": "the sprite <i>{sprite}</i> <b style=\"color: #ffab19\">didn't start as a clone</b>",
-            "not-clone-started-irrelevant": "the event <b style=\"color: #ffab19\"><i>I start as a clone</i></b> can not occur for an original sprite",
+            "not-clone-started-irrelevant": "the event <b style=\"color: #ffab19\"><i>I start as a clone</i></b> cannot occur for an original sprite",
             "backdrop-switched": "the backdrop switched to <span blockType=\"reporter\" blockCategory=\"look\">{backdrop}</span>",
             "not-backdrop-switched": "the backdrop didn't switch to <span blockType=\"reporter\" blockCategory=\"look\">{backdrop}</span>",
             "not-backdrop-switched-during-lifetime": "the backdrop didn't switch to <span blockType=\"reporter\" blockCategory=\"look\">{backdrop}</span> during the lifetime of the clone",
