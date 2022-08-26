@@ -39,7 +39,7 @@
         "close": "Close category", 
         "type": {
             "motion": "Motion",
-            "look": "Look",
+            "look": "Looks",
             "sound": "Sound",
             "events": "Events",
             "control": "Control",
