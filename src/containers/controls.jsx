@@ -19,6 +19,7 @@ class Controls extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
+            'handleKeyDown',
             'handleGreenFlagClick',
             'handleRunTestClick',
             'handlePauseResumeClick',
@@ -44,6 +45,32 @@ class Controls extends React.Component {
         this.testRunner.on(TestRunner.RUN_END, this.onTestRunEnd);
 
         this.modelTester = new ModelTester();
+    }
+    componentDidMount () {
+        document.addEventListener('keydown', this.handleKeyDown);
+    }
+    componentWillUnmount () {
+        document.removeEventListener('keydown', this.handleKeyDown);
+    }
+    handleKeyDown (e) {
+        if (e.key === 'F5') {
+            this.handleGreenFlagClick(e);
+        }
+        if (e.key === 'F6') {
+            this.handleInitialStep(e);
+        }
+        if (e.key === 'F7') {
+            this.handlePauseResumeClick(e);
+        }
+        if (e.key === 'F8') {
+            this.handleStepBack(e);
+        }
+        if (e.key === 'F9') {
+            this.handleStepOver(e);
+        }
+        if (e.key === 'F10') {
+            this.handleStopAllClick(e);
+        }
     }
     handleGreenFlagClick (e) {
         e.preventDefault();
