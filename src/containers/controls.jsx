@@ -33,6 +33,9 @@ class Controls extends React.Component {
             'onTestDone',
             'onTestRunEnd'
         ]);
+
+        props.vm.runtime.branchDistTracingActive = false;
+        
         this.tracingState = props.tracingActive ?
             TracingState.ACTIVE : TracingState.INACTIVE;
 
