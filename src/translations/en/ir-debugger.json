@@ -298,8 +298,8 @@
             "distance-color-color": "The distance of the colors was <span style=\"color: red;\"><b>{distance}</b></span> when the block was executed. ",
             "sprite-invisible": "Sprite <i>{sprite}</i> could not be touched, because it was invisible when the block was executed!",
             "sprites-invisible": "Sprite <i>{sprite1}</i> and sprite <i>{sprite2}</i> could not touch each other, because they were invisible when the block was executed!",
-            "nonexistent-color": "The color <span style=\"color: {color}; background-color: {color}; padding: 0 3px; border-radius: 10px\">⬤</span> did not occur when the block was executed! <br> Try to select the desired color with the color picker. ",
-            "nonexistent-colors": "The colors <span style=\"color: {color1}; background-color: {color1}; padding: 0 3px; border-radius: 10px\">⬤</span> and <span style=\"color: {color2}; background-color: {color2}; padding: 0 3px; border-radius: 10px\">⬤</span> did not occur when the block was executed! <br> Try to select the desired colors with the color picker. "
+            "nonexistent-color": "The color <span style=\"color: {color}; background-color: {color}; padding: 0 3px; border-radius: 10px\">⬤</span> didn't occur when the block was executed! <br> Try to select the desired color with the color picker. ",
+            "nonexistent-colors": "The colors <span style=\"color: {color1}; background-color: {color1}; padding: 0 3px; border-radius: 10px\">⬤</span> and <span style=\"color: {color2}; background-color: {color2}; padding: 0 3px; border-radius: 10px\">⬤</span> didn't occur when the block was executed! <br> Try to select the desired colors with the color picker. "
         },
         "time": {
             "block-executed-seconds-after-green-flag": "The block was executed <span style=\"color: red;\"><b>{timeElapsed}</b></span> seconds after clicking the green flag. ",
@@ -311,7 +311,7 @@
             "executed": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block was executed",
             "executed-with-value": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block was executed with value <code class=\"scratchBlock\">({value} :: #ffffff)</code>",
             "executed-with-coordinates": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block was executed with x:<code class=\"scratchBlock\">({x} :: #ffffff)</code>and y:<code class=\"scratchBlock\">({y} :: #ffffff)</code>",
-            "unexecuted": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block was not executed",        
+            "unexecuted": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block wasn't executed",        
             "executed-wrong-behavior": "the executed <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block didn't lead to that behavior",
             "executed-wrong-input": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block wasn't executed with value <code class=\"scratchBlock\">({expectedInput} :: #ffffff)</code>",
             "executed-no-change": "the executed <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block didn't change {attribute}",
@@ -324,7 +324,7 @@
             "not-reachable": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block that would lead to the behavior is not reachable"
         },
         "possible-behavior-block": {
-            "unexecuted": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block that could lead to the behavior was not executed",
+            "unexecuted": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block that could lead to the behavior wasn't executed",
             "not-reachable": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block that could lead to the behavior is not reachable"
         },
         "multiple-behavior-blocks": {
@@ -332,12 +332,12 @@
             "all-unexecuted": "none of the {count} <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> blocks was executed",
             "one-executed-wrong-behavior": "the executed <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block didn't lead to that behavior",
             "some-executed-wrong-behavior": "the executed <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> blocks didn't lead to that behavior",
-            "one-unexecuted": "another <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block that would lead to the behavior was not executed",
+            "one-unexecuted": "another <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block that would lead to the behavior wasn't executed",
             "some-unexecuted": "{count} other <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> blocks that would lead to the behavior were not executed"
         },
         "multiple-possible-behavior-blocks": {
             "all-unexecuted": "none of the {count} <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> blocks that could lead to the behavior was executed",
-            "one-unexecuted": "another <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block that could lead to the behavior was not executed",
+            "one-unexecuted": "another <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block that could lead to the behavior wasn't executed",
             "some-unexecuted": "{count} other <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> blocks that could lead to the behavior were not executed"
         },
         "execution": {
@@ -469,7 +469,7 @@
             }
         },
         "unobserved": {
-            "all": ", but it was not observed why! ",
+            "all": ", but it wasn't observed why! ",
             "some": "Not all responsible blocks were observed! "
         }
     },
@@ -535,7 +535,7 @@
         "next-backdrop": "next backdrop",
         "show": "show",
         "hide": "hide",
-        "play": "play",
+        "play": "start sound",
         "stop-sound": "stop sounds",
         "broadcast": "broadcast",
         "clone": "create clone",
