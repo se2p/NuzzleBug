@@ -913,6 +913,13 @@ class IRAnswer extends React.Component {
 
     _addResponsibleTargetImages () {
         this.targetsDiv.current.innerHTML = '';
+
+        // Hide the responsible targets if the answer graph only contains blocks of the selected target of interest.
+        if (this.props.answer.graph.responsibleTargetIds.size === 1 && !this.props.block &&
+            this.props.answer.graph.responsibleTargetIds.values().next().value === this.target.id) {
+            return;
+        }
+
         const targets = [this.target].concat(this.otherTargets);
         this.targetColors = {};
         let colorIndex = 0;
