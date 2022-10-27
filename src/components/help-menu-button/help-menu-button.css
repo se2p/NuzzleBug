@@ -1,0 +1,19 @@
+@import "../../css/colors.css";
+
+.helpMenuButton {
+    width: 2rem;
+    height: 2rem;
+    padding: 0.35rem;
+    border-radius: 0.25rem;
+    user-select: none;
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+.helpMenuButton:hover {
+    background-color: $motion-light-transparent;
+}
+
+.helpMenuButton.enabled {
+    opacity: 1;
+}

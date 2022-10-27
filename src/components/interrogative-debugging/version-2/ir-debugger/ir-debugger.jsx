@@ -8,6 +8,7 @@ import VirtualMachine from 'scratch-vm';
 
 import scratchblocks from 'scratchblocks';
 import de from 'scratchblocks/locales/de.json';
+import HelpMenuBody from '../../../../containers/help-menu/help-menu-body.jsx';
 scratchblocks.loadLanguages({de});
 
 import {
@@ -139,7 +140,7 @@ class IRDebugger extends React.Component {
         const canvas = document.createElementNS(NS, 'g');
         canvas.setAttribute('class', 'blocklyBlockCanvas');
         canvas.appendChild(svgGroup);
-        
+
         const svgCanvas = document.createElementNS(NS, 'svg');
         svgCanvas.setAttribute('x', `${blockMargin}`);
         svgCanvas.setAttribute('y', `${blockMargin}`);
@@ -208,26 +209,26 @@ class IRDebugger extends React.Component {
         sprite.setAttribute('fill', '#FFAB19');
         sprite.setAttribute('transform', 'translate(-1,0)');
         sprite.setAttribute('d',
-            `M 12.2753 11.6677 C 12.2753 14.7585 9.7593 16.05 6.6685 16.05 C 3.5789 16.05 1.0758 14.7585 1.0758 11.6677 
-            C 1.0758 10.9039 1.2039 10.2575 1.4519 9.7169 L 1.3578 5.2512 C 1.3461 4.7576 1.8984 4.4756 2.298 4.7693 
-            L 4.6836 6.5674 C 5.2359 6.2735 5.9175 6.1443 6.6685 6.1443 C 7.4218 6.1443 8.1152 6.2735 8.6675 6.5674 
-            L 11.0532 4.7693 C 11.4409 4.4756 11.9933 4.7576 11.9933 5.2512 L 11.8993 9.7169 C 12.1461 10.2575 12.2753 
-            10.9039 12.2753 11.6677 Z M 9.0309 13.5946 C 9.1966 13.4195 9.1719 13.1364 8.9851 12.9718 C 8.8088 12.819 
-            8.5256 12.8425 8.3622 13.0318 C 8.2317 13.1834 8.0437 13.2656 7.844 13.2656 C 7.4679 13.2656 7.1506 12.96 
-            7.1506 12.5722 L 7.1506 11.9259 C 7.8322 11.7379 8.3493 11.1632 8.3493 10.786 C 8.3493 10.3159 7.6089 
-            10.3159 6.7157 10.3159 C 5.812 10.3159 5.0835 10.3159 5.0835 10.786 C 5.0835 11.1632 5.577 11.7379 6.2692 
-            11.9142 L 6.2692 12.5722 C 6.2692 12.96 5.9649 13.2656 5.5876 13.2656 C 5.3772 13.2656 5.188 13.1834 5.0587 
-            13.0318 C 4.906 12.8425 4.6239 12.819 4.4359 12.9718 C 4.2491 13.1364 4.2361 13.4195 4.39 13.5946 C 4.6839 
-            13.9473 5.1176 14.1471 5.5876 14.1471 C 6.0224 14.1471 6.422 13.9602 6.7157 13.6664 C 6.999 13.9602 7.3974 
+            `M 12.2753 11.6677 C 12.2753 14.7585 9.7593 16.05 6.6685 16.05 C 3.5789 16.05 1.0758 14.7585 1.0758 11.6677
+            C 1.0758 10.9039 1.2039 10.2575 1.4519 9.7169 L 1.3578 5.2512 C 1.3461 4.7576 1.8984 4.4756 2.298 4.7693
+            L 4.6836 6.5674 C 5.2359 6.2735 5.9175 6.1443 6.6685 6.1443 C 7.4218 6.1443 8.1152 6.2735 8.6675 6.5674
+            L 11.0532 4.7693 C 11.4409 4.4756 11.9933 4.7576 11.9933 5.2512 L 11.8993 9.7169 C 12.1461 10.2575 12.2753
+            10.9039 12.2753 11.6677 Z M 9.0309 13.5946 C 9.1966 13.4195 9.1719 13.1364 8.9851 12.9718 C 8.8088 12.819
+            8.5256 12.8425 8.3622 13.0318 C 8.2317 13.1834 8.0437 13.2656 7.844 13.2656 C 7.4679 13.2656 7.1506 12.96
+            7.1506 12.5722 L 7.1506 11.9259 C 7.8322 11.7379 8.3493 11.1632 8.3493 10.786 C 8.3493 10.3159 7.6089
+            10.3159 6.7157 10.3159 C 5.812 10.3159 5.0835 10.3159 5.0835 10.786 C 5.0835 11.1632 5.577 11.7379 6.2692
+            11.9142 L 6.2692 12.5722 C 6.2692 12.96 5.9649 13.2656 5.5876 13.2656 C 5.3772 13.2656 5.188 13.1834 5.0587
+            13.0318 C 4.906 12.8425 4.6239 12.819 4.4359 12.9718 C 4.2491 13.1364 4.2361 13.4195 4.39 13.5946 C 4.6839
+            13.9473 5.1176 14.1471 5.5876 14.1471 C 6.0224 14.1471 6.422 13.9602 6.7157 13.6664 C 6.999 13.9602 7.3974
             14.1471 7.844 14.1471 C 8.3035 14.1471 8.7371 13.9473 9.0309 13.5946 Z`);
         svg.appendChild(sprite);
         const plusSign = document.createElement('path');
         plusSign.setAttribute('fill', '#FFAB19');
         plusSign.setAttribute('transform', 'translate(-2,-3)');
         plusSign.setAttribute('d',
-            `M 18.8 9.2 L 20.9 9.2 C 20.9 9.2 21.95 9.2 21.95 10.25 C 21.95 11.3 20.9 11.3 20.9 11.3 L 18.8 11.3 
-            L 18.8 13.4 C 18.8 13.4 18.8 14.45 17.75 14.45 C 16.7 14.45 16.7 13.4 16.7 13.4 L 16.7 11.3 L 14.6 11.3 
-            C 14.6 11.3 13.55 11.3 13.55 10.25 C 13.55 9.2 14.6 9.2 14.6 9.2 L 16.7 9.2 L 16.7 7.1 C 16.7 7.1 16.7 
+            `M 18.8 9.2 L 20.9 9.2 C 20.9 9.2 21.95 9.2 21.95 10.25 C 21.95 11.3 20.9 11.3 20.9 11.3 L 18.8 11.3
+            L 18.8 13.4 C 18.8 13.4 18.8 14.45 17.75 14.45 C 16.7 14.45 16.7 13.4 16.7 13.4 L 16.7 11.3 L 14.6 11.3
+            C 14.6 11.3 13.55 11.3 13.55 10.25 C 13.55 9.2 14.6 9.2 14.6 9.2 L 16.7 9.2 L 16.7 7.1 C 16.7 7.1 16.7
             6.05 17.75 6.05 C 18.8 6.05 18.8 7.1 18.8 7.1 L 18.8 9.2 Z`);
         svg.appendChild(plusSign);
         return svg;
@@ -291,6 +292,146 @@ class IRDebugger extends React.Component {
         }
     }
 
+    renderHelpMenuBody (categories) {
+        const {
+            onAbstractCategorySelected
+        } = this.props;
+
+        return (
+            <div>
+                <HelpMenuBody
+                    abstractCategories={categories}
+                    onClick={onAbstractCategorySelected}
+                />
+            </div>
+        )
+    }
+
+    renderAnswerArea () {
+        const {
+            vm,
+            target,
+            block,
+            selectedQuestion,
+            answer,
+            answerLoading,
+            onGraphNodeClick,
+            crashed,
+        } = this.props;
+
+        return (
+            <div>
+                <div className={styles.answerArea}>
+                    {selectedQuestion ? (
+                        <div>
+                            <div className={styles.selectedQuestion}>
+                                <IRSelectedQuestion
+                                    selectedQuestion={selectedQuestion}
+                                />
+                            </div>
+                            <div className={styles.answer}>
+                                {answer ? (
+                                    <IRAnswer
+                                        answer={answer}
+                                        selectedQuestion={selectedQuestion}
+                                        vm={vm}
+                                        target={target}
+                                        block={block}
+                                        createSvgBlock={this.createSvgBlock}
+                                        onGraphNodeClick={onGraphNodeClick}
+                                        setCursorOfBlock={this.setCursorOfBlock}
+                                    />
+                                ) : (answerLoading ? (
+                                    <div className={styles.loaderDiv}>
+                                        <div
+                                            className={styles.loader}
+                                            style={{
+                                                borderTop: `8px solid ${selectedQuestion.color}`
+                                            }}
+                                        />
+                                    </div>
+                                ) : (crashed ? (
+                                    <div className={styles.answerCrashMessage}>
+                                        <FormattedMessage
+                                            defaultMessage="Oops! Something went wrong."
+                                            description="Crash Message title"
+                                            id="gui.crashMessage.label"
+                                        />
+                                    </div>
+                                ) : null))}
+                            </div>
+                        </div>
+                    ) : null}
+                </div>
+            </div>
+        )
+    }
+
+    renderDebuggerBody () {
+        const {
+            questionHierarchy,
+            selectedQuestion,
+            selectedCategory,
+            selectedAbstractCategory,
+            onQuestionClick,
+            helpMenuChooseQuestionType,
+            helpMenuFinished,
+            crashed,
+        } = this.props;
+
+        let formCategories = null
+        if(selectedCategory){
+            let tempNewCategory = null;
+            for(const category of questionHierarchy){
+                if(category.type === selectedCategory.type){
+                    tempNewCategory = new QuestionCategory({
+                        message: category.message,
+                        type: category.type,
+                        color: category.color,
+                        questionCategories: []
+                    });
+                    if(category.questionCategories) {
+                        for (const formCategoryQH of category.questionCategories) {
+                            for (const formCategoryAC of selectedAbstractCategory.questionCategories){
+                                if(formCategoryAC.form === formCategoryQH.form){
+                                    tempNewCategory.questionCategories.push(formCategoryQH);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            formCategories = [tempNewCategory];
+        }
+
+        return (
+            <div>
+                {questionHierarchy ? (
+                    <div className={styles.questionHierarchy}>
+                        <IRQuestionHierarchy
+                            selectedCategory={selectedCategory}
+                            questionHierarchy={questionHierarchy}
+                            selectedQuestion={selectedQuestion}
+                            onQuestionClick={onQuestionClick}
+                        />
+                    </div>
+                ) : (crashed ? (
+                    <div className={styles.debuggerCrashMessage}>
+                        <FormattedMessage
+                            defaultMessage="Oops! Something went wrong."
+                            description="Crash Message title"
+                            id="gui.crashMessage.label"
+                        />
+                    </div>
+                ) : null)}
+                {/*Todo: Case if no form question is available*/
+                helpMenuChooseQuestionType ? this.renderHelpMenuBody(formCategories) :
+                    (helpMenuFinished ? this.renderHelpMenuBody(null) : this.renderAnswerArea())
+                }
+            </div>
+        )
+    }
+
     render () {
         const {
             vm,
@@ -300,7 +441,14 @@ class IRDebugger extends React.Component {
             blockExecutionOptions,
             block,
             questionHierarchy,
+            abstractCategories,
+            helpMenuInjected,
+            helpMenuChooseCategories,
+            helpMenuChooseQuestionType,
+            helpMenuFinished,
             selectedQuestion,
+            selectedCategory,
+            selectedAbstractCategory,
             answer,
             answerLoading,
             expanded,
@@ -309,6 +457,7 @@ class IRDebugger extends React.Component {
             onBlockExecutionChange,
             onQuestionClick,
             onGraphNodeClick,
+            onAbstractCategorySelected,
             onClose,
             onBack,
             onShrinkExpand,
@@ -318,7 +467,7 @@ class IRDebugger extends React.Component {
             crashed,
             ...posProps
         } = this.props;
-    
+
         let {x, y} = posProps;
         const cardHorizontalDragOffset = 800; // ~80% of card width
         const cardVerticalDragOffset = expanded ? 432 : 0; // ~80% of card height
@@ -327,7 +476,7 @@ class IRDebugger extends React.Component {
             x = 280 + cardHorizontalDragOffset;
             y = 36;
         }
-    
+
         return (
             <div>
                 {expanded ? (
@@ -383,65 +532,7 @@ class IRDebugger extends React.Component {
                                     className={expanded ? styles.body : cardStyles.hidden}
                                     ref={this.body}
                                 >
-                                    {questionHierarchy ? (
-                                        <div className={styles.questionHierarchy}>
-                                            <IRQuestionHierarchy
-                                                questionHierarchy={questionHierarchy}
-                                                selectedQuestion={selectedQuestion}
-                                                onQuestionClick={onQuestionClick}
-                                            />
-                                        </div>
-                                    ) : (crashed ? (
-                                        <div className={styles.debuggerCrashMessage}>
-                                            <FormattedMessage
-                                                defaultMessage="Oops! Something went wrong."
-                                                description="Crash Message title"
-                                                id="gui.crashMessage.label"
-                                            />
-                                        </div>
-                                    ) : null)}
-                                    <div className={styles.answerArea}>
-                                        {selectedQuestion ? (
-                                            <div>
-                                                <div className={styles.selectedQuestion}>
-                                                    <IRSelectedQuestion
-                                                        selectedQuestion={selectedQuestion}
-                                                    />
-                                                </div>
-                                                <div className={styles.answer}>
-                                                    {answer ? (
-                                                        <IRAnswer
-                                                            answer={answer}
-                                                            selectedQuestion={selectedQuestion}
-                                                            vm={vm}
-                                                            target={target}
-                                                            block={block}
-                                                            createSvgBlock={this.createSvgBlock}
-                                                            onGraphNodeClick={onGraphNodeClick}
-                                                            setCursorOfBlock={this.setCursorOfBlock}
-                                                        />
-                                                    ) : (answerLoading ? (
-                                                        <div className={styles.loaderDiv}>
-                                                            <div
-                                                                className={styles.loader}
-                                                                style={{
-                                                                    borderTop: `8px solid ${selectedQuestion.color}`
-                                                                }}
-                                                            />
-                                                        </div>
-                                                    ) : (crashed ? (
-                                                        <div className={styles.answerCrashMessage}>
-                                                            <FormattedMessage
-                                                                defaultMessage="Oops! Something went wrong."
-                                                                description="Crash Message title"
-                                                                id="gui.crashMessage.label"
-                                                            />
-                                                        </div>
-                                                    ) : null))}
-                                                </div>
-                                            </div>
-                                        ) : null}
-                                    </div>
+                                    {helpMenuChooseCategories? this.renderHelpMenuBody(abstractCategories) : this.renderDebuggerBody()}
                                 </div>
                             </div>
                         </div>
@@ -484,7 +575,14 @@ IRDebugger.propTypes = {
         opcode: PropTypes.string
     }),
     questionHierarchy: PropTypes.arrayOf(PropTypes.instanceOf(QuestionCategory)),
+    abstractCategories: PropTypes.arrayOf(PropTypes.instanceOf(QuestionCategory)),
     selectedQuestion: PropTypes.instanceOf(Question),
+    selectedCategory: PropTypes.instanceOf(QuestionCategory),
+    selectedAbstractCategory: PropTypes.instanceOf(QuestionCategory),
+    helpMenuInjected: PropTypes.bool.isRequired,
+    helpMenuChooseCategories: PropTypes.bool.isRequired,
+    helpMenuChooseQuestionType:PropTypes.bool.isRequired,
+    helpMenuFinished: PropTypes.bool.isRequired,
     answerLoading: PropTypes.bool.isRequired,
     answer: PropTypes.instanceOf(Answer),
     expanded: PropTypes.bool.isRequired,
@@ -498,6 +596,7 @@ IRDebugger.propTypes = {
     onClose: PropTypes.func.isRequired,
     onBack: PropTypes.func,
     onShrinkExpand: PropTypes.func.isRequired,
+    onAbstractCategorySelected: PropTypes.func.isRequired,
     onStartDrag: PropTypes.func,
     onDrag: PropTypes.func,
     onEndDrag: PropTypes.func,

@@ -38,6 +38,7 @@ import {
     getIsShowingProject,
     manualUpdateProject,
     requestNewProject,
+    requestRestartProject,
     remixProject,
     saveProjectAsCopy
 } from '../../reducers/project-state';
@@ -165,6 +166,7 @@ class MenuBar extends React.Component {
             'handleClickNew',
             'handleClickRemix',
             'handleClickSave',
+            'handleClickRestart',
             'handleClickSaveAsCopy',
             'handleClickSeeCommunity',
             'handleClickShare',
@@ -197,6 +199,23 @@ class MenuBar extends React.Component {
         }
         this.props.onRequestCloseFile();
     }
+    handleClickRestart () {
+        // if the project is dirty, and user owns the project, we will autosave.
+        // but if they are not logged in and can't save, user should consider
+        // downloading or logging in first.
+        // Note that if user is logged in and editing someone else's project,
+        // they'll lose their work.
+
+        const readyToReplaceProject = this.props.confirmReadyToReplaceProject(
+            this.props.intl.formatMessage(sharedMessages.replaceProjectWarning)
+        );
+        this.props.onRequestCloseFile();
+        if (readyToReplaceProject) {
+            this.props.onClickRestart(this.props.canSave && this.props.canCreateNew);
+        }
+        this.props.onRequestCloseFile();
+    }
+
     handleClickRemix () {
         this.props.onClickRemix();
         this.props.onRequestCloseFile();
@@ -359,6 +378,13 @@ class MenuBar extends React.Component {
                 id="gui.menuBar.saveNow"
             />
         );
+        const restartProjectMessage = (
+            <FormattedMessage
+                defaultMessage="Restart Project"
+                description="Menu bar item for restarting the project"
+                id="gui.menuBar.restartProject"
+            />
+        );
         const createCopyMessage = (
             <FormattedMessage
                 defaultMessage="Save as a copy"
@@ -454,6 +480,12 @@ class MenuBar extends React.Component {
                                             onClick={this.handleClickNew}
                                         >
                                             {newProjectMessage}
+                                        </MenuItem>
+                                        <MenuItem
+                                            isRtl={this.props.isRtl}
+                                            onClick={this.handleClickRestart}
+                                        >
+                                                {restartProjectMessage}
                                         </MenuItem>
                                     </MenuSection>
                                     {(this.props.canSave || this.props.canCreateCopy || this.props.canRemix) && (
@@ -820,6 +852,7 @@ MenuBar.propTypes = {
     onClickLogin: PropTypes.func,
     onClickLogo: PropTypes.func,
     onClickNew: PropTypes.func,
+    onClickRestart: PropTypes.func,
     onClickRemix: PropTypes.func,
     onClickSave: PropTypes.func,
     onClickSaveAsCopy: PropTypes.func,
@@ -897,6 +930,7 @@ const mapDispatchToProps = dispatch => ({
     onRequestOpenAbout: () => dispatch(openAboutMenu()),
     onRequestCloseAbout: () => dispatch(closeAboutMenu()),
     onClickNew: needSave => dispatch(requestNewProject(needSave)),
+    onClickRestart: needSave => dispatch(requestRestartProject(needSave)),
     onClickRemix: () => dispatch(remixProject()),
     onClickSave: () => dispatch(manualUpdateProject()),
     onClickSaveAsCopy: () => dispatch(saveProjectAsCopy()),

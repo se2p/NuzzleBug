@@ -14,6 +14,7 @@ import {setTestRunningState} from '../reducers/vm-status.js';
 import Test from 'whisker-main/whisker-main/dist/src/test-runner/test';
 import TestRunner from 'whisker-main/whisker-main/dist/src/test-runner/test-runner';
 import {ModelTester} from 'whisker-main/whisker-main/dist/src/whisker/model/ModelTester';
+import {actionExecuted, openHelpMenu, repositionHelpMenuWindow} from '../reducers/help-menu';
 
 class Controls extends React.Component {
     constructor (props) {
@@ -23,6 +24,7 @@ class Controls extends React.Component {
             'handleGreenFlagClick',
             'handleRunTestClick',
             'handlePauseResumeClick',
+            'handleHelpMenuButtonClick',
             'handleStepBack',
             'handleStepOver',
             'handleInitialStep',
@@ -35,7 +37,7 @@ class Controls extends React.Component {
         ]);
 
         props.vm.runtime.branchDistTracingActive = false;
-        
+
         this.tracingState = props.tracingActive ?
             TracingState.ACTIVE : TracingState.INACTIVE;
 
@@ -94,6 +96,11 @@ class Controls extends React.Component {
             }
             this.props.vm.greenFlag();
         }
+
+        if (this.props.helpMenuOpen && !this.props.actionExecuted){
+            this.props.onActionExecuted();
+            this.forceUpdate();
+        }
         if (logging.isActive()) {
             logging.logClickEvent('ICON', new Date(), 'GREENFLAG', null);
         }
@@ -103,7 +110,7 @@ class Controls extends React.Component {
 
         if (this.props.whiskerTest) {
             this.props.onTestStart();
-            
+
             if (this.props.projectPaused) {
                 // Resets the state of the VM back to normal.
                 // Otherwise we could not start execution again.
@@ -161,6 +168,18 @@ class Controls extends React.Component {
             this.props.vm.stepBack();
             if (logging.isActive()) {
                 logging.logClickEvent('BUTTON', new Date(), 'STEP_BACK', null);
+            }
+        }
+    }
+    handleHelpMenuButtonClick (e) {
+        e.preventDefault();
+        if ((this.props.projectRunning && this.props.projectPaused) || !this.props.projectRunning) {
+            const x = window.innerWidth - 480 - 200
+            const y = window.innerHeight / 4;
+            this.props.repositionHelpMenuWindow(x,y);
+            this.props.onHelpMenuButtonClick();
+            if (logging.isActive()) {
+                logging.logClickEvent('BUTTON', new Date(), 'HELP_MENU_BUTTON', null);
             }
         }
     }
@@ -299,6 +318,7 @@ class Controls extends React.Component {
                 onGreenFlagClick={this.handleGreenFlagClick}
                 onRunTestClick={this.handleRunTestClick}
                 onStepBackClick={this.handleStepBack}
+                onHelpMenuButtonClick={this.handleHelpMenuButtonClick}
                 onStepOverClick={this.handleStepOver}
                 onInitialStepClick={this.handleInitialStep}
                 onInitialTestStepClick={this.handleInitialTestStep}
@@ -321,10 +341,15 @@ Controls.propTypes = {
     irDisabled: PropTypes.bool.isRequired,
     projectRunning: PropTypes.bool.isRequired,
     turbo: PropTypes.bool.isRequired,
+    onHelpMenuButtonClick: PropTypes.func.isRequired,
+    onActionExecuted: PropTypes.func.isRequired,
+    actionExecuted: PropTypes.bool.isRequired,
+    helpMenuOpen: PropTypes.bool.isRequired,
     interrogationSupported: PropTypes.bool.isRequired,
     interrogationEnabled: PropTypes.bool.isRequired,
     tracingActive: PropTypes.bool.isRequired,
     projectChanged: PropTypes.bool.isRequired,
+    repositionHelpMenuWindow: PropTypes.func.isRequired,
     vm: PropTypes.instanceOf(VM),
     whiskerTest: PropTypes.instanceOf(Test)
 };
@@ -337,6 +362,8 @@ const mapStateToProps = state => ({
     turbo: state.scratchGui.vmStatus.turbo,
     interrogationSupported: state.scratchGui.irDebugger.supported,
     interrogationEnabled: state.scratchGui.irDebugger.enabled,
+    helpMenuOpen: state.scratchGui.helpMenu.visible,
+    actionExecuted: state.scratchGui.helpMenu.actionExecuted,
     tracingActive: state.scratchGui.vmStatus.tracingActive,
     projectChanged: state.scratchGui.projectChanged,
     whiskerTest: state.scratchGui.vmStatus.whiskerTest
@@ -345,7 +372,10 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     onTestStart: () => dispatch(setTestRunningState(true)),
     onTestEnd: () => dispatch(setTestRunningState(false)),
-    handleIRQuestionsClick: () => dispatch(viewCards())
+    onHelpMenuButtonClick: () => dispatch(openHelpMenu()),
+    handleIRQuestionsClick: () => dispatch(viewCards()),
+    onActionExecuted: () => dispatch(actionExecuted()),
+    repositionHelpMenuWindow: (x, y) => dispatch(repositionHelpMenuWindow(x, y))
 });
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Controls));

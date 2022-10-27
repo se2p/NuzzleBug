@@ -76,7 +76,7 @@ class IRQuestionCategory extends React.Component {
             onQuestionClick,
             selectedQuestion
         } = this.props;
-        
+
         return (
             <ul className={styles.questionList}>
                 {questions.map(question => (
@@ -94,13 +94,18 @@ class IRQuestionCategory extends React.Component {
             </ul>
         );
     }
-    
+
     render () {
         const {
             intl,
             questionCategory,
+            selectedCategory,
             renderCategories
         } = this.props;
+
+        if(selectedCategory && selectedCategory.id === questionCategory.id){
+            this.state.expanded = true;
+        }
 
         return (
             <div>

@@ -1,0 +1,80 @@
+@import "../../../css/colors.css";
+
+.speech-bubble-box {
+  position: fixed;
+  bottom: 100px;
+  right: 180px;
+  width: 350px;
+  min-height: 95px;
+  max-height: 130px;
+  margin-right: 25px;
+  padding-right: 3px;
+  border-radius: 10px;
+  color: #575E75;
+  background: $ui-secondary;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.speech-bubble-triangle:before {
+  content: "";
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  border-left: 16px solid $ui-secondary;
+  border-right: 16px solid transparent;
+  border-top: 8px solid $ui-secondary;
+  border-bottom: 8px solid transparent;
+  right: -30px;
+  top: 54px;
+}
+
+.help-messages {
+  padding: 10px;
+  max-height: 130px;
+  width: 100%;
+
+}
+
+.owl-button{
+    background-color: white;
+    border: 2px solid #a07a75;
+    color: #a07a75;
+    padding: 5px 10px;
+    margin: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    border-radius: 8px;
+    transition-duration: 0.4s;
+}
+
+
+.owl-button:hover {
+    background-color: #a07a75;
+    color: white;
+    cursor: pointer;
+}
+
+.owl {
+  width: 77px;
+  position: fixed;
+  bottom: 80px;
+  right: 120px;
+}
+
+
+.help-messages svg {
+  margin: 2px 4px 0 4px;
+}
+
+.help-messages span {
+  display: contents;
+}
+
+.help-messages svg rect[fill="#ffffff"] ~ text {
+  fill: #575E75 !important;
+}

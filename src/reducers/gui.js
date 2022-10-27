@@ -28,6 +28,7 @@ import toolboxReducer, {toolboxInitialState} from './toolbox';
 import vmReducer, {vmInitialState} from './vm';
 import vmStatusReducer, {vmStatusInitialState} from './vm-status';
 import workspaceMetricsReducer, {workspaceMetricsInitialState} from './workspace-metrics';
+import helpMenuReducer, {helpMenuInitialState} from './help-menu';
 import throttle from 'redux-throttle';
 
 import decks from '../lib/libraries/decks/index.jsx';
@@ -41,6 +42,7 @@ const guiInitialState = {
     cards: cardsInitialState,
     ircards: irCardsInitialState,
     irDebugger: irDebuggerInitialState,
+    helpMenu: helpMenuInitialState,
     colorPicker: colorPickerInitialState,
     connectionModal: connectionModalInitialState,
     customProcedures: customProceduresInitialState,
@@ -142,6 +144,7 @@ const guiReducer = combineReducers({
     cards: cardsReducer,
     ircards: irCardsReducer,
     irDebugger: irDebuggerReducer,
+    helpMenu: helpMenuReducer,
     colorPicker: colorPickerReducer,
     connectionModal: connectionModalReducer,
     customProcedures: customProceduresReducer,

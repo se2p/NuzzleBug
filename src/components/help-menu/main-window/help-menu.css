@@ -1,0 +1,86 @@
+@import "../../../css/colors.css";
+@import "../../../css/z-index.css";
+
+.expanded-overlay {
+    background: $ui-black-transparent;
+    position: fixed;
+    pointer-events: all;
+    z-index: $z-index-help-menu;
+}
+
+.overlay {
+    position: fixed;
+    pointer-events: none;
+    z-index: $z-index-help-menu;
+}
+
+.card {
+    border-width: 0px;
+    min-width: 350px;
+    max-width: 350px;
+}
+
+.owl {
+    height: 0px;
+    width: 100%;
+    background: transparent;
+    cursor: default;
+    font-size: 13px;
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    color: #575E75;
+    word-wrap: break-word;
+    border-width: 0px;
+    min-width: 350px;
+    max-width: 350px;
+}
+
+.header {
+    min-width: 350px;
+}
+
+.body {
+    height: 0;
+    width: 100%;
+    background: white;
+    cursor: default;
+    font-size: 13px;
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    color: #575E75;
+    word-wrap: break-word;
+}
+
+.loader-div {
+    position: fixed;
+    right: calc(33.5% - 30px);
+    bottom: calc(250px - 30px);
+}
+
+.loader {
+    border: 8px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 8px solid gray;
+    width: 60px;
+    height: 60px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.help-menu-crash-message {
+    text-align: center;
+    color: red;
+    height: 300px;
+    width: 300px;
+    padding-top: 230px;
+    font-size: 15px;
+}
+

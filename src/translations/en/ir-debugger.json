@@ -1,21 +1,33 @@
 {
     "controls": {
-        "pause": "Pause", 
+        "pause": "Pause",
         "resume": "Resume",
-        "step-back": "Step back", 
-        "step-over": "Step over", 
+        "step-back": "Step back",
+        "step-over": "Step over",
         "initial-step": "First step",
         "run-test": "Run test \"{name}\"",
         "initial-test-step": "First test step",
         "ir-questions": "Show Questions",
         "activate-tracing": "Activate recording",
         "deactivate-tracing": "Deactivate recording",
-        "open-debugger": "open questions"
+        "open-debugger": "Open Questions"
     },
     "tracing": {
         "limit-reached": "The execution was stopped, because there is no more memory space available!",
         "deactivated": "The recording was deactivated, because there is no more memory space available!",
         "impossible": "Recording is not possible, because there is not enough memory space available!"
+    },
+    "abstract-category": {
+        "type":{
+            "movement": "Is it some kind of movement?",
+            "turn": "Is it some kind of turn?",
+            "say": "Is it something said or thought?",
+            "size": "Is it a size change?",
+            "visibility": "Is there a problem with the visibility of the sprite?",
+            "costume": "Is it a costume or backdrop change?",
+            "sound": "Is it some kind of sound?",
+            "placeholder": "Is it something else?"
+        }
     },
     "header": {
         "title-sprite": "Interrogative Debugger for sprite <i>{sprite}</i>",
@@ -24,11 +36,11 @@
         "title": "Interrogative Debugger",
         "of": "of",
         "expand": "Expand",
-        "close": "Close", 
+        "close": "Close",
         "shrink": "Shrink",
         "refresh": "Refresh",
         "back": "Back"
-    }, 
+    },
     "target": {
         "stage": "Stage",
         "original": "Original",
@@ -36,15 +48,15 @@
     },
     "category": {
         "expand": "Expand category",
-        "close": "Close category", 
+        "close": "Close category",
         "type": {
             "motion": "Motion",
             "look": "Looks",
             "sound": "Sound",
             "events": "Events",
             "control": "Control",
-            "sensing": "Sensing", 
-            "operators": "Operators", 
+            "sensing": "Sensing",
+            "operators": "Operators",
             "variables": "Variables",
             "lists": "Lists",
             "execution": "Execution"
@@ -88,9 +100,9 @@
             "why-did-not-turn-left": "Why didn't sprite <i>{sprite}</i> <b>turn to the left</b>?"
         },
         "look": {
-            "why-did-say": "Why did sprite <i>{sprite}</i> say <b><i>\"{message}\"</i></b> ?", 
+            "why-did-say": "Why did sprite <i>{sprite}</i> say <b><i>\"{message}\"</i></b> ?",
             "why-did-not-say": "Why didn't sprite <i>{sprite}</i> say <b><i>\"{message}\"</i></b> ?",
-            "why-did-think": "Why did sprite <i>{sprite}</i> think <b><i>\"{message}\"</i></b> ?", 
+            "why-did-think": "Why did sprite <i>{sprite}</i> think <b><i>\"{message}\"</i></b> ?",
             "why-did-not-think": "Why didn't sprite <i>{sprite}</i> think <b><i>\"{message}\"</i></b> ?",
             "why-did-size-change": "Why did the <b>size</b> of sprite <i>{sprite}</i> change?",
             "why-did-not-size-change": "Why didn't the <b>size</b> of sprite <i>{sprite}</i> change?",
@@ -144,8 +156,8 @@
             "why-did-not-stage-clone-sprite": "Why didn't the stage create a <b>clone</b> of sprite <b><i>{clone}</i></b>?"
         },
         "sensing": {
-            "why-did-sprite-ask": "Why did sprite <i>{sprite}</i> ask <b><i>\"{message}\"</i></b> ?", 
-            "why-did-stage-ask": "Why did the stage ask <b><i>\"{message}\"</i></b> ?", 
+            "why-did-sprite-ask": "Why did sprite <i>{sprite}</i> ask <b><i>\"{message}\"</i></b> ?",
+            "why-did-stage-ask": "Why did the stage ask <b><i>\"{message}\"</i></b> ?",
             "why-did-not-sprite-ask": "Why didn't sprite <i>{sprite}</i> ask <b><i>\"{message}\"</i></b> ?",
             "why-did-not-stage-ask": "Why didn't the stage ask <b><i>\"{message}\"</i></b> ?"
         },
@@ -202,9 +214,9 @@
             "not-turn-left": "The sprite didn't turn to the left"
         },
         "look": {
-            "say": "The sprite said <i>\"{message}\"</i>", 
+            "say": "The sprite said <i>\"{message}\"</i>",
             "not-say": "The sprite didn't say <i>\"{message}\"</i>",
-            "think": "The sprite thought <i>\"{message}\"</i>", 
+            "think": "The sprite thought <i>\"{message}\"</i>",
             "not-think": "The sprite didn't think <i>\"{message}\"</i>",
             "size-change": "The size changed",
             "not-size-change": "The size didn't change",
@@ -258,8 +270,8 @@
             "not-stage-clone-sprite": "The stage didn't create a clone of sprite <i>{clone}</i>"
         },
         "sensing": {
-            "sprite-ask": "The sprite asked <i>\"{message}\"</i>", 
-            "stage-ask": "The stage asked <i>\"{message}\"</i>", 
+            "sprite-ask": "The sprite asked <i>\"{message}\"</i>",
+            "stage-ask": "The stage asked <i>\"{message}\"</i>",
             "not-sprite-ask": "The sprite didn't ask <i>\"{message}\"</i>",
             "not-stage-ask": "The stage didn't ask <i>\"{message}\"</i>"
         },
@@ -311,14 +323,14 @@
             "executed": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block was executed",
             "executed-with-value": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block was executed with value <code class=\"scratchBlock\">({value} :: #ffffff)</code>",
             "executed-with-coordinates": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block was executed with x:<code class=\"scratchBlock\">({x} :: #ffffff)</code>and y:<code class=\"scratchBlock\">({y} :: #ffffff)</code>",
-            "unexecuted": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block wasn't executed",        
+            "unexecuted": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block wasn't executed",
             "executed-wrong-behavior": "the executed <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block didn't lead to that behavior",
             "executed-wrong-input": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block wasn't executed with value <code class=\"scratchBlock\">({expectedInput} :: #ffffff)</code>",
             "executed-no-change": "the executed <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block didn't change {attribute}",
             "executed-not-turn-positive": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block wasn't executed with a positive value",
             "executed-not-turn-negative": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block wasn't executed with a negative value",
             "executed-left-to-right-direction-change": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block changed the direction from a negative to a positive value",
-            "executed-right-to-left-direction-change": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block changed the direction from a positive to a negative value",    
+            "executed-right-to-left-direction-change": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block changed the direction from a positive to a negative value",
             "executed-no-left-to-right-direction-change": "the executed <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block didn't change the direction from a negative to a positive value",
             "executed-no-right-to-left-direction-change": "the executed <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block didn't change the direction from a positive to a negative value",
             "not-reachable": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block that would lead to the behavior is not reachable"
@@ -558,7 +570,7 @@
         "and": "<{condition1} and {condition2}>",
         "or": "<{condition1} or {condition2}>",
         "not": "<not {condition}>",
-        "compare": "<{operand1} {operator} {operand2}>",  
+        "compare": "<{operand1} {operator} {operand2}>",
         "contains": "<{operand1} contains {operand2}?>"
     },
     "visibility": {

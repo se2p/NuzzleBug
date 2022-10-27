@@ -9,7 +9,7 @@ import hierarchyStyles from './ir-question-hierarchy.css';
 import IRQuestionCategory from '../ir-question-category/ir-question-category.jsx';
 
 class IRQuestionHierarchy extends React.Component {
-    
+
     constructor (props) {
         super(props);
         bindAll(this, [
@@ -21,7 +21,8 @@ class IRQuestionHierarchy extends React.Component {
         const {
             intl,
             onQuestionClick,
-            selectedQuestion
+            selectedQuestion,
+            selectedCategory
         } = this.props;
 
         return (
@@ -39,6 +40,7 @@ class IRQuestionHierarchy extends React.Component {
                             intl={intl}
                             questionCategory={category}
                             renderCategories={this.renderCategories}
+                            selectedCategory={selectedCategory}
                             selectedQuestion={selectedQuestion}
                             onQuestionClick={onQuestionClick}
                         />

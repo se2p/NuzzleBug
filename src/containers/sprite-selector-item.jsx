@@ -12,6 +12,7 @@ import DragRecognizer from '../lib/drag-recognizer';
 import {getEventXY} from '../lib/touch-utils';
 
 import SpriteSelectorItemComponent from '../components/sprite-selector-item/sprite-selector-item.jsx';
+import {repositionHelpMenuWindow, selectSprite, startChooseCategory} from '../reducers/help-menu';
 
 class SpriteSelectorItem extends React.PureComponent {
     constructor (props) {
@@ -89,6 +90,12 @@ class SpriteSelectorItem extends React.PureComponent {
         e.preventDefault();
         if (!this.noClick) {
             this.props.onClick(this.props.id);
+        }
+        if (this.props.spriteSelectionEnabled){
+            this.props.onSpriteSelected(this.props.id, this.props.costumeURL);
+            this.props.onChooseCategory();
+            this.props.onInterrogativeButtonClick(this.props.id, this.getCostumeData());
+            this.forceUpdate();
         }
     }
     handleDelete (e) {
@@ -172,7 +179,11 @@ SpriteSelectorItem.propTypes = {
     onInterrogativeButtonClick: PropTypes.func,
     receivedBlocks: PropTypes.bool.isRequired,
     selected: PropTypes.bool,
-    vm: PropTypes.instanceOf(VM).isRequired
+    spriteSelectionEnabled: PropTypes.bool.isRequired,
+    onSpriteSelected: PropTypes.func.isRequired,
+    onChooseCategory: PropTypes.func.isRequired,
+    vm: PropTypes.instanceOf(VM).isRequired,
+    repositionHelpMenuWindow: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, {id}) => ({
@@ -180,13 +191,21 @@ const mapStateToProps = (state, {id}) => ({
     receivedBlocks: state.scratchGui.hoveredTarget.receivedBlocks &&
             state.scratchGui.hoveredTarget.sprite === id,
     vm: state.scratchGui.vm,
+    spriteSelectionEnabled: state.scratchGui.helpMenu.spriteSelection,
     interrogationEnabled: state.scratchGui.irDebugger.enabled && state.scratchGui.irDebugger.supported
 });
 const mapDispatchToProps = dispatch => ({
     dispatchSetHoveredSprite: spriteId => {
         dispatch(setHoveredSprite(spriteId));
     },
-    onDrag: data => dispatch(updateAssetDrag(data))
+    onSpriteSelected: (targetId, costumeUrl) => {
+        dispatch(selectSprite(targetId, costumeUrl));
+    },
+    onChooseCategory: () => {
+        dispatch(startChooseCategory());
+    },
+    onDrag: data => dispatch(updateAssetDrag(data)),
+    repositionHelpMenuWindow: (x, y) => dispatch(repositionHelpMenuWindow(x, y))
 });
 
 const ConnectedComponent = connect(

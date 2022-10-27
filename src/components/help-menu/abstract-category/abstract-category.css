@@ -1,0 +1,33 @@
+@import "../../../css/colors.css";
+
+.category {
+    display: flex;
+    flex-direction: row;
+    padding: 4px 0;
+    cursor: pointer;
+}
+.category-list-wrap-item {
+    padding: 4px;
+    margin-bottom: 8px;
+    color: #575E75;
+    background-color: white;
+    border: 1px solid $ui-black-transparent;
+    border-radius: 4px;
+}
+
+.category-list {
+    list-style-type: none;
+    padding-inline-start: 0;
+    font-weight: bold;
+    background-color: white;
+    border: 1px solid white;
+    border-radius: 4px;
+    padding: 4px 8px;
+    margin-top: 4px;
+}
+
+.category-list-item {
+    padding: 2px 0;
+    color: #575E75;
+    background-color: white;
+}

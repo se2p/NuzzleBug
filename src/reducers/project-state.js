@@ -475,6 +475,11 @@ const requestNewProject = needSave => {
     return {type: START_FETCHING_NEW};
 };
 
+const requestRestartProject = needSave => {
+    if (needSave) return {type: START_UPDATING_BEFORE_CREATING_NEW};
+    return {type: START_LOADING_VM_FILE_UPLOAD};
+};
+
 const requestProjectUpload = loadingState => {
     switch (loadingState) {
     case LoadingState.NOT_LOADED:
@@ -535,6 +540,7 @@ export {
     projectError,
     remixProject,
     requestNewProject,
+    requestRestartProject,
     requestProjectUpload,
     saveProjectAsCopy,
     setProjectId

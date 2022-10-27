@@ -24,6 +24,7 @@ import {fetchSprite, fetchCode} from '../lib/backpack-api';
 import randomizeSpritePosition from '../lib/randomize-sprite-position';
 import downloadBlob from '../lib/download-blob';
 import {openTargetDebugger} from '../reducers/interrogative-debugging/version-2/ir-debugger.js';
+import {selectSprite} from '../reducers/help-menu.js';
 
 class TargetPane extends React.Component {
     constructor (props) {

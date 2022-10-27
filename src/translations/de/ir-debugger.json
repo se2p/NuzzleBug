@@ -1,9 +1,9 @@
 {
     "controls": {
-        "pause": "Pause", 
+        "pause": "Pause",
         "resume": "Fortsetzen",
-        "step-back": "Schritt zurück", 
-        "step-over": "Schritt vorwärts", 
+        "step-back": "Schritt zurück",
+        "step-over": "Schritt vorwärts",
         "initial-step": "Erster Schritt",
         "run-test": "Test \"{name}\" starten",
         "initial-test-step": "Erster Schritt des Tests",
@@ -28,15 +28,27 @@
         "shrink": "Zuklappen",
         "refresh": "Aktualisieren",
         "back": "Zurück"
-    }, 
+    },
     "target": {
         "stage": "Bühne",
         "original": "Original",
         "clone": "Klon {index}"
-    }, 
+    },
+    "abstract-category": {
+        "type":{
+            "movement": "Handelt es sich um eine Art Bewegung?",
+            "turn": "Handelt es sich um eine Drehung?",
+            "say": "Handelt es sich um was Gesagtes oder Gedachtes?",
+            "size": "Handelt es sich um eine Veränderung der Größe?",
+            "visibility": "Sieht man etwas das man nicht sehen darf oder sieht man etwas nicht?",
+            "costume": "Liegt das Problem beim Kostüm oder dem Hintergrund der Figur?",
+            "sound": "Handelt es sich um ein Problem mit Tönen?",
+            "placeholder": "Ist es etwas anderes?"
+        }
+    },
     "category": {
         "expand": "Kategorie aufklappen",
-        "close": "Kategorie zuklappen", 
+        "close": "Kategorie zuklappen",
         "type": {
             "motion": "Bewegung",
             "look": "Aussehen",
@@ -88,9 +100,9 @@
             "why-did-not-turn-left": "Warum hat sich die Figur <i>{sprite}</i> nicht <b>nach links gedreht</b>?"
         },
         "look": {
-            "why-did-say": "Warum hat die Figur <i>{sprite}</i> <b><i>\"{message}\"</i></b> gesagt?", 
+            "why-did-say": "Warum hat die Figur <i>{sprite}</i> <b><i>\"{message}\"</i></b> gesagt?",
             "why-did-not-say": "Warum hat die Figur <i>{sprite}</i> nicht <b><i>\"{message}\"</i></b> gesagt?",
-            "why-did-think": "Warum hat die Figur <i>{sprite}</i> <b><i>\"{message}\"</i></b> gedacht?", 
+            "why-did-think": "Warum hat die Figur <i>{sprite}</i> <b><i>\"{message}\"</i></b> gedacht?",
             "why-did-not-think": "Warum hat die Figur <i>{sprite}</i> nicht <b><i>\"{message}\"</i></b> gedacht?",
             "why-did-size-change": "Warum hat sich die <b>Größe</b> von Figur <i>{sprite}</i> verändert?",
             "why-did-not-size-change": "Warum hat sich die <b>Größe</b> von Figur <i>{sprite}</i> nicht verändert?",
@@ -144,8 +156,8 @@
             "why-did-not-stage-clone-sprite": "Warum hat die Bühne keinen <b>Klon</b> von Figur <b><i>{clone}</i></b> erzeugt?"
         },
         "sensing": {
-            "why-did-sprite-ask": "Warum hat die Figur <i>{sprite}</i> <b><i>\"{message}\"</i></b> gefragt?", 
-            "why-did-stage-ask": "Warum hat die Bühne <b><i>\"{message}\"</i></b> gefragt?", 
+            "why-did-sprite-ask": "Warum hat die Figur <i>{sprite}</i> <b><i>\"{message}\"</i></b> gefragt?",
+            "why-did-stage-ask": "Warum hat die Bühne <b><i>\"{message}\"</i></b> gefragt?",
             "why-did-not-sprite-ask": "Warum hat die Figur <i>{sprite}</i> nicht <b><i>\"{message}\"</i></b> gefragt?",
             "why-did-not-stage-ask": "Warum hat die Bühne nicht <b><i>\"{message}\"</i></b> gefragt?"
         },
@@ -202,9 +214,9 @@
             "not-turn-left": "Die Figur hat sich nicht nach links gedreht"
         },
         "look": {
-            "say": "Die Figur hat <i>\"{message}\"</i> gesagt", 
+            "say": "Die Figur hat <i>\"{message}\"</i> gesagt",
             "not-say": "Die Figur hat nicht <i>\"{message}\"</i> gesagt",
-            "think": "Die Figur hat <i>\"{message}\"</i> gedacht", 
+            "think": "Die Figur hat <i>\"{message}\"</i> gedacht",
             "not-think": "Die Figur hat nicht <i>\"{message}\"</i> gedacht",
             "size-change": "Die Größe hat sich verändert",
             "not-size-change": "Die Größe hat sich nicht verändert",
@@ -258,8 +270,8 @@
             "not-stage-clone-sprite": "Die Bühne hat keinen Klon von Figur <i>{clone}</i> erzeugt"
         },
         "sensing": {
-            "sprite-ask": "Die Figur hat <i>\"{message}\"</i> gefragt", 
-            "stage-ask": "Die Bühne hat <i>\"{message}\"</i> gefragt", 
+            "sprite-ask": "Die Figur hat <i>\"{message}\"</i> gefragt",
+            "stage-ask": "Die Bühne hat <i>\"{message}\"</i> gefragt",
             "not-sprite-ask": "Die Figur hat nicht <i>\"{message}\"</i> gefragt",
             "not-stage-ask": "Die Bühne hat nicht <i>\"{message}\"</i> gefragt"
         },
@@ -318,14 +330,14 @@
             "executed-not-turn-positive": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block nicht mit einem positiven Wert ausgeführt wurde",
             "executed-not-turn-negative": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block nicht mit einem negativen Wert ausgeführt wurde",
             "executed-left-to-right-direction-change": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block zu einer Änderung der Richtung von einem negativen zu einem positiven Wert geführt hat",
-            "executed-right-to-left-direction-change": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block zu einer Änderung der Richtung von einem positiven zu einem negativen Wert geführt hat",                
+            "executed-right-to-left-direction-change": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block zu einer Änderung der Richtung von einem positiven zu einem negativen Wert geführt hat",
             "executed-no-left-to-right-direction-change": "der ausgeführte <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block die Richtung nicht von einem negativen zu einem positiven Wert geändert hat",
             "executed-no-right-to-left-direction-change": "der ausgeführte <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block die Richtung nicht von einem positiven zu einem negativen Wert geändert hat",
             "not-reachable": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block, der dazu führen würde, nicht erreichbar ist"
         },
         "possible-behavior-block": {
             "unexecuted": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block, der dazu führen könnte, nicht ausgeführt wurde",
-            "not-reachable": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block, der dazu führen könnte, nicht erreichbar ist"  
+            "not-reachable": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block, der dazu führen könnte, nicht erreichbar ist"
         },
         "multiple-behavior-blocks": {
             "executed": "die Ausführung von {count} <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Blöcken dazu geführt hat",
@@ -336,7 +348,7 @@
             "some-unexecuted": "{count} andere <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Blöcke, die dazu führen würden, nicht ausgeführt wurden"
         },
         "multiple-possible-behavior-blocks": {
-            "all-unexecuted": "keiner der {count} <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Blöcke, die dazu führen könnten, ausgeführt wurde",    
+            "all-unexecuted": "keiner der {count} <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Blöcke, die dazu führen könnten, ausgeführt wurde",
             "one-unexecuted": "ein anderer <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block, der dazu führen könnte, nicht ausgeführt wurde",
             "some-unexecuted": "{count} andere <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Blöcke, die dazu führen könnten, nicht ausgeführt wurden"
         },
@@ -385,7 +397,7 @@
             "the-condition": "die Bedingung",
             "was-true": "wahr war",
             "was-not-true": "nicht wahr war",
-            "was-false": "falsch war", 
+            "was-false": "falsch war",
             "was-not-false": "nicht falsch war",
             "is-true": "wahr ist",
             "is-not-true": "nicht wahr ist",
@@ -558,7 +570,7 @@
         "and": "<{condition1} und {condition2}>",
         "or": "<{condition1} oder {condition2}>",
         "not": "<nicht {condition}>",
-        "compare": "<{operand1} {operator} {operand2}>",  
+        "compare": "<{operand1} {operator} {operand2}>",
         "contains": "<{operand1} enthält {operand2}?>"
     },
     "visibility": {

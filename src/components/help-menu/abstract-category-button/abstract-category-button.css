@@ -1,0 +1,7 @@
+@import "../../../css/colors.css";
+
+.category-text {
+    height: 16px;
+    line-height: 16px;
+    text-align: center;
+}

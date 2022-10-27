@@ -1,0 +1,24 @@
+{
+    "controls": {
+        "help-menu-button": "Hilfe öffnen",
+        "message-box-button": "Bestätigen"
+    },
+
+    "header": {
+        "title": "Owly, die helfende Eule",
+        "expand": "Aufklappen",
+        "close": "Schließen",
+        "shrink": "Zuklappen",
+        "back": "Zurück"
+    },
+
+    "steps": {
+        "run-action": "Kannst du mir bitte helfen den Fehler etwas einzugrenzen? Führe dafür einfach das Spiel soweit aus, bis der Fehler auftritt.",
+        "run-action-completed": "Bist du bereit, dass wir weitermachen?",
+        "sprite-selection": "Gut gemacht! Nun wähle die Figur aus, in der du den Fehler erwartest!",
+        "choose-category": "Wir kommen immer näher und näher! Kannst du eingrenzen, um was es sich bei dem Fehler handelt?",
+        "choose-question-type-multiple": "Ok, abhängig davon was du gerade angeklickt hast, haben wir nun mehrere Optionen. Würde dich interessieren, warum etwas passiert oder eher warum nicht?",
+        "choose-question-type-single": "Ah ok, uns bleibt hier anscheinend nicht viel übrig. Das was du vorher angeklickt hast, lässt sich nur in der angegebenen Kategorie finden.",
+        "finished": "Sehr gut! Wir haben die einzelnen Fragen erreicht, die wir genauer betrachten müssen. Versuche hier nachzusehen, ob du den Fehler findest. Wenn du auf Fragen klickst, kannst du dann wiederum erneut auf die einzelnen Blöcke klicken, um so noch gezielter nachzuforschen. Viel Glück!"
+    }
+}

@@ -15,7 +15,8 @@ $z-index-stage-question: 49; /* "ask" block text input goes above monitors */
 $z-index-card: 480;
 $z-index-alerts: 490;
 $z-index-menu-bar: 491; /* menu-bar should go over monitors, alerts and tutorials */
-$z-index-ir-debugger: 492;
+$z-index-help-menu:492;
+$z-index-ir-debugger: 493;
 $z-index-loader: 500;
 $z-index-modal: 510;
 

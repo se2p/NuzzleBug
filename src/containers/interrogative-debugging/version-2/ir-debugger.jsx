@@ -10,7 +10,7 @@ import logging from 'scratch-vm/src/util/logging.js';
 import {
     QuestionHierarchyProvider,
     AnswerProviderV2 as AnswerProvider,
-    QuestionCategoryType
+    QuestionCategoryType, QuestionCategory
 } from 'scratch-ir';
 
 import {
@@ -32,6 +32,7 @@ import {
     QuestionContent,
     getContentMessageKey
 } from 'scratch-ir/src/version-2/questions/question';
+import {closeHelpMenu, startChooseQuestionType, startFinished} from "../../../reducers/help-menu";
 
 class IRDebugger extends React.Component {
 
@@ -43,6 +44,7 @@ class IRDebugger extends React.Component {
             'handleQuestionClick',
             'handleGraphNodeClick',
             'handleBackButtonClick',
+            'handleCategoryClick',
             'handleClose',
             'rerender',
             'translate'
@@ -100,7 +102,7 @@ class IRDebugger extends React.Component {
             this.cancel = true;
             return;
         }
-        
+
         try {
             this.cfg = generateCFG(this.props.vm);
             this.cdg = generateCDG(this.cfg);
@@ -130,6 +132,10 @@ class IRDebugger extends React.Component {
         this.props.vm.resetLastTrace();
         this.props.vm.resetEditingTarget();
         this.props.onCloseDebugger();
+        if(this.props.helpMenuInjected){
+            this.props.onCloseHelpMenu();
+        }
+
         if (logging.isActive()) {
             logging.logClickEvent('BUTTON', new Date(), 'CLOSE_DEBUGGER', null);
         }
@@ -164,7 +170,9 @@ class IRDebugger extends React.Component {
             }
 
             this.updateRelevantTraces();
+            // Todo: add specific cases
             this.calculateQuestionHierarchy();
+            this.calculateAbstractCategories();
             if (this.questionHierarchy.length) {
                 this.initAnswerProvider();
                 if (this.isBlockDebugger && !this.selectedQuestion) {
@@ -219,6 +227,24 @@ class IRDebugger extends React.Component {
         }
     }
 
+    calculateAbstractCategories () {
+        //Todo: calculate all specific category forms
+        try {
+            this.crashed = false;
+            const questionHierarchyProvider = new QuestionHierarchyProvider(
+                this.props.vm,
+                this.allTraces,
+                this.relevantTraces,
+                this.target,
+                this.block,
+                this.translate
+            );
+            this.abstractCategories = questionHierarchyProvider.generateAbstractQuestionCategories();
+        } catch {
+            this.crashed = true;
+        }
+    }
+
     initAnswerProvider () {
         this.answerProvider = new AnswerProvider(
             this.props.vm,
@@ -263,7 +289,7 @@ class IRDebugger extends React.Component {
                     // with the targetsInfo of the 'control_create_clone_of' trace,
                     // because it is empty otherwise.
                     startAsCloneTrace.targetsInfo = createCloneTrace.targetsInfo;
-                    
+
                     firstCloneTraceIndex = traces.indexOf(startAsCloneTrace);
                 }
             }
@@ -271,7 +297,7 @@ class IRDebugger extends React.Component {
             // Remove traces where the clone did not exist.
             traces = traces.filter((trace, index) =>
                 index >= firstCloneTraceIndex && trace.targetsInfo[this.target.id]);
-            
+
             // Remove the 'control_create_clone_of' trace.
             if (createCloneTrace) {
                 traces = traces.filter(trace => trace.uniqueId !== createCloneTrace.uniqueId);
@@ -504,6 +530,37 @@ class IRDebugger extends React.Component {
         }
     }
 
+    handleCategoryClick(selectedCategory) {
+
+        if (this.questionHierarchy && selectedCategory) {
+            if(this.props.helpMenuChooseCategories) {
+                for (const category of this.questionHierarchy) {
+                    if (category.type === selectedCategory.type) {
+                        this.selectedCategory = category;
+                        this.selectedAbstractCategory = selectedCategory;
+                    }
+                }
+                this.props.onSelectQuestionType();
+                this.forceUpdate();
+            }
+
+            else if(this.props.helpMenuChooseQuestionType){
+                for (const category of this.questionHierarchy) {
+                    if (category.type === selectedCategory.type && category.questionCategories) {
+                        for (const subcategory of category.questionCategories) {
+                            if (subcategory.form === selectedCategory.form) {
+                                console.log(selectedCategory.type);
+                                this.selectedCategory = subcategory;
+                            }
+                        }
+                    }
+                }
+                this.props.onFinishHelp();
+                this.forceUpdate();
+            }
+        }
+    }
+
     setSelectedQuestion (question) {
         this.selectedQuestion = question;
         this.answer = null;
@@ -515,7 +572,12 @@ class IRDebugger extends React.Component {
     }
 
     handleQuestionClick (question) {
+        if(this.props.helpMenuInjected){
+            this.props.onCloseHelpMenu();
+            this.forceUpdate();
+        }
         this.setSelectedQuestion(question);
+
 
         if (logging.isActive()) {
             logging.logQuestionEvent(
@@ -585,7 +647,7 @@ class IRDebugger extends React.Component {
                 this.setSelectedBlockExecution(blockExecution);
             }
             this.forceUpdate();
-            
+
             if (logging.isActive()) {
                 logging.logDebuggerEvent(
                     'BLOCK',
@@ -631,13 +693,21 @@ class IRDebugger extends React.Component {
                 selectedBlockExecution={this.selectedBlockExecution}
                 blockExecutionOptions={this.blockExecutionOptions}
                 questionHierarchy={this.questionHierarchy}
+                abstractCategories={this.abstractCategories}
                 selectedQuestion={this.selectedQuestion}
+                selectedCategory={this.selectedCategory}
+                selectedAbstractCategory={this.selectedAbstractCategory}
+                helpMenuInjected={this.helpMenuInjected}
+                helpMenuChooseCategories={this.helpMenuChooseCategories}
+                helpMenuChooseQuestionType={this.helpMenuChooseQuestionType}
+                helpMenuFinished={this.helpMenuFinished}
                 answer={this.answer}
                 answerLoading={this.answerLoading}
                 onTargetChange={this.handleTargetChange}
                 onBlockExecutionChange={this.handleSelectedBlockExecutionChange}
                 onQuestionClick={this.handleQuestionClick}
                 onGraphNodeClick={this.handleGraphNodeClick}
+                onAbstractCategorySelected={this.handleCategoryClick}
                 handleRefresh={this.rerender}
                 onBack={this.previousBlocks.length ? this.handleBackButtonClick : null}
                 crashed={this.crashed}
@@ -656,16 +726,28 @@ IRDebugger.propTypes = {
     initialBlockId: PropTypes.string,
     visible: PropTypes.bool.isRequired,
     expanded: PropTypes.bool.isRequired,
+    abstractCategories: PropTypes.arrayOf(PropTypes.instanceOf(QuestionCategory)),
+    helpMenuInjected: PropTypes.bool.isRequired,
+    helpMenuChooseCategories: PropTypes.bool.isRequired,
+    helpMenuChooseQuestionType: PropTypes.bool.isRequired,
+    helpMenuFinished: PropTypes.bool.isRequired,
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
     onCloseDebugger: PropTypes.func.isRequired,
+    onCloseHelpMenu: PropTypes.func.isRequired,
     onShrinkExpand: PropTypes.func.isRequired,
     onStartDrag: PropTypes.func.isRequired,
     onDrag: PropTypes.func.isRequired,
-    onEndDrag: PropTypes.func.isRequired
+    onEndDrag: PropTypes.func.isRequired,
+    onSelectQuestionType: PropTypes.func.isRequired,
+    onFinishHelp: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
+    helpMenuInjected: state.scratchGui.helpMenu.injected,
+    helpMenuChooseCategories: state.scratchGui.helpMenu.chooseCategory,
+    helpMenuChooseQuestionType: state.scratchGui.helpMenu.chooseQuestionType,
+    helpMenuFinished:state.scratchGui.helpMenu.finished,
     targetOriginId: state.scratchGui.irDebugger.targetId,
     costumeUrl: state.scratchGui.irDebugger.costumeUrl,
     initialBlockId: state.scratchGui.irDebugger.blockId,
@@ -680,7 +762,10 @@ const mapDispatchToProps = dispatch => ({
     onShrinkExpand: () => dispatch(shrinkExpandDebugger()),
     onStartDrag: () => dispatch(startDragDebugger()),
     onDrag: (e_, data) => dispatch(dragDebugger(data.x, data.y)),
-    onEndDrag: () => dispatch(endDragDebugger())
+    onEndDrag: () => dispatch(endDragDebugger()),
+    onCloseHelpMenu: () => dispatch(closeHelpMenu()),
+    onSelectQuestionType: () => dispatch(startChooseQuestionType()),
+    onFinishHelp: () => dispatch(startFinished())
 });
 
 export default connect(

@@ -12,6 +12,7 @@ import StepOver from '../step-over/step-over.jsx';
 import InitialStep from '../initial-step/initial-step.jsx';
 import InitialTestStep from '../initial-test-step/initial-test-step.jsx';
 import StepBack from '../step-back/step-back.jsx';
+import HelpMenuButton from "../help-menu-button/help-menu-button.jsx";
 import StopAll from '../stop-all/stop-all.jsx';
 import TurboMode from '../turbo-mode/turbo-mode.jsx';
 import IRQuestions from '../interrogative-debugging/version-1/ir-questions/ir-question-button.jsx';
@@ -49,6 +50,11 @@ const messages = defineMessages({
         id: 'gui.ir-debugger.controls.step-over',
         defaultMessage: 'Step Over',
         description: 'Step Over button title'
+    },
+    helpMenuButtonTitle: {
+        id: 'gui.help-menu.controls.help-menu-button',
+        defaultMessage: 'Help Menu',
+        description: 'Help menu button title'
     },
     initialStepTitle: {
         id: 'gui.ir-debugger.controls.initial-step',
@@ -93,6 +99,7 @@ const Controls = function (props) {
         onStopAllClick,
         onStepBackClick,
         onStepOverClick,
+        onHelpMenuButtonClick,
         onInitialStepClick,
         onInitialTestStepClick,
         onIRQuestionsClick,
@@ -163,6 +170,7 @@ const Controls = function (props) {
                 title={intl.formatMessage(messages.stopTitle)}
                 onClick={onStopAllClick}
             />
+
             {turbo ? (
                 <TurboMode />
             ) : null}
@@ -180,6 +188,13 @@ const Controls = function (props) {
                 state={tracingState}
                 active={tracingActive}
             />) : null}
+            {// Todo Only open Help Menu, when a block is present
+                interrogationSupported ? (<HelpMenuButton
+                active={active}
+                paused={paused}
+                title={intl.formatMessage(messages.helpMenuButtonTitle)}
+                onClick={onHelpMenuButtonClick}
+            />) : null}
         </div>
     );
 };
@@ -194,6 +209,7 @@ Controls.propTypes = {
     onPauseResumeClick: PropTypes.func.isRequired,
     onStepBackClick: PropTypes.func.isRequired,
     onStepOverClick: PropTypes.func.isRequired,
+    onHelpMenuButtonClick: PropTypes.func.isRequired,
     onInitialStepClick: PropTypes.func.isRequired,
     onInitialTestStepClick: PropTypes.func.isRequired,
     onStopAllClick: PropTypes.func.isRequired,

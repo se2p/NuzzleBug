@@ -1,0 +1,30 @@
+@import "../../../../css/colors.css";
+
+.toggleObservation {
+    width: 2rem;
+    height: 2rem;
+    padding: 0.375rem;
+    border-radius: 0.25rem;
+    user-select: none;
+    cursor: pointer;
+    opacity: 1;
+}
+
+.toggleObservation:hover {
+    background-color: $motion-light-transparent;
+}
+
+.toggleObservation.active:hover, 
+.toggleObservation.active {
+    background-color: $motion-transparent;
+}
+
+.toggleObservation.activated {
+    filter: invert(54%) sepia(98%) saturate(311%) hue-rotate(75deg) brightness(100%) contrast(85%);
+    background-color: $motion-transparent;
+}
+
+.toggleObservation.deactivated {
+    filter: invert(79%) sepia(72%) saturate(7318%) hue-rotate(332deg) brightness(105%) contrast(85%);
+    background-color: $motion-transparent;
+}
