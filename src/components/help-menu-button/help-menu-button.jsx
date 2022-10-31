@@ -34,16 +34,12 @@ const HelpMenuButtonComponent = function (props) {
 
 HelpMenuButtonComponent.propTypes = {
     vm: PropTypes.instanceOf(VM),
-    active: PropTypes.bool,
-    paused: PropTypes.bool,
     className: PropTypes.string,
     onClick: PropTypes.func.isRequired,
     title: PropTypes.string
 };
 
 HelpMenuButtonComponent.defaultProps = {
-    active: false,
-    paused: false,
     title: 'Help menu'
 };
 

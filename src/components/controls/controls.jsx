@@ -12,7 +12,7 @@ import StepOver from '../step-over/step-over.jsx';
 import InitialStep from '../initial-step/initial-step.jsx';
 import InitialTestStep from '../initial-test-step/initial-test-step.jsx';
 import StepBack from '../step-back/step-back.jsx';
-import HelpMenuButton from "../help-menu-button/help-menu-button.jsx";
+import HelpMenuButton from '../help-menu-button/help-menu-button.jsx';
 import StopAll from '../stop-all/stop-all.jsx';
 import TurboMode from '../turbo-mode/turbo-mode.jsx';
 import IRQuestions from '../interrogative-debugging/version-1/ir-questions/ir-question-button.jsx';
@@ -190,11 +190,9 @@ const Controls = function (props) {
             />) : null}
             {// Todo Only open Help Menu, when a block is present
                 interrogationSupported ? (<HelpMenuButton
-                active={active}
-                paused={paused}
-                title={intl.formatMessage(messages.helpMenuButtonTitle)}
-                onClick={onHelpMenuButtonClick}
-            />) : null}
+                    title={intl.formatMessage(messages.helpMenuButtonTitle)}
+                    onClick={onHelpMenuButtonClick}
+                />) : null}
         </div>
     );
 };
