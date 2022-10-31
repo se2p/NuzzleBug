@@ -39,23 +39,23 @@
 }
 
 .owl-button{
-    background-color: white;
+    background-color: #a07a75;
     border: 2px solid #a07a75;
-    color: #a07a75;
+    color: white;
     padding: 5px 10px;
     margin: 10px 15px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 14px;
-    border-radius: 8px;
+    border-radius: 4px;
     transition-duration: 0.4s;
 }
 
 
 .owl-button:hover {
-    background-color: #a07a75;
-    color: white;
+    background-color: white;
+    color: #a07a75;
     cursor: pointer;
 }
 

@@ -24,7 +24,7 @@ import {fetchSprite, fetchCode} from '../lib/backpack-api';
 import randomizeSpritePosition from '../lib/randomize-sprite-position';
 import downloadBlob from '../lib/download-blob';
 import {openTargetDebugger} from '../reducers/interrogative-debugging/version-2/ir-debugger.js';
-import {selectSprite} from '../reducers/help-menu.js';
+import {selectSprite, startChooseCategory} from '../reducers/help-menu';
 
 class TargetPane extends React.Component {
     constructor (props) {
@@ -289,6 +289,7 @@ TargetPane.propTypes = {
 };
 
 const mapStateToProps = state => ({
+    spriteSelectionEnabled: state.scratchGui.helpMenu.spriteSelection,
     editingTarget: state.scratchGui.targets.editingTarget,
     hoveredTarget: state.scratchGui.hoveredTarget,
     isRtl: state.locales.isRtl,
@@ -324,6 +325,12 @@ const mapDispatchToProps = dispatch => ({
     onShowImporting: () => dispatch(showStandardAlert('importingAsset')),
     onInterrogativeButtonClick: (targetId, costumeUrl) => {
         dispatch(openTargetDebugger(targetId, costumeUrl));
+    },
+    onSpriteSelected: (targetId, costumeUrl) => {
+        dispatch(selectSprite(targetId, costumeUrl));
+    },
+    onChooseCategory: () => {
+        dispatch(startChooseCategory());
     }
 });
 

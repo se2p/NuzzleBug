@@ -1,5 +1,10 @@
 @import "../../../css/colors.css";
 
+.body{
+    display: flex;
+    flex-flow: wrap;
+    flex-direction: row;
+}
 .category-list {
     list-style-type: none;
     padding-inline-start: 0;
@@ -19,7 +24,23 @@
 
 .category {
     display: flex;
-    flex-direction: row;
+    align-items: center;
+    padding: 4px 0;
+    width: 33%;
+    height: 550px;
+    margin-left: 50px;
+    cursor: pointer;
+    border: none;
+}
+.owlArea {
+    display: flex;
+    align-items: center;
+    height: 550px;
+    border: none;
+    width:60%;
     padding: 4px 0;
     cursor: pointer;
+}
+.owl {
+    height: 200px;
 }

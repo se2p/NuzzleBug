@@ -12,7 +12,8 @@ const HelpMenuOwlComponent = function (props) {
         flying,
         buttonText,
         onSubmit,
-        enabled
+        enabled,
+        injected
     } = props;
 
     let owl = owl1;
@@ -25,10 +26,20 @@ const HelpMenuOwlComponent = function (props) {
             <div>
                 <img
                     className={styles.owl}
+                    style={injected ? {
+                        position: 'relative',
+                        bottom: '0',
+                        left: '410px'
+                    } : null}
                     src={owl}
                 />
                 <div
                     className={classNames(styles.speechBubbleBox, styles.speechBubbleTriangle)}
+                    style={injected ? {
+                        position: 'relative',
+                        bottom: '120px',
+                        left: '50px'
+                    } : null}
                 >
                     <div
                         id="help-messages"
@@ -40,7 +51,8 @@ const HelpMenuOwlComponent = function (props) {
                         {/* Todo languages and css!*/}
                         {enabled ? <button
                             className={styles.owlButton}
-                            onClick={onSubmit}>{buttonText}</button> : null}
+                            onClick={onSubmit}
+                        >{buttonText}</button> : null}
                     </div>
                 </div>
             </div>
@@ -53,7 +65,8 @@ HelpMenuOwlComponent.propTypes = {
     text: PropTypes.string,
     buttonText: PropTypes.string,
     onSubmit: PropTypes.func.isRequired,
-    enabled: PropTypes.bool.isRequired
+    enabled: PropTypes.bool.isRequired,
+    injected: PropTypes.bool
 };
 
 HelpMenuOwlComponent.defaultProps = {

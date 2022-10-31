@@ -13,9 +13,10 @@
     },
 
     "steps": {
+        "no-questions": "It looks like that there are no questions available. This could be, because there is no Block around!",
         "run-action": "Can you please help me narrow it down when the error occurs? For that you have to execute the game and wait till the error pops up.",
         "run-action-completed": "Are you ready to proceed?",
-        "sprite-selection": "Thank you very much! Please select the sprite where you suspect the error is in.",
+        "sprite-selection": "Thank you very much! Please select the sprite or the stage where you suspect the error is in.",
         "choose-category": "Splendid! We come closer and closer I can feel it! Let’s get deeper: Please choose where we proceed to look next!",
         "choose-question-type-multiple": "According to what you selected we have multiple possible options. Is it something that should happen or should not happen? Please Choose.",
         "choose-question-type-single": "Oh it looks like we have no choice here. According to what you selected we should look in the given category.",

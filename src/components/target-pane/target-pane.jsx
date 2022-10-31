@@ -15,6 +15,7 @@ import {ContextMenu, MenuItem} from '../context-menu/context-menu.jsx';
 import {FormattedMessage} from 'react-intl';
 
 import styles from './target-pane.css';
+import {c} from 'bowser';
 
 /*
  * Pane that contains the sprite selector, sprite info, stage selector,
@@ -27,7 +28,8 @@ class TargetPane extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'handleOpenIRStageDebugger'
+            'handleOpenIRStageDebugger',
+            'handleOpenStage'
         ]);
     }
 
@@ -39,6 +41,26 @@ class TargetPane extends React.Component {
         const costumeUrl = stage.costume.asset ?
             getCostumeUrl(stage.costume.asset) : null;
         onInterrogativeButtonClick(stage.id, costumeUrl);
+    }
+
+    handleOpenStage (id){
+        const {
+            onInterrogativeButtonClick,
+            onSelectSprite,
+            onChooseCategory,
+            onSpriteSelected,
+            spriteSelectionEnabled,
+            stage
+        } = this.props;
+        onSelectSprite(id);
+        if (spriteSelectionEnabled){
+            const costumeUrl = stage.costume.asset ?
+                getCostumeUrl(stage.costume.asset) : null;
+            onSpriteSelected(stage.id, costumeUrl);
+            onChooseCategory();
+            onInterrogativeButtonClick(stage.id, costumeUrl);
+            this.forceUpdate();
+        }
     }
 
     render () {
@@ -121,7 +143,7 @@ class TargetPane extends React.Component {
                             backdropCount={stage.costumeCount}
                             id={stage.id}
                             selected={stage.id === editingTarget}
-                            onSelect={onSelectSprite}
+                            onSelect={this.handleOpenStage}
                         />}
                         <div>
                             {spriteLibraryVisible ? (
@@ -202,6 +224,9 @@ TargetPane.propTypes = {
     onSelectSprite: PropTypes.func,
     onSpriteUpload: PropTypes.func,
     onSurpriseSpriteClick: PropTypes.func,
+    spriteSelectionEnabled: PropTypes.bool.isRequired,
+    onSpriteSelected: PropTypes.func.isRequired,
+    onChooseCategory: PropTypes.func.isRequired,
     raiseSprites: PropTypes.bool,
     spriteLibraryVisible: PropTypes.bool,
     sprites: PropTypes.objectOf(spriteShape),

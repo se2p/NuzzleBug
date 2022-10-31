@@ -2,8 +2,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import bindAll from 'lodash.bindall';
-import VirtualMachine from 'scratch-vm';
-import logging from 'scratch-vm/src/util/logging.js';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 import HelpMenuBodyComponent from '../../components/help-menu/body/help-menu-body.jsx';
@@ -11,9 +9,14 @@ import {
     closeHelpMenu
 
 } from '../../reducers/help-menu.js';
-import {QuestionCategory} from "scratch-ir";
+import {QuestionCategory} from 'scratch-ir';
 
 const messages = defineMessages({
+    noQuestions: {
+        id: 'gui.help-menu.steps.no-questions',
+        defaultMessage: 'No questions available!',
+        description: 'no questions available!'
+    },
     chooseCategory: {
         id: 'gui.help-menu.steps.choose-category',
         defaultMessage: 'Which category?',
@@ -47,7 +50,7 @@ class HelpMenuBody extends React.Component {
         super(props);
         bindAll(this, [
             'handleMessage',
-            'translate',
+            'translate'
         ]);
     }
 
@@ -56,12 +59,14 @@ class HelpMenuBody extends React.Component {
     }
 
     handleMessage () {
-        if (this.props.chooseCategory) {
+        if (this.props.chooseCategory && this.props.abstractCategories.length === 0) {
+            return (this.props.intl.formatMessage(messages.noQuestions));
+        } else if (this.props.chooseCategory){
             return (this.props.intl.formatMessage(messages.chooseCategory));
-        } else if (this.props.chooseQuestionType && this.props.abstractCategories[0].questionCategories.length
-            && this.props.abstractCategories[0].questionCategories.length > 1) {
+        } else if (this.props.chooseQuestionType && this.props.abstractCategories[0].questionCategories.length &&
+            this.props.abstractCategories[0].questionCategories.length > 1) {
             return (this.props.intl.formatMessage(messages.chooseQuestionTypeMultiple));
-        } else if(this.props.chooseQuestionType){
+        } else if (this.props.chooseQuestionType){
             return (this.props.intl.formatMessage(messages.chooseQuestionTypeSingle));
         } else if (this.props.finished) {
             return (this.props.intl.formatMessage(messages.finished));
@@ -70,8 +75,6 @@ class HelpMenuBody extends React.Component {
 
     render () {
         const {
-            vm,
-            intl,
             onClick,
             abstractCategories
         } = this.props;
@@ -80,6 +83,8 @@ class HelpMenuBody extends React.Component {
 
         return (
             <HelpMenuBodyComponent
+                injected={this.props.injected}
+                chooseQuestionType={this.props.chooseQuestionType}
                 message={message}
                 onClick={onClick}
                 abstractCategories={abstractCategories}
@@ -95,16 +100,18 @@ HelpMenuBody.propTypes = {
     chooseCategory: PropTypes.bool.isRequired,
     chooseQuestionType: PropTypes.bool.isRequired,
     finished: PropTypes.bool.isRequired,
+    injected: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
     chooseCategory: state.scratchGui.helpMenu.chooseCategory,
     chooseQuestionType: state.scratchGui.helpMenu.chooseQuestionType,
     finished: state.scratchGui.helpMenu.finished,
+    injected: state.scratchGui.helpMenu.injected
 });
 
 const mapDispatchToProps = dispatch => ({
-    onCloseHelpMenu: () => dispatch(closeHelpMenu()),
+    onCloseHelpMenu: () => dispatch(closeHelpMenu())
 });
 
 export default injectIntl(connect(

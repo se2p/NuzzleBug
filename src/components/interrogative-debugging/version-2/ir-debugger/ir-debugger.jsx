@@ -304,7 +304,7 @@ class IRDebugger extends React.Component {
                     onClick={onAbstractCategorySelected}
                 />
             </div>
-        )
+        );
     }
 
     renderAnswerArea () {
@@ -316,7 +316,7 @@ class IRDebugger extends React.Component {
             answer,
             answerLoading,
             onGraphNodeClick,
-            crashed,
+            crashed
         } = this.props;
 
         return (
@@ -364,7 +364,7 @@ class IRDebugger extends React.Component {
                     ) : null}
                 </div>
             </div>
-        )
+        );
     }
 
     renderDebuggerBody () {
@@ -376,24 +376,24 @@ class IRDebugger extends React.Component {
             onQuestionClick,
             helpMenuChooseQuestionType,
             helpMenuFinished,
-            crashed,
+            crashed
         } = this.props;
 
-        let formCategories = null
-        if(selectedCategory){
+        let formCategories = null;
+        if (selectedCategory){
             let tempNewCategory = null;
-            for(const category of questionHierarchy){
-                if(category.type === selectedCategory.type){
+            for (const category of questionHierarchy){
+                if (category.type === selectedCategory.type){
                     tempNewCategory = new QuestionCategory({
                         message: category.message,
                         type: category.type,
                         color: category.color,
                         questionCategories: []
                     });
-                    if(category.questionCategories) {
+                    if (category.questionCategories) {
                         for (const formCategoryQH of category.questionCategories) {
                             for (const formCategoryAC of selectedAbstractCategory.questionCategories){
-                                if(formCategoryAC.form === formCategoryQH.form){
+                                if (formCategoryAC.form === formCategoryQH.form){
                                     tempNewCategory.questionCategories.push(formCategoryQH);
                                 }
                             }
@@ -424,47 +424,34 @@ class IRDebugger extends React.Component {
                         />
                     </div>
                 ) : null)}
-                {/*Todo: Case if no form question is available*/
-                helpMenuChooseQuestionType ? this.renderHelpMenuBody(formCategories) :
-                    (helpMenuFinished ? this.renderHelpMenuBody(null) : this.renderAnswerArea())
+                {/* Todo: Case if no form question is available*/
+                    helpMenuChooseQuestionType ? this.renderHelpMenuBody(formCategories) :
+                        (helpMenuFinished ? this.renderHelpMenuBody(null) : this.renderAnswerArea())
                 }
             </div>
-        )
+        );
     }
 
     render () {
         const {
-            vm,
             target,
             targetOptions,
             selectedBlockExecution,
             blockExecutionOptions,
             block,
-            questionHierarchy,
             abstractCategories,
-            helpMenuInjected,
+            questionHierarchy,
             helpMenuChooseCategories,
-            helpMenuChooseQuestionType,
-            helpMenuFinished,
-            selectedQuestion,
-            selectedCategory,
-            selectedAbstractCategory,
-            answer,
-            answerLoading,
             expanded,
             handleRefresh,
             onTargetChange,
             onBlockExecutionChange,
-            onQuestionClick,
-            onGraphNodeClick,
-            onAbstractCategorySelected,
             onClose,
             onBack,
             onShrinkExpand,
             onDrag,
             onStartDrag,
             onEndDrag,
-            crashed,
             ...posProps
         } = this.props;
 
@@ -532,7 +519,10 @@ class IRDebugger extends React.Component {
                                     className={expanded ? styles.body : cardStyles.hidden}
                                     ref={this.body}
                                 >
-                                    {helpMenuChooseCategories? this.renderHelpMenuBody(abstractCategories) : this.renderDebuggerBody()}
+
+                                    {helpMenuChooseCategories ?
+                                        this.renderHelpMenuBody(abstractCategories) :
+                                        this.renderDebuggerBody()}
                                 </div>
                             </div>
                         </div>
@@ -581,7 +571,7 @@ IRDebugger.propTypes = {
     selectedAbstractCategory: PropTypes.instanceOf(QuestionCategory),
     helpMenuInjected: PropTypes.bool.isRequired,
     helpMenuChooseCategories: PropTypes.bool.isRequired,
-    helpMenuChooseQuestionType:PropTypes.bool.isRequired,
+    helpMenuChooseQuestionType: PropTypes.bool.isRequired,
     helpMenuFinished: PropTypes.bool.isRequired,
     answerLoading: PropTypes.bool.isRequired,
     answer: PropTypes.instanceOf(Answer),
