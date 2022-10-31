@@ -19,48 +19,51 @@ const HelpMenuBodyComponent = function (props) {
     return (
         <div
             className={styles.body}
-            style={chooseQuestionType ? {
-                flexWrap: 'wrap',
-                flexDirection: 'column'
-            } : null}
         >
-            {abstractCategories ? (
+            <div className={styles.menu}>
                 <div
-                    className={styles.category}
-                    style={chooseQuestionType ? {
-                        height: '33%'
-                    } : null}
+                    className={styles.owlArea}
                 >
-                    <ul className={styles.categoryList}>
-                        {abstractCategories.map(category => (
-                            <li
-                                key={category.id}
-                            >
-                                {category.questionCategories && category.questionCategories.length ? (
-                                    <AbstractCategoryComponent
-                                        onClick={onClick}
-                                        category={category}
-                                        abstractCategories={category.questionCategories}
-                                    />) : null}
-                            </li>
-                        ))}
-                    </ul>
-                </div>) : null}
-            <div
-                className={styles.owlArea}
-                style={chooseQuestionType ? {
-                    width: '66%',
-                    height: '300px'
-                } : null}
-            >
-                <div className={styles.owl}>
-                    <Owl
-                        injected={injected}
-                        onSubmit={print}
-                        enabled={false}
-                        text={message}
-                    />
+                    <div className={styles.owl}>
+                        <Owl
+                            injected={injected}
+                            onSubmit={print}
+                            enabled={false}
+                            text={message}
+                        />
+                    </div>
                 </div>
+                {abstractCategories && abstractCategories.length > 0 ? (
+                    <div
+                        className={styles.category}
+                    >
+                        <div
+                            className={classNames(styles.speechBubbleBox, styles.speechBubbleTriangle)}
+                        >
+                            <div
+                                id="help-messages"
+                                className={styles.helpMessages}
+                            >
+                                <div>
+                                    {'text'}
+                                </div>
+                                <ul className={styles.categoryList}>
+                                    {abstractCategories.map(category => (
+                                        <li
+                                            key={category.id}
+                                        >
+                                            {category.questionCategories && category.questionCategories.length ? (
+                                                <AbstractCategoryComponent
+                                                    onClick={onClick}
+                                                    category={category}
+                                                    abstractCategories={category.questionCategories}
+                                                />) : null}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>) : null}
             </div>
         </div>
 

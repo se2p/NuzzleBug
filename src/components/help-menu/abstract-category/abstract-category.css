@@ -11,7 +11,7 @@
     margin-bottom: 8px;
     color: #575E75;
     background-color: white;
-    border: 1px solid $ui-black-transparent;
+    border: 1px solid transparent;
     border-radius: 4px;
 }
 
@@ -19,8 +19,8 @@
     list-style-type: none;
     padding-inline-start: 0;
     font-weight: bold;
-    background-color: white;
-    border: 1px solid white;
+    background-color: transparent;
+    border: 1px solid transparent;
     border-radius: 4px;
     padding: 4px 8px;
     margin-top: 4px;
@@ -30,4 +30,6 @@
     padding: 2px 0;
     color: #575E75;
     background-color: white;
+    border: 1px solid transparent;
+    border-radius: 4px;
 }
