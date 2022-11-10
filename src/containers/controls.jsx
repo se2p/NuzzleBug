@@ -174,10 +174,13 @@ class Controls extends React.Component {
     handleHelpMenuButtonClick (e) {
         e.preventDefault();
         if ((this.props.projectRunning && this.props.projectPaused) || !this.props.projectRunning) {
-            const x = window.innerWidth - 480 - 200
+            const x = window.innerWidth - 480 - 200;
             const y = window.innerHeight / 4;
-            this.props.repositionHelpMenuWindow(x,y);
+            this.props.repositionHelpMenuWindow(x, y);
             this.props.onHelpMenuButtonClick();
+            if (this.props.executedOnce){
+                this.props.onActionExecuted();
+            }
             if (logging.isActive()) {
                 logging.logClickEvent('BUTTON', new Date(), 'HELP_MENU_BUTTON', null);
             }
@@ -345,6 +348,7 @@ Controls.propTypes = {
     onActionExecuted: PropTypes.func.isRequired,
     actionExecuted: PropTypes.bool.isRequired,
     helpMenuOpen: PropTypes.bool.isRequired,
+    executedOnce: PropTypes.bool.isRequired,
     interrogationSupported: PropTypes.bool.isRequired,
     interrogationEnabled: PropTypes.bool.isRequired,
     tracingActive: PropTypes.bool.isRequired,
@@ -364,6 +368,7 @@ const mapStateToProps = state => ({
     interrogationEnabled: state.scratchGui.irDebugger.enabled,
     helpMenuOpen: state.scratchGui.helpMenu.visible,
     actionExecuted: state.scratchGui.helpMenu.actionExecuted,
+    executedOnce: state.scratchGui.helpMenu.executedOnce,
     tracingActive: state.scratchGui.vmStatus.tracingActive,
     projectChanged: state.scratchGui.projectChanged,
     whiskerTest: state.scratchGui.vmStatus.whiskerTest

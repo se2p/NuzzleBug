@@ -21,6 +21,11 @@ const HelpMenuOwlComponent = function (props) {
         owl = owl2;
     }
 
+    /* const [show, setShow] = useState(false);
+    useEffect(() => {
+        setTimeout(() => setShow(true), 300);
+    }, []);*/
+
     return (
         <div>
             <div>
@@ -33,6 +38,12 @@ const HelpMenuOwlComponent = function (props) {
                     } : null}
                     src={owl}
                 />
+                {/* <CSSTransition
+                    in={show}
+                    timeout={200}
+                    unmountOnExit
+                    classNames="my-node"
+                >*/}
                 <div
                     className={classNames(styles.speechBubbleBox, styles.speechBubbleTriangle)}
                     style={injected ? {
@@ -78,4 +89,3 @@ HelpMenuOwlComponent.defaultProps = {
 };
 
 export default HelpMenuOwlComponent;
-

@@ -32,7 +32,7 @@ import {
     QuestionContent,
     getContentMessageKey
 } from 'scratch-ir/src/version-2/questions/question';
-import {closeHelpMenu, startChooseQuestionType, startFinished} from "../../../reducers/help-menu";
+import {closeHelpMenu, startChooseQuestionType, startFinished} from '../../../reducers/help-menu';
 
 class IRDebugger extends React.Component {
 
@@ -132,7 +132,7 @@ class IRDebugger extends React.Component {
         this.props.vm.resetLastTrace();
         this.props.vm.resetEditingTarget();
         this.props.onCloseDebugger();
-        if(this.props.helpMenuInjected){
+        if (this.props.helpMenuInjected){
             this.props.onCloseHelpMenu();
         }
 
@@ -228,7 +228,7 @@ class IRDebugger extends React.Component {
     }
 
     calculateAbstractCategories () {
-        //Todo: calculate all specific category forms
+        // Todo: calculate all specific category forms
         try {
             this.crashed = false;
             const questionHierarchyProvider = new QuestionHierarchyProvider(
@@ -530,10 +530,9 @@ class IRDebugger extends React.Component {
         }
     }
 
-    handleCategoryClick(selectedCategory) {
-
+    handleCategoryClick (selectedCategory) {
         if (this.questionHierarchy && selectedCategory) {
-            if(this.props.helpMenuChooseCategories) {
+            if (this.props.helpMenuChooseCategories) {
                 for (const category of this.questionHierarchy) {
                     if (category.type === selectedCategory.type) {
                         this.selectedCategory = category;
@@ -542,15 +541,13 @@ class IRDebugger extends React.Component {
                 }
                 this.props.onSelectQuestionType();
                 this.forceUpdate();
-            }
-
-            else if(this.props.helpMenuChooseQuestionType){
+            } else if (this.props.helpMenuChooseQuestionType){
                 for (const category of this.questionHierarchy) {
                     if (category.type === selectedCategory.type && category.questionCategories) {
                         for (const subcategory of category.questionCategories) {
                             if (subcategory.form === selectedCategory.form) {
-                                console.log(selectedCategory.type);
                                 this.selectedCategory = subcategory;
+                                this.selectedAbstractCategory = selectedCategory;
                             }
                         }
                     }
@@ -572,7 +569,7 @@ class IRDebugger extends React.Component {
     }
 
     handleQuestionClick (question) {
-        if(this.props.helpMenuInjected){
+        if (this.props.helpMenuInjected){
             this.props.onCloseHelpMenu();
             this.forceUpdate();
         }
@@ -747,7 +744,7 @@ const mapStateToProps = state => ({
     helpMenuInjected: state.scratchGui.helpMenu.injected,
     helpMenuChooseCategories: state.scratchGui.helpMenu.chooseCategory,
     helpMenuChooseQuestionType: state.scratchGui.helpMenu.chooseQuestionType,
-    helpMenuFinished:state.scratchGui.helpMenu.finished,
+    helpMenuFinished: state.scratchGui.helpMenu.finished,
     targetOriginId: state.scratchGui.irDebugger.targetId,
     costumeUrl: state.scratchGui.irDebugger.costumeUrl,
     initialBlockId: state.scratchGui.irDebugger.blockId,

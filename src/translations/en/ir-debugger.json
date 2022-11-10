@@ -19,14 +19,14 @@
     },
     "abstract-category": {
         "type":{
-            "movement": "Is it some kind of movement?",
-            "turn": "Is it some kind of turn?",
-            "say": "Is it something said or thought?",
-            "size": "Is it a size change?",
-            "visibility": "Is there a problem with the visibility of the sprite?",
-            "costume": "Is it a costume or backdrop change?",
-            "sound": "Is it some kind of sound?",
-            "placeholder": "Is it something else?"
+            "movement": "it is some kind of movement.",
+            "turn": "it is some kind of turn.",
+            "say": "it is something said or thought.",
+            "size": "it is a size change.",
+            "visibility": "there is a problem with the visibility of the sprite.",
+            "costume": "it is a costume or backdrop change.",
+            "sound": "it is some kind of sound.",
+            "placeholder": "it is something else."
         }
     },
     "header": {

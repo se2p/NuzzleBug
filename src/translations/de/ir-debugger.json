@@ -36,14 +36,14 @@
     },
     "abstract-category": {
         "type":{
-            "movement": "Handelt es sich um eine Art Bewegung?",
-            "turn": "Handelt es sich um eine Drehung?",
-            "say": "Handelt es sich um was Gesagtes oder Gedachtes?",
-            "size": "Handelt es sich um eine Veränderung der Größe?",
-            "visibility": "Sieht man etwas das man nicht sehen darf oder sieht man etwas nicht?",
-            "costume": "Liegt das Problem beim Kostüm oder dem Hintergrund der Figur?",
-            "sound": "Handelt es sich um ein Problem mit Tönen?",
-            "placeholder": "Ist es etwas anderes?"
+            "movement": "es handelt sich um eine Art Bewegung.",
+            "turn": "es handelt sich um eine Drehung.",
+            "say": "es handelt sich um was Gesagtes oder Gedachtes.",
+            "size": "es handelt sich um eine Veränderung der Größe.",
+            "visibility": "man sieht etwas das man nicht sehen darf oder man sieht etwas nicht.",
+            "costume": "das Problem liegt beim Kostüm oder dem Hintergrund der Figur.",
+            "sound": "es handelt sich um ein Problem mit Tönen.",
+            "placeholder": "es ist etwas anderes."
         }
     },
     "category": {

@@ -25,6 +25,7 @@ const initialState = {
     x: 0,
     y: 0,
     expanded: true,
+    executedOnce: false,
     dragging: false,
     runAction: true,
     spriteSelection: false,
@@ -50,7 +51,7 @@ const reducer = function (state, action) {
     }
     case OPEN:
         return Object.assign({}, state, {
-            visible: true
+            visible: true,
         });
     case CLOSE:
         return Object.assign({}, state, {
@@ -138,7 +139,8 @@ const reducer = function (state, action) {
         });
     case ACTION_EXECUTED:
         return Object.assign({}, state, {
-            actionExecuted: true
+            actionExecuted: true,
+            executedOnce: true
         });
     case INJECT_HELP_MENU:
         return Object.assign({}, state, {

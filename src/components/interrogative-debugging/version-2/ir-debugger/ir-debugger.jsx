@@ -294,13 +294,17 @@ class IRDebugger extends React.Component {
 
     renderHelpMenuBody (categories) {
         const {
-            onAbstractCategorySelected
+            onAbstractCategorySelected,
+            selectedAbstractCategory,
+            abstractCategories
         } = this.props;
 
         return (
-            <div>
+            <div className={styles.answerArea}>
                 <HelpMenuBody
-                    abstractCategories={categories}
+                    abstractCategories={abstractCategories}
+                    selectedAbstractCategory={selectedAbstractCategory}
+                    categories={categories}
                     onClick={onAbstractCategorySelected}
                 />
             </div>
@@ -376,6 +380,8 @@ class IRDebugger extends React.Component {
             onQuestionClick,
             helpMenuChooseQuestionType,
             helpMenuFinished,
+            helpMenuChooseCategories,
+            abstractCategories,
             crashed
         } = this.props;
 
@@ -390,10 +396,11 @@ class IRDebugger extends React.Component {
                         color: category.color,
                         questionCategories: []
                     });
-                    if (category.questionCategories) {
+                    if (category.questionCategories && selectedAbstractCategory.questionCategories) {
                         for (const formCategoryQH of category.questionCategories) {
                             for (const formCategoryAC of selectedAbstractCategory.questionCategories){
                                 if (formCategoryAC.form === formCategoryQH.form){
+                                    formCategoryQH.abstractType = selectedAbstractCategory.abstractType;
                                     tempNewCategory.questionCategories.push(formCategoryQH);
                                 }
                             }
@@ -425,8 +432,13 @@ class IRDebugger extends React.Component {
                     </div>
                 ) : null)}
                 {/* Todo: Case if no form question is available*/
-                    helpMenuChooseQuestionType ? this.renderHelpMenuBody(formCategories) :
-                        (helpMenuFinished ? this.renderHelpMenuBody(null) : this.renderAnswerArea())
+                    helpMenuChooseCategories ?
+                        this.renderHelpMenuBody(abstractCategories) :
+                        (helpMenuChooseQuestionType ?
+                            this.renderHelpMenuBody(formCategories) :
+                            (helpMenuFinished ?
+                                this.renderHelpMenuBody(null) :
+                                this.renderAnswerArea()))
                 }
             </div>
         );
@@ -439,9 +451,6 @@ class IRDebugger extends React.Component {
             selectedBlockExecution,
             blockExecutionOptions,
             block,
-            abstractCategories,
-            questionHierarchy,
-            helpMenuChooseCategories,
             expanded,
             handleRefresh,
             onTargetChange,
@@ -519,10 +528,7 @@ class IRDebugger extends React.Component {
                                     className={expanded ? styles.body : cardStyles.hidden}
                                     ref={this.body}
                                 >
-
-                                    {helpMenuChooseCategories ?
-                                        this.renderHelpMenuBody(abstractCategories) :
-                                        this.renderDebuggerBody()}
+                                    {this.renderDebuggerBody()}
                                 </div>
                             </div>
                         </div>

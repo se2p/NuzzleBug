@@ -13,22 +13,23 @@ import {
     startDragHelpMenu,
     dragHelpMenu,
     endDragHelpMenu,
-    startSpriteSelection, repositionHelpMenuWindow, actionExecuted
+    startSpriteSelection,
+    repositionHelpMenuWindow
 } from '../../reducers/help-menu.js';
 
 const messages = defineMessages({
     runAction: {
-        id: 'gui.help-menu.steps.run-action',
+        id: 'gui.help-menu.steps.owl.run-action',
         defaultMessage: 'Let the project run',
         description: 'First step for starting the execution of the application'
     },
     runActionCompleted: {
-        id: 'gui.help-menu.steps.run-action-completed',
+        id: 'gui.help-menu.steps.owl.run-action-completed',
         defaultMessage: 'Can we proceed?',
         description: 'First step for starting the execution of the application'
     },
     spriteSelection: {
-        id: 'gui.help-menu.steps.sprite-selection',
+        id: 'gui.help-menu.steps.owl.sprite-selection',
         defaultMessage: 'Select sprite!',
         description: 'Second step for selecting a sprite'
     },
@@ -85,12 +86,11 @@ class HelpMenu extends React.Component {
     handleMessage (){
         if (this.props.runAction && !this.props.actionExecuted) {
             return (this.props.intl.formatMessage(messages.runAction));
-        } else if(this.props.runAction) {
-            return (this.props.intl.formatMessage(messages.runActionCompleted))
+        } else if (this.props.runAction) {
+            return (this.props.intl.formatMessage(messages.runActionCompleted));
         } else if (this.props.spriteSelection) {
             return (this.props.intl.formatMessage(messages.spriteSelection));
         }
-
     }
 
     handleButtonSubmit () {
