@@ -1,9 +1,9 @@
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Button from "../../button/button.jsx";
-import {QuestionCategory} from "scratch-ir";
-import styles from "../../interrogative-debugging/version-2/ir-question-category/ir-question-category.css";
+import Button from '../../button/button.jsx';
+import {QuestionCategory} from 'scratch-ir';
+import styles from './abstract-category-button.css';
 
 
 const AbstractCategoryButtonComponent = function (props) {
@@ -19,7 +19,7 @@ const AbstractCategoryButtonComponent = function (props) {
             <Button
                 className={classNames(
                     className,
-                    //styles.helpMenuButton,
+                    // styles.helpMenuButton,
 
                 )}
                 onClick={() => onClick(category)}

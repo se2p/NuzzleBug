@@ -55,7 +55,7 @@ class HelpMenu extends React.Component {
             ...posProps
         } = this.props;
 
-        let {x, y} = posProps;
+        const {x, y} = posProps;
         const cardHorizontalDragOffset = 400; // ~80% of card width
         const cardVerticalDragOffset = expanded ? 432 : 0; // ~80% of card height
         const menuBarHeight = 10;
@@ -67,7 +67,9 @@ class HelpMenu extends React.Component {
                     <div
                         className={styles.expandedOverlay}
                         style={{
-                            width: `calc(${window.innerWidth}px - 480px - ((0.5rem + 0.0625rem) * 2))`,
+                            width: (window.innerHeight > 640 ?
+                                `calc(${window.innerWidth}px - 480px - ((0.5rem + 0.0625rem) * 2))` :
+                                `calc(${window.innerWidth}px - 17px - 480px - ((0.5rem + 0.0625rem) * 2))`),
                             height: `${window.innerHeight + cardVerticalDragOffset}px`,
                             top: 0,
                             left: 0

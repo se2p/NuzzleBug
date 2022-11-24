@@ -23,11 +23,24 @@ const PrevMessageGenerator = function (props) {
                         <div
                             className={styles.helpMessages}
                         >
-                            <div>
+                            <div className={styles.message}>
                                 {
-                                    message
+                                    message.message
                                 }
                             </div>
+                            {message.userAnswer ? (<div
+                                className={styles.formerAnswerWrapItem}
+                                style={message.color ? {
+                                    backgroundColor: message.color,
+                                    color: 'white'
+                                } : null}
+                            >
+                                <div
+                                    className={styles.formerAnswerItem}
+                                >
+                                    {message.userAnswer}
+                                </div>
+                            </div>) : null}
                         </div>
                     </div>
                 </div>

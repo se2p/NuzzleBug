@@ -10,6 +10,7 @@ import {
 
 } from '../../reducers/help-menu.js';
 import {QuestionCategory} from 'scratch-ir';
+import {ChatMessage} from './chat-message.jsx';
 
 const owlMessages = defineMessages({
     noQuestions: {
@@ -103,17 +104,12 @@ class HelpMenuBody extends React.Component {
     generatePrevMessages (){
         const messages = [];
         if (this.props.selectedAbstractCategory){
-            messages.push(this.props.intl.formatMessage(owlMessages.chooseCategory));
-            let message = this.props.intl.formatMessage(userMessages.chooseCategory);
-            message += ` ${this.translate(
-                `gui.ir-debugger.abstract-category.type.${this.props.selectedAbstractCategory.abstractType}`,
-                {}
-            )}`;
-            messages.push(message);
-            if (this.props.selectedAbstractCategory.form){
-                let categoryCount = 0;
+            let categoryCount = 0;
+            let categoryColor;
+            if (this.props.selectedAbstractCategory.form) {
                 for (const category of this.props.abstractCategories) {
                     if (category.type === this.props.selectedAbstractCategory.type) {
+                        categoryColor = category.color;
                         for (const subcategory of category.questionCategories) {
                             if (subcategory.abstractType === this.props.selectedAbstractCategory.abstractType) {
                                 categoryCount = subcategory.questionCategories.length;
@@ -121,17 +117,46 @@ class HelpMenuBody extends React.Component {
                         }
                     }
                 }
-                if (categoryCount === 1){
-                    messages.push(this.props.intl.formatMessage(owlMessages.chooseQuestionTypeSingle));
-                } else {
-                    messages.push(this.props.intl.formatMessage(owlMessages.chooseQuestionTypeMultiple));
-                }
-                message = this.props.intl.formatMessage(userMessages.chooseQuestionType);
-                message += ` "${this.translate(
-                    `gui.ir-debugger.question.form.${this.props.selectedAbstractCategory.form}`,
+            }
+            const owlMessage1 = new ChatMessage({
+                message: this.props.intl.formatMessage(owlMessages.chooseCategory)
+            });
+            messages.push(owlMessage1);
+            const userMessage1 = new ChatMessage({
+                message: this.props.intl.formatMessage(userMessages.chooseCategory),
+                userAnswer: this.translate(
+                    `gui.ir-debugger.abstract-category.type.${this.props.selectedAbstractCategory.abstractType}`,
                     {}
-                )}"`;
-                messages.push(message);
+                ),
+                type: this.props.selectedAbstractCategory.type,
+                abstractType: this.props.selectedAbstractCategory.abstractType,
+                color: categoryColor ? categoryColor : this.props.selectedAbstractCategory.color,
+            });
+            messages.push(userMessage1);
+
+            if (this.props.selectedAbstractCategory.form){
+
+                const owlMessage2 = new ChatMessage({
+                    message: ''
+                });
+                if (categoryCount === 1){
+                    owlMessage2.message = this.props.intl.formatMessage(owlMessages.chooseQuestionTypeSingle);
+                } else {
+                    owlMessage2.message = this.props.intl.formatMessage(owlMessages.chooseQuestionTypeMultiple);
+                }
+                messages.push(owlMessage2);
+                const userMessage2 = new ChatMessage({
+                    message: this.props.intl.formatMessage(userMessages.chooseQuestionType),
+                    userAnswer: this.translate(
+                        `gui.ir-debugger.question.form.${this.props.selectedAbstractCategory.form}`,
+                        {}
+                    ),
+                    type: this.props.selectedAbstractCategory.type,
+                    abstractType: this.props.selectedAbstractCategory.abstractType,
+                    color: categoryColor ? categoryColor : this.props.selectedAbstractCategory.color,
+                    form: this.props.selectedAbstractCategory.form
+                });
+                messages.push(userMessage2);
             }
         }
         return messages;

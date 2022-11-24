@@ -29,7 +29,7 @@ import TipsLibrary from '../../containers/tips-library.jsx';
 import Cards from '../../containers/cards.jsx';
 import IRCards from '../../containers/interrogative-debugging/version-1/ir-cards.jsx';
 import IRDebugger from '../../containers/interrogative-debugging/version-2/ir-debugger.jsx';
-import HelpMenu from "../../containers/help-menu/help-menu.jsx";
+import HelpMenu from '../../containers/help-menu/help-menu.jsx';
 import Alerts from '../../containers/alerts.jsx';
 import DragLayer from '../../containers/drag-layer.jsx';
 import ConnectionModal from '../../containers/connection-modal.jsx';

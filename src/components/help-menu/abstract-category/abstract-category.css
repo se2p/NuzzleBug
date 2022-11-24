@@ -14,6 +14,15 @@
     border-radius: 4px;
 }
 
+.category-list-item {
+    padding: 2px 0;
+    color: #575E75;
+    background-color: white;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
 .category-list {
     list-style-type: none;
     padding-inline-start: 0;
@@ -25,11 +34,4 @@
     margin-top: 4px;
 }
 
-.category-list-item {
-    padding: 2px 0;
-    color: #575E75;
-    background-color: white;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    cursor: pointer;
-}
+
