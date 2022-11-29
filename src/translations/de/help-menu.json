@@ -1,7 +1,8 @@
 {
     "controls": {
         "help-menu-button": "Hilfe öffnen",
-        "message-box-button": "Ich habe die Ausführung genau beobachtet!"
+        "message-box-button": "Ich habe die Ausführung genau beobachtet!",
+        "restart-project": "Setze Projekt zurück"
     },
 
     "header": {

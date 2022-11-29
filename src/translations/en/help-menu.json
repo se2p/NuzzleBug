@@ -1,7 +1,8 @@
 {
     "controls": {
         "help-menu-button": "Help menu",
-        "message-box-button": "I watched the execution closely!"
+        "message-box-button": "I watched the execution closely!",
+        "restart-project": "Restart Project"
     },
 
     "header": {

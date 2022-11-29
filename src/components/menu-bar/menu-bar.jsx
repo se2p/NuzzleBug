@@ -211,9 +211,8 @@ class MenuBar extends React.Component {
         );
         this.props.onRequestCloseFile();
         if (readyToReplaceProject) {
-            this.props.onClickRestart(this.props.canSave && this.props.canCreateNew);
+            this.props.onRestartingProject();
         }
-        this.props.onRequestCloseFile();
     }
 
     handleClickRemix () {
@@ -379,10 +378,11 @@ class MenuBar extends React.Component {
             />
         );
         const restartProjectMessage = (
+            // the translation information is saved in the help-menu json file
             <FormattedMessage
                 defaultMessage="Restart Project"
                 description="Menu bar item for restarting the project"
-                id="gui.menuBar.restartProject"
+                id="gui.help-menu.controls.restart-project"
             />
         );
         const createCopyMessage = (
@@ -485,7 +485,7 @@ class MenuBar extends React.Component {
                                             isRtl={this.props.isRtl}
                                             onClick={this.handleClickRestart}
                                         >
-                                                {restartProjectMessage}
+                                            {restartProjectMessage}
                                         </MenuItem>
                                     </MenuSection>
                                     {(this.props.canSave || this.props.canCreateCopy || this.props.canRemix) && (
@@ -852,7 +852,6 @@ MenuBar.propTypes = {
     onClickLogin: PropTypes.func,
     onClickLogo: PropTypes.func,
     onClickNew: PropTypes.func,
-    onClickRestart: PropTypes.func,
     onClickRemix: PropTypes.func,
     onClickSave: PropTypes.func,
     onClickSaveAsCopy: PropTypes.func,
@@ -867,6 +866,7 @@ MenuBar.propTypes = {
     onRequestCloseFile: PropTypes.func,
     onRequestCloseLanguage: PropTypes.func,
     onRequestCloseLogin: PropTypes.func,
+    onRestartingProject: PropTypes.func,
     onSeeCommunity: PropTypes.func,
     onShare: PropTypes.func,
     onStartSelectingFileUpload: PropTypes.func,
@@ -930,7 +930,6 @@ const mapDispatchToProps = dispatch => ({
     onRequestOpenAbout: () => dispatch(openAboutMenu()),
     onRequestCloseAbout: () => dispatch(closeAboutMenu()),
     onClickNew: needSave => dispatch(requestNewProject(needSave)),
-    onClickRestart: needSave => dispatch(requestRestartProject(needSave)),
     onClickRemix: () => dispatch(remixProject()),
     onClickSave: () => dispatch(manualUpdateProject()),
     onClickSaveAsCopy: () => dispatch(saveProjectAsCopy()),

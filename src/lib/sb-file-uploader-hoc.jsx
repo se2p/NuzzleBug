@@ -12,7 +12,7 @@ import {
     getIsLoadingUpload,
     getIsShowingWithoutId,
     onLoadedProject,
-    requestProjectUpload
+    requestProjectUpload, requestNewProject
 } from '../reducers/project-state';
 import {setProjectTitle} from '../reducers/project-title';
 import {
@@ -50,6 +50,7 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                 'handleFinishedLoadingUpload',
                 'handleStartSelectingFileUpload',
                 'handleChange',
+                'handleProjectRestart',
                 'onload',
                 'removeFileObjects'
             ]);
@@ -156,6 +157,7 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                             const uploadedProjectTitle = this.getProjectTitleFromFilename(filename);
                             this.props.onSetProjectTitle(uploadedProjectTitle);
                         }
+                        this.savedProjectState = {result: this.fileReader.result, filename: filename};
                         loadingSuccess = true;
                     })
                     .catch(error => {
@@ -182,6 +184,32 @@ const SBFileUploaderHOC = function (WrappedComponent) {
             this.fileReader = null;
             this.fileToUpload = null;
         }
+
+        handleProjectRestart () {
+            if (this.savedProjectState) {
+                const filename = this.savedProjectState.filename;
+                this.props.vm.loadProject(this.savedProjectState.result)
+                    .then(() => {
+                        if (filename) {
+                            const uploadedProjectTitle = this.getProjectTitleFromFilename(filename);
+                            this.props.onSetProjectTitle(uploadedProjectTitle);
+                        }
+                    })
+                    .catch(error => {
+                        log.warn(error);
+                        alert(this.props.intl.formatMessage(messages.loadError)); // eslint-disable-line no-alert
+                    })
+                    .then(() => {
+                        // go back to step 7: whether project loading succeeded
+                        // or failed, reset file objects
+                        this.removeFileObjects();
+                        this.props.vm.renderer.draw();
+                    });
+            } else {
+                this.props.onCreateNew();
+            }
+        }
+
         render () {
             const {
                 /* eslint-disable no-unused-vars */
@@ -203,6 +231,7 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                 <React.Fragment>
                     <WrappedComponent
                         onStartSelectingFileUpload={this.handleStartSelectingFileUpload}
+                        onRestartingProject={this.handleProjectRestart}
                         {...componentProps}
                     />
                 </React.Fragment>
@@ -218,6 +247,7 @@ const SBFileUploaderHOC = function (WrappedComponent) {
         isLoadingUpload: PropTypes.bool,
         isShowingWithoutId: PropTypes.bool,
         loadingState: PropTypes.oneOf(LoadingStates),
+        onCreateNew: PropTypes.func,
         onLoadingFinished: PropTypes.func,
         onLoadingStarted: PropTypes.func,
         onSetProjectTitle: PropTypes.func,
@@ -255,6 +285,7 @@ const SBFileUploaderHOC = function (WrappedComponent) {
         // show project loading screen
         onLoadingStarted: () => dispatch(openLoadingProject()),
         onSetProjectTitle: title => dispatch(setProjectTitle(title)),
+        onCreateNew: () => dispatch(requestNewProject(false)),
         // step 4: transition the project state so we're ready to handle the new
         // project data. When this is done, the project state transition will be
         // noticed by componentDidUpdate()
