@@ -92,7 +92,7 @@ class SpriteSelectorItem extends React.PureComponent {
             this.props.onClick(this.props.id);
         }
         if (this.props.spriteSelectionEnabled){
-            this.props.onSpriteSelected(this.props.id, this.props.costumeURL);
+            this.props.onSpriteSelected(this.props.name);
             this.props.onChooseCategory();
             this.props.onInterrogativeButtonClick(this.props.id, this.getCostumeData());
             this.forceUpdate();
@@ -198,8 +198,8 @@ const mapDispatchToProps = dispatch => ({
     dispatchSetHoveredSprite: spriteId => {
         dispatch(setHoveredSprite(spriteId));
     },
-    onSpriteSelected: (targetId, costumeUrl) => {
-        dispatch(selectSprite(targetId, costumeUrl));
+    onSpriteSelected: targetName => {
+        dispatch(selectSprite(targetName));
     },
     onChooseCategory: () => {
         dispatch(startChooseCategory());

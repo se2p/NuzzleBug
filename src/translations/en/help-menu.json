@@ -1,7 +1,7 @@
 {
     "controls": {
         "help-menu-button": "Help menu",
-        "message-box-button": "Confirm"
+        "message-box-button": "I watched the execution closely!"
     },
 
     "header": {
@@ -14,9 +14,10 @@
 
     "steps": {
         "owl": {
-            "no-questions": "It looks like that there are no questions available. This could be, because there is no Block around!",
+            "no-questions-stage": "It looks like that there are no questions available. This could be, because on our stage there is no Block around!",
+            "no-questions-sprite": "It looks like that there are no questions available. This could be, because there is no Block in the selected sprite <i><b>{sprite}</b></i>!",
             "run-action": "Can you please help me narrow it down when the error occurs? For that you have to execute the game and wait till the error pops up.",
-            "run-action-completed": "Are you ready to proceed?",
+            "run-action-completed": "Execute the game and watch closely which sprite is not working properly.",
             "sprite-selection": "Thank you very much! Please select the sprite or the stage where you suspect the error is in.",
             "choose-category": "Splendid! We come closer and closer I can feel it! We are now in the debugger for this sprite. Let’s get deeper: Please choose where we proceed to look next!",
             "choose-question-type-multiple": "According to what you selected we have multiple possible options. Is it something that should happen or should not happen? Please Choose.",

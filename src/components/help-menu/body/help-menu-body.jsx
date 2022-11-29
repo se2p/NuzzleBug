@@ -64,7 +64,8 @@ const HelpMenuBodyComponent = function (props) {
                             injected={injected}
                             onSubmit={print}
                             enabled={false}
-                            text={owlMessage}
+                            message={owlMessage}
+                            lookRight={false}
                         />
                     </div>
                 </div>

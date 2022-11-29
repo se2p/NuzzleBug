@@ -56,7 +56,7 @@ class TargetPane extends React.Component {
         if (spriteSelectionEnabled){
             const costumeUrl = stage.costume.asset ?
                 getCostumeUrl(stage.costume.asset) : null;
-            onSpriteSelected(stage.id, costumeUrl);
+            onSpriteSelected(null);
             onChooseCategory();
             onInterrogativeButtonClick(stage.id, costumeUrl);
             this.forceUpdate();

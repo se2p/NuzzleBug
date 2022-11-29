@@ -49,7 +49,7 @@ class HelpMenu extends React.Component {
             'handleClose',
             'handleMessage',
             'handleButtonSubmit',
-            'translate',
+            'translate'
         ]);
         this.init();
     }
@@ -73,7 +73,7 @@ class HelpMenu extends React.Component {
     initProperties () {
         this.cancel = false;
         this.crashed = false;
-        this.flying = true;
+        this.lookRight = true;
     }
 
     handleClose () {
@@ -85,11 +85,11 @@ class HelpMenu extends React.Component {
 
     handleMessage (){
         if (this.props.runAction && !this.props.actionExecuted) {
-            return (this.props.intl.formatMessage(messages.runAction));
+            return messages.runAction;
         } else if (this.props.runAction) {
-            return (this.props.intl.formatMessage(messages.runActionCompleted));
+            return messages.runActionCompleted;
         } else if (this.props.spriteSelection) {
-            return (this.props.intl.formatMessage(messages.spriteSelection));
+            return messages.spriteSelection;
         }
     }
 
@@ -138,6 +138,7 @@ class HelpMenu extends React.Component {
                 onOwlButtonSubmit={this.handleButtonSubmit}
                 buttonText={buttonText}
                 actionExecuted={actionExecuted}
+                lookRight={this.lookRight}
                 x={x}
                 y={y}
 

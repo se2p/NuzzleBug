@@ -38,7 +38,7 @@ class HelpMenu extends React.Component {
             vm,
             intl,
             expanded,
-            flying,
+            lookRight,
             onClose,
             onBack,
             onShrinkExpand,
@@ -64,17 +64,30 @@ class HelpMenu extends React.Component {
         return (
             <div>
                 {(expanded && (runAction || spriteSelection)) ? (
-                    <div
-                        className={styles.expandedOverlay}
-                        style={{
-                            width: (window.innerHeight > 640 ?
-                                `calc(${window.innerWidth}px - 480px - ((0.5rem + 0.0625rem) * 2))` :
-                                `calc(${window.innerWidth}px - 17px - 480px - ((0.5rem + 0.0625rem) * 2))`),
-                            height: `${window.innerHeight + cardVerticalDragOffset}px`,
-                            top: 0,
-                            left: 0
-                        }}
-                    />
+                    <div>
+                        <div
+                            className={styles.expandedOverlay}
+                            style={{
+                                width: (window.innerHeight > 640 ?
+                                    `calc(${window.innerWidth}px - 475px - ((0.5rem + 0.0625rem) * 2))` :
+                                    `calc(${window.innerWidth}px - 17px - 480px - ((0.5rem + 0.0625rem) * 2))`),
+                                height: `${window.innerHeight + cardVerticalDragOffset}px`,
+                                top: 0,
+                                left: 0
+                            }}
+                        />
+                        {spriteSelection ? (<div
+                            className={styles.expandedOverlay}
+                            style={{
+                                width: `${window.innerWidth + (2 * cardHorizontalDragOffset)}px`,
+                                height: `458px`,
+                                top: 0,
+                                left: (window.innerHeight > 640 ?
+                                    `calc(${window.innerWidth}px - 475px - ((0.5rem + 0.0625rem) * 2))` :
+                                    `calc(${window.innerWidth}px - 17px - 480px - ((0.5rem + 0.0625rem) * 2))`)
+                            }}
+                        />) : null}
+                    </div>
                 ) : (expanded ? (
                     <div
                         className={styles.expandedOverlay}
@@ -121,8 +134,8 @@ class HelpMenu extends React.Component {
                                 >
                                     <div className={styles.card}>
                                         <Owl
-                                            text={handledMessage}
-                                            flying={flying}
+                                            message={handledMessage}
+                                            lookRight={lookRight}
                                             onSubmit={onOwlButtonSubmit}
                                             buttonText={buttonText}
                                             enabled={actionExecuted}
@@ -156,7 +169,7 @@ HelpMenu.propTypes = {
     intl: intlShape.isRequired,
     vm: PropTypes.instanceOf(VirtualMachine).isRequired,
     expanded: PropTypes.bool.isRequired,
-    flying: PropTypes.bool,
+    lookRight: PropTypes.bool,
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
     onClose: PropTypes.func.isRequired,

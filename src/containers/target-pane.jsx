@@ -326,8 +326,8 @@ const mapDispatchToProps = dispatch => ({
     onInterrogativeButtonClick: (targetId, costumeUrl) => {
         dispatch(openTargetDebugger(targetId, costumeUrl));
     },
-    onSpriteSelected: (targetId, costumeUrl) => {
-        dispatch(selectSprite(targetId, costumeUrl));
+    onSpriteSelected: targetName => {
+        dispatch(selectSprite(targetName));
     },
     onChooseCategory: () => {
         dispatch(startChooseCategory());

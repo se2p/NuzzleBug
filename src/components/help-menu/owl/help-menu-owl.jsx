@@ -4,12 +4,13 @@ import React from 'react';
 
 import styles from './help-menu-owl.css';
 import owl1 from './owl-a.svg';
-import owl2 from './owl-c.svg';
+import owl2 from './owl-b.svg';
+import {FormattedHTMLMessage} from 'react-intl';
 
 const HelpMenuOwlComponent = function (props) {
     const {
-        text,
-        flying,
+        message,
+        lookRight,
         buttonText,
         onSubmit,
         enabled,
@@ -17,7 +18,7 @@ const HelpMenuOwlComponent = function (props) {
     } = props;
 
     let owl = owl1;
-    if (flying){
+    if (!lookRight){
         owl = owl2;
     }
 
@@ -57,7 +58,10 @@ const HelpMenuOwlComponent = function (props) {
                         className={styles.helpMessages}
                     >
                         <div>
-                            {text}
+                            <FormattedHTMLMessage
+                                tagName="span"
+                                {...message}
+                            />
                         </div>
                         {/* Todo languages and css!*/}
                         {enabled ? <button
@@ -72,8 +76,8 @@ const HelpMenuOwlComponent = function (props) {
 };
 
 HelpMenuOwlComponent.propTypes = {
-    flying: PropTypes.bool,
-    text: PropTypes.string,
+    lookRight: PropTypes.bool,
+    message: PropTypes.string,
     buttonText: PropTypes.string,
     onSubmit: PropTypes.func.isRequired,
     enabled: PropTypes.bool.isRequired,
@@ -83,8 +87,8 @@ HelpMenuOwlComponent.propTypes = {
 HelpMenuOwlComponent.defaultProps = {
     buttonText: 'OK',
     onSubmit: null,
-    text: 'No Text available',
-    flying: false,
+    message: 'No Text available',
+    lookRight: true,
     enabled: false
 };
 

@@ -13,35 +13,47 @@ import {QuestionCategory} from 'scratch-ir';
 import {ChatMessage} from './chat-message.jsx';
 
 const owlMessages = defineMessages({
-    noQuestions: {
-        id: 'gui.help-menu.steps.owl.no-questions',
+    noQuestionsStage: {
+        id: 'gui.help-menu.steps.owl.no-questions-stage',
         defaultMessage: 'No questions available!',
-        description: 'no questions available!'
+        description: 'no questions available!',
+        values: {}
+    },
+    noQuestionsSprite: {
+        id: 'gui.help-menu.steps.owl.no-questions-sprite',
+        defaultMessage: 'No questions available!',
+        description: 'no questions available!',
+        values: {}
     },
     chooseCategory: {
         id: 'gui.help-menu.steps.owl.choose-category',
         defaultMessage: 'Which category?',
-        description: 'Third step for selecting a category'
+        description: 'Third step for selecting a category',
+        values: {}
     },
     chooseQuestionTypeMultiple: {
         id: 'gui.help-menu.steps.owl.choose-question-type-multiple',
         defaultMessage: 'Did it happen or not?',
-        description: 'Fourth step for selecting what type the question has'
+        description: 'Fourth step for selecting what type the question has',
+        values: {}
     },
     chooseQuestionTypeSingle: {
         id: 'gui.help-menu.steps.owl.choose-question-type-single',
         defaultMessage: 'According to the blocks available, you have only one choice!',
-        description: 'Fourth step but only one question type is available'
+        description: 'Fourth step but only one question type is available',
+        values: {}
     },
     finished: {
         id: 'gui.help-menu.steps.owl.finished',
         defaultMessage: 'Finished!',
-        description: 'Fifth step for when the help is finished'
+        description: 'Fifth step for when the help is finished',
+        values: {}
     },
     messageBoxButton: {
         id: 'gui.help-menu.controls.message-box-button',
         defaultMessage: 'OK',
-        description: 'The text for the button in the speech bubble of the owl'
+        description: 'The text for the button in the speech bubble of the owl',
+        values: {}
     }
 });
 
@@ -77,7 +89,13 @@ class HelpMenuBody extends React.Component {
     handleOwlMessage () {
         let chosenMessage = null;
         if (this.props.chooseCategory && this.props.categories.length === 0) {
-            chosenMessage = owlMessages.noQuestions;
+            if (this.props.targetName) {
+                chosenMessage = owlMessages.noQuestionsSprite;
+                chosenMessage.values = {sprite: this.props.targetName};
+            }
+            else {
+                chosenMessage = owlMessages.noQuestionsStage;
+            }
         } else if (this.props.chooseCategory){
             chosenMessage = owlMessages.chooseCategory;
         } else if (this.props.chooseQuestionType && this.props.categories[0].questionCategories.length &&
@@ -88,7 +106,7 @@ class HelpMenuBody extends React.Component {
         } else if (this.props.finished) {
             chosenMessage = owlMessages.finished;
         }
-        return this.props.intl.formatMessage(chosenMessage);
+        return chosenMessage;
     }
 
     handleUserMessage () {
@@ -98,7 +116,10 @@ class HelpMenuBody extends React.Component {
         } else {
             chosenMessage = userMessages.chooseQuestionType;
         }
-        return this.props.intl.formatMessage(chosenMessage);
+        if (chosenMessage) {
+            return this.translate(chosenMessage.id, {});
+        }
+        return '';
     }
 
     generatePrevMessages (){
@@ -130,7 +151,7 @@ class HelpMenuBody extends React.Component {
                 ),
                 type: this.props.selectedAbstractCategory.type,
                 abstractType: this.props.selectedAbstractCategory.abstractType,
-                color: categoryColor ? categoryColor : this.props.selectedAbstractCategory.color,
+                color: categoryColor ? categoryColor : this.props.selectedAbstractCategory.color
             });
             messages.push(userMessage1);
 
@@ -195,10 +216,12 @@ HelpMenuBody.propTypes = {
     chooseQuestionType: PropTypes.bool.isRequired,
     finished: PropTypes.bool.isRequired,
     injected: PropTypes.bool.isRequired,
-    selectedAbstractCategory: PropTypes.instanceOf(QuestionCategory)
+    selectedAbstractCategory: PropTypes.instanceOf(QuestionCategory),
+    targetName: PropTypes.string
 };
 
 const mapStateToProps = state => ({
+    targetName: state.scratchGui.helpMenu.targetName,
     chooseCategory: state.scratchGui.helpMenu.chooseCategory,
     chooseQuestionType: state.scratchGui.helpMenu.chooseQuestionType,
     finished: state.scratchGui.helpMenu.finished,

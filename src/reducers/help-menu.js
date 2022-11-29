@@ -25,12 +25,11 @@ const initialState = {
     x: 0,
     y: 0,
     expanded: true,
-    executedOnce: false,
+    executedOnce: true,
     dragging: false,
     runAction: true,
     spriteSelection: false,
-    targetId: null,
-    costumeUrl: null,
+    targetName: null,
     chooseCategory: false,
     chooseQuestionType: false,
     finished: false,
@@ -51,15 +50,14 @@ const reducer = function (state, action) {
     }
     case OPEN:
         return Object.assign({}, state, {
-            visible: true,
+            visible: true
         });
     case CLOSE:
         return Object.assign({}, state, {
             visible: false,
             runAction: true,
             spriteSelection: false,
-            targetId: null,
-            costumeUrl: null,
+            targetName: null,
             chooseCategory: false,
             chooseQuestionType: false,
             finished: false,
@@ -108,8 +106,7 @@ const reducer = function (state, action) {
         });
     case SELECTED_SPRITE:
         return Object.assign({}, state, {
-            target_id: action.target_id,
-            costume_url: action.costume_url
+            targetName: action.targetName
         });
     case CHOOSE_CATEGORY:
         return Object.assign({}, state, {
@@ -179,8 +176,8 @@ const endDragHelpMenu = function () {
     return {type: END_DRAG};
 };
 
-const selectSprite = function (targetId, costumeUrl) {
-    return {type: SELECTED_SPRITE, targetId, costumeUrl};
+const selectSprite = function (targetName) {
+    return {type: SELECTED_SPRITE, targetName};
 };
 
 const actionExecuted = function (){
