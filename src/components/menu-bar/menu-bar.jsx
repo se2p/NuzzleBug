@@ -38,7 +38,6 @@ import {
     getIsShowingProject,
     manualUpdateProject,
     requestNewProject,
-    requestRestartProject,
     remixProject,
     saveProjectAsCopy
 } from '../../reducers/project-state';
@@ -195,6 +194,7 @@ class MenuBar extends React.Component {
         );
         this.props.onRequestCloseFile();
         if (readyToReplaceProject) {
+            this.props.onResetProjectState();
             this.props.onClickNew(this.props.canSave && this.props.canCreateNew);
         }
         this.props.onRequestCloseFile();
@@ -221,10 +221,12 @@ class MenuBar extends React.Component {
     }
     handleClickSave () {
         this.props.onClickSave();
+        this.props.onSaveProjectState();
         this.props.onRequestCloseFile();
     }
     handleClickSaveAsCopy () {
         this.props.onClickSaveAsCopy();
+        this.props.onSaveProjectState();
         this.props.onRequestCloseFile();
     }
     handleClickSeeCommunity (waitForUpdate) {
@@ -279,6 +281,7 @@ class MenuBar extends React.Component {
         return () => {
             this.props.onRequestCloseFile();
             downloadProjectCallback();
+            this.props.onSaveProjectState(this.props.projectTitle);
             if (this.props.onProjectTelemetryEvent) {
                 const metadata = collectMetadata(this.props.vm, this.props.projectTitle, this.props.locale);
                 this.props.onProjectTelemetryEvent('projectDidSave', metadata);
@@ -866,7 +869,9 @@ MenuBar.propTypes = {
     onRequestCloseFile: PropTypes.func,
     onRequestCloseLanguage: PropTypes.func,
     onRequestCloseLogin: PropTypes.func,
+    onResetProjectState: PropTypes.func,
     onRestartingProject: PropTypes.func,
+    onSaveProjectState: PropTypes.func,
     onSeeCommunity: PropTypes.func,
     onShare: PropTypes.func,
     onStartSelectingFileUpload: PropTypes.func,

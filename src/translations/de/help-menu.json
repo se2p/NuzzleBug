@@ -18,7 +18,7 @@
             "no-questions-stage": "Es sieht so aus, als ob keine Fragen verfügbar sind. Dies könnte daran liegen, dass in der Bühne kein Block vorhanden ist!",
             "no-questions-sprite": "Es sieht so aus, als ob keine Fragen verfügbar sind. Dies könnte daran liegen, dass in der Figur <i><b>{sprite}</b></i> kein Block vorhanden ist!",
             "run-action": "Kannst du mir bitte helfen den Fehler etwas einzugrenzen? Führe dafür einfach das Spiel soweit aus, bis der Fehler auftritt.",
-            "run-action-completed": "Klicke oben auf das grüne Dreieck und führe das Prorgamm aus. Beobachte genau, bei welcher Figur der Fehler aufgetreten ist!",
+            "run-action-completed": "Klicke oben auf die grüne Flagge und führe das Prorgamm aus. Beobachte genau, bei welcher Figur der Fehler aufgetreten ist!",
             "sprite-selection": "Gut gemacht! Nun wähle die Figur oder die Bühne aus, in der du den Fehler erwartest!",
             "choose-category": "Wir kommen immer näher und näher, wir befinden uns nun im Debugger! Kannst du eingrenzen, um was es sich bei dem Fehler handelt?",
             "choose-question-type-multiple": "Ok, abhängig davon was du gerade angeklickt hast, haben wir nun mehrere Optionen. Würde dich interessieren, warum etwas passiert oder eher warum nicht?",

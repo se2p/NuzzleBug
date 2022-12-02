@@ -112,6 +112,8 @@ const GUIComponent = props => {
         onRequestCloseBackdropLibrary,
         onRequestCloseCostumeLibrary,
         onRequestCloseTelemetryModal,
+        onResetProjectState,
+        onSaveProjectState,
         onRestartingProject,
         onSeeCommunity,
         onShare,
@@ -260,6 +262,8 @@ const GUIComponent = props => {
                     onShare={onShare}
                     onStartSelectingFileUpload={onStartSelectingFileUpload}
                     onRestartingProject={onRestartingProject}
+                    onResetProjectState={onResetProjectState}
+                    onSaveProjectState={onSaveProjectState}
                     onToggleLoginOpen={onToggleLoginOpen}
                 />
                 <Box className={styles.bodyWrapper}>
@@ -423,7 +427,9 @@ GUIComponent.propTypes = {
     onRequestCloseBackdropLibrary: PropTypes.func,
     onRequestCloseCostumeLibrary: PropTypes.func,
     onRequestCloseTelemetryModal: PropTypes.func,
+    onResetProjectState: PropTypes.func,
     onRestartingProject: PropTypes.func,
+    onSaveProjectState: PropTypes.func,
     onSeeCommunity: PropTypes.func,
     onShare: PropTypes.func,
     onShowPrivacyPolicy: PropTypes.func,

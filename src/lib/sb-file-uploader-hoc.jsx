@@ -2,26 +2,22 @@ import bindAll from 'lodash.bindall';
 import React from 'react';
 import Renderer from 'scratch-render';
 import PropTypes from 'prop-types';
-import {defineMessages, intlShape, injectIntl} from 'react-intl';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import {connect} from 'react-redux';
 import log from '../lib/log';
 import sharedMessages from './shared-messages';
 
 import {
-    LoadingStates,
     getIsLoadingUpload,
     getIsShowingWithoutId,
+    LoadingStates,
     onLoadedProject,
-    requestProjectUpload, requestNewProject
+    requestNewProject,
+    requestProjectUpload
 } from '../reducers/project-state';
 import {setProjectTitle} from '../reducers/project-title';
-import {
-    openLoadingProject,
-    closeLoadingProject
-} from '../reducers/modals';
-import {
-    closeFileMenu
-} from '../reducers/menus';
+import {closeLoadingProject, openLoadingProject} from '../reducers/modals';
+import {closeFileMenu} from '../reducers/menus';
 
 const messages = defineMessages({
     loadError: {
@@ -52,7 +48,9 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                 'handleChange',
                 'handleProjectRestart',
                 'onload',
-                'removeFileObjects'
+                'removeFileObjects',
+                'handleResetProjectState',
+                'handleSaveProjectState'
             ]);
         }
         componentDidUpdate (prevProps) {
@@ -210,6 +208,20 @@ const SBFileUploaderHOC = function (WrappedComponent) {
             }
         }
 
+        handleResetProjectState () {
+            this.savedProjectState = null;
+        }
+
+        handleSaveProjectState (projectTitle) {
+            if (!this.savedProjectState) {
+                this.savedProjectState = {result: null, filename: null};
+            }
+            if (projectTitle) {
+                this.savedProjectState.filename = `${projectTitle}.sb3`;
+            }
+            this.savedProjectState.result = this.props.vm.toJSON();
+        }
+
         render () {
             const {
                 /* eslint-disable no-unused-vars */
@@ -232,6 +244,8 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                     <WrappedComponent
                         onStartSelectingFileUpload={this.handleStartSelectingFileUpload}
                         onRestartingProject={this.handleProjectRestart}
+                        onResetProjectState={this.handleResetProjectState}
+                        onSaveProjectState={this.handleSaveProjectState}
                         {...componentProps}
                     />
                 </React.Fragment>
@@ -256,7 +270,8 @@ const SBFileUploaderHOC = function (WrappedComponent) {
         userOwnsProject: PropTypes.bool,
         vm: PropTypes.shape({
             loadProject: PropTypes.func,
-            renderer: PropTypes.instanceOf(Renderer)
+            renderer: PropTypes.instanceOf(Renderer),
+            toJSON: PropTypes.func
         })
     };
     const mapStateToProps = (state, ownProps) => {
