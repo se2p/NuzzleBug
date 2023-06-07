@@ -180,7 +180,7 @@ class TargetPane extends React.Component {
             const {scrollX, scrollY, scale} = metrics;
             const posY = -scrollY + 30;
             let posX;
-            if (this.props.isRtl) {
+            if (this.props.isrtl) {
                 posX = scrollX + 30;
             } else {
                 posX = -scrollX + 30;
@@ -288,7 +288,7 @@ TargetPane.propTypes = {
 const mapStateToProps = state => ({
     editingTarget: state.scratchGui.targets.editingTarget,
     hoveredTarget: state.scratchGui.hoveredTarget,
-    isRtl: state.locales.isRtl,
+    isrtl: state.locales.isrtl,
     spriteLibraryVisible: state.scratchGui.modals.spriteLibrary,
     sprites: state.scratchGui.targets.sprites,
     stage: state.scratchGui.targets.stage,
