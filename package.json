@@ -78,7 +78,7 @@
         "redux": "3.7.2",
         "redux-throttle": "0.1.1",
         "regenerator-runtime": "^0.13.9",
-        "scratch-analysis": "git+https://gitlab+deploy-token-11:EHrTMLWyoV8wpvFpZPKX@gitlab.infosun.fim.uni-passau.de/se2/whisker/scratch-analysis.git#master",
+        "scratch-analysis": "git+https://gitlab+deploy-token-12:j56psq6y2wRxAs6rC1dM@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-analysis.git#master",
         "scratch-audio": "0.1.0-prerelease.20200528195344",
         "scratch-blocks": "git+https://gitlab+deploy-token-8:vQ5PEsjDsFr9WtF56a7h@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-blocks.git#develop",
         "scratch-ir": "git+https://gitlab+deploy-token-10:aXHysSQXmgmbCC-3GMzp@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-ir.git#master",

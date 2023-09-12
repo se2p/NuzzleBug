@@ -9391,8 +9391,8 @@
   "resolved" "file:node_modules/scratch-analysis"
   "version" "0.1.0"
 
-"scratch-analysis@git+https://gitlab+deploy-token-11:EHrTMLWyoV8wpvFpZPKX@gitlab.infosun.fim.uni-passau.de/se2/whisker/scratch-analysis.git#master":
-  "resolved" "git+https://gitlab+deploy-token-11:EHrTMLWyoV8wpvFpZPKX@gitlab.infosun.fim.uni-passau.de/se2/whisker/scratch-analysis.git#fde422c03e41b2b200de86847be1c46922bcc892"
+"scratch-analysis@git+https://gitlab+deploy-token-12:j56psq6y2wRxAs6rC1dM@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-analysis.git#master":
+  "resolved" "git+https://gitlab+deploy-token-12:j56psq6y2wRxAs6rC1dM@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-analysis.git#14d7fb036670815aa51b4999fbdeb69a2703e499"
   "version" "0.1.0"
 
 "scratch-audio@0.1.0-prerelease.20200528195344":
