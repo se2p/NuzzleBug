@@ -6819,6 +6819,11 @@
   "resolved" "https://registry.npmjs.org/lodash.bindall/-/lodash.bindall-4.4.0.tgz"
   "version" "4.4.0"
 
+"lodash.clonedeep@^4.5.0":
+  "integrity" "sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ=="
+  "resolved" "https://registry.npmjs.org/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz"
+  "version" "4.5.0"
+
 "lodash.debounce@^3.0.0":
   "integrity" "sha512-lcmJwMpdPAtChA4hfiwxTtgFeNAaow701wWUgVUqeD0XJF7vMXIN+bu/2FJSGxT0NUbZy9g9VFrlOFfPjl+0Ew=="
   "resolved" "https://registry.npmjs.org/lodash.debounce/-/lodash.debounce-3.1.1.tgz"
@@ -6830,6 +6835,11 @@
   "integrity" "sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow=="
   "resolved" "https://registry.npmjs.org/lodash.debounce/-/lodash.debounce-4.0.8.tgz"
   "version" "4.0.8"
+
+"lodash.defaults@^4.2.0":
+  "integrity" "sha512-qjxPLHd3r5DnsdGacqOMU6pb/avJzdh9tFX2ymgoZE27BmjXrNy/y4LoaiTeAb+O3gL8AfpJGtqfX/ae2leYYQ=="
+  "resolved" "https://registry.npmjs.org/lodash.defaults/-/lodash.defaults-4.2.0.tgz"
+  "version" "4.2.0"
 
 "lodash.defaultsdeep@4.6.1":
   "integrity" "sha512-3j8wdDzYuWO3lM3Reg03MuQR957t287Rpcxp1njpEa8oDrikb+FwGdW3n+FELh/A6qib6yPit0j/pv9G/yeAqA=="
@@ -9378,7 +9388,11 @@
     "ajv-keywords" "^3.5.2"
 
 "scratch-analysis@file:../scratch-analysis":
-  "resolved" "file:../scratch-analysis"
+  "resolved" "file:node_modules/scratch-analysis"
+  "version" "0.1.0"
+
+"scratch-analysis@git+https://gitlab+deploy-token-11:EHrTMLWyoV8wpvFpZPKX@gitlab.infosun.fim.uni-passau.de/se2/whisker/scratch-analysis.git#master":
+  "resolved" "git+https://gitlab+deploy-token-11:EHrTMLWyoV8wpvFpZPKX@gitlab.infosun.fim.uni-passau.de/se2/whisker/scratch-analysis.git#fde422c03e41b2b200de86847be1c46922bcc892"
   "version" "0.1.0"
 
 "scratch-audio@0.1.0-prerelease.20200528195344":
@@ -9399,8 +9413,8 @@
     "imports-loader" "0.6.5"
     "scratch-l10n" "3.14.20220329031539"
 
-"scratch-ir@file:../scratch-ir":
-  "resolved" "file:../scratch-ir"
+"scratch-ir@git+https://gitlab+deploy-token-10:aXHysSQXmgmbCC-3GMzp@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-ir.git#master":
+  "resolved" "git+https://gitlab+deploy-token-10:aXHysSQXmgmbCC-3GMzp@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-ir.git#1f28d90f560309788be0c0e8a73a13d7766b4e96"
   "version" "0.1.0"
   dependencies:
     "lodash.bindall" "4.4.0"
