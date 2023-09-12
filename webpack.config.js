@@ -57,8 +57,7 @@ const base = {
         },
         {
             test: /\.tsx?$/,
-            loader: 'ts-loader',
-            exclude: path.resolve(__dirname, 'node_modules/whisker-main/whisker-main/test')
+            loader: 'ts-loader'
         },
         {
             test: /\.css$/,
