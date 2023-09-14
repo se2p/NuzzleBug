@@ -28,7 +28,8 @@ const base = {
         chunkFilename: 'chunks/[name].js'
     },
     resolve: {
-        symlinks: false
+        symlinks: false,
+        extensions: ['.ts', '.tsx', '.js']
     },
     module: {
         rules: [{
@@ -53,6 +54,10 @@ const base = {
                     }]],
                 presets: ['@babel/preset-env', '@babel/preset-react']
             }
+        },
+        {
+            test: /\.tsx?$/,
+            loader: 'ts-loader'
         },
         {
             test: /\.css$/,

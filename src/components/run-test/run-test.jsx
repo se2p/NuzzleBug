@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Test from 'whisker-main/whisker-main/dist/src/test-runner/test';
+import Test from 'whisker-main/whisker-main/src/test-runner/test';
 
 import runTestIcon from './icon--run-test.png';
 import styles from './run-test.css';
