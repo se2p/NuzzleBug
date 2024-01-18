@@ -8,8 +8,16 @@ import VirtualMachine from 'scratch-vm';
 import downloadBlob from '../lib/download-blob';
 
 import {homeMenu} from '../reducers/tutorial-cards';
-import {testNextStep, nextTutorialStep, testStopped, testStarted,
-    reset, success, fail, expandSolution} from '../reducers/tutorial-step';
+import {
+    expandSolution,
+    fail,
+    nextTutorialStep,
+    reset,
+    success,
+    testNextStep,
+    testStarted,
+    testStopped
+} from '../reducers/tutorial-step';
 import {lock, unlock} from '../reducers/vm-status';
 
 import {runTest} from 'tutorial-tests';
@@ -26,6 +34,28 @@ class TutorialStep extends React.Component {
         this.test = this.test.bind(this);
         this.handleDownload = this.handleDownload.bind(this);
         this.next = this.next.bind(this);
+        this.requestHints = this.requestHints.bind(this);
+    }
+
+    /**
+     * Contacts the server to fetch new hints for the current program.
+     *
+     * Also deletes old block comments beforehand.
+     * @return {*} the hints object fetched from the server.
+     */
+    requestHints () {
+        const program = this.props.toJson();
+        const url = 'http://localhost:8080/tutorial-system/checker/generate-feedback'
+        return fetch(url, {
+            method: 'POST',
+            headers: new Headers({'content-type': 'application/json'}),
+            referrerPolicy: 'origin-when-cross-origin',
+            body: {
+                "language": 'GERMAN',
+                "detectors": 'default',
+                "program": program
+            }
+        });
     }
 
     processSteps () {
@@ -144,6 +174,8 @@ class TutorialStep extends React.Component {
 
         const guiMessages = this.props.guiMessages;
 
+        const hints = this.requestHints();
+
         return (
             this.props.step + 1 === this.props.totalSteps ?
                 <>
@@ -176,6 +208,7 @@ class TutorialStep extends React.Component {
                             guiMessages.testButtonTitle}
                         onTest={this.props.stepSucceeded ? this.next : this.test}
                         solutionVisible={!isCurrentStep || this.props.failedTimes >= 3}
+                        generatedHints={hints}
                         {...this.props}
                     />
                 </>
@@ -205,6 +238,7 @@ TutorialStep.propTypes = {
     lockVM: PropTypes.func,
     unlockVM: PropTypes.func,
     locale: PropTypes.string.isRequired,
+    toJson: PropTypes.func,
     vm: PropTypes.instanceOf(VirtualMachine).isRequired
 };
 
@@ -218,7 +252,8 @@ const mapStateToProps = state => ({
     failureMessage: state.scratchGui.tutorialStep.failureMessage,
     failedTimes: state.scratchGui.tutorialStep.failedTimes,
     solutionExpanded: state.scratchGui.tutorialStep.solutionExpanded,
-    locale: state.locales.locale
+    locale: state.locales.locale,
+    toJson: state.scratchGui.vm.toJSON.bind(state.scratchGui.vm)
 });
 
 const mapDispatchToProps = dispatch => ({

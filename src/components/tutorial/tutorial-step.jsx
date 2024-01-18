@@ -6,6 +6,7 @@ import checkmark from './icon--checkmark.png';
 import crossMark from './icon--cross-mark.png';
 import loading from './icon--loading.svg';
 import arrow from './icon--arrow.svg';
+import HintContent from './hints.jsx';
 
 const Solution = ({title, content, onSolution, solutionExpanded}) => (
     <>
@@ -43,6 +44,8 @@ Solution.propTypes = {
     onSolution: PropTypes.func.isRequired,
     solutionExpanded: PropTypes.bool.isRequired
 };
+
+// TODO an der Stelle CodeQualityComponent erstellen
 
 const TestingComponent = props => {
     const {
@@ -144,7 +147,8 @@ const TutorialStep = props => {
         solutionVisible,
         solutionExpanded,
         currentlyTesting,
-        onSolution
+        onSolution,
+        generatedHints
     } = props;
 
     return (
@@ -179,6 +183,9 @@ const TutorialStep = props => {
                     success={success}
                     currentlyTesting={currentlyTesting}
                 />
+                <HintContent
+                    text={generatedHints}
+                />
             </div>
         </div>
     );
@@ -208,7 +215,8 @@ TutorialStep.propTypes = {
     solutionVisible: PropTypes.bool.isRequired,
     solutionExpanded: PropTypes.bool.isRequired,
     currentlyTesting: PropTypes.bool.isRequired,
-    onSolution: PropTypes.func.isRequired
+    onSolution: PropTypes.func.isRequired,
+    generatedHints: PropTypes.string
 };
 
 export default TutorialStep;

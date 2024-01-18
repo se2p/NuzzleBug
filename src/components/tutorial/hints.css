@@ -1,0 +1,45 @@
+@import "../../css/units.css";
+@import "../../css/colors.css";
+@import "../../css/z-index.css";
+
+.scratch-image {
+    transform: scale(0.75);
+}
+
+.hint-explanation {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.hint-explanation-head {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.hint-explanation-text {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    margin-left: 20px;
+}
+
+.hint-explanation-arrow {
+    margin-top: 35px;
+    font-size: 60px;
+    color: lightblue;
+    margin-left: 50px;
+}
+
+.hint-explanation-code-block {
+    margin: 0 30px;
+    flex-direction: row;
+    display: flex;
+    flex-wrap: wrap;
+    border: dotted lightblue;
+    border-radius: 15px;
+    justify-content: center;
+}
+
+.right-hint-part {
+    display: flex;
+    justify-content: center;
+}
