@@ -18,11 +18,21 @@ HintExplanation.propTypes = {
 };
 
 const HintContent = props => (
-    <div>{props.text}</div>
+    <div>
+        {props.text.map((element, index) => (
+            <div key={index}>{element}</div>
+        ))}
+    </div>
 );
 
 HintContent.propTypes = {
-    text: PropTypes.string
+    hints: PropTypes.arrayOf(PropTypes.shape({
+        title: PropTypes.string.isRequired,
+        description: PropTypes.number.isRequired,
+        sprite: PropTypes.string.isRequired,
+        type: PropTypes.string.isRequired,
+        codeSnippet: PropTypes.string
+    })).isRequired
 };
 
 export default HintContent;

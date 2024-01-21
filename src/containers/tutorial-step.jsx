@@ -34,7 +34,7 @@ class TutorialStep extends React.Component {
         this.test = this.test.bind(this);
         this.handleDownload = this.handleDownload.bind(this);
         this.next = this.next.bind(this);
-        this.requestHints = this.requestHints.bind(this);
+        //this.requestHints = this.requestHints.bind(this);
     }
 
     /**
@@ -43,19 +43,85 @@ class TutorialStep extends React.Component {
      * Also deletes old block comments beforehand.
      * @return {*} the hints object fetched from the server.
      */
+    // requestHints () {
+    //     const program = this.props.toJson();
+    //     const url = 'http://localhost:8080/tutorial-system/checker/generate-feedback';
+    //     const jsonBody = JSON.stringify({
+    //         language: 'GERMAN',
+    //         detectors: 'default',
+    //         program: JSON.parse(program)
+    //     });
+    //     fetch(url, {
+    //         method: 'POST',
+    //         headers: new Headers({'content-type': 'application/json'}),
+    //         referrerPolicy: 'origin-when-cross-origin',
+    //         body: jsonBody
+    //     }).then(
+    //         value => console.log(value.text()),
+    //         error => {
+    //             console.log(error);
+    //         }
+    //     );
+    // }
+
+    sendHttpRequest (url, method, headers, jsonBody) {
+        const xhr = new XMLHttpRequest();
+        xhr.open(method, url, false);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        for (const header in headers) {
+            if (headers.hasOwnProperty(header)) {
+                xhr.setRequestHeader(header, headers[header]);
+            }
+        }
+
+        xhr.send(jsonBody);
+
+        if (xhr.status === 200) {
+            return JSON.parse(xhr.responseText);
+        }
+        throw new Error('Network response was not ok.');
+
+    }
+
     requestHints () {
         const program = this.props.toJson();
-        const url = 'http://localhost:8080/tutorial-system/checker/generate-feedback'
-        return fetch(url, {
-            method: 'POST',
-            headers: new Headers({'content-type': 'application/json'}),
-            referrerPolicy: 'origin-when-cross-origin',
-            body: {
-                "language": 'GERMAN',
-                "detectors": 'default',
-                "program": program
-            }
+        const url = 'http://localhost:8080/tutorial-system/checker/generate-feedback';
+        const jsonBody = JSON.stringify({
+            language: 'GERMAN',
+            detectors: 'default',
+            program: JSON.parse(program)
         });
+        try {
+            const response = this.sendHttpRequest(url, 'POST', {}, jsonBody);
+            console.log(response);
+            return response;
+        } catch (error) {
+            console.error('Error:', error);
+        }
+        // return fetch(url, {
+        //     method: 'POST',
+        //     headers: new Headers({'content-type': 'application/json'}),
+        //     referrerPolicy: 'origin-when-cross-origin',
+        //     body: jsonBody
+        // })
+        //     .then(
+        //         response => {
+        //             if (response.ok) {
+        //                 return response.json();
+        //             }
+        //             throw new Error('Network response was not ok.');
+        //         }
+        //     )
+        //     .catch(
+        //         error => {
+        //             console.log('Error:', error);
+        //         }
+        //     );
+    }
+
+    onCodeQualityHintGeneration () {
+        this.hints = this.requestHints();
     }
 
     processSteps () {
@@ -103,9 +169,11 @@ class TutorialStep extends React.Component {
         const messages = this.props.tutorialMessages;
         let hint = '';
         if (step <= this.props.step) {
-            hint = messages.stepBefore1.concat(step).concat(messages.stepBefore2);
+            hint = messages.stepBefore1.concat(step)
+                .concat(messages.stepBefore2);
         }
-        hint = hint.concat(messages.hintMessage).concat(messages[messageID]);
+        hint = hint.concat(messages.hintMessage)
+            .concat(messages[messageID]);
         this.props.failed(hint);
     }
 
@@ -120,16 +188,19 @@ class TutorialStep extends React.Component {
             this.props.unlockVM();
             this.props.testStopped();
             if (result.passed) {
+                //this.hints = this.requestHints();
                 this.props.succeeded();
             } else {
+                //this.hints = this.requestHints();
                 console.log(`Failed test: ${result.messageId}`);
                 this.setFailureMessages(result.step, result.messageId);
             }
-        }).catch((error) => {
-            console.log(`Test execution crashed: ${error}`);
-            this.props.unlockVM();
-            this.props.testStopped();
-        });
+        })
+            .catch(error => {
+                console.log(`Test execution crashed: ${error}`);
+                this.props.unlockVM();
+                this.props.testStopped();
+            });
     }
 
     handleDownload (name, content) {
@@ -174,12 +245,36 @@ class TutorialStep extends React.Component {
 
         const guiMessages = this.props.guiMessages;
 
-        const hints = this.requestHints();
-
         return (
-            this.props.step + 1 === this.props.totalSteps ?
-                <>
-                    <div onClick={this.next} className={styles.skipLink}>skip</div>
+            <>
+                <div
+                    onClick={this.next}
+                    className={styles.skipLink}
+                >
+                    skip
+                </div>
+                {this.props.step === 0 ?
+                    <Intro
+                        content={downloads}
+                        onDownload={this.handleDownload}
+                        downloadButtonTitle={guiMessages.downloadButtonTitle}
+                    /> : null}
+                <Step
+                    content={steps[this.props.step]}
+                    tested={tested}
+                    currentlyTesting={this.props.currentlyTesting}
+                    success={stepSucceeded}
+                    testButtonVisible={isCurrentStep}
+                    testButtonTitle={this.props.stepSucceeded ? guiMessages.continueButtonTitle :
+                        guiMessages.testButtonTitle}
+                    codeQualityButtonTitle={'Codequalität prüfen'} // TODO in dictionary auslagern
+                    onCodeQualityHintGeneration={this.onCodeQualityHintGeneration()}
+                    onTest={this.props.stepSucceeded ? this.next : this.test}
+                    solutionVisible={!isCurrentStep || this.props.failedTimes >= 3}
+                    generatedHints={JSON.stringify(this.hints)}
+                    {...this.props}
+                />
+                {this.props.step + 1 === this.props.totalSteps &&
                     <Success
                         content={{
                             title: this.props.tutorialMessages.successTitle,
@@ -189,32 +284,12 @@ class TutorialStep extends React.Component {
                         onHome={this.handleHome}
                         homeButtonTitle={guiMessages.homeButtonTitle}
                     />
-                </> :
-                <>
-                    <div onClick={this.next} className={styles.skipLink}>skip</div>
-                    {this.props.step === 0 ?
-                        <Intro
-                            content={downloads}
-                            onDownload={this.handleDownload}
-                            downloadButtonTitle={guiMessages.downloadButtonTitle}
-                        /> : null}
-                    <Step
-                        content={steps[this.props.step]}
-                        tested={tested}
-                        currentlyTesting={this.props.currentlyTesting}
-                        success={stepSucceeded}
-                        testButtonVisible={isCurrentStep}
-                        testButtonTitle={this.props.stepSucceeded ? guiMessages.continueButtonTitle :
-                            guiMessages.testButtonTitle}
-                        onTest={this.props.stepSucceeded ? this.next : this.test}
-                        solutionVisible={!isCurrentStep || this.props.failedTimes >= 3}
-                        generatedHints={hints}
-                        {...this.props}
-                    />
-                </>
+                }
+            </>
         );
     }
 }
+
 TutorialStep.propTypes = {
     guiMessages: PropTypes.objectOf(PropTypes.string),
     tutorial: PropTypes.string.isRequired,

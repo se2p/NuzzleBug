@@ -50,10 +50,12 @@ Solution.propTypes = {
 const TestingComponent = props => {
     const {
         testButtonTitle,
+        codeQualityButtonTitle,
         successMsg,
         failMsg,
         loadingMsg,
         onTest,
+        onCodeQualityHintGeneration,
         testButtonVisible,
         tested,
         success,
@@ -67,12 +69,18 @@ const TestingComponent = props => {
                     className={styles.stepTestingButton}
                     onClick={onTest}
                     style={{
-                        pointerEvents: currentlyTesting? 'none' : 'auto',
+                        pointerEvents: currentlyTesting ? 'none' : 'auto',
                         opacity: currentlyTesting ? 0.5 : 1
                     }}
                 >
                     <span className={styles.stepTestingButtonTitle}>{testButtonTitle}</span>
                 </div> : null}
+            <div
+                className={styles.stepCodeQualityHintGeneration}
+                onClick={onCodeQualityHintGeneration}
+            >
+                <span className={styles.stepTestingButtonTitle}>{codeQualityButtonTitle}</span>
+            </div>
             {tested ?
                 (currentlyTesting ?
                     <p className={styles.stepTestingLoading}>
@@ -128,6 +136,8 @@ TestingComponent.propTypes = {
     failMsg: PropTypes.string.isRequired,
     loadingMsg: PropTypes.string.isRequired,
     onTest: PropTypes.func.isRequired,
+    onCodeQualityHintGeneration: PropTypes.func.isRequired,
+    codeQualityButtonTitle: PropTypes.string,
     testButtonVisible: PropTypes.bool.isRequired,
     tested: PropTypes.bool.isRequired,
     success: PropTypes.bool.isRequired,
@@ -140,9 +150,11 @@ const TutorialStep = props => {
         guiMessages,
         tested,
         onTest,
+        onCodeQualityHintGeneration,
         success,
         testButtonVisible,
         testButtonTitle,
+        codeQualityButtonTitle,
         failureMessage,
         solutionVisible,
         solutionExpanded,
@@ -174,10 +186,12 @@ const TutorialStep = props => {
                     <p className={styles.stepTestingFail}>{failureMessage}</p> : null}
                 <TestingComponent
                     testButtonTitle={testButtonTitle}
+                    codeQualityButtonTitle={codeQualityButtonTitle}
                     successMsg={guiMessages.successMessage}
                     failMsg={guiMessages.failMessage}
                     loadingMsg={guiMessages.loadingMessage}
                     onTest={onTest}
+                    onCodeQualityHintGeneration={onCodeQualityHintGeneration}
                     testButtonVisible={testButtonVisible}
                     tested={tested}
                     success={success}
@@ -204,9 +218,11 @@ TutorialStep.propTypes = {
     guiMessages: PropTypes.objectOf(PropTypes.string),
     tested: PropTypes.bool.isRequired,
     onTest: PropTypes.func.isRequired,
+    onCodeQualityHintGeneration: PropTypes.func.isRequired,
     success: PropTypes.bool.isRequired,
     testButtonVisible: PropTypes.bool.isRequired,
     testButtonTitle: PropTypes.string.isRequired,
+    codeQualityButtonTitle: PropTypes.string.isRequired,
     failureMessage: PropTypes.string.isRequired,
     solution: PropTypes.shape({
         img: PropTypes.node.isRequired,

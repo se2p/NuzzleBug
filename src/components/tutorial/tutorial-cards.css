@@ -285,6 +285,19 @@
     cursor: pointer;
 }
 
+.step-code-quality-hint-generation {
+    width: 200px;
+    height: 40px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    margin: 20px;
+    background-color: #ff8a54;
+    box-sizing: border-box;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
 .step-testing-button:hover {
     background-color: #ff9c6d;
 }
