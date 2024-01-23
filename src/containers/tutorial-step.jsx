@@ -9,6 +9,7 @@ import downloadBlob from '../lib/download-blob';
 
 import {homeMenu} from '../reducers/tutorial-cards';
 import {
+    codeQualityHints,
     expandSolution,
     fail,
     nextTutorialStep,
@@ -34,35 +35,27 @@ class TutorialStep extends React.Component {
         this.test = this.test.bind(this);
         this.handleDownload = this.handleDownload.bind(this);
         this.next = this.next.bind(this);
-        //this.requestHints = this.requestHints.bind(this);
+        this.isGeneratingHints = false;
     }
 
-    /**
-     * Contacts the server to fetch new hints for the current program.
-     *
-     * Also deletes old block comments beforehand.
-     * @return {*} the hints object fetched from the server.
-     */
-    // requestHints () {
-    //     const program = this.props.toJson();
-    //     const url = 'http://localhost:8080/tutorial-system/checker/generate-feedback';
-    //     const jsonBody = JSON.stringify({
-    //         language: 'GERMAN',
-    //         detectors: 'default',
-    //         program: JSON.parse(program)
-    //     });
-    //     fetch(url, {
-    //         method: 'POST',
-    //         headers: new Headers({'content-type': 'application/json'}),
-    //         referrerPolicy: 'origin-when-cross-origin',
-    //         body: jsonBody
-    //     }).then(
-    //         value => console.log(value.text()),
-    //         error => {
-    //             console.log(error);
-    //         }
-    //     );
-    // }
+    requestHints () {
+        if (this.isGeneratingHints === false) {
+            this.isGeneratingHints = true;
+            const program = this.props.toJson();
+            const url = 'http://localhost:8080/tutorial-system/checker/generate-feedback';
+            const jsonBody = JSON.stringify({
+                language: 'GERMAN',
+                detectors: 'default',
+                program: JSON.parse(program)
+            });
+            const response = this.sendHttpRequest(url, 'POST', {}, jsonBody);
+            console.log(response);
+            const issues = response.issues;
+            console.log('Issues:', issues);
+            this.isGeneratingHints = false;
+            return issues;
+        }
+    }
 
     sendHttpRequest (url, method, headers, jsonBody) {
         const xhr = new XMLHttpRequest();
@@ -80,48 +73,29 @@ class TutorialStep extends React.Component {
         if (xhr.status === 200) {
             return JSON.parse(xhr.responseText);
         }
-        throw new Error('Network response was not ok.');
-
-    }
-
-    requestHints () {
-        const program = this.props.toJson();
-        const url = 'http://localhost:8080/tutorial-system/checker/generate-feedback';
-        const jsonBody = JSON.stringify({
-            language: 'GERMAN',
-            detectors: 'default',
-            program: JSON.parse(program)
-        });
-        try {
-            const response = this.sendHttpRequest(url, 'POST', {}, jsonBody);
-            console.log(response);
-            return response;
-        } catch (error) {
-            console.error('Error:', error);
-        }
-        // return fetch(url, {
-        //     method: 'POST',
-        //     headers: new Headers({'content-type': 'application/json'}),
-        //     referrerPolicy: 'origin-when-cross-origin',
-        //     body: jsonBody
-        // })
-        //     .then(
-        //         response => {
-        //             if (response.ok) {
-        //                 return response.json();
-        //             }
-        //             throw new Error('Network response was not ok.');
-        //         }
-        //     )
-        //     .catch(
-        //         error => {
-        //             console.log('Error:', error);
-        //         }
-        //     );
+        console.log('Error occurred while retrieving data');
+        return [];
     }
 
     onCodeQualityHintGeneration () {
-        this.hints = this.requestHints();
+        const hints = this.requestHints();
+        console.log(typeof (hints));
+        const result = [];
+        hints.forEach(hint => {
+            let description = hint.hint.replaceAll('[b]', '<strong>');
+            description = description.replaceAll('[/b]', '</strong>');
+            description = description.replaceAll('[newline]', '<br>');
+            const temp = {
+                title: hint.name,
+                description: description,
+                sprite: hint.sprite,
+                type: hint.type,
+                codeSnippet: hint.code
+            };
+            console.log(temp);
+            result.push(temp);
+        });
+        this.hints = result;
     }
 
     processSteps () {
@@ -188,10 +162,10 @@ class TutorialStep extends React.Component {
             this.props.unlockVM();
             this.props.testStopped();
             if (result.passed) {
-                //this.hints = this.requestHints();
+                // this.hints = this.requestHints();
                 this.props.succeeded();
             } else {
-                //this.hints = this.requestHints();
+                // this.hints = this.requestHints();
                 console.log(`Failed test: ${result.messageId}`);
                 this.setFailureMessages(result.step, result.messageId);
             }
@@ -267,11 +241,12 @@ class TutorialStep extends React.Component {
                     testButtonVisible={isCurrentStep}
                     testButtonTitle={this.props.stepSucceeded ? guiMessages.continueButtonTitle :
                         guiMessages.testButtonTitle}
-                    codeQualityButtonTitle={'Codequalität prüfen'} // TODO in dictionary auslagern
+                    codeQualityButtonTitle={'Codequalität prüfen'}
                     onCodeQualityHintGeneration={this.onCodeQualityHintGeneration()}
                     onTest={this.props.stepSucceeded ? this.next : this.test}
                     solutionVisible={!isCurrentStep || this.props.failedTimes >= 3}
-                    generatedHints={JSON.stringify(this.hints)}
+                    hints={this.hints}
+                    generatedHints={'Spaß'} // JSON.stringify(this.hints) // TODO später löschen
                     {...this.props}
                 />
                 {this.props.step + 1 === this.props.totalSteps &&

@@ -45,17 +45,13 @@ Solution.propTypes = {
     solutionExpanded: PropTypes.bool.isRequired
 };
 
-// TODO an der Stelle CodeQualityComponent erstellen
-
 const TestingComponent = props => {
     const {
         testButtonTitle,
-        codeQualityButtonTitle,
         successMsg,
         failMsg,
         loadingMsg,
         onTest,
-        onCodeQualityHintGeneration,
         testButtonVisible,
         tested,
         success,
@@ -64,7 +60,7 @@ const TestingComponent = props => {
 
     return (
         <div className={styles.stepTesting}>
-            { testButtonVisible ?
+            {testButtonVisible ?
                 <div
                     className={styles.stepTestingButton}
                     onClick={onTest}
@@ -75,12 +71,6 @@ const TestingComponent = props => {
                 >
                     <span className={styles.stepTestingButtonTitle}>{testButtonTitle}</span>
                 </div> : null}
-            <div
-                className={styles.stepCodeQualityHintGeneration}
-                onClick={onCodeQualityHintGeneration}
-            >
-                <span className={styles.stepTestingButtonTitle}>{codeQualityButtonTitle}</span>
-            </div>
             {tested ?
                 (currentlyTesting ?
                     <p className={styles.stepTestingLoading}>
@@ -136,8 +126,6 @@ TestingComponent.propTypes = {
     failMsg: PropTypes.string.isRequired,
     loadingMsg: PropTypes.string.isRequired,
     onTest: PropTypes.func.isRequired,
-    onCodeQualityHintGeneration: PropTypes.func.isRequired,
-    codeQualityButtonTitle: PropTypes.string,
     testButtonVisible: PropTypes.bool.isRequired,
     tested: PropTypes.bool.isRequired,
     success: PropTypes.bool.isRequired,
@@ -160,7 +148,7 @@ const TutorialStep = props => {
         solutionExpanded,
         currentlyTesting,
         onSolution,
-        generatedHints
+        hints
     } = props;
 
     return (
@@ -186,20 +174,22 @@ const TutorialStep = props => {
                     <p className={styles.stepTestingFail}>{failureMessage}</p> : null}
                 <TestingComponent
                     testButtonTitle={testButtonTitle}
-                    codeQualityButtonTitle={codeQualityButtonTitle}
                     successMsg={guiMessages.successMessage}
                     failMsg={guiMessages.failMessage}
                     loadingMsg={guiMessages.loadingMessage}
                     onTest={onTest}
-                    onCodeQualityHintGeneration={onCodeQualityHintGeneration}
                     testButtonVisible={testButtonVisible}
                     tested={tested}
                     success={success}
                     currentlyTesting={currentlyTesting}
                 />
-                <HintContent
-                    text={generatedHints}
-                />
+                {hints.length > 0 ?
+                    <HintContent
+                        hints={hints}
+                        codeQualityButtonTitle={codeQualityButtonTitle}
+                        onCodeQualityHintGeneration={onCodeQualityHintGeneration}
+                    /> : null
+                }
             </div>
         </div>
     );
@@ -232,7 +222,13 @@ TutorialStep.propTypes = {
     solutionExpanded: PropTypes.bool.isRequired,
     currentlyTesting: PropTypes.bool.isRequired,
     onSolution: PropTypes.func.isRequired,
-    generatedHints: PropTypes.string
+    hints: PropTypes.arrayOf(PropTypes.shape({
+        title: PropTypes.string.isRequired,
+        description: PropTypes.string.isRequired,
+        sprite: PropTypes.string.isRequired,
+        type: PropTypes.string.isRequired,
+        codeSnippet: PropTypes.string
+    })).isRequired
 };
 
 export default TutorialStep;
