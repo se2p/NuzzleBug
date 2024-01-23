@@ -81,20 +81,24 @@ class TutorialStep extends React.Component {
         const hints = this.requestHints();
         console.log(typeof (hints));
         const result = [];
-        hints.forEach(hint => {
-            let description = hint.hint.replaceAll('[b]', '<strong>');
-            description = description.replaceAll('[/b]', '</strong>');
-            description = description.replaceAll('[newline]', '<br>');
-            const temp = {
-                title: hint.name,
-                description: description,
-                sprite: hint.sprite,
-                type: hint.type,
-                codeSnippet: hint.code
-            };
-            console.log(temp);
-            result.push(temp);
-        });
+        if (hints) {
+            hints.forEach(hint => {
+                // let description = hint.hint.replaceAll('[b]', '<strong>');
+                // description = description.replaceAll('[/b]', '</strong>');
+                // description = description.replaceAll('[newline]', '<br>');
+                let code = hint.code.replaceAll('[/scratchblocks]', '');
+                code = code.replaceAll('[scratchblocks]', '');
+                const temp = {
+                    title: hint.name,
+                    description: hint.hint,
+                    sprite: hint.sprite,
+                    type: hint.type,
+                    codeSnippet: code
+                };
+                console.log(temp);
+                result.push(temp);
+            });
+        }
         this.hints = result;
     }
 
@@ -162,10 +166,8 @@ class TutorialStep extends React.Component {
             this.props.unlockVM();
             this.props.testStopped();
             if (result.passed) {
-                // this.hints = this.requestHints();
                 this.props.succeeded();
             } else {
-                // this.hints = this.requestHints();
                 console.log(`Failed test: ${result.messageId}`);
                 this.setFailureMessages(result.step, result.messageId);
             }
@@ -246,7 +248,6 @@ class TutorialStep extends React.Component {
                     onTest={this.props.stepSucceeded ? this.next : this.test}
                     solutionVisible={!isCurrentStep || this.props.failedTimes >= 3}
                     hints={this.hints}
-                    generatedHints={'Spaß'} // JSON.stringify(this.hints) // TODO später löschen
                     {...this.props}
                 />
                 {this.props.step + 1 === this.props.totalSteps &&

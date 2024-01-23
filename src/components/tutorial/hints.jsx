@@ -1,21 +1,37 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, {useState} from 'react';
 import styles from './tutorial-cards.css';
+import stylesHints from './hints.css';
 
-// import scratchblocks from 'scratchblocks';
-// import ScratchBlocks from 'scratchblocks-react';
-// import de from 'scratchblocks/locales/de.json';
 
-// scratchblocks.loadLanguages({de});
+import scratchblocks from 'scratchblocks';
+import ScratchBlocks from 'scratchblocks-react';
+import de from 'scratchblocks/locales/de.json';
 
-const HintExplanation = props => (
-    <div>
-        <p>{props.hintExplanation}</p>
+scratchblocks.loadLanguages({de});
+
+
+const translate = scratchBlocksText => {
+    const block = scratchblocks.parse(scratchBlocksText, {
+        languages: ['en', 'de']
+    });
+    block.translate(scratchblocks.allLanguages.de);
+    return block.stringify();
+};
+
+const ScratchBlocksImage = props => (
+    <div className={stylesHints.scratchImage}>
+        <ScratchBlocks
+            blockStyle="scratch3"
+            languages={['en', 'de']}
+        >
+            {translate(props.scratchBlocksText)}
+        </ScratchBlocks>
     </div>
 );
 
-HintExplanation.propTypes = {
-    hintExplanation: PropTypes.string
+ScratchBlocksImage.propTypes = {
+    scratchBlocksText: PropTypes.string
 };
 
 const HintContent = props => {
@@ -24,24 +40,63 @@ const HintContent = props => {
         onCodeQualityHintGeneration,
         codeQualityButtonTitle
     } = props;
+
+    const replaceTags = text => text.split(/\[b\]/g)
+        .map((segment, index) => (
+            index === 0 ? (
+                <span key={index}>{segment}</span>
+            ) : (
+                <React.Fragment key={index}>
+                    <strong>{segment.split(/\[\/b\]/g)[0]}</strong>
+                    {segment.split(/\[\/b\]/g)[1].split(/\[newLine\]/g)
+                        .map((line, lineIndex) => (
+                            <React.Fragment key={lineIndex}>
+                                <br/>
+                                {line}
+                            </React.Fragment>
+                        ))}
+                </React.Fragment>
+            )
+        ));
+
+    const [isAccordionOpen, setIsAccordionOpen] = useState(true);
+    const [selectedType, setSelectedType] = useState(null);
+
+    const toggleAccordion = () => {
+        setIsAccordionOpen(!isAccordionOpen);
+    };
+
+    const filterHintsByType = (type) => {
+        setSelectedType(type);
+    };
+
+    const filteredHints = hints.filter((hint) => selectedType === null || hint.type === selectedType);
+
     return (
         <div>
+            <div>
+                <button onClick={() => filterHintsByType('SMELL')}>Show SMELL Hints</button>
+                <button onClick={() => filterHintsByType('BUG')}>Show BUG Hints</button>
+                <button onClick={() => filterHintsByType('PERFUME')}>Show PERFUME Hints</button>
+            </div>
             <div
                 className={styles.stepCodeQualityHintGeneration}
-                onClick={onCodeQualityHintGeneration}
+                //onClick={toggleAccordion}
             >
                 <span className={styles.stepTestingButtonTitle}>{codeQualityButtonTitle}</span>
             </div>
-            <div>
-                {hints.map((hint, index) => (
-                    <div key={index}>
-                        <h3>{hint.title}</h3>
-                        <p>{hint.description}</p>
-                    </div>
-                ))}
-            </div>
+            {isAccordionOpen && (
+                <div>
+                    {filteredHints.map((hint, index) => (
+                        <div key={index}>
+                            <h3>{hint.title}</h3>
+                            {replaceTags(hint.description)}
+                            <ScratchBlocksImage scratchBlocksText={hint.codeSnippet}/>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
-
     );
 };
 
