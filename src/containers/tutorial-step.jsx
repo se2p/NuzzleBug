@@ -1,15 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
+// custom components
+import CodeQualityHints from '../components/tutorial/tutorial-card-step/code-quality/tutorial-step-code-quality.jsx';
+import Instructions from '../components/tutorial/tutorial-card-step/current-step/tutorial-step-instructions.jsx';
 import Success from '../components/tutorial/tutorial-card-step/current-step/tutorial-step-success.jsx';
 import Intro from '../components/tutorial/tutorial-card-step/description/tutorial-intro.jsx';
-import Solution, TestingComponent from '../components/tutorial/tutorial-card-step.jsx';
+import Solution from '../components/tutorial/tutorial-card-step/testing/tutorial-step-solution.jsx';
+import Testing from '../components/tutorial/tutorial-card-step/testing/tutorial-step-testing.jsx';
+
 import {connect} from 'react-redux';
 import VirtualMachine from 'scratch-vm';
 import downloadBlob from '../lib/download-blob';
 
 import {homeMenu} from '../reducers/tutorial-cards';
 import {
-    codeQualityHints,
     expandSolution,
     fail,
     nextTutorialStep,
@@ -56,9 +61,7 @@ class TutorialStep extends React.Component {
                 program: JSON.parse(program)
             });
             const response = this.sendHttpRequest(url, 'POST', {}, jsonBody);
-            console.log(response);
             const issues = response.issues;
-            console.log('Issues:', issues);
             this.isGeneratingHints = false;
             return issues;
         }
@@ -225,6 +228,8 @@ class TutorialStep extends React.Component {
 
         const guiMessages = this.props.guiMessages;
 
+        const content = steps[this.props.step];
+
         return (
             <div className={styles.flexContainer}>
                 <div className={styles.navBar}>
@@ -266,47 +271,23 @@ class TutorialStep extends React.Component {
 
                     {this.clickedNavBarButton === this.CURRENT_STEP ?
                         <div>
-                            <h4 className={styles.stepTitle}>{steps[this.props.step].title} </h4>
-                            <p className={styles.stepInstructions}> {steps[this.props.step].message1} </p>
-                            <img
-                                className={styles.stepImage}
-                                draggable={false}
-                                src={steps[this.props.step].img}
-                                alt={'Image of the current step.'}
+                            <Instructions
+                                title={content.title}
+                                message1={content.message1}
+                                img={content.img}
+                                message2={content.message2}
                             />
-                            <p className={styles.stepInstructions}> {steps[this.props.step].message2} </p>
-                            {/* <div */}
-                            {/*     onClick={this.next} */}
-                            {/*     className={styles.skipLink} */}
-                            {/* > */}
-                            {/*     skip */}
-                            {/* </div> */}
-                            {/* <Step */}
-                            {/*     content={steps[this.props.step]} */}
-                            {/*     tested={tested} */}
-                            {/*     currentlyTesting={this.props.currentlyTesting} */}
-                            {/*     success={stepSucceeded} */}
-                            {/*     testButtonVisible={isCurrentStep} */}
-                            {/*     testButtonTitle={this.props.stepSucceeded ? guiMessages.continueButtonTitle : */}
-                            {/*         guiMessages.testButtonTitle} */}
-                            {/*     codeQualityButtonTitle={'Codequalität prüfen'} */}
-                            {/*     onCodeQualityHintGeneration={this.onCodeQualityHintGeneration()} */}
-                            {/*     onTest={this.props.stepSucceeded ? this.next : this.test} */}
-                            {/*     solutionVisible={!isCurrentStep || this.props.failedTimes >= 3} */}
-                            {/*     hints={this.hints} */}
-                            {/*     {...this.props} */}
-                            {/* /> */}
-                            {/* {this.props.step + 1 === this.props.totalSteps && */}
-                            {/*     <Success */}
-                            {/*         content={{ */}
-                            {/*             title: this.props.tutorialMessages.successTitle, */}
-                            {/*             message: this.props.tutorialMessages.successMsg, */}
-                            {/*             img: this.props.locale === 'de' ? successImageDE : successImageEN */}
-                            {/*         }} */}
-                            {/*         onHome={this.handleHome} */}
-                            {/*         homeButtonTitle={guiMessages.homeButtonTitle} */}
-                            {/*     /> */}
-                            {/* } */}
+                            {this.props.step + 1 === this.props.totalSteps &&
+                                <Success
+                                    content={{
+                                        title: this.props.tutorialMessages.successTitle,
+                                        message: this.props.tutorialMessages.successMsg,
+                                        img: this.props.locale === 'de' ? successImageDE : successImageEN
+                                    }}
+                                    onHome={this.handleHome}
+                                    homeButtonTitle={guiMessages.homeButtonTitle}
+                                />
+                            }
                         </div> : null
                     }
 
@@ -316,21 +297,23 @@ class TutorialStep extends React.Component {
                                 <Solution
                                     title={guiMessages.solutionHeader}
                                     content={content.solution}
-                                    onSolution={onSolution}
-                                    solutionExpanded={solutionExpanded}
-                                /> : null}
+                                    onSolution={this.onSolution}
+                                    solutionExpanded={this.solutionExpanded}
+                                /> : null
+                            }
                             {tested && !success ?
-                                <p className={styles.stepTestingFail}>{failureMessage}</p> : null}
-                            <TestingComponent
-                                testButtonTitle={testButtonTitle}
-                                successMsg={guiMessages.successMessage}
-                                failMsg={guiMessages.failMessage}
-                                loadingMsg={guiMessages.loadingMessage}
-                                onTest={onTest}
-                                testButtonVisible={testButtonVisible}
+                                <p className={styles.stepTestingFail}>{this.props.guiMessages.failureMessage}</p> : null
+                            }
+                            <Testing
                                 tested={tested}
-                                success={success}
-                                currentlyTesting={currentlyTesting}
+                                currentlyTesting={this.props.currentlyTesting}
+                                success={stepSucceeded}
+                                testButtonVisible={isCurrentStep}
+                                testButtonTitle={this.props.stepSucceeded ? guiMessages.continueButtonTitle :
+                                    guiMessages.testButtonTitle}
+                                onTest={this.props.stepSucceeded ? this.next : this.test}
+                                solutionVisible={!isCurrentStep || this.props.failedTimes >= 3}
+                                {...this.props}
                             />
                         </div> : null
                     }
