@@ -48,7 +48,7 @@ Download.propTypes = {
  * @constructor
  */
 
-const TutorialIntro = ({content, onDownload, downloadButtonTitle}) => (
+const Intro = ({content, onDownload, downloadButtonTitle}) => (
     <div className={styles.tutorialStep}>
         <h4 className={styles.stepTitle}> {content.title} </h4>
         <p className={styles.stepInstructions}> {content.message} </p>
@@ -63,7 +63,7 @@ const TutorialIntro = ({content, onDownload, downloadButtonTitle}) => (
             ))}
     </div>
 );
-TutorialIntro.propTypes = {
+Intro.propTypes = {
     content: PropTypes.shape({
         title: PropTypes.string.isRequired,
         message: PropTypes.string.isRequired,
@@ -78,4 +78,4 @@ TutorialIntro.propTypes = {
     onDownload: PropTypes.func.isRequired
 };
 
-export default injectIntl(TutorialIntro);
+export default Intro;

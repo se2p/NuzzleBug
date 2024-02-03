@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
  * @constructor
  */
 
-const TutorialStepSolution = ({title, content, onSolution, solutionExpanded}) => (
+const Solution = ({title, content, onSolution, solutionExpanded}) => (
     <>
         <div
             className={styles.stepSolutionHeader}
@@ -40,7 +40,7 @@ const TutorialStepSolution = ({title, content, onSolution, solutionExpanded}) =>
             </div> : null}
     </>
 );
-TutorialStepSolution.propTypes = {
+Solution.propTypes = {
     title: PropTypes.string.isRequired,
     content: PropTypes.shape({
         message: PropTypes.string.isRequired,
@@ -49,3 +49,5 @@ TutorialStepSolution.propTypes = {
     onSolution: PropTypes.func.isRequired,
     solutionExpanded: PropTypes.bool.isRequired
 };
+
+export default Solution;

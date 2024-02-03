@@ -34,7 +34,7 @@ ScratchBlocksImage.propTypes = {
     scratchBlocksText: PropTypes.string
 };
 
-const HintContent = props => {
+const CodeQualityHints = props => {
     const {
         hints,
         onCodeQualityHintGeneration,
@@ -100,7 +100,7 @@ const HintContent = props => {
     );
 };
 
-HintContent.propTypes = {
+CodeQualityHints.propTypes = {
     hints: PropTypes.arrayOf(PropTypes.shape({
         title: PropTypes.string.isRequired,
         description: PropTypes.string.isRequired,
@@ -112,4 +112,4 @@ HintContent.propTypes = {
     codeQualityButtonTitle: PropTypes.string.isRequired
 };
 
-export default HintContent;
+export default CodeQualityHints;

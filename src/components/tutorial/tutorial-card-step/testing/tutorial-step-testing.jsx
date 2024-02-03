@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
  * @constructor
  */
 
-const TutorialStepTesting = props => {
+const Testing = props => {
     const {
         testButtonTitle,
         successMsg,
@@ -85,7 +85,7 @@ const TutorialStepTesting = props => {
         </div>
     );
 };
-TutorialStepTesting.propTypes = {
+Testing.propTypes = {
     testButtonTitle: PropTypes.string.isRequired,
     successMsg: PropTypes.string.isRequired,
     failMsg: PropTypes.string.isRequired,
@@ -96,3 +96,5 @@ TutorialStepTesting.propTypes = {
     success: PropTypes.bool.isRequired,
     currentlyTesting: PropTypes.bool.isRequired
 };
+
+export default Testing;

@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
  * @constructor
  */
 
-const TutorialStepInstructions = props => {
+const Instructions = props => {
     const {
         title,
         message1,
@@ -30,11 +30,11 @@ const TutorialStepInstructions = props => {
         </div>
     );
 };
-TutorialStepInstructions.propTypes = {
+Instructions.propTypes = {
     title: PropTypes.string.isRequired,
     message1: PropTypes.string.isRequired,
     img: PropTypes.node.isRequired,
     message2: PropTypes.string.isRequired
 };
 
-export default TutorialStepInstructions;
+export default Instructions;
