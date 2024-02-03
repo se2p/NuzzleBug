@@ -1,4 +1,4 @@
-import styles from './tutorial-cards.css';
+import styles from './styles/tutorial-cards.css';
 import PropTypes from 'prop-types';
 import {injectIntl} from 'react-intl';
 import React from 'react';

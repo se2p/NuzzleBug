@@ -26,7 +26,7 @@ import * as tutorials from 'tutorial-tests/src/tutorials';
 
 import successImageEN from '../components/tutorial/images/greatDoneEN.png';
 import successImageDE from '../components/tutorial/images/greatDoneDE.png';
-import styles from '../components/tutorial/tutorial-cards.css';
+import styles from '../components/tutorial/styles/tutorial-cards.css';
 
 class TutorialStep extends React.Component {
     constructor (props) {

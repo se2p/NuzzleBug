@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styles from './tutorial-cards.css';
+import styles from './styles/tutorial-cards.css';
 
 import checkmark from './images/icon--checkmark.png';
 import crossMark from './images/icon--cross-mark.png';

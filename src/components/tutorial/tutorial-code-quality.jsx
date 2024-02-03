@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, {useState} from 'react';
-import styles from './tutorial-cards.css';
-import stylesHints from './tutorial-code-quality.css';
+import styles from './styles/tutorial-cards.css';
+import stylesHints from './styles/tutorial-code-quality.css';
 
 
 import scratchblocks from 'scratchblocks';

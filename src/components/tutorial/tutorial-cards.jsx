@@ -5,7 +5,7 @@ import Draggable from 'react-draggable';
 import {injectIntl, FormattedMessage} from 'react-intl';
 
 import styles from '../cards/card.css';
-import tutorialStyles from './tutorial-cards.css';
+import tutorialStyles from './styles/tutorial-cards.css';
 
 import homeIcon from './images/icon--home.svg';
 import shrinkIcon from '../cards/icon--shrink.svg';
