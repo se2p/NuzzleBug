@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Success from '../components/tutorial/tutorial-success.jsx';
-import Intro from '../components/tutorial/tutorial-intro.jsx';
-import Solution, TestingComponent from '../components/tutorial/tutorial-step.jsx';
+import Success from '../components/tutorial/tutorial-card-step/current-step/tutorial-step-success.jsx';
+import Intro from '../components/tutorial/tutorial-card-step/description/tutorial-intro.jsx';
+import Solution, TestingComponent from '../components/tutorial/tutorial-card-step.jsx';
 import {connect} from 'react-redux';
 import VirtualMachine from 'scratch-vm';
 import downloadBlob from '../lib/download-blob';
@@ -90,9 +90,6 @@ class TutorialStep extends React.Component {
         const result = [];
         if (hints) {
             hints.forEach(hint => {
-                // let description = hint.hint.replaceAll('[b]', '<strong>');
-                // description = description.replaceAll('[/b]', '</strong>');
-                // description = description.replaceAll('[newline]', '<br>');
                 let code = hint.code.replaceAll('[/scratchblocks]', '');
                 code = code.replaceAll('[scratchblocks]', '');
                 const temp = {
