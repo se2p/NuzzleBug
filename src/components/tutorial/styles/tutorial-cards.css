@@ -441,4 +441,9 @@
     background-color: #ff8a54;
     height: 15%;
     width: 100%;
+    border: 2px solid black;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    display: flex;
 }
