@@ -15,8 +15,8 @@
 }
 .step-body {
     overflow-y: auto;
-    height: 350px;
-    width: 600px;
+    height: 550px;
+    width: 900px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -421,4 +421,24 @@
 
 .success-home-button:hover {
     background-color: #ff9c6d;
+}
+
+.nav-bar {
+    height: 100%;
+    width: 25%;
+    background-color: #4c7397;
+    color: black;
+    align-content: center;
+}
+
+.flex-container {
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+.nav-bar-button {
+    background-color: #ff8a54;
+    height: 15%;
+    width: 100%;
 }

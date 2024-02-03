@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, {useState} from 'react';
 import styles from './tutorial-cards.css';
-import stylesHints from './hints.css';
+import stylesHints from './tutorial-code-quality.css';
 
 
 import scratchblocks from 'scratchblocks';
@@ -51,7 +51,7 @@ const HintContent = props => {
                     {segment.split(/\[\/b\]/g)[1].split(/\[newLine\]/g)
                         .map((line, lineIndex) => (
                             <React.Fragment key={lineIndex}>
-                                <br/>
+                                <br />
                                 {line}
                             </React.Fragment>
                         ))}
@@ -66,11 +66,11 @@ const HintContent = props => {
         setIsAccordionOpen(!isAccordionOpen);
     };
 
-    const filterHintsByType = (type) => {
+    const filterHintsByType = type => {
         setSelectedType(type);
     };
 
-    const filteredHints = hints.filter((hint) => selectedType === null || hint.type === selectedType);
+    const filteredHints = hints.filter(hint => selectedType === null || hint.type === selectedType);
 
     return (
         <div>
@@ -81,7 +81,7 @@ const HintContent = props => {
             </div>
             <div
                 className={styles.stepCodeQualityHintGeneration}
-                //onClick={toggleAccordion}
+                onClick={onCodeQualityHintGeneration}
             >
                 <span className={styles.stepTestingButtonTitle}>{codeQualityButtonTitle}</span>
             </div>

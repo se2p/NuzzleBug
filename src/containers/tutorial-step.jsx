@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Step from '../components/tutorial/tutorial-step.jsx';
 import Success from '../components/tutorial/tutorial-success.jsx';
 import Intro from '../components/tutorial/tutorial-intro.jsx';
+import Solution, TestingComponent from '../components/tutorial/tutorial-step.jsx';
 import {connect} from 'react-redux';
 import VirtualMachine from 'scratch-vm';
 import downloadBlob from '../lib/download-blob';
@@ -24,8 +24,8 @@ import {lock, unlock} from '../reducers/vm-status';
 import {runTest} from 'tutorial-tests';
 import * as tutorials from 'tutorial-tests/src/tutorials';
 
-import successImageEN from '../components/tutorial/greatDoneEN.png';
-import successImageDE from '../components/tutorial/greatDoneDE.png';
+import successImageEN from '../components/tutorial/images/greatDoneEN.png';
+import successImageDE from '../components/tutorial/images/greatDoneDE.png';
 import styles from '../components/tutorial/tutorial-cards.css';
 
 class TutorialStep extends React.Component {
@@ -36,6 +36,13 @@ class TutorialStep extends React.Component {
         this.handleDownload = this.handleDownload.bind(this);
         this.next = this.next.bind(this);
         this.isGeneratingHints = false;
+        // set constant values
+        this.DESCRIPTION = 'description';
+        this.TEST = 'test';
+        this.CODE_QUALITY = 'code quality';
+        this.CURRENT_STEP = 'current step';
+        // set initial clickedNavBarButton value
+        this.clickedNavBarButton = this.DESCRIPTION;
     }
 
     requestHints () {
@@ -222,46 +229,116 @@ class TutorialStep extends React.Component {
         const guiMessages = this.props.guiMessages;
 
         return (
-            <>
-                <div
-                    onClick={this.next}
-                    className={styles.skipLink}
-                >
-                    skip
-                </div>
-                {this.props.step === 0 ?
-                    <Intro
-                        content={downloads}
-                        onDownload={this.handleDownload}
-                        downloadButtonTitle={guiMessages.downloadButtonTitle}
-                    /> : null}
-                <Step
-                    content={steps[this.props.step]}
-                    tested={tested}
-                    currentlyTesting={this.props.currentlyTesting}
-                    success={stepSucceeded}
-                    testButtonVisible={isCurrentStep}
-                    testButtonTitle={this.props.stepSucceeded ? guiMessages.continueButtonTitle :
-                        guiMessages.testButtonTitle}
-                    codeQualityButtonTitle={'Codequalität prüfen'}
-                    onCodeQualityHintGeneration={this.onCodeQualityHintGeneration()}
-                    onTest={this.props.stepSucceeded ? this.next : this.test}
-                    solutionVisible={!isCurrentStep || this.props.failedTimes >= 3}
-                    hints={this.hints}
-                    {...this.props}
-                />
-                {this.props.step + 1 === this.props.totalSteps &&
-                    <Success
-                        content={{
-                            title: this.props.tutorialMessages.successTitle,
-                            message: this.props.tutorialMessages.successMsg,
-                            img: this.props.locale === 'de' ? successImageDE : successImageEN
+            <div className={styles.flexContainer}>
+                <div className={styles.navBar}>
+                    <div
+                        onClick={() => {
+                            this.clickedNavBarButton = this.DESCRIPTION;
                         }}
-                        onHome={this.handleHome}
-                        homeButtonTitle={guiMessages.homeButtonTitle}
-                    />
-                }
-            </>
+                        className={styles.navBarButton}
+                    >
+                        <span>Beschreibung</span>
+                    </div>
+                    <div
+                        onClick={() => this.clickedNavBarButton = this.CURRENT_STEP}
+                        className={styles.navBarButton}
+                    >
+                        <span>Aktueller Schritt</span>
+                    </div>
+                    <div
+                        onClick={() => this.clickedNavBarButton = this.TEST}
+                        className={styles.navBarButton}
+                    >
+                        <span>Test</span>
+                    </div>
+                    <div
+                        onClick={() => this.clickedNavBarButton = this.CODE_QUALITY}
+                        className={styles.navBarButton}
+                    >
+                        <span>Qualität</span>
+                    </div>
+                </div>
+                <div>
+
+                    {this.clickedNavBarButton === this.DESCRIPTION ?
+                        <Intro
+                            content={downloads}
+                            onDownload={this.handleDownload}
+                            downloadButtonTitle={guiMessages.downloadButtonTitle}
+                        /> : null}
+
+                    {this.clickedNavBarButton === this.CURRENT_STEP ?
+                        <div>
+                            <h4 className={styles.stepTitle}>{steps[this.props.step].title} </h4>
+                            <p className={styles.stepInstructions}> {steps[this.props.step].message1} </p>
+                            <img
+                                className={styles.stepImage}
+                                draggable={false}
+                                src={steps[this.props.step].img}
+                                alt={'Image of the current step.'}
+                            />
+                            <p className={styles.stepInstructions}> {steps[this.props.step].message2} </p>
+                            {/* <div */}
+                            {/*     onClick={this.next} */}
+                            {/*     className={styles.skipLink} */}
+                            {/* > */}
+                            {/*     skip */}
+                            {/* </div> */}
+                            {/* <Step */}
+                            {/*     content={steps[this.props.step]} */}
+                            {/*     tested={tested} */}
+                            {/*     currentlyTesting={this.props.currentlyTesting} */}
+                            {/*     success={stepSucceeded} */}
+                            {/*     testButtonVisible={isCurrentStep} */}
+                            {/*     testButtonTitle={this.props.stepSucceeded ? guiMessages.continueButtonTitle : */}
+                            {/*         guiMessages.testButtonTitle} */}
+                            {/*     codeQualityButtonTitle={'Codequalität prüfen'} */}
+                            {/*     onCodeQualityHintGeneration={this.onCodeQualityHintGeneration()} */}
+                            {/*     onTest={this.props.stepSucceeded ? this.next : this.test} */}
+                            {/*     solutionVisible={!isCurrentStep || this.props.failedTimes >= 3} */}
+                            {/*     hints={this.hints} */}
+                            {/*     {...this.props} */}
+                            {/* /> */}
+                            {/* {this.props.step + 1 === this.props.totalSteps && */}
+                            {/*     <Success */}
+                            {/*         content={{ */}
+                            {/*             title: this.props.tutorialMessages.successTitle, */}
+                            {/*             message: this.props.tutorialMessages.successMsg, */}
+                            {/*             img: this.props.locale === 'de' ? successImageDE : successImageEN */}
+                            {/*         }} */}
+                            {/*         onHome={this.handleHome} */}
+                            {/*         homeButtonTitle={guiMessages.homeButtonTitle} */}
+                            {/*     /> */}
+                            {/* } */}
+                        </div> : null
+                    }
+
+                    {this.clickedNavBarButton === this.TEST ?
+                        <div>
+                            {!isCurrentStep || this.props.failedTimes >= 3 ?
+                                <Solution
+                                    title={guiMessages.solutionHeader}
+                                    content={content.solution}
+                                    onSolution={onSolution}
+                                    solutionExpanded={solutionExpanded}
+                                /> : null}
+                            {tested && !success ?
+                                <p className={styles.stepTestingFail}>{failureMessage}</p> : null}
+                            <TestingComponent
+                                testButtonTitle={testButtonTitle}
+                                successMsg={guiMessages.successMessage}
+                                failMsg={guiMessages.failMessage}
+                                loadingMsg={guiMessages.loadingMessage}
+                                onTest={onTest}
+                                testButtonVisible={testButtonVisible}
+                                tested={tested}
+                                success={success}
+                                currentlyTesting={currentlyTesting}
+                            />
+                        </div> : null
+                    }
+                </div>
+            </div>
         );
     }
 }

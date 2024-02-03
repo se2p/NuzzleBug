@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './tutorial-cards.css';
 
-import checkmark from './icon--checkmark.png';
-import crossMark from './icon--cross-mark.png';
-import loading from './icon--loading.svg';
-import arrow from './icon--arrow.svg';
-import HintContent from './hints.jsx';
+import checkmark from './images/icon--checkmark.png';
+import crossMark from './images/icon--cross-mark.png';
+import loading from './images/icon--loading.svg';
+import arrow from './images/icon--arrow.svg';
+import HintContent from './tutorial-code-quality.jsx';
 
 const Solution = ({title, content, onSolution, solutionExpanded}) => (
     <>

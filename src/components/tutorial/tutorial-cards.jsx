@@ -7,7 +7,7 @@ import {injectIntl, FormattedMessage} from 'react-intl';
 import styles from '../cards/card.css';
 import tutorialStyles from './tutorial-cards.css';
 
-import homeIcon from './icon--home.svg';
+import homeIcon from './images/icon--home.svg';
 import shrinkIcon from '../cards/icon--shrink.svg';
 import expandIcon from '../cards/icon--expand.svg';
 import closeIcon from '../cards/icon--close.svg';
