@@ -1,7 +1,16 @@
-import styles from './styles/tutorial-cards.css';
+import styles from '../../styles/tutorial-cards.css';
 import PropTypes from 'prop-types';
 import {injectIntl} from 'react-intl';
 import React from 'react';
+
+/**
+ * Component for downloading files required for the tutorial.
+ *
+ * @param downloadContent content to be downloaded.
+ * @param onDownload action performed for downloading files.
+ * @param downloadButtonTitle name of the button, that performs onClick the onDownload function
+ * @constructor
+ */
 
 const Download = ({downloadContent, onDownload, downloadButtonTitle}) => (
     <div className={styles.introDownloadContainer}>
@@ -29,6 +38,15 @@ Download.propTypes = {
     downloadButtonTitle: PropTypes.string.isRequired,
     onDownload: PropTypes.func.isRequired
 };
+
+/**
+ * Component that introduces the selected tutorial and provides functionality to download required files.
+ *
+ * @param content content of the file to download
+ * @param onDownload action performed for downloading files.
+ * @param downloadButtonTitle name of the button, that performs onClick the onDownload function
+ * @constructor
+ */
 
 const TutorialIntro = ({content, onDownload, downloadButtonTitle}) => (
     <div className={styles.tutorialStep}>
