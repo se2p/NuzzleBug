@@ -1,37 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-// custom components
-import CodeQualityHints from '../components/tutorial/tutorial-card-step/code-quality/tutorial-step-code-quality.jsx';
-import Instructions from '../components/tutorial/tutorial-card-step/current-step/tutorial-step-instructions.jsx';
-import Success from '../components/tutorial/tutorial-card-step/current-step/tutorial-step-success.jsx';
-import Intro from '../components/tutorial/tutorial-card-step/description/tutorial-intro.jsx';
-import Solution from '../components/tutorial/tutorial-card-step/testing/tutorial-step-solution.jsx';
-import Testing from '../components/tutorial/tutorial-card-step/testing/tutorial-step-testing.jsx';
-
+import Step from '../components/tutorial/tutorial-card-step/step.jsx';
 import {connect} from 'react-redux';
 import VirtualMachine from 'scratch-vm';
 import downloadBlob from '../lib/download-blob';
-
 import {homeMenu} from '../reducers/tutorial-cards';
 import {
-    expandSolution,
-    fail,
-    nextTutorialStep,
-    reset,
-    success,
-    testNextStep,
-    testStarted,
-    testStopped
+    expandSolution, fail, nextTutorialStep, reset, success, testNextStep, testStarted, testStopped
 } from '../reducers/tutorial-step';
 import {lock, unlock} from '../reducers/vm-status';
-
 import {runTest} from 'tutorial-tests';
 import * as tutorials from 'tutorial-tests/src/tutorials';
 
 import successImageEN from '../components/tutorial/images/greatDoneEN.png';
 import successImageDE from '../components/tutorial/images/greatDoneDE.png';
-import styles from '../components/tutorial/styles/tutorial-cards.css';
 
 class TutorialStep extends React.Component {
     constructor (props) {
@@ -56,9 +38,7 @@ class TutorialStep extends React.Component {
             const program = this.props.toJson();
             const url = 'http://localhost:8080/tutorial-system/checker/generate-feedback';
             const jsonBody = JSON.stringify({
-                language: 'GERMAN',
-                detectors: 'default',
-                program: JSON.parse(program)
+                language: 'GERMAN', detectors: 'default', program: JSON.parse(program)
             });
             const response = this.sendHttpRequest(url, 'POST', {}, jsonBody);
             const issues = response.issues;
@@ -96,11 +76,7 @@ class TutorialStep extends React.Component {
                 let code = hint.code.replaceAll('[/scratchblocks]', '');
                 code = code.replaceAll('[scratchblocks]', '');
                 const temp = {
-                    title: hint.name,
-                    description: hint.hint,
-                    sprite: hint.sprite,
-                    type: hint.type,
-                    codeSnippet: code
+                    title: hint.name, description: hint.hint, sprite: hint.sprite, type: hint.type, codeSnippet: code
                 };
                 console.log(temp);
                 result.push(temp);
@@ -124,8 +100,7 @@ class TutorialStep extends React.Component {
                 img: tutorial[`imageStep${i}`],
                 message2: messages[`message2Step${i}`],
                 solution: {
-                    message: messages[`solutionStep${i}`],
-                    img: image
+                    message: messages[`solutionStep${i}`], img: image
                 }
             });
 
@@ -139,14 +114,11 @@ class TutorialStep extends React.Component {
         const messages = this.props.tutorialMessages;
         for (let i = 1; i <= tutorial.totalDownloads; i++) {
             downloads.push({
-                title: messages[`download${i}`],
-                content: tutorial[`downloadContent${i}`]
+                title: messages[`download${i}`], content: tutorial[`downloadContent${i}`]
             });
         }
         return {
-            title: messages.title,
-            message: messages.downloadMessage,
-            download: downloads
+            title: messages.title, message: messages.downloadMessage, download: downloads
         };
     }
 
@@ -230,96 +202,67 @@ class TutorialStep extends React.Component {
 
         const content = steps[this.props.step];
 
-        return (
-            <div className={styles.flexContainer}>
-                <div className={styles.navBar}>
-                    <div
-                        onClick={() => {
-                            this.clickedNavBarButton = this.DESCRIPTION;
-                        }}
-                        className={styles.navBarButton}
-                    >
-                        <span>Beschreibung</span>
-                    </div>
-                    <div
-                        onClick={() => this.clickedNavBarButton = this.CURRENT_STEP}
-                        className={styles.navBarButton}
-                    >
-                        <span>Aktueller Schritt</span>
-                    </div>
-                    <div
-                        onClick={() => this.clickedNavBarButton = this.TEST}
-                        className={styles.navBarButton}
-                    >
-                        <span>Test</span>
-                    </div>
-                    <div
-                        onClick={() => this.clickedNavBarButton = this.CODE_QUALITY}
-                        className={styles.navBarButton}
-                    >
-                        <span>Qualität</span>
-                    </div>
-                </div>
-                <div>
+        this.onCodeQualityHintGeneration();
 
-                    {this.clickedNavBarButton === this.DESCRIPTION ?
-                        <Intro
-                            content={downloads}
-                            onDownload={this.handleDownload}
-                            downloadButtonTitle={guiMessages.downloadButtonTitle}
-                        /> : null}
+        // const's for props of Step component
+        const descriptionProps = {
+            intro: {
+                content: downloads,
+                onDownload: this.handleDownload,
+                downloadButtonTitle: guiMessages.downloadButtonTitle
+            }
+        };
+        const currentStepProps = {
+            instruction: {
+                title: content.title, message1: content.message1, img: content.img, message2: content.message2
+            },
+            isSuccessVisible: this.props.step + 1 === this.props.totalSteps,
+            success: {
+                content: {
+                    title: this.props.tutorialMessages.successTitle,
+                    message: this.props.tutorialMessages.successMsg,
+                    img: this.props.locale === 'de' ? successImageDE : successImageEN
+                },
+                onHome: this.handleHome,
+                homeButtonTitle: guiMessages.homeButtonTitle
+            }
+        };
+        const testingProps = {
+            isSolutionVisible: !isCurrentStep || this.props.failedTimes >= 3,
+            solution: {
+                title: guiMessages.solutionHeader,
+                content: content.solution,
+                onSolution: this.onSolution,
+                solutionExpanded: this.solutionExpanded
+            },
+            isFailureMessageVisible: tested && !stepSucceeded,
+            failureMessage: this.props.guiMessages.failureMessage,
+            testing: {
+                tested: tested,
+                currentlyTesting: this.props.currentlyTesting,
+                success: stepSucceeded,
+                testButtonVisible: isCurrentStep,
+                onTest: this.props.stepSucceeded ? this.next : this.test,
+                testButtonTitle: this.props.stepSucceeded ? guiMessages.continueButtonTitle : guiMessages.testButtonTitle,
+                successMsg: this.props.guiMessages.successMessage,
+                failMsg: this.props.guiMessages.failMessage,
+                loadingMsg: this.props.guiMessages.loadingMessage
+            }
+        };
+        const codeQuality = {
+            codeQuality: {
+                hints: this.hints,
+                onCodeQualityHintGeneration: this.onCodeQualityHintGeneration,
+                codeQualityButtonTitle: 'Codequalität prüfen'
+            }
+        };
 
-                    {this.clickedNavBarButton === this.CURRENT_STEP ?
-                        <div>
-                            <Instructions
-                                title={content.title}
-                                message1={content.message1}
-                                img={content.img}
-                                message2={content.message2}
-                            />
-                            {this.props.step + 1 === this.props.totalSteps &&
-                                <Success
-                                    content={{
-                                        title: this.props.tutorialMessages.successTitle,
-                                        message: this.props.tutorialMessages.successMsg,
-                                        img: this.props.locale === 'de' ? successImageDE : successImageEN
-                                    }}
-                                    onHome={this.handleHome}
-                                    homeButtonTitle={guiMessages.homeButtonTitle}
-                                />
-                            }
-                        </div> : null
-                    }
-
-                    {this.clickedNavBarButton === this.TEST ?
-                        <div>
-                            {!isCurrentStep || this.props.failedTimes >= 3 ?
-                                <Solution
-                                    title={guiMessages.solutionHeader}
-                                    content={content.solution}
-                                    onSolution={this.onSolution}
-                                    solutionExpanded={this.solutionExpanded}
-                                /> : null
-                            }
-                            {tested && !success ?
-                                <p className={styles.stepTestingFail}>{this.props.guiMessages.failureMessage}</p> : null
-                            }
-                            <Testing
-                                tested={tested}
-                                currentlyTesting={this.props.currentlyTesting}
-                                success={stepSucceeded}
-                                testButtonVisible={isCurrentStep}
-                                testButtonTitle={this.props.stepSucceeded ? guiMessages.continueButtonTitle :
-                                    guiMessages.testButtonTitle}
-                                onTest={this.props.stepSucceeded ? this.next : this.test}
-                                solutionVisible={!isCurrentStep || this.props.failedTimes >= 3}
-                                {...this.props}
-                            />
-                        </div> : null
-                    }
-                </div>
-            </div>
-        );
+        return (<Step
+            description={descriptionProps}
+            currentStep={currentStepProps}
+            testing={testingProps}
+            codeQuality={codeQuality}
+        />);
     }
 }
 
@@ -378,7 +321,4 @@ const mapDispatchToProps = dispatch => ({
     unlockVM: () => dispatch(unlock())
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(TutorialStep);
+export default connect(mapStateToProps, mapDispatchToProps)(TutorialStep);
