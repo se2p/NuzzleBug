@@ -30,7 +30,7 @@ Success.propTypes = {
         img: PropTypes.node.isRequired
     }),
     onHome: PropTypes.func.isRequired,
-    homeButtonTitle: PropTypes.func.isRequired
+    homeButtonTitle: PropTypes.string.isRequired
 };
 
 export default Success;
