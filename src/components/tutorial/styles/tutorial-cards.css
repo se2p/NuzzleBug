@@ -425,10 +425,12 @@
 
 .nav-bar {
     height: 100%;
-    width: 25%;
     background-color: #4c7397;
-    color: black;
-    align-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 20px;
 }
 
 .flex-container {
@@ -438,12 +440,25 @@
 }
 
 .nav-bar-button {
-    background-color: #ff8a54;
-    height: 15%;
     width: 100%;
-    border: 2px solid black;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #ff8a54;
+    color: white;
+    border: none;
     text-align: center;
-    align-items: center;
-    justify-content: center;
-    display: flex;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+
+}
+
+.nav-bar-button:hover {
+    background-color: #777; /* Hover background color */
+}
+
+.page {
+    height: 95%;
+    width: 75%;
 }
