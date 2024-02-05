@@ -232,8 +232,8 @@ class TutorialStep extends React.Component {
             solution: {
                 title: guiMessages.solutionHeader,
                 content: content.solution,
-                onSolution: this.onSolution,
-                solutionExpanded: this.solutionExpanded
+                onSolution: this.props.onSolution,
+                solutionExpanded: this.props.solutionExpanded
             },
             isFailureMessageVisible: tested && !stepSucceeded,
             failureMessage: this.props.guiMessages.failureMessage,
@@ -290,6 +290,8 @@ TutorialStep.propTypes = {
     unlockVM: PropTypes.func,
     locale: PropTypes.string.isRequired,
     toJson: PropTypes.func,
+    solutionExpanded: PropTypes.bool,
+    onSolution: PropTypes.func,
     vm: PropTypes.instanceOf(VirtualMachine).isRequired
 };
 
