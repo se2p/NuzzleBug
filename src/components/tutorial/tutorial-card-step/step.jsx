@@ -2,8 +2,6 @@ import styles from '../styles/tutorial-cards.css';
 import Intro from './description/tutorial-intro.jsx';
 import Instructions from './current-step/tutorial-step-instructions.jsx';
 import Success from './current-step/tutorial-step-success.jsx';
-import successImageDE from '../images/greatDoneDE.png';
-import successImageEN from '../images/greatDoneEN.png';
 import Solution from './testing/tutorial-step-solution.jsx';
 import Testing from './testing/tutorial-step-testing.jsx';
 import React, {useState} from 'react';
