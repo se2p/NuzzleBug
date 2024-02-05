@@ -29,30 +29,38 @@ const Step = props => {
     };
 
     const navBar = (
-        <div className={styles.navBar}>
-            <div
-                onClick={() => selectNavBarButton(DESCRIPTION)}
-                className={styles.navBarButton}
-            >
-                <span>Beschreibung</span>
-            </div>
-            <div
-                onClick={() => selectNavBarButton(CURRENT_STEP)}
-                className={styles.navBarButton}
-            >
-                <span>Aktueller Schritt</span>
-            </div>
-            <div
-                onClick={() => selectNavBarButton(TEST)}
-                className={styles.navBarButton}
-            >
-                <span>Test</span>
-            </div>
-            <div
-                onClick={() => selectNavBarButton(CODE_QUALITY)}
-                className={styles.navBarButton}
-            >
-                <span>Qualität</span>
+        <div
+            style={{
+                backgroundColor: '#4c7397',
+                position: 'fixed',
+                height: '90%'
+            }}
+        >
+            <div className={styles.navBar}>
+                <div
+                    onClick={() => selectNavBarButton(DESCRIPTION)}
+                    className={styles.navBarButton}
+                >
+                    <span>Beschreibung</span>
+                </div>
+                <div
+                    onClick={() => selectNavBarButton(CURRENT_STEP)}
+                    className={styles.navBarButton}
+                >
+                    <span>Aktueller Schritt</span>
+                </div>
+                <div
+                    onClick={() => selectNavBarButton(TEST)}
+                    className={styles.navBarButton}
+                >
+                    <span>Test</span>
+                </div>
+                <div
+                    onClick={() => selectNavBarButton(CODE_QUALITY)}
+                    className={styles.navBarButton}
+                >
+                    <span>Qualität</span>
+                </div>
             </div>
         </div>
     );
