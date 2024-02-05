@@ -31,34 +31,32 @@ const Step = props => {
     };
 
     const navBar = (
-        <>
-            <div className={styles.navBar}>
-                <div
-                    onClick={() => selectNavBarButton(DESCRIPTION)}
-                    className={styles.navBarButton}
-                >
-                    <span>Beschreibung</span>
-                </div>
-                <div
-                    onClick={() => selectNavBarButton(CURRENT_STEP)}
-                    className={styles.navBarButton}
-                >
-                    <span>Aktueller Schritt</span>
-                </div>
-                <div
-                    onClick={() => selectNavBarButton(TEST)}
-                    className={styles.navBarButton}
-                >
-                    <span>Test</span>
-                </div>
-                <div
-                    onClick={() => selectNavBarButton(CODE_QUALITY)}
-                    className={styles.navBarButton}
-                >
-                    <span>Qualität</span>
-                </div>
+        <div className={styles.navBar}>
+            <div
+                onClick={() => selectNavBarButton(DESCRIPTION)}
+                className={styles.navBarButton}
+            >
+                <span>Beschreibung</span>
             </div>
-        </>
+            <div
+                onClick={() => selectNavBarButton(CURRENT_STEP)}
+                className={styles.navBarButton}
+            >
+                <span>Aktueller Schritt</span>
+            </div>
+            <div
+                onClick={() => selectNavBarButton(TEST)}
+                className={styles.navBarButton}
+            >
+                <span>Test</span>
+            </div>
+            <div
+                onClick={() => selectNavBarButton(CODE_QUALITY)}
+                className={styles.navBarButton}
+            >
+                <span>Qualität</span>
+            </div>
+        </div>
     );
 
     switch (selectedType) {
@@ -66,11 +64,13 @@ const Step = props => {
         return (
             <div className={styles.flexContainer}>
                 {navBar}
-                <Intro
-                    content={description.intro.content}
-                    onDownload={description.intro.onDownload}
-                    downloadButtonTitle={description.intro.downloadButtonTitle}
-                />
+                <div className={styles.page}>
+                    <Intro
+                        content={description.intro.content}
+                        onDownload={description.intro.onDownload}
+                        downloadButtonTitle={description.intro.downloadButtonTitle}
+                    />
+                </div>
             </div>
         );
     }
@@ -78,7 +78,7 @@ const Step = props => {
         return (
             <div className={styles.flexContainer}>
                 {navBar}
-                <div>
+                <div className={styles.page}>
                     <Instructions
                         title={currentStep.instruction.title}
                         message1={currentStep.instruction.message1}
@@ -104,7 +104,18 @@ const Step = props => {
         return (
             <div className={styles.flexContainer}>
                 {navBar}
-                <div>
+                <div className={styles.page}>
+                    <Testing
+                        tested={testing.testing.tested}
+                        currentlyTesting={testing.testing.currentlyTesting}
+                        success={testing.testing.success}
+                        testButtonVisible={testing.testing.testButtonVisible}
+                        testButtonTitle={testing.testing.testButtonTitle}
+                        onTest={testing.testing.onTest}
+                        successMsg={testing.testing.successMsg}
+                        failMsg={testing.testing.failMsg}
+                        loadingMsg={testing.testing.loadingMsg}
+                    />
                     {testing.isSolutionVisible ?
                         <Solution
                             title={testing.solution.title}
@@ -116,16 +127,19 @@ const Step = props => {
                     {testing.isFailureMessageVisible ?
                         <p className={styles.stepTestingFail}>{testing.failureMessage}</p> : null
                     }
-                    <Testing
-                        tested={testing.testing.tested}
-                        currentlyTesting={testing.testing.currentlyTesting}
-                        success={testing.testing.success}
-                        testButtonVisible={testing.testing.testButtonVisible}
-                        testButtonTitle={testing.testing.testButtonTitle}
-                        onTest={testing.testing.onTest}
-                        successMsg={testing.testing.successMsg}
-                        failMsg={testing.testing.failMsg}
-                        loadingMsg={testing.testing.loadingMsg}
+                </div>
+            </div>
+        );
+    }
+    case CODE_QUALITY: {
+        return (
+            <div className={styles.flexContainer}>
+                {navBar}
+                <div className={styles.page}>
+                    <CodeQualityHints
+                        hints={codeQuality.codeQuality.hints}
+                        onCodeQualityHintGeneration={codeQuality.codeQuality.onCodeQualityHintGeneration}
+                        codeQualityButtonTitle={codeQuality.codeQuality.codeQualityButtonTitle}
                     />
                 </div>
             </div>
