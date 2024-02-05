@@ -170,7 +170,7 @@ const CodeQualityHints = props => {
                                 alignContent: 'center'
                             }}
                         >
-                            <br />
+                            <br/>
                             {hints[index].title}
                         </h3>
                         <div
@@ -187,7 +187,7 @@ const CodeQualityHints = props => {
                                     maxHeight: '92%',
                                     borderStyle: 'dashed none dashed dashed',
                                     borderWidth: '2px',
-                                    maxWidth: '260px',
+                                    maxWidth: '281.96px',
                                     padding: '2%'
                                 }}
                             >
@@ -201,13 +201,13 @@ const CodeQualityHints = props => {
                                     maxHeight: '92%',
                                     borderStyle: 'dashed',
                                     borderWidth: '2px',
-                                    maxWidth: '260px',
+                                    maxWidth: '281.96px',
                                     padding: '2%'
                                 }}
                             >
                                 <div
                                     style={{
-                                        maxWidth: '200px'
+                                        overflowX: 'scroll'
                                     }}
                                 >
                                     <ScratchBlocksImage
