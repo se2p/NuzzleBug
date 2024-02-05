@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from '../../styles/tutorial-cards.css';
-import arrow from '../../images/icon--arrow.svg';
+import arrow from '../../images/icon--arrow-top.svg';
 import PropTypes from 'prop-types';
 
 /**

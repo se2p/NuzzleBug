@@ -5,7 +5,7 @@ import styles from '../styles/tutorial-cards.css';
 import checkmark from '../images/icon--checkmark.png';
 import crossMark from '../images/icon--cross-mark.png';
 import loading from '../images/icon--loading.svg';
-import arrow from '../images/icon--arrow.svg';
+import arrow from '../images/icon--arrow-top.svg';
 import HintContent from './code-quality/tutorial-step-code-quality.jsx';
 
 const Solution = ({title, content, onSolution, solutionExpanded}) => (
