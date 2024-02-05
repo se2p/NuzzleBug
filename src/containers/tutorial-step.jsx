@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import Step from '../components/tutorial/tutorial-card-step/step.jsx';
 import {connect} from 'react-redux';
@@ -22,14 +22,15 @@ class TutorialStep extends React.Component {
         this.test = this.test.bind(this);
         this.handleDownload = this.handleDownload.bind(this);
         this.next = this.next.bind(this);
+        this.generateHints = this.generateHints.bind(this);
         this.isGeneratingHints = false;
+        this.onCodeQualityHintGeneration = this.onCodeQualityHintGeneration.bind(this);
         // set constant values
-        this.DESCRIPTION = 'description';
-        this.TEST = 'test';
-        this.CODE_QUALITY = 'code quality';
-        this.CURRENT_STEP = 'current step';
-        // set initial clickedNavBarButton value
-        this.clickedNavBarButton = this.DESCRIPTION;
+        this.state = {
+            hints: []
+        };
+
+        this.onCodeQualityHintGeneration();
     }
 
     requestHints () {
@@ -68,21 +69,39 @@ class TutorialStep extends React.Component {
     }
 
     onCodeQualityHintGeneration () {
-        const hints = this.requestHints();
-        console.log(typeof (hints));
-        const result = [];
-        if (hints) {
-            hints.forEach(hint => {
-                let code = hint.code.replaceAll('[/scratchblocks]', '');
-                code = code.replaceAll('[scratchblocks]', '');
-                const temp = {
-                    title: hint.name, description: hint.hint, sprite: hint.sprite, type: hint.type, codeSnippet: code
-                };
-                console.log(temp);
-                result.push(temp);
-            });
-        }
-        this.hints = result;
+        const program = this.props.toJson();
+        const url = 'http://localhost:8080/tutorial-system/checker/generate-feedback';
+        const jsonBody = JSON.stringify({
+            language: 'GERMAN', detectors: 'default', program: JSON.parse(program)
+        });
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: jsonBody,
+            referrerPolicy: 'origin-when-cross-origin'
+        })
+            .then(response => response.json())
+            .then(issues => issues.issues)
+            .then(problems => {
+                const result = [];
+                problems.forEach(hint => {
+                    let code = hint.code.replaceAll('[/scratchblocks]', '');
+                    code = code.replaceAll('[scratchblocks]', '');
+                    const temp = {
+                        title: hint.name,
+                        description: hint.hint,
+                        sprite: hint.sprite,
+                        type: hint.type,
+                        codeSnippet: code
+                    };
+                    console.log(temp);
+                    result.push(temp);
+                });
+                this.setState({hints: result});
+            }
+            );
     }
 
     processSteps () {
@@ -184,6 +203,23 @@ class TutorialStep extends React.Component {
         this.props.onHome();
     }
 
+    generateHints () {
+        const hints = this.requestHints;
+        const result = [];
+        if (hints) {
+            hints.forEach(hint => {
+                let code = hint.code.replaceAll('[/scratchblocks]', '');
+                code = code.replaceAll('[scratchblocks]', '');
+                const temp = {
+                    title: hint.name, description: hint.hint, sprite: hint.sprite, type: hint.type, codeSnippet: code
+                };
+                console.log(temp);
+                result.push(temp);
+            });
+        }
+        this.setState({hints: result});
+    }
+
     render () {
         // true, if this content was tested at least one time.
         const tested = this.props.step <= this.props.testedSteps;
@@ -201,8 +237,6 @@ class TutorialStep extends React.Component {
         const guiMessages = this.props.guiMessages;
 
         const content = steps[this.props.step];
-
-        this.onCodeQualityHintGeneration();
 
         // const's for props of Step component
         const descriptionProps = {
@@ -251,7 +285,7 @@ class TutorialStep extends React.Component {
         };
         const codeQuality = {
             codeQuality: {
-                hints: this.hints,
+                hints: this.state.hints,
                 onCodeQualityHintGeneration: this.onCodeQualityHintGeneration,
                 codeQualityButtonTitle: 'Codequalität prüfen'
             }
