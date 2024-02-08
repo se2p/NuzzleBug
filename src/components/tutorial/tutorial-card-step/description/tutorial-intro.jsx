@@ -1,6 +1,5 @@
 import styles from '../../styles/tutorial-cards.css';
 import PropTypes from 'prop-types';
-import {injectIntl} from 'react-intl';
 import React from 'react';
 
 /**
@@ -14,19 +13,26 @@ import React from 'react';
 
 const Download = ({downloadContent, onDownload, downloadButtonTitle}) => (
     <div className={styles.introDownloadContainer}>
-        <p className={styles.introDownloadText}> {downloadContent.title}</p>
-        <img
-            className={styles.introImage}
-            draggable={false}
-            src={downloadContent.content}
-            alt={'picture of the download'}
-        />
         <div
-            className={styles.introDownloadButton}
-            /* eslint-disable-next-line react/jsx-no-bind */
-            onClick={() => onDownload(downloadContent.title, downloadContent.content)}
+            style={{
+                display: 'flex',
+                justifyContent: 'space-between'
+            }}
         >
-            <span className={styles.stepTestingButtonTitle}> {downloadButtonTitle} </span>
+            <p className={styles.introDownloadText}> {downloadContent.title}</p>
+            <img
+                className={styles.introImage}
+                draggable={false}
+                src={downloadContent.content}
+                alt={'picture of the download'}
+            />
+            <div
+                className={styles.introDownloadButton}
+                /* eslint-disable-next-line react/jsx-no-bind */
+                onClick={() => onDownload(downloadContent.title, downloadContent.content)}
+            >
+                <span className={styles.stepTestingButtonTitle}> {downloadButtonTitle} </span>
+            </div>
         </div>
     </div>
 );

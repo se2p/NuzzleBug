@@ -186,8 +186,10 @@
 }
 
 .intro-download-container {
-    height: 145px;
+    height: 80px;
     display: inline-block;
+    justify-content: space-between;
+    /*align-items: center;*/
     background-color: bisque;
     width: 80%;
     box-sizing: border-box;
@@ -197,10 +199,11 @@
 }
 
 .intro-image {
-    width: 130px;
+    max-height: 60px;
+    max-width: 125px;
     float: left;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     margin-left: 30px;
     box-sizing: border-box;
     border-radius: 10px;
@@ -212,8 +215,8 @@
     display: inline-block;
     text-align: center;
     vertical-align: middle;
-    margin-top: 30px;
-    margin-right: 50px;
+    margin-top: 20px;
+    margin-right: 40px;
     float: right;
     background-color: #ff8a54;
     box-sizing: border-box;
@@ -222,9 +225,10 @@
 }
 
 .intro-download-text {
-    margin-top: 5px;
+    margin-top: 25px;
     margin-bottom: 0px;
     text-align: left;
+    align-items: center;
     margin-left: 30px;
     font-family: 'Open Sans',sans-serif;
     color: hsla(225, 15%, 40%, 1);
@@ -509,4 +513,8 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
+}
+
+.overflowed {
+    transform: scale(0.75);
 }
