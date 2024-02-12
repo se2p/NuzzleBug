@@ -39,25 +39,25 @@ const Step = props => {
             <div className={styles.navBar}>
                 <div
                     onClick={() => selectNavBarButton(DESCRIPTION)}
-                    className={styles.navBarButton}
+                    className={`${styles.navBarButton} ${selectedType === DESCRIPTION ? styles.selectedNavBarButton : ''}`}
                 >
                     <span>Beschreibung</span>
                 </div>
                 <div
                     onClick={() => selectNavBarButton(CURRENT_STEP)}
-                    className={styles.navBarButton}
+                    className={`${styles.navBarButton} ${selectedType === CURRENT_STEP ? styles.selectedNavBarButton : ''}`}
                 >
                     <span>Aktueller Schritt</span>
                 </div>
                 <div
                     onClick={() => selectNavBarButton(TEST)}
-                    className={styles.navBarButton}
+                    className={`${styles.navBarButton} ${selectedType === TEST ? styles.selectedNavBarButton : ''}`}
                 >
                     <span>Test</span>
                 </div>
                 <div
                     onClick={() => selectNavBarButton(CODE_QUALITY)}
-                    className={styles.navBarButton}
+                    className={`${styles.navBarButton} ${selectedType === CODE_QUALITY ? styles.selectedNavBarButton : ''}`}
                 >
                     <span>Qualität</span>
                 </div>

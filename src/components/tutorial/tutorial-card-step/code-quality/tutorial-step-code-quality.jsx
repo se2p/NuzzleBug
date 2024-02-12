@@ -60,8 +60,36 @@ const CodeQualityHints = props => {
             )
         ));
 
-    const [selectedType, setSelectedType] = useState(null);
+    const [selectedType, setSelectedType] = useState('PERFUME');
     const [index, setIndex] = useState(0);
+    const [hasHints, setHasHints] = useState({
+        hasBugs: hints
+            .filter(hint => selectedType === null || hint.type === 'BUG')
+            .length > 0,
+        hasSmells: hints
+            .filter(hint => selectedType === null || hint.type === 'SMELL')
+            .length > 0,
+        hasPerfumes: hints
+            .filter(hint => selectedType === null || hint.type === 'PERFUME')
+            .length > 0
+    });
+
+    const newHints = () => {
+        const hasBugs = hints
+            .filter(hint => selectedType === null || hint.type === 'BUG')
+            .length > 0;
+        const hasSmells = hints
+            .filter(hint => selectedType === null || hint.type === 'SMELL')
+            .length > 0;
+        const hasPerfumes = hints
+            .filter(hint => selectedType === null || hint.type === 'PERFUME')
+            .length > 0;
+        setHasHints({
+            hasBugs: hasBugs,
+            hasSmells: hasSmells,
+            hasPerfumes: hasPerfumes
+        });
+    };
 
     const nextHint = i => {
         const filteredHints = hints.filter(hint => selectedType === null || hint.type === selectedType);
@@ -98,7 +126,10 @@ const CodeQualityHints = props => {
             {/* check code quality button */}
             <div
                 className={styles.stepCodeQualityHintGeneration}
-                onClick={onCodeQualityHintGeneration}
+                onClick={() => {
+                    onCodeQualityHintGeneration();
+                    newHints();
+                }}
             >
                 <span className={styles.stepTestingButtonTitle}>{codeQualityButtonTitle}</span>
             </div>
@@ -108,22 +139,35 @@ const CodeQualityHints = props => {
             >
                 <div className={styles.hintTypeButtonContainer}>
                     <button
-                        onClick={() => filterHintsByType('SMELL')}
+                        onClick={() => filterHintsByType('PERFUME')}
+                        disabled={!hasHints.hasPerfumes}
                         className={styles.hintTypeButton}
+                        style={{
+                            backgroundColor: hasHints.hasPerfumes ? 'green' : 'gray'
+                        }}
+
                     >
-                        {'Show SMELL Hints'}
+                        {'Eleganter Code'}
+                    </button>
+                    <button
+                        onClick={() => filterHintsByType('SMELL')}
+                        disabled={!hasHints.hasSmells}
+                        className={styles.hintTypeButton}
+                        style={{
+                            backgroundColor: hasHints.hasSmells ? 'orange' : 'gray'
+                        }}
+                    >
+                        {'Smells'}
                     </button>
                     <button
                         onClick={() => filterHintsByType('BUG')}
+                        disabled={!hasHints.hasBugs}
                         className={styles.hintTypeButton}
+                        style={{
+                            backgroundColor: hasHints.hasBugs ? 'red' : 'gray'
+                        }}
                     >
-                        {'Show BUG Hints'}
-                    </button>
-                    <button
-                        onClick={() => filterHintsByType('PERFUME')}
-                        className={styles.hintTypeButton}
-                    >
-                        {'Show PERFUME Hints'}
+                        {'Fehler'}
                     </button>
                 </div>
 
@@ -144,7 +188,14 @@ const CodeQualityHints = props => {
                             paddingRight: '3px'
                         }}
                     >
-                        <button onClick={() => prevHint(index)}>
+                        <button
+                            onClick={() => prevHint(index)}
+                            disabled={
+                                (selectedType === 'BUG' && !hasHints.hasBugs) ||
+                                (selectedType === 'SMELL' && !hasHints.hasSmells) ||
+                                (selectedType === 'PERFUME' && !hasHints.hasPerfumes)
+                            }
+                        >
                             <img
                                 src={arrow}
                                 draggable={false}
@@ -153,69 +204,69 @@ const CodeQualityHints = props => {
                             />
                         </button>
                     </div>
-                    {/* {filteredHints.map((hint, index) => ( */}
-                    {/*     <div key={index}> */}
-
-                    {/*     </div> */}
-                    {/* ))} */}
-
                     <div
                         style={{
                             width: '100%'
                         }}
                     >
-                        <h3
-                            style={{
-                                width: '100%',
-                                alignContent: 'center'
-                            }}
-                        >
-                            <br/>
-                            {hints[index].title}
-                        </h3>
-                        <div
-                            style={{
-                                display: 'flex',
-                                width: '563.93px'
-                            }}
-                        >
-                            <div
-                                style={{
-                                    flex: 1,
-                                    border: '2px',
-                                    minHeight: '250px',
-                                    maxHeight: '92%',
-                                    borderStyle: 'dashed none dashed dashed',
-                                    borderWidth: '2px',
-                                    maxWidth: '281.96px',
-                                    padding: '2%'
-                                }}
-                            >
-                                {replaceTags(hints[index].description)}
-                            </div>
-                            <div
-                                style={{
-                                    flex: 1,
-                                    border: '2px',
-                                    minHeight: '250px',
-                                    maxHeight: '92%',
-                                    borderStyle: 'dashed',
-                                    borderWidth: '2px',
-                                    maxWidth: '281.96px',
-                                    padding: '2%'
-                                }}
-                            >
-                                <div
+                        {(selectedType === 'BUG' && hasHints.hasBugs) ||
+                        (selectedType === 'SMELL' && hasHints.hasSmells) ||
+                        (selectedType === 'PERFUME' && hasHints.hasPerfumes) ?
+                            <div>
+                                <h3
                                     style={{
-                                        overflowX: 'scroll'
+                                        width: '100%',
+                                        alignContent: 'center'
                                     }}
                                 >
-                                    <ScratchBlocksImage
-                                        scratchBlocksText={hints[index].codeSnippet}
-                                    />
+                                    <br />
+                                    {hints.filter(hint => selectedType === null || hint.type === selectedType)[index].title}
+                                </h3>
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        width: '563.93px'
+                                    }}
+                                >
+                                    <div
+                                        style={{
+                                            flex: 1,
+                                            border: '2px',
+                                            minHeight: '250px',
+                                            maxHeight: '92%',
+                                            borderStyle: 'dashed none dashed dashed',
+                                            borderWidth: '2px',
+                                            maxWidth: '281.96px',
+                                            padding: '2%'
+                                        }}
+                                    >
+                                        {replaceTags(hints.filter(hint => selectedType === null || hint.type === selectedType)[index].description)}
+                                    </div>
+                                    <div
+                                        style={{
+                                            flex: 1,
+                                            border: '2px',
+                                            minHeight: '250px',
+                                            maxHeight: '92%',
+                                            borderStyle: 'dashed',
+                                            borderWidth: '2px',
+                                            maxWidth: '281.96px',
+                                            padding: '2%'
+                                        }}
+                                    >
+                                        <div
+                                            style={{
+                                                overflowX: 'scroll'
+                                            }}
+                                        >
+                                            <ScratchBlocksImage
+                                                scratchBlocksText={hints.filter(hint => selectedType === null || hint.type === selectedType)[index].codeSnippet}
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
+                            </div> : <span>{'keine Hinweise verfügbar'}</span>
+                        }
                     </div>
 
                     <div
@@ -228,7 +279,14 @@ const CodeQualityHints = props => {
                             paddingLeft: '3px'
                         }}
                     >
-                        <button onClick={() => nextHint(index)}>
+                        <button
+                            onClick={() => nextHint(index)}
+                            disabled={
+                                (selectedType === 'BUG' && !hasHints.hasBugs) ||
+                                (selectedType === 'SMELL' && !hasHints.hasSmells) ||
+                                (selectedType === 'PERFUME' && !hasHints.hasPerfumes)
+                            }
+                        >
                             <img
                                 src={arrow}
                                 draggable={false}

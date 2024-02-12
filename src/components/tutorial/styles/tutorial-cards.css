@@ -469,11 +469,14 @@
     display: inline-block;
     font-size: 16px;
     cursor: pointer;
+}
 
+.selected-nav-bar-button {
+    background-color: #40BF4A;
 }
 
 .nav-bar-button:hover {
-    background-color: #777; /* Hover background color */
+    /*background-color: #777; !* Hover background color *!*/
 }
 
 .page {

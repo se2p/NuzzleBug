@@ -22,50 +22,11 @@ class TutorialStep extends React.Component {
         this.test = this.test.bind(this);
         this.handleDownload = this.handleDownload.bind(this);
         this.next = this.next.bind(this);
-        this.generateHints = this.generateHints.bind(this);
-        this.isGeneratingHints = false;
         this.onCodeQualityHintGeneration = this.onCodeQualityHintGeneration.bind(this);
-        // set constant values
         this.state = {
             hints: []
         };
-
         this.onCodeQualityHintGeneration();
-    }
-
-    requestHints () {
-        if (this.isGeneratingHints === false) {
-            this.isGeneratingHints = true;
-            const program = this.props.toJson();
-            const url = 'http://localhost:8080/tutorial-system/checker/generate-feedback';
-            const jsonBody = JSON.stringify({
-                language: 'GERMAN', detectors: 'default', program: JSON.parse(program)
-            });
-            const response = this.sendHttpRequest(url, 'POST', {}, jsonBody);
-            const issues = response.issues;
-            this.isGeneratingHints = false;
-            return issues;
-        }
-    }
-
-    sendHttpRequest (url, method, headers, jsonBody) {
-        const xhr = new XMLHttpRequest();
-        xhr.open(method, url, false);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-
-        for (const header in headers) {
-            if (headers.hasOwnProperty(header)) {
-                xhr.setRequestHeader(header, headers[header]);
-            }
-        }
-
-        xhr.send(jsonBody);
-
-        if (xhr.status === 200) {
-            return JSON.parse(xhr.responseText);
-        }
-        console.log('Error occurred while retrieving data');
-        return [];
     }
 
     onCodeQualityHintGeneration () {
@@ -96,7 +57,6 @@ class TutorialStep extends React.Component {
                         type: hint.type,
                         codeSnippet: code
                     };
-                    console.log(temp);
                     result.push(temp);
                 });
                 this.setState({hints: result});
@@ -200,23 +160,6 @@ class TutorialStep extends React.Component {
     handleHome () {
         this.props.onReset();
         this.props.onHome();
-    }
-
-    generateHints () {
-        const hints = this.requestHints;
-        const result = [];
-        if (hints) {
-            hints.forEach(hint => {
-                let code = hint.code.replaceAll('[/scratchblocks]', '');
-                code = code.replaceAll('[scratchblocks]', '');
-                const temp = {
-                    title: hint.name, description: hint.hint, sprite: hint.sprite, type: hint.type, codeSnippet: code
-                };
-                console.log(temp);
-                result.push(temp);
-            });
-        }
-        this.setState({hints: result});
     }
 
     render () {
