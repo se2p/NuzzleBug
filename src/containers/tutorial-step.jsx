@@ -263,7 +263,7 @@ class TutorialStep extends React.Component {
         const testingProps = {
             isSolutionVisible: !isCurrentStep || this.props.failedTimes >= 3,
             isFailureMessageVisible: tested && !stepSucceeded,
-            failureMessage: this.props.guiMessages.failureMessage,
+            failureMessage: this.props.failureMessage,
             testing: {
                 tested: tested,
                 currentlyTesting: this.props.currentlyTesting,
@@ -327,6 +327,7 @@ TutorialStep.propTypes = {
     toJson: PropTypes.func,
     solutionExpanded: PropTypes.bool,
     onSolution: PropTypes.func,
+    failureMessage: PropTypes.string,
     vm: PropTypes.instanceOf(VirtualMachine).isRequired
 };
 
