@@ -122,7 +122,6 @@ class TutorialStep extends React.Component {
                     message: messages[`solutionStep${i}`], img: image
                 }
             });
-
         }
         return steps;
     }
@@ -263,12 +262,6 @@ class TutorialStep extends React.Component {
         };
         const testingProps = {
             isSolutionVisible: !isCurrentStep || this.props.failedTimes >= 3,
-            solution: {
-                title: guiMessages.solutionHeader,
-                content: content.solution,
-                onSolution: this.props.onSolution,
-                solutionExpanded: this.props.solutionExpanded
-            },
             isFailureMessageVisible: tested && !stepSucceeded,
             failureMessage: this.props.guiMessages.failureMessage,
             testing: {
@@ -283,6 +276,14 @@ class TutorialStep extends React.Component {
                 loadingMsg: this.props.guiMessages.loadingMessage
             }
         };
+        if (content.solution && content.solution.message && content.solution.img) {
+            testingProps.solution = {
+                title: guiMessages.solutionHeader,
+                content: content.solution,
+                onSolution: this.props.onSolution,
+                solutionExpanded: this.props.solutionExpanded
+            };
+        }
         const codeQuality = {
             codeQuality: {
                 hints: this.state.hints,

@@ -41,7 +41,7 @@ const Solution = ({title, content, onSolution, solutionExpanded}) => (
     </>
 );
 Solution.propTypes = {
-    title: PropTypes.string.isRequired,
+    title: PropTypes.string,
     content: PropTypes.shape({
         message: PropTypes.string.isRequired,
         img: PropTypes.node.isRequired

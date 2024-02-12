@@ -122,7 +122,7 @@ const Step = props => {
                         failMsg={testing.testing.failMsg}
                         loadingMsg={testing.testing.loadingMsg}
                     />
-                    {testing.isSolutionVisible ?
+                    {testing.isSolutionVisible && testing.solution ?
                         <Solution
                             title={testing.solution.title}
                             content={testing.solution.content}
@@ -201,13 +201,13 @@ Step.propTypes = {
         isSolutionVisible: PropTypes.bool.isRequired,
         // props for solution component
         solution: PropTypes.shape({
-            title: PropTypes.string.isRequired,
+            title: PropTypes.string,
             content: PropTypes.shape({
-                message: PropTypes.string.isRequired,
-                img: PropTypes.node.isRequired
-            }).isRequired,
-            onSolution: PropTypes.func.isRequired,
-            solutionExpanded: PropTypes.bool.isRequired
+                message: PropTypes.string,
+                img: PropTypes.node
+            }),
+            onSolution: PropTypes.func,
+            solutionExpanded: PropTypes.bool
         }),
         // specifies whether failure message is visible
         isFailureMessageVisible: PropTypes.bool.isRequired,
