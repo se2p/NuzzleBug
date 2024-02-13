@@ -14,9 +14,9 @@ scratchblocks.loadLanguages({de});
 
 const translate = scratchBlocksText => {
     const block = scratchblocks.parse(scratchBlocksText, {
-        languages: ['en'] // , 'de'
+        languages: ['en', 'de']
     });
-    // block.translate(scratchblocks.allLanguages.en);
+    block.translate(scratchblocks.allLanguages.de);
     return block.stringify();
 };
 
@@ -24,7 +24,7 @@ const ScratchBlocksImage = props => (
     <div className={stylesHints.scratchImage}>
         <ScratchBlocks
             blockStyle="scratch3"
-            languages={['en']} // , 'de'
+            languages={['en', 'de']}
         >
             {translate(props.scratchBlocksText)}
         </ScratchBlocks>
