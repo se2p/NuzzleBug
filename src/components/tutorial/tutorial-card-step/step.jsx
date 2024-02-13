@@ -257,6 +257,7 @@ Step.propTypes = {
                 title: PropTypes.string.isRequired,
                 description: PropTypes.string.isRequired,
                 sprite: PropTypes.string.isRequired,
+                costume: PropTypes.string.isRequired,
                 type: PropTypes.string.isRequired,
                 codeSnippet: PropTypes.string
             })),
