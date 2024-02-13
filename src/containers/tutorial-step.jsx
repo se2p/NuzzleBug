@@ -33,8 +33,12 @@ class TutorialStep extends React.Component {
     onCodeQualityHintGeneration () {
         const program = this.props.toJson();
         const url = 'http://localhost:8080/tutorial-system/checker/generate-feedback';
+        let detectors = 'default';
+        if (this.props.detectors) {
+            detectors = this.props.detectors;
+        }
         const jsonBody = JSON.stringify({
-            language: 'GERMAN', detectors: 'default', program: JSON.parse(program)
+            language: 'GERMAN', detectors: detectors, program: JSON.parse(program)
         });
         fetch(url, {
             method: 'POST',
@@ -262,6 +266,7 @@ TutorialStep.propTypes = {
     tutorialMessages: PropTypes.objectOf(PropTypes.string),
     step: PropTypes.number.isRequired,
     testedSteps: PropTypes.number.isRequired,
+    detectors: PropTypes.string,
     currentTutorialStep: PropTypes.number.isRequired,
     currentlyTesting: PropTypes.bool.isRequired,
     stepSucceeded: PropTypes.bool.isRequired,
