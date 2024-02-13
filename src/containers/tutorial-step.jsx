@@ -24,7 +24,8 @@ class TutorialStep extends React.Component {
         this.next = this.next.bind(this);
         this.onCodeQualityHintGeneration = this.onCodeQualityHintGeneration.bind(this);
         this.state = {
-            hints: []
+            hints: [],
+            details: []
         };
         this.onCodeQualityHintGeneration();
     }
@@ -59,7 +60,10 @@ class TutorialStep extends React.Component {
                     };
                     result.push(temp);
                 });
-                this.setState({hints: result});
+                this.setState({
+                    hints: result,
+                    details: this.state.details
+                });
             }
             );
     }
@@ -126,6 +130,10 @@ class TutorialStep extends React.Component {
                 this.props.succeeded();
             } else {
                 console.log(`Failed test: ${result.messageId}`);
+                this.setState({
+                    hints: this.state.hints,
+                    details: result.details
+                });
                 this.setFailureMessages(result.step, result.messageId);
             }
         })
@@ -217,7 +225,8 @@ class TutorialStep extends React.Component {
                 successMsg: this.props.guiMessages.successMessage,
                 failMsg: this.props.guiMessages.failMessage,
                 loadingMsg: this.props.guiMessages.loadingMessage
-            }
+            },
+            details: this.state.details
         };
         if (content.solution && content.solution.message && content.solution.img) {
             testingProps.solution = {

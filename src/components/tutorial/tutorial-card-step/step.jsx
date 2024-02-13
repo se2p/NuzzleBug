@@ -133,6 +133,26 @@ const Step = props => {
                             solutionExpanded={testing.solution.solutionExpanded}
                         /> : null
                     }
+                    {testing.isFailureMessageVisible && testing.details ?
+                        <table className={styles.testTable}>
+                            <thead>
+                                <tr>
+                                    <th>{'Test Name'}</th>
+                                    <th>{'Ergebnis'}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {testing.details.map((detail, index) => (
+                                    <tr key={index}>
+                                        <td>{detail.test}</td>
+                                        <td className={`${detail.result === 'pass' ? styles.passed : styles.failed}`}>
+                                            {detail.result}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table> : null
+                    }
                 </div>
             </div>
         );
@@ -223,7 +243,12 @@ Step.propTypes = {
             tested: PropTypes.bool.isRequired,
             success: PropTypes.bool.isRequired,
             currentlyTesting: PropTypes.bool.isRequired
-        })
+        }),
+        // details table
+        details: PropTypes.arrayOf(PropTypes.shape({
+            test: PropTypes.string.isRequired,
+            result: PropTypes.string.isRequired
+        }))
     }),
     // props for code quality page
     codeQuality: PropTypes.shape({
