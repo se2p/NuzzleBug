@@ -227,7 +227,8 @@ class TutorialStep extends React.Component {
                 failMsg: this.props.guiMessages.failMessage,
                 loadingMsg: this.props.guiMessages.loadingMessage
             },
-            details: this.state.details
+            details: this.state.details,
+            isStepPassed: this.props.stepSucceeded
         };
         if (content.solution && content.solution.message && content.solution.img) {
             testingProps.solution = {
