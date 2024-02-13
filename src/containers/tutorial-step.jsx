@@ -55,6 +55,7 @@ class TutorialStep extends React.Component {
                         title: hint.name,
                         description: hint.hint,
                         sprite: hint.sprite,
+                        costume: hint.costumes[0],
                         type: hint.type,
                         codeSnippet: code
                     };
@@ -277,6 +278,7 @@ TutorialStep.propTypes = {
     unlockVM: PropTypes.func,
     locale: PropTypes.string.isRequired,
     toJson: PropTypes.func,
+    getCostume: PropTypes.func,
     solutionExpanded: PropTypes.bool,
     onSolution: PropTypes.func,
     failureMessage: PropTypes.string,
@@ -294,7 +296,8 @@ const mapStateToProps = state => ({
     failedTimes: state.scratchGui.tutorialStep.failedTimes,
     solutionExpanded: state.scratchGui.tutorialStep.solutionExpanded,
     locale: state.locales.locale,
-    toJson: state.scratchGui.vm.toJSON.bind(state.scratchGui.vm)
+    toJson: state.scratchGui.vm.toJSON.bind(state.scratchGui.vm),
+    getCostume: state.scratchGui.vm.getCostume.bind(state.scratchGui.vm)
 });
 
 const mapDispatchToProps = dispatch => ({
