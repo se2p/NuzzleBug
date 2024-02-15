@@ -1,4 +1,4 @@
-# !/bin/bash
+#!/bin/bash
 
 echo "Install Dependencies"
 yarn install
