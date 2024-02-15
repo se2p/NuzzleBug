@@ -10209,7 +10209,7 @@
   "version" "0.0.20191118205314"
 
 "scratch-vm@git+https://gitlab+deploy-token-3:i8XTz2vnGPewCoYALnoy@gitlab.infosun.fim.uni-passau.de/se2/whisker/scratch-vm.git#fix-assetSerialization-tutorials":
-  "resolved" "git+https://gitlab+deploy-token-3:i8XTz2vnGPewCoYALnoy@gitlab.infosun.fim.uni-passau.de/se2/whisker/scratch-vm.git#cf63d3360f42eadea946551c188bb3f3b7aca25e"
+  "resolved" "git+https://gitlab+deploy-token-3:i8XTz2vnGPewCoYALnoy@gitlab.infosun.fim.uni-passau.de/se2/whisker/scratch-vm.git#771cffcd4f19051d9139a4e01de2ba0e25a9c273"
   "version" "1.5.76"
   dependencies:
     "@vernier/godirect" "1.5.0"
@@ -12009,7 +12009,7 @@
     "isexe" "^2.0.0"
 
 "whisker-main@git+https://gitlab+deploy-token-13:NRiPPX3fbpKk4b2rs5t2@gitlab.infosun.fim.uni-passau.de/se2/whisker/whisker-main.git#Tutorials":
-  "resolved" "git+https://gitlab+deploy-token-13:NRiPPX3fbpKk4b2rs5t2@gitlab.infosun.fim.uni-passau.de/se2/whisker/whisker-main.git#05ea82d29fd57dcdf29a2ec1bee41e8845d2cbb5"
+  "resolved" "git+https://gitlab+deploy-token-13:NRiPPX3fbpKk4b2rs5t2@gitlab.infosun.fim.uni-passau.de/se2/whisker/whisker-main.git#71aba265ec9801079824b403c7c7fd1ed1d2b7fe"
   "version" "0.8.0"
 
 "word-wrap@~1.2.3":
