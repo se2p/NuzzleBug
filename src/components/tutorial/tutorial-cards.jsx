@@ -208,7 +208,7 @@ const TutorialCards = props => {
 
     let detectors;
     const tut = tutorials.filter(tutorial => tutorial.id === selectedTutorial);
-    if (tut.length > 0 && tut[0] !== undefined) {
+    if (tut.length > 0 && tut[0] !== undefined && tut[0].detectors) {
         detectors = tut[0].detectors;
     }
 
@@ -301,7 +301,7 @@ TutorialCards.propTypes = {
             img: PropTypes.node.isRequired,
             difficulty: PropTypes.string.isRequired,
             totalSteps: PropTypes.number.isRequired,
-            detectors: PropTypes.string.isRequired
+            detectors: PropTypes.string
         })),
     selectedTutorial: PropTypes.string,
     isMenuVisible: PropTypes.bool,
