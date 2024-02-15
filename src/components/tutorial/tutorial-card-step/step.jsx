@@ -125,6 +125,13 @@ const Step = props => {
                         failMsg={testing.testing.failMsg}
                         loadingMsg={testing.testing.loadingMsg}
                     />
+                    {testing.isStepPassed ?
+                        <div className={styles.testPassedMessage}>
+                            {'Super! Du hast den Schritt bestanden.\n ' +
+                                'Prüfe und verbessere die Codequalität deiner Lösung, ' +
+                                'bevor du mit dem nächsten Schritt fortfährst.'}
+                        </div> : null
+                    }
                     {testing.isSolutionVisible && testing.solution ?
                         <Solution
                             title={testing.solution.title}
@@ -248,7 +255,9 @@ Step.propTypes = {
         details: PropTypes.arrayOf(PropTypes.shape({
             test: PropTypes.string.isRequired,
             result: PropTypes.string.isRequired
-        }))
+        })),
+        // determines whether hint to check out code quality gets displayed
+        isStepPassed: PropTypes.bool.isRequired
     }),
     // props for code quality page
     codeQuality: PropTypes.shape({
@@ -257,6 +266,7 @@ Step.propTypes = {
                 title: PropTypes.string.isRequired,
                 description: PropTypes.string.isRequired,
                 sprite: PropTypes.string.isRequired,
+                costume: PropTypes.string.isRequired,
                 type: PropTypes.string.isRequired,
                 codeSnippet: PropTypes.string
             })),

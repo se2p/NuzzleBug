@@ -14,9 +14,9 @@ scratchblocks.loadLanguages({de});
 
 const translate = scratchBlocksText => {
     const block = scratchblocks.parse(scratchBlocksText, {
-        languages: ['en'] // , 'de'
+        languages: ['en', 'de']
     });
-    // block.translate(scratchblocks.allLanguages.en);
+    block.translate(scratchblocks.allLanguages.de);
     return block.stringify();
 };
 
@@ -24,7 +24,7 @@ const ScratchBlocksImage = props => (
     <div className={stylesHints.scratchImage}>
         <ScratchBlocks
             blockStyle="scratch3"
-            languages={['en']} // , 'de'
+            languages={['en', 'de']}
         >
             {translate(props.scratchBlocksText)}
         </ScratchBlocks>
@@ -213,15 +213,27 @@ const CodeQualityHints = props => {
                         (selectedType === 'SMELL' && hasHints.hasSmells) ||
                         (selectedType === 'PERFUME' && hasHints.hasPerfumes) ?
                             <div>
-                                <h3
-                                    style={{
-                                        width: '100%',
-                                        alignContent: 'center'
-                                    }}
-                                >
+                                <div style={{display: 'flex'}}>
                                     <br />
-                                    {hints.filter(hint => selectedType === null || hint.type === selectedType)[index].title}
-                                </h3>
+                                    <div
+                                        className={styles.sprite}
+                                    >
+                                        {hints.filter(hint => selectedType === null || hint.type === selectedType)[index].sprite}
+                                    </div>
+                                    <h3
+                                        style={{
+                                            flex: '4',
+                                            width: '100%',
+                                            alignContent: 'center',
+                                            color:
+                                                selectedType === 'BUG' ? 'red' :
+                                                    selectedType === 'SMELL' ? 'orange' :
+                                                        selectedType === 'PERFUME' ? 'green' : ''
+                                        }}
+                                    >
+                                        {hints.filter(hint => selectedType === null || hint.type === selectedType)[index].title}
+                                    </h3>
+                                </div>
                                 <div
                                     style={{
                                         display: 'flex',
@@ -306,6 +318,7 @@ CodeQualityHints.propTypes = {
         title: PropTypes.string.isRequired,
         description: PropTypes.string.isRequired,
         sprite: PropTypes.string.isRequired,
+        costume: PropTypes.string.isRequired,
         type: PropTypes.string.isRequired,
         codeSnippet: PropTypes.string
     })).isRequired,

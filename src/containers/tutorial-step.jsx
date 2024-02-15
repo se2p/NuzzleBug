@@ -33,8 +33,12 @@ class TutorialStep extends React.Component {
     onCodeQualityHintGeneration () {
         const program = this.props.toJson();
         const url = 'http://localhost:8080/tutorial-system/checker/generate-feedback';
+        let detectors = 'default';
+        if (this.props.detectors) {
+            detectors = this.props.detectors;
+        }
         const jsonBody = JSON.stringify({
-            language: 'GERMAN', detectors: 'default', program: JSON.parse(program)
+            language: 'GERMAN', detectors: detectors, program: JSON.parse(program)
         });
         fetch(url, {
             method: 'POST',
@@ -55,6 +59,7 @@ class TutorialStep extends React.Component {
                         title: hint.name,
                         description: hint.hint,
                         sprite: hint.sprite,
+                        costume: hint.costumes[0],
                         type: hint.type,
                         codeSnippet: code
                     };
@@ -226,7 +231,8 @@ class TutorialStep extends React.Component {
                 failMsg: this.props.guiMessages.failMessage,
                 loadingMsg: this.props.guiMessages.loadingMessage
             },
-            details: this.state.details
+            details: this.state.details,
+            isStepPassed: this.props.stepSucceeded
         };
         if (content.solution && content.solution.message && content.solution.img) {
             testingProps.solution = {
@@ -260,6 +266,7 @@ TutorialStep.propTypes = {
     tutorialMessages: PropTypes.objectOf(PropTypes.string),
     step: PropTypes.number.isRequired,
     testedSteps: PropTypes.number.isRequired,
+    detectors: PropTypes.string,
     currentTutorialStep: PropTypes.number.isRequired,
     currentlyTesting: PropTypes.bool.isRequired,
     stepSucceeded: PropTypes.bool.isRequired,
@@ -277,6 +284,7 @@ TutorialStep.propTypes = {
     unlockVM: PropTypes.func,
     locale: PropTypes.string.isRequired,
     toJson: PropTypes.func,
+    getCostume: PropTypes.func,
     solutionExpanded: PropTypes.bool,
     onSolution: PropTypes.func,
     failureMessage: PropTypes.string,
@@ -294,7 +302,8 @@ const mapStateToProps = state => ({
     failedTimes: state.scratchGui.tutorialStep.failedTimes,
     solutionExpanded: state.scratchGui.tutorialStep.solutionExpanded,
     locale: state.locales.locale,
-    toJson: state.scratchGui.vm.toJSON.bind(state.scratchGui.vm)
+    toJson: state.scratchGui.vm.toJSON.bind(state.scratchGui.vm),
+    getCostume: state.scratchGui.vm.getCostume.bind(state.scratchGui.vm)
 });
 
 const mapDispatchToProps = dispatch => ({

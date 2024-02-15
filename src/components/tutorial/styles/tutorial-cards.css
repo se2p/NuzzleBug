@@ -545,3 +545,18 @@
 .failed {
     color: red;
 }
+
+.sprite {
+    border: 1px solid black;
+    border-radius: 10px;
+    flex: 1;
+    margin-bottom: 9px;
+    padding-top: 14px;
+    color: dodgerblue;
+}
+
+.test-passed-message {
+    color: #229954;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 50px;
+}

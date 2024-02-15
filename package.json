@@ -138,7 +138,7 @@
         "scratchblocks-react": "^1.0.1",
         "selenium-webdriver": "3.6.0",
         "ts-loader": "~8.2.0",
-        "typescript": "^5.2.2",
+        "typescript": "^5.3.3",
         "uglifyjs-webpack-plugin": "^1.2.5",
         "web-audio-test-api": "^0.5.2",
         "webpack": "^4.6.0",

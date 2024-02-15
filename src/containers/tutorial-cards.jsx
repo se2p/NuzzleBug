@@ -46,7 +46,8 @@ class TutorialCards extends React.Component {
                 img: tutorial.img,
                 difficulty: tutorial.difficulty,
                 difficultyMsg: tutorialMsg.difficulty,
-                totalSteps: tutorial.totalSteps
+                totalSteps: tutorial.totalSteps,
+                detectors: tutorial.detectors
             }
             );
         }
@@ -99,6 +100,7 @@ class TutorialCards extends React.Component {
                 /* eslint-disable-next-line react/jsx-no-bind */
                 cardRef={ref => (this.myRef = ref)}
                 tutorials={tutorialsData}
+                selectedTutorial={this.props.selectedTutorial}
                 guiMessages={guiMessages}
                 tutorialMessages={tutorialMessages}
                 title={title}
