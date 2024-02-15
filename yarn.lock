@@ -12009,7 +12009,7 @@
     "isexe" "^2.0.0"
 
 "whisker-main@git+https://gitlab+deploy-token-13:NRiPPX3fbpKk4b2rs5t2@gitlab.infosun.fim.uni-passau.de/se2/whisker/whisker-main.git#Tutorials":
-  "resolved" "git+https://gitlab+deploy-token-13:NRiPPX3fbpKk4b2rs5t2@gitlab.infosun.fim.uni-passau.de/se2/whisker/whisker-main.git#71aba265ec9801079824b403c7c7fd1ed1d2b7fe"
+  "resolved" "git+https://gitlab+deploy-token-13:NRiPPX3fbpKk4b2rs5t2@gitlab.infosun.fim.uni-passau.de/se2/whisker/whisker-main.git#0138e61e3294fd56cf4e5ab3454030b01fd73f26"
   "version" "0.8.0"
 
 "word-wrap@~1.2.3":
