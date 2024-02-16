@@ -6,6 +6,9 @@ const SET_TRACING_ACTIVE_STATE = 'scratch-gui/vm-status/SET_TRACING_ACTIVE_STATE
 const SET_WHISKER_TEST = 'scratch-gui/vm-status/SET_WHISKER_TEST';
 const SET_IS_WHISKER_PROJECT_LOADING = 'scratch-gui/vm-status/SET_IS_WHISKER_PROJECT_LOADING';
 const SET_TEST_RUNNING_STATE = 'scratch-gui/vm-status/SET_TEST_RUNNING_STATE';
+const LOCK = 'scratch-gui/vm-status/LOCK';
+const UNLOCK = 'scratch-gui/vm-status/UNLOCK';
+
 
 const initialState = {
     running: false,
@@ -15,7 +18,8 @@ const initialState = {
     tracingActive: true,
     isWhiskerProjectLoading: false,
     testRunning: false,
-    whiskerTest: null
+    whiskerTest: null,
+    locked: false
 };
 
 const reducer = function (state, action) {
@@ -52,6 +56,14 @@ const reducer = function (state, action) {
     case SET_TEST_RUNNING_STATE:
         return Object.assign({}, state, {
             testRunning: action.testRunning
+        });
+    case LOCK:
+        return Object.assign({}, state, {
+            locked: true
+        });
+    case UNLOCK:
+        return Object.assign({}, state, {
+            locked: false
         });
     default:
         return state;
@@ -115,6 +127,18 @@ const setTestRunningState = function (testRunning) {
     };
 };
 
+const lock = function () {
+    return {
+        type: LOCK
+    };
+};
+
+const unlock = function () {
+    return {
+        type: UNLOCK
+    };
+};
+
 export {
     reducer as default,
     initialState as vmStatusInitialState,
@@ -125,5 +149,7 @@ export {
     setTracingActiveState,
     setIsWhiskerProjectLoading,
     setWhiskerTest,
-    setTestRunningState
+    setTestRunningState,
+    lock,
+    unlock
 };

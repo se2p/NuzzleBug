@@ -28,8 +28,8 @@ const base = {
         chunkFilename: 'chunks/[name].js'
     },
     resolve: {
-        symlinks: false,
-        extensions: ['.ts', '.tsx', '.js']
+        symlinks: true, // avoid unreadable symlinks to make debugging easier
+        extensions: ['.ts', '.tsx', '.js'], // including typescript is necessary as whisker includes some
     },
     module: {
         rules: [{

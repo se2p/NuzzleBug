@@ -1,6 +1,6 @@
 import {addLocaleData} from 'react-intl';
 
-import {localeData} from 'scratch-l10n';
+import {localeData, isRtl} from 'scratch-l10n';
 import editorMessages from 'scratch-l10n/locales/editor-msgs';
 import {messagesEn} from '../translations/en/messages.js';
 import {messagesDe} from '../translations/de/messages.js';

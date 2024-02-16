@@ -15,6 +15,7 @@ import Test from 'whisker-main/whisker-main/src/test-runner/test';
 import TestRunner from 'whisker-main/whisker-main/src/test-runner/test-runner';
 import {ModelTester} from 'whisker-main/whisker-main/src/whisker/model/ModelTester.ts';
 import {actionExecuted, openHelpMenu, repositionHelpMenuWindow} from '../reducers/help-menu';
+import {viewTutorial} from '../reducers/tutorial-cards.js';
 
 class Controls extends React.Component {
     constructor (props) {
@@ -293,6 +294,7 @@ class Controls extends React.Component {
             projectRunning,
             projectPaused,
             irDisabled,
+            handleTutorialClick,
             turbo,
             interrogationSupported,
             interrogationEnabled,
@@ -329,6 +331,7 @@ class Controls extends React.Component {
                 onStopAllClick={this.handleStopAllClick}
                 onIRQuestionsClick={handleIRQuestionsClick}
                 onToggleTracingClick={this.handleToggleTracingClick}
+                onTutorialClick={handleTutorialClick}
             />
         );
     }
@@ -343,6 +346,7 @@ Controls.propTypes = {
     projectPaused: PropTypes.bool.isRequired,
     irDisabled: PropTypes.bool.isRequired,
     projectRunning: PropTypes.bool.isRequired,
+    handleTutorialClick: PropTypes.func.isRequired,
     turbo: PropTypes.bool.isRequired,
     onHelpMenuButtonClick: PropTypes.func.isRequired,
     onActionExecuted: PropTypes.func.isRequired,
@@ -381,6 +385,13 @@ const mapDispatchToProps = dispatch => ({
     handleIRQuestionsClick: () => dispatch(viewCards()),
     onActionExecuted: () => dispatch(actionExecuted()),
     repositionHelpMenuWindow: (x, y) => dispatch(repositionHelpMenuWindow(x, y))
+    tutorialCardsVisible: state.scratchGui.tutorialCards.visible,
+    turbo: state.scratchGui.vmStatus.turbo,
+    locale: state.locales.locale
+});
+
+const mapDispatchToProps = dispatch => ({
+    handleTutorialClick: () => dispatch(viewTutorial())
 });
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Controls));

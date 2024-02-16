@@ -370,7 +370,7 @@ export default {
         ],
         urlId: 'imagine'
     },
-    
+
     'Make-Music': {
         name: (
             <FormattedMessage
@@ -1230,7 +1230,7 @@ export default {
         ],
         urlId: 'code-cartoon'
     },
-    
+
     'cartoon-network': {
         name: (
             <FormattedMessage

@@ -1,0 +1,411 @@
+@import "../../css/units.css";
+@import "../../css/colors.css";
+@import "../../css/z-index.css";
+
+.card-title-header {
+    font-size: 0.9rem;
+    margin: 0.9rem;
+    text-align: center;
+    font-weight: bold;
+    color: $ui-primary;
+    cursor: grab;
+}
+.card-title-header:active {
+    cursor: grabbing;
+}
+.step-body {
+    overflow-y: auto;
+    height: 350px;
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    cursor: grab;
+    resize: both;
+    min-width: 480px;
+}
+.step-body:active {
+    cursor: grabbing;
+}
+.step-body::-webkit-scrollbar {
+    width: 0.4rem;
+}
+.step-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+.step-body::-webkit-scrollbar-thumb {
+    background: #888;
+}
+.step-body::-webkit-scrollbar-thumb:hover {
+    background: #555555;
+}
+
+/* setting background color*/
+.left-card::after, .right-card::after {
+    background: $motion-primary;
+}
+.left-button, .right-button {
+    background: $motion-primary;
+    box-shadow: 0 0 0 4px $motion-transparent;
+}
+.left-button:hover, .right-button:hover {
+    box-shadow: 0 0 0 6px $motion-transparent;
+}
+.header-buttons {
+    background: $motion-primary;
+    border-bottom: 1px solid $motion-tertiary;
+    cursor: grab;
+}
+.header-buttons:active {
+    cursor: grabbing;
+}
+.home-button {
+    cursor: pointer;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0.75rem;
+}
+
+.home-button:hover, .all-button:hover {
+    background-color: $ui-black-transparent;
+}
+
+.home-button-icon {
+    height: 20px;
+    width: 20px;
+}
+
+.footer {
+    width: 100%;
+    text-align: center;
+    background-color: hsla(215, 100%, 65%, 1);
+    border-top: 1px solid hsla(215, 60%, 50%, 1);
+    display: flex;
+    justify-content: center;
+    cursor: grab;
+}
+.footer:active {
+    cursor: grabbing;
+}
+.footer-text {
+    text-align: center;
+    color: hsla(215, 100%, 95%, 1);
+    margin: 5px;
+}
+
+.footer-link {
+    color: hsla(215, 100%, 95%, 1);
+    text-decoration: underline;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.footer-link:hover {
+    color: hsl(18, 100%, 77%);
+}
+
+.tutorial {
+    width: 100%;
+    height: 110px;
+    text-align: left;
+    background: #e9f2fa;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 1px solid #828282;
+    margin-top: 2px;
+    cursor: pointer;
+}
+
+.tutorial:hover {
+    background-color: $ui-black-transparent;
+}
+
+.tutorial-head {
+    width: 100%;
+    height: 15px;
+    background: #4c7397;
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+.tutorial-image {
+    height: 70px;
+    width: 103px;
+    margin: 4px 10px;
+    box-sizing: border-box;
+    border-radius: 10px;
+
+}
+
+.tutorial-container {
+    height: 80px;
+    display: flex;
+    border: 1px solid #77aad9;
+    box-sizing: border-box;
+    border-radius: 5px;
+    margin: 3px 10px 10px;
+}
+
+.tutorial-title {
+    font-family: Comic Sans MS, serif;
+    font-size: 20px;
+    color: hsla(225, 15%, 40%, 1);
+    line-height: 80px;
+    margin-left: 10px;
+}
+
+.tutorial-difficulty {
+    margin-left: auto;
+    margin-right: 0;
+    width: 20%;
+    line-height: 80px;
+    text-align: center;
+    font-family: Comic Sans MS, serif;
+    font-size: 20px;
+}
+
+.easy {
+    color: #57902c;
+}
+
+.medium {
+    color: #ffa000;
+}
+
+.difficult {
+    color: #CD5C5C;
+}
+
+.tutorial-step {
+    width: 100%;
+    background-color: hsl(0, 0%, 100%);
+}
+
+.intro-download-container {
+    height: 145px;
+    display: inline-block;
+    background-color: bisque;
+    width: 80%;
+    box-sizing: border-box;
+    border: 1px #b3734a solid;
+    border-radius: 10px;
+    margin-top: 5px;
+}
+
+.intro-image {
+    width: 130px;
+    float: left;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 30px;
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+.intro-download-button {
+    width: 150px;
+    height: 40px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    margin-top: 30px;
+    margin-right: 50px;
+    float: right;
+    background-color: #ff8a54;
+    box-sizing: border-box;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.intro-download-text {
+    margin-top: 5px;
+    margin-bottom: 0px;
+    text-align: left;
+    margin-left: 30px;
+    font-family: 'Open Sans',sans-serif;
+    color: hsla(225, 15%, 40%, 1);
+}
+
+.intro-download-button:hover {
+    background-color: #ff9c6d;
+}
+
+.skip-link {
+    color: white;
+    font-size: small;
+    margin-bottom: -5px;
+}
+
+.step-title {
+    margin: 20px auto 0;
+    font-weight: 400;
+    font-size: 1.875rem;
+    line-height: 1.2;
+    color: hsla(225, 15%, 40%, 1);
+}
+
+.step-instructions {
+    margin: 12px 29px 0;
+    text-align: center;
+    font-size: 1rem;
+    line-height: 1.6;
+    font-family: 'Open Sans',sans-serif;
+    color: hsla(225, 15%, 40%, 1);
+}
+
+.step-image {
+    width: 205px;
+    height: 136px;
+    margin: 20px auto 0;
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+.step-testing {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+
+}
+
+.step-testing-button {
+    width: 100px;
+    height: 40px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    margin: 20px;
+    background-color: #ff8a54;
+    box-sizing: border-box;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.step-testing-button:hover {
+    background-color: #ff9c6d;
+}
+
+.step-testing-button-title {
+    line-height: 40px;
+    vertical-align: middle;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1.3rem;
+    color: white;
+}
+
+.step-testing-success {
+    line-height: 30px;
+    color: #229954;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.step-testing-fail {
+    line-height: 30px;
+    color: #cb4335;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin-left: 29px;
+    margin-right: 29px;
+}
+
+.step-testing-fail-short {
+    line-height: 30px;
+    color: #cb4335;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin-left: 0;
+    margin-right: 29px;
+}
+
+.step-testing-loading {
+    line-height: 30px;
+    color: hsla(225, 15%, 40%, 1);
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin-left: 0;
+    margin-right: 29px;
+}
+
+.step-solution-header {
+    width: 500px;
+    height: 40px;
+    margin-top: 20px;
+    display: inline-block;
+    text-align: left;
+    background-color: #ff8a54;
+    box-sizing: border-box;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.step-solution-header:hover {
+    background-color: #ff9c6d;
+}
+
+.step-solution-header-title {
+    display: inline;
+    line-height: 40px;
+    vertical-align: middle;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1.3rem;
+    color: white;
+    margin-left: 15px;
+}
+
+.step-solution-header-arrow-up {
+    height: 26px;
+    margin: 7px 10px;
+    float: right;
+}
+
+.step-solution-header-arrow-down {
+    height: 26px;
+    margin: 7px 10px;
+    float: right;
+    transform: rotate(180deg);
+}
+
+.step-solution-container {
+    width: 500px;
+    margin-bottom: 20px;
+    display: inline-flex;
+    text-align: left;
+    box-sizing: border-box;
+    border-radius: 5px;
+    background-color: #ffdac9;
+}
+
+.step-solution-image {
+    margin: 25px;
+    width: 250px;
+    height: 100%;
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+.step-solution-text {
+    width: 250px;
+    margin: 25px 15px 25px 0;
+    font-size: 1rem;
+    line-height: 1.3;
+    font-family: 'Open Sans',sans-serif;
+    color: hsla(225, 15%, 40%, 1);
+}
+
+.success-home-button {
+    width: 150px;
+    height: 40px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    margin: 20px;
+    background-color: #ff8a54;
+    box-sizing: border-box;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.success-home-button:hover {
+    background-color: #ff9c6d;
+}

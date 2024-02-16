@@ -25,9 +25,9 @@ import {activateColorPicker} from '../reducers/color-picker';
 import {closeExtensionLibrary, openSoundRecorder, openConnectionModal} from '../reducers/modals';
 import {activateCustomProcedures, deactivateCustomProcedures} from '../reducers/custom-procedures';
 import {setConnectionModalExtensionId} from '../reducers/connection-modal';
+import {updateMetrics} from '../reducers/workspace-metrics';
 import {forwardDebuggerSupported} from '../reducers/interrogative-debugging/version-2/ir-debugger';
 import {highlightTarget} from '../reducers/targets';
-import {updateMetrics} from '../reducers/workspace-metrics';
 
 import {
     activateTab,
