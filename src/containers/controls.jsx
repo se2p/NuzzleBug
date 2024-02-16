@@ -375,7 +375,9 @@ const mapStateToProps = state => ({
     executedOnce: state.scratchGui.helpMenu.executedOnce,
     tracingActive: state.scratchGui.vmStatus.tracingActive,
     projectChanged: state.scratchGui.projectChanged,
-    whiskerTest: state.scratchGui.vmStatus.whiskerTest
+    whiskerTest: state.scratchGui.vmStatus.whiskerTest,
+    tutorialCardsVisible: state.scratchGui.tutorialCards.visible,
+    locale: state.locales.locale
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -384,13 +386,7 @@ const mapDispatchToProps = dispatch => ({
     onHelpMenuButtonClick: () => dispatch(openHelpMenu()),
     handleIRQuestionsClick: () => dispatch(viewCards()),
     onActionExecuted: () => dispatch(actionExecuted()),
-    repositionHelpMenuWindow: (x, y) => dispatch(repositionHelpMenuWindow(x, y))
-    tutorialCardsVisible: state.scratchGui.tutorialCards.visible,
-    turbo: state.scratchGui.vmStatus.turbo,
-    locale: state.locales.locale
-});
-
-const mapDispatchToProps = dispatch => ({
+    repositionHelpMenuWindow: (x, y) => dispatch(repositionHelpMenuWindow(x, y)),
     handleTutorialClick: () => dispatch(viewTutorial())
 });
 

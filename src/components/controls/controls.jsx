@@ -229,7 +229,7 @@ Controls.propTypes = {
     vm: PropTypes.instanceOf(VM),
     tracingState: PropTypes.oneOf(Object.values(TracingState)).isRequired,
     tracingActive: PropTypes.bool,
-    whiskerTest: PropTypes.instanceOf(Test)
+    whiskerTest: PropTypes.instanceOf(Test),
     onTutorialClick: PropTypes.func.isRequired,
     tutorialCardsVisible: PropTypes.bool,
     locale: PropTypes.string.isRequired
