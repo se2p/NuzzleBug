@@ -32,8 +32,9 @@ class TutorialCards extends React.Component {
 
     processTutorials () {
         const rows = [];
-        for (let i = 0; i < Object.values(tutorials).length; i++) {
-            const tutorial = Object.values(tutorials)[i];
+        const values = Object.values(tutorials);
+        for (let i = 0; i < values.length; i++) {
+            const tutorial = values[i];
 
             let messages = tutorial[`messages${this.props.locale.toUpperCase()}`];
             if (typeof messages === 'undefined') {
@@ -87,6 +88,7 @@ class TutorialCards extends React.Component {
             guiMessagesContainer =
                 require(`../lib/libraries/tutorial-messages-${this.props.locale}.js`);
         } catch (e) {
+            console.error(e);
             guiMessagesContainer = messagesEN;
         }
         const guiMessages = guiMessagesContainer.default;
