@@ -23,41 +23,48 @@ const reducer = function (state, action) {
     case RESET:
         return initialState;
     case NEXT_TEST:
-        return Object.assign({}, state, {
+        return {
+            ...state,
             testedStep: state.testedStep + 1,
             solutionExpanded: false
-        });
+        };
     case TEST_STARTED:
-        return Object.assign({}, state, {
+        return {
+            ...state,
             currentlyTesting: true
-        });
+        };
     case TEST_STOPPED:
-        return Object.assign({}, state, {
+        return {
+            ...state,
             currentlyTesting: false
-        });
+        };
     case NEXT_TUTORIAL_STEP: {
-        return Object.assign({}, state, {
+        return {
+            ...state,
             currentStep: state.currentStep + 1,
             success: false
-        });
+        };
     }
     case SUCCESS: {
-        return Object.assign({}, state, {
+        return {
+            ...state,
             success: true,
             failureMessage: '',
             failedTimes: 0
-        });
+        };
     }
     case FAIL: {
-        return Object.assign({}, state, {
+        return {
+            ...state,
             failureMessage: action.failureMessage,
             failedTimes: state.failedTimes + 1
-        });
+        };
     }
     case EXPAND_SOLUTION: {
-        return Object.assign({}, state, {
+        return {
+            ...state,
             solutionExpanded: !state.solutionExpanded
-        });
+        };
     }
     default:
         return state;

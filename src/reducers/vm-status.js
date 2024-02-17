@@ -26,45 +26,55 @@ const reducer = function (state, action) {
     if (typeof state === 'undefined') state = initialState;
     switch (action.type) {
     case SET_STARTED_STATE:
-        return Object.assign({}, state, {
+        return {
+            ...state,
             started: action.started
-        });
+        };
     case SET_RUNNING_STATE:
-        return Object.assign({}, state, {
+        return {
+            ...state,
             running: action.running
-        });
+        };
     case SET_PAUSE_STATE:
-        return Object.assign({}, state, {
+        return {
+            ...state,
             paused: action.paused
-        });
+        };
     case SET_TURBO_STATE:
-        return Object.assign({}, state, {
+        return {
+            ...state,
             turbo: action.turbo
-        });
+        };
     case SET_TRACING_ACTIVE_STATE:
-        return Object.assign({}, state, {
+        return {
+            ...state,
             tracingActive: action.tracingActive
-        });
+        };
     case SET_WHISKER_TEST:
-        return Object.assign({}, state, {
+        return {
+            ...state,
             whiskerTest: action.whiskerTest
-        });
+        };
     case SET_IS_WHISKER_PROJECT_LOADING:
-        return Object.assign({}, state, {
+        return {
+            ...state,
             isWhiskerProjectLoading: action.isWhiskerProjectLoading
-        });
+        };
     case SET_TEST_RUNNING_STATE:
-        return Object.assign({}, state, {
+        return {
+            ...state,
             testRunning: action.testRunning
-        });
+        };
     case LOCK:
-        return Object.assign({}, state, {
+        return {
+            ...state,
             locked: true
-        });
+        };
     case UNLOCK:
-        return Object.assign({}, state, {
+        return {
+            ...state,
             locked: false
-        });
+        };
     default:
         return state;
     }

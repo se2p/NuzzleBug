@@ -28,58 +28,69 @@ const reducer = function (state, action) {
     if (typeof state === 'undefined') state = initialState;
     switch (action.type) {
     case CLOSE_CARDS:
-        return Object.assign({}, state, {
+        return {
+            ...state,
             visible: false
-        });
+        };
     case BLOCK_DRAG_UPDATE:
-        return Object.assign({}, state, {
+        return {
+            ...state,
             disabled: true
-        });
+        };
     case SHRINK_EXPAND_CARDS:
-        return Object.assign({}, state, {
+        return {
+            ...state,
             expanded: !state.expanded
-        });
+        };
     case VIEW_CARDS:
-        return Object.assign({}, state, {
+        return {
+            ...state,
             visible: true
-        });
+        };
     case NEXT_STEP:
-        return Object.assign({}, state, {
+        return {
+            ...state,
             step: state.step + 1
-        });
+        };
     case PREV_STEP:
         if (state.step > 0) {
-            return Object.assign({}, state, {
+            return {
+                ...state,
                 step: state.step - 1
-            });
+            };
         }
         return state;
     case DRAG_CARD:
-        return Object.assign({}, state, {
+        return {
+            ...state,
             x: action.x,
             y: action.y
-        });
+        };
     case START_DRAG:
-        return Object.assign({}, state, {
+        return {
+            ...state,
             dragging: true
-        });
+        };
     case END_DRAG:
-        return Object.assign({}, state, {
+        return {
+            ...state,
             dragging: false
-        });
+        };
     case SELECT_TUTORIAL:
-        return Object.assign({}, state, {
+        return {
+            ...state,
             tutorial: action.tutorial,
             totalSteps: action.totalSteps,
             menu: false
-        });
+        };
     case HOME_MENU:
-        return Object.assign({}, state, {
+        return {
+            ...state,
             tutorial: '',
             menu: true,
             totalSteps: 0,
             step: 0
-        });
+        };
     default:
         return state;
     }
