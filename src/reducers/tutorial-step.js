@@ -18,57 +18,41 @@ const initialState = {
 };
 
 const reducer = function (state, action) {
-    if (typeof state === 'undefined') state = initialState;
+    if (typeof state === 'undefined') {
+        state = initialState;
+    }
+    const baseState = JSON.parse(JSON.stringify(state));
     switch (action.type) {
     case RESET:
         return initialState;
     case NEXT_TEST:
-        return {
-            ...state,
-            testedStep: state.testedStep + 1,
-            solutionExpanded: false
-        };
+        baseState.testedStep = state.testedStep + 1;
+        baseState.solutionExpanded = false;
+        break;
     case TEST_STARTED:
-        return {
-            ...state,
-            currentlyTesting: true
-        };
+        baseState.currentlyTesting = true;
+        break;
     case TEST_STOPPED:
-        return {
-            ...state,
-            currentlyTesting: false
-        };
-    case NEXT_TUTORIAL_STEP: {
-        return {
-            ...state,
-            currentStep: state.currentStep + 1,
-            success: false
-        };
+        baseState.currentlyTesting = false;
+        break;
+    case NEXT_TUTORIAL_STEP:
+        baseState.currentStep = state.currentStep + 1;
+        baseState.success = false;
+        break;
+    case SUCCESS:
+        baseState.success = true;
+        baseState.failureMessage = '';
+        baseState.failedTimes = 0;
+        break;
+    case FAIL:
+        baseState.failureMessage = action.failureMessage;
+        baseState.failedTimes = state.failedTimes + 1;
+        break;
+    case EXPAND_SOLUTION:
+        baseState.solutionExpanded = !state.solutionExpanded;
+        break;
     }
-    case SUCCESS: {
-        return {
-            ...state,
-            success: true,
-            failureMessage: '',
-            failedTimes: 0
-        };
-    }
-    case FAIL: {
-        return {
-            ...state,
-            failureMessage: action.failureMessage,
-            failedTimes: state.failedTimes + 1
-        };
-    }
-    case EXPAND_SOLUTION: {
-        return {
-            ...state,
-            solutionExpanded: !state.solutionExpanded
-        };
-    }
-    default:
-        return state;
-    }
+    return baseState;
 };
 
 const reset = function () {

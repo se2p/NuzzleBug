@@ -23,61 +23,43 @@ const initialState = {
 };
 
 const reducer = function (state, action) {
-    if (typeof state === 'undefined') state = initialState;
+    if (typeof state === 'undefined') {
+        state = initialState;
+    }
+    const baseState = JSON.parse(JSON.stringify(state));
     switch (action.type) {
     case SET_STARTED_STATE:
-        return {
-            ...state,
-            started: action.started
-        };
+        baseState.started = action.started;
+        break;
     case SET_RUNNING_STATE:
-        return {
-            ...state,
-            running: action.running
-        };
+        baseState.running = action.running;
+        break;
     case SET_PAUSE_STATE:
-        return {
-            ...state,
-            paused: action.paused
-        };
+        baseState.paused = action.paused;
+        break;
     case SET_TURBO_STATE:
-        return {
-            ...state,
-            turbo: action.turbo
-        };
+        baseState.turbo = action.turbo;
+        break;
     case SET_TRACING_ACTIVE_STATE:
-        return {
-            ...state,
-            tracingActive: action.tracingActive
-        };
+        baseState.tracingActive = action.tracingActive;
+        break;
     case SET_WHISKER_TEST:
-        return {
-            ...state,
-            whiskerTest: action.whiskerTest
-        };
+        baseState.whiskerTest = action.whiskerTest;
+        break;
     case SET_IS_WHISKER_PROJECT_LOADING:
-        return {
-            ...state,
-            isWhiskerProjectLoading: action.isWhiskerProjectLoading
-        };
+        baseState.isWhiskerProjectLoading = action.isWhiskerProjectLoading;
+        break;
     case SET_TEST_RUNNING_STATE:
-        return {
-            ...state,
-            testRunning: action.testRunning
-        };
+        baseState.testRunning = action.testRunning;
+        break;
     case LOCK:
-        return {
-            ...state,
-            locked: true
-        };
+        baseState.locked = true;
+        break;
     case UNLOCK:
-        return {
-            ...state,
-            locked: false
-        };
-    default:
-        return state;
+        baseState.locked = false;
+        break;
     }
+    return baseState;
 };
 
 const setStartedState = function (started) {
