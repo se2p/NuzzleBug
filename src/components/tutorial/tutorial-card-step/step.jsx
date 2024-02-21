@@ -111,7 +111,7 @@ const Step = props => {
             <div className={styles.flexContainer}>
                 {navBar}
                 <div className={styles.page}>
-                    {testing.isFailureMessageVisible ?
+                    {testing.isFailureMessageVisible && testing.failureMessage !== '' ?
                         <p className={styles.stepTestingFail}>{testing.failureMessage}</p> : null
                     }
                     <Testing
@@ -140,7 +140,7 @@ const Step = props => {
                             solutionExpanded={testing.solution.solutionExpanded}
                         /> : null
                     }
-                    {testing.isFailureMessageVisible && testing.details ?
+                    {testing.isFailureMessageVisible && testing.details && testing.failureMessage !== '' ?
                         <table className={styles.testTable}>
                             <thead>
                                 <tr>
