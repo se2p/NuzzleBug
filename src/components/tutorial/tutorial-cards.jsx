@@ -309,7 +309,10 @@ TutorialCards.propTypes = {
     title: PropTypes.string,
     homeButtonTitle: PropTypes.string,
     guiMessages: PropTypes.objectOf(PropTypes.string),
-    tutorialMessages: PropTypes.objectOf(PropTypes.string),
+    tutorialMessages: PropTypes.shape({
+        failureMessage: PropTypes.string,
+        description: PropTypes.string
+    }),
     dragging: PropTypes.bool.isRequired,
     expanded: PropTypes.bool.isRequired,
     onCloseCards: PropTypes.func.isRequired,

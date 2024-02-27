@@ -646,7 +646,9 @@ class MenuBar extends React.Component {
                     <div>
                         <Scratch1984Button
                             className={styles.menuBarButton}
-                            onClick={() => { this.handleFinishExperiment(); }} // check if called correctly
+                            onClick={() => {
+                                this.handleFinishExperiment();
+                            }} // check if called correctly
                         />
                     </div>
                     {this.props.sessionExists ? (

@@ -15,6 +15,9 @@ import * as tutorials from 'tutorial-tests/src/tutorials';
 import successImageEN from '../components/tutorial/images/greatDoneEN.png';
 import successImageDE from '../components/tutorial/images/greatDoneDE.png';
 
+// import logging from 'scratch-vm/src/util/logging.js';
+
+
 class TutorialStep extends React.Component {
     constructor (props) {
         super(props);
@@ -27,6 +30,12 @@ class TutorialStep extends React.Component {
             hints: [],
             details: []
         };
+        // const experimentId = new URL(window.location.href).searchParams.get('expid');
+        // const userId = new URL(window.location.href).searchParams.get('uid');
+        // const secret = new URL(window.location.href).searchParams.get('secret');
+        // logging._experimentId = experimentId;
+        // logging._userId = userId;
+        // logging._secret = secret;
         this.onCodeQualityHintGeneration();
     }
 
@@ -117,7 +126,7 @@ class TutorialStep extends React.Component {
                 .concat(messages.stepBefore2);
         }
         hint = hint.concat(messages.hintMessage)
-            .concat(messages[messageID]);
+            .concat(messages[messageID].failureMessage);
         this.props.failed(hint);
     }
 
@@ -135,9 +144,18 @@ class TutorialStep extends React.Component {
                 this.props.succeeded();
             } else {
                 console.log(`Failed test: ${result.messageId}`);
+                const details = [];
+                const messages = this.props.tutorialMessages;
+                for (const element in result.details) {
+                    details.push({
+                        test: result.details[element].test,
+                        result: result.details[element].result,
+                        description: messages[result.details[element].testId].description
+                    });
+                }
                 this.setState({
                     hints: this.state.hints,
-                    details: result.details
+                    details: details
                 });
                 this.setFailureMessages(result.step, result.messageId);
             }
@@ -202,9 +220,12 @@ class TutorialStep extends React.Component {
             }
         };
         const currentStepProps = {
-            instruction: {
-                title: content.title, message1: content.message1, img: content.img, message2: content.message2
-            },
+            instruction: content ? {
+                title: content.title,
+                message1: content.message1,
+                img: content.img,
+                message2: content.message2
+            } : undefined,
             isSuccessVisible: this.props.step + 1 === this.props.totalSteps,
             success: {
                 content: {
@@ -217,6 +238,8 @@ class TutorialStep extends React.Component {
             }
         };
         const testingProps = {
+            visible: !!content,
+            finishedMessage: 'Es gibt nichts mehr zum Testen, du hast das Tutorial schon erfolgreich abgeschlossen. Du kann noch weiter experimentieren und deine Codequalität verbessern.',
             isSolutionVisible: !isCurrentStep || this.props.failedTimes >= 3,
             isFailureMessageVisible: tested && !stepSucceeded,
             failureMessage: this.props.failureMessage,
@@ -234,7 +257,7 @@ class TutorialStep extends React.Component {
             details: this.state.details,
             isStepPassed: this.props.stepSucceeded
         };
-        if (content.solution && content.solution.message && content.solution.img) {
+        if (content && content.solution && content.solution.message && content.solution.img) {
             testingProps.solution = {
                 title: guiMessages.solutionHeader,
                 content: content.solution,
@@ -263,7 +286,10 @@ TutorialStep.propTypes = {
     guiMessages: PropTypes.objectOf(PropTypes.string),
     tutorial: PropTypes.string.isRequired,
     totalSteps: PropTypes.number.isRequired,
-    tutorialMessages: PropTypes.objectOf(PropTypes.string),
+    tutorialMessages: PropTypes.shape({
+        failureMessage: PropTypes.string,
+        description: PropTypes.string
+    }) || PropTypes.objectOf(PropTypes.string),
     step: PropTypes.number.isRequired,
     testedSteps: PropTypes.number.isRequired,
     detectors: PropTypes.string,

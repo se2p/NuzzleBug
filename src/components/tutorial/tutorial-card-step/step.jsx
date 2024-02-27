@@ -28,6 +28,12 @@ const Step = props => {
         setSelectedType(type);
     };
 
+    const [expandedIndex, setExpandedIndex] = useState(null);
+
+    const toggleDescription = index => {
+        setExpandedIndex(index === expandedIndex ? null : index);
+    };
+
     const navBar = (
         <div
             style={{
@@ -85,12 +91,14 @@ const Step = props => {
             <div className={styles.flexContainer}>
                 {navBar}
                 <div className={styles.page}>
-                    <Instructions
-                        title={currentStep.instruction.title}
-                        message1={currentStep.instruction.message1}
-                        img={currentStep.instruction.img}
-                        message2={currentStep.instruction.message2}
-                    />
+                    {currentStep.instruction ?
+                        <Instructions
+                            title={currentStep.instruction.title}
+                            message1={currentStep.instruction.message1}
+                            img={currentStep.instruction.img}
+                            message2={currentStep.instruction.message2}
+                        /> : null
+                    }
                     {currentStep.isSuccessVisible &&
                         <Success
                             content={{
@@ -111,54 +119,73 @@ const Step = props => {
             <div className={styles.flexContainer}>
                 {navBar}
                 <div className={styles.page}>
-                    {testing.isFailureMessageVisible && testing.failureMessage !== '' ?
-                        <p className={styles.stepTestingFail}>{testing.failureMessage}</p> : null
-                    }
-                    <Testing
-                        tested={testing.testing.tested}
-                        currentlyTesting={testing.testing.currentlyTesting}
-                        success={testing.testing.success}
-                        testButtonVisible={testing.testing.testButtonVisible}
-                        testButtonTitle={testing.testing.testButtonTitle}
-                        onTest={testing.testing.onTest}
-                        successMsg={testing.testing.successMsg}
-                        failMsg={testing.testing.failMsg}
-                        loadingMsg={testing.testing.loadingMsg}
-                    />
-                    {testing.isStepPassed ?
-                        <div className={styles.testPassedMessage}>
-                            {'Super! Du hast den Schritt bestanden.\n ' +
-                                'Prüfe und verbessere die Codequalität deiner Lösung, ' +
-                                'bevor du mit dem nächsten Schritt fortfährst.'}
-                        </div> : null
-                    }
-                    {testing.isSolutionVisible && testing.solution ?
-                        <Solution
-                            title={testing.solution.title}
-                            content={testing.solution.content}
-                            onSolution={testing.solution.onSolution}
-                            solutionExpanded={testing.solution.solutionExpanded}
-                        /> : null
-                    }
-                    {testing.isFailureMessageVisible && testing.details && testing.failureMessage !== '' ?
-                        <table className={styles.testTable}>
-                            <thead>
-                                <tr>
-                                    <th>{'Test Name'}</th>
-                                    <th>{'Ergebnis'}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {testing.details.map((detail, index) => (
-                                    <tr key={index}>
-                                        <td>{detail.test}</td>
-                                        <td className={`${detail.result === 'pass' ? styles.passed : styles.failed}`}>
-                                            {detail.result}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table> : null
+                    {testing.visible ?
+                        <div>
+                            {testing.isFailureMessageVisible && testing.failureMessage !== '' ?
+                                <p className={styles.stepTestingFail}>{testing.failureMessage}</p> : null
+                            }
+                            <Testing
+                                tested={testing.testing.tested}
+                                currentlyTesting={testing.testing.currentlyTesting}
+                                success={testing.testing.success}
+                                testButtonVisible={testing.testing.testButtonVisible}
+                                testButtonTitle={testing.testing.testButtonTitle}
+                                onTest={testing.testing.onTest}
+                                successMsg={testing.testing.successMsg}
+                                failMsg={testing.testing.failMsg}
+                                loadingMsg={testing.testing.loadingMsg}
+                            />
+                            {testing.isStepPassed ?
+                                <div className={styles.testPassedMessage}>
+                                    {'Super! Du hast den Schritt bestanden.\n ' +
+                                        'Prüfe und verbessere die Codequalität deiner Lösung, ' +
+                                        'bevor du mit dem nächsten Schritt fortfährst.'}
+                                </div> : null
+                            }
+                            {testing.isSolutionVisible && testing.solution ?
+                                <Solution
+                                    title={testing.solution.title}
+                                    content={testing.solution.content}
+                                    onSolution={testing.solution.onSolution}
+                                    solutionExpanded={testing.solution.solutionExpanded}
+                                /> : null
+                            }
+                            {testing.isFailureMessageVisible && testing.details && testing.failureMessage !== '' ?
+                                <table className={styles.testTable}>
+                                    <thead>
+                                        <tr>
+                                            <th>{''}</th>
+                                            <th>{'Test Name'}</th>
+                                            <th>{'Ergebnis'}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {testing.details.map((detail, index) => (
+                                            <React.Fragment key={index}>
+                                                <tr>
+                                                    <td style={{textAlign: 'center'}}>
+                                                        <button
+                                                            className={styles.testDescriptionButton}
+                                                            onClick={() => toggleDescription(index)}>
+                                                            {'+'}
+                                                        </button>
+                                                    </td>
+                                                    <td>{detail.test}</td>
+                                                    <td className={`${detail.result === 'pass' ? styles.passed : styles.failed}`}>
+                                                        {detail.result}
+                                                    </td>
+                                                </tr>
+                                                {expandedIndex === index && (
+                                                    <tr>
+                                                        <td colSpan="3" style={{textAlign: 'center', background: 'white'}}>{detail.description}</td>
+                                                    </tr>
+                                                )}
+                                            </React.Fragment>
+                                        ))}
+                                    </tbody>
+                                </table> : null
+                            }
+                        </div> : <p className={styles.stepTestingFinished}>{testing.finishedMessage}</p>
                     }
                 </div>
             </div>
@@ -241,6 +268,8 @@ Step.propTypes = {
         failureMessage: PropTypes.string,
         // for testing component
         testing: PropTypes.shape({
+            visible: PropTypes.bool.isRequired, // false when user already finished the tutorial
+            finishedMessage: PropTypes.string.isRequired, // msg gets  displayed when tutorial is already finished
             testButtonTitle: PropTypes.string.isRequired,
             successMsg: PropTypes.string.isRequired,
             failMsg: PropTypes.string.isRequired,
@@ -254,7 +283,8 @@ Step.propTypes = {
         // details table
         details: PropTypes.arrayOf(PropTypes.shape({
             test: PropTypes.string.isRequired,
-            result: PropTypes.string.isRequired
+            result: PropTypes.string.isRequired,
+            description: PropTypes.string.isRequired
         })),
         // determines whether hint to check out code quality gets displayed
         isStepPassed: PropTypes.bool.isRequired

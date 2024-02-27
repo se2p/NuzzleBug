@@ -330,6 +330,17 @@
     padding: 10px;
 }
 
+.step-testing-finished {
+    line-height: 30px;
+    color: #229954;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin-left: 29px;
+    margin-right: 29px;
+    border: 2px solid #229954;
+    border-radius: 10px;
+    padding: 10px;
+}
+
 .step-testing-fail-short {
     line-height: 30px;
     color: #cb4335;
@@ -559,4 +570,15 @@
     color: #229954;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     margin: 50px;
+}
+
+.test-description-button {
+    background-color: white;
+    color: black;
+    border: 2px solid #555555;
+}
+
+.test-description-button:hover {
+    background-color: #555555;
+    color: white;
 }
