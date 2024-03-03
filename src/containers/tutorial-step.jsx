@@ -148,7 +148,7 @@ class TutorialStep extends React.Component {
                 const messages = this.props.tutorialMessages;
                 for (const element in result.details) {
                     details.push({
-                        test: result.details[element].test,
+                        test: messages[result.details[element].testId].name,
                         result: result.details[element].result,
                         description: messages[result.details[element].testId].description
                     });

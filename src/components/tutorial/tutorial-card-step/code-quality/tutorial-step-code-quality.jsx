@@ -249,7 +249,8 @@ const CodeQualityHints = props => {
                                             borderStyle: 'dashed none dashed dashed',
                                             borderWidth: '2px',
                                             maxWidth: '281.96px',
-                                            padding: '2%'
+                                            padding: '2%',
+                                            textAlign: 'left'
                                         }}
                                     >
                                         {replaceTags(hints.filter(hint => selectedType === null || hint.type === selectedType)[index].description)}

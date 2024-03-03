@@ -156,7 +156,7 @@ const Step = props => {
                                         <tr>
                                             <th>{''}</th>
                                             <th>{'Test Name'}</th>
-                                            <th>{'Ergebnis'}</th>
+                                            <th style={{textAlign: 'center'}}>{'Ergebnis'}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -166,13 +166,17 @@ const Step = props => {
                                                     <td style={{textAlign: 'center'}}>
                                                         <button
                                                             className={styles.testDescriptionButton}
-                                                            onClick={() => toggleDescription(index)}>
-                                                            {'+'}
+                                                            onClick={() => toggleDescription(index)}
+                                                        >
+                                                            {expandedIndex === index ? '-' : '+'}
                                                         </button>
                                                     </td>
                                                     <td>{detail.test}</td>
-                                                    <td className={`${detail.result === 'pass' ? styles.passed : styles.failed}`}>
-                                                        {detail.result}
+                                                    <td
+                                                        className={`${detail.result === 'pass' ? styles.passed : styles.failed}`}
+                                                        style={{textAlign: 'center'}}
+                                                    >
+                                                        {`${detail.result === 'pass' ? '✓' : `${detail.result === 'fail' ? '✗' : '⚠'}`}`}
                                                     </td>
                                                 </tr>
                                                 {expandedIndex === index && (
