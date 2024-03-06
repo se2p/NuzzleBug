@@ -15,8 +15,7 @@ import * as tutorials from 'tutorial-tests/src/tutorials';
 import successImageEN from '../components/tutorial/images/greatDoneEN.png';
 import successImageDE from '../components/tutorial/images/greatDoneDE.png';
 
-// import logging from 'scratch-vm/src/util/logging.js';
-
+import logging from 'scratch-vm/src/util/logging.js';
 
 class TutorialStep extends React.Component {
     constructor (props) {
@@ -30,16 +29,21 @@ class TutorialStep extends React.Component {
             hints: [],
             details: []
         };
-        // const experimentId = new URL(window.location.href).searchParams.get('expid');
-        // const userId = new URL(window.location.href).searchParams.get('uid');
-        // const secret = new URL(window.location.href).searchParams.get('secret');
-        // logging._experimentId = experimentId;
-        // logging._userId = userId;
-        // logging._secret = secret;
+        const experimentId = new URL(window.location.href).searchParams.get('expid');
+        const userId = new URL(window.location.href).searchParams.get('uid');
+        const secret = new URL(window.location.href).searchParams.get('secret');
+        logging._experimentId = experimentId;
+        logging._userId = userId;
+        logging._secret = secret;
         this.onCodeQualityHintGeneration();
     }
 
     onCodeQualityHintGeneration () {
+        // first log the click with scratchlog
+        if (logging.isActive()) {
+            logging.logClickEvent('BUTTON', new Date(), 'CHECK_CODE_QUALITY', null);
+        }
+        // then start proccessing the request
         const program = this.props.toJson();
         const url = 'http://localhost:8080/tutorial-system/checker/generate-feedback';
         let detectors = 'default';

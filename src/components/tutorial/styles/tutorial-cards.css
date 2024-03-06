@@ -589,3 +589,7 @@
     background-color: #555555;
     color: white;
 }
+
+code {
+    font-size: 87.5%;
+}

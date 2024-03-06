@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from '../../styles/tutorial-cards.css';
 import stylesHints from '../../styles/tutorial-code-quality.css';
 import arrow from '../../images/icon--arrow-top.svg';
@@ -7,10 +7,10 @@ import arrow from '../../images/icon--arrow-top.svg';
 import scratchblocks from 'scratchblocks';
 import ScratchBlocks from 'scratchblocks-react';
 import de from 'scratchblocks/locales/de.json';
-// import en from 'scratchblocks/locales/en.json';
+
+import logging from 'scratch-vm/src/util/logging.js';
 
 scratchblocks.loadLanguages({de});
-
 
 const translate = scratchBlocksText => {
     const block = scratchblocks.parse(scratchBlocksText, {
@@ -42,24 +42,20 @@ const CodeQualityHints = props => {
         codeQualityButtonTitle
     } = props;
 
-    const replaceTags = text => text.split(/\[b\]/g)
-        .map((segment, index) => (
-            index === 0 ? (
-                <span key={index}>{segment}</span>
-            ) : (
-                <React.Fragment key={index}>
-                    <strong>{segment.split(/\[\/b\]/g)[0]}</strong>
-                    {segment.split(/\[\/b\]/g)[1].split(/\[newLine\]/g)
-                        .map((line, lineIndex) => (
-                            <React.Fragment key={lineIndex}>
-                                <br/>
-                                {line}
-                            </React.Fragment>
-                        ))}
-                </React.Fragment>
-            )
-        ));
+    const reformatHtml = text => {
+        text = text.replaceAll('[b]', '<strong>');
+        text = text.replaceAll('[/b]', '</strong>');
+        text = text.replaceAll('[newLine]', '<br />');
+        text = text.replaceAll('[sbi]', '<code class="b">');
+        text = text.replaceAll('[/sbi]', '</code>');
+        text = text.replaceAll('[var]', '<code class="b">(Variable "');
+        text = text.replaceAll('[/var]', '")</code>');
+        text = text.replaceAll('[bc]', '<span style="color:#f09438; font-family: Courier New,Courier,Lucida Sans Typewriter,Lucida Typewriter,monospace;"><b>');
+        text = text.replaceAll('[/bc]', '</b></span>');
+        return text;
+    };
 
+    const [processedHtml, setProcessedHtml] = useState('');
     const [selectedType, setSelectedType] = useState('PERFUME');
     const [index, setIndex] = useState(0);
     const [hasHints, setHasHints] = useState({
@@ -73,6 +69,16 @@ const CodeQualityHints = props => {
             .filter(hint => selectedType === null || hint.type === 'PERFUME')
             .length > 0
     });
+
+    const setHintText = () => {
+        if (hints.filter(hint => selectedType === null || hint.type === selectedType)[index]){
+            const text = hints.filter(hint => selectedType === null || hint.type === selectedType)[index].description;
+            const processedText = reformatHtml(text);
+            setProcessedHtml(processedText);
+        } else {
+            setProcessedHtml('');
+        }
+    };
 
     const newHints = () => {
         const hasBugs = hints
@@ -89,6 +95,8 @@ const CodeQualityHints = props => {
             hasSmells: hasSmells,
             hasPerfumes: hasPerfumes
         });
+        // set hint text
+        setHintText();
     };
 
     const nextHint = i => {
@@ -98,7 +106,8 @@ const CodeQualityHints = props => {
         } else {
             setIndex(0);
         }
-
+        // set hint text
+        setHintText();
     };
 
     const prevHint = i => {
@@ -108,13 +117,31 @@ const CodeQualityHints = props => {
         } else {
             setIndex(i - 1);
         }
-
+        // set hint text
+        setHintText();
     };
 
     const filterHintsByType = type => {
+        // log the click event with scratchlog
+        if (logging.isActive()) {
+            const clickEventType = 'CODE_QUALITY_'.concat([type]);
+            logging.logClickEvent('BUTTON', new Date(), clickEventType, null);
+        }
         setSelectedType(type);
         setIndex(0);
+
+        // set hint text
+        setHintText();
     };
+
+    useEffect(() => {
+        scratchblocks.renderMatching('code.b', {
+            inline: true,
+            style: 'scratch3',
+            languages: ['de'],
+            scale: 0.5
+        });
+    }, [processedHtml, selectedType, index]);
 
     return (
         <div
@@ -138,6 +165,7 @@ const CodeQualityHints = props => {
                 className={styles.codeQualityBox}
             >
                 <div className={styles.hintTypeButtonContainer}>
+                    {/* When this button is clicked, perfumes are displayed */}
                     <button
                         onClick={() => filterHintsByType('PERFUME')}
                         disabled={!hasHints.hasPerfumes}
@@ -149,6 +177,7 @@ const CodeQualityHints = props => {
                     >
                         {'Eleganter Code'}
                     </button>
+                    {/* When this button is clicked, smells are displayed  */}
                     <button
                         onClick={() => filterHintsByType('SMELL')}
                         disabled={!hasHints.hasSmells}
@@ -159,6 +188,7 @@ const CodeQualityHints = props => {
                     >
                         {'Smells'}
                     </button>
+                    {/* When this button is clicked, bugs are displayed */}
                     <button
                         onClick={() => filterHintsByType('BUG')}
                         disabled={!hasHints.hasBugs}
@@ -170,12 +200,13 @@ const CodeQualityHints = props => {
                         {'Fehler'}
                     </button>
                 </div>
-
+                {/* this div contains the currently selected hint */}
                 <div
                     style={{
                         width: '100%',
                         height: '100%',
-                        display: 'flex'
+                        display: 'flex',
+                        lineHeight: 1.5
                     }}
                 >
                     <div
@@ -214,7 +245,7 @@ const CodeQualityHints = props => {
                         (selectedType === 'PERFUME' && hasHints.hasPerfumes) ?
                             <div>
                                 <div style={{display: 'flex'}}>
-                                    <br />
+                                    <br/>
                                     <div
                                         className={styles.sprite}
                                     >
@@ -240,7 +271,9 @@ const CodeQualityHints = props => {
                                         width: '563.93px'
                                     }}
                                 >
+                                    {/* {reformatHtml(hints.filter(hint => selectedType === null || hint.type === selectedType)[index].description)} */}
                                     <div
+                                        dangerouslySetInnerHTML={{__html: reformatHtml(hints.filter(hint => selectedType === null || hint.type === selectedType)[index].description)}}
                                         style={{
                                             flex: 1,
                                             border: '2px',
@@ -252,9 +285,7 @@ const CodeQualityHints = props => {
                                             padding: '2%',
                                             textAlign: 'left'
                                         }}
-                                    >
-                                        {replaceTags(hints.filter(hint => selectedType === null || hint.type === selectedType)[index].description)}
-                                    </div>
+                                    />
                                     <div
                                         style={{
                                             flex: 1,
