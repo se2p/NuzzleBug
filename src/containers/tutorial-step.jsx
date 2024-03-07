@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, Component} from 'react';
 import PropTypes from 'prop-types';
 import Step from '../components/tutorial/tutorial-card-step/step.jsx';
 import {connect} from 'react-redux';
@@ -16,6 +16,7 @@ import successImageEN from '../components/tutorial/images/greatDoneEN.png';
 import successImageDE from '../components/tutorial/images/greatDoneDE.png';
 
 import logging from 'scratch-vm/src/util/logging.js';
+import JSZip from 'jszip';
 
 class TutorialStep extends React.Component {
     constructor (props) {
@@ -27,7 +28,8 @@ class TutorialStep extends React.Component {
         this.onCodeQualityHintGeneration = this.onCodeQualityHintGeneration.bind(this);
         this.state = {
             hints: [],
-            details: []
+            details: [],
+            isAutoSaving: false
         };
         const experimentId = new URL(window.location.href).searchParams.get('expid');
         const userId = new URL(window.location.href).searchParams.get('uid');
@@ -35,7 +37,16 @@ class TutorialStep extends React.Component {
         logging._experimentId = experimentId;
         logging._userId = userId;
         logging._secret = secret;
-        this.onCodeQualityHintGeneration();
+        this.autoSave = this.autoSave.bind(this);
+        this.litterboxWebURL = ''; // localhost default: http://localhost:8080
+    }
+
+    componentDidMount () {
+        this.requestHints();
+        // activate auto save when logging is enabled
+        if (logging.isActive()) {
+            setInterval(this.autoSave, 30000);
+        }
     }
 
     onCodeQualityHintGeneration () {
@@ -43,9 +54,13 @@ class TutorialStep extends React.Component {
         if (logging.isActive()) {
             logging.logClickEvent('BUTTON', new Date(), 'CHECK_CODE_QUALITY', null);
         }
-        // then start proccessing the request
+        // then start processing the request
+        this.requestHints();
+    }
+
+    requestHints () {
         const program = this.props.toJson();
-        const url = 'http://localhost:8080/tutorial-system/checker/generate-feedback';
+        const url = `${this.litterboxWebURL}/tutorial-system/checker/generate-feedback`;
         let detectors = 'default';
         if (this.props.detectors) {
             detectors = this.props.detectors;
@@ -80,10 +95,10 @@ class TutorialStep extends React.Component {
                 });
                 this.setState({
                     hints: result,
-                    details: this.state.details
+                    details: this.state.details,
+                    isAutoSaving: this.state.isAutoSaving
                 });
-            }
-            );
+            });
     }
 
     processSteps () {
@@ -159,7 +174,8 @@ class TutorialStep extends React.Component {
                 }
                 this.setState({
                     hints: this.state.hints,
-                    details: details
+                    details: details,
+                    isAutoSaving: this.state.isAutoSaving
                 });
                 this.setFailureMessages(result.step, result.messageId);
             }
@@ -195,6 +211,36 @@ class TutorialStep extends React.Component {
     handleHome () {
         this.props.onReset();
         this.props.onHome();
+    }
+
+    autoSave () {
+        console.log('autoSave() wurde aufgerufen.');
+        // if last save was one min ago, auto save project
+        const currentTime = new Date();
+        const timeDifference = (currentTime - logging.last_time_saved) / (1000 * 60);
+        console.log(`time difference: ${timeDifference}`);
+        if (timeDifference >= 1) {
+            const projectJson = this.props.toJson();
+            const zip = new JSZip();
+            zip.file('project.json', projectJson);
+            zip.generateAsync({
+                type: 'blob',
+                mimeType: 'application/x.scratch.sb3',
+                compression: 'DEFLATE',
+                compressionOptions: {
+                    level: 6
+                }
+            })
+                .then(output => {
+                    console.log('jetzt wird projekt gespeichert.');
+                    logging.logProject(logging._userId, logging._experimentId, logging._secret, output, currentTime);
+                    logging.last_time_saved = currentTime;
+                    console.log('autoSave() wurde durchgeführt.');
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        }
     }
 
     render () {
@@ -314,7 +360,6 @@ TutorialStep.propTypes = {
     unlockVM: PropTypes.func,
     locale: PropTypes.string.isRequired,
     toJson: PropTypes.func,
-    getCostume: PropTypes.func,
     solutionExpanded: PropTypes.bool,
     onSolution: PropTypes.func,
     failureMessage: PropTypes.string,
