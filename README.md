@@ -9,5 +9,9 @@
 
 ## Running
 
-You can start the application by executing the `start.sh` script.
-Then, go to [http://localhost:8601/](http://localhost:8601/) using your preferred browser to open the scratch-gui.
+- Install all dependencies by running `yarn install`
+- configure in ./node_modules/scratch-vm/src/util/logging.js line 23 your ScratchLog URL
+- configure in ./src/components/menu-bar/menu-bar.jsx line 177 your ScratchLog URL
+- configure in ./src/containers/tutorial-step.jsx line 41 your LitterBox-Web URL
+- run `npm start`
+- Then, go to [http://localhost:8601/](http://localhost:8601/) using your preferred browser to open the scratch-gui.
