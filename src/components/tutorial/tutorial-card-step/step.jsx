@@ -59,7 +59,7 @@ const Step = props => {
                     onClick={() => selectNavBarButton(TEST)}
                     className={`${styles.navBarButton} ${selectedType === TEST ? styles.selectedNavBarButton : ''}`}
                 >
-                    <span>Test</span>
+                    <span>Überprüfe aktuellen Schritt</span>
                 </div>
                 <div
                     onClick={() => selectNavBarButton(CODE_QUALITY)}
@@ -219,6 +219,7 @@ Step.propTypes = {
         intro: PropTypes.shape({
             content: PropTypes.shape({
                 title: PropTypes.string.isRequired,
+                img: PropTypes.node.isRequired,
                 message: PropTypes.string.isRequired,
                 download: PropTypes.arrayOf(
                     PropTypes.shape({

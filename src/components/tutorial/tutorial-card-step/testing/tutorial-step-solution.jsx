@@ -36,7 +36,7 @@ const Solution = ({title, content, onSolution, solutionExpanded}) => (
                     draggable={false}
                     alt={'Image of a possible solution for this step.'}
                 />
-                <p className={styles.stepSolutionText}> {content.message} </p>
+                {/* <p className={styles.stepSolutionText}> {content.message} </p> */}
             </div> : null}
     </>
 );

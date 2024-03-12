@@ -133,7 +133,7 @@ class TutorialStep extends React.Component {
             });
         }
         return {
-            title: messages.title, message: messages.downloadMessage, download: downloads
+            title: messages.title, img: tutorial.img, message: messages.downloadMessage, download: downloads
         };
     }
 
@@ -299,7 +299,7 @@ class TutorialStep extends React.Component {
                 success: stepSucceeded,
                 testButtonVisible: isCurrentStep,
                 onTest: this.props.stepSucceeded ? this.next : this.test,
-                testButtonTitle: this.props.stepSucceeded ? guiMessages.continueButtonTitle : guiMessages.testButtonTitle,
+                testButtonTitle: this.props.stepSucceeded ? 'Weiter' : 'Überprüfen',
                 successMsg: this.props.guiMessages.successMessage,
                 failMsg: this.props.guiMessages.failMessage,
                 loadingMsg: this.props.guiMessages.loadingMessage

@@ -57,6 +57,12 @@ Download.propTypes = {
 const Intro = ({content, onDownload, downloadButtonTitle}) => (
     <div className={styles.tutorialStep}>
         <h4 className={styles.stepTitle}> {content.title} </h4>
+        <img
+            className={styles.stepImage}
+            draggable={false}
+            src={content.img}
+            alt={'Image of the current step.'}
+        />
         <p className={styles.stepInstructions}> {content.message} </p>
         {Array(content.download.length).fill(0)
             .map((_, i) => (
@@ -72,6 +78,7 @@ const Intro = ({content, onDownload, downloadButtonTitle}) => (
 Intro.propTypes = {
     content: PropTypes.shape({
         title: PropTypes.string.isRequired,
+        img: PropTypes.node.isRequired,
         message: PropTypes.string.isRequired,
         download: PropTypes.arrayOf(
             PropTypes.shape({

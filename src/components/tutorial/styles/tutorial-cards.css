@@ -279,7 +279,7 @@
 }
 
 .step-testing-button {
-    width: 100px;
+    width: 140px;
     height: 40px;
     display: inline-block;
     text-align: center;
@@ -361,7 +361,7 @@
 }
 
 .step-solution-header {
-    width: 500px;
+    width: 92%;
     height: 40px;
     margin-top: 20px;
     display: inline-block;
@@ -414,7 +414,7 @@
 }
 
 .step-solution-container {
-    width: 500px;
+    width: 92%;
     margin-bottom: 20px;
     display: inline-flex;
     text-align: left;
@@ -425,7 +425,7 @@
 
 .step-solution-image {
     margin: 25px;
-    width: 250px;
+    /*width: 250px;*/
     height: 100%;
     box-sizing: border-box;
     border-radius: 10px;
@@ -491,7 +491,7 @@
 }
 
 .page {
-    padding-left: 15%;
+    padding-left: 23%;
     height: 95%;
     width: 100%;
 }
