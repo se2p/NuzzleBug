@@ -268,7 +268,7 @@ const CodeQualityHints = props => {
                                 <div
                                     style={{
                                         display: 'flex',
-                                        width: '563.93px'
+                                        // width: '563.93px'
                                     }}
                                 >
                                     {/* {reformatHtml(hints.filter(hint => selectedType === null || hint.type === selectedType)[index].description)} */}
