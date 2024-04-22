@@ -171,7 +171,7 @@ const CodeQualityHints = props => {
                     {/* When this button is clicked, perfumes are displayed */}
                     <button
                         onClick={() => filterHintsByType('PERFUME')}
-                        disabled={!hasHints.hasPerfumes}
+                        // disabled={!hasHints.hasPerfumes}
                         className={styles.hintTypeButton}
                         style={{
                             backgroundColor: hasHints.hasPerfumes ? 'green' : 'gray',
@@ -186,7 +186,7 @@ const CodeQualityHints = props => {
                     {/* When this button is clicked, smells are displayed  */}
                     <button
                         onClick={() => filterHintsByType('SMELL')}
-                        disabled={!hasHints.hasSmells}
+                        // disabled={!hasHints.hasSmells}
                         className={styles.hintTypeButton}
                         style={{
                             backgroundColor: hasHints.hasSmells ? 'orange' : 'gray',
@@ -200,7 +200,7 @@ const CodeQualityHints = props => {
                     {/* When this button is clicked, bugs are displayed */}
                     <button
                         onClick={() => filterHintsByType('BUG')}
-                        disabled={!hasHints.hasBugs}
+                        // disabled={!hasHints.hasBugs}
                         className={styles.hintTypeButton}
                         style={{
                             backgroundColor: hasHints.hasBugs ? 'red' : 'gray',
