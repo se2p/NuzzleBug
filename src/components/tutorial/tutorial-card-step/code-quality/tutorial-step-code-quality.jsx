@@ -12,11 +12,13 @@ import logging from 'scratch-vm/src/util/logging.js';
 
 scratchblocks.loadLanguages({de});
 
-const translate = scratchBlocksText => {
+const translate = (scratchBlocksText, locale) => {
     const block = scratchblocks.parse(scratchBlocksText, {
         languages: ['en', 'de']
     });
-    block.translate(scratchblocks.allLanguages.de);
+    if (locale === 'de') {
+        block.translate(scratchblocks.allLanguages.de);
+    }
     return block.stringify();
 };
 
@@ -26,13 +28,14 @@ const ScratchBlocksImage = props => (
             blockStyle="scratch3"
             languages={['en', 'de']}
         >
-            {translate(props.scratchBlocksText)}
+            {translate(props.scratchBlocksText, props.locale)}
         </ScratchBlocks>
     </div>
 );
 
 ScratchBlocksImage.propTypes = {
-    scratchBlocksText: PropTypes.string
+    scratchBlocksText: PropTypes.string,
+    locale: PropTypes.string
 };
 
 const CodeQualityHints = props => {
@@ -71,7 +74,7 @@ const CodeQualityHints = props => {
     });
 
     const setHintText = () => {
-        if (hints.filter(hint => selectedType === null || hint.type === selectedType)[index]){
+        if (hints.filter(hint => selectedType === null || hint.type === selectedType)[index]) {
             const text = hints.filter(hint => selectedType === null || hint.type === selectedType)[index].description;
             const processedText = reformatHtml(text);
             setProcessedHtml(processedText);
@@ -138,7 +141,7 @@ const CodeQualityHints = props => {
         scratchblocks.renderMatching('code.b', {
             inline: true,
             style: 'scratch3',
-            languages: ['de'],
+            languages: [props.locale],
             scale: 0.5
         });
     }, [processedHtml, selectedType, index]);
@@ -171,11 +174,14 @@ const CodeQualityHints = props => {
                         disabled={!hasHints.hasPerfumes}
                         className={styles.hintTypeButton}
                         style={{
-                            backgroundColor: hasHints.hasPerfumes ? 'green' : 'gray'
+                            backgroundColor: hasHints.hasPerfumes ? 'green' : 'gray',
+                            textDecorationLine: selectedType === 'PERFUME' ? 'underline' : 'none',
+                            fontWeight: selectedType === 'PERFUME' ? 'bolder' : 'normal',
+                            textDecorationThickness: '3px'
                         }}
 
                     >
-                        {'Eleganter Code'}
+                        {props.locale === 'de' ? 'Eleganter Code' : 'Good Code'}
                     </button>
                     {/* When this button is clicked, smells are displayed  */}
                     <button
@@ -183,7 +189,10 @@ const CodeQualityHints = props => {
                         disabled={!hasHints.hasSmells}
                         className={styles.hintTypeButton}
                         style={{
-                            backgroundColor: hasHints.hasSmells ? 'orange' : 'gray'
+                            backgroundColor: hasHints.hasSmells ? 'orange' : 'gray',
+                            textDecorationLine: selectedType === 'SMELL' ? 'underline' : 'none',
+                            fontWeight: selectedType === 'SMELL' ? 'bolder' : 'normal',
+                            textDecorationThickness: '3px'
                         }}
                     >
                         {'Smells'}
@@ -194,10 +203,13 @@ const CodeQualityHints = props => {
                         disabled={!hasHints.hasBugs}
                         className={styles.hintTypeButton}
                         style={{
-                            backgroundColor: hasHints.hasBugs ? 'red' : 'gray'
+                            backgroundColor: hasHints.hasBugs ? 'red' : 'gray',
+                            textDecorationLine: selectedType === 'BUG' ? 'underline' : 'none',
+                            fontWeight: selectedType === 'BUG' ? 'bolder' : 'normal',
+                            textDecorationThickness: '3px'
                         }}
                     >
-                        {'Fehler'}
+                        {props.locale === 'de' ? 'Fehler' : 'Bugs'}
                     </button>
                 </div>
                 {/* this div contains the currently selected hint */}
@@ -226,6 +238,9 @@ const CodeQualityHints = props => {
                                 (selectedType === 'SMELL' && !hasHints.hasSmells) ||
                                 (selectedType === 'PERFUME' && !hasHints.hasPerfumes)
                             }
+                            style={{
+                                visibility: (hints.filter(hint => selectedType === null || hint.type === selectedType).length > 1) ? 'visible' : 'hidden'
+                            }}
                         >
                             <img
                                 src={arrow}
@@ -267,7 +282,7 @@ const CodeQualityHints = props => {
                                 </div>
                                 <div
                                     style={{
-                                        display: 'flex',
+                                        display: 'flex'
                                         // width: '563.93px'
                                     }}
                                 >
@@ -305,11 +320,13 @@ const CodeQualityHints = props => {
                                         >
                                             <ScratchBlocksImage
                                                 scratchBlocksText={hints.filter(hint => selectedType === null || hint.type === selectedType)[index].codeSnippet}
+                                                locale={props.locale}
                                             />
                                         </div>
                                     </div>
                                 </div>
-                            </div> : <span>{'keine Hinweise verfügbar'}</span>
+                            </div> :
+                            <span>{props.locale === 'de' ? 'Keine Hinweise verfügbar' : 'No hints available'}</span>
                         }
                     </div>
 
@@ -330,6 +347,9 @@ const CodeQualityHints = props => {
                                 (selectedType === 'SMELL' && !hasHints.hasSmells) ||
                                 (selectedType === 'PERFUME' && !hasHints.hasPerfumes)
                             }
+                            style={{
+                                visibility: (hints.filter(hint => selectedType === null || hint.type === selectedType).length > 1) ? 'visible' : 'hidden'
+                            }}
                         >
                             <img
                                 src={arrow}
@@ -355,7 +375,8 @@ CodeQualityHints.propTypes = {
         codeSnippet: PropTypes.string
     })).isRequired,
     onCodeQualityHintGeneration: PropTypes.func.isRequired,
-    codeQualityButtonTitle: PropTypes.string.isRequired
+    codeQualityButtonTitle: PropTypes.string.isRequired,
+    locale: PropTypes.string.isRequired
 };
 
 export default CodeQualityHints;

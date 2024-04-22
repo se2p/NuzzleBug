@@ -66,7 +66,7 @@ class TutorialStep extends React.Component {
             detectors = this.props.detectors;
         }
         const jsonBody = JSON.stringify({
-            language: 'GERMAN', detectors: detectors, program: JSON.parse(program)
+            language: (this.props.locale === 'de' ? 'GERMAN' : 'ENGLISH'), detectors: detectors, program: JSON.parse(program)
         });
         fetch(url, {
             method: 'POST',
@@ -214,11 +214,9 @@ class TutorialStep extends React.Component {
     }
 
     autoSave () {
-        console.log('autoSave() wurde aufgerufen.');
         // if last save was one min ago, auto save project
         const currentTime = new Date();
         const timeDifference = (currentTime - logging.last_time_saved) / (1000 * 60);
-        console.log(`time difference: ${timeDifference}`);
         if (timeDifference >= 1) {
             const projectJson = this.props.toJson();
             const zip = new JSZip();
@@ -232,10 +230,8 @@ class TutorialStep extends React.Component {
                 }
             })
                 .then(output => {
-                    console.log('jetzt wird projekt gespeichert.');
                     logging.logProject(logging._userId, logging._experimentId, logging._secret, output, currentTime);
                     logging.last_time_saved = currentTime;
-                    console.log('autoSave() wurde durchgeführt.');
                 })
                 .catch(error => {
                     console.log(error);
@@ -289,7 +285,7 @@ class TutorialStep extends React.Component {
         };
         const testingProps = {
             visible: !!content,
-            finishedMessage: 'Es gibt nichts mehr zum Testen, du hast das Tutorial schon erfolgreich abgeschlossen. Du kann noch weiter experimentieren und deine Codequalität verbessern.',
+            finishedMessage: (this.props.locale === 'de' ? 'Es gibt nichts mehr zum Testen, du hast das Tutorial schon erfolgreich abgeschlossen. Du kann noch weiter experimentieren und deine Codequalität verbessern.' : 'There is nothing more to test, you have already successfully completed the tutorial. You can continue to experiment and improve your code quality.'),
             isSolutionVisible: !isCurrentStep || this.props.failedTimes >= 3,
             isFailureMessageVisible: tested && !stepSucceeded,
             failureMessage: this.props.failureMessage,
@@ -299,7 +295,7 @@ class TutorialStep extends React.Component {
                 success: stepSucceeded,
                 testButtonVisible: isCurrentStep,
                 onTest: this.props.stepSucceeded ? this.next : this.test,
-                testButtonTitle: this.props.stepSucceeded ? 'Weiter' : 'Überprüfen',
+                testButtonTitle: this.props.stepSucceeded ? (this.props.locale === 'de' ? 'Weiter' : 'Next') : (this.props.locale === 'de' ? 'Überprüfen' : 'Check'),
                 successMsg: this.props.guiMessages.successMessage,
                 failMsg: this.props.guiMessages.failMessage,
                 loadingMsg: this.props.guiMessages.loadingMessage
@@ -319,7 +315,7 @@ class TutorialStep extends React.Component {
             codeQuality: {
                 hints: this.state.hints,
                 onCodeQualityHintGeneration: this.onCodeQualityHintGeneration,
-                codeQualityButtonTitle: 'Codequalität prüfen'
+                codeQualityButtonTitle: this.props.locale === 'de' ? 'Codequalität prüfen' : 'Check Code Quality'
             }
         };
 
@@ -328,6 +324,7 @@ class TutorialStep extends React.Component {
             currentStep={currentStepProps}
             testing={testingProps}
             codeQuality={codeQuality}
+            locale={this.props.locale}
         />);
     }
 }

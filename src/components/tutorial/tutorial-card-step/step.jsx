@@ -13,7 +13,8 @@ const Step = props => {
         description,
         currentStep,
         testing,
-        codeQuality
+        codeQuality,
+        locale
     } = props;
 
     // Constants used for the different states. State represents the currently visible page.
@@ -47,25 +48,25 @@ const Step = props => {
                     onClick={() => selectNavBarButton(DESCRIPTION)}
                     className={`${styles.navBarButton} ${selectedType === DESCRIPTION ? styles.selectedNavBarButton : ''}`}
                 >
-                    <span>Beschreibung</span>
+                    <span>{props.locale === 'de' ? 'Beschreibung' : 'Description'}</span>
                 </div>
                 <div
                     onClick={() => selectNavBarButton(CURRENT_STEP)}
                     className={`${styles.navBarButton} ${selectedType === CURRENT_STEP ? styles.selectedNavBarButton : ''}`}
                 >
-                    <span>Aktueller Schritt</span>
+                    <span>{props.locale === 'de' ? 'Aktueller Schritt' : 'Current Step'}</span>
                 </div>
                 <div
                     onClick={() => selectNavBarButton(TEST)}
                     className={`${styles.navBarButton} ${selectedType === TEST ? styles.selectedNavBarButton : ''}`}
                 >
-                    <span>Überprüfe aktuellen Schritt</span>
+                    <span>{props.locale === 'de' ? 'Überprüfe aktuellen Schritt' : 'Check current Step'}</span>
                 </div>
                 <div
                     onClick={() => selectNavBarButton(CODE_QUALITY)}
                     className={`${styles.navBarButton} ${selectedType === CODE_QUALITY ? styles.selectedNavBarButton : ''}`}
                 >
-                    <span>Qualität</span>
+                    <span>{props.locale === 'de' ? 'Qualität' : 'Quality'}</span>
                 </div>
             </div>
         </div>
@@ -137,9 +138,7 @@ const Step = props => {
                             />
                             {testing.isStepPassed ?
                                 <div className={styles.testPassedMessage}>
-                                    {'Super! Du hast den Schritt bestanden.\n ' +
-                                        'Prüfe und verbessere die Codequalität deiner Lösung, ' +
-                                        'bevor du mit dem nächsten Schritt fortfährst.'}
+                                    {props.locale === 'de' ? 'Super! Du hast den Schritt bestanden.\nPrüfe und verbessere die Codequalität deiner Lösung, bevor du mit dem nächsten Schritt fortfährst.' : 'Great! You have passed the step.\nCheck and improve the code quality of your solution before proceeding with the next step.'}
                                 </div> : null
                             }
                             {testing.isSolutionVisible && testing.solution ?
@@ -156,7 +155,7 @@ const Step = props => {
                                         <tr>
                                             <th>{''}</th>
                                             <th>{'Test Name'}</th>
-                                            <th style={{textAlign: 'center'}}>{'Ergebnis'}</th>
+                                            <th style={{textAlign: 'center'}}>{props.locale === 'de' ? 'Ergebnis' : 'Result'}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -204,6 +203,7 @@ const Step = props => {
                         hints={codeQuality.codeQuality.hints}
                         onCodeQualityHintGeneration={codeQuality.codeQuality.onCodeQualityHintGeneration}
                         codeQualityButtonTitle={codeQuality.codeQuality.codeQualityButtonTitle}
+                        locale={props.locale}
                     />
                 </div>
             </div>
@@ -308,7 +308,8 @@ Step.propTypes = {
             onCodeQualityHintGeneration: PropTypes.func.isRequired,
             codeQualityButtonTitle: PropTypes.string.isRequired
         })
-    })
+    }),
+    locale: PropTypes.string.isRequired
 };
 
 export default Step;
