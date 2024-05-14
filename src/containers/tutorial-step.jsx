@@ -38,7 +38,7 @@ class TutorialStep extends React.Component {
         logging._userId = userId;
         logging._secret = secret;
         this.autoSave = this.autoSave.bind(this);
-        this.litterboxWebURL = ''; // localhost default: http://localhost:8080
+        this.litterboxWebURL = 'https://scratch.fim.uni-passau.de/litterbox-api'; // localhost default: http://localhost:8080
     }
 
     componentDidMount () {
