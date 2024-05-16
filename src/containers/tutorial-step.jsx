@@ -1,4 +1,4 @@
-import React, {useState, Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Step from '../components/tutorial/tutorial-card-step/step.jsx';
 import {connect} from 'react-redux';
@@ -60,13 +60,14 @@ class TutorialStep extends React.Component {
 
     requestHints () {
         const program = this.props.toJson();
-        const url = `${this.litterboxWebURL}/tutorial-system/checker/generate-feedback`;
+        const url = `${this.litterboxWebURL}/tutorial-system/generate-feedback`;
         let detectors = 'default';
         if (this.props.detectors) {
             detectors = this.props.detectors;
         }
+        const language = this.props.locale === 'de' ? 'de' : 'en';
         const jsonBody = JSON.stringify({
-            language: (this.props.locale === 'de' ? 'GERMAN' : 'ENGLISH'), detectors: detectors, program: JSON.parse(program)
+            language: language, detectors: detectors, program: program
         });
         fetch(url, {
             method: 'POST',
@@ -77,28 +78,24 @@ class TutorialStep extends React.Component {
             referrerPolicy: 'origin-when-cross-origin'
         })
             .then(response => response.json())
-            .then(issues => issues.issues)
             .then(problems => {
-                const result = [];
-                problems.forEach(hint => {
-                    let code = hint.code.replaceAll('[/scratchblocks]', '');
-                    code = code.replaceAll('[scratchblocks]', '');
-                    const temp = {
-                        title: hint.name,
-                        description: hint.hint,
-                        sprite: hint.sprite,
-                        costume: hint.costumes[0],
-                        type: hint.type,
-                        codeSnippet: code
-                    };
-                    result.push(temp);
-                });
+                const result = problems.map(hint => ({
+                    title: hint.name,
+                    description: hint.hint,
+                    sprite: hint.sprite,
+                    costume: hint.costume,
+                    type: hint.type,
+                    codeSnippet: hint.scratchBlocksCode
+                }));
                 this.setState({
                     hints: result,
                     details: this.state.details,
                     isAutoSaving: this.state.isAutoSaving
                 });
-            });
+            })
+            // ignore errors to avoid crashing the tutorial tab
+            // eslint-disable-next-line no-unused-vars
+            .catch(ignored => {});
     }
 
     processSteps () {
