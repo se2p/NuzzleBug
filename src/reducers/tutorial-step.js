@@ -1,4 +1,4 @@
-const RESET = 'scratch-gui/tutorial-step/RESET';
+const RESET = 'scratch-gui/tutorial-card-step/RESET';
 const NEXT_TEST = 'scratch-gui/tutorial-cards/NEXT_TEST';
 const TEST_STARTED = 'scratch-gui/tutorial-cards/TEST_STARTED';
 const TEST_STOPPED = 'scratch-gui/tutorial-cards/TEST_STOPPED';

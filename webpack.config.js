@@ -29,7 +29,7 @@ const base = {
     },
     resolve: {
         symlinks: true, // avoid unreadable symlinks to make debugging easier
-        extensions: ['.ts', '.js'], // including typescript is necessary as whisker includes some
+        extensions: ['.ts', '.tsx', '.js'], // including typescript is necessary as whisker includes some
     },
     module: {
         rules: [{
@@ -57,8 +57,7 @@ const base = {
         },
         {
             test: /\.tsx?/,
-            use: 'ts-loader',
-            exclude: /node_modules/,
+            loader: 'ts-loader'
         },
         {
             test: /\.css$/,
