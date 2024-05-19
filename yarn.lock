@@ -10238,6 +10238,11 @@ scratch-translate-extension-languages@0.0.20191118205314:
     text-encoding "0.7.0"
     twgl.js latest
 
+scratchblocks-react@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/scratchblocks-react/-/scratchblocks-react-1.0.1.tgz#22c3b2dd0961ce139162b5fe3d38b1e0674f1590"
+  integrity sha512-5pHAwH1oGTCtLOOwqHcmv0qXFiA9YSgBh0g0TpWRv5Nb7TIOalwX/iNWKUpwHSNMAP5wMKWJyehbUG5P3oW4Ow==
+
 scratchblocks@^3.6.0:
   version "3.6.3"
   resolved "https://registry.npmjs.org/scratchblocks/-/scratchblocks-3.6.3.tgz"

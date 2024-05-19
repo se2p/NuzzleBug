@@ -94,6 +94,7 @@
         "scratch-svg-renderer": "0.2.0-prerelease.20210727023023",
         "scratch-vm": "git+https://gitlab+deploy-token-3:i8XTz2vnGPewCoYALnoy@gitlab.infosun.fim.uni-passau.de/se2/whisker/scratch-vm",
         "scratchblocks": "^3.6.0",
+        "scratchblocks-react": "^1.0.1",
         "startaudiocontext": "1.2.1",
         "style-loader": "^0.23.0",
         "text-encoding": "0.7.0",

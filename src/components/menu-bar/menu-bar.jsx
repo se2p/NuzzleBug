@@ -77,7 +77,6 @@ import aboutIcon from './icon--about.svg';
 import scratchLogo from './scratch-logo.svg';
 
 import sharedMessages from '../../lib/shared-messages';
-import Scratch1984Button from './scratch1984-button.jsx';
 
 const ariaMessages = defineMessages({
     language: {
