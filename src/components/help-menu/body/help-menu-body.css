@@ -1,0 +1,160 @@
+@import "../../../css/colors.css";
+
+
+.owl-head {
+    height:40px;
+    width: 40px;
+    color: white;
+    display: flex;
+    margin-right: 5px;
+
+}
+
+.chat-title{
+    display: flex;
+    margin-left: 10px;
+    margin-right: 5px;
+}
+
+.header {
+    background: #0FBD8C;
+    cursor: default;
+    border-left: 1px solid transparent;
+    border-top: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-top-right-radius: 12px;
+    border-top-left-radius: 12px;
+    height:10%;
+    font-size: 15px;
+    padding: 0 15px;
+    font-weight: bold;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.speech-bubble-box {
+    position: relative;
+    width: 350px;
+    height: fit-content;
+    min-height: 95px;
+    margin-right: 25px;
+    padding-right: 3px;
+    border-radius: 10px;
+    left: -10px;
+    color: #575E75;
+    background: $ui-tertiary;
+}
+
+.speech-bubble-triangle:before {
+    content: "";
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    border-left: 16px solid transparent;
+    border-right: 16px solid $ui-tertiary;
+    border-top: 8px solid $ui-tertiary;
+    border-bottom: 8px solid transparent;
+    left: -30px;
+    top: 54px;
+}
+
+.help-messages {
+    padding: 10px;
+    width: 100%;
+    text-align: center;
+}
+
+
+.body{
+    padding-top: 30px;
+    padding-left: 30px;
+    padding-right: 30px;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid #CECDCE;
+    border-right: 1px solid #CECDCE;
+    border-bottom: 1px solid #CECDCE;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    height: 90%;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: #CECDCE transparent;
+}
+
+.my-node-enter {
+    opacity: 0;
+}
+.my-node-enter-active {
+    opacity: 1;
+    transition: opacity 200ms;
+}
+.my-node-exit {
+    opacity: 1;
+}
+.my-node-exit-active {
+    opacity: 0;
+    transition: opacity 200ms;
+}
+
+.body::-webkit-scrollbar-track {
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.body::-webkit-scrollbar-thumb {
+    background:#CECDCE;
+    border: 1px solid #CECDCE;
+    border-radius: 4px;
+}
+
+.menu{
+    height: 520px;
+    max-width: 700px;
+    margin: 5px auto;
+}
+.category-list {
+    list-style-type: none;
+    padding-inline-start: 0;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    font-weight: bold;
+}
+
+.category-list-item {
+    padding: 4px;
+    margin-bottom: 8px;
+    color: #575E75;
+    background-color: transparent;
+    border-radius: 4px;
+}
+
+.category {
+    margin-top: 20px;
+    margin-bottom: 70px;
+    display: flex;
+    padding: 4px 0;
+    height: 60%;
+    margin-left: 50px;
+    border: none;
+}
+.owlArea {
+    margin-bottom: 20px;
+    margin-top: -20px;
+    display: flex;
+    border: none;
+    width:100%;
+    max-height: 25%;
+    padding: 4px 0;
+    justify-content: flex-end
+}
+.owl {
+    position: relative;
+    right: 100px;
+    height: 200px;
+}

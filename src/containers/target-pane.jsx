@@ -23,6 +23,8 @@ import {highlightTarget} from '../reducers/targets';
 import {fetchSprite, fetchCode} from '../lib/backpack-api';
 import randomizeSpritePosition from '../lib/randomize-sprite-position';
 import downloadBlob from '../lib/download-blob';
+import {openTargetDebugger} from '../reducers/interrogative-debugging/version-2/ir-debugger.js';
+import {selectSprite, startChooseCategory} from '../reducers/help-menu';
 
 class TargetPane extends React.Component {
     constructor (props) {
@@ -180,7 +182,7 @@ class TargetPane extends React.Component {
             const {scrollX, scrollY, scale} = metrics;
             const posY = -scrollY + 30;
             let posX;
-            if (this.props.isrtl) {
+            if (this.props.isRtl) {
                 posX = scrollX + 30;
             } else {
                 posX = -scrollX + 30;
@@ -237,6 +239,7 @@ class TargetPane extends React.Component {
         /* eslint-disable no-unused-vars */
         const {
             dispatchUpdateRestore,
+            isRtl,
             onActivateTab,
             onCloseImporting,
             onHighlightTarget,
@@ -286,14 +289,16 @@ TargetPane.propTypes = {
 };
 
 const mapStateToProps = state => ({
+    spriteSelectionEnabled: state.scratchGui.helpMenu.spriteSelection,
     editingTarget: state.scratchGui.targets.editingTarget,
     hoveredTarget: state.scratchGui.hoveredTarget,
-    isrtl: state.locales.isrtl,
-    spriteLibraryVisible: state.scratchGui.modals.spriteLibrary,
+    isRtl: state.locales.isRtl,
     sprites: state.scratchGui.targets.sprites,
     stage: state.scratchGui.targets.stage,
     raiseSprites: state.scratchGui.blockDrag,
-    workspaceMetrics: state.scratchGui.workspaceMetrics
+    workspaceMetrics: state.scratchGui.workspaceMetrics,
+    spriteLibraryVisible: state.scratchGui.modals.spriteLibrary,
+    interrogationEnabled: state.scratchGui.irDebugger.enabled && state.scratchGui.irDebugger.supported
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -317,7 +322,16 @@ const mapDispatchToProps = dispatch => ({
         dispatch(highlightTarget(id));
     },
     onCloseImporting: () => dispatch(closeAlertWithId('importingAsset')),
-    onShowImporting: () => dispatch(showStandardAlert('importingAsset'))
+    onShowImporting: () => dispatch(showStandardAlert('importingAsset')),
+    onInterrogativeButtonClick: (targetId, costumeUrl) => {
+        dispatch(openTargetDebugger(targetId, costumeUrl));
+    },
+    onSpriteSelected: targetName => {
+        dispatch(selectSprite(targetName));
+    },
+    onChooseCategory: () => {
+        dispatch(startChooseCategory());
+    }
 });
 
 export default injectIntl(connect(

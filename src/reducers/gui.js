@@ -5,6 +5,8 @@ import assetDragReducer, {assetDragInitialState} from './asset-drag';
 import cardsReducer, {cardsInitialState} from './cards';
 import tutorialCardsReducer, {tutorialCardsInitialState} from './tutorial-cards';
 import tutorialStepReducer, {tutorialStepInitialState} from './tutorial-step';
+import irCardsReducer, {irCardsInitialState} from './interrogative-debugging/version-1/ir-cards';
+import irDebuggerReducer, {irDebuggerInitialState} from './interrogative-debugging/version-2/ir-debugger';
 import colorPickerReducer, {colorPickerInitialState} from './color-picker';
 import connectionModalReducer, {connectionModalInitialState} from './connection-modal';
 import customProceduresReducer, {customProceduresInitialState} from './custom-procedures';
@@ -29,6 +31,7 @@ import toolboxReducer, {toolboxInitialState} from './toolbox';
 import vmReducer, {vmInitialState} from './vm';
 import vmStatusReducer, {vmStatusInitialState} from './vm-status';
 import workspaceMetricsReducer, {workspaceMetricsInitialState} from './workspace-metrics';
+import helpMenuReducer, {helpMenuInitialState} from './help-menu';
 import throttle from 'redux-throttle';
 
 import decks from '../lib/libraries/decks/index.jsx';
@@ -40,6 +43,9 @@ const guiInitialState = {
     assetDrag: assetDragInitialState,
     blockDrag: blockDragInitialState,
     cards: cardsInitialState,
+    ircards: irCardsInitialState,
+    irDebugger: irDebuggerInitialState,
+    helpMenu: helpMenuInitialState,
     tutorialCards: tutorialCardsInitialState,
     tutorialStep: tutorialStepInitialState,
     colorPicker: colorPickerInitialState,
@@ -141,6 +147,9 @@ const guiReducer = combineReducers({
     assetDrag: assetDragReducer,
     blockDrag: blockDragReducer,
     cards: cardsReducer,
+    ircards: irCardsReducer,
+    irDebugger: irDebuggerReducer,
+    helpMenu: helpMenuReducer,
     tutorialCards: tutorialCardsReducer,
     tutorialStep: tutorialStepReducer,
     colorPicker: colorPickerReducer,

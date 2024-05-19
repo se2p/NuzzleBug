@@ -80,11 +80,12 @@ class GUI extends React.Component {
             fetchingProject,
             isLoading,
             loadingStateVisible,
+            isWhiskerProjectLoading,
             ...componentProps
         } = this.props;
         return (
             <GUIComponent
-                loading={fetchingProject || isLoading || loadingStateVisible}
+                loading={fetchingProject || isLoading || loadingStateVisible || isWhiskerProjectLoading}
                 {...componentProps}
             >
                 {children}
@@ -102,6 +103,7 @@ GUI.propTypes = {
     intl: intlShape,
     isError: PropTypes.bool,
     isLoading: PropTypes.bool,
+    isWhiskerProjectLoading: PropTypes.bool,
     isScratchDesktop: PropTypes.bool,
     isShowingProject: PropTypes.bool,
     loadingStateVisible: PropTypes.bool,
@@ -132,6 +134,9 @@ const mapStateToProps = state => {
         backdropLibraryVisible: state.scratchGui.modals.backdropLibrary,
         blocksTabVisible: state.scratchGui.editorTab.activeTabIndex === BLOCKS_TAB_INDEX,
         cardsVisible: state.scratchGui.cards.visible,
+        irCardsVisible: state.scratchGui.ircards.visible,
+        irDebuggerVisible: state.scratchGui.irDebugger.visible,
+        helpMenuVisible: state.scratchGui.helpMenu.visible,
         tutorialCardsVisible: state.scratchGui.tutorialCards.visible,
         connectionModalVisible: state.scratchGui.modals.connectionModal,
         costumeLibraryVisible: state.scratchGui.modals.costumeLibrary,
@@ -143,12 +148,9 @@ const mapStateToProps = state => {
         isRtl: state.locales.isRtl,
         isShowingProject: getIsShowingProject(loadingState),
         loadingStateVisible: state.scratchGui.modals.loadingProject,
+        isWhiskerProjectLoading: state.scratchGui.vmStatus.isWhiskerProjectLoading,
         projectId: state.scratchGui.projectState.projectId,
         soundsTabVisible: state.scratchGui.editorTab.activeTabIndex === SOUNDS_TAB_INDEX,
-        targetIsStage: (
-            state.scratchGui.targets.stage &&
-            state.scratchGui.targets.stage.id === state.scratchGui.targets.editingTarget
-        ),
         telemetryModalVisible: state.scratchGui.modals.telemetryModal,
         tipsLibraryVisible: state.scratchGui.modals.tipsLibrary,
         vm: state.scratchGui.vm

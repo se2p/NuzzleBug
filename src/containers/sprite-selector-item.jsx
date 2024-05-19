@@ -12,6 +12,7 @@ import DragRecognizer from '../lib/drag-recognizer';
 import {getEventXY} from '../lib/touch-utils';
 
 import SpriteSelectorItemComponent from '../components/sprite-selector-item/sprite-selector-item.jsx';
+import {repositionHelpMenuWindow, selectSprite, startChooseCategory} from '../reducers/help-menu';
 
 class SpriteSelectorItem extends React.PureComponent {
     constructor (props) {
@@ -23,6 +24,7 @@ class SpriteSelectorItem extends React.PureComponent {
             'handleDelete',
             'handleDuplicate',
             'handleExport',
+            'handleOpenInterrogativeDebugger',
             'handleMouseEnter',
             'handleMouseLeave',
             'handleMouseDown',
@@ -89,6 +91,12 @@ class SpriteSelectorItem extends React.PureComponent {
         if (!this.noClick) {
             this.props.onClick(this.props.id);
         }
+        if (this.props.spriteSelectionEnabled){
+            this.props.onSpriteSelected(this.props.name);
+            this.props.onChooseCategory();
+            this.props.onInterrogativeButtonClick(this.props.id, this.getCostumeData());
+            this.forceUpdate();
+        }
     }
     handleDelete (e) {
         e.stopPropagation(); // To prevent from bubbling back to handleClick
@@ -101,6 +109,10 @@ class SpriteSelectorItem extends React.PureComponent {
     handleExport (e) {
         e.stopPropagation();
         this.props.onExportButtonClick(this.props.id);
+    }
+    handleOpenInterrogativeDebugger (e) {
+        e.stopPropagation();
+        this.props.onInterrogativeButtonClick(this.props.id, this.getCostumeData());
     }
     handleMouseLeave () {
         this.props.dispatchSetHoveredSprite(null);
@@ -122,6 +134,7 @@ class SpriteSelectorItem extends React.PureComponent {
             onDeleteButtonClick,
             onDuplicateButtonClick,
             onExportButtonClick,
+            onInterrogativeButtonClick,
             dragPayload,
             receivedBlocks,
             costumeURL,
@@ -138,6 +151,7 @@ class SpriteSelectorItem extends React.PureComponent {
                 onDeleteButtonClick={onDeleteButtonClick ? this.handleDelete : null}
                 onDuplicateButtonClick={onDuplicateButtonClick ? this.handleDuplicate : null}
                 onExportButtonClick={onExportButtonClick ? this.handleExport : null}
+                onInterrogativeButtonClick={onInterrogativeButtonClick ? this.handleOpenInterrogativeDebugger : null}
                 onMouseDown={this.handleMouseDown}
                 onMouseEnter={this.handleMouseEnter}
                 onMouseLeave={this.handleMouseLeave}
@@ -162,22 +176,36 @@ SpriteSelectorItem.propTypes = {
     onDrag: PropTypes.func.isRequired,
     onDuplicateButtonClick: PropTypes.func,
     onExportButtonClick: PropTypes.func,
+    onInterrogativeButtonClick: PropTypes.func,
     receivedBlocks: PropTypes.bool.isRequired,
     selected: PropTypes.bool,
-    vm: PropTypes.instanceOf(VM).isRequired
+    spriteSelectionEnabled: PropTypes.bool.isRequired,
+    onSpriteSelected: PropTypes.func.isRequired,
+    onChooseCategory: PropTypes.func.isRequired,
+    vm: PropTypes.instanceOf(VM).isRequired,
+    repositionHelpMenuWindow: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, {id}) => ({
     dragging: state.scratchGui.assetDrag.dragging,
     receivedBlocks: state.scratchGui.hoveredTarget.receivedBlocks &&
             state.scratchGui.hoveredTarget.sprite === id,
-    vm: state.scratchGui.vm
+    vm: state.scratchGui.vm,
+    spriteSelectionEnabled: state.scratchGui.helpMenu.spriteSelection,
+    interrogationEnabled: state.scratchGui.irDebugger.enabled && state.scratchGui.irDebugger.supported
 });
 const mapDispatchToProps = dispatch => ({
     dispatchSetHoveredSprite: spriteId => {
         dispatch(setHoveredSprite(spriteId));
     },
-    onDrag: data => dispatch(updateAssetDrag(data))
+    onSpriteSelected: targetName => {
+        dispatch(selectSprite(targetName));
+    },
+    onChooseCategory: () => {
+        dispatch(startChooseCategory());
+    },
+    onDrag: data => dispatch(updateAssetDrag(data)),
+    repositionHelpMenuWindow: (x, y) => dispatch(repositionHelpMenuWindow(x, y))
 });
 
 const ConnectedComponent = connect(

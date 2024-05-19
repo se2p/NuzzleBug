@@ -55,6 +55,15 @@ const SpriteSelectorItem = props => (
         ) : null }
         {props.onDuplicateButtonClick || props.onDeleteButtonClick || props.onExportButtonClick ? (
             <ContextMenu id={`${props.name}-${contextMenuId++}`}>
+                {props.onInterrogativeButtonClick && props.interrogationEnabled ? (
+                    <MenuItem onClick={props.onInterrogativeButtonClick}>
+                        <FormattedMessage
+                            defaultMessage="Ask why..."
+                            description="Menu item to open the interrogative debugger for the selected item"
+                            id="gui.ir-debugger.controls.open-debugger"
+                        />
+                    </MenuItem>
+                ) : null }
                 {props.onDuplicateButtonClick ? (
                     <MenuItem onClick={props.onDuplicateButtonClick}>
                         <FormattedMessage
@@ -98,11 +107,13 @@ SpriteSelectorItem.propTypes = {
     onDeleteButtonClick: PropTypes.func,
     onDuplicateButtonClick: PropTypes.func,
     onExportButtonClick: PropTypes.func,
+    onInterrogativeButtonClick: PropTypes.func,
     onMouseDown: PropTypes.func,
     onMouseEnter: PropTypes.func,
     onMouseLeave: PropTypes.func,
     preventContextMenu: PropTypes.bool,
-    selected: PropTypes.bool.isRequired
+    selected: PropTypes.bool.isRequired,
+    interrogationEnabled: PropTypes.bool
 };
 
 export default SpriteSelectorItem;

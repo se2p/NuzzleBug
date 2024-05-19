@@ -1,0 +1,7 @@
+@import "../../../css/colors.css";
+
+.category-text {
+    width: 280px;
+    display:table;
+    white-space: pre-wrap;
+}

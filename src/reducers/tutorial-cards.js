@@ -25,64 +25,54 @@ const initialState = {
 };
 
 const reducer = function (state, action) {
-    if (typeof state === 'undefined') state = initialState;
+    if (typeof state === 'undefined') {
+        state = initialState;
+    }
+    const baseState = JSON.parse(JSON.stringify(state));
     switch (action.type) {
     case CLOSE_CARDS:
-        return Object.assign({}, state, {
-            visible: false
-        });
+        baseState.visible = false;
+        break;
     case BLOCK_DRAG_UPDATE:
-        return Object.assign({}, state, {
-            disabled: true
-        });
+        baseState.disabled = true;
+        break;
     case SHRINK_EXPAND_CARDS:
-        return Object.assign({}, state, {
-            expanded: !state.expanded
-        });
+        baseState.expanded = !state.expanded;
+        break;
     case VIEW_CARDS:
-        return Object.assign({}, state, {
-            visible: true
-        });
+        baseState.visible = true;
+        break;
     case NEXT_STEP:
-        return Object.assign({}, state, {
-            step: state.step + 1
-        });
+        baseState.step = state.step + 1;
+        break;
     case PREV_STEP:
         if (state.step > 0) {
-            return Object.assign({}, state, {
-                step: state.step - 1
-            });
+            baseState.step = state.step - 1;
         }
-        return state;
+        break;
     case DRAG_CARD:
-        return Object.assign({}, state, {
-            x: action.x,
-            y: action.y
-        });
+        baseState.x = action.x;
+        baseState.y = action.y;
+        break;
     case START_DRAG:
-        return Object.assign({}, state, {
-            dragging: true
-        });
+        baseState.dragging = true;
+        break;
     case END_DRAG:
-        return Object.assign({}, state, {
-            dragging: false
-        });
+        baseState.dragging = false;
+        break;
     case SELECT_TUTORIAL:
-        return Object.assign({}, state, {
-            tutorial: action.tutorial,
-            totalSteps: action.totalSteps,
-            menu: false
-        });
+        baseState.tutorial = action.tutorial;
+        baseState.totalSteps = action.totalSteps;
+        baseState.menu = false;
+        break;
     case HOME_MENU:
-        return Object.assign({}, state, {
-            tutorial: '',
-            menu: true,
-            totalSteps: 0,
-            step: 0
-        });
-    default:
-        return state;
+        baseState.tutorial = '';
+        baseState.menu = true;
+        baseState.totalSteps = 0;
+        baseState.step = 0;
+        break;
     }
+    return baseState;
 };
 
 const viewTutorial = function () {

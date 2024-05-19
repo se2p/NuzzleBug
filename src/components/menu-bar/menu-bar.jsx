@@ -13,6 +13,7 @@ import Box from '../box/box.jsx';
 import Button from '../button/button.jsx';
 import CommunityButton from './community-button.jsx';
 import ShareButton from './share-button.jsx';
+import Scratch1984Button from './scratch1984-button.jsx';
 import {ComingSoonTooltip} from '../coming-soon/coming-soon.jsx';
 import Divider from '../divider/divider.jsx';
 import LanguageSelector from '../../containers/language-selector.jsx';
@@ -165,6 +166,7 @@ class MenuBar extends React.Component {
             'handleClickNew',
             'handleClickRemix',
             'handleClickSave',
+            'handleClickRestart',
             'handleClickSaveAsCopy',
             'handleClickSeeCommunity',
             'handleClickShare',
@@ -172,7 +174,8 @@ class MenuBar extends React.Component {
             'handleLanguageMouseUp',
             'handleRestoreOption',
             'getSaveToComputerHandler',
-            'restoreOptionMessage'
+            'restoreOptionMessage',
+            'handleFinishExperiment'
         ]);
         this.scratchlogURL = ''; // localhost default: http://localhost:8090
     }
@@ -193,20 +196,39 @@ class MenuBar extends React.Component {
         );
         this.props.onRequestCloseFile();
         if (readyToReplaceProject) {
+            this.props.onResetProjectState();
             this.props.onClickNew(this.props.canSave && this.props.canCreateNew);
         }
         this.props.onRequestCloseFile();
     }
+    handleClickRestart () {
+        // if the project is dirty, and user owns the project, we will autosave.
+        // but if they are not logged in and can't save, user should consider
+        // downloading or logging in first.
+        // Note that if user is logged in and editing someone else's project,
+        // they'll lose their work.
+
+        const readyToReplaceProject = this.props.confirmReadyToReplaceProject(
+            this.props.intl.formatMessage(sharedMessages.replaceProjectWarning)
+        );
+        this.props.onRequestCloseFile();
+        if (readyToReplaceProject) {
+            this.props.onRestartingProject();
+        }
+    }
+
     handleClickRemix () {
         this.props.onClickRemix();
         this.props.onRequestCloseFile();
     }
     handleClickSave () {
         this.props.onClickSave();
+        this.props.onSaveProjectState();
         this.props.onRequestCloseFile();
     }
     handleClickSaveAsCopy () {
         this.props.onClickSaveAsCopy();
+        this.props.onSaveProjectState();
         this.props.onRequestCloseFile();
     }
     handleClickSeeCommunity (waitForUpdate) {
@@ -263,6 +285,7 @@ class MenuBar extends React.Component {
         return () => {
             this.props.onRequestCloseFile();
             downloadProjectCallback();
+            this.props.onSaveProjectState(this.props.projectTitle);
             if (this.props.onProjectTelemetryEvent) {
                 const metadata = collectMetadata(this.props.vm, this.props.projectTitle, this.props.locale);
                 this.props.onProjectTelemetryEvent('projectDidSave', metadata);
@@ -361,6 +384,14 @@ class MenuBar extends React.Component {
                 id="gui.menuBar.saveNow"
             />
         );
+        const restartProjectMessage = (
+            // the translation information is saved in the help-menu json file
+            <FormattedMessage
+                defaultMessage="Restart Project"
+                description="Menu bar item for restarting the project"
+                id="gui.help-menu.controls.restart-project"
+            />
+        );
         const createCopyMessage = (
             <FormattedMessage
                 defaultMessage="Save as a copy"
@@ -456,6 +487,12 @@ class MenuBar extends React.Component {
                                             onClick={this.handleClickNew}
                                         >
                                             {newProjectMessage}
+                                        </MenuItem>
+                                        <MenuItem
+                                            isRtl={this.props.isRtl}
+                                            onClick={this.handleClickRestart}
+                                        >
+                                            {restartProjectMessage}
                                         </MenuItem>
                                     </MenuSection>
                                     {(this.props.canSave || this.props.canCreateCopy || this.props.canRemix) && (
@@ -841,6 +878,9 @@ MenuBar.propTypes = {
     onRequestCloseLogin: PropTypes.func,
     saveProjectBeforeFinish: PropTypes.func,
     onSaveFinished: PropTypes.func,
+    onResetProjectState: PropTypes.func,
+    onRestartingProject: PropTypes.func,
+    onSaveProjectState: PropTypes.func,
     onSeeCommunity: PropTypes.func,
     onShare: PropTypes.func,
     onStartSelectingFileUpload: PropTypes.func,
@@ -853,7 +893,9 @@ MenuBar.propTypes = {
     userOwnsProject: PropTypes.bool,
     username: PropTypes.string,
     vm: PropTypes.instanceOf(VM).isRequired,
-    saveProjectSb3: PropTypes.func
+    saveProjectBeforeFinish: PropTypes.func,
+    saveProjectSb3: PropTypes.func,
+    onSaveFinished: PropTypes.func
 };
 
 MenuBar.defaultProps = {

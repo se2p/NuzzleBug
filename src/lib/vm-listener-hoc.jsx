@@ -5,13 +5,27 @@ import VM from 'scratch-vm';
 
 import {connect} from 'react-redux';
 
+import {injectIntl, intlShape} from 'react-intl';
+
 import {updateTargets} from '../reducers/targets';
 import {updateBlockDrag} from '../reducers/block-drag';
 import {updateMonitors} from '../reducers/monitors';
 import {setProjectChanged, setProjectUnchanged} from '../reducers/project-changed';
-import {setRunningState, setTurboState, setStartedState} from '../reducers/vm-status';
+import {
+    setRunningState,
+    setPauseState,
+    setTurboState,
+    setStartedState,
+    setTestRunningState,
+    setTracingActiveState
+} from '../reducers/vm-status';
 import {showExtensionAlert} from '../reducers/alerts';
 import {updateMicIndicator} from '../reducers/mic-indicator';
+import {
+    openBlockDebugger,
+    disableDebugger,
+    enableDebugger
+} from '../reducers/interrogative-debugging/version-2/ir-debugger';
 
 /*
  * Higher Order Component to manage events emitted by the VM
@@ -26,6 +40,9 @@ const vmListenerHOC = function (WrappedComponent) {
                 'handleKeyDown',
                 'handleKeyUp',
                 'handleProjectChanged',
+                'handleTracingLimitReached',
+                'handleTracingDeactivated',
+                'handleBlockDragUpdate',
                 'handleTargetsUpdate'
             ]);
             // We have to start listening to the vm here rather than in
@@ -36,17 +53,25 @@ const vmListenerHOC = function (WrappedComponent) {
             // we need to start listening before mounting the wrapped component.
             this.props.vm.on('targetsUpdate', this.handleTargetsUpdate);
             this.props.vm.on('MONITORS_UPDATE', this.props.onMonitorsUpdate);
-            this.props.vm.on('BLOCK_DRAG_UPDATE', this.props.onBlockDragUpdate);
+            this.props.vm.on('BLOCK_DRAG_UPDATE', this.handleBlockDragUpdate);
+            this.props.vm.on('BLOCK_ASK_WHY', this.props.onBlockAskWhy);
             this.props.vm.on('TURBO_MODE_ON', this.props.onTurboModeOn);
             this.props.vm.on('TURBO_MODE_OFF', this.props.onTurboModeOff);
             this.props.vm.on('PROJECT_RUN_START', this.props.onProjectRunStart);
             this.props.vm.on('PROJECT_RUN_STOP', this.props.onProjectRunStop);
+            this.props.vm.on('PROJECT_RUN_PAUSE', this.props.onProjectRunPause);
+            this.props.vm.on('PROJECT_RUN_RESUME', this.props.onProjectRunResume);
             this.props.vm.on('PROJECT_CHANGED', this.handleProjectChanged);
             this.props.vm.on('RUNTIME_STARTED', this.props.onRuntimeStarted);
             this.props.vm.on('PROJECT_START', this.props.onGreenFlag);
             this.props.vm.on('PERIPHERAL_CONNECTION_LOST_ERROR', this.props.onShowExtensionAlert);
             this.props.vm.on('MIC_LISTENING', this.props.onMicListeningUpdate);
-
+            this.props.vm.on('TRACING_ACTIVE', this.props.onActivateTracing);
+            this.props.vm.on('TRACING_INACTIVE', this.props.onDeactivateTracing);
+            this.props.vm.on('TRACING_LIMIT_REACHED', this.handleTracingLimitReached);
+            this.props.vm.on('TRACING_DEACTIVATED', this.handleTracingDeactivated);
+            this.props.vm.on('TEST_RUN_START', this.props.onTestRunStart);
+            this.props.vm.on('TEST_RUN_END', this.props.onTestRunEnd);
         }
         componentDidMount () {
             if (this.props.attachKeyboardEvents) {
@@ -68,6 +93,8 @@ const vmListenerHOC = function (WrappedComponent) {
         }
         componentWillUnmount () {
             this.props.vm.removeListener('PERIPHERAL_CONNECTION_LOST_ERROR', this.props.onShowExtensionAlert);
+            this.props.vm.removeListener('TRACING_LIMIT_REACHED', this.handleTracingLimitReached);
+            this.props.vm.removeListener('TRACING_DEACTIVATED', this.handleTracingDeactivated);
             if (this.props.attachKeyboardEvents) {
                 document.removeEventListener('keydown', this.handleKeyDown);
                 document.removeEventListener('keyup', this.handleKeyUp);
@@ -78,6 +105,23 @@ const vmListenerHOC = function (WrappedComponent) {
                 this.props.onProjectChanged();
             }
         }
+        handleTracingLimitReached () {
+            // eslint-disable-next-line no-alert
+            alert(this.props.intl.formatMessage({id: 'gui.ir-debugger.tracing.limit-reached'}));
+        }
+        handleTracingDeactivated () {
+            // eslint-disable-next-line no-alert
+            alert(this.props.intl.formatMessage({id: 'gui.ir-debugger.tracing.deactivated'}));
+        }
+        handleBlockDragUpdate (areBlocksOverGui) {
+            if (this.props.projectChanged) {
+                this.props.onProjectSaved();
+                this.props.onProjectChanged();
+            } else {
+                this.props.onProjectChanged();
+            }
+            this.props.onBlockDragUpdate(areBlocksOverGui);
+        }
         handleTargetsUpdate (data) {
             if (this.props.shouldUpdateTargets) {
                 this.props.onTargetsUpdate(data);
@@ -86,6 +130,8 @@ const vmListenerHOC = function (WrappedComponent) {
         handleKeyDown (e) {
             // Don't capture keys intended for Blockly inputs.
             if (e.target !== document && e.target !== document.body) return;
+
+            if (this.props.testRunning) return;
 
             const key = (!e.key || e.key === 'Dead') ? e.keyCode : e.key;
             this.props.vm.postIOData('keyboard', {
@@ -100,6 +146,8 @@ const vmListenerHOC = function (WrappedComponent) {
             }
         }
         handleKeyUp (e) {
+            if (this.props.testRunning) return;
+            
             // Always capture up events,
             // even those that have switched to other targets.
             const key = (!e.key || e.key === 'Dead') ? e.keyCode : e.key;
@@ -121,6 +169,7 @@ const vmListenerHOC = function (WrappedComponent) {
                 shouldUpdateTargets,
                 shouldUpdateProjectChanged,
                 onBlockDragUpdate,
+                onBlockAskWhy,
                 onGreenFlag,
                 onKeyDown,
                 onKeyUp,
@@ -130,20 +179,30 @@ const vmListenerHOC = function (WrappedComponent) {
                 onProjectChanged,
                 onProjectRunStart,
                 onProjectRunStop,
+                onProjectRunPause,
+                onProjectRunResume,
                 onProjectSaved,
                 onRuntimeStarted,
                 onTurboModeOff,
                 onTurboModeOn,
                 onShowExtensionAlert,
+                onActivateTracing,
+                onDeactivateTracing,
                 /* eslint-enable no-unused-vars */
                 ...props
             } = this.props;
+
+            delete props.onTestRunStart;
+            delete props.onTestRunEnd;
+
             return <WrappedComponent {...props} />;
         }
     }
     VMListener.propTypes = {
+        intl: intlShape.isRequired,
         attachKeyboardEvents: PropTypes.bool,
         onBlockDragUpdate: PropTypes.func.isRequired,
+        onBlockAskWhy: PropTypes.func.isRequired,
         onGreenFlag: PropTypes.func,
         onKeyDown: PropTypes.func,
         onKeyUp: PropTypes.func,
@@ -152,15 +211,22 @@ const vmListenerHOC = function (WrappedComponent) {
         onProjectChanged: PropTypes.func.isRequired,
         onProjectRunStart: PropTypes.func.isRequired,
         onProjectRunStop: PropTypes.func.isRequired,
+        onProjectRunPause: PropTypes.func.isRequired,
+        onProjectRunResume: PropTypes.func.isRequired,
         onProjectSaved: PropTypes.func.isRequired,
         onRuntimeStarted: PropTypes.func.isRequired,
         onShowExtensionAlert: PropTypes.func.isRequired,
         onTargetsUpdate: PropTypes.func.isRequired,
         onTurboModeOff: PropTypes.func.isRequired,
         onTurboModeOn: PropTypes.func.isRequired,
+        onActivateTracing: PropTypes.func.isRequired,
+        onDeactivateTracing: PropTypes.func.isRequired,
+        onTestRunStart: PropTypes.func.isRequired,
+        onTestRunEnd: PropTypes.func.isRequired,
         projectChanged: PropTypes.bool,
         shouldUpdateTargets: PropTypes.bool,
         shouldUpdateProjectChanged: PropTypes.bool,
+        testRunning: PropTypes.bool,
         username: PropTypes.string,
         vm: PropTypes.instanceOf(VM).isRequired
     };
@@ -177,6 +243,7 @@ const vmListenerHOC = function (WrappedComponent) {
         // Do not update the projectChanged state in fullscreen or player only mode
         shouldUpdateProjectChanged: !state.scratchGui.mode.isFullScreen && !state.scratchGui.mode.isPlayerOnly,
         vm: state.scratchGui.vm,
+        testRunning: state.scratchGui.vmStatus.testRunning,
         username: state.session && state.session.session && state.session.session.user ?
             state.session.session.user.username : ''
     });
@@ -190,8 +257,13 @@ const vmListenerHOC = function (WrappedComponent) {
         onBlockDragUpdate: areBlocksOverGui => {
             dispatch(updateBlockDrag(areBlocksOverGui));
         },
+        onBlockAskWhy: blockId => {
+            dispatch(openBlockDebugger(blockId));
+        },
         onProjectRunStart: () => dispatch(setRunningState(true)),
         onProjectRunStop: () => dispatch(setRunningState(false)),
+        onProjectRunPause: () => dispatch(setPauseState(true)),
+        onProjectRunResume: () => dispatch(setPauseState(false)),
         onProjectChanged: () => dispatch(setProjectChanged()),
         onProjectSaved: () => dispatch(setProjectUnchanged()),
         onRuntimeStarted: () => dispatch(setStartedState(true)),
@@ -202,12 +274,22 @@ const vmListenerHOC = function (WrappedComponent) {
         },
         onMicListeningUpdate: listening => {
             dispatch(updateMicIndicator(listening));
-        }
+        },
+        onActivateTracing: () => {
+            dispatch(setTracingActiveState(true));
+            dispatch(enableDebugger());
+        },
+        onDeactivateTracing: () => {
+            dispatch(setTracingActiveState(false));
+            dispatch(disableDebugger());
+        },
+        onTestRunStart: () => dispatch(setTestRunningState(true)),
+        onTestRunEnd: () => dispatch(setTestRunningState(false))
     });
-    return connect(
+    return injectIntl(connect(
         mapStateToProps,
         mapDispatchToProps
-    )(VMListener);
+    )(VMListener));
 };
 
 export default vmListenerHOC;

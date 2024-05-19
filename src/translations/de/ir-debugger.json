@@ -1,0 +1,606 @@
+{
+    "controls": {
+        "pause": "Pause",
+        "resume": "Fortsetzen",
+        "step-back": "Schritt zurück",
+        "step-over": "Schritt vorwärts",
+        "initial-step": "Erster Schritt",
+        "run-test": "Test \"{name}\" starten",
+        "initial-test-step": "Erster Schritt des Tests",
+        "ir-questions": "Zeige Fragen",
+        "activate-tracing": "Aufzeichnung starten",
+        "deactivate-tracing": "Aufzeichnung stoppen",
+        "open-debugger": "Fragen öffnen"
+    },
+    "tracing": {
+        "limit-reached": "Die Ausführung wurde gestoppt, da für die Aufzeichnung kein Speicherplatz mehr verfügbar ist!",
+        "deactivated": "Die Aufzeichnung wurde deaktiviert, da kein Speicherplatz verfügbar ist!",
+        "impossible": "Eine Aufzeichnung ist nicht möglich, da kein Speicherplatz verfügbar ist!"
+    },
+    "header": {
+        "title-sprite": "Interrogativer Debugger für die Figur <i>{sprite}</i>",
+        "title-stage": "Interrogativer Debugger für die Bühne",
+        "title-block": "Interrogativer Debugger für den Block",
+        "title": "Interrogativer Debugger",
+        "of": "von",
+        "expand": "Aufklappen",
+        "close": "Schließen",
+        "shrink": "Zuklappen",
+        "refresh": "Aktualisieren",
+        "back": "Zurück"
+    },
+    "target": {
+        "stage": "Bühne",
+        "original": "Original",
+        "clone": "Klon {index}"
+    },
+    "abstract-category": {
+        "type":{
+            "movement": "es handelt sich um eine Art Bewegung.",
+            "turn": "es handelt sich um eine Drehung.",
+            "say": "es handelt sich um was Gesagtes oder Gedachtes.",
+            "size": "es handelt sich um eine Veränderung der Größe.",
+            "visibility": "man sieht etwas das man nicht sehen darf oder man sieht etwas nicht.",
+            "costume": "das Problem liegt beim Kostüm oder dem Hintergrund der Figur.",
+            "sound": "es handelt sich um ein Problem mit Tönen.",
+            "placeholder": "es ist etwas anderes."
+        }
+    },
+    "category": {
+        "expand": "Kategorie aufklappen",
+        "close": "Kategorie zuklappen",
+        "type": {
+            "motion": "Bewegung",
+            "look": "Aussehen",
+            "sound": "Klang",
+            "events": "Ereignisse",
+            "control": "Steuerung",
+            "sensing": "Fühlen",
+            "operators": "Operatoren",
+            "variables": "Variablen",
+            "lists": "Listen",
+            "execution": "Ausführung"
+        }
+    },
+    "question-hierarchy": {
+        "empty": "Keine Fragen verfügbar. "
+    },
+    "question": {
+        "form": {
+            "why-did": "Warum ...?",
+            "why-did-not": "Warum nicht ...?",
+            "when-did": "Wann ...?"
+        },
+        "motion": {
+            "why-did-move": "Warum hat sich die <b>Position</b> von Figur <i>{sprite}</i> verändert?",
+            "why-did-not-move": "Warum hat sich die <b>Position</b> von Figur <i>{sprite}</i> nicht verändert?",
+            "why-did-move-right": "Warum hat sich die Figur <i>{sprite}</i> <b>nach rechts bewegt</b>?",
+            "why-did-not-move-right": "Warum hat sich die Figur <i>{sprite}</i> nicht <b>nach rechts bewegt</b>?",
+            "why-did-move-left": "Warum hat sich die Figur <i>{sprite}</i> <b>nach links bewegt</b>?",
+            "why-did-not-move-left": "Warum hat sich die Figur <i>{sprite}</i> nicht <b>nach links bewegt</b>?",
+            "why-did-move-up": "Warum hat sich die Figur <i>{sprite}</i> <b>nach oben bewegt</b>?",
+            "why-did-not-move-up": "Warum hat sich die Figur <i>{sprite}</i> nicht <b>nach oben bewegt</b>?",
+            "why-did-move-down": "Warum hat sich die Figur <i>{sprite}</i> <b>nach unten bewegt</b>?",
+            "why-did-not-move-down": "Warum hat sich die Figur <i>{sprite}</i> nicht <b>nach unten bewegt</b>?",
+            "why-did-direction-change-to": "Warum hat sich die Richtung von Figur <i>{sprite}</i> auf <b>{direction}°</b> geändert?",
+            "why-did-not-direction-change-to": "Warum hat sich die Richtung von Figur <i>{sprite}</i> nicht auf <b>{direction}°</b> geändert?",
+            "why-did-point-towards-sprite": "Warum hat sich die Figur <i>{sprite}</i> zu Figur <b><i>{direction}</i></b> gedreht?",
+            "why-did-not-point-towards-sprite": "Warum hat sich die Figur <i>{sprite}</i> nicht zu Figur <b><i>{direction}</i></b> gedreht?",
+            "why-did-point-towards-mousepointer": "Warum hat sich die Figur <i>{sprite}</i> zum <b>Mauszeiger</b> gedreht?",
+            "why-did-not-point-towards-mousepointer": "Warum hat sich die Figur <i>{sprite}</i> nicht zum <b>Mauszeiger</b> gedreht?",
+            "why-did-direction-change": "Warum hat sich die <b>Richtung</b> von Figur <i>{sprite}</i> verändert?",
+            "why-did-not-direction-change": "Warum hat sich die <b>Richtung</b> von Figur <i>{sprite}</i> nicht verändert?",
+            "why-did-turn-clockwise": "Warum hat sich die Figur <i>{sprite}</i> <b>im Uhrzeigersinn gedreht</b>?",
+            "why-did-not-turn-clockwise": "Warum hat sich die Figur <i>{sprite}</i> nicht <b>im Uhrzeigersinn gedreht</b>?",
+            "why-did-turn-counterclockwise": "Warum hat sich die Figur <i>{sprite}</i> <b>gegen den Uhrzeigersinn gedreht</b>?",
+            "why-did-not-turn-counterclockwise": "Warum hat sich die Figur <i>{sprite}</i> nicht <b>gegen den Uhrzeigersinn gedreht</b>?",
+            "why-did-turn-right": "Warum hat sich die Figur <i>{sprite}</i> <b>nach rechts gedreht</b>?",
+            "why-did-not-turn-right": "Warum hat sich die Figur <i>{sprite}</i> nicht <b>nach rechts gedreht</b>?",
+            "why-did-turn-left": "Warum hat sich die Figur <i>{sprite}</i> <b>nach links gedreht</b>?",
+            "why-did-not-turn-left": "Warum hat sich die Figur <i>{sprite}</i> nicht <b>nach links gedreht</b>?"
+        },
+        "look": {
+            "why-did-say": "Warum hat die Figur <i>{sprite}</i> <b><i>\"{message}\"</i></b> gesagt?",
+            "why-did-not-say": "Warum hat die Figur <i>{sprite}</i> nicht <b><i>\"{message}\"</i></b> gesagt?",
+            "why-did-think": "Warum hat die Figur <i>{sprite}</i> <b><i>\"{message}\"</i></b> gedacht?",
+            "why-did-not-think": "Warum hat die Figur <i>{sprite}</i> nicht <b><i>\"{message}\"</i></b> gedacht?",
+            "why-did-size-change": "Warum hat sich die <b>Größe</b> von Figur <i>{sprite}</i> verändert?",
+            "why-did-not-size-change": "Warum hat sich die <b>Größe</b> von Figur <i>{sprite}</i> nicht verändert?",
+            "why-did-size-increase": "Warum hat sich die Figur <i>{sprite}</i> <b>vergrößert</b>?",
+            "why-did-not-size-increase": "Warum hat sich die Figur <i>{sprite}</i> nicht <b>vergrößert</b>?",
+            "why-did-size-decrease": "Warum hat sich die Figur <i>{sprite}</i> <b>verkleinert</b>?",
+            "why-did-not-size-decrease": "Warum hat sich die Figur <i>{sprite}</i> nicht <b>verkleinert</b>?",
+            "why-did-sprite-show": "Warum war die Figur <i>{sprite}</i> <b>sichtbar</b>?",
+            "why-did-not-sprite-show": "Warum war die Figur <i>{sprite}</i> nicht <b>sichtbar</b>?",
+            "why-did-sprite-hide": "Warum war die Figur <i>{sprite}</i> <b>unsichtbar</b>?",
+            "why-did-not-sprite-hide": "Warum war die Figur <i>{sprite}</i> nicht <b>unsichtbar</b>?",
+            "why-did-costume-change": "Warum hat sich das <b>Kostüm</b> von Figur <i>{sprite}</i> verändert?",
+            "why-did-not-costume-change": "Warum hat sich das <b>Kostüm</b> von Figur <i>{sprite}</i> nicht verändert?",
+            "why-did-costume-change-to": "Warum hat sich das Kostüm von Figur <i>{sprite}</i> zu Kostüm <b><i>{costume}</i></b> geändert?",
+            "why-did-not-costume-change-to": "Warum hat sich das Kostüm von Figur <i>{sprite}</i> nicht zu Kostüm <b><i>{costume}</i></b> geändert?",
+            "why-did-backdrop-change": "Warum hat sich das <b>Bühnenbild</b> verändert?",
+            "why-did-not-backdrop-change": "Warum hat sich das <b>Bühnenbild</b> nicht verändert?",
+            "why-did-backdrop-change-to": "Warum hat sich das Bühnenbild zu <b><i>{backdrop}</i></b> geändert?",
+            "why-did-not-backdrop-change-to": "Warum hat sich das Bühnenbild nicht zu <b><i>{backdrop}</i></b> geändert?",
+            "why-did-sprite-change-backdrop": "Warum hat die Figur <i>{sprite}</i> das <b>Bühnenbild</b> verändert?",
+            "why-did-not-sprite-change-backdrop": "Warum hat die Figur <i>{sprite}</i> das <b>Bühnenbild</b> nicht verändert?",
+            "why-did-sprite-change-backdrop-to": "Warum hat die Figur <i>{sprite}</i> das Bühnenbild zu <b><i>{backdrop}</i></b> geändert?",
+            "why-did-not-sprite-change-backdrop-to": "Warum hat die Figur <i>{sprite}</i> das Bühnenbild nicht zu <b><i>{backdrop}</i></b> geändert?"
+        },
+        "sound": {
+            "why-did-sprite-play": "Warum hat die Figur <i>{sprite}</i> den Klang <b><i>{sound}</i></b> abgespielt?",
+            "why-did-stage-play": "Warum hat die Bühne den Klang <b><i>{sound}</i></b> abgespielt?",
+            "why-did-not-sprite-play": "Warum hat die Figur <i>{sprite}</i> den Klang <b><i>{sound}</i></b> nicht abgespielt?",
+            "why-did-not-stage-play": "Warum hat die Bühne den Klang <b><i>{sound}</i></b> nicht abgespielt?",
+            "why-did-sprite-stop": "Warum hat die Figur <i>{sprite}</i> alle Klänge <b>gestoppt</b>?",
+            "why-did-stage-stop": "Warum hat die Bühne alle Klänge <b>gestoppt</b>?",
+            "why-did-not-sprite-stop": "Warum hat die Figur <i>{sprite}</i> nicht alle Klänge <b>gestoppt</b>?",
+            "why-did-not-stage-stop": "Warum hat die Bühne nicht alle Klänge <b>gestoppt</b>?"
+        },
+        "event": {
+            "why-did-sprite-send": "Warum hat die Figur <i>{sprite}</i> die Nachricht <b><i>{message}</i></b> gesendet?",
+            "why-did-stage-send": "Warum hat die Bühne die Nachricht <b><i>{message}</i></b> gesendet?",
+            "why-did-not-sprite-send": "Warum hat die Figur <i>{sprite}</i> die Nachricht <b><i>{message}</i></b> nicht gesendet?",
+            "why-did-not-stage-send": "Warum hat die Bühne die Nachricht <b><i>{message}</i></b> nicht gesendet?",
+            "why-did-sprite-receive": "Warum hat die Figur <i>{sprite}</i> die Nachricht <b><i>{message}</i></b> empfangen?",
+            "why-did-stage-receive": "Warum hat die Bühne die Nachricht <b><i>{message}</i></b> empfangen?",
+            "why-did-not-sprite-receive": "Warum hat die Figur <i>{sprite}</i> die Nachricht <b><i>{message}</i></b> nicht empfangen?",
+            "why-did-not-stage-receive": "Warum hat die Bühne die Nachricht <b><i>{message}</i></b> nicht empfangen?"
+        },
+        "control": {
+            "why-did-start-as-clone": "Warum wurde ein <b>Klon</b> von Figur <i>{sprite}</i> erzeugt?",
+            "why-did-not-start-as-clone": "Warum wurde kein <b>Klon</b> von Figur <i>{sprite}</i> erzeugt?",
+            "why-did-sprite-clone-sprite": "Warum hat die Figur <i>{sprite}</i> einen <b>Klon</b> von Figur <b><i>{clone}</i></b> erzeugt?",
+            "why-did-stage-clone-sprite": "Warum hat die Bühne einen <b>Klon</b> von Figur <b><i>{clone}</i></b> erzeugt?",
+            "why-did-not-sprite-clone-sprite": "Warum hat die Figur <i>{sprite}</i> keinen <b>Klon</b> von Figur <b><i>{clone}</i></b> erzeugt?",
+            "why-did-not-stage-clone-sprite": "Warum hat die Bühne keinen <b>Klon</b> von Figur <b><i>{clone}</i></b> erzeugt?"
+        },
+        "sensing": {
+            "why-did-sprite-ask": "Warum hat die Figur <i>{sprite}</i> <b><i>\"{message}\"</i></b> gefragt?",
+            "why-did-stage-ask": "Warum hat die Bühne <b><i>\"{message}\"</i></b> gefragt?",
+            "why-did-not-sprite-ask": "Warum hat die Figur <i>{sprite}</i> nicht <b><i>\"{message}\"</i></b> gefragt?",
+            "why-did-not-stage-ask": "Warum hat die Bühne nicht <b><i>\"{message}\"</i></b> gefragt?"
+        },
+        "operator": {
+            "why-did-meet-condition-1": "Warum war die Bedingung",
+            "why-did-meet-condition-2": "wahr?",
+            "why-did-not-meet-condition-1": "Warum war die Bedingung",
+            "why-did-not-meet-condition-2": "nicht wahr?"
+        },
+        "variable": {
+            "why-did-have-value": "Warum hatte die Variable <code class=\"scratchBlock\">({variable} :: #FF8C1A)</code> den Wert <code class=\"scratchBlock\">({value} :: #ffffff)</code>?",
+            "why-did-not-have-value": "Warum hatte die Variable <code class=\"scratchBlock\">({variable} :: #FF8C1A)</code> nicht den Wert <code class=\"scratchBlock\">({value} :: #ffffff)</code>?"
+        },
+        "list": {
+            "why-did-have-value": "Warum hatte die Liste <code class=\"scratchBlock\">({list} :: list)</code> den Wert <code class=\"scratchBlock\">({value} :: #ffffff)</code>?",
+            "why-did-not-contain-item": "Warum war <code class=\"scratchBlock\">({item} :: #ffffff)</code> nicht in der Liste <code class=\"scratchBlock\">({list} :: list)</code> enthalten?"
+        },
+        "execution": {
+            "why-did-block-execute": "Warum wurde der Block ausgeführt?",
+            "why-did-not-block-execute": "Warum wurde der Block nicht ausgeführt?",
+            "when-did-block-execute": "Wann wurde der Block ausgeführt?"
+        },
+        "input": {
+            "why-did-have-value": "Warum hatte <code class=\"scratchBlock\">{input}</code> den Wert <code class=\"scratchBlock\">({value} :: #ffffff)</code>?"
+        }
+    },
+    "behavior": {
+        "motion": {
+            "move": "Die Position hat sich verändert",
+            "not-move": "Die Position hat sich nicht verändert",
+            "move-right": "Die Figur hat sich nach rechts bewegt",
+            "not-move-right": "Die Figur hat sich nicht nach rechts bewegt",
+            "move-left": "Die Figur hat sich nach links bewegt",
+            "not-move-left": "Die Figur hat sich nicht nach links bewegt",
+            "move-up": "Die Figur hat sich nach oben bewegt",
+            "not-move-up": "Die Figur hat sich nicht nach oben bewegt",
+            "move-down": "Die Figur hat sich nach unten bewegt",
+            "not-move-down": "Die Figur hat sich nicht nach unten bewegt",
+            "direction-change-to": "Die Richtung hat sich auf {direction}° geändert",
+            "not-direction-change-to": "Die Richtung hat sich nicht auf {direction}° geändert",
+            "point-towards-sprite": "Die Figur hat sich zu Figur <i>{direction}</i> gedreht",
+            "not-point-towards-sprite": "Die Figur hat sich nicht zu Figur <i>{direction}</i> gedreht",
+            "point-towards-mousepointer": "Die Figur hat sich zum Mauszeiger gedreht",
+            "not-point-towards-mousepointer": "Die Figur hat sich nicht zum Mauszeiger gedreht",
+            "direction-change": "Die Richtung hat sich verändert",
+            "not-direction-change": "Die Richtung hat sich nicht verändert",
+            "turn-clockwise": "Die Figur hat sich im Uhrzeigersinn gedreht",
+            "not-turn-clockwise": "Die Figur hat sich nicht im Uhrzeigersinn gedreht",
+            "turn-counterclockwise": "Die Figur hat sich gegen den Uhrzeigersinn gedreht",
+            "not-turn-counterclockwise": "Die Figur hat sich nicht gegen den Uhrzeigersinn gedreht",
+            "turn-right": "Die Figur hat sich nach rechts gedreht",
+            "not-turn-right": "Die Figur hat sich nicht nach rechts gedreht",
+            "turn-left": "Die Figur hat sich nach links gedreht",
+            "not-turn-left": "Die Figur hat sich nicht nach links gedreht"
+        },
+        "look": {
+            "say": "Die Figur hat <i>\"{message}\"</i> gesagt",
+            "not-say": "Die Figur hat nicht <i>\"{message}\"</i> gesagt",
+            "think": "Die Figur hat <i>\"{message}\"</i> gedacht",
+            "not-think": "Die Figur hat nicht <i>\"{message}\"</i> gedacht",
+            "size-change": "Die Größe hat sich verändert",
+            "not-size-change": "Die Größe hat sich nicht verändert",
+            "size-increase": "Die Figur hat sich vergrößert",
+            "not-size-increase": "Die Figur hat sich nicht vergrößert",
+            "size-decrease": "Die Figur hat sich verkleinert",
+            "not-size-decrease": "Die Figur hat sich nicht verkleinert",
+            "sprite-show": "Die Figur war sichtbar",
+            "not-sprite-show": "Die Figur war nicht sichtbar",
+            "sprite-hide": "Die Figur war unsichtbar",
+            "not-sprite-hide": "Die Figur war nicht unsichtbar",
+            "costume-change": "Das Kostüm hat sich verändert",
+            "not-costume-change": "Das Kostüm hat sich nicht verändert",
+            "costume-change-to": "Das Kostüm hat sich zu <i>{costume}</i> geändert",
+            "not-costume-change-to": "Das Kostüm hat sich nicht zu <i>{costume}</i> geändert",
+            "backdrop-change": "Das Bühnenbild hat sich verändert",
+            "not-backdrop-change": "Das Bühnenbild hat sich nicht verändert",
+            "backdrop-change-to": "Das Bühnenbild hat sich zu <i>{backdrop}</i> geändert",
+            "not-backdrop-change-to": "Das Bühnenbild hat sich nicht zu <i>{backdrop}</i> geändert",
+            "sprite-change-backdrop": "Die Figur hat das Bühnenbild verändert",
+            "not-sprite-change-backdrop": "Die Figur hat das Bühnenbild nicht verändert",
+            "sprite-change-backdrop-to": "Die Figur hat das Bühnenbild zu <i>{backdrop}</i> geändert",
+            "not-sprite-change-backdrop-to": "Die Figur hat das Bühnenbild nicht zu <i>{backdrop}</i> geändert"
+        },
+        "sound": {
+            "sprite-play": "Die Figur hat den Klang <i>{sound}</i> abgespielt",
+            "stage-play": "Die Bühne hat den Klang <i>{sound}</i> abgespielt",
+            "not-sprite-play": "Die Figur hat den Klang <i>{sound}</i> nicht abgespielt",
+            "not-stage-play": "Die Bühne den Klang <i>{sound}</i> nicht abgespielt",
+            "sprite-stop": "Die Figur hat alle Klänge gestoppt",
+            "stage-stop": "Die Bühne hat alle Klänge gestoppt",
+            "not-sprite-stop": "Die Figur hat nicht alle Klänge gestoppt",
+            "not-stage-stop": "Die Bühne hat nicht alle Klänge gestoppt"
+        },
+        "event": {
+            "sprite-send": "Die Figur hat die Nachricht <i>{message}</i> gesendet",
+            "stage-send": "Die Bühne hat die Nachricht <i>{message}</i> gesendet",
+            "not-sprite-send": "Die Figur hat die Nachricht <i>{message}</i> nicht gesendet",
+            "not-stage-send": "Die Bühne hat die Nachricht <i>{message}</i> nicht gesendet",
+            "sprite-receive": "Die Figur hat die Nachricht <i>{message}</i> empfangen",
+            "stage-receive": "Die Bühne hat die Nachricht <i>{message}</i> empfangen",
+            "not-sprite-receive": "Die Figur hat die Nachricht <i>{message}</i> nicht empfangen",
+            "not-stage-receive": "Die Bühne hat die Nachricht <i>{message}</i> nicht empfangen"
+        },
+        "control": {
+            "start-as-clone": "Es wurde ein Klon von der Figur erzeugt",
+            "not-start-as-clone": "Es wurde kein Klon von der Figur erzeugt",
+            "sprite-clone-sprite": "Die Figur hat einen Klon von Figur <i>{clone}</i> erzeugt",
+            "stage-clone-sprite": "Die Bühne hat einen Klon von Figur <i>{clone}</i> erzeugt",
+            "not-sprite-clone-sprite": "Die Figur hat keinen Klon von Figur <i>{clone}</i> erzeugt",
+            "not-stage-clone-sprite": "Die Bühne hat keinen Klon von Figur <i>{clone}</i> erzeugt"
+        },
+        "sensing": {
+            "sprite-ask": "Die Figur hat <i>\"{message}\"</i> gefragt",
+            "stage-ask": "Die Bühne hat <i>\"{message}\"</i> gefragt",
+            "not-sprite-ask": "Die Figur hat nicht <i>\"{message}\"</i> gefragt",
+            "not-stage-ask": "Die Bühne hat nicht <i>\"{message}\"</i> gefragt"
+        },
+        "operator": {
+            "meet-condition": "Als der Block ausgeführt wurde, war die Bedingung wahr",
+            "not-meet-condition": "Als der Block ausgeführt wurde, war die Bedingung nicht wahr"
+        },
+        "variable": {
+            "have-value": "Als der Block ausgeführt wurde, hatte die Variable den Wert <code class=\"scratchBlock\">({value} :: #ffffff)</code>",
+            "not-have-value": "Als der Block ausgeführt wurde, hatte die Variable nicht den Wert <code class=\"scratchBlock\">({value} :: #ffffff)</code>"
+        },
+        "list": {
+            "have-value": "Als der Block ausgeführt wurde, hatte die Liste den Wert <code class=\"scratchBlock\">({value} :: #ffffff)</code>",
+            "not-contain-item": "Als der Block ausgeführt wurde, war <code class=\"scratchBlock\">({item} :: #ffffff)</code> nicht in der Liste enthalten"
+        },
+        "execution": {
+            "block-execute": "Der Block wurde ausgeführt",
+            "not-block-execute": "Der Block wurde nicht ausgeführt"
+        },
+        "input": {
+            "have-value": "Als der Block ausgeführt wurde, hatte <code class=\"scratchBlock\">{input}</code> den Wert <code class=\"scratchBlock\">({value} :: #ffffff)</code>"
+        }
+    },
+    "answer": {
+        "draw-attention-to-block-answers": "Brauchst du eine Erklärung für einen Block? Dann klicke auf das <div style=\"display: inline-block; margin-top: 3px; padding: 0 4.5px; border: 1.4px solid #575E75; border-radius: 15px;\">?</div> daneben! ",
+        "sensing": {
+            "touching-sprite-edge": "Die Figur <i>{sprite}</i> hat den <i>Rand</i> an den im Bild rot markierten Stellen berührt, als der Block ausgeführt wurde. ",
+            "touching-sprite-mouse": "Die Figur <i>{sprite}</i> hat den <i>Mauszeiger</i> wie im Bild gezeigt berührt, als der Block ausgeführt wurde. <br> Der <i>Mauszeiger</i> befand sich auf Position ({mouseX},{mouseY}). ",
+            "touching-sprite-sprite": "Figur <i>{sprite1}</i> und Figur <i>{sprite2}</i> haben sich an den im Bild hervorgehobenen Stellen berührt, als der Block ausgeführt wurde. ",
+            "touching-sprite-color": "Die Figur <i>{sprite}</i> hat die ausgewählte Farbe an den im Bild hervorgehobenen Stellen berührt, als der Block ausgeführt wurde. ",
+            "touching-color-color": "Die Farben haben sich an den im Bild hervorgehobenen Stellen berührt, als der Block ausgeführt wurde. ",
+            "distance-sprite-edge": "Der Abstand von Figur <i>{sprite}</i> zum <i>Rand</i> war <span style=\"color: red;\"><b>{distance}</b></span>, als der Block ausgeführt wurde. ",
+            "distance-sprite-mouse": "Der Abstand von Figur <i>{sprite}</i> zum <i>Mauszeiger</i> auf Position ({mouseX},{mouseY}) war <span style=\"color: red;\"><b>{distance}</b></span>, als der Block ausgeführt wurde . ",
+            "distance-sprite-sprite": "Der Abstand von Figur <i>{sprite1}</i> zu Figur <i>{sprite2}</i> war <span style=\"color: red;\"><b>{distance}</b></span>, als der Block ausgeführt wurde. ",
+            "distance-sprite-color": "Der Abstand von Figur <i>{sprite}</i> zur ausgewählten Farbe war <span style=\"color: red;\"><b>{distance}</b></span>, als der Block ausgeführt wurde. ",
+            "distance-color-color": "Der Abstand der Farben war <span style=\"color: red;\"><b>{distance}</b></span>, als der Block ausgeführt wurde. ",
+            "sprite-invisible": "Die Figur <i>{sprite}</i> war nicht sichtbar als der Block ausgeführt wurde und konnte deshalb nicht berührt werden!",
+            "sprites-invisible": "Die Figur <i>{sprite1}</i> und die Figur <i>{sprite2}</i> waren nicht sichtbar als der Block ausgeführt wurde und konnten sich deshalb nicht berühren!",
+            "nonexistent-color": "Die Farbe <span style=\"color: {color}; background-color: {color}; padding: 0 3px; border-radius: 10px\">⬤</span> kam nicht vor, als der Block ausgeführt wurde! <br> Versuche die gewünschte Farbe mit der Pipette auszuwählen. ",
+            "nonexistent-colors": "Die Farben <span style=\"color: {color1}; background-color: {color1}; padding: 0 3px; border-radius: 10px\">⬤</span> und <span style=\"color: {color2}; background-color: {color2}; padding: 0 3px; border-radius: 10px\">⬤</span> kamen nicht vor, als der Block ausgeführt wurde! <br> Versuche die gewünschten Farben mit der Pipette auszuwählen. "
+        },
+        "time": {
+            "block-executed-seconds-after-green-flag": "Der Block wurde <span style=\"color: red;\"><b>{timeElapsed}</b></span> Sekunden nach Klicken der grünen Flagge ausgeführt. ",
+            "block-executed-seconds-after-tracing-start": "Der Block wurde <span style=\"color: red;\"><b>{timeElapsed}</b></span> Sekunden nach Starten der Aufzeichnung ausgeführt. "
+        }
+    },
+    "reason": {
+        "behavior-block": {
+            "executed": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block ausgeführt wurde",
+            "executed-with-value": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block mit dem Wert <code class=\"scratchBlock\">({value} :: #ffffff)</code> ausgeführt wurde",
+            "executed-with-coordinates": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block mit den Werten x:<code class=\"scratchBlock\">({x} :: #ffffff)</code>und y:<code class=\"scratchBlock\">({y} :: #ffffff)</code>ausgeführt wurde",
+            "unexecuted": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block nicht ausgeführt wurde",
+            "executed-wrong-behavior": "der ausgeführte <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block nicht dazu geführt hat",
+            "executed-wrong-input": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block nicht mit dem Wert <code class=\"scratchBlock\">({expectedInput} :: #ffffff)</code> ausgeführt wurde",
+            "executed-no-change": "der ausgeführte <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block {attribute} nicht verändert hat",
+            "executed-not-turn-positive": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block nicht mit einem positiven Wert ausgeführt wurde",
+            "executed-not-turn-negative": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block nicht mit einem negativen Wert ausgeführt wurde",
+            "executed-left-to-right-direction-change": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block zu einer Änderung der Richtung von einem negativen zu einem positiven Wert geführt hat",
+            "executed-right-to-left-direction-change": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block zu einer Änderung der Richtung von einem positiven zu einem negativen Wert geführt hat",
+            "executed-no-left-to-right-direction-change": "der ausgeführte <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block die Richtung nicht von einem negativen zu einem positiven Wert geändert hat",
+            "executed-no-right-to-left-direction-change": "der ausgeführte <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block die Richtung nicht von einem positiven zu einem negativen Wert geändert hat",
+            "not-reachable": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block, der dazu führen würde, nicht erreichbar ist"
+        },
+        "possible-behavior-block": {
+            "unexecuted": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block, der dazu führen könnte, nicht ausgeführt wurde",
+            "not-reachable": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block, der dazu führen könnte, nicht erreichbar ist"
+        },
+        "multiple-behavior-blocks": {
+            "executed": "die Ausführung von {count} <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Blöcken dazu geführt hat",
+            "all-unexecuted": "keiner der {count} <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Blöcke ausgeführt wurde",
+            "one-executed-wrong-behavior": "der ausgeführte <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block nicht dazu geführt hat",
+            "some-executed-wrong-behavior": "die ausgeführten <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Blöcke nicht dazu geführt haben",
+            "one-unexecuted": "ein anderer <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block, der dazu führen würde, nicht ausgeführt wurde",
+            "some-unexecuted": "{count} andere <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Blöcke, die dazu führen würden, nicht ausgeführt wurden"
+        },
+        "multiple-possible-behavior-blocks": {
+            "all-unexecuted": "keiner der {count} <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Blöcke, die dazu führen könnten, ausgeführt wurde",
+            "one-unexecuted": "ein anderer <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block, der dazu führen könnte, nicht ausgeführt wurde",
+            "some-unexecuted": "{count} andere <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Blöcke, die dazu führen könnten, nicht ausgeführt wurden"
+        },
+        "execution": {
+            "stopped": "die Ausführung gestoppt wurde",
+            "paused": "die Ausführung pausiert wurde",
+            "breakpoint-paused": "die Ausführung wegen eines Haltepunkts pausiert wurde"
+        },
+        "control-flow": {
+            "interrupted-for-block": "alle darauffolgenden Blöcke, die dazu führen könnten, nicht ausgeführt wurden",
+            "interrupted-for-behavior": "alle darauffolgenden Blöcke, die dazu führen könnten, nicht ausgeführt wurden"
+        },
+        "event": {
+            "flag-clicked": "<code class=\"scratchBlock\">@greenFlag :: events reporter</code> angeklickt wurde",
+            "not-flag-clicked": "<code class=\"scratchBlock\">@greenFlag :: events reporter</code> nicht angeklickt wurde",
+            "not-flag-clicked-during-lifetime": "ein Klon nicht auf das Ereignis <b style=\"color: #ffab19\"><i>Klick auf</i></b> <code class=\"scratchBlock\">@greenFlag :: events reporter</code> reagiert",
+            "sprite-clicked": "die Figur <b style=\"color: #ffbf00\"><i>{sprite}</i> angeklickt</b> wurde",
+            "not-sprite-clicked": "die Figur <b style=\"color: #ffbf00\"><i>{sprite}</i> nicht angeklickt</b> wurde",
+            "stage-clicked": "die <b style=\"color: #ffbf00\">Bühne angeklickt</b> wurde",
+            "not-stage-clicked": "die <b style=\"color: #ffbf00\">Bühne nicht angeklickt</b> wurde",
+            "key-pressed": "die Taste <span blockType=\"reporter\" blockCategory=\"events\">{key}</span> gedrückt wurde",
+            "not-key-pressed": "die Taste <span blockType=\"reporter\" blockCategory=\"events\">{key}</span> nicht gedrückt wurde",
+            "not-key-pressed-during-lifetime": "die Taste <span blockType=\"reporter\" blockCategory=\"events\">{key}</span> während der Lebenszeit des Klons nicht gedrückt wurde",
+            "broadcast-sent": "die Nachricht <span blockType=\"reporter\" blockCategory=\"events\">{broadcastMessage}</span> gesendet wurde",
+            "broadcast-sent-and-received": "die Nachricht <span blockType=\"reporter\" blockCategory=\"events\">{broadcastMessage}</span> gesendet und empfangen wurde",
+            "not-broadcast-sent": "die Nachricht <span blockType=\"reporter\" blockCategory=\"events\">{broadcastMessage}</span> nicht gesendet wurde",
+            "broadcast-received": "die Nachricht <span blockType=\"reporter\" blockCategory=\"events\">{broadcastMessage}</span> empfangen wurde",
+            "not-broadcast-received": "die Nachricht <span blockType=\"reporter\" blockCategory=\"events\">{broadcastMessage}</span> nicht empfangen wurde",
+            "no-broadcast-send-block": "es keinen Block gibt, der diese Nachricht sendet",
+            "clone-created": "ein <b style=\"color: #ffab19\">Klon</b> von Figur <i>{sprite}</i> <b style=\"color: #ffab19\">erzeugt</b> wurde",
+            "not-clone-created": "<b style=\"color: #ffab19\">kein Klon</b> von Figur <i>{sprite}</i> <b style=\"color: #ffab19\">erzeugt</b> wurde",
+            "clone-started": "die Figur <i>{sprite}</i> <b style=\"color: #ffab19\">als Klon entstanden</b> ist",
+            "not-clone-started": "die Figur <i>{sprite}</i> <b style=\"color: #ffab19\">nicht als Klon entstanden</b> ist",
+            "not-clone-started-irrelevant": "das Ereignis <b style=\"color: #ffab19\"><i>Ich entstehe als Klon</i></b> für eine Original-Figur nicht eintreten kann",
+            "backdrop-switched": "das Bühnenbild zu <span blockType=\"reporter\" blockCategory=\"look\">{backdrop}</span> gewechselt hat",
+            "not-backdrop-switched": "das Bühnenbild nicht zu <span blockType=\"reporter\" blockCategory=\"look\">{backdrop}</span> gewechselt hat",
+            "not-backdrop-switched-during-lifetime": "das Bühnenbild während der Lebenszeit des Klons nicht zu <span blockType=\"reporter\" blockCategory=\"look\">{backdrop}</span> gewechselt hat",
+            "loudness-greater-than": "die <b style=\"color: #ffbf00\">Lautstärke</b> größer als {value} war",
+            "not-loudness-greater-than": "die <b style=\"color: #ffbf00\">Lautstärke</b> nicht größer als {value} war",
+            "loudness-greater-than-during-lifetime": "die <b style=\"color: #ffbf00\">Lautstärke</b> während der Lebenszeit des Klons nicht größer als {value} war",
+            "timer-greater-than": "die <b style=\"color: #ffbf00\">Stoppuhr</b> größer als {value} war",
+            "not-timer-greater-than": "die <b style=\"color: #ffbf00\">Stoppuhr</b> nicht größer als {value} war",
+            "not-timer-greater-than-during-lifetime": "die <b style=\"color: #ffbf00\">Stoppuhr</b> während der Lebenszeit des Klons nicht größer als {value} war"
+        },
+        "condition": {
+            "the-condition": "die Bedingung",
+            "was-true": "wahr war",
+            "was-not-true": "nicht wahr war",
+            "was-false": "falsch war",
+            "was-not-false": "nicht falsch war",
+            "is-true": "wahr ist",
+            "is-not-true": "nicht wahr ist",
+            "smaller-than": "<code class=\"scratchBlock\">{input1}</code> kleiner als <code class=\"scratchBlock\">{input2}</code> ist",
+            "not-smaller-than": "<code class=\"scratchBlock\">{input1}</code> nicht kleiner als <code class=\"scratchBlock\">{input2}</code> ist",
+            "greater-than": "<code class=\"scratchBlock\">{input1}</code> größer als <code class=\"scratchBlock\">{input2}</code> ist",
+            "not-greater-than": "<code class=\"scratchBlock\">{input1}</code> nicht größer als <code class=\"scratchBlock\">{input2}</code> ist",
+            "equal": "<code class=\"scratchBlock\">{input1}</code> und <code class=\"scratchBlock\">{input2}</code> gleich sind",
+            "not-equal": "<code class=\"scratchBlock\">{input1}</code> und <code class=\"scratchBlock\">{input2}</code> nicht gleich sind",
+            "contained": "<code class=\"scratchBlock\">{input2}</code> in <code class=\"scratchBlock\">{input1}</code> enthalten ist",
+            "not-contained": "<code class=\"scratchBlock\">{input2}</code> nicht in <code class=\"scratchBlock\">{input1}</code> enthalten ist",
+            "hard-coded": "Die Bedingung ist <b style=\"color: red;\">immer {value}</b>, weil keiner der Blöcke eine <code class=\"scratchBlock\">(Variable)</code> ist. "
+        },
+        "block": {
+            "not-reachable": "der Block nicht erreichbar ist",
+            "no-broadcast-send-block": "Die Nachricht <i>{message}</i>, die hier empfangen werden soll, wird nie gesendet. Das liegt daran, dass dein Projekt keinen <span blockType=\"stack\" blockCategory=\"events\">sende</span> Block mit der passenden Nachricht hat",
+            "no-create-clone-block": "Dein Projekt beinhaltet keinen Block, der einen Klon von Figur <i>{sprite}</i> erzeugen könnte",
+            "no-backdrop-change-block": "Dein Projekt beinhaltet keinen Block, der das Bühnenbild zu <i>{backdrop}</i> ändern könnte",
+            "repeat": "der <span blockType=\"stack\" blockCategory=\"control\">wiederhole</span> Block ausgeführt wurde",
+            "not-repeat": "der <span blockType=\"stack\" blockCategory=\"control\">wiederhole</span> Block nicht ausgeführt wurde",
+            "repeat-forever": "der <span blockType=\"stack\" blockCategory=\"control\">wiederhole fortlaufend</span> Block ausgeführt wurde",
+            "not-repeat-forever": "der <span blockType=\"stack\" blockCategory=\"control\">wiederhole fortlaufend</span> Block nicht ausgeführt wurde",
+            "procedure-call": "dein eigener Block <span blockType=\"stack\" blockCategory=\"procedure\">{proccode}</span> ausgeführt wurde",
+            "not-procedure-call": "dein eigener Block <span blockType=\"stack\" blockCategory=\"procedure\">{proccode}</span> nicht ausgeführt wurde"
+        },
+        "variable": {
+            "value-set": "der Wert auf <code class=\"scratchBlock\">{value}</code> gesetzt wurde",
+            "value-change-by": "um <code class=\"scratchBlock\">{change}</code> verändert wurde",
+            "value-change-by-times": "{times} mal um <code class=\"scratchBlock\">{change}</code> verändert wurde",
+            "initial-value": "der Wert als <code class=\"scratchBlock\">@greenFlag :: events reporter</code> geklickt wurde <code class=\"scratchBlock\">({initialValue} :: #ffffff)</code> war",
+            "clone-start-value": "der Wert der ursprünglichen Figur <code class=\"scratchBlock\">({initialValue} :: #ffffff)</code> war, als der Klon erzeugt wurde und der Klon diese Eigenschaft übernommen hat",
+            "tracing-start-value": "der Wert zu Beginn der Aufzeichnung <code class=\"scratchBlock\">({initialValue} :: #ffffff)</code> war",
+            "have-value": "<code class=\"scratchBlock\">{variable}</code> den Wert <code class=\"scratchBlock\">({value} :: #ffffff)</code> hatte",
+            "value-set-but-changed-afterwards": "Die Variable wurde auf <code class=\"scratchBlock\">({value} :: #ffffff)</code> gesetzt, aber danach wieder verändert. ",
+            "position": {
+                "move": "die Figur <code class=\"scratchBlock\">{steps}</code> Schritte gegangen ist",
+                "move-times": "die Figur {times} mal <code class=\"scratchBlock\">{steps}</code> Schritte gegangen ist",
+                "go-to": "die Figur zu Position x:<code class=\"scratchBlock\">{x}</code> y:<code class=\"scratchBlock\">{y}</code> gegangen ist",
+                "go-to-related": "die Figur zu <code class=\"scratchBlock\">{to}</code> gegangen ist",
+                "go-to-related-sprite": "die Figur zur Figur <code class=\"scratchBlock\">{to}</code> gegangen ist",
+                "go-to-related-mouse": "die Figur zum <code class=\"scratchBlock\">(Mauszeiger :: motion)</code> gegangen ist",
+                "go-to-related-random": "die Figur zu einer <code class=\"scratchBlock\">(Zufallsposition :: motion)</code> gegangen ist"
+            },
+            "direction": {
+                "turn-left": "die Figur sich um <code class=\"scratchBlock\">{degrees}</code> Grad gegen den Uhrzeigersinn gedreht hat",
+                "turn-left-times": "die Figur sich {times} mal um <code class=\"scratchBlock\">{degrees}</code> Grad gegen den Uhrzeigersinn gedreht hat",
+                "turn-right": "die Figur sich um <code class=\"scratchBlock\">{degrees}</code> Grad im Uhrzeigersinn gedreht hat",
+                "turn-right-times": "die Figur sich {times} mal um <code class=\"scratchBlock\">{degrees}</code> Grad im Uhrzeigersinn gedreht hat",
+                "set-related-mouse": "sich die Figur zum <code class=\"scratchBlock\">(Mauszeiger :: motion)</code> gedreht hat",
+                "set-related-sprite": "sich die Figur zur Figur <code class=\"scratchBlock\">{towards}</code> gedreht hat",
+                "set-related": "sich die Figur zu <code class=\"scratchBlock\">{towards}</code> gedreht hat",
+                "bounce": "die Figur vom Rand abgeprallt ist",
+                "bounce-times": "die Figur {times} mal vom Rand abgeprallt ist"
+            },
+            "costume": {
+                "set": "das Kostüm auf <code class=\"scratchBlock\">{value}</code> gesetzt wurde",
+                "next": "zum nächsten Kostüm gewechselt wurde",
+                "next-times": "{times} mal zum nächsten Kostüm gewechselt wurde"
+            },
+            "backdrop": {
+                "set": "das Bühnenbild auf <code class=\"scratchBlock\">{value}</code> gesetzt wurde",
+                "next": "zum nächsten Bühnenbild gewechselt wurde",
+                "next-times": "{times} mal zum nächsten Bühnenbild gewechselt wurde"
+            },
+            "list": {
+                "add": "das Element <code class=\"scratchBlock\">{item}</code> hinzugefügt wurde",
+                "add-times": "{times} mal das Element <code class=\"scratchBlock\">{item}</code> hinzugefügt wurde",
+                "insert": "das Element <code class=\"scratchBlock\">{item}</code> an Position <code class=\"scratchBlock\">{index}</code> eingefügt wurde",
+                "insert-times": "{times} mal das Element <code class=\"scratchBlock\">{item}</code> an Position <code class=\"scratchBlock\">{index}</code> eingefügt wurde",
+                "replace": "das Element an Position <code class=\"scratchBlock\">{index}</code> durch <code class=\"scratchBlock\">{item}</code> ersetzt wurde",
+                "replace-times": "{times} mal das Element an Position <code class=\"scratchBlock\">{index}</code> durch <code class=\"scratchBlock\">{item}</code> ersetzt wurde",
+                "delete-at": "das Element an Position <code class=\"scratchBlock\">{index}</code>gelöscht wurde",
+                "delete-at-times": "{times} mal das Element an Position <code class=\"scratchBlock\">{index}</code> gelöscht wurde",
+                "delete-all": "alle Elemente gelöscht wurden",
+                "item-removed": "<code class=\"scratchBlock\">({item} :: #ffffff)</code> war in der Liste enthalten, wurde aber gelöscht"
+            },
+            "visibility": {
+                "initial-visibility": "sie bereits <i>{initialVisibility}</i> war als <code class=\"scratchBlock\">@greenFlag :: events reporter</code> geklickt wurde",
+                "clone-start-visibility": "die ursprüngliche Figur <i>{initialVisibility}</i> war, als der Klon erzeugt wurde und der Klon diese Eigenschaft übernommen hat",
+                "tracing-start-visibility": "sie bereits <i>{initialVisibility}</i> war als die Aufzeichnung gestartet wurde"
+            }
+        },
+        "unobserved": {
+            "all": ", aber es wurde nicht beobachtet warum! ",
+            "some": "Nicht alle verantwortlichen Blöcke wurden beobachtet! "
+        }
+    },
+    "variable": {
+        "x-position": "x-Position",
+        "y-position": "y-Position",
+        "direction": "Richtung",
+        "size": "Größe",
+        "costume": "Kostüm",
+        "backdrop": "Bühnenbild",
+        "name": "Name",
+        "number": "Nummer",
+        "visibility": "Sichtbarkeit"
+    },
+    "attribute": {
+        "position": "die Position",
+        "direction": "die Richtung",
+        "size": "die Größe",
+        "costume": "das Kostüm",
+        "backdrop": "das Bühnenbild",
+        "variable": "die Variable"
+    },
+    "number": {
+        "1": "eins",
+        "2": "zwei",
+        "3": "drei",
+        "4": "vier",
+        "5": "fünf",
+        "6": "sechs",
+        "7": "sieben",
+        "8": "acht",
+        "9": "neun",
+        "10": "zehn",
+        "11": "elf",
+        "12": "zwölf"
+    },
+    "block-type": {
+        "position": "Position",
+        "move": "gehe",
+        "go-to": "gehe zu",
+        "glide-to": "gleite zu",
+        "set-x": "setze x",
+        "set-y": "setze y",
+        "change-x": "ändere x",
+        "change-y": "ändere y",
+        "direction": "Richtung",
+        "set-direction": "setze Richtung",
+        "point-towards": "drehe dich",
+        "turn": "drehe dich",
+        "set-rotation-style": "setze Drehtyp",
+        "if-on-edge-bounce": "pralle vom Rand ab",
+        "say": "sage",
+        "think": "denke",
+        "ask": "frage",
+        "size": "Größe",
+        "size-set": "setze Größe",
+        "size-change": "ändere Größe",
+        "costume": "Kostüm",
+        "costume-set": "wechsle Kostüm",
+        "next-costume": "nächstes Kostüm",
+        "backdrop": "Bühnenbild",
+        "backdrop-set": "wechsle Bühnenbild",
+        "next-backdrop": "nächstes Bühnenbild",
+        "show": "zeige dich",
+        "hide": "verstecke dich",
+        "play": "spiele",
+        "stop-sound": "stoppe Klänge",
+        "broadcast": "sende",
+        "clone": "erzeuge Klon",
+        "set-variable": "setze Variable",
+        "add-list-item": "einfüge"
+    },
+    "operator": {
+        "round": "{operand} gerundet"
+    },
+    "condition": {
+        "true": "wahr",
+        "false": "falsch",
+        "touching-edge": "<wird [Rand v] berührt?>",
+        "touching-mouse": "<wird [Mauszeiger v] berührt?>",
+        "touching-sprite": "<wird [{sprite} v] berührt?>",
+        "touching-color": "<wird Farbe [{color}] berührt?>",
+        "color-touching-color": "<Farbe [{color1}] berührt [{color2}]?>",
+        "key-pressed": "<Taste [{key} v] gedrückt?>",
+        "mouse-down": "<Maustaste gedrückt?>",
+        "and": "<{condition1} und {condition2}>",
+        "or": "<{condition1} oder {condition2}>",
+        "not": "<nicht {condition}>",
+        "compare": "<{operand1} {operator} {operand2}>",
+        "contains": "<{operand1} enthält {operand2}?>"
+    },
+    "visibility": {
+        "visible": "sichtbar",
+        "invisible": "unsichtbar"
+    },
+    "block": {
+        "from": {
+            "sprite": "Block von \"{sprite}\"",
+            "stage": "Block von der Bühne"
+        },
+        "general-event": "Allgemeines Ereignis"
+    },
+    "rotation-style": {
+        "all-around": "rundherum",
+        "left-right": "links-rechts",
+        "no-rotation": "nicht drehen"
+    },
+    "execution":"Ausführung",
+    "execution-stopped": "Ausführung gestoppt",
+    "execution-paused": "Ausführung pausiert",
+    "tracing-stopped": "Aufzeichnung gestoppt",
+    "new-line": "<br>",
+    "because" :  ", weil ",
+    "then" :  ", dann ",
+    "next" :  ", danach ",
+    "and-then" :  " und anschließend ",
+    "and-therefore": " und dadurch ",
+    "and-because" :  " und weil ",
+    "dot": ". ",
+    "comma": ", ",
+    "exclamation-mark": "! "
+}

@@ -172,9 +172,10 @@ class Stage extends React.Component {
         this.props.vm.setEditingTarget(targetId);
     }
     onMouseMove (e) {
-        if (this.props.locked) {
+        if (this.props.testRunning || this.props.locked) {
             return;
         }
+
         const {x, y} = getEventXY(e);
         const mousePosition = [x - this.rect.left, y - this.rect.top];
 
@@ -217,6 +218,8 @@ class Stage extends React.Component {
         this.props.vm.postIOData('mouse', coordinates);
     }
     onMouseUp (e) {
+        if (this.props.testRunning) return;
+
         const {x, y} = getEventXY(e);
         const mousePosition = [x - this.rect.left, y - this.rect.top];
         this.cancelMouseDownTimeout();
@@ -254,12 +257,10 @@ class Stage extends React.Component {
         }
     }
     onMouseDown (e) {
-        if (this.props.locked) {
+        if (this.props.testRunning || this.props.locked) {
             return;
         }
-        if (this.props.locked) {
-            return;
-        }
+
         this.updateRect();
         const {x, y} = getEventXY(e);
         const mousePosition = [x - this.rect.left, y - this.rect.top];
@@ -299,9 +300,10 @@ class Stage extends React.Component {
         }
     }
     onWheel (e) {
-        if (this.props.locked) {
+        if (this.props.testRunning || this.props.locked) {
             return;
         }
+
         const data = {
             deltaX: e.deltaX,
             deltaY: e.deltaY
@@ -441,6 +443,7 @@ Stage.propTypes = {
     isColorPicking: PropTypes.bool,
     isFullScreen: PropTypes.bool.isRequired,
     isStarted: PropTypes.bool,
+    testRunning: PropTypes.bool,
     locked: PropTypes.bool,
     micIndicator: PropTypes.bool,
     onActivateColorPicker: PropTypes.func,
@@ -458,6 +461,7 @@ const mapStateToProps = state => ({
     isColorPicking: state.scratchGui.colorPicker.active,
     isFullScreen: state.scratchGui.mode.isFullScreen,
     isStarted: state.scratchGui.vmStatus.started,
+    testRunning: state.scratchGui.vmStatus.testRunning,
     micIndicator: state.scratchGui.micIndicator,
     locked: state.scratchGui.vmStatus.locked,
     // Do not use editor drag style in fullscreen or player mode.

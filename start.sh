@@ -3,5 +3,5 @@
 echo "Install Dependencies"
 yarn install
 
-echo "Start Tutorials"
+echo "Start Scratch-GUI"
 npm start

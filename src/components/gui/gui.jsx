@@ -12,6 +12,7 @@ import Renderer from 'scratch-render';
 
 import Blocks from '../../containers/blocks.jsx';
 import CostumeTab from '../../containers/costume-tab.jsx';
+import CostumeTabTitle from '../../containers/costume-tab-title.jsx';
 import TargetPane from '../../containers/target-pane.jsx';
 import SoundTab from '../../containers/sound-tab.jsx';
 import StageWrapper from '../../containers/stage-wrapper.jsx';
@@ -26,6 +27,9 @@ import Backpack from '../../containers/backpack.jsx';
 import WebGlModal from '../../containers/webgl-modal.jsx';
 import TipsLibrary from '../../containers/tips-library.jsx';
 import Cards from '../../containers/cards.jsx';
+import IRCards from '../../containers/interrogative-debugging/version-1/ir-cards.jsx';
+import IRDebugger from '../../containers/interrogative-debugging/version-2/ir-debugger.jsx';
+import HelpMenu from '../../containers/help-menu/help-menu.jsx';
 import TutorialCards from '../../containers/tutorial-cards.jsx';
 import Alerts from '../../containers/alerts.jsx';
 import DragLayer from '../../containers/drag-layer.jsx';
@@ -67,6 +71,9 @@ const GUIComponent = props => {
         backpackVisible,
         blocksTabVisible,
         cardsVisible,
+        irCardsVisible,
+        irDebuggerVisible,
+        helpMenuVisible,
         tutorialCardsVisible,
         canChangeLanguage,
         canCreateNew,
@@ -107,6 +114,9 @@ const GUIComponent = props => {
         onRequestCloseBackdropLibrary,
         onRequestCloseCostumeLibrary,
         onRequestCloseTelemetryModal,
+        onResetProjectState,
+        onSaveProjectState,
+        onRestartingProject,
         onSeeCommunity,
         onShare,
         onShowPrivacyPolicy,
@@ -117,7 +127,6 @@ const GUIComponent = props => {
         showComingSoon,
         soundsTabVisible,
         stageSizeMode,
-        targetIsStage,
         telemetryModalVisible,
         tipsLibraryVisible,
         vm,
@@ -187,6 +196,23 @@ const GUIComponent = props => {
                 {cardsVisible ? (
                     <Cards />
                 ) : null}
+                {irCardsVisible ? (
+                    <IRCards
+                        vm={vm}
+                    />
+                ) : null}
+                {irDebuggerVisible ? (
+                    <IRDebugger
+                        vm={vm}
+                        intl={intl}
+                    />
+                ) : null}
+                {helpMenuVisible ? (
+                    <HelpMenu
+                        vm={vm}
+                        intl={intl}
+                    />
+                ) : null}
                 {tutorialCardsVisible ? (
                     <TutorialCards
                         vm={vm}
@@ -241,6 +267,9 @@ const GUIComponent = props => {
                     onSeeCommunity={onSeeCommunity}
                     onShare={onShare}
                     onStartSelectingFileUpload={onStartSelectingFileUpload}
+                    onRestartingProject={onRestartingProject}
+                    onResetProjectState={onResetProjectState}
+                    onSaveProjectState={onSaveProjectState}
                     onToggleLoginOpen={onToggleLoginOpen}
                 />
                 <Box className={styles.bodyWrapper}>
@@ -274,19 +303,7 @@ const GUIComponent = props => {
                                             draggable={false}
                                             src={costumesIcon}
                                         />
-                                        {targetIsStage ? (
-                                            <FormattedMessage
-                                                defaultMessage="Backdrops"
-                                                description="Button to get to the backdrops panel"
-                                                id="gui.gui.backdropsTab"
-                                            />
-                                        ) : (
-                                            <FormattedMessage
-                                                defaultMessage="Costumes"
-                                                description="Button to get to the costumes panel"
-                                                id="gui.gui.costumesTab"
-                                            />
-                                        )}
+                                        <CostumeTabTitle />
                                     </Tab>
                                     <Tab
                                         className={tabClassNames.tab}
@@ -389,6 +406,9 @@ GUIComponent.propTypes = {
     canShare: PropTypes.bool,
     canUseCloud: PropTypes.bool,
     cardsVisible: PropTypes.bool,
+    irCardsVisible: PropTypes.bool,
+    irDebuggerVisible: PropTypes.bool,
+    helpMenuVisible: PropTypes.bool,
     children: PropTypes.node,
     costumeLibraryVisible: PropTypes.bool,
     costumesTabVisible: PropTypes.bool,
@@ -413,6 +433,9 @@ GUIComponent.propTypes = {
     onRequestCloseBackdropLibrary: PropTypes.func,
     onRequestCloseCostumeLibrary: PropTypes.func,
     onRequestCloseTelemetryModal: PropTypes.func,
+    onResetProjectState: PropTypes.func,
+    onRestartingProject: PropTypes.func,
+    onSaveProjectState: PropTypes.func,
     onSeeCommunity: PropTypes.func,
     onShare: PropTypes.func,
     onShowPrivacyPolicy: PropTypes.func,
@@ -426,7 +449,6 @@ GUIComponent.propTypes = {
     showComingSoon: PropTypes.bool,
     soundsTabVisible: PropTypes.bool,
     stageSizeMode: PropTypes.oneOf(Object.keys(STAGE_SIZE_MODES)),
-    targetIsStage: PropTypes.bool,
     telemetryModalVisible: PropTypes.bool,
     tipsLibraryVisible: PropTypes.bool,
     tutorialCardsVisible: PropTypes.bool,

@@ -7,6 +7,9 @@ import musicInsetIconURL from './music/music-small.svg';
 import penIconURL from './pen/pen.png';
 import penInsetIconURL from './pen/pen-small.svg';
 
+import whiskerIconURL from './whisker/whisker-bg.png';
+import whiskerInsetIconURL from './whisker/whisker-icon.svg';
+
 import videoSensingIconURL from './videoSensing/video-sensing.png';
 import videoSensingInsetIconURL from './videoSensing/video-sensing-small.svg';
 
@@ -85,6 +88,14 @@ export default [
                 id="gui.extension.pen.description"
             />
         ),
+        featured: true
+    },
+    {
+        name: 'Whisker',
+        extensionId: 'whisker',
+        iconURL: whiskerIconURL,
+        insetIconURL: whiskerInsetIconURL,
+        description: 'Testing with Whisker',
         featured: true
     },
     {

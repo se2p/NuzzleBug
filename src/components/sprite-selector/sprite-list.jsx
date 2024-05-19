@@ -24,6 +24,7 @@ const SpriteList = function (props) {
         onDeleteSprite,
         onDuplicateSprite,
         onExportSprite,
+        onInterrogativeButtonClick,
         onSelectSprite,
         onAddSortable,
         onRemoveSortable,
@@ -94,6 +95,7 @@ const SpriteList = function (props) {
                                 onDeleteButtonClick={onDeleteSprite}
                                 onDuplicateButtonClick={onDuplicateSprite}
                                 onExportButtonClick={onExportSprite}
+                                onInterrogativeButtonClick={onInterrogativeButtonClick}
                             />
                         </SortableAsset>
                     );
@@ -111,7 +113,7 @@ SpriteList.propTypes = {
     hoveredTarget: PropTypes.shape({
         hoveredSprite: PropTypes.string,
         receivedBlocks: PropTypes.bool,
-        sprite: PropTypes.string
+        sprite: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     }),
     items: PropTypes.arrayOf(PropTypes.shape({
         costume: PropTypes.shape({
@@ -128,6 +130,7 @@ SpriteList.propTypes = {
     onDeleteSprite: PropTypes.func,
     onDuplicateSprite: PropTypes.func,
     onExportSprite: PropTypes.func,
+    onInterrogativeButtonClick: PropTypes.func,
     onRemoveSortable: PropTypes.func,
     onSelectSprite: PropTypes.func,
     ordering: PropTypes.arrayOf(PropTypes.number),

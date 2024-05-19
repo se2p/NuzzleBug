@@ -26,6 +26,8 @@ import {closeExtensionLibrary, openSoundRecorder, openConnectionModal} from '../
 import {activateCustomProcedures, deactivateCustomProcedures} from '../reducers/custom-procedures';
 import {setConnectionModalExtensionId} from '../reducers/connection-modal';
 import {updateMetrics} from '../reducers/workspace-metrics';
+import {forwardDebuggerSupported} from '../reducers/interrogative-debugging/version-2/ir-debugger';
+import {highlightTarget} from '../reducers/targets';
 
 import {
     activateTab,
@@ -66,6 +68,11 @@ class Blocks extends React.Component {
             'onScriptGlowOff',
             'onBlockGlowOn',
             'onBlockGlowOff',
+            'onBreakpointHit',
+            'onBreakpointResumed',
+            'onAddBlockArrow',
+            'onRemoveBlockArrow',
+            'handleMonitorsUpdate',
             'handleExtensionAdded',
             'handleBlocksInfoUpdate',
             'onTargetsUpdate',
@@ -207,6 +214,7 @@ class Blocks extends React.Component {
                 this.withToolboxUpdates(() => {
                     this.workspace.getFlyout().setRecyclingEnabled(true);
                 });
+                forwardDebuggerSupported(this.props.interrogationSupported, this.props.vm);
             });
     }
 
@@ -256,9 +264,15 @@ class Blocks extends React.Component {
         this.props.vm.addListener('SCRIPT_GLOW_OFF', this.onScriptGlowOff);
         this.props.vm.addListener('BLOCK_GLOW_ON', this.onBlockGlowOn);
         this.props.vm.addListener('BLOCK_GLOW_OFF', this.onBlockGlowOff);
+        this.props.vm.addListener('BREAKPOINT_HIT', this.onBreakpointHit);
+        this.props.vm.addListener('BREAKPOINT_RESUMED', this.onBreakpointResumed);
+        this.props.vm.addListener('ADD_BLOCK_ARROW', this.onAddBlockArrow);
+        this.props.vm.addListener('REMOVE_BLOCK_ARROW', this.onRemoveBlockArrow);
         this.props.vm.addListener('VISUAL_REPORT', this.onVisualReport);
         this.props.vm.addListener('workspaceUpdate', this.onWorkspaceUpdate);
         this.props.vm.addListener('targetsUpdate', this.onTargetsUpdate);
+        this.props.vm.addListener('HIGHLIGHT_TARGET', this.props.onHighlightTarget);
+        this.props.vm.addListener('MONITORS_UPDATE', this.handleMonitorsUpdate);
         this.props.vm.addListener('EXTENSION_ADDED', this.handleExtensionAdded);
         this.props.vm.addListener('BLOCKSINFO_UPDATE', this.handleBlocksInfoUpdate);
         this.props.vm.addListener('PERIPHERAL_CONNECTED', this.handleStatusButtonUpdate);
@@ -269,9 +283,15 @@ class Blocks extends React.Component {
         this.props.vm.removeListener('SCRIPT_GLOW_OFF', this.onScriptGlowOff);
         this.props.vm.removeListener('BLOCK_GLOW_ON', this.onBlockGlowOn);
         this.props.vm.removeListener('BLOCK_GLOW_OFF', this.onBlockGlowOff);
+        this.props.vm.removeListener('BREAKPOINT_HIT', this.onBreakpointHit);
+        this.props.vm.removeListener('BREAKPOINT_RESUMED', this.onBreakpointResumed);
+        this.props.vm.removeListener('ADD_BLOCK_ARROW', this.onAddBlockArrow);
+        this.props.vm.removeListener('REMOVE_BLOCK_ARROW', this.onRemoveBlockArrow);
         this.props.vm.removeListener('VISUAL_REPORT', this.onVisualReport);
         this.props.vm.removeListener('workspaceUpdate', this.onWorkspaceUpdate);
         this.props.vm.removeListener('targetsUpdate', this.onTargetsUpdate);
+        this.props.vm.removeListener('HIGHLIGHT_TARGET', this.props.onHighlightTarget);
+        this.props.vm.removeListener('MONITORS_UPDATE', this.handleMonitorsUpdate);
         this.props.vm.removeListener('EXTENSION_ADDED', this.handleExtensionAdded);
         this.props.vm.removeListener('BLOCKSINFO_UPDATE', this.handleBlocksInfoUpdate);
         this.props.vm.removeListener('PERIPHERAL_CONNECTED', this.handleStatusButtonUpdate);
@@ -325,6 +345,18 @@ class Blocks extends React.Component {
     }
     onBlockGlowOff (data) {
         this.workspace.glowBlock(data.id, false);
+    }
+    onBreakpointHit (data) {
+        this.workspace.setBreakpointHit(data, true);
+    }
+    onBreakpointResumed (data) {
+        this.workspace.setBreakpointHit(data, false);
+    }
+    onAddBlockArrow (data) {
+        this.workspace.setArrowVisibility(data.blockId, true, data.fillColor, data.strokeColor);
+    }
+    onRemoveBlockArrow (data) {
+        this.workspace.setArrowVisibility(data.blockId, false, data.fillColor, data.strokeColor);
     }
     onVisualReport (data) {
         this.workspace.reportValue(data.id, data.value);
@@ -396,6 +428,24 @@ class Blocks extends React.Component {
         // fresh workspace and we don't want any changes made to another sprites
         // workspace to be 'undone' here.
         this.workspace.clearUndo();
+    }
+    handleMonitorsUpdate (monitors) {
+        // Update the checkboxes of the relevant monitors.
+        // TODO: What about monitors that have fields? See todo in scratch-vm blocks.js changeBlock:
+        // https://github.com/LLK/scratch-vm/blob/2373f9483edaf705f11d62662f7bb2a57fbb5e28/src/engine/blocks.js#L569-L576
+        const flyout = this.workspace.getFlyout();
+        for (const monitor of monitors.values()) {
+            const blockId = monitor.get('id');
+            const isVisible = monitor.get('visible');
+            flyout.setCheckboxState(blockId, isVisible);
+            // We also need to update the isMonitored flag for this block on the VM, since it's used to determine
+            // whether the checkbox is activated or not when the checkbox is re-displayed (e.g. local variables/blocks
+            // when switching between sprites).
+            const block = this.props.vm.runtime.monitorBlocks.getBlock(blockId);
+            if (block) {
+                block.isMonitored = isVisible;
+            }
+        }
     }
     handleExtensionAdded (categoryInfo) {
         const defineBlocks = blockInfoArray => {
@@ -523,6 +573,7 @@ class Blocks extends React.Component {
             onActivateColorPicker,
             onOpenConnectionModal,
             onOpenSoundRecorder,
+            onHighlightTarget,
             updateToolboxState,
             onActivateCustomProcedures,
             onRequestCloseExtensionLibrary,
@@ -533,6 +584,7 @@ class Blocks extends React.Component {
             ...props
         } = this.props;
         /* eslint-enable no-unused-vars */
+        delete props.interrogationSupported;
         return (
             <React.Fragment>
                 <DroppableBlocks
@@ -544,6 +596,7 @@ class Blocks extends React.Component {
                     <Prompt
                         defaultValue={this.state.prompt.defaultValue}
                         isStage={vm.runtime.getEditingTarget().isStage}
+                        showListMessage={this.state.prompt.varType === this.ScratchBlocks.LIST_VARIABLE_TYPE}
                         label={this.state.prompt.message}
                         showCloudOption={this.state.prompt.showCloudOption}
                         showVariableOptions={this.state.prompt.showVariableOptions}
@@ -586,6 +639,7 @@ Blocks.propTypes = {
     onActivateCustomProcedures: PropTypes.func,
     onOpenConnectionModal: PropTypes.func,
     onOpenSoundRecorder: PropTypes.func,
+    onHighlightTarget: PropTypes.func,
     onRequestCloseCustomProcedures: PropTypes.func,
     onRequestCloseExtensionLibrary: PropTypes.func,
     options: PropTypes.shape({
@@ -615,6 +669,7 @@ Blocks.propTypes = {
     updateMetrics: PropTypes.func,
     updateToolboxState: PropTypes.func,
     vm: PropTypes.instanceOf(VM).isRequired,
+    interrogationSupported: PropTypes.bool,
     workspaceMetrics: PropTypes.shape({
         targets: PropTypes.objectOf(PropTypes.object)
     })
@@ -664,6 +719,7 @@ const mapStateToProps = state => ({
     messages: state.locales.messages,
     toolboxXML: state.scratchGui.toolbox.toolboxXML,
     customProceduresVisible: state.scratchGui.customProcedures.active,
+    interrogationSupported: state.scratchGui.irDebugger.supported,
     workspaceMetrics: state.scratchGui.workspaceMetrics
 });
 
@@ -686,6 +742,9 @@ const mapDispatchToProps = dispatch => ({
     },
     updateToolboxState: toolboxXML => {
         dispatch(updateToolbox(toolboxXML));
+    },
+    onHighlightTarget: targetId => {
+        dispatch(highlightTarget(targetId));
     },
     updateMetrics: metrics => {
         dispatch(updateMetrics(metrics));

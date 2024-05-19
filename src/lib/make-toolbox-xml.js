@@ -763,17 +763,19 @@ const makeToolboxXML = function (isInitialSetup, isStage = true, targetId, categ
     const variablesXML = moveCategory('data') || variables(isInitialSetup, isStage, targetId);
     const myBlocksXML = moveCategory('procedures') || myBlocks(isInitialSetup, isStage, targetId);
 
+    const querystring = window.location.search;
+    
     const everything = [
         xmlOpen,
-        motionXML, gap,
-        looksXML, gap,
-        soundXML, gap,
-        eventsXML, gap,
-        controlXML, gap,
-        sensingXML, gap,
-        operatorsXML, gap,
-        variablesXML, gap,
-        myBlocksXML
+        querystring.includes('motion=false') ? [] : motionXML, gap,
+        querystring.includes('looks=false') ? [] : looksXML, gap,
+        querystring.includes('sound=false') ? [] : soundXML, gap,
+        querystring.includes('events=false') ? [] : eventsXML, gap,
+        querystring.includes('control=false') ? [] : controlXML, gap,
+        querystring.includes('sensing=false') ? [] : sensingXML, gap,
+        querystring.includes('operators=false') ? [] : operatorsXML, gap,
+        querystring.includes('variables=false') ? [] : variablesXML, gap,
+        querystring.includes('myblocks=false') ? [] : myBlocksXML
     ];
 
     for (const extensionCategory of categoriesXML) {
