@@ -17,6 +17,7 @@ import StopAll from '../stop-all/stop-all.jsx';
 import TurboMode from '../turbo-mode/turbo-mode.jsx';
 import IRQuestions from '../interrogative-debugging/version-1/ir-questions/ir-question-button.jsx';
 import ToggleTracing, {TracingState} from '../toggle-tracing/toggle-tracing.jsx';
+import Tutorial from '../tutorial-button/tutorial-button.jsx';
 
 import styles from './controls.css';
 
@@ -107,12 +108,15 @@ const Controls = function (props) {
         irDisabled,
         vm,
         paused,
+        onTutorialClick,
         turbo,
         interrogationSupported,
         interrogationEnabled,
         tracingState,
         tracingActive,
         whiskerTest,
+        locale,
+        tutorialCardsVisible,
         ...componentProps
     } = props;
 
@@ -193,6 +197,11 @@ const Controls = function (props) {
                     title={intl.formatMessage(messages.helpMenuButtonTitle)}
                     onClick={onHelpMenuButtonClick}
                 />) : null}
+            <Tutorial
+                active={!tutorialCardsVisible}
+                onClick={onTutorialClick}
+                title={'Tutorial'}
+            />
         </div>
     );
 };
@@ -220,7 +229,10 @@ Controls.propTypes = {
     vm: PropTypes.instanceOf(VM),
     tracingState: PropTypes.oneOf(Object.values(TracingState)).isRequired,
     tracingActive: PropTypes.bool,
-    whiskerTest: PropTypes.instanceOf(Test)
+    whiskerTest: PropTypes.instanceOf(Test),
+    onTutorialClick: PropTypes.func.isRequired,
+    tutorialCardsVisible: PropTypes.bool,
+    locale: PropTypes.string.isRequired
 };
 
 Controls.defaultProps = {

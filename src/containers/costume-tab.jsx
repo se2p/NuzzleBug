@@ -208,6 +208,14 @@ class CostumeTab extends React.Component {
             }, this.props.onCloseImporting);
         }, this.props.onCloseImporting);
     }
+    handleCameraBuffer (buffer) {
+        const storage = this.props.vm.runtime.storage;
+        const targetId = this.props.vm.editingTarget.id;
+        costumeUpload(buffer, 'image/png', storage, vmCostumes => {
+            vmCostumes[0].name = this.props.intl.formatMessage(messages.costume, {index: 1});
+            this.handleNewCostume(vmCostumes, false, targetId);
+        });
+    }
     handleFileUploadClick () {
         this.fileInput.click();
     }

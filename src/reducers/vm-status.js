@@ -6,6 +6,9 @@ const SET_TRACING_ACTIVE_STATE = 'scratch-gui/vm-status/SET_TRACING_ACTIVE_STATE
 const SET_WHISKER_TEST = 'scratch-gui/vm-status/SET_WHISKER_TEST';
 const SET_IS_WHISKER_PROJECT_LOADING = 'scratch-gui/vm-status/SET_IS_WHISKER_PROJECT_LOADING';
 const SET_TEST_RUNNING_STATE = 'scratch-gui/vm-status/SET_TEST_RUNNING_STATE';
+const LOCK = 'scratch-gui/vm-status/LOCK';
+const UNLOCK = 'scratch-gui/vm-status/UNLOCK';
+
 
 const initialState = {
     running: false,
@@ -15,47 +18,48 @@ const initialState = {
     tracingActive: true,
     isWhiskerProjectLoading: false,
     testRunning: false,
-    whiskerTest: null
+    whiskerTest: null,
+    locked: false
 };
 
 const reducer = function (state, action) {
-    if (typeof state === 'undefined') state = initialState;
+    if (typeof state === 'undefined') {
+        state = initialState;
+    }
+    const baseState = JSON.parse(JSON.stringify(state));
     switch (action.type) {
     case SET_STARTED_STATE:
-        return Object.assign({}, state, {
-            started: action.started
-        });
+        baseState.started = action.started;
+        break;
     case SET_RUNNING_STATE:
-        return Object.assign({}, state, {
-            running: action.running
-        });
+        baseState.running = action.running;
+        break;
     case SET_PAUSE_STATE:
-        return Object.assign({}, state, {
-            paused: action.paused
-        });
+        baseState.paused = action.paused;
+        break;
     case SET_TURBO_STATE:
-        return Object.assign({}, state, {
-            turbo: action.turbo
-        });
+        baseState.turbo = action.turbo;
+        break;
     case SET_TRACING_ACTIVE_STATE:
-        return Object.assign({}, state, {
-            tracingActive: action.tracingActive
-        });
+        baseState.tracingActive = action.tracingActive;
+        break;
     case SET_WHISKER_TEST:
-        return Object.assign({}, state, {
-            whiskerTest: action.whiskerTest
-        });
+        baseState.whiskerTest = action.whiskerTest;
+        break;
     case SET_IS_WHISKER_PROJECT_LOADING:
-        return Object.assign({}, state, {
-            isWhiskerProjectLoading: action.isWhiskerProjectLoading
-        });
+        baseState.isWhiskerProjectLoading = action.isWhiskerProjectLoading;
+        break;
     case SET_TEST_RUNNING_STATE:
-        return Object.assign({}, state, {
-            testRunning: action.testRunning
-        });
-    default:
-        return state;
+        baseState.testRunning = action.testRunning;
+        break;
+    case LOCK:
+        baseState.locked = true;
+        break;
+    case UNLOCK:
+        baseState.locked = false;
+        break;
     }
+    return baseState;
 };
 
 const setStartedState = function (started) {
@@ -115,6 +119,18 @@ const setTestRunningState = function (testRunning) {
     };
 };
 
+const lock = function () {
+    return {
+        type: LOCK
+    };
+};
+
+const unlock = function () {
+    return {
+        type: UNLOCK
+    };
+};
+
 export {
     reducer as default,
     initialState as vmStatusInitialState,
@@ -125,5 +141,7 @@ export {
     setTracingActiveState,
     setIsWhiskerProjectLoading,
     setWhiskerTest,
-    setTestRunningState
+    setTestRunningState,
+    lock,
+    unlock
 };

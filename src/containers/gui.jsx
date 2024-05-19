@@ -137,6 +137,7 @@ const mapStateToProps = state => {
         irCardsVisible: state.scratchGui.ircards.visible,
         irDebuggerVisible: state.scratchGui.irDebugger.visible,
         helpMenuVisible: state.scratchGui.helpMenu.visible,
+        tutorialCardsVisible: state.scratchGui.tutorialCards.visible,
         connectionModalVisible: state.scratchGui.modals.connectionModal,
         costumeLibraryVisible: state.scratchGui.modals.costumeLibrary,
         costumesTabVisible: state.scratchGui.editorTab.activeTabIndex === COSTUMES_TAB_INDEX,

@@ -30,6 +30,7 @@ import Cards from '../../containers/cards.jsx';
 import IRCards from '../../containers/interrogative-debugging/version-1/ir-cards.jsx';
 import IRDebugger from '../../containers/interrogative-debugging/version-2/ir-debugger.jsx';
 import HelpMenu from '../../containers/help-menu/help-menu.jsx';
+import TutorialCards from '../../containers/tutorial-cards.jsx';
 import Alerts from '../../containers/alerts.jsx';
 import DragLayer from '../../containers/drag-layer.jsx';
 import ConnectionModal from '../../containers/connection-modal.jsx';
@@ -73,6 +74,7 @@ const GUIComponent = props => {
         irCardsVisible,
         irDebuggerVisible,
         helpMenuVisible,
+        tutorialCardsVisible,
         canChangeLanguage,
         canCreateNew,
         canEditTitle,
@@ -149,7 +151,6 @@ const GUIComponent = props => {
 
     return (<MediaQuery minWidth={layout.fullSizeMinWidth}>{isFullSize => {
         const stageSize = resolveStageSize(stageSizeMode, isFullSize);
-
         return isPlayerOnly ? (
             <StageWrapper
                 isFullScreen={isFullScreen}
@@ -210,6 +211,11 @@ const GUIComponent = props => {
                     <HelpMenu
                         vm={vm}
                         intl={intl}
+                    />
+                ) : null}
+                {tutorialCardsVisible ? (
+                    <TutorialCards
+                        vm={vm}
                     />
                 ) : null}
                 {alertsVisible ? (
@@ -445,6 +451,7 @@ GUIComponent.propTypes = {
     stageSizeMode: PropTypes.oneOf(Object.keys(STAGE_SIZE_MODES)),
     telemetryModalVisible: PropTypes.bool,
     tipsLibraryVisible: PropTypes.bool,
+    tutorialCardsVisible: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired
 };
 GUIComponent.defaultProps = {
