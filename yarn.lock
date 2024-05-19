@@ -10062,6 +10062,10 @@ schema-utils@^3.0.0:
     ajv "^6.12.5"
     ajv-keywords "^3.5.2"
 
+"scratch-analysis@git+https://gitlab+deploy-token-12:j56psq6y2wRxAs6rC1dM@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-analysis.git#add-branchCoverage-filter":
+  version "0.1.0"
+  resolved "git+https://gitlab+deploy-token-12:j56psq6y2wRxAs6rC1dM@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-analysis.git#f939a334ed2f18af2bded2f8891eb35bb75dea7a"
+
 "scratch-analysis@git+https://gitlab+deploy-token-12:j56psq6y2wRxAs6rC1dM@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-analysis.git#master":
   version "0.1.0"
   resolved "git+https://gitlab+deploy-token-12:j56psq6y2wRxAs6rC1dM@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-analysis.git#d131826bda646b307f42390e9fcb71da9c5bb60b"
