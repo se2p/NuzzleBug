@@ -176,6 +176,7 @@ class MenuBar extends React.Component {
             'restoreOptionMessage',
             'handleFinishExperiment'
         ]);
+        this.scratchlogURL = ''; // localhost default: http://localhost:8090
     }
     componentDidMount () {
         document.addEventListener('keydown', this.handleKeyPress);
@@ -250,18 +251,20 @@ class MenuBar extends React.Component {
             }
         }
     }
+
     handleFinishExperiment () {
         const experimentId = new URL(window.location.href).searchParams.get('expid');
         const userId = new URL(window.location.href).searchParams.get('uid');
+        const secret = new URL(window.location.href).searchParams.get('secret');
         if (experimentId && userId) {
             this.props.saveProjectSb3().then(content => {
                 if (this.props.onSaveFinished) {
                     this.props.onSaveFinished();
                 }
                 this.props.saveProjectBeforeFinish(content);
-                window.location.href =
-                    `http://localhost:8090/participant/stop?user=${userId}&experiment=${experimentId}`;
             });
+            //TODO baseurl scratchlog setzen
+            window.location.href = `${this.scratchlogURL}/participant/stop?user=${userId}&experiment=${experimentId}&secret=${secret}`;
         }
     }
     handleRestoreOption (restoreFun) {
@@ -676,10 +679,13 @@ class MenuBar extends React.Component {
                             <SaveStatus />
                         )}
                     </div>
+                    {/* scratch1984 */}
                     <div>
                         <Scratch1984Button
                             className={styles.menuBarButton}
-                            onClick={this.handleFinishExperiment}
+                            onClick={() => {
+                                this.handleFinishExperiment();
+                            }} // check if called correctly
                         />
                     </div>
                     {this.props.sessionExists ? (
@@ -869,6 +875,8 @@ MenuBar.propTypes = {
     onRequestCloseFile: PropTypes.func,
     onRequestCloseLanguage: PropTypes.func,
     onRequestCloseLogin: PropTypes.func,
+    saveProjectBeforeFinish: PropTypes.func,
+    onSaveFinished: PropTypes.func,
     onResetProjectState: PropTypes.func,
     onRestartingProject: PropTypes.func,
     onSaveProjectState: PropTypes.func,
@@ -913,9 +921,9 @@ const mapStateToProps = (state, ownProps) => {
         username: user ? user.username : null,
         userOwnsProject: ownProps.authorUsername && user &&
             (ownProps.authorUsername === user.username),
-        vm: state.scratchGui.vm,
         saveProjectBeforeFinish: state.scratchGui.vm.saveProjectBeforeFinish,
-        saveProjectSb3: state.scratchGui.vm.saveProjectSb3.bind(state.scratchGui.vm)
+        saveProjectSb3: state.scratchGui.vm.saveProjectSb3.bind(state.scratchGui.vm),
+        vm: state.scratchGui.vm
     };
 };
 
