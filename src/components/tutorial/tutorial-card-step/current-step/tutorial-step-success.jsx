@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {injectIntl} from 'react-intl';
-import styles from './tutorial-cards.css';
+import styles from '../../styles/tutorial-cards.css';
 
-const TutorialSuccess = ({content, homeButtonTitle, onHome}) => (
+const Success = ({content, homeButtonTitle, onHome}) => (
     <div className={styles.tutorialStep}>
         <h4 className={styles.stepTitle}> {content.title} </h4>
         <img
@@ -24,14 +23,14 @@ const TutorialSuccess = ({content, homeButtonTitle, onHome}) => (
         </div>
     </div>
 );
-TutorialSuccess.propTypes = {
+Success.propTypes = {
     content: PropTypes.shape({
         title: PropTypes.string.isRequired,
         message: PropTypes.string.isRequired,
         img: PropTypes.node.isRequired
     }),
     onHome: PropTypes.func.isRequired,
-    homeButtonTitle: PropTypes.func.isRequired
+    homeButtonTitle: PropTypes.string.isRequired
 };
 
-export default injectIntl(TutorialSuccess);
+export default Success;

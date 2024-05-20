@@ -1,6 +1,6 @@
-@import "../../css/units.css";
-@import "../../css/colors.css";
-@import "../../css/z-index.css";
+@import "../../../css/units.css";
+@import "../../../css/colors.css";
+@import "../../../css/z-index.css";
 
 .card-title-header {
     font-size: 0.9rem;
@@ -15,8 +15,8 @@
 }
 .step-body {
     overflow-y: auto;
-    height: 350px;
-    width: 600px;
+    height: 550px;
+    width: 900px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -40,7 +40,6 @@
     background: #555555;
 }
 
-/* setting background color*/
 .left-card::after, .right-card::after {
     background: $motion-primary;
 }
@@ -86,6 +85,7 @@
     display: flex;
     justify-content: center;
     cursor: grab;
+    z-index: 10;
 }
 .footer:active {
     cursor: grabbing;
@@ -150,7 +150,7 @@
 }
 
 .tutorial-title {
-    font-family: Comic Sans MS, serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 20px;
     color: hsla(225, 15%, 40%, 1);
     line-height: 80px;
@@ -163,7 +163,7 @@
     width: 20%;
     line-height: 80px;
     text-align: center;
-    font-family: Comic Sans MS, serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 20px;
 }
 
@@ -182,11 +182,13 @@
 .tutorial-step {
     width: 100%;
     background-color: hsl(0, 0%, 100%);
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .intro-download-container {
-    height: 145px;
+    height: 80px;
     display: inline-block;
+    justify-content: space-between;
     background-color: bisque;
     width: 80%;
     box-sizing: border-box;
@@ -196,10 +198,11 @@
 }
 
 .intro-image {
-    width: 130px;
+    max-height: 60px;
+    max-width: 125px;
     float: left;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     margin-left: 30px;
     box-sizing: border-box;
     border-radius: 10px;
@@ -211,8 +214,8 @@
     display: inline-block;
     text-align: center;
     vertical-align: middle;
-    margin-top: 30px;
-    margin-right: 50px;
+    margin-top: 20px;
+    margin-right: 40px;
     float: right;
     background-color: #ff8a54;
     box-sizing: border-box;
@@ -221,11 +224,12 @@
 }
 
 .intro-download-text {
-    margin-top: 5px;
+    margin-top: 25px;
     margin-bottom: 0px;
     text-align: left;
+    align-items: center;
     margin-left: 30px;
-    font-family: 'Open Sans',sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: hsla(225, 15%, 40%, 1);
 }
 
@@ -248,12 +252,14 @@
 }
 
 .step-instructions {
-    margin: 12px 29px 0;
-    text-align: center;
     font-size: 1rem;
     line-height: 1.6;
-    font-family: 'Open Sans',sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: hsla(225, 15%, 40%, 1);
+    width: 80%;
+    display: inline-block;
+    text-align: justify;
+    margin: 12px 29px 10px;
 }
 
 .step-image {
@@ -273,7 +279,20 @@
 }
 
 .step-testing-button {
-    width: 100px;
+    width: 140px;
+    height: 40px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    margin: 20px;
+    background-color: #ff8a54;
+    box-sizing: border-box;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.step-code-quality-hint-generation {
+    width: 200px;
     height: 40px;
     display: inline-block;
     text-align: center;
@@ -309,6 +328,20 @@
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     margin-left: 29px;
     margin-right: 29px;
+    border: 2px solid #cb4335;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.step-testing-finished {
+    line-height: 30px;
+    color: #229954;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin-left: 29px;
+    margin-right: 29px;
+    border: 2px solid #229954;
+    border-radius: 10px;
+    padding: 10px;
 }
 
 .step-testing-fail-short {
@@ -328,7 +361,7 @@
 }
 
 .step-solution-header {
-    width: 500px;
+    width: 92%;
     height: 40px;
     margin-top: 20px;
     display: inline-block;
@@ -359,6 +392,20 @@
     float: right;
 }
 
+.step-solution-header-arrow-left {
+    height: 26px;
+    margin: 7px 10px;
+    float: right;
+    transform: rotate(-90deg);
+}
+
+.step-solution-header-arrow-right {
+    height: 26px;
+    margin: 7px 10px;
+    float: right;
+    transform: rotate(90deg);
+}
+
 .step-solution-header-arrow-down {
     height: 26px;
     margin: 7px 10px;
@@ -367,7 +414,7 @@
 }
 
 .step-solution-container {
-    width: 500px;
+    width: 92%;
     margin-bottom: 20px;
     display: inline-flex;
     text-align: left;
@@ -378,7 +425,7 @@
 
 .step-solution-image {
     margin: 25px;
-    width: 250px;
+    /*width: 250px;*/
     height: 100%;
     box-sizing: border-box;
     border-radius: 10px;
@@ -389,7 +436,7 @@
     margin: 25px 15px 25px 0;
     font-size: 1rem;
     line-height: 1.3;
-    font-family: 'Open Sans',sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: hsla(225, 15%, 40%, 1);
 }
 
@@ -408,4 +455,141 @@
 
 .success-home-button:hover {
     background-color: #ff9c6d;
+}
+
+.nav-bar {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 20px;
+}
+
+.flex-container {
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+.nav-bar-button {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #ff8a54;
+    color: white;
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.selected-nav-bar-button {
+    background-color: #40BF4A;
+}
+
+.page {
+    padding-left: 23%;
+    height: 95%;
+    width: 100%;
+}
+
+.code-quality-box {
+    border: 2px solid #444;
+    min-height: 450px;
+    width: 100%;
+    border-radius: 10px;
+    padding: 0.5%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.hint-type-button {
+    flex: 1;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #ff8a54;
+    color: white;
+    border: 2px solid #444;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.hint-type-button-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.overflowed {
+    transform: scale(0.75);
+}
+
+.test-table {
+    margin: 30px;
+    width: 92%;
+    border-collapse: collapse;
+}
+
+.test-table th,
+.test-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.test-table th {
+    background-color: #f2f2f2;
+}
+
+.test-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.passed {
+    color: green;
+    font-size: 27px;
+    text-align: justify;
+}
+
+.failed {
+    color: red;
+    font-size: 27px;
+    text-align: justify;
+}
+
+.sprite {
+    border: 1px solid black;
+    border-radius: 10px;
+    flex: 1;
+    margin-bottom: 9px;
+    padding-top: 14px;
+    color: dodgerblue;
+}
+
+.test-passed-message {
+    color: #229954;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 50px;
+}
+
+.test-description-button {
+    background-color: white;
+    color: black;
+    border: 2px solid #555555;
+}
+
+.test-description-button:hover {
+    background-color: #555555;
+    color: white;
+}
+
+code {
+    font-size: 87.5%;
 }

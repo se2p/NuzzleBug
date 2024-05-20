@@ -5,9 +5,9 @@ import Draggable from 'react-draggable';
 import {injectIntl, FormattedMessage} from 'react-intl';
 
 import styles from '../cards/card.css';
-import tutorialStyles from './tutorial-cards.css';
+import tutorialStyles from './styles/tutorial-cards.css';
 
-import homeIcon from './icon--home.svg';
+import homeIcon from './images/icon--home.svg';
 import shrinkIcon from '../cards/icon--shrink.svg';
 import expandIcon from '../cards/icon--expand.svg';
 import closeIcon from '../cards/icon--close.svg';
@@ -170,6 +170,7 @@ const TutorialCards = props => {
     const {
         cardRef,
         tutorials,
+        selectedTutorial,
         isMenuVisible,
         isRtl,
         currentTutorialStep,
@@ -204,6 +205,13 @@ const TutorialCards = props => {
         x += cardHorizontalDragOffset;
         y = 60;
     }
+
+    let detectors;
+    const tut = tutorials.filter(tutorial => tutorial.id === selectedTutorial);
+    if (tut.length > 0 && tut[0] !== undefined && tut[0].detectors) {
+        detectors = tut[0].detectors;
+    }
+
 
     return (
         // Custom overlay to act as the bounding parent for the draggable, using values from above
@@ -252,6 +260,7 @@ const TutorialCards = props => {
                                 <TutorialStep
                                     guiMessages={guiMessages}
                                     tutorialMessages={tutorialMessages}
+                                    detectors={detectors}
                                     step={step}
                                     nextStep={onNextStep}
                                     vm={vm}
@@ -291,14 +300,19 @@ TutorialCards.propTypes = {
             title: PropTypes.string.isRequired,
             img: PropTypes.node.isRequired,
             difficulty: PropTypes.string.isRequired,
-            totalSteps: PropTypes.number.isRequired
+            totalSteps: PropTypes.number.isRequired,
+            detectors: PropTypes.string
         })),
+    selectedTutorial: PropTypes.string,
     isMenuVisible: PropTypes.bool,
     isRtl: PropTypes.bool.isRequired,
     title: PropTypes.string,
     homeButtonTitle: PropTypes.string,
     guiMessages: PropTypes.objectOf(PropTypes.string),
-    tutorialMessages: PropTypes.objectOf(PropTypes.string),
+    tutorialMessages: PropTypes.shape({
+        failureMessage: PropTypes.string,
+        description: PropTypes.string
+    }),
     dragging: PropTypes.bool.isRequired,
     expanded: PropTypes.bool.isRequired,
     onCloseCards: PropTypes.func.isRequired,

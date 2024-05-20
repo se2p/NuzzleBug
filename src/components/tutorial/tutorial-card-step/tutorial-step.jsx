@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styles from './tutorial-cards.css';
+import styles from '../styles/tutorial-cards.css';
 
-import checkmark from './icon--checkmark.png';
-import crossMark from './icon--cross-mark.png';
-import loading from './icon--loading.svg';
-import arrow from './icon--arrow.svg';
+import checkmark from '../images/icon--checkmark.png';
+import crossMark from '../images/icon--cross-mark.png';
+import loading from '../images/icon--loading.svg';
+import arrow from '../images/icon--arrow-top.svg';
+import HintContent from './code-quality/tutorial-step-code-quality.jsx';
 
 const Solution = ({title, content, onSolution, solutionExpanded}) => (
     <>
@@ -59,12 +60,12 @@ const TestingComponent = props => {
 
     return (
         <div className={styles.stepTesting}>
-            { testButtonVisible ?
+            {testButtonVisible ?
                 <div
                     className={styles.stepTestingButton}
                     onClick={onTest}
                     style={{
-                        pointerEvents: currentlyTesting? 'none' : 'auto',
+                        pointerEvents: currentlyTesting ? 'none' : 'auto',
                         opacity: currentlyTesting ? 0.5 : 1
                     }}
                 >
@@ -137,14 +138,17 @@ const TutorialStep = props => {
         guiMessages,
         tested,
         onTest,
+        onCodeQualityHintGeneration,
         success,
         testButtonVisible,
         testButtonTitle,
+        codeQualityButtonTitle,
         failureMessage,
         solutionVisible,
         solutionExpanded,
         currentlyTesting,
-        onSolution
+        onSolution,
+        hints
     } = props;
 
     return (
@@ -179,6 +183,13 @@ const TutorialStep = props => {
                     success={success}
                     currentlyTesting={currentlyTesting}
                 />
+                {hints.length > 0 ?
+                    <HintContent
+                        hints={hints}
+                        codeQualityButtonTitle={codeQualityButtonTitle}
+                        onCodeQualityHintGeneration={onCodeQualityHintGeneration}
+                    /> : null
+                }
             </div>
         </div>
     );
@@ -197,9 +208,11 @@ TutorialStep.propTypes = {
     guiMessages: PropTypes.objectOf(PropTypes.string),
     tested: PropTypes.bool.isRequired,
     onTest: PropTypes.func.isRequired,
+    onCodeQualityHintGeneration: PropTypes.func.isRequired,
     success: PropTypes.bool.isRequired,
     testButtonVisible: PropTypes.bool.isRequired,
     testButtonTitle: PropTypes.string.isRequired,
+    codeQualityButtonTitle: PropTypes.string.isRequired,
     failureMessage: PropTypes.string.isRequired,
     solution: PropTypes.shape({
         img: PropTypes.node.isRequired,
@@ -208,7 +221,14 @@ TutorialStep.propTypes = {
     solutionVisible: PropTypes.bool.isRequired,
     solutionExpanded: PropTypes.bool.isRequired,
     currentlyTesting: PropTypes.bool.isRequired,
-    onSolution: PropTypes.func.isRequired
+    onSolution: PropTypes.func.isRequired,
+    hints: PropTypes.arrayOf(PropTypes.shape({
+        title: PropTypes.string.isRequired,
+        description: PropTypes.string.isRequired,
+        sprite: PropTypes.string.isRequired,
+        type: PropTypes.string.isRequired,
+        codeSnippet: PropTypes.string
+    })).isRequired
 };
 
 export default TutorialStep;

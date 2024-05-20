@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {injectIntl} from 'react-intl';
-import styles from './tutorial-cards.css';
+import styles from './styles/tutorial-cards.css';
 
 const TutorialMenuItem = ({content, onSelect}) => (
     <div

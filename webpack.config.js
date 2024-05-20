@@ -57,7 +57,10 @@ const base = {
         },
         {
             test: /\.tsx?$/,
-            loader: 'ts-loader'
+            loader: 'ts-loader',
+            options: {
+                allowTsInNodeModules: true
+            }
         },
         {
             test: /\.css$/,
