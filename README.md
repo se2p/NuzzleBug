@@ -20,9 +20,9 @@ via `npm install --global yarn`
 
 ## Running NuzzleBug
 
-configure in ./node_modules/scratch-vm/src/util/logging.js line 23 your ScratchLog URL
-configure in ./src/components/menu-bar/menu-bar.jsx line 177 your ScratchLog URL
-configure in ./src/containers/tutorial-step.jsx line 41 your LitterBox-Web URL
+configure in ./node_modules/scratch-vm/src/util/logging.js line 23 your ScratchLog URL\
+configure in ./src/components/menu-bar/menu-bar.jsx line 177 your ScratchLog URL\
+configure in ./src/containers/tutorial-step.jsx line 41 your LitterBox-Web URL\
 
 You can start *NuzzleBug* by executing the `start.sh` script, which is responsible for installing the required dependencies and opening the NuzzleBug-UI in a browser.
 
