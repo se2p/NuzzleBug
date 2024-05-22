@@ -7,6 +7,8 @@ NuzzleBug is a fork of the [scratch-gui](https://github.com/scratchfoundation/sc
 
 NuzzleBug is debugger for Scratch. It allows controlling the executions of Scratch programs with classical debugging functionality such as stepping and breakpoints, and it is an omniscient debugger that also allows reverse stepping. NuzzleBug is also an interrogative debugger that enables to ask questions about executions and provides answers explaining the behavior in question.
 
+This also contains the interactive tutorial system with LitterBox integration.
+
 
 ## Requirements
 
@@ -18,7 +20,13 @@ via `npm install --global yarn`
 
 ## Running NuzzleBug
 
+configure in ./node_modules/scratch-vm/src/util/logging.js line 23 your ScratchLog URL
+configure in ./src/components/menu-bar/menu-bar.jsx line 177 your ScratchLog URL
+configure in ./src/containers/tutorial-step.jsx line 41 your LitterBox-Web URL
+
 You can start *NuzzleBug* by executing the `start.sh` script, which is responsible for installing the required dependencies and opening the NuzzleBug-UI in a browser.
+
+Then, go to http://localhost:8601/ using your preferred browser to open the scratch-gui.
 
 
 ## Contributors
@@ -29,9 +37,13 @@ NuzzleBug is developed at the
 Contributors:
 
 Adina Deiner\
+Jonas Elsper\
+Benedikt Fein\
 Patric Feldmeier\
 Gordon Fraser\
 Stephan Gramüller\
+Fabian Häuslein\
+Florian Obermüller\
 Sebastian Schweikl\
 Phil Werli
 
@@ -51,4 +63,13 @@ NuzzleBug is supported by the project FR 2955/3-1 funded by the
   year      = {2024}
 }
 ```
-
+```
+@inproceedings{obermueller2023tutorials,
+author = {Oberm\"{u}ller, Florian and Greifenstein, Luisa and Fraser, Gordon},
+title = {Effects of Automated Feedback in Scratch Programming Tutorials},
+year = {2023},
+url = {https://doi.org/10.1145/3587102.3588803},
+doi = {10.1145/3587102.3588803},
+booktitle = {Proceedings of the 2023 Conference on Innovation and Technology in Computer Science Education V. 1}
+}
+```
