@@ -1,4 +1,4 @@
-import {applyMiddleware, compose, combineReducers} from 'redux';
+import {applyMiddleware, combineReducers, compose} from 'redux';
 
 import alertsReducer, {alertsInitialState} from './alerts';
 import assetDragReducer, {assetDragInitialState} from './asset-drag';
@@ -33,6 +33,9 @@ import vmStatusReducer, {vmStatusInitialState} from './vm-status';
 import workspaceMetricsReducer, {workspaceMetricsInitialState} from './workspace-metrics';
 import helpMenuReducer, {helpMenuInitialState} from './help-menu';
 import throttle from 'redux-throttle';
+import hintsExplanationCardReducer, {
+    hintsExplanationCardInitialState
+} from '../components/hint-gen/hints-explanation-card-reducer';
 
 import decks from '../lib/libraries/decks/index.jsx';
 
@@ -43,6 +46,7 @@ const guiInitialState = {
     assetDrag: assetDragInitialState,
     blockDrag: blockDragInitialState,
     cards: cardsInitialState,
+    hintsExplanationCard: hintsExplanationCardInitialState,
     ircards: irCardsInitialState,
     irDebugger: irDebuggerInitialState,
     helpMenu: helpMenuInitialState,
@@ -77,24 +81,28 @@ const initPlayer = function (currentState) {
     return Object.assign(
         {},
         currentState,
-        {mode: {
-            isFullScreen: currentState.mode.isFullScreen,
-            isPlayerOnly: true,
-            // When initializing in player mode, make sure to reset
-            // hasEverEnteredEditorMode
-            hasEverEnteredEditor: false
-        }}
+        {
+            mode: {
+                isFullScreen: currentState.mode.isFullScreen,
+                isPlayerOnly: true,
+                // When initializing in player mode, make sure to reset
+                // hasEverEnteredEditorMode
+                hasEverEnteredEditor: false
+            }
+        }
     );
 };
 const initFullScreen = function (currentState) {
     return Object.assign(
         {},
         currentState,
-        {mode: {
-            isFullScreen: true,
-            isPlayerOnly: currentState.mode.isPlayerOnly,
-            hasEverEnteredEditor: currentState.mode.hasEverEnteredEditor
-        }}
+        {
+            mode: {
+                isFullScreen: true,
+                isPlayerOnly: currentState.mode.isPlayerOnly,
+                hasEverEnteredEditor: currentState.mode.hasEverEnteredEditor
+            }
+        }
     );
 };
 
@@ -102,12 +110,14 @@ const initEmbedded = function (currentState) {
     return Object.assign(
         {},
         currentState,
-        {mode: {
-            showBranding: true,
-            isFullScreen: true,
-            isPlayerOnly: true,
-            hasEverEnteredEditor: false
-        }}
+        {
+            mode: {
+                showBranding: true,
+                isFullScreen: true,
+                isPlayerOnly: true,
+                hasEverEnteredEditor: false
+            }
+        }
     );
 };
 
@@ -122,6 +132,23 @@ const initTutorialCard = function (currentState, deckId) {
                 activeDeckId: deckId,
                 expanded: true,
                 step: 0,
+                x: 0,
+                y: 0,
+                dragging: false
+            }
+        }
+    );
+};
+
+const initHintsExplanationCard = function (currentState) {
+    return Object.assign(
+        {},
+        currentState,
+        {
+            hintsExplanationCard: {
+                visible: false,
+                content: '',
+                expanded: true,
                 x: 0,
                 y: 0,
                 dragging: false
@@ -147,6 +174,7 @@ const guiReducer = combineReducers({
     assetDrag: assetDragReducer,
     blockDrag: blockDragReducer,
     cards: cardsReducer,
+    hintsExplanationCard: hintsExplanationCardReducer,
     ircards: irCardsReducer,
     irDebugger: irDebuggerReducer,
     helpMenu: helpMenuReducer,
@@ -185,5 +213,6 @@ export {
     initFullScreen,
     initPlayer,
     initTelemetryModal,
-    initTutorialCard
+    initTutorialCard,
+    initHintsExplanationCard
 };
