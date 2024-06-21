@@ -81,12 +81,14 @@ class RequestHintButton extends React.Component {
         this.props.hintsExplanationCard.content = 'Fetching Hints...';
         this.props.vm.emitWorkspaceUpdate();
 
-        const enable = () => this.setState({enabled: true});
+        // const enable = () => this.setState({enabled: true});
 
-        this.requestHints()
-            .then(h => this.showHints(h))
-            .then(enable())
-            .catch(() => enable());
+        // this.requestHints()
+        //     .then(h => this.showHints(h))
+        //     .then(enable())
+        //     .catch(() => enable());
+
+        this.showHints(this.getGPTHints());
     }
 
     /**
@@ -212,6 +214,16 @@ class RequestHintButton extends React.Component {
         this.state.blockCommentIds.push(new Comment(blockId, blockCommentId));
 
         this.props.vm.emitWorkspaceUpdate();
+    }
+
+    getGPTHints () {
+        return {testsSuccessFul: 'success',
+            testsSuccessfulMessage: 'hint generation successful',
+            hints: ['hint1', 'hint2']};
+    }
+
+    generateRandomHint () {
+        return {HintId: Math.floor(Math.random())};
     }
 
     render () {
