@@ -1,0 +1,10 @@
+build:
+    stage: build
+    image: node:16
+    script:
+        - yarn install
+        - yarn run build
+    artifacts:
+        paths:
+            - build/
+        expire_in: 1 hour
