@@ -11,9 +11,9 @@ import {TracingState} from '../components/toggle-tracing/toggle-tracing.jsx';
 import {viewCards} from '../reducers/interrogative-debugging/version-1/ir-cards.js';
 import {setTestRunningState} from '../reducers/vm-status.js';
 
-import Test from 'whisker-main/whisker-main/src/test-runner/test';
-import TestRunner from 'whisker-main/whisker-main/src/test-runner/test-runner';
-import {ModelTester} from 'whisker-main/whisker-main/src/whisker/model/ModelTester.ts';
+import Test from 'whisker/whisker-main/src/test-runner/test';
+import TestRunner from 'whisker/whisker-main/src/test-runner/test-runner';
+import {ModelTester} from 'whisker/whisker-main/src/whisker/model/ModelTester.ts';
 import {actionExecuted, openHelpMenu, repositionHelpMenuWindow} from '../reducers/help-menu';
 import {viewTutorial} from '../reducers/tutorial-cards.js';
 
