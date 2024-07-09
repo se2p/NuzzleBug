@@ -20,7 +20,7 @@ import {
     setIsWhiskerProjectLoading
 } from '../reducers/vm-status';
 
-import TestRunner from 'whisker-main/whisker-main/src/test-runner/test-runner';
+import TestRunner from 'whisker/whisker-main/src/test-runner/test-runner';
 /*
  * Higher Order Component to manage events emitted by the VM
  * @param {React.Component} WrappedComponent component to manage VM events for

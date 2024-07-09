@@ -28,8 +28,8 @@ const base = {
         chunkFilename: 'chunks/[name].js'
     },
     resolve: {
-        symlinks: true, // avoid unreadable symlinks to make debugging easier
-        extensions: ['.ts', '.tsx', '.js'], // including typescript is necessary as whisker includes some
+        symlinks: false,
+        extensions: ['.ts', '.tsx', '.js'] // including typescript is necessary as whisker includes some
     },
     module: {
         rules: [{
@@ -57,10 +57,15 @@ const base = {
         },
         {
             test: /\.tsx?$/,
-            loader: 'ts-loader',
-            options: {
-                allowTsInNodeModules: true
-            }
+            use: [
+                {
+                    loader: 'ts-loader',
+                    options: {
+                        allowTsInNodeModules: true,
+                        transpileOnly: true // This seems to fix problems with linking whisker locally
+                    }
+                }
+            ]
         },
         {
             test: /\.css$/,
