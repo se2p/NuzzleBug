@@ -1,0 +1,132 @@
+
+
+.container {
+    padding: 20px;
+    margin: 0 auto;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    color: hsla(225, 15%, 40%, 1);
+}
+
+.description {
+    text-align: left;
+    margin: 20px 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.descriptionHeader {
+    text-align: left;
+    margin: 20px 0;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.error {
+    margin: 8px 0;
+    background-color: #e74c3c;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    justify-content: left;
+    display: flex;
+    text-align: left;
+}
+
+.error-label {
+    margin-right: 5px;
+    text-align: left;
+}
+
+.error-bar {
+    display: flex;
+    align-items: center;
+    border: 2px solid #e74c3c;
+    border-radius: 10px;
+    padding: 5px 5px;
+}
+
+.error-text {
+    flex-grow: 1;
+    font-size: 16px;
+    text-align: right;
+}
+
+.errorNumber {
+    flex-grow: 1;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: left;
+    margin-left: 5px;
+}
+
+.details-button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    position: relative;
+}
+
+.details-button:hover {
+    background-color: #c0392b;
+}
+
+.button-bar {
+    margin-top: 100px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.button-element {
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 15px 15px;
+    cursor: pointer;
+
+}
+
+
+/* Tooltip text */
+.details-button .tooltip-text {
+    visibility: hidden;
+    width: 210px;
+    background-color: #e74c3c;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 110%;
+
+    opacity: 0;
+    transition: opacity .7s;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.details-button:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+.details-button .tooltip-text::after {
+    content: " ";
+    position: absolute;
+    top: 50%;
+    left: 100%; /* To the right of the tooltip */
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent transparent #e74c3c;
+}

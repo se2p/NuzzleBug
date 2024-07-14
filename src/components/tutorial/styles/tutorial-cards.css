@@ -593,3 +593,58 @@
 code {
     font-size: 87.5%;
 }
+
+
+
+
+
+
+
+.tutorial-debugging-icon {
+    height: 40px;
+    width: auto;
+    margin: 20px 40px;
+    box-sizing: border-box;
+
+}
+
+.tutorial-debugging-head {
+    width: 100%;
+    height: 15px;
+    background: #70a45f;
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+.tutorial-debugging-container {
+    height: 80px;
+    display: flex;
+    border: 1px solid #44693c;
+    box-sizing: border-box;
+    border-radius: 5px;
+    margin: 3px 10px 10px;
+}
+
+.tutorial-debugging-title {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 20px;
+    color: #44693c;
+    line-height: 80px;
+    margin-left: 10px;
+}
+
+.tutorial-debugging {
+    width: 100%;
+    height: 110px;
+    text-align: left;
+    background: #e5faeb;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 1px solid #828282;
+    margin-top: 2px;
+    cursor: pointer;
+}
+
+.tutorial-debugging:hover {
+    background-color: #bed3bf;
+}

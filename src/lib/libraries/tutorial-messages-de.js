@@ -30,5 +30,7 @@ export default {
     failMessage: 'Deine Lösung stimmt noch nicht. Versuche es nochmal.',
     loadingMessage: 'Deine Lösung wird getestet.',
 
-    solutionHeader: 'Lösung'
+    solutionHeader: 'Lösung',
+
+    backButtonTitle: 'Übersicht'
 };

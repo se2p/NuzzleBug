@@ -30,5 +30,7 @@ export default {
     failMessage: 'Your solution is not yet correct. Please try it again.',
     loadingMessage: 'Tests running.',
 
-    solutionHeader: 'Solution'
+    solutionHeader: 'Solution',
+
+    backButtonTitle: 'Overview'
 };

@@ -20,6 +20,7 @@ import ToggleTracing, {TracingState} from '../toggle-tracing/toggle-tracing.jsx'
 import Tutorial from '../tutorial-button/tutorial-button.jsx';
 
 import styles from './controls.css';
+import DebuggingTutorialButton from "../debuggingTutorial/debuggingTutorialButton.jsx";
 
 const messages = defineMessages({
     goTitle: {
@@ -109,6 +110,7 @@ const Controls = function (props) {
         vm,
         paused,
         onTutorialClick,
+        onDebugTutorialClick, //TODO
         turbo,
         interrogationSupported,
         interrogationEnabled,
@@ -202,6 +204,7 @@ const Controls = function (props) {
                 onClick={onTutorialClick}
                 title={'Tutorial'}
             />
+            <DebuggingTutorialButton active={true} onClick={onDebugTutorialClick}/>
         </div>
     );
 };
@@ -232,7 +235,8 @@ Controls.propTypes = {
     whiskerTest: PropTypes.instanceOf(Test),
     onTutorialClick: PropTypes.func.isRequired,
     tutorialCardsVisible: PropTypes.bool,
-    locale: PropTypes.string.isRequired
+    locale: PropTypes.string.isRequired,
+    debuggingTutorialVisible: PropTypes.bool //TODO Speichert, ob das menü sichtbar ist. Wird im Button verwendet
 };
 
 Controls.defaultProps = {

@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import PropTypes from 'prop-types';
+import PropTypes, {func} from 'prop-types';
 import React, {Fragment} from 'react';
 import Draggable from 'react-draggable';
 import {injectIntl, FormattedMessage} from 'react-intl';
@@ -13,10 +13,16 @@ import expandIcon from '../cards/icon--expand.svg';
 import closeIcon from '../cards/icon--close.svg';
 import leftArrow from '../cards/icon--prev.svg';
 import rightArrow from '../cards/icon--next.svg';
+import backIcon from './images/icon--back.png'
 
 import Tutorial from './tutorial-menu-item.jsx';
 import TutorialStep from '../../containers/tutorial-step.jsx';
 import VirtualMachine from 'scratch-vm';
+import DebuggingTutorialStep from "../../containers/debugging-tutorial-step.jsx";
+import DebuggingTutorialOverview from "../../containers/debugging-tutorial-overview.jsx";
+import DebuggingTutorialStep1 from "../../containers/debugging-tutorial-step1.jsx";
+
+
 
 const NextPrevButtons = ({isMenuVisible, onNextStep, onPrevStep, expanded}) => (
     isMenuVisible ? null :
@@ -70,13 +76,23 @@ const TutorialHeader = props => {
         isMenuVisible,
         title,
         homeButtonTitle,
+        backButtonTitle,
         onCloseCards,
         onShrinkExpandCards,
         onHomeMenu,
         totalSteps,
         step,
-        expanded
+        expanded,
+        contentType,
     } = props;
+
+    const isBackButtonEnabled = contentType === "DEBUGGING_STEP" || contentType === "DEBUGGING_HELP";
+    let homeButtonText = "";
+    if (contentType === "DEBUGGING_STEP") {
+        homeButtonText = backButtonTitle;
+    } else if (contentType === "DEBUGGING_HELP") {
+        homeButtonText = "Aktueller Schritt"; //TODO add buttonText
+    } else {homeButtonText = homeButtonTitle;}
 
     return (
         <div
@@ -108,10 +124,10 @@ const TutorialHeader = props => {
                         <img
                             className={tutorialStyles.homeButtonIcon}
                             draggable={false}
-                            src={homeIcon}
+                            src={isBackButtonEnabled ? backIcon : homeIcon}
                             alt={'House'}
                         />
-                        {homeButtonTitle}
+                        {homeButtonText}
                     </div> : null}
                 <div
                     className={styles.shrinkExpandButton}
@@ -171,11 +187,12 @@ const TutorialCards = props => {
         cardRef,
         tutorials,
         selectedTutorial,
-        isMenuVisible,
+        isMenuVisible, //TODO löschen
         isRtl,
         currentTutorialStep,
         title,
         homeButtonTitle,
+        backButtonTitle,
         guiMessages,
         tutorialMessages,
         onCloseCards,
@@ -191,6 +208,11 @@ const TutorialCards = props => {
         step,
         expanded,
         vm,
+        contentType,
+        onSetContentType,
+        onStartTutorial,
+        projectFiles,
+        onOpenHelp,
         ...posProps
     } = props;
     let {x, y} = posProps;
@@ -207,11 +229,62 @@ const TutorialCards = props => {
     }
 
     let detectors;
+    let isDebuggingTutorialSelected = false;
     const tut = tutorials.filter(tutorial => tutorial.id === selectedTutorial);
-    if (tut.length > 0 && tut[0] !== undefined && tut[0].detectors) {
-        detectors = tut[0].detectors;
+    if (tut.length > 0 && tut[0] !== undefined) {
+        isDebuggingTutorialSelected = tut[0].isDebuggingTutorial;
+        if (tut[0].detectors) detectors = tut[0].detectors;
     }
 
+
+
+
+    const parseContent = function () {
+
+        switch (contentType) {
+            case "TUTORIAL_SELECTED":
+                if (isDebuggingTutorialSelected) {
+                    return <DebuggingTutorialOverview
+                        title={title}
+                        tutorialMessages={tutorialMessages}
+                        tutorialPicture={tut[0].img}
+                        onStartTutorial={onStartTutorial}
+                        vm={vm}
+                        projectFiles={projectFiles}
+                        stepCount={totalSteps}
+                    />;
+                } else {
+                    return <TutorialStep
+                        guiMessages={guiMessages}
+                        tutorialMessages={tutorialMessages}
+                        detectors={detectors}
+                        step={step}
+                        nextStep={onNextStep}
+                        vm={vm}
+                    />;
+                }
+            case "DEBUGGING_STEP":
+                return <DebuggingTutorialStep1
+                    onOpenHelp={onOpenHelp}
+                    tutorialMessages={tutorialMessages}
+
+                />;
+            case "DEBUGGING_HELP":
+                return <DebuggingTutorialStep
+                    tutorial={tutorialMessages}
+                />
+            default: //Show menu
+                return Array(tutorials.length).fill(0)
+                    .map((_, i) => (
+                        <Tutorial
+                            isDebuggingTutorial={tutorials[i].isDebuggingTutorial}
+                            key={tutorials[i].id}
+                            content={tutorials[i]}
+                            onSelect={onSelectTutorial}
+                        />
+                    ));
+        }
+    }
 
     return (
         // Custom overlay to act as the bounding parent for the draggable, using values from above
@@ -237,35 +310,25 @@ const TutorialCards = props => {
                             isMenuVisible={isMenuVisible}
                             title={title}
                             homeButtonTitle={homeButtonTitle}
+                            backButtonTitle={backButtonTitle}
                             expanded={expanded}
                             step={step}
                             totalSteps={totalSteps}
                             onCloseCards={onCloseCards}
                             onShrinkExpandCards={onShrinkExpandCards}
                             onHomeMenu={onHomeMenu}
+                            contentType={contentType}
                         />
                         <div
                             className={expanded ? classNames(styles.stepBody, tutorialStyles.stepBody) : styles.hidden}
                             ref={cardRef}
                         >
-                            {isMenuVisible ?
-                                Array(tutorials.length).fill(0)
-                                    .map((_, i) => (
-                                        <Tutorial
-                                            key={tutorials[i].id}
-                                            content={tutorials[i]}
-                                            onSelect={onSelectTutorial}
-                                        />
-                                    )) :
-                                <TutorialStep
-                                    guiMessages={guiMessages}
-                                    tutorialMessages={tutorialMessages}
-                                    detectors={detectors}
-                                    step={step}
-                                    nextStep={onNextStep}
-                                    vm={vm}
-                                />
-                            }
+
+                            {parseContent()}
+
+
+
+
                         </div>
                         <NextPrevButtons
                             isMenuVisible={isMenuVisible}
@@ -329,7 +392,10 @@ TutorialCards.propTypes = {
     currentTutorialStep: PropTypes.number.isRequired,
     x: PropTypes.number,
     y: PropTypes.number,
-    vm: PropTypes.instanceOf(VirtualMachine).isRequired
+    vm: PropTypes.instanceOf(VirtualMachine).isRequired,
+    onSetContentType: PropTypes.func,
+    projectFiles: PropTypes.string,
+    onOpenHelp: PropTypes.func,
 };
 
 export default injectIntl(TutorialCards);

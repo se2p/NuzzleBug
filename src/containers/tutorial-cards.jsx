@@ -12,7 +12,10 @@ import {
     shrinkExpandCards,
     startDrag,
     selectTutorial,
-    homeMenu
+    homeMenu,
+    setContentType,
+    onStartTutorial,
+    onOpenHelp,
 } from '../reducers/tutorial-cards';
 import {reset} from '../reducers/tutorial-step';
 
@@ -20,6 +23,7 @@ import * as messagesEN from '../lib/libraries/tutorial-messages-en.js';
 
 import TutorialCardsComponent from '../components/tutorial/tutorial-cards.jsx';
 import * as tutorials from 'tutorial-tests/src/tutorials';
+import projectFilesTest from 'tutorial-tests/src/tutorials/testTutorial/codeFilesDE.json'
 
 class TutorialCards extends React.Component {
     constructor (props) {
@@ -40,6 +44,7 @@ class TutorialCards extends React.Component {
             if (typeof messages === 'undefined') {
                 messages = tutorial.messagesEN;
             }
+
             const tutorialMsg = messages.default;
             rows.push({
                 id: tutorial.id,
@@ -48,7 +53,8 @@ class TutorialCards extends React.Component {
                 difficulty: tutorial.difficulty,
                 difficultyMsg: tutorialMsg.difficulty,
                 totalSteps: tutorial.totalSteps,
-                detectors: tutorial.detectors
+                detectors: tutorial.detectors,
+                isDebuggingTutorial: tutorial.isDebuggingTutorial,
             }
             );
         }
@@ -56,8 +62,16 @@ class TutorialCards extends React.Component {
     }
 
     handleHome () {
-        this.props.onReset();
-        this.props.onHome();
+        // Go to the tutorialOverview (Home) if the button was clocked in the DebuggingOverview or
+        // the tutorialStep, otherwise go to the DebuggingOverview.
+        if (this.props.contentType === "DEBUGGING_STEP") {
+            this.props.onSetContentType("TUTORIAL_SELECTED");
+        } else if (this.props.contentType === "DEBUGGING_HELP") {
+            this.props.onSetContentType("DEBUGGING_STEP");
+        } else {
+            this.props.onReset();
+            this.props.onHome();
+        }
     }
 
     handlePrev () {
@@ -96,6 +110,7 @@ class TutorialCards extends React.Component {
 
         const title = this.props.isMenuVisible ? guiMessages.headerTitle : tutorialMessages.title;
         const homeButtonTitle = guiMessages.homeButtonTitle;
+        const backButtonTitle = guiMessages.backButtonTitle;
 
         return (
             <TutorialCardsComponent
@@ -107,9 +122,11 @@ class TutorialCards extends React.Component {
                 tutorialMessages={tutorialMessages}
                 title={title}
                 homeButtonTitle={homeButtonTitle}
+                backButtonTitle={backButtonTitle}
                 onHomeMenu={this.handleHome}
                 onNextStep={this.handleNext}
                 onPrevStep={this.handlePrev}
+                projectFiles={projectFilesTest}
                 {...this.props}
             />
         );
@@ -129,6 +146,7 @@ TutorialCards.propTypes = {
     locale: PropTypes.string.isRequired,
     isRtl: PropTypes.bool.isRequired,
     step: PropTypes.number.isRequired,
+    contentType: PropTypes.string,
     vm: PropTypes.instanceOf(VirtualMachine).isRequired
 };
 
@@ -144,7 +162,8 @@ const mapStateToProps = state => ({
     y: state.scratchGui.tutorialCards.y,
     locale: state.locales.locale,
     isRtl: state.locales.isRtl,
-    dragging: state.scratchGui.tutorialCards.dragging
+    dragging: state.scratchGui.tutorialCards.dragging,
+    contentType: state.scratchGui.tutorialCards.contentType,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -157,7 +176,10 @@ const mapDispatchToProps = dispatch => ({
     onEndDrag: () => dispatch(endDrag()),
     onSelectTutorial: (tutorial, totalSteps) => dispatch(selectTutorial(tutorial, totalSteps)),
     onHome: () => dispatch(homeMenu()),
-    onReset: () => dispatch(reset())
+    onReset: () => dispatch(reset()),
+    onSetContentType: (contentType) => dispatch(setContentType(contentType)),
+    onStartTutorial: () => dispatch(onStartTutorial()),
+    onOpenHelp: () => dispatch(onOpenHelp()),
 });
 
 export default connect(

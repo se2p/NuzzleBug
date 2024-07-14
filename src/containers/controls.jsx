@@ -16,6 +16,7 @@ import TestRunner from 'whisker-main/whisker-main/src/test-runner/test-runner';
 import {ModelTester} from 'whisker-main/whisker-main/src/whisker/model/ModelTester.ts';
 import {actionExecuted, openHelpMenu, repositionHelpMenuWindow} from '../reducers/help-menu';
 import {viewTutorial} from '../reducers/tutorial-cards.js';
+import {viewDebuggingTutorial} from '../reducers/debugging-tutorial';
 
 class Controls extends React.Component {
     constructor (props) {
@@ -286,6 +287,7 @@ class Controls extends React.Component {
         this.tracingState = state;
         this.forceUpdate();
     }
+
     render () {
         const {
             vm, // eslint-disable-line no-unused-vars
@@ -295,6 +297,7 @@ class Controls extends React.Component {
             projectPaused,
             irDisabled,
             handleTutorialClick,
+            handleDebugTutorialClick,//TODO
             turbo,
             interrogationSupported,
             interrogationEnabled,
@@ -331,7 +334,8 @@ class Controls extends React.Component {
                 onStopAllClick={this.handleStopAllClick}
                 onIRQuestionsClick={handleIRQuestionsClick}
                 onToggleTracingClick={this.handleToggleTracingClick}
-                onTutorialClick={handleTutorialClick}
+                onTutorialClick={handleTutorialClick} //handleTutorialClick UNNÖTIG? WIRD NUR AM ANFANG AUFGERUFEN
+                onDebugTutorialClick={handleDebugTutorialClick}//TODO
             />
         );
     }
@@ -347,6 +351,7 @@ Controls.propTypes = {
     irDisabled: PropTypes.bool.isRequired,
     projectRunning: PropTypes.bool.isRequired,
     handleTutorialClick: PropTypes.func.isRequired,
+    handleDebugTutorialClick: PropTypes.func, //TODO isRequired
     turbo: PropTypes.bool.isRequired,
     onHelpMenuButtonClick: PropTypes.func.isRequired,
     onActionExecuted: PropTypes.func.isRequired,
@@ -387,7 +392,8 @@ const mapDispatchToProps = dispatch => ({
     handleIRQuestionsClick: () => dispatch(viewCards()),
     onActionExecuted: () => dispatch(actionExecuted()),
     repositionHelpMenuWindow: (x, y) => dispatch(repositionHelpMenuWindow(x, y)),
-    handleTutorialClick: () => dispatch(viewTutorial())
+    handleTutorialClick: () => dispatch(viewTutorial()), //dispatch(viewTutorial())
+    handleDebugTutorialClick: () => dispatch(viewDebuggingTutorial()) //TODO Zeigt tutorial an
 });
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Controls));

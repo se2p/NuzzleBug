@@ -44,6 +44,8 @@ import addExtensionIcon from './icon--extensions.svg';
 import codeIcon from './icon--code.svg';
 import costumesIcon from './icon--costumes.svg';
 import soundsIcon from './icon--sounds.svg';
+import DebuggingTutorialWindow from '../../containers/debugging-tutorial-window.jsx';//../../containers/debugging-tutorial-window.jsx';
+
 
 const messages = defineMessages({
     addExtension: {
@@ -71,6 +73,7 @@ const GUIComponent = props => {
         backpackVisible,
         blocksTabVisible,
         cardsVisible,
+        debuggingTutorialVisible, //TODO Added the show debuggingProp
         irCardsVisible,
         irDebuggerVisible,
         helpMenuVisible,
@@ -218,6 +221,11 @@ const GUIComponent = props => {
                         vm={vm}
                     />
                 ) : null}
+
+                {debuggingTutorialVisible ? ( //Show the debuggingWindow
+                    <DebuggingTutorialWindow/>
+                ) : null}
+
                 {alertsVisible ? (
                     <Alerts className={styles.alertsContainer} />
                 ) : null}

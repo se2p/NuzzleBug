@@ -33,6 +33,9 @@ import vmStatusReducer, {vmStatusInitialState} from './vm-status';
 import workspaceMetricsReducer, {workspaceMetricsInitialState} from './workspace-metrics';
 import helpMenuReducer, {helpMenuInitialState} from './help-menu';
 import throttle from 'redux-throttle';
+import debuggingTutorialReducer, {debuggingTutorialInitialState} from './debugging-tutorial-step';
+import debuggingTutorialOverviewReducer, {debuggingTutorialOverviewInitialState} from "./debugging-tutorial-overview";
+import debuggingTutorialStepReducer, {debuggingTutorialStepInitialState} from "./debugging-tutorial-step1";
 
 import decks from '../lib/libraries/decks/index.jsx';
 
@@ -47,6 +50,9 @@ const guiInitialState = {
     irDebugger: irDebuggerInitialState,
     helpMenu: helpMenuInitialState,
     tutorialCards: tutorialCardsInitialState,
+    debuggingTutorial: debuggingTutorialInitialState, //TODO CARDS weg?
+    debuggingTutorialOverview: debuggingTutorialOverviewInitialState,
+    debuggingTutorialStep: debuggingTutorialStepInitialState,
     tutorialStep: tutorialStepInitialState,
     colorPicker: colorPickerInitialState,
     connectionModal: connectionModalInitialState,
@@ -151,6 +157,9 @@ const guiReducer = combineReducers({
     irDebugger: irDebuggerReducer,
     helpMenu: helpMenuReducer,
     tutorialCards: tutorialCardsReducer,
+    debuggingTutorial: debuggingTutorialReducer, //TODO WAS MACHT DAS? Erlaubt dem container/gui auf state.debugTutorial.visible zuzugreifen
+    debuggingTutorialOverview: debuggingTutorialOverviewReducer,
+    debuggingTutorialStep: debuggingTutorialStepReducer,
     tutorialStep: tutorialStepReducer,
     colorPicker: colorPickerReducer,
     connectionModal: connectionModalReducer,
@@ -174,7 +183,7 @@ const guiReducer = combineReducers({
     toolbox: toolboxReducer,
     vm: vmReducer,
     vmStatus: vmStatusReducer,
-    workspaceMetrics: workspaceMetricsReducer
+    workspaceMetrics: workspaceMetricsReducer,
 });
 
 export {
