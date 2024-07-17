@@ -37,114 +37,129 @@ const DebuggingTutorialStep = props => {
         }
     }
 
-    const parseQuestion = function (){
-        switch (tutorial[step]["questionType"]) {
-            case "SINGLE_CHOICE":
-                return Object.keys(tutorial[step]).filter((key) => (key.startsWith("option"))).map((key) => (
-                    <div key={key} className={css.option}>
-                        <img alt={"option picture"} className={css.smallImage}
-                             style={{width: tutorial[step][key]["width"]}}
-                             src={tutorialIndexData[tutorial[step][key]["img"]]}/>
+    const renderSingleChoice = () => {
+        return Object.keys(tutorial[step]).filter((key) => (key.startsWith("option"))).map((key) => (
+            <div key={key} className={css.option}>
+                <img alt={"option picture"} className={css.smallImage}
+                     style={{width: tutorial[step][key]["width"]}}
+                     src={tutorialIndexData[tutorial[step][key]["img"]]}/>
 
-                        <input
-                            type="radio"
-                            id={key}
-                            name="singleChoice"
-                            checked={answers[0] === key}
-                            onChange={(e) => setAnswer(0, key)}
-                        />
-                    </div>
-                ));
-            case "DROPDOWN":
-                return (
-                    <div className={css.textAnswerContainer}>
-                        <span className={css.textAnswerLine} style={{marginRight: "10px"}}>{tutorial[step]["questionText1_0"]}</span>
-                        <div className={css.dropdown}>
-                            <input className={css.dropdownBody} readOnly={true} placeholder={"Wähle aus"} type="text" value={answers[0]}/>
+                <input
+                    type="radio"
+                    id={key}
+                    name="singleChoice"
+                    checked={answers[0] === key}
+                    onChange={(e) => setAnswer(0, key)}
+                />
+            </div>
+        ));
+    }
 
-                            <div className={css.dropdownTest}>
-                                <img className={css.dropdownIcon} src={dropdownIcon} alt={"selectorIcon"}/>
-                                <div className={css.dropdownContent}>
+    const renderMultipleChoice = () => {
+        return Object.keys(tutorial[step]).filter((key) => (key.startsWith("option"))).map((key) => (
+            <div key={key} className={css.option}>
+                <img alt={"option picture"} className={css.smallImage}
+                     style={{width: tutorial[step][key]["width"]}}
+                     src={tutorialIndexData[tutorial[step][key]["img"]]}/>
+                <div style={{display: "flex", justifyContent: "center"}}>
 
-                                    {Object.keys(tutorial[step]).filter((key) => (key.startsWith("option"))).map((key) =>
+                    <button key={key} onClick={() => onEnterMultiAnswer(key)} className=
+                        {selectedAnswers[key.at(6) - 1] ? css.multiButton_active : css.multiButton}>
+                    </button>
+                </div>
+            </div>
+        ));
+    }
 
-                                    <span className={css.dropdownElement} onClick={() => setAnswer(0, tutorial[step][key]["label"])}>
-                                        {tutorial[step][key]["label"]}
-                                    </span>)
+    const renderMessage = () => {
+        return <div style={{marginTop:"20px", marginBottom:"20px"}}>
+            <span className={css.messageText}>{tutorial[step]["message"]}</span>
+        </div>
+    }
 
-                                    }
+    const renderGapText = () => {
+        return <div style={{width:"80%"}}>
+            <div className={css.textAnswerContainer}>
+                <span className={css.textAnswerLine} style={{marginRight: "10px"}}>{tutorial[step].question1.questionStart}</span>
+                <div className={isTextAnswerCorrect ? css.dropdownDisabled : css.dropdown}>
+                    <input className={css.dropdownBody} readOnly={isTextAnswerCorrect} placeholder={"Anzahl eingeben"} type="text" value={answers[0]} onChange={(e) => setAnswer(0, e.target.value)}/>
 
-                                </div>
-                            </div>
-                        </div>
-                        <span className={css.textAnswerLine} style={{marginLeft: "10px"}}>{tutorial[step]["questionText1_1"]}</span>
-                    </div>
-                );
-            case "MULTIPLE_CHOICE":
-                return Object.keys(tutorial[step]).filter((key) => (key.startsWith("option"))).map((key) => (
-                    <div key={key} className={css.option}>
-                        <img alt={"option picture"} className={css.smallImage}
-                             style={{width: tutorial[step][key]["width"]}}
-                             src={tutorialIndexData[tutorial[step][key]["img"]]}/>
-                        <div style={{display: "flex", justifyContent: "center"}}>
-
-                            <button key={key} onClick={() => onEnterMultiAnswer(key)} className=
-                                {selectedAnswers[key.at(6) - 1] ? css.multiButton_active : css.multiButton}>
-                            </button>
+                    <div className={isTextAnswerCorrect ? css.dropdownTestDisabled : css.dropdownTest}>
+                        <img className={css.dropdownIcon} src={dropdownIcon} alt={"selectorIcon"}/>
+                        <div className={css.dropdownContent}>
+                            <span className={css.dropdownElement} onClick={() => setAnswer(0, "0")}>0</span>
+                            <span className={css.dropdownElement} onClick={() => setAnswer(0, "unendlich")}>unendlich</span>
                         </div>
                     </div>
-                ));
-            case "GAP_TEXT":
-                return <div style={{width:"80%"}}>
-                    <div className={css.textAnswerContainer}>
-                        <span className={css.textAnswerLine} style={{marginRight: "10px"}}>{tutorial[step].question1.questionStart}</span>
-                        <div className={isTextAnswerCorrect ? css.dropdownDisabled : css.dropdown}>
-                            <input className={css.dropdownBody} readOnly={isTextAnswerCorrect} placeholder={"Anzahl eingeben"} type="text" value={answers[0]} onChange={(e) => setAnswer(0, e.target.value)}/>
+                </div>
+                <span className={css.textAnswerLine} style={{marginLeft: "10px"}}>{tutorial[step].question1.questionEnd}</span>
+            </div>
 
-                            <div className={isTextAnswerCorrect ? css.dropdownTestDisabled : css.dropdownTest}>
-                                <img className={css.dropdownIcon} src={dropdownIcon} alt={"selectorIcon"}/>
-                                <div className={css.dropdownContent}>
-                                    <span className={css.dropdownElement} onClick={() => setAnswer(0, "0")}>0</span>
-                                    <span className={css.dropdownElement} onClick={() => setAnswer(0, "unendlich")}>unendlich</span>
-                                </div>
-                            </div>
+            <div className={css.textAnswerContainer}>
+                <span className={css.textAnswerLine} style={{marginRight: "10px"}}>{tutorial[step].question2.questionStart}</span>
+                <div className={isTextAnswerCorrect ? css.dropdownDisabled : css.dropdown}>
+                    <input className={css.dropdownBody} readOnly={isTextAnswerCorrect} placeholder={"Anzahl eingeben"} type="text" value={answers[1]} onChange={(e) => setAnswer(1, e.target.value)}/>
+                    <div className={isTextAnswerCorrect ? css.dropdownTestDisabled : css.dropdownTest}>
+                        <img className={css.dropdownIcon} src={dropdownIcon} alt={"selectorIcon"}/>
+                        <div className={css.dropdownContent}>
+                            <span className={css.dropdownElement} onClick={() => setAnswer(1, "0")}>0</span>
+                            <span className={css.dropdownElement} onClick={() => setAnswer(1, "unendlich")}>unendlich</span>
                         </div>
-                        <span className={css.textAnswerLine} style={{marginLeft: "10px"}}>{tutorial[step].question1.questionEnd}</span>
                     </div>
-
-                    <div className={css.textAnswerContainer}>
-                        <span className={css.textAnswerLine} style={{marginRight: "10px"}}>{tutorial[step].question2.questionStart}</span>
-                        <div className={isTextAnswerCorrect ? css.dropdownDisabled : css.dropdown}>
-                            <input className={css.dropdownBody} readOnly={isTextAnswerCorrect} placeholder={"Anzahl eingeben"} type="text" value={answers[1]} onChange={(e) => setAnswer(1, e.target.value)}/>
-
-                            <div className={isTextAnswerCorrect ? css.dropdownTestDisabled : css.dropdownTest}>
-                                <img className={css.dropdownIcon} src={dropdownIcon} alt={"selectorIcon"}/>
-                                <div className={css.dropdownContent}>
-                                    <span className={css.dropdownElement} onClick={() => setAnswer(1, "0")}>0</span>
-                                    <span className={css.dropdownElement} onClick={() => setAnswer(1, "unendlich")}>unendlich</span>
-                                </div>
-                            </div>
-                        </div>
-                        <span className={css.textAnswerLine} style={{marginLeft: "10px"}}>{tutorial[step].question2.questionEnd}</span>
-                    </div>
-
-                    {isTextAnswerCorrect && <div>
+                </div>
+                <span className={css.textAnswerLine} style={{marginLeft: "10px"}}>{tutorial[step].question2.questionEnd}</span>
+            </div>
+            {isTextAnswerCorrect && <div>
                         <span className={css.textAnswerLine} style={{marginTop: "30px", fontWeight:"bold", textDecoration:"underline"}}>
                             {tutorial[step].endQuestion}
                         </span>
+                <div className={css.textAnswerBar}>
+                    <button className={css.textAnswerButton} style={{backgroundColor:gapTextButtonState()[2]}} onClick={onGapTextButton}>
+                        {gapTextButtonState()[0]}
+                    </button>
+                    <span className={css.textAnswerText}>{gapTextButtonState()[1]}</span>
+                </div>
+            </div>}
+        </div>
+    }
 
-                        <div className={css.textAnswerBar}>
-                            <button className={css.textAnswerButton} style={{backgroundColor:gapTextButtonState()[2]}} onClick={onGapTextButton}>
-                                {gapTextButtonState()[0]}
-                            </button>
-                            <span className={css.textAnswerText}>{gapTextButtonState()[1]}</span>
+    const renderDropdown = () => {
+        return (
+            <div className={css.textAnswerContainer}>
+                <span className={css.textAnswerLine} style={{marginRight: "10px"}}>{tutorial[step]["questionText1_0"]}</span>
+                <div className={css.dropdown}>
+                    <input className={css.dropdownBody} readOnly={true} placeholder={"Wähle aus"} type="text" value={answers[0]}/>
+                    <div className={css.dropdownTest}>
+                        <img className={css.dropdownIcon} src={dropdownIcon} alt={"selectorIcon"}/>
+                        <div className={css.dropdownContent}>
+                            {Object.keys(tutorial[step]).filter((key) => (key.startsWith("option"))).map((key) =>
+
+                                <span className={css.dropdownElement} onClick={() => setAnswer(0, tutorial[step][key]["label"])}>
+                                        {tutorial[step][key]["label"]}
+                                    </span>)
+                            }
                         </div>
-                    </div>}
+                    </div>
                 </div>
+                <span className={css.textAnswerLine} style={{marginLeft: "10px"}}>{tutorial[step]["questionText1_1"]}</span>
+            </div>
+        );
+    }
+
+    const parseQuestion = function (){
+        switch (tutorial[step]["questionType"]) {
+            case "SINGLE_CHOICE":
+                return renderSingleChoice();
+            case "DROPDOWN":
+                return renderDropdown();
+            case "MULTIPLE_CHOICE":
+                return renderMultipleChoice();
+            case "GAP_TEXT":
+                return renderGapText();
             case "MESSAGE":
-                return <div style={{marginTop:"20px", marginBottom:"20px"}}>
-                    <span className={css.messageText}>{tutorial[step]["message"]}</span>
-                </div>
+                return renderMessage();
+            default:
+                console.log("Unknown questionType found: " + tutorial[step]["questionType"]);
         }
 
 
