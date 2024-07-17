@@ -213,6 +213,7 @@ const TutorialCards = props => {
         onStartTutorial,
         projectFiles,
         onOpenHelp,
+        tutorialIndexData,
         ...posProps
     } = props;
     let {x, y} = posProps;
@@ -250,7 +251,6 @@ const TutorialCards = props => {
                         tutorialPicture={tut[0].img}
                         onStartTutorial={onStartTutorial}
                         vm={vm}
-                        projectFiles={projectFiles}
                         stepCount={totalSteps}
                     />;
                 } else {
@@ -267,11 +267,15 @@ const TutorialCards = props => {
                 return <DebuggingTutorialStep1
                     onOpenHelp={onOpenHelp}
                     tutorialMessages={tutorialMessages}
-
+                    projectFiles={"projectFiles"}
+                    vm={vm}
+                    step={step}
+                    nextStep={onNextStep}
                 />;
             case "DEBUGGING_HELP":
                 return <DebuggingTutorialStep
                     tutorial={tutorialMessages}
+                    tutorialIndexData={tutorialIndexData}
                 />
             default: //Show menu
                 return Array(tutorials.length).fill(0)
@@ -394,7 +398,6 @@ TutorialCards.propTypes = {
     y: PropTypes.number,
     vm: PropTypes.instanceOf(VirtualMachine).isRequired,
     onSetContentType: PropTypes.func,
-    projectFiles: PropTypes.string,
     onOpenHelp: PropTypes.func,
 };
 

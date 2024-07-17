@@ -23,7 +23,6 @@ import * as messagesEN from '../lib/libraries/tutorial-messages-en.js';
 
 import TutorialCardsComponent from '../components/tutorial/tutorial-cards.jsx';
 import * as tutorials from 'tutorial-tests/src/tutorials';
-import projectFilesTest from 'tutorial-tests/src/tutorials/testTutorial/codeFilesDE.json'
 
 class TutorialCards extends React.Component {
     constructor (props) {
@@ -88,9 +87,10 @@ class TutorialCards extends React.Component {
         const tutorialsData = this.processTutorials();
 
         let tutorialMessages;
+        let tutorial;
 
         if (this.props.selectedTutorial !== '') {
-            const tutorial = tutorials[`${this.props.selectedTutorial}`];
+            tutorial = tutorials[`${this.props.selectedTutorial}`];
             let messages = tutorial[`messages${this.props.locale.toUpperCase()}`];
             if (typeof messages === 'undefined') {
                 messages = tutorial.messagesEN;
@@ -112,6 +112,8 @@ class TutorialCards extends React.Component {
         const homeButtonTitle = guiMessages.homeButtonTitle;
         const backButtonTitle = guiMessages.backButtonTitle;
 
+
+
         return (
             <TutorialCardsComponent
                 /* eslint-disable-next-line react/jsx-no-bind */
@@ -126,7 +128,7 @@ class TutorialCards extends React.Component {
                 onHomeMenu={this.handleHome}
                 onNextStep={this.handleNext}
                 onPrevStep={this.handlePrev}
-                projectFiles={projectFilesTest}
+                tutorialIndexData={tutorial}
                 {...this.props}
             />
         );
@@ -147,7 +149,7 @@ TutorialCards.propTypes = {
     isRtl: PropTypes.bool.isRequired,
     step: PropTypes.number.isRequired,
     contentType: PropTypes.string,
-    vm: PropTypes.instanceOf(VirtualMachine).isRequired
+    vm: PropTypes.instanceOf(VirtualMachine).isRequired,
 };
 
 const mapStateToProps = state => ({

@@ -87,10 +87,30 @@
 .button-element {
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
     padding: 15px 15px;
     cursor: pointer;
+    background-color: hsla(215, 100%, 65%, 1);
+    min-width: 120px;
+}
 
+.button-element:hover {
+    background-color: #3d77c5;
+}
+
+.next-button {
+    color: white;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 15px 15px;
+    cursor: pointer;
+    border: 3px solid #784451ff;
+    background-color: hsl(10, 22%, 56%);
+    min-width: 120px;
+}
+
+.next-button:hover {
+    background-color: #795d55;
 }
 
 
@@ -129,4 +149,96 @@
     border-width: 5px;
     border-style: solid;
     border-color: transparent transparent transparent #e74c3c;
+}
+
+.error-label {
+    margin-right: 5px;
+    text-align: left;
+}
+
+.test-bar {
+    display: flex;
+    align-items: center;
+    border: 2px solid hsla(215, 100%, 65%, 1);
+    border-radius: 10px;
+    padding: 5px 5px;
+    margin-top: 40px;
+}
+
+.test-text {
+    flex-grow: 1;
+    font-size: 16px;
+    text-align: right;
+}
+
+.test-number {
+    flex-grow: 1;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: left;
+    margin-left: 10px;
+}
+
+.test-details-button {
+    background-color: hsla(215, 100%, 65%, 1);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    position: relative;
+}
+
+.test-details-button:hover {
+    background-color: hsl(215, 59%, 53%);
+}
+
+.testContainer {
+    width: 100%;
+    margin-top: 40px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.testBox {
+    width: 300px;
+    display: flex;
+    align-items: start;
+    border: 2px solid hsla(215, 100%, 65%, 1);
+    border-radius: 10px;
+    flex-direction: column;
+    margin-right: 15px;
+    margin-bottom: 20px;
+    background-color: white;
+}
+
+.test-result-button {
+    background-color: hsla(215, 100%, 65%, 1);
+    color: white;
+    border: none;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 8px;
+    padding: 5px 15px;
+    cursor: pointer;
+    position: relative;
+}
+
+.test-result-button:hover {
+    background-color: hsl(215, 59%, 53%);
+}
+
+.test-res-container {
+    display: flex;
+    align-items: start;
+    width: 298px;
+}
+
+.result-item {
+    display: flex;
+    align-items: start;
+    margin-bottom: 5px;
+    width: 297px;
+    justify-content: space-between;
 }

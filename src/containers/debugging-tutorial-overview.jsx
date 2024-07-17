@@ -4,16 +4,12 @@ import {onStartTutorial} from "../reducers/debugging-tutorial-overview"
 import DebuggingTutorialOverviewComponent from '../components/debuggingTutorial/debuggingTutorialOverview.jsx';
 import PropTypes from "prop-types";
 import VirtualMachine from "scratch-vm";
+import asdProject from '!arraybuffer-loader!../components/debuggingTutorial/testImg/Scratch-Projekt(1).sb3';
 
 class DebuggingTutorialOverview extends React.Component {
 
-
     loadProject() {
-        //console.log(this.props.vm.toJSON())
-        if (this.props.projectFiles !== undefined)  {
-            //console.log(this.props.vm.toJSON())
-            this.props.vm.loadProject(this.props.projectFiles.toString()).then(r => this.props.onStartTutorial);
-        }
+        this.props.vm.loadProject(asdProject);
     }
 
     render () {
@@ -32,8 +28,7 @@ DebuggingTutorialOverview.propTypes = {
     tutorialPicture: PropTypes.any,
     onStartTutorial: PropTypes.func.isRequired,
 
-    vm: PropTypes.instanceOf(VirtualMachine).isRequired,
-    projectFiles: PropTypes.string, //TODO Ändere PropType weil für String zu lange?
+    vm: PropTypes.instanceOf(VirtualMachine).isRequired
 };
 
 const mapStateToProps = state => ({

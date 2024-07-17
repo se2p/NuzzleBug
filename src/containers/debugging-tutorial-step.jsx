@@ -9,19 +9,21 @@ import {
     onEnterMultiAnswer,
     onChangeTextInput1,
     onChangeTextInput2,
-    onChangeTextEndAnswer, } from "../reducers/debugging-tutorial-step";
+    onChangeTextEndAnswer,
+    onSetTutorial,} from "../reducers/debugging-tutorial-step";
 import DebuggingTutorialStepComponent from '../components/debuggingTutorial/debuggingTutorialStep.jsx';
 import PropTypes from "prop-types";
 
 class DebuggingTutorialStep extends React.Component {
 
 
+
     render () {
         return (
             <DebuggingTutorialStepComponent
                 isTextAnswerCorrect={
-                this.props.textAnswer1.toLowerCase() === this.props.tutorial[this.props.step]["textAnswer1"] &&
-                    this.props.textAnswer2.toLowerCase() === this.props.tutorial[this.props.step]["textAnswer2"]}
+                    this.props.tutorial[this.props.step].questionType === "TEXT" && this.props.textAnswer1.toLowerCase() === this.props.tutorial[this.props.step].question1.questionSolution &&
+                    this.props.textAnswer2.toLowerCase() === this.props.tutorial[this.props.step].question2.questionSolution}
                 {...this.props}
             />
         );
@@ -35,7 +37,9 @@ DebuggingTutorialStep.propTypes = {
     textAnswer1: PropTypes.string,
     textAnswer2: PropTypes.string,
     tutorial: PropTypes.any.isRequired,
-    step: PropTypes.string
+    tutorialIndexData: PropTypes.any.isRequired,
+    step: PropTypes.string,
+    onSetTutorial: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -51,12 +55,13 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     onEnterAnswer: (answer) => dispatch(onEnterAnswer(answer)),
     onHelp: () => dispatch(onHelp()),
-    onCheckAnswer: () => dispatch(onCheckAnswer()),
+    onCheckAnswer: (tutorial) => dispatch(onCheckAnswer(tutorial)),
     onStepBack: () => dispatch(onStepBack()),
     onEnterMultiAnswer: (answer) => dispatch(onEnterMultiAnswer(answer)),
     onChangeTextInput1: (input) => dispatch(onChangeTextInput1(input)),
     onChangeTextInput2: (input) => dispatch(onChangeTextInput2(input)),
     onChangeTextEndAnswer: () => dispatch(onChangeTextEndAnswer()),
+    onSetTutorial: (tutorial) => dispatch(onSetTutorial(tutorial)),
 });
 
 export default connect(

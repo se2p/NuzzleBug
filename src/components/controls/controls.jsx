@@ -20,7 +20,6 @@ import ToggleTracing, {TracingState} from '../toggle-tracing/toggle-tracing.jsx'
 import Tutorial from '../tutorial-button/tutorial-button.jsx';
 
 import styles from './controls.css';
-import DebuggingTutorialButton from "../debuggingTutorial/debuggingTutorialButton.jsx";
 
 const messages = defineMessages({
     goTitle: {
@@ -204,7 +203,6 @@ const Controls = function (props) {
                 onClick={onTutorialClick}
                 title={'Tutorial'}
             />
-            <DebuggingTutorialButton active={true} onClick={onDebugTutorialClick}/>
         </div>
     );
 };

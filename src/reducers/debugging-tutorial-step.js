@@ -1,6 +1,3 @@
-import {func} from "prop-types";
-
-
 const ENTER_ANSWER = 'scratch-gui/debugging-tutorial-cards/ENTER_ANSWER';
 const ENTER_MULTI_ANSWER = 'scratch-gui/debugging-tutorial-cards/ENTER_MULTI_ANSWER';
 const HELP = 'scratch-gui/debugging-tutorial-cards/HELP';
@@ -19,6 +16,7 @@ const initialState = {
     textAnswer1: "",
     textAnswer2: "",
     textEndAnswer: "",
+    tutorial: null,
 };
 
 const reducer = function (state, action) {
@@ -40,12 +38,13 @@ const reducer = function (state, action) {
             break;
         case ENTER_MULTI_ANSWER:
             baseState.selectedAnswers[action.index] = !baseState.selectedAnswers[action.index];
-            console.log(baseState.selectedAnswers)
             break;
         case HELP:
             baseState.isHelpVisible = !baseState.isHelpVisible;
             break;
         case CHECK_ANSWER:
+            baseState.tutorial = action.tutorial;
+
             switch (baseState.tutorial[baseState.step]["questionType"]) {
                 case "SINGLE":
                     if (baseState.selectedAnswer === null) {
@@ -66,8 +65,6 @@ const reducer = function (state, action) {
                     }
                     break;
                 case "MULTIPLE":
-                    console.log(baseState.selectedAnswers + "  /  " + baseState.tutorial[baseState.step]["solution"]);
-
                     if (JSON.stringify(baseState.selectedAnswers) === JSON.stringify(baseState.tutorial[baseState.step]["solution"])) {
                         let lastStep = baseState.step;
                         baseState.step = baseState.tutorial[baseState.step]["next"];
@@ -77,6 +74,43 @@ const reducer = function (state, action) {
                             baseState.isHelpVisible = false;
                         }
                     }
+                    break;
+                case "SINGLE_DROPDOWN":
+                    console.log("singleDropdown");
+                    if (baseState.textAnswer2 === "") {
+                        break;
+                    } else {
+                        let lastStep = baseState.step;
+                        const findOption = () => Object.entries(baseState.tutorial[baseState.step]).find(([key, value]) => value.label === baseState.textAnswer2)?.[0] || null;
+                        baseState.step = baseState.tutorial[baseState.step][findOption()]["next"];
+                        if (baseState.step !== lastStep) {
+                            baseState.stepStack = [...baseState.stepStack, baseState.step];
+                            baseState.textAnswer2 = "";
+                            baseState.isHelpVisible = false;
+                        }
+                    }
+                    break;
+                case "TEXT":
+                    if (baseState.textEndAnswer === "true") { //TODO Zusammenfassen?
+                        baseState.textEndAnswer = "";
+                        baseState.isHelpVisible = false;
+                        baseState.step = baseState.tutorial[baseState.step].endQuestionTrueNext;
+                        baseState.stepStack = [...baseState.stepStack, baseState.step];
+                        baseState.textAnswer1 = "";
+                        baseState.textAnswer2 = "";
+                    } else {
+                        baseState.textEndAnswer = "";
+                        baseState.isHelpVisible = false;
+                        baseState.step = baseState.tutorial[baseState.step].endQuestionFalseNext;
+                        baseState.stepStack = [...baseState.stepStack, baseState.step];
+                        baseState.textAnswer1 = "";
+                        baseState.textAnswer2 = "";
+                    }
+                    break;
+                case "MESSAGE":
+                    baseState.step = baseState.tutorial[baseState.step].next;
+                    baseState.isHelpVisible = false;
+                    baseState.stepStack = [...baseState.stepStack, baseState.step];
                     break;
             }
             break;
@@ -93,7 +127,6 @@ const reducer = function (state, action) {
                 baseState.textEndAnswer === "true" ?
                     baseState.textEndAnswer = "false" : baseState.textEndAnswer = "true";
             }
-
             break;
     }
     return baseState;
@@ -112,8 +145,8 @@ const onHelp = function () {
     return {type: HELP};
 }
 
-const onCheckAnswer = function () {
-    return {type: CHECK_ANSWER};
+const onCheckAnswer = function (tutorial) {
+    return {type: CHECK_ANSWER, tutorial};
 }
 
 const onStepBack = function () {
@@ -133,6 +166,7 @@ const onChangeTextEndAnswer = function () {
     return {type: CHANGE_TEXT_END_ANSWER};
 }
 
+
 export {
     reducer as default,
     initialState as debuggingTutorialInitialState,
@@ -143,5 +177,5 @@ export {
     onEnterMultiAnswer,
     onChangeTextInput1,
     onChangeTextInput2,
-    onChangeTextEndAnswer,
+    onChangeTextEndAnswer
 };

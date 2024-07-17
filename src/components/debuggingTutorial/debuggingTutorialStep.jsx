@@ -4,7 +4,7 @@ import css from "./debuggingTutorialWindow.css";
 import PropTypes from "prop-types";
 import React from "react";
 import headerImage from "./images/testIMG.png"
-import dropdownIcon from "./images/icon--dropdown-selector.png"
+import dropdownIcon from "./images/icon--dropdown-selector.png";
 
 const DebuggingTutorialStep = props => {
     const {
@@ -13,6 +13,7 @@ const DebuggingTutorialStep = props => {
         onEndDrag,
         isRtl,
         tutorial,
+        tutorialIndexData,
         step,
         onEnterAnswer,
         onHelp,
@@ -39,7 +40,7 @@ const DebuggingTutorialStep = props => {
             if (textEndAnswer === "true") {
                 return "ja";
             } else {
-                return "nö";
+                return "nein";
             }
         }
     }
@@ -56,14 +57,29 @@ const DebuggingTutorialStep = props => {
         }
     }
 
-    const parseQuestion = function (){
+    const getTextEndAnswerText = function () {
+        if (textEndAnswer === "") {
+            return "";
+        } else {
+            if (textEndAnswer === "true") {
+                return tutorial[step].endQuestionTrue;
+            } else {
+                return tutorial[step].endQuestionFalse;
+            }
+        }
+    }
 
+
+
+    const parseQuestion = function (){
         switch (tutorial[step]["questionType"]) {
             case "SINGLE":
                 return Object.keys(tutorial[step]).filter((key) => (key.startsWith("option"))).map((key) => (
-                    <div key={key} className="option">
-                        <img alt={"testPicture"} className={"smallImage"} src={"imgTemplates/" + tutorial[step][key].img + ".png"}/>
-                        <div className="image"> {tutorial[step][key].label} </div>
+                    <div key={key} className={css.option}>
+                        <img alt={"option picture"} className={css.smallImage}
+                             style={{width: tutorial[step][key]["width"]}}
+                             src={tutorialIndexData[tutorial[step][key]["img"]]}/>
+
                         <input
                             type="radio"
                             id={key}
@@ -73,26 +89,53 @@ const DebuggingTutorialStep = props => {
                         />
                     </div>
                 ));
+            case "SINGLE_DROPDOWN":
+                return (
+                    <div className={css.textAnswerContainer}>
+                        <span className={css.textAnswerLine} style={{marginRight: "10px"}}>{tutorial[step]["questionText1_0"]}</span>
+                        <div className={isTextAnswerCorrect ? css.dropdownDisabled : css.dropdown}>
+                            <input className={css.dropdownBody} readOnly={isTextAnswerCorrect} placeholder={"Wähle aus"} type="text" value={textAnswer2} onChange={(e) => onChangeTextInput2(e.target.value)}/>
+
+                            <div className={isTextAnswerCorrect ? css.dropdownTestDisabled : css.dropdownTest}>
+                                <img className={css.dropdownIcon} src={dropdownIcon} alt={"selectorIcon"}/>
+                                <div className={css.dropdownContent}>
+
+                                    {Object.keys(tutorial[step]).filter((key) => (key.startsWith("option"))).map((key) =>
+
+                                    <span className={css.dropdownElement} onClick={() => onChangeTextInput2(tutorial[step][key]["label"])}>
+                                        {tutorial[step][key]["label"]}
+                                    </span>)
+
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                        <span className={css.textAnswerLine} style={{marginLeft: "10px"}}>{tutorial[step]["questionText1_1"]}</span>
+                    </div>
+                );
             case "MULTIPLE":
                 return Object.keys(tutorial[step]).filter((key) => (key.startsWith("option"))).map((key) => (
-                    <div key={key} className="option">
-                        <div className="image" > {tutorial[step][key].label} </div>
+                    <div key={key} className={css.option}>
+                        <img alt={"option picture"} className={css.smallImage}
+                             style={{width: tutorial[step][key]["width"]}}
+                             src={tutorialIndexData[tutorial[step][key]["img"]]}/>
+                        <div style={{display: "flex", justifyContent: "center"}}>
 
-
-
-                        <button key={key} onClick={() => onEnterMultiAnswer(key)} className=
-                            {selectedAnswers[key.at(6) - 1] ? css.multiButton_active : css.multiButton}>
-                        </button>
+                            <button key={key} onClick={() => onEnterMultiAnswer(key)} className=
+                                {selectedAnswers[key.at(6) - 1] ? css.multiButton_active : css.multiButton}>
+                            </button>
+                        </div>
                     </div>
                 ));
             case "TEXT":
-                return <div className="option">
+                return <div style={{width:"80%"}}>
                     <div className={css.textAnswerContainer}>
-                        <span className={css.textAnswerLine} style={{marginRight: "10px"}}>Die Schleife wurde</span>
-                        <div className={css.dropdown}>
-                            <input className={css.dropdownBody} placeholder={"Anzahl eingeben"} type="text" value={textAnswer1} onChange={(e) => onChangeTextInput1(e.target.value)}/>
+                        <span className={css.textAnswerLine} style={{marginRight: "10px"}}>{tutorial[step].question1.questionStart}</span>
+                        <div className={isTextAnswerCorrect ? css.dropdownDisabled : css.dropdown}>
+                            <input className={css.dropdownBody} readOnly={isTextAnswerCorrect} placeholder={"Anzahl eingeben"} type="text" value={textAnswer1} onChange={(e) => onChangeTextInput1(e.target.value)}/>
 
-                            <div className={css.dropdownTest}>
+                            <div className={isTextAnswerCorrect ? css.dropdownTestDisabled : css.dropdownTest}>
                                 <img className={css.dropdownIcon} src={dropdownIcon} alt={"selectorIcon"}/>
                                 <div className={css.dropdownContent}>
                                     <span className={css.dropdownElement} onClick={() => onChangeTextInput1("0")}>0</span>
@@ -100,15 +143,15 @@ const DebuggingTutorialStep = props => {
                                 </div>
                             </div>
                         </div>
-                        <span className={css.textAnswerLine} style={{marginLeft: "10px"}}>mal durchlaufen.</span>
+                        <span className={css.textAnswerLine} style={{marginLeft: "10px"}}>{tutorial[step].question1.questionEnd}</span>
                     </div>
 
                     <div className={css.textAnswerContainer}>
-                        <span className={css.textAnswerLine} style={{marginRight: "10px"}}>Die Schleife sollte</span>
-                        <div className={css.dropdown}>
-                            <input className={css.dropdownBody} placeholder={"Anzahl eingeben"} type="text" value={textAnswer2} onChange={(e) => onChangeTextInput2(e.target.value)}/>
+                        <span className={css.textAnswerLine} style={{marginRight: "10px"}}>{tutorial[step].question2.questionStart}</span>
+                        <div className={isTextAnswerCorrect ? css.dropdownDisabled : css.dropdown}>
+                            <input className={css.dropdownBody} readOnly={isTextAnswerCorrect} placeholder={"Anzahl eingeben"} type="text" value={textAnswer2} onChange={(e) => onChangeTextInput2(e.target.value)}/>
 
-                            <div className={css.dropdownTest}>
+                            <div className={isTextAnswerCorrect ? css.dropdownTestDisabled : css.dropdownTest}>
                                 <img className={css.dropdownIcon} src={dropdownIcon} alt={"selectorIcon"}/>
                                 <div className={css.dropdownContent}>
                                     <span className={css.dropdownElement} onClick={() => onChangeTextInput2("0")}>0</span>
@@ -116,19 +159,25 @@ const DebuggingTutorialStep = props => {
                                 </div>
                             </div>
                         </div>
-                        <span className={css.textAnswerLine} style={{marginLeft: "10px"}}>mal durchlaufen werden.</span>
+                        <span className={css.textAnswerLine} style={{marginLeft: "10px"}}>{tutorial[step].question2.questionEnd}</span>
                     </div>
 
                     {isTextAnswerCorrect && <div>
-                        <span className={css.textAnswerLine} style={{marginTop: "30px", fontWeight:"bold", textDecoration:"underline"}}>Hat deine Vermutung gestimmt, dass die Schleife zu selten ausgeführt wurde?</span>
+                        <span className={css.textAnswerLine} style={{marginTop: "30px", fontWeight:"bold", textDecoration:"underline"}}>
+                            {tutorial[step].endQuestion}
+                        </span>
 
                         <div className={css.textAnswerBar}>
                             <button className={css.textAnswerButton} style={{backgroundColor:getTextEndAnswerButtonColor()}} onClick={onChangeTextEndAnswer}>
                                 {getTextEndAnswerButtonText()}
                             </button>
-                            <span className={css.textAnswerText}>deswegen schaue ich nun, woran dies liegt.</span>
+                            <span className={css.textAnswerText}>{getTextEndAnswerText()}</span>
                         </div>
                     </div>}
+                </div>
+            case "MESSAGE":
+                return <div style={{marginTop:"20px", marginBottom:"20px"}}>
+                    <span className={css.messageText}>{tutorial[step]["message"]}</span>
                 </div>
         }
 
@@ -144,14 +193,13 @@ const DebuggingTutorialStep = props => {
         <div className={css.cardContainer}>
 
             <div className={css.header}>
-                step: {step}
-                <img src={headerImage} alt="Diagramm of the debugging process." className={css.headerImage} />
+                <img src={tutorialIndexData["diagramm" + tutorial[step]["diagrammStep"]]} alt="Diagramm of the debugging process." className={css.headerImage} />
             </div>
 
 
             <div className={css.questionSection}>
                 <div className={css.questionHeader}>
-                    <span>{tutorial[step]["text"]}</span>
+                    <span style={{marginTop:"5px", marginBottom:"5px"}}>{tutorial[step]["text"]}</span>
                     {tutorial[step]["help"] !== null && <button className={css.helpButton} onClick={props.onHelp}>i</button>}
                 </div>
 
@@ -171,7 +219,7 @@ const DebuggingTutorialStep = props => {
 
             <div className={css.footer}>
                 <button className={css.footerButton} onClick={onStepBack}>Zurück</button>
-                <button className={css.footerButton} onClick={onCheckAnswer}>Weiter</button>
+                <button className={css.footerButton} onClick={() => onCheckAnswer(tutorial)}>Weiter</button>
             </div>
 
 

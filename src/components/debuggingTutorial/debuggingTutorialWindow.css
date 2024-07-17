@@ -21,20 +21,21 @@
     flex-direction: column;
 }
 .header {
-    padding: 10px;
+    border: 3px solid hsla(215, 100%, 65%, 1);
+    border-radius: 10px;
+    margin-bottom: 50px;
+    margin-top: 10px;
 }
 
 .header-image {
-    width: 50%;
+    width: 80%;
     height: auto;
 }
 
 .question-section {
-    padding: 0px;
-    color: black;
     width: 100%;
     text-align: center;
-    border: 5px solid hsla(215, 100%, 65%, 1);
+    border: 3px solid hsla(215, 100%, 65%, 1);
     font-size: 0.9rem;
     border-radius: 10px;
 }
@@ -57,9 +58,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0;
     text-align: center;
     padding: 5px 20px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
     background-color: hsla(215, 60%, 55%, 1);
     color: hsla(215, 100%, 95%, 1);
 }
@@ -77,22 +79,36 @@
     justify-content: space-around;
 }
 
+.smallImage {
+    height: auto;
+}
+
 .option {
-    background: red;
-    width: 50px;
-    height: 50px;
-    margin: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .footer {
     display: flex;
-    justify-content: flex-end; /* Elemente am rechten Ende ausrichten */
-    gap: 20px; /* Abstand von 20px zwischen den Buttons */
-    padding: 10px; /* Optional: etwas Polsterung um den Footer-Inhalt */
+    justify-content: flex-end;
+    gap: 20px;
+    padding: 10px;
 }
 
 .footer-button {
     background-color: hsla(215, 100%, 65%, 1);
+    border: none;
+    color: hsla(215, 100%, 95%, 1);
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.footer-button:hover {
+    background-color: hsl(215, 59%, 52%);
     border: none;
     color: hsla(215, 100%, 95%, 1);
     padding: 5px 10px;
@@ -126,6 +142,14 @@
     margin-top: 10px;
 }
 
+.messageText {
+    width: 90%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: hsla(225, 15%, 40%, 1);
+    text-align: center;
+}
+
 .dropdown{
     display: flex;
     justify-content: flex-start;
@@ -137,13 +161,32 @@
     margin-top: 10px;
 }
 
+.dropdown-test-disabled {
+    position: relative;
+    display: inline-block;
+    height: 40px;
+    width: 24px;
+    padding-right: 10px;
+}
+
+.dropdown-disabled {
+    display: flex;
+    justify-content: flex-start;
+    width: 160px;
+    border-radius: 10px;
+    background-color: hsla(218, 26%, 46%, 0.48);
+    border: none;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
 .dropdown-body {
     width: 130px;
     padding: 8px 10px;
     border-radius: 10px;
     border: none;
     color: white;
-    background-color: hsla(215, 100%, 65%, 1);
+    background-color: hsla(215, 100%, 65%, 0);
 }
 
 .dropdown-icon {
@@ -160,7 +203,6 @@
     height: 40px;
     width: 24px;
     padding-right: 10px;
-    left: 0px;
 }
 
 .dropdown-content {
