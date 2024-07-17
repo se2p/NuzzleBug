@@ -2,14 +2,12 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import {
-    onEnterAnswer,
     onHelp,
     onCheckAnswer,
     onStepBack,
     onEnterMultiAnswer,
-    onChangeTextInput1,
-    onChangeTextInput2,
-    onChangeTextEndAnswer,
+    setAnswer,
+    onGapTextButton,
     onSetTutorial,} from "../reducers/debugging-tutorial-step";
 import DebuggingTutorialStepComponent from '../components/debuggingTutorial/debuggingTutorialStep.jsx';
 import PropTypes from "prop-types";
@@ -22,8 +20,8 @@ class DebuggingTutorialStep extends React.Component {
         return (
             <DebuggingTutorialStepComponent
                 isTextAnswerCorrect={
-                    this.props.tutorial[this.props.step].questionType === "TEXT" && this.props.textAnswer1.toLowerCase() === this.props.tutorial[this.props.step].question1.questionSolution &&
-                    this.props.textAnswer2.toLowerCase() === this.props.tutorial[this.props.step].question2.questionSolution}
+                    this.props.tutorial[this.props.step].questionType === "GAP_TEXT" && this.props.answers[0].toLowerCase() === this.props.tutorial[this.props.step].question1.questionSolution &&
+                    this.props.answers[1].toLowerCase() === this.props.tutorial[this.props.step].question2.questionSolution}
                 {...this.props}
             />
         );
@@ -34,34 +32,28 @@ class DebuggingTutorialStep extends React.Component {
 
 
 DebuggingTutorialStep.propTypes = {
-    textAnswer1: PropTypes.string,
-    textAnswer2: PropTypes.string,
     tutorial: PropTypes.any.isRequired,
     tutorialIndexData: PropTypes.any.isRequired,
     step: PropTypes.string,
     onSetTutorial: PropTypes.func,
+    answers: PropTypes.any,
 };
 
 const mapStateToProps = state => ({
     step: state.scratchGui.debuggingTutorial.step,
     isHelpVisible: state.scratchGui.debuggingTutorial.isHelpVisible,
-    selectedAnswer: state.scratchGui.debuggingTutorial.selectedAnswer,
     selectedAnswers: state.scratchGui.debuggingTutorial.selectedAnswers,
-    textAnswer1: state.scratchGui.debuggingTutorial.textAnswer1,
-    textAnswer2: state.scratchGui.debuggingTutorial.textAnswer2,
-    textEndAnswer: state.scratchGui.debuggingTutorial.textEndAnswer,
+    answers: state.scratchGui.debuggingTutorial.answers,
 });
 
 const mapDispatchToProps = dispatch => ({
-    onEnterAnswer: (answer) => dispatch(onEnterAnswer(answer)),
     onHelp: () => dispatch(onHelp()),
     onCheckAnswer: (tutorial) => dispatch(onCheckAnswer(tutorial)),
     onStepBack: () => dispatch(onStepBack()),
     onEnterMultiAnswer: (answer) => dispatch(onEnterMultiAnswer(answer)),
-    onChangeTextInput1: (input) => dispatch(onChangeTextInput1(input)),
-    onChangeTextInput2: (input) => dispatch(onChangeTextInput2(input)),
-    onChangeTextEndAnswer: () => dispatch(onChangeTextEndAnswer()),
     onSetTutorial: (tutorial) => dispatch(onSetTutorial(tutorial)),
+    setAnswer: (index, value) => dispatch(setAnswer(value, index)),
+    onGapTextButton: () => dispatch(onGapTextButton()),
 });
 
 export default connect(
