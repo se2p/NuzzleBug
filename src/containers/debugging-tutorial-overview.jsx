@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import DebuggingTutorialOverviewComponent from '../components/debuggingTutorial/debuggingTutorialOverview.jsx';
 import PropTypes from "prop-types";
 import VirtualMachine from "scratch-vm";
-import asdProject from '!arraybuffer-loader!../components/debuggingTutorial/testImg/Scratch-Projekt(1).sb3';
+import asdProject from '!arraybuffer-loader!../components/debuggingTutorial/testProject/Scratch-Projekt(1).sb3';
 
 class DebuggingTutorialOverview extends React.Component {
 

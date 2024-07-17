@@ -33,8 +33,8 @@ import vmStatusReducer, {vmStatusInitialState} from './vm-status';
 import workspaceMetricsReducer, {workspaceMetricsInitialState} from './workspace-metrics';
 import helpMenuReducer, {helpMenuInitialState} from './help-menu';
 import throttle from 'redux-throttle';
-import debuggingTutorialReducer, {debuggingTutorialInitialState} from './debugging-tutorial-step';
-import debuggingTutorialStepReducer, {debuggingTutorialStepInitialState} from "./debugging-tutorial-step1";
+import debuggingTutorialReducer, {debuggingTutorialInitialState} from './debugging-tutorial-help';
+import debuggingTutorialStepReducer, {debuggingTutorialStepInitialState} from "./debugging-tutorial-step";
 
 import decks from '../lib/libraries/decks/index.jsx';
 

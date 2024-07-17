@@ -1,17 +1,14 @@
-const ENTER_MULTI_ANSWER = 'scratch-gui/debugging-tutorial-cards/ENTER_MULTI_ANSWER';
-const HELP = 'scratch-gui/debugging-tutorial-cards/HELP';
-const CHECK_ANSWER = 'scratch-gui/debugging-tutorial-cards/CHECK_ANSWER';
-const STEP_BACK = 'scratch-gui/debugging-tutorial-cards/STEP_BACK';
-const GAP_TEXT_BUTTON = 'scratch-gui/debugging-tutorial-cards/GAP_TEXT_BUTTON';
-const SET_ANSWER = 'scratch-gui/debugging-tutorial-cards/SET_ANSWER';
+const RESET_STEP = 'scratch-gui/debugging-tutorial-cards/RESET_STEP';
+const ERROR_CLICKED = 'scratch-gui/debugging-tutorial-cards/ERROR_CLICKED';
+const UPDATE_TEST_RESULTS = 'scratch-gui/debugging-tutorial-cards/UPDATE_TEST_RESULTS';
+const TEST_DETAILS = 'scratch-gui/debugging-tutorial-cards/TEST_DETAILS';
+
 
 const initialState = {
-    step: "step1",
-    tutorial: null,
-    isHelpVisible: false,
-    stepStack: ["step1"],
-    answers: ["", "", ""],
-    selectedAnswers: [false, false, false, false, false, false],
+    step: 0,
+    isErrorInfoVisible: false,
+    testResults: null,
+    showTestDetail: false
 };
 
 const reducer = function (state, action) {
@@ -20,127 +17,46 @@ const reducer = function (state, action) {
     }
     const baseState = JSON.parse(JSON.stringify(state));
     switch (action.type) {
-        case STEP_BACK:
-            if (baseState.stepStack.length > 1) {
-                baseState.stepStack.pop()
-                baseState.step = baseState.stepStack.pop(); // step1, step2, step3, step4 -> step1, step2
-                baseState.stepStack.push(baseState.step) //TODO BRUH WTF
-                baseState.selectedAnswer = null;
-            }
+        case RESET_STEP:
+            baseState.isErrorInfoVisible = false;
+            baseState.showTestDetail = false;
+            baseState.testResults = null;
             break;
-        case ENTER_MULTI_ANSWER:
-            baseState.selectedAnswers[action.index] = !baseState.selectedAnswers[action.index];
+        case ERROR_CLICKED:
+            baseState.isErrorInfoVisible = !baseState.isErrorInfoVisible;
             break;
-        case HELP:
-            baseState.isHelpVisible = !baseState.isHelpVisible;
+        case UPDATE_TEST_RESULTS:
+            baseState.testResults = action.results;
             break;
-        case CHECK_ANSWER:
-            baseState.tutorial = action.tutorial;
-            checkAnswerParse(baseState, action);
-            break;
-        case GAP_TEXT_BUTTON:
-            if (baseState.answers[2] === "") {
-                baseState.answers[2] = "true";
-            } else {
-                baseState.answers[2] === "true" ?
-                    baseState.answers[2] = "false" : baseState.answers[2] = "true";
-            }
-            break;
-        case SET_ANSWER:
-            baseState.answers[action.index] = action.value;
+        case TEST_DETAILS:
+            baseState.showTestDetail = !baseState.showTestDetail;
             break;
     }
     return baseState;
 };
 
-const resetAnswers = function (baseState, lastStep) {
-    if (baseState.step !== lastStep) { //Only when visiting a new step.
-        baseState.stepStack = [...baseState.stepStack, baseState.step];
-        baseState.answers = ["", "", ""];
-        baseState.selectedAnswers = [false, false, false, false, false, false];
-        baseState.isHelpVisible = false;
-    }
+const resetStep = function () {
+    console.log("RESET_STEP");
+    return {type: RESET_STEP};
 }
 
-const checkAnswerParse = function (baseState) { //TODO move from reducer into other class
-    let lastStep = baseState.step;
-    switch (baseState.tutorial[baseState.step]["questionType"]) {
-        case "SINGLE_CHOICE":
-            if (baseState.answers[0] === "") {
-                break;
-            }
-
-            if (baseState.tutorial[baseState.step][baseState.answers[0]]["next"] === "wrongAnswer") {
-                break; //TODO Display Message
-            }
-
-            baseState.step = baseState.tutorial[baseState.step][baseState.answers[0]]["next"];
-            resetAnswers(baseState, lastStep);
-            break;
-        case "MULTIPLE_CHOICE":
-            if (JSON.stringify(baseState.selectedAnswers) === JSON.stringify(baseState.tutorial[baseState.step]["solution"])) {
-
-                baseState.step = baseState.tutorial[baseState.step]["next"];
-                resetAnswers(baseState, lastStep);
-            }
-            break;
-        case "DROPDOWN":
-            if (baseState.answers[0] !== "") {
-                const findOption = () => Object.entries(baseState.tutorial[baseState.step])
-                    .find(([key, value]) => value.label === baseState.answers[0])?.[0] || null;
-                baseState.step = baseState.tutorial[baseState.step][findOption()]["next"];
-                resetAnswers(baseState, lastStep);
-            }
-            break;
-        case "GAP_TEXT":
-            if (baseState.answers[2] !== "") {
-                baseState.step = baseState.answers[2] !== "false" ?
-                    baseState.tutorial[baseState.step].endQuestionTrueNext :
-                    baseState.step = baseState.tutorial[baseState.step].endQuestionFalseNext;
-                resetAnswers(baseState, lastStep);
-            }
-            break;
-        case "MESSAGE":
-            baseState.step = baseState.tutorial[baseState.step].next;
-            baseState.isHelpVisible = false;
-            baseState.stepStack = [...baseState.stepStack, baseState.step];
-            break;
-    }
+const errorClicked = function () {
+    return {type: ERROR_CLICKED};
 }
 
-const onEnterMultiAnswer = function (answer) {
-    let index = answer.charAt(6) - 1; //option1 -> 0
-    return {type: ENTER_MULTI_ANSWER, index};
+const updateTestResults = function (results) {
+    return {type: UPDATE_TEST_RESULTS, results};
 }
 
-const onHelp = function () {
-    return {type: HELP};
+const onTestDetails = function () {
+    return {type: TEST_DETAILS};
 }
-
-const onCheckAnswer = function (tutorial) {
-    return {type: CHECK_ANSWER, tutorial};
-}
-
-const onStepBack = function () {
-    return {type: STEP_BACK};
-}
-
-const onGapTextButton = function () {
-    return {type: GAP_TEXT_BUTTON};
-}
-
-const setAnswer = function (value, index) {
-    return {type: SET_ANSWER, value, index}
-}
-
 
 export {
     reducer as default,
-    initialState as debuggingTutorialInitialState,
-    onHelp,
-    onCheckAnswer,
-    onStepBack,
-    onEnterMultiAnswer,
-    setAnswer,
-    onGapTextButton,
+    initialState as debuggingTutorialStepInitialState,
+    resetStep,
+    errorClicked,
+    updateTestResults,
+    onTestDetails,
 };
