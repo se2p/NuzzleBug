@@ -1,9 +1,6 @@
-import styles from "../cards/card.css";
-import Draggable from "react-draggable";
 import css from "./debuggingTutorialWindow.css";
 import PropTypes from "prop-types";
 import React from "react";
-import headerImage from "./images/testIMG.png"
 import dropdownIcon from "./images/icon--dropdown-selector.png";
 
 const DebuggingTutorialStep = props => {

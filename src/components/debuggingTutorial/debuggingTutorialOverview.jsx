@@ -1,15 +1,12 @@
-import styles from "../cards/card.css";
-import Draggable from "react-draggable";
 import css from "./debuggingTutorialOverview.css";
 import PropTypes from "prop-types";
 import React from "react";
-import headerImage from "./images/testIMG.png"
 
 const DebuggingTutorialOverview = props => {
     const {
         header,
         tutorialPicture,
-        onStartTutorial,
+        onStart,
         tutorialMessages,
         stepCount,
         ...posProps
@@ -44,7 +41,7 @@ const DebuggingTutorialOverview = props => {
             </div>
 
 
-            <button className={css.startButton} onClick={onStartTutorial} >Start</button>
+            <button className={css.startButton} onClick={onStart} >Start</button>
         </div>
     )
 }

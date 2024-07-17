@@ -10,12 +10,13 @@ class DebuggingTutorialOverview extends React.Component {
 
     loadProject() {
         this.props.vm.loadProject(asdProject);
+        this.props.onStartTutorial();
     }
 
     render () {
         return (
             <DebuggingTutorialOverviewComponent
-                onStartTutorial={this.loadProject()}
+                onStart={() => this.loadProject()}
                 {...this.props}
             />
         );
@@ -24,7 +25,7 @@ class DebuggingTutorialOverview extends React.Component {
 
 DebuggingTutorialOverview.propTypes = {
     title: PropTypes.string,
-    tutorialMessages: PropTypes.string,
+    tutorialMessages: PropTypes.any,
     tutorialPicture: PropTypes.any,
     onStartTutorial: PropTypes.func.isRequired,
 
