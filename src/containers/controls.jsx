@@ -16,7 +16,6 @@ import TestRunner from 'whisker-main/whisker-main/src/test-runner/test-runner';
 import {ModelTester} from 'whisker-main/whisker-main/src/whisker/model/ModelTester.ts';
 import {actionExecuted, openHelpMenu, repositionHelpMenuWindow} from '../reducers/help-menu';
 import {viewTutorial} from '../reducers/tutorial-cards.js';
-import {viewDebuggingTutorial} from '../reducers/debugging-tutorial';
 
 class Controls extends React.Component {
     constructor (props) {

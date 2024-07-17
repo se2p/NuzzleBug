@@ -18,7 +18,7 @@ const DebuggingTutorialStep = props => {
         selectedAnswers,
         onStepBack,
         onEnterMultiAnswer,
-        isTextAnswerCorrect,
+        isGapTextSolved,
         answers,
         setAnswer,
         onGapTextButton,
@@ -81,10 +81,10 @@ const DebuggingTutorialStep = props => {
         return <div style={{width:"80%"}}>
             <div className={css.textAnswerContainer}>
                 <span className={css.textAnswerLine} style={{marginRight: "10px"}}>{tutorial[step].question1.questionStart}</span>
-                <div className={isTextAnswerCorrect ? css.dropdownDisabled : css.dropdown}>
-                    <input className={css.dropdownBody} readOnly={isTextAnswerCorrect} placeholder={"Anzahl eingeben"} type="text" value={answers[0]} onChange={(e) => setAnswer(0, e.target.value)}/>
+                <div className={isGapTextSolved ? css.dropdownDisabled : css.dropdown}>
+                    <input className={css.dropdownBody} readOnly={isGapTextSolved} placeholder={"Anzahl eingeben"} type="text" value={answers[0]} onChange={(e) => setAnswer(0, e.target.value)}/>
 
-                    <div className={isTextAnswerCorrect ? css.dropdownTestDisabled : css.dropdownTest}>
+                    <div className={isGapTextSolved ? css.dropdownTestDisabled : css.dropdownTest}>
                         <img className={css.dropdownIcon} src={dropdownIcon} alt={"selectorIcon"}/>
                         <div className={css.dropdownContent}>
                             <span className={css.dropdownElement} onClick={() => setAnswer(0, "0")}>0</span>
@@ -97,9 +97,9 @@ const DebuggingTutorialStep = props => {
 
             <div className={css.textAnswerContainer}>
                 <span className={css.textAnswerLine} style={{marginRight: "10px"}}>{tutorial[step].question2.questionStart}</span>
-                <div className={isTextAnswerCorrect ? css.dropdownDisabled : css.dropdown}>
-                    <input className={css.dropdownBody} readOnly={isTextAnswerCorrect} placeholder={"Anzahl eingeben"} type="text" value={answers[1]} onChange={(e) => setAnswer(1, e.target.value)}/>
-                    <div className={isTextAnswerCorrect ? css.dropdownTestDisabled : css.dropdownTest}>
+                <div className={isGapTextSolved ? css.dropdownDisabled : css.dropdown}>
+                    <input className={css.dropdownBody} readOnly={isGapTextSolved} placeholder={"Anzahl eingeben"} type="text" value={answers[1]} onChange={(e) => setAnswer(1, e.target.value)}/>
+                    <div className={isGapTextSolved ? css.dropdownTestDisabled : css.dropdownTest}>
                         <img className={css.dropdownIcon} src={dropdownIcon} alt={"selectorIcon"}/>
                         <div className={css.dropdownContent}>
                             <span className={css.dropdownElement} onClick={() => setAnswer(1, "0")}>0</span>
@@ -109,7 +109,7 @@ const DebuggingTutorialStep = props => {
                 </div>
                 <span className={css.textAnswerLine} style={{marginLeft: "10px"}}>{tutorial[step].question2.questionEnd}</span>
             </div>
-            {isTextAnswerCorrect && <div>
+            {isGapTextSolved && <div>
                         <span className={css.textAnswerLine} style={{marginTop: "30px", fontWeight:"bold", textDecoration:"underline"}}>
                             {tutorial[step].endQuestion}
                         </span>

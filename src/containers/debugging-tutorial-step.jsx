@@ -7,21 +7,21 @@ import {
     onStepBack,
     onEnterMultiAnswer,
     setAnswer,
-    onGapTextButton,
-    onSetTutorial,} from "../reducers/debugging-tutorial-step";
+    onGapTextButton,} from "../reducers/debugging-tutorial-step";
 import DebuggingTutorialStepComponent from '../components/debuggingTutorial/debuggingTutorialStep.jsx';
 import PropTypes from "prop-types";
 
 class DebuggingTutorialStep extends React.Component {
 
-
-
     render () {
+        const isGapTextSolved = this.props.tutorial[this.props.step].questionType === "GAP_TEXT"
+            && this.props.answers[0].toLowerCase() === this.props.tutorial[this.props.step].question1.questionSolution
+            && this.props.answers[1].toLowerCase() === this.props.tutorial[this.props.step].question2.questionSolution;
+
+
         return (
             <DebuggingTutorialStepComponent
-                isTextAnswerCorrect={
-                    this.props.tutorial[this.props.step].questionType === "GAP_TEXT" && this.props.answers[0].toLowerCase() === this.props.tutorial[this.props.step].question1.questionSolution &&
-                    this.props.answers[1].toLowerCase() === this.props.tutorial[this.props.step].question2.questionSolution}
+                isGapTextSolved={isGapTextSolved}
                 {...this.props}
             />
         );
@@ -51,7 +51,6 @@ const mapDispatchToProps = dispatch => ({
     onCheckAnswer: (tutorial) => dispatch(onCheckAnswer(tutorial)),
     onStepBack: () => dispatch(onStepBack()),
     onEnterMultiAnswer: (answer) => dispatch(onEnterMultiAnswer(answer)),
-    onSetTutorial: (tutorial) => dispatch(onSetTutorial(tutorial)),
     setAnswer: (index, value) => dispatch(setAnswer(value, index)),
     onGapTextButton: () => dispatch(onGapTextButton()),
 });

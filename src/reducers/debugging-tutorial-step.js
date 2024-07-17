@@ -5,9 +5,6 @@ const STEP_BACK = 'scratch-gui/debugging-tutorial-cards/STEP_BACK';
 const GAP_TEXT_BUTTON = 'scratch-gui/debugging-tutorial-cards/GAP_TEXT_BUTTON';
 const SET_ANSWER = 'scratch-gui/debugging-tutorial-cards/SET_ANSWER';
 
-
-
-
 const initialState = {
     step: "step1",
     tutorial: null,
@@ -65,7 +62,7 @@ const resetAnswers = function (baseState, lastStep) {
     }
 }
 
-const checkAnswerParse = function (baseState) {
+const checkAnswerParse = function (baseState) { //TODO move from reducer into other class
     let lastStep = baseState.step;
     switch (baseState.tutorial[baseState.step]["questionType"]) {
         case "SINGLE_CHOICE":

@@ -1,6 +1,5 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {onStartTutorial} from "../reducers/debugging-tutorial-overview"
 import DebuggingTutorialOverviewComponent from '../components/debuggingTutorial/debuggingTutorialOverview.jsx';
 import PropTypes from "prop-types";
 import VirtualMachine from "scratch-vm";
