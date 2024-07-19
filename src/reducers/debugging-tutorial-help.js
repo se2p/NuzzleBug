@@ -5,13 +5,14 @@ const STEP_BACK = 'scratch-gui/debugging-tutorial-cards/STEP_BACK';
 const GAP_TEXT_BUTTON = 'scratch-gui/debugging-tutorial-cards/GAP_TEXT_BUTTON';
 const SET_ANSWER = 'scratch-gui/debugging-tutorial-cards/SET_ANSWER';
 
-const initialState = {
+const initialState = { //TODO Needs complete rework. Remove logic from reducer!
     step: "step1",
     tutorial: null,
     isHelpVisible: false,
     stepStack: ["step1"],
     answers: ["", "", ""],
     selectedAnswers: [false, false, false, false, false, false],
+    solvedSteps: [],
 };
 
 const reducer = function (state, action) {
@@ -24,8 +25,10 @@ const reducer = function (state, action) {
             if (baseState.stepStack.length > 1) {
                 baseState.stepStack.pop()
                 baseState.step = baseState.stepStack.pop(); // step1, step2, step3, step4 -> step1, step2
-                baseState.stepStack.push(baseState.step) //TODO BRUH WTF
-                baseState.selectedAnswer = null;
+                baseState.stepStack.push(baseState.step) //TODO BRUH
+                baseState.answers = ["", "", ""];
+                baseState.selectedAnswers = [false, false, false, false, false, false];
+                baseState.isHelpVisible = false;
             }
             break;
         case ENTER_MULTI_ANSWER:
@@ -98,6 +101,8 @@ const checkAnswerParse = function (baseState) { //TODO move from reducer into ot
                     baseState.tutorial[baseState.step].endQuestionTrueNext :
                     baseState.step = baseState.tutorial[baseState.step].endQuestionFalseNext;
                 resetAnswers(baseState, lastStep);
+                // The GAP TEXT was solved. Next time when visiting this specific step, solve the first 2 inputFields
+                baseState.solvedSteps = [...baseState.solvedSteps, lastStep];
             }
             break;
         case "MESSAGE":

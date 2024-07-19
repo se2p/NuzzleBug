@@ -2,6 +2,7 @@ import css from "./debuggingTutorialHelp.css";
 import PropTypes from "prop-types";
 import React from "react";
 import dropdownIcon from "./images/icon--dropdown-selector.png";
+import infoIcon from "./images/icon--info.png"
 
 const DebuggingTutorialHelp = props => {
     const {
@@ -72,8 +73,10 @@ const DebuggingTutorialHelp = props => {
     }
 
     const renderMessage = () => {
-        return <div style={{marginTop:"20px", marginBottom:"20px"}}>
+        return <div style={{display:"flex", flexDirection:"column", alignItems:"center", marginTop:"20px", marginBottom:"20px"}}>
             <span className={css.messageText}>{tutorial[step]["message"]}</span>
+            {tutorial[step].img !== null &&
+                <img src={tutorialIndexData[tutorial[step].img]} style={{height:"auto", width:tutorial[step].width}} alt={"messageContent"}/>}
         </div>
     }
 
@@ -177,7 +180,9 @@ const DebuggingTutorialHelp = props => {
             <div className={css.questionSection}>
                 <div className={css.questionHeader}>
                     <span style={{marginTop:"5px", marginBottom:"5px"}}>{tutorial[step]["text"]}</span>
-                    {tutorial[step]["help"] !== null && <button className={css.helpButton} onClick={props.onHelp}>i</button>}
+                    {tutorial[step]["help"] !== null && <div className={isHelpVisible ? css.infoButtonBackground : css.infoButtonBackgroundInvisible} onClick={props.onHelp}>
+                        <img className={css.helpButton} style={{width:"15px", height:"auto", paddingTop:"6px"}} src={infoIcon} alt={"infoButton"}/>
+                    </div>}
                 </div>
 
                 {isHelpVisible && <div className={css.helpSection}>
@@ -196,10 +201,6 @@ const DebuggingTutorialHelp = props => {
         </div>
     );
 };
-
-
-
-
 
 DebuggingTutorialHelp.props = {
     onHelp: PropTypes.func,

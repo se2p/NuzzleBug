@@ -2,13 +2,14 @@ const RESET_STEP = 'scratch-gui/debugging-tutorial-cards/RESET_STEP';
 const ERROR_CLICKED = 'scratch-gui/debugging-tutorial-cards/ERROR_CLICKED';
 const UPDATE_TEST_RESULTS = 'scratch-gui/debugging-tutorial-cards/UPDATE_TEST_RESULTS';
 const TEST_DETAILS = 'scratch-gui/debugging-tutorial-cards/TEST_DETAILS';
-
+const SHOW_RESET = 'scratch-gui/debugging-tutorial-cards/SHOW_RESET';
 
 const initialState = {
     step: 0,
     isErrorInfoVisible: false,
     testResults: null,
-    showTestDetail: false
+    showTestDetail: false,
+    showReset: false,
 };
 
 const reducer = function (state, action) {
@@ -31,6 +32,9 @@ const reducer = function (state, action) {
         case TEST_DETAILS:
             baseState.showTestDetail = !baseState.showTestDetail;
             break;
+        case SHOW_RESET:
+            baseState.showReset = action.showReset
+            break;
     }
     return baseState;
 };
@@ -52,6 +56,10 @@ const onTestDetails = function () {
     return {type: TEST_DETAILS};
 }
 
+const showResetOptions = function (showReset) {
+    return {type: SHOW_RESET, showReset};
+}
+
 export {
     reducer as default,
     initialState as debuggingTutorialStepInitialState,
@@ -59,4 +67,5 @@ export {
     errorClicked,
     updateTestResults,
     onTestDetails,
+    showResetOptions,
 };

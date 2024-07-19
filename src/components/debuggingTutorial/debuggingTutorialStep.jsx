@@ -4,6 +4,8 @@ import css from "./debuggingTutorialStep.css"
 import owl from "./images/owl-b.svg"
 import accept from "./images/icon--passed.png"
 import failed from "./images/icon--failed.png"
+import acceptReset from "./images/icon--accept.png"
+import declineReset from "./images/icon--decline.png"
 
 const DebuggingTutorialStep = props => {
     const {
@@ -18,6 +20,8 @@ const DebuggingTutorialStep = props => {
         showTestDetail,
         nextStep,
         onResetProject,
+        showReset,
+        onReset,
         ...posProps
     } = props;
 
@@ -61,8 +65,22 @@ const DebuggingTutorialStep = props => {
 
 
             <div className={css.buttonBar}>
-                <button className={css.buttonElement} onClick={onResetProject}>Rücks</button>
+                <div className={css.resetContainer}>
+                    <button className={`${css.resetButton} ${showReset ? css.moveRight : ''}`} style={{backgroundColor:"#4D97FFFF"}} onClick={onResetProject}>
+                        {showReset ? "Aktuellen Schritt zurücksetzen?" : "Zurücksetzen"}
+                    </button>
+                    <button className={css.resetOptionAccept} onClick={onReset}>
+                        <img alt={"yes"} src={acceptReset} style={{height:"auto", width:"13px"}}/>
+                    </button>
+                    <button className={css.resetOptionExit} onClick={onResetProject}>
+                        <img alt={"no"} src={declineReset} style={{height:"auto", width:"10px"}}/>
+                    </button>
+
+
+                </div>
+
                 <button className={css.buttonElement} onClick={onOpenHelp}>Hilfe</button>
+
                 <button className={(testResults !== null && testResults.passed) ? css.nextButton : css.buttonElement}
                         onClick={(testResults !== null && testResults.passed) ? nextStep : onStartTests}>
                     {(testResults !== null && testResults.passed) ? "Nächster Schritt" : "Testen"}
@@ -96,6 +114,7 @@ DebuggingTutorialStep.props = {
     onOpenHelp: PropTypes.func.isRequired,
     step: PropTypes.string,
     onStartTests: PropTypes.func,
+    onReset: PropTypes.func,
 }
 
 

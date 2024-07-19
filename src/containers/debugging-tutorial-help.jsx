@@ -14,9 +14,16 @@ import PropTypes from "prop-types";
 class DebuggingTutorialHelp extends React.Component {
 
     render () {
-        const isGapTextSolved = this.props.tutorial[this.props.step].questionType === "GAP_TEXT"
-            && this.props.answers[0].toLowerCase() === this.props.tutorial[this.props.step].question1.questionSolution
-            && this.props.answers[1].toLowerCase() === this.props.tutorial[this.props.step].question2.questionSolution;
+        const tutorialStep = this.props.tutorial[this.props.step];
+
+        if (this.props.solvedSteps.includes(this.props.step)) {
+            this.props.answers[0] = tutorialStep.question1.questionSolution;
+            this.props.answers[1] = tutorialStep.question2.questionSolution;
+        }
+
+        const isGapTextSolved = tutorialStep.questionType === "GAP_TEXT"
+            && this.props.answers[0].toLowerCase() === tutorialStep.question1.questionSolution
+            && this.props.answers[1].toLowerCase() === tutorialStep.question2.questionSolution;
 
 
         return (
@@ -37,6 +44,7 @@ DebuggingTutorialHelp.propTypes = {
     step: PropTypes.string,
     onSetTutorial: PropTypes.func,
     answers: PropTypes.any,
+    solvedSteps: PropTypes.any,
 };
 
 const mapStateToProps = state => ({
@@ -44,6 +52,7 @@ const mapStateToProps = state => ({
     isHelpVisible: state.scratchGui.debuggingTutorial.isHelpVisible,
     selectedAnswers: state.scratchGui.debuggingTutorial.selectedAnswers,
     answers: state.scratchGui.debuggingTutorial.answers,
+    solvedSteps: state.scratchGui.debuggingTutorial.solvedSteps,
 });
 
 const mapDispatchToProps = dispatch => ({

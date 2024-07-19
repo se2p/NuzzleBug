@@ -91,7 +91,9 @@
     padding: 15px 15px;
     cursor: pointer;
     background-color: hsla(215, 100%, 65%, 1);
-    min-width: 120px;
+    min-width: 150px;
+    height: 45px;
+    position: relative;
 }
 
 .button-element:hover {
@@ -100,11 +102,10 @@
 
 .next-button {
     color: white;
-    font-weight: bold;
+    border: none;
     border-radius: 10px;
     padding: 15px 15px;
     cursor: pointer;
-    border: 3px solid #784451ff;
     background-color: hsl(10, 22%, 56%);
     min-width: 120px;
 }
@@ -114,7 +115,6 @@
 }
 
 
-/* Tooltip text */
 .details-button .tooltip-text {
     visibility: hidden;
     width: 210px;
@@ -241,4 +241,68 @@
     margin-bottom: 5px;
     width: 297px;
     justify-content: space-between;
+}
+
+.reset-button {
+    color: white;
+    border: none;
+    border-radius: 10px;
+    height: 45px;
+    cursor: pointer;
+    background-color: hsla(215, 100%, 65%, 1);
+    min-width: 150px;
+    position: relative;
+    transition: transform .7s ease-in-out;
+    z-index: 200;
+    bottom: 3px;
+    right: 3px
+}
+
+.reset-button:hover {
+    background-color: hsl(215, 54%, 41%);
+}
+
+.moveRight {
+    transform: translateX(120px);
+}
+
+.resetOptionAccept {
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: #616a83;
+    width: 50px;
+    height: 33px;
+    right: 34px;
+    top:3px;
+    position: absolute;
+}
+
+.resetOptionAccept:hover {
+    background-color: #70a45f;
+}
+
+.resetOptionExit {
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: #616a83;
+    width: 50px;
+    height: 33px;
+    right: 91px;
+    top:3px;
+    position: absolute;
+}
+.resetOptionExit:hover {
+    background-color: #e74c3c;
+}
+
+.reset-container {
+    border-radius: 10px;
+    border: 3px solid hsla(215, 100%, 65%, 1);
+    height: 45px;
+    width:150px;
+    position: relative;
 }
