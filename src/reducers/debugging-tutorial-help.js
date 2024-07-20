@@ -4,6 +4,7 @@ const CHECK_ANSWER = 'scratch-gui/debugging-tutorial-cards/CHECK_ANSWER';
 const STEP_BACK = 'scratch-gui/debugging-tutorial-cards/STEP_BACK';
 const GAP_TEXT_BUTTON = 'scratch-gui/debugging-tutorial-cards/GAP_TEXT_BUTTON';
 const SET_ANSWER = 'scratch-gui/debugging-tutorial-cards/SET_ANSWER';
+const CLOSE_QUESTION = 'scratch-gui/debugging-tutorial-cards/CLOSE_QUESTION';
 
 const initialState = { //TODO Needs complete rework. Remove logic from reducer!
     step: "step1",
@@ -13,6 +14,7 @@ const initialState = { //TODO Needs complete rework. Remove logic from reducer!
     answers: ["", "", ""],
     selectedAnswers: [false, false, false, false, false, false],
     solvedSteps: [],
+    questionMessage: null,
 };
 
 const reducer = function (state, action) {
@@ -52,6 +54,9 @@ const reducer = function (state, action) {
         case SET_ANSWER:
             baseState.answers[action.index] = action.value;
             break;
+        case CLOSE_QUESTION:
+            baseState.questionMessage = null;
+            break;
     }
     return baseState;
 };
@@ -62,6 +67,7 @@ const resetAnswers = function (baseState, lastStep) {
         baseState.answers = ["", "", ""];
         baseState.selectedAnswers = [false, false, false, false, false, false];
         baseState.isHelpVisible = false;
+        baseState.questionMessage = null;
     }
 }
 
@@ -74,7 +80,8 @@ const checkAnswerParse = function (baseState) { //TODO move from reducer into ot
             }
 
             if (baseState.tutorial[baseState.step][baseState.answers[0]]["next"] === "wrongAnswer") {
-                break; //TODO Display Message
+                baseState.questionMessage = baseState.tutorial[baseState.step].correctionText;
+                break;
             }
 
             baseState.step = baseState.tutorial[baseState.step][baseState.answers[0]]["next"];
@@ -85,6 +92,8 @@ const checkAnswerParse = function (baseState) { //TODO move from reducer into ot
 
                 baseState.step = baseState.tutorial[baseState.step]["next"];
                 resetAnswers(baseState, lastStep);
+            } else {
+                baseState.questionMessage = baseState.tutorial[baseState.step].correctionText;
             }
             break;
         case "DROPDOWN":
@@ -138,6 +147,9 @@ const setAnswer = function (value, index) {
     return {type: SET_ANSWER, value, index}
 }
 
+const onCloseQuestionMessage = function () {
+    return {type: CLOSE_QUESTION}
+}
 
 export {
     reducer as default,
@@ -148,4 +160,5 @@ export {
     onEnterMultiAnswer,
     setAnswer,
     onGapTextButton,
+    onCloseQuestionMessage,
 };

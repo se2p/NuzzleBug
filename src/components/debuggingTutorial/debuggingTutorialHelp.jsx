@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import dropdownIcon from "./images/icon--dropdown-selector.png";
 import infoIcon from "./images/icon--info.png"
+import owl from "./images/owl-b.svg"
 
 const DebuggingTutorialHelp = props => {
     const {
@@ -23,6 +24,8 @@ const DebuggingTutorialHelp = props => {
         answers,
         setAnswer,
         onGapTextButton,
+        questionMessage,
+        onCloseQuestionMessage,
         ...posProps
     } = props;
 
@@ -195,8 +198,18 @@ const DebuggingTutorialHelp = props => {
             </div>
 
             <div className={css.footer}>
-                <button className={css.footerButton} onClick={onStepBack}>Zurück</button>
-                <button className={css.footerButton} onClick={() => onCheckAnswer(tutorial)}>Weiter</button>
+                {questionMessage !== null && <div className={css.helpBox}>
+                    <div className={css.helpBoxHeader}>Hinweis:</div>
+                    <span style={{padding: "5px 10px", color:"white", flexShrink: "1", width:"100%", textAlign:"start"}}>{questionMessage}</span>
+                    <div className={css.helpBoxClose} onClick={onCloseQuestionMessage}>X</div>
+                </div>}
+
+                {step !== "step1" && <button className={css.footerButton} onClick={onStepBack}>Zurück</button>}
+                <button className={css.footerButton} onClick={() => onCheckAnswer(tutorial)}>
+                    Weiter
+                    {questionMessage !== null && <div className={css.footerBorder}/>}
+                    {questionMessage !== null && <hr className={css.footerLine}/>}
+                </button>
             </div>
         </div>
     );

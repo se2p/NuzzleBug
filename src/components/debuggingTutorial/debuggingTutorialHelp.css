@@ -105,24 +105,6 @@
     padding: 10px;
 }
 
-.footer-button {
-    background-color: hsla(215, 100%, 65%, 1);
-    border: none;
-    color: hsla(215, 100%, 95%, 1);
-    padding: 5px 10px;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-.footer-button:hover {
-    background-color: hsl(215, 59%, 52%);
-    border: none;
-    color: hsla(215, 100%, 95%, 1);
-    padding: 5px 10px;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
 .multiButton {
     background-color: white;
     border: 3px solid hsla(215, 100%, 65%, 1);
@@ -282,4 +264,96 @@
     color: hsla(225, 15%, 40%, 1);
     margin-top: 4px;
     margin-left: 10px;
+}
+
+.help-box {
+    width: 100%;
+    background-color: #82645eff;
+    color: white;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.help-box-header {
+    font-weight: bold;
+    color: white;
+    display: flex;
+    align-items: center;
+    background-color: #623d51ff;
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+    height: 100%;
+    padding-right: 10px;
+    padding-left: 10px;
+    flex-shrink: 0;
+}
+
+.help-box-close {
+    font-weight: bold;
+    color: white;
+    background-color: #623d51ff;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+    height: 100%;
+    padding-right: 10px;
+    padding-left: 10px;
+    flex-shrink: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.help-box-close:hover {
+    font-weight: bold;
+    color: white;
+    background-color: #4d3040;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+    height: 100%;
+    padding-right: 10px;
+    padding-left: 10px;
+    flex-shrink: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.footer-border {
+    border: 2px solid #82645eff;
+    background-color: white;
+    width: 90px;
+    height: 40px;
+    border-radius: 10px;
+    position: absolute;
+    z-index: -1;
+    bottom: -5px;
+    right: -5px;
+}
+
+.footer-button {
+    background-color: hsla(215, 100%, 65%, 1);
+    border: none;
+    color: hsla(215, 100%, 95%, 1);
+    height: 30px;
+    width: 80px;
+    cursor: pointer;
+    border-radius: 5px;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.footer-button:hover {
+    background-color: hsl(215, 59%, 52%);
+}
+
+.footerLine {
+    width: 200px;
+    border: none;
+    border-top: 2px solid #82645eff;
+    margin: 0 auto;
+    right: 80px;
+    bottom: 14px;
+    position: absolute;
+    z-index: -2;
 }

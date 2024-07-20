@@ -244,65 +244,48 @@
 }
 
 .reset-button {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    background-color: hsla(215, 100%, 65%, 1);
     color: white;
     border: none;
     border-radius: 10px;
-    height: 45px;
-    cursor: pointer;
-    background-color: hsla(215, 100%, 65%, 1);
     min-width: 150px;
-    position: relative;
-    transition: transform .7s ease-in-out;
-    z-index: 200;
-    bottom: 3px;
-    right: 3px
+    height: 45px;
 }
 
 .reset-button:hover {
     background-color: hsl(215, 54%, 41%);
 }
 
-.moveRight {
-    transform: translateX(120px);
-}
-
-.resetOptionAccept {
+.reset-button-pressed {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    background-color: hsl(215, 54%, 41%);
     color: white;
     border: none;
     border-radius: 10px;
-    cursor: pointer;
-    background-color: #616a83;
-    width: 50px;
-    height: 33px;
-    right: 34px;
-    top:3px;
-    position: absolute;
-}
-
-.resetOptionAccept:hover {
-    background-color: #70a45f;
-}
-
-.resetOptionExit {
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    background-color: #616a83;
-    width: 50px;
-    height: 33px;
-    right: 91px;
-    top:3px;
-    position: absolute;
-}
-.resetOptionExit:hover {
-    background-color: #e74c3c;
+    min-width: 144px;
+    height: 41px;
 }
 
 .reset-container {
-    border-radius: 10px;
-    border: 3px solid hsla(215, 100%, 65%, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 150px;
     height: 45px;
-    width:150px;
-    position: relative;
+}
+
+.progressBar {
+    position: absolute;
+    left: 10%;
+    bottom: 6px;
+    height: 4px;
+    width: 0;
+    border-radius: 3px;
+    background-color: white;
+    transition: width 1s linear;
 }

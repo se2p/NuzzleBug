@@ -7,7 +7,8 @@ import {
     onStepBack,
     onEnterMultiAnswer,
     setAnswer,
-    onGapTextButton,} from "../reducers/debugging-tutorial-help";
+    onGapTextButton,
+    onCloseQuestionMessage,} from "../reducers/debugging-tutorial-help";
 import DebuggingTutorialStepComponent from '../components/debuggingTutorial/debuggingTutorialHelp.jsx';
 import PropTypes from "prop-types";
 
@@ -53,6 +54,7 @@ const mapStateToProps = state => ({
     selectedAnswers: state.scratchGui.debuggingTutorial.selectedAnswers,
     answers: state.scratchGui.debuggingTutorial.answers,
     solvedSteps: state.scratchGui.debuggingTutorial.solvedSteps,
+    questionMessage: state.scratchGui.debuggingTutorial.questionMessage
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -62,6 +64,7 @@ const mapDispatchToProps = dispatch => ({
     onEnterMultiAnswer: (answer) => dispatch(onEnterMultiAnswer(answer)),
     setAnswer: (index, value) => dispatch(setAnswer(value, index)),
     onGapTextButton: () => dispatch(onGapTextButton()),
+    onCloseQuestionMessage: () => dispatch(onCloseQuestionMessage()),
 });
 
 export default connect(

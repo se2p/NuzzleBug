@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import {resetStep, errorClicked, updateTestResults, onTestDetails, showResetOptions} from "../reducers/debugging-tutorial-step";
+import {resetStep, errorClicked, updateTestResults, onTestDetails, setLoading} from "../reducers/debugging-tutorial-step";
 import DebuggingTutorialStepComponent from '../components/debuggingTutorial/debuggingTutorialStep.jsx';
 import PropTypes from "prop-types";
 import VirtualMachine from "scratch-vm";
@@ -39,14 +39,8 @@ class DebuggingTutorialStep extends React.Component {
     }
 
     onResetProject() {
-        this.props.showResetOptions(!this.props.showReset);
-    }
-
-    reset() {
         this.props.vm.loadProject(asdProject);
-        this.props.showResetOptions(false);
     }
-
 
     render () {
         return (
@@ -54,7 +48,6 @@ class DebuggingTutorialStep extends React.Component {
                 onStartTests={() => this.onTest()}
                 nextStep={() => this.onNextStep}
                 onResetProject={() => this.onResetProject()}
-                onReset={() => this.reset()}
                 {...this.props}
             />
         );
@@ -88,6 +81,7 @@ const mapStateToProps = state => ({
     testResults: state.scratchGui.debuggingTutorialStep.testResults,
     showTestDetail: state.scratchGui.debuggingTutorialStep.showTestDetail,
     showReset: state.scratchGui.debuggingTutorialStep.showReset,
+    isLoading: state.scratchGui.debuggingTutorialStep.isLoading,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -97,7 +91,7 @@ const mapDispatchToProps = dispatch => ({
     onTestDetails: () => dispatch(onTestDetails()),
     lockVM: () => dispatch(lock()),
     unlockVM: () => dispatch(unlock()),
-    showResetOptions: (showReset)  => dispatch(showResetOptions(showReset)),
+    setLoading: (isLoading) => dispatch(setLoading(isLoading)),
 });
 
 export default connect(

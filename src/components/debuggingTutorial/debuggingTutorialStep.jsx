@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React from "react";
+import React, {useRef} from "react";
 import css from "./debuggingTutorialStep.css"
 import owl from "./images/owl-b.svg"
 import accept from "./images/icon--passed.png"
@@ -20,8 +20,8 @@ const DebuggingTutorialStep = props => {
         showTestDetail,
         nextStep,
         onResetProject,
-        showReset,
-        onReset,
+        setLoading,
+        isLoading,
         ...posProps
     } = props;
 
@@ -35,6 +35,30 @@ const DebuggingTutorialStep = props => {
             </div>
         );
     }
+
+    const progressBarRef = useRef(null);
+    const timeoutIdRef = useRef(null);
+    //const startTimeRef = useRef(null);
+
+    const handleMouseDown = () => {
+        //startTimeRef.current = Date.now();
+        setLoading(true);
+        progressBarRef.current.style.width = '80%';
+        progressBarRef.current.style.transition = 'width 1s linear';
+
+        timeoutIdRef.current = setTimeout(() => {
+            onResetProject();
+            progressBarRef.current.style.transition = 'none';
+            progressBarRef.current.style.width = '0';
+        }, 1100);
+    };
+
+    const handleMouseUp = () => {
+        setLoading(false);
+        clearTimeout(timeoutIdRef.current);
+        progressBarRef.current.style.transition = 'none';
+        progressBarRef.current.style.width = '0';
+    };
 
     return (
         <div className={css.container}>
@@ -66,17 +90,15 @@ const DebuggingTutorialStep = props => {
 
             <div className={css.buttonBar}>
                 <div className={css.resetContainer}>
-                    <button className={`${css.resetButton} ${showReset ? css.moveRight : ''}`} style={{backgroundColor:"#4D97FFFF"}} onClick={onResetProject}>
-                        {showReset ? "Aktuellen Schritt zurücksetzen?" : "Zurücksetzen"}
+                    <button
+                        className={isLoading ? css.resetButtonPressed : css.resetButton}
+                        onMouseDown={handleMouseDown}
+                        onMouseUp={handleMouseUp}
+                        onMouseLeave={handleMouseUp} // Falls die Maus den Button verlässt, wird das gleiche wie bei mouseup ausgelöst
+                    >
+                        Zurücksetzen
+                        <div className={css.progressBar} ref={progressBarRef}></div>
                     </button>
-                    <button className={css.resetOptionAccept} onClick={onReset}>
-                        <img alt={"yes"} src={acceptReset} style={{height:"auto", width:"13px"}}/>
-                    </button>
-                    <button className={css.resetOptionExit} onClick={onResetProject}>
-                        <img alt={"no"} src={declineReset} style={{height:"auto", width:"10px"}}/>
-                    </button>
-
-
                 </div>
 
                 <button className={css.buttonElement} onClick={onOpenHelp}>Hilfe</button>
