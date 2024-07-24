@@ -1,0 +1,87 @@
+.main {
+    display: flex;
+    border: 1px solid darkgray;
+    margin: -1px;
+    padding: 3px;
+}
+
+.no-borders {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    border-top-width: 0 !important;
+    border-bottom-width: 0 !important;
+}
+
+.test-collapsible {
+    margin: 10px;
+    border: 1px solid darkgray;
+    border-radius: 0.3rem;
+    user-select: none;
+    overflow:hidden;
+}
+
+.trigger {
+    display: flex;
+    padding: 3px;
+    color: black;
+    background-color: rgb(218, 232, 255);
+    height: 2.4rem;
+}
+
+.trigger:hover {
+    cursor: pointer;
+}
+
+.background-green {
+    background-color: #51c43c;
+}
+
+.background-red {
+    background-color: #f95353;
+}
+
+.background-purple {
+    background-color: #c27cdb;
+}
+
+.icon {
+    height: 24px;
+    align-self: start;
+    padding-right: 0.5rem;
+}
+
+.icon-disabled {
+    cursor: default !important;
+    opacity: 0.2;
+}
+
+.icon-right {
+    align-self: start;
+    margin-left: auto;
+}
+
+.icon-vertically-centered {
+    align-self: center !important;
+}
+
+.icon-right:hover {
+    background-color: hsla(215, 100%, 65%, 0.15);
+    cursor: pointer;
+}
+
+.text {
+    align-self: center;
+    font-size: 0.8rem;
+}
+
+.test-name {
+    align-self: center;
+    font-size: 1rem;
+}
+
+.no-description {
+    align-self: center;
+    font-size: 0.8rem;
+    height: 0.8rem;
+    color: grey;
+}
