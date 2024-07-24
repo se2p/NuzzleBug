@@ -9,11 +9,7 @@ import {injectIntl, intlShape} from 'react-intl';
 import ControlsComponent from '../components/controls/controls.jsx';
 import {TracingState} from '../components/toggle-tracing/toggle-tracing.jsx';
 import {viewCards} from '../reducers/interrogative-debugging/version-1/ir-cards.js';
-import {setTestRunningState} from '../reducers/vm-status.js';
 
-import Test from 'whisker/whisker-main/src/test-runner/test';
-import TestRunner from 'whisker/whisker-main/src/test-runner/test-runner';
-import {ModelTester} from 'whisker/whisker-main/src/whisker/model/ModelTester.ts';
 import {actionExecuted, openHelpMenu, repositionHelpMenuWindow} from '../reducers/help-menu';
 import {viewTutorial} from '../reducers/tutorial-cards.js';
 
@@ -23,34 +19,19 @@ class Controls extends React.Component {
         bindAll(this, [
             'handleKeyDown',
             'handleGreenFlagClick',
-            'handleRunTestClick',
             'handlePauseResumeClick',
             'handleHelpMenuButtonClick',
             'handleStepBack',
             'handleStepOver',
             'handleInitialStep',
-            'handleInitialTestStep',
             'handleStopAllClick',
-            'handleToggleTracingClick',
-            'onTestStart',
-            'onTestDone',
-            'onTestRunEnd'
+            'handleToggleTracingClick'
         ]);
 
         props.vm.runtime.branchDistTracingActive = false;
 
         this.tracingState = props.tracingActive ?
             TracingState.ACTIVE : TracingState.INACTIVE;
-
-        this.testRunner = new TestRunner();
-        this.testRunner.on(TestRunner.TEST_START, this.onTestStart);
-        this.testRunner.on(TestRunner.TEST_PASS, this.onTestDone);
-        this.testRunner.on(TestRunner.TEST_FAIL, this.onTestDone);
-        this.testRunner.on(TestRunner.TEST_ERROR, this.onTestDone);
-        this.testRunner.on(TestRunner.TEST_SKIP, this.onTestDone);
-        this.testRunner.on(TestRunner.RUN_END, this.onTestRunEnd);
-
-        this.modelTester = new ModelTester();
     }
     componentDidMount () {
         document.addEventListener('keydown', this.handleKeyDown);
@@ -106,63 +87,6 @@ class Controls extends React.Component {
             logging.logClickEvent('ICON', new Date(), 'GREENFLAG', null);
         }
     }
-    handleRunTestClick (e) {
-        e.preventDefault();
-
-        if (this.props.whiskerTest) {
-            this.props.onTestStart();
-
-            if (this.props.projectPaused) {
-                // Resets the state of the VM back to normal.
-                // Otherwise we could not start execution again.
-                this.resetPauseResume();
-            }
-            const test = this.props.whiskerTest;
-            test.isLoading = true;
-            test.isRunning = false;
-            test.resultStatus = null;
-            this.forceUpdate();
-            setTimeout(() => this.testRunner.runTests(
-                this.props.vm,
-                test.project,
-                [test],
-                this.modelTester,
-                test.props,
-                test.modelProps
-            ), 100);
-        }
-    }
-    onTestStart () {
-        if (this.haltAfterFirstTestStep) {
-            this.props.vm.haltExecution();
-            this.props.vm.runtime.oneStep = true;
-            this.haltAfterFirstTestStep = false;
-        }
-        const test = this.props.whiskerTest;
-        test.isLoading = false;
-        test.isRunning = true;
-        this.props.vm.runtime.whiskerTestRunning = true;
-        this.forceUpdate();
-    }
-    onTestDone (result) {
-        const test = this.props.whiskerTest;
-        test.isRunning = false;
-        test.resultStatus = result.status;
-        this.props.vm.runtime.whiskerTestRunning = false;
-        const traces = this.props.vm.runtime.traceInfo.tracer.traces;
-        traces[traces.length - 1].whiskerTestEnd = true;
-        this.props.onTestEnd();
-        this.forceUpdate();
-    }
-    onTestRunEnd () {
-        if (this.props.projectPaused) {
-            // Resets the state of the VM back to normal.
-            // Otherwise we could not stop execution.
-            this.resetPauseResume();
-        }
-        this.props.vm.stopAll();
-        this.props.vm.runtime._executeStep();
-    }
     handleStepBack (e) {
         e.preventDefault();
         if ((this.props.projectRunning && this.props.projectPaused) || !this.props.projectRunning) {
@@ -207,12 +131,6 @@ class Controls extends React.Component {
             logging.logClickEvent('BUTTON', new Date(), 'PAUSE_EXECUTION', null);
         }
     }
-    handleInitialTestStep (e) {
-        e.preventDefault();
-
-        this.haltAfterFirstTestStep = true;
-        this.handleRunTestClick(e);
-    }
     handlePauseResumeClick (e) {
         e.preventDefault();
 
@@ -243,9 +161,6 @@ class Controls extends React.Component {
         }
 
         this.props.vm.stopAll();
-        if (this.testRunner.vmWrapper) {
-            this.testRunner.vmWrapper.end();
-        }
         if (logging.isActive()) {
             logging.logClickEvent('ICON', new Date(), 'STOPALL', null);
         }
@@ -299,13 +214,10 @@ class Controls extends React.Component {
             interrogationSupported,
             interrogationEnabled,
             tracingActive,
-            whiskerTest,
             ...props
         } = this.props;
 
         delete props.projectChanged;
-        delete props.onTestStart;
-        delete props.onTestEnd;
 
         return (
             <ControlsComponent
@@ -319,14 +231,11 @@ class Controls extends React.Component {
                 tracingState={this.tracingState}
                 tracingActive={tracingActive}
                 vm={vm}
-                whiskerTest={whiskerTest}
                 onGreenFlagClick={this.handleGreenFlagClick}
-                onRunTestClick={this.handleRunTestClick}
                 onStepBackClick={this.handleStepBack}
                 onHelpMenuButtonClick={this.handleHelpMenuButtonClick}
                 onStepOverClick={this.handleStepOver}
                 onInitialStepClick={this.handleInitialStep}
-                onInitialTestStepClick={this.handleInitialTestStep}
                 onPauseResumeClick={this.handlePauseResumeClick}
                 onStopAllClick={this.handleStopAllClick}
                 onIRQuestionsClick={handleIRQuestionsClick}
@@ -340,8 +249,6 @@ class Controls extends React.Component {
 Controls.propTypes = {
     intl: intlShape.isRequired,
     isStarted: PropTypes.bool.isRequired,
-    onTestStart: PropTypes.func.isRequired,
-    onTestEnd: PropTypes.func.isRequired,
     handleIRQuestionsClick: PropTypes.func.isRequired,
     projectPaused: PropTypes.bool.isRequired,
     irDisabled: PropTypes.bool.isRequired,
@@ -358,8 +265,7 @@ Controls.propTypes = {
     tracingActive: PropTypes.bool.isRequired,
     projectChanged: PropTypes.bool.isRequired,
     repositionHelpMenuWindow: PropTypes.func.isRequired,
-    vm: PropTypes.instanceOf(VM),
-    whiskerTest: PropTypes.instanceOf(Test)
+    vm: PropTypes.instanceOf(VM)
 };
 
 const mapStateToProps = state => ({
@@ -375,14 +281,11 @@ const mapStateToProps = state => ({
     executedOnce: state.scratchGui.helpMenu.executedOnce,
     tracingActive: state.scratchGui.vmStatus.tracingActive,
     projectChanged: state.scratchGui.projectChanged,
-    whiskerTest: state.scratchGui.vmStatus.whiskerTest,
     tutorialCardsVisible: state.scratchGui.tutorialCards.visible,
     locale: state.locales.locale
 });
 
 const mapDispatchToProps = dispatch => ({
-    onTestStart: () => dispatch(setTestRunningState(true)),
-    onTestEnd: () => dispatch(setTestRunningState(false)),
     onHelpMenuButtonClick: () => dispatch(openHelpMenu()),
     handleIRQuestionsClick: () => dispatch(viewCards()),
     onActionExecuted: () => dispatch(actionExecuted()),

@@ -16,7 +16,6 @@ import {
     setPauseState,
     setTurboState,
     setStartedState,
-    setTestRunningState,
     setTracingActiveState
 } from '../reducers/vm-status';
 import {showExtensionAlert} from '../reducers/alerts';
@@ -70,8 +69,6 @@ const vmListenerHOC = function (WrappedComponent) {
             this.props.vm.on('TRACING_INACTIVE', this.props.onDeactivateTracing);
             this.props.vm.on('TRACING_LIMIT_REACHED', this.handleTracingLimitReached);
             this.props.vm.on('TRACING_DEACTIVATED', this.handleTracingDeactivated);
-            this.props.vm.on('TEST_RUN_START', this.props.onTestRunStart);
-            this.props.vm.on('TEST_RUN_END', this.props.onTestRunEnd);
         }
         componentDidMount () {
             if (this.props.attachKeyboardEvents) {
@@ -131,8 +128,6 @@ const vmListenerHOC = function (WrappedComponent) {
             // Don't capture keys intended for Blockly inputs.
             if (e.target !== document && e.target !== document.body) return;
 
-            if (this.props.testRunning) return;
-
             const key = (!e.key || e.key === 'Dead') ? e.keyCode : e.key;
             this.props.vm.postIOData('keyboard', {
                 key: key,
@@ -146,8 +141,7 @@ const vmListenerHOC = function (WrappedComponent) {
             }
         }
         handleKeyUp (e) {
-            if (this.props.testRunning) return;
-            
+
             // Always capture up events,
             // even those that have switched to other targets.
             const key = (!e.key || e.key === 'Dead') ? e.keyCode : e.key;
@@ -192,9 +186,6 @@ const vmListenerHOC = function (WrappedComponent) {
                 ...props
             } = this.props;
 
-            delete props.onTestRunStart;
-            delete props.onTestRunEnd;
-
             return <WrappedComponent {...props} />;
         }
     }
@@ -221,12 +212,9 @@ const vmListenerHOC = function (WrappedComponent) {
         onTurboModeOn: PropTypes.func.isRequired,
         onActivateTracing: PropTypes.func.isRequired,
         onDeactivateTracing: PropTypes.func.isRequired,
-        onTestRunStart: PropTypes.func.isRequired,
-        onTestRunEnd: PropTypes.func.isRequired,
         projectChanged: PropTypes.bool,
         shouldUpdateTargets: PropTypes.bool,
         shouldUpdateProjectChanged: PropTypes.bool,
-        testRunning: PropTypes.bool,
         username: PropTypes.string,
         vm: PropTypes.instanceOf(VM).isRequired
     };
@@ -243,7 +231,6 @@ const vmListenerHOC = function (WrappedComponent) {
         // Do not update the projectChanged state in fullscreen or player only mode
         shouldUpdateProjectChanged: !state.scratchGui.mode.isFullScreen && !state.scratchGui.mode.isPlayerOnly,
         vm: state.scratchGui.vm,
-        testRunning: state.scratchGui.vmStatus.testRunning,
         username: state.session && state.session.session && state.session.session.user ?
             state.session.session.user.username : ''
     });
@@ -282,9 +269,7 @@ const vmListenerHOC = function (WrappedComponent) {
         onDeactivateTracing: () => {
             dispatch(setTracingActiveState(false));
             dispatch(disableDebugger());
-        },
-        onTestRunStart: () => dispatch(setTestRunningState(true)),
-        onTestRunEnd: () => dispatch(setTestRunningState(false))
+        }
     });
     return injectIntl(connect(
         mapStateToProps,
