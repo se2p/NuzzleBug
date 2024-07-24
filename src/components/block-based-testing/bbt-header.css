@@ -1,0 +1,48 @@
+@import "../../css/colors.css";
+
+.main {
+    height: 2.75rem;
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+}
+
+.icon {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.25rem;
+    user-select: none;
+    cursor: pointer;
+}
+
+.icon-disabled {
+    cursor: default !important;
+    opacity: 0.5;
+}
+
+.icon-active {
+    background-color: hsla(215, 100%, 65%, 0.35);
+}
+
+.icon-normal-padding {
+    padding: 0.375rem;
+}
+
+.icon-smaller-padding {
+    padding: 0.2em;
+}
+
+.icon-small-padding {
+    padding: 0.1em;
+}
+
+.icon-right {
+    float: right;
+}
+
+.icon:hover {
+    background-color: $motion-light-transparent;
+}
+
+input[type="file"] {
+    display: none;
+}

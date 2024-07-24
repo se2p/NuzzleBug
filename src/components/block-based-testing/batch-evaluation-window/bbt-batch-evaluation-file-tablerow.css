@@ -1,0 +1,21 @@
+.control-icon {
+    width: 24px;
+}
+
+.control-icon-smaller {
+    width: 17px;
+    padding-bottom: 2px;
+}
+
+.table-row-buttons {
+    border: 1px solid lightgray;
+    margin-right: 2px;
+}
+
+.control-div {
+    display: flex;
+}
+
+.bold {
+    font-weight: bold;
+}

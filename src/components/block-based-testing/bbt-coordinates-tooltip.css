@@ -1,0 +1,10 @@
+@import "../../css/z-index.css";
+
+.coordinates-tooltip {
+    position: absolute;
+    background: rgba(255, 255, 204, 0.85);
+    border: 1px solid black;
+    padding: 2px;
+    z-index: $z-index-coordinates-tooltip;
+    color: black;
+}
