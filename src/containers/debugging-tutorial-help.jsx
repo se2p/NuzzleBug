@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import {connect} from 'react-redux';
 
 import {
@@ -8,7 +8,8 @@ import {
     onEnterMultiAnswer,
     setAnswer,
     onGapTextButton,
-    onCloseQuestionMessage,} from "../reducers/debugging-tutorial-help";
+    onCloseQuestionMessage,
+    onToggleDiagramm,} from "../reducers/debugging-tutorial-help";
 import DebuggingTutorialStepComponent from '../components/debuggingTutorial/debuggingTutorialHelp.jsx';
 import PropTypes from "prop-types";
 
@@ -25,8 +26,6 @@ class DebuggingTutorialHelp extends React.Component {
         const isGapTextSolved = tutorialStep.questionType === "GAP_TEXT"
             && this.props.answers[0].toLowerCase() === tutorialStep.question1.questionSolution
             && this.props.answers[1].toLowerCase() === tutorialStep.question2.questionSolution;
-
-
         return (
             <DebuggingTutorialStepComponent
                 isGapTextSolved={isGapTextSolved}
@@ -54,7 +53,8 @@ const mapStateToProps = state => ({
     selectedAnswers: state.scratchGui.debuggingTutorial.selectedAnswers,
     answers: state.scratchGui.debuggingTutorial.answers,
     solvedSteps: state.scratchGui.debuggingTutorial.solvedSteps,
-    questionMessage: state.scratchGui.debuggingTutorial.questionMessage
+    questionMessage: state.scratchGui.debuggingTutorial.questionMessage,
+    showDiagramm: state.scratchGui.debuggingTutorial.showDiagramm,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -65,6 +65,7 @@ const mapDispatchToProps = dispatch => ({
     setAnswer: (index, value) => dispatch(setAnswer(value, index)),
     onGapTextButton: () => dispatch(onGapTextButton()),
     onCloseQuestionMessage: () => dispatch(onCloseQuestionMessage()),
+    onToggleDiagramm: () => dispatch(onToggleDiagramm()),
 });
 
 export default connect(

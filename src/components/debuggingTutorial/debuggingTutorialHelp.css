@@ -5,6 +5,7 @@
     margin: 0.5rem 2rem;
     min-width: 468px;
     resize: both;
+    width: 90%;
 }
 
 .header {
@@ -12,6 +13,7 @@
     border-radius: 10px;
     margin-bottom: 50px;
     margin-top: 10px;
+    width: 100%;
 }
 
 .header-image {

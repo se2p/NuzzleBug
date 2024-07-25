@@ -5,6 +5,7 @@ const STEP_BACK = 'scratch-gui/debugging-tutorial-cards/STEP_BACK';
 const GAP_TEXT_BUTTON = 'scratch-gui/debugging-tutorial-cards/GAP_TEXT_BUTTON';
 const SET_ANSWER = 'scratch-gui/debugging-tutorial-cards/SET_ANSWER';
 const CLOSE_QUESTION = 'scratch-gui/debugging-tutorial-cards/CLOSE_QUESTION';
+const TOGGLE_DIAGRAMM = 'scratch-gui/debugging-tutorial-cards/TOGGLE_DIAGRAMM';
 
 const initialState = { //TODO Needs complete rework. Remove logic from reducer!
     step: "step1",
@@ -15,6 +16,7 @@ const initialState = { //TODO Needs complete rework. Remove logic from reducer!
     selectedAnswers: [false, false, false, false, false, false],
     solvedSteps: [],
     questionMessage: null,
+    showDiagramm: true,
 };
 
 const reducer = function (state, action) {
@@ -31,6 +33,7 @@ const reducer = function (state, action) {
                 baseState.answers = ["", "", ""];
                 baseState.selectedAnswers = [false, false, false, false, false, false];
                 baseState.isHelpVisible = false;
+                baseState.questionMessage = null;
             }
             break;
         case ENTER_MULTI_ANSWER:
@@ -56,6 +59,9 @@ const reducer = function (state, action) {
             break;
         case CLOSE_QUESTION:
             baseState.questionMessage = null;
+            break;
+        case TOGGLE_DIAGRAMM:
+            baseState.showDiagramm = !baseState.showDiagramm;
             break;
     }
     return baseState;
@@ -151,6 +157,10 @@ const onCloseQuestionMessage = function () {
     return {type: CLOSE_QUESTION}
 }
 
+const onToggleDiagramm = function () {
+    return {type: TOGGLE_DIAGRAMM}
+}
+
 export {
     reducer as default,
     initialState as debuggingTutorialInitialState,
@@ -161,4 +171,5 @@ export {
     setAnswer,
     onGapTextButton,
     onCloseQuestionMessage,
+    onToggleDiagramm,
 };

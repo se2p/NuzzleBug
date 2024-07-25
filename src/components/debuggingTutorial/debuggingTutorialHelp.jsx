@@ -1,9 +1,10 @@
 import css from "./debuggingTutorialHelp.css";
 import PropTypes from "prop-types";
-import React from "react";
+import React, {useEffect, useRef} from "react";
 import dropdownIcon from "./images/icon--dropdown-selector.png";
 import infoIcon from "./images/icon--info.png"
-import owl from "./images/owl-b.svg"
+import shrinkIcon from './images/icon--shrink.svg';
+import expandIcon from './images/icon--expand.png';
 
 const DebuggingTutorialHelp = props => {
     const {
@@ -26,8 +27,27 @@ const DebuggingTutorialHelp = props => {
         onGapTextButton,
         questionMessage,
         onCloseQuestionMessage,
+        onToggleDiagramm,
+        showDiagramm,
         ...posProps
     } = props;
+
+    const endRef = useRef(null);
+
+    useEffect(() => {
+        const scrollToBottom = () => {
+            if (endRef.current) {
+                endRef.current.scrollIntoView({ behavior: "smooth" });
+            }
+        };
+
+        // Ein kleines Timeout setzen, um sicherzustellen, dass der Inhalt geladen ist
+        const timer = setTimeout(scrollToBottom, 0);
+
+        // Cleanup-Funktion, um das Timeout zu entfernen, wenn sich der Effekt erneut auslöst
+        return () => clearTimeout(timer);
+    }, [step]);
+
 
     const gapTextButtonState = function () {
         if (answers[2] === "") {
@@ -172,12 +192,14 @@ const DebuggingTutorialHelp = props => {
     }
 
     return (
-
-
         <div className={css.cardContainer}>
 
-            <div className={css.header}>
-                <img src={tutorialIndexData["diagramm" + tutorial[step]["diagrammStep"]]} alt="Diagramm of the debugging process." className={css.headerImage} />
+            <div className={css.header} style={{backgroundColor: showDiagramm ? "transparent" : "rgba(77,151,255,0.42)",
+                borderColor: showDiagramm ? "#4D97FFFF" : "transparent"}}>
+                <div style={{position:"relative", width:"100%", display: "flex", alignItems: "flex-end"}}>
+                    <img onClick={onToggleDiagramm} src={showDiagramm ? expandIcon : shrinkIcon} style={{width:"20px", height:"auto",marginLeft:"auto", marginRight:"10px", paddingBottom:"3px", paddingTop:"3px", cursor: "pointer"}} alt={"expandButton"}/>
+                </div>
+                {showDiagramm && <img draggable={false} src={tutorialIndexData["diagramm" + tutorial[step]["diagrammStep"]]} alt="Diagramm of the debugging process." className={css.headerImage} />}
             </div>
 
             <div className={css.questionSection}>
@@ -211,6 +233,9 @@ const DebuggingTutorialHelp = props => {
                     {questionMessage !== null && <hr className={css.footerLine}/>}
                 </button>
             </div>
+
+
+            <div ref={endRef} />
         </div>
     );
 };
