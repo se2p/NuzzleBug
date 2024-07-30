@@ -1,17 +1,20 @@
 const ENTER_MULTI_ANSWER = 'scratch-gui/debugging-tutorial-cards/ENTER_MULTI_ANSWER';
 const HELP = 'scratch-gui/debugging-tutorial-cards/HELP';
-const CHECK_ANSWER = 'scratch-gui/debugging-tutorial-cards/CHECK_ANSWER';
 const STEP_BACK = 'scratch-gui/debugging-tutorial-cards/STEP_BACK';
 const GAP_TEXT_BUTTON = 'scratch-gui/debugging-tutorial-cards/GAP_TEXT_BUTTON';
 const SET_ANSWER = 'scratch-gui/debugging-tutorial-cards/SET_ANSWER';
 const CLOSE_QUESTION = 'scratch-gui/debugging-tutorial-cards/CLOSE_QUESTION';
 const TOGGLE_DIAGRAMM = 'scratch-gui/debugging-tutorial-cards/TOGGLE_DIAGRAMM';
+const SET_STEP = 'scratch-gui/debugging-tutorial-cards/SET_STEP';
+const RESET = 'scratch-gui/debugging-tutorial-cards/RESET';
+const SET_QUESTION_MSG = 'scratch-gui/debugging-tutorial-cards/SET_QUESTION_MSG';
+const ADD_SOLVED = 'scratch-gui/debugging-tutorial-cards/ADD_SOLVED';
 
-const initialState = { //TODO Needs complete rework. Remove logic from reducer!
-    step: "step1",
+const initialState = { //TODO Remove logic from reducer!
+    step: "1",
     tutorial: null,
     isHelpVisible: false,
-    stepStack: ["step1"],
+    stepStack: ["1"],
     answers: ["", "", ""],
     selectedAnswers: [false, false, false, false, false, false],
     solvedSteps: [],
@@ -27,9 +30,7 @@ const reducer = function (state, action) {
     switch (action.type) {
         case STEP_BACK:
             if (baseState.stepStack.length > 1) {
-                baseState.stepStack.pop()
-                baseState.step = baseState.stepStack.pop(); // step1, step2, step3, step4 -> step1, step2
-                baseState.stepStack.push(baseState.step) //TODO BRUH
+                baseState.step = baseState.stepStack.pop();
                 baseState.answers = ["", "", ""];
                 baseState.selectedAnswers = [false, false, false, false, false, false];
                 baseState.isHelpVisible = false;
@@ -41,10 +42,6 @@ const reducer = function (state, action) {
             break;
         case HELP:
             baseState.isHelpVisible = !baseState.isHelpVisible;
-            break;
-        case CHECK_ANSWER:
-            baseState.tutorial = action.tutorial;
-            checkAnswerParse(baseState, action);
             break;
         case GAP_TEXT_BUTTON:
             if (baseState.answers[2] === "") {
@@ -63,70 +60,25 @@ const reducer = function (state, action) {
         case TOGGLE_DIAGRAMM:
             baseState.showDiagramm = !baseState.showDiagramm;
             break;
+        case SET_STEP:
+            baseState.stepStack = [...baseState.stepStack, baseState.step];
+            baseState.step = action.step;
+            break;
+        case RESET:
+            baseState.answers = ["", "", ""];
+            baseState.selectedAnswers = [false, false, false, false, false, false];
+            baseState.isHelpVisible = false;
+            baseState.questionMessage = null;
+            break;
+        case SET_QUESTION_MSG:
+            baseState.questionMessage = action.content;
+            break;
+        case ADD_SOLVED:
+            baseState.solvedSteps = [...baseState.solvedSteps, action.step];
+            break;
     }
     return baseState;
 };
-
-const resetAnswers = function (baseState, lastStep) {
-    if (baseState.step !== lastStep) { //Only when visiting a new step.
-        baseState.stepStack = [...baseState.stepStack, baseState.step];
-        baseState.answers = ["", "", ""];
-        baseState.selectedAnswers = [false, false, false, false, false, false];
-        baseState.isHelpVisible = false;
-        baseState.questionMessage = null;
-    }
-}
-
-const checkAnswerParse = function (baseState) { //TODO move from reducer into other class
-    let lastStep = baseState.step;
-    switch (baseState.tutorial[baseState.step]["questionType"]) {
-        case "SINGLE_CHOICE":
-            if (baseState.answers[0] === "") {
-                break;
-            }
-
-            if (baseState.tutorial[baseState.step][baseState.answers[0]]["next"] === "wrongAnswer") {
-                baseState.questionMessage = baseState.tutorial[baseState.step].correctionText;
-                break;
-            }
-
-            baseState.step = baseState.tutorial[baseState.step][baseState.answers[0]]["next"];
-            resetAnswers(baseState, lastStep);
-            break;
-        case "MULTIPLE_CHOICE":
-            if (JSON.stringify(baseState.selectedAnswers) === JSON.stringify(baseState.tutorial[baseState.step]["solution"])) {
-
-                baseState.step = baseState.tutorial[baseState.step]["next"];
-                resetAnswers(baseState, lastStep);
-            } else {
-                baseState.questionMessage = baseState.tutorial[baseState.step].correctionText;
-            }
-            break;
-        case "DROPDOWN":
-            if (baseState.answers[0] !== "") {
-                const findOption = () => Object.entries(baseState.tutorial[baseState.step])
-                    .find(([key, value]) => value.label === baseState.answers[0])?.[0] || null;
-                baseState.step = baseState.tutorial[baseState.step][findOption()]["next"];
-                resetAnswers(baseState, lastStep);
-            }
-            break;
-        case "GAP_TEXT":
-            if (baseState.answers[2] !== "") {
-                baseState.step = baseState.answers[2] !== "false" ?
-                    baseState.tutorial[baseState.step].endQuestionTrueNext :
-                    baseState.step = baseState.tutorial[baseState.step].endQuestionFalseNext;
-                resetAnswers(baseState, lastStep);
-                // The GAP TEXT was solved. Next time when visiting this specific step, solve the first 2 inputFields
-                baseState.solvedSteps = [...baseState.solvedSteps, lastStep];
-            }
-            break;
-        case "MESSAGE":
-            baseState.step = baseState.tutorial[baseState.step].next;
-            baseState.isHelpVisible = false;
-            baseState.stepStack = [...baseState.stepStack, baseState.step];
-            break;
-    }
-}
 
 const onEnterMultiAnswer = function (answer) {
     let index = answer.charAt(6) - 1; //option1 -> 0
@@ -135,10 +87,6 @@ const onEnterMultiAnswer = function (answer) {
 
 const onHelp = function () {
     return {type: HELP};
-}
-
-const onCheckAnswer = function (tutorial) {
-    return {type: CHECK_ANSWER, tutorial};
 }
 
 const onStepBack = function () {
@@ -161,15 +109,34 @@ const onToggleDiagramm = function () {
     return {type: TOGGLE_DIAGRAMM}
 }
 
+const setStep = function (step) {
+    return {type: SET_STEP, step}
+}
+
+const reset = function () {
+    return {type: RESET}
+}
+
+const setQuestionMessage = function (content) {
+    return {type: SET_QUESTION_MSG, content}
+}
+
+const addSolvedStep = function (step) {
+    return {type: ADD_SOLVED, step}
+}
+
 export {
     reducer as default,
     initialState as debuggingTutorialInitialState,
     onHelp,
-    onCheckAnswer,
     onStepBack,
     onEnterMultiAnswer,
     setAnswer,
     onGapTextButton,
     onCloseQuestionMessage,
     onToggleDiagramm,
+    setStep,
+    reset,
+    setQuestionMessage,
+    addSolvedStep,
 };

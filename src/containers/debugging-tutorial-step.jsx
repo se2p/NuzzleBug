@@ -33,9 +33,10 @@ class DebuggingTutorialStep extends React.Component {
     }
 
     onNextStep() {
-        this.props.resetStep();
         this.props.onIncreaseStep();
-        this.myRef.scrollTop = 0;
+        this.props.resetStep();
+        this.props.vm.loadProject(asdProject); //TODO Load right level
+        // TODO +reset Help completely
     }
 
     onResetProject() {
@@ -46,7 +47,7 @@ class DebuggingTutorialStep extends React.Component {
         return (
             <DebuggingTutorialStepComponent
                 onStartTests={() => this.onTest()}
-                nextStep={() => this.onNextStep}
+                nextStep={() => this.onNextStep()}
                 onResetProject={() => this.onResetProject()}
                 {...this.props}
             />

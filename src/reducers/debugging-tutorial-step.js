@@ -1,5 +1,3 @@
-import {bool} from "prop-types";
-
 const RESET_STEP = 'scratch-gui/debugging-tutorial-cards/RESET_STEP';
 const ERROR_CLICKED = 'scratch-gui/debugging-tutorial-cards/ERROR_CLICKED';
 const UPDATE_TEST_RESULTS = 'scratch-gui/debugging-tutorial-cards/UPDATE_TEST_RESULTS';
@@ -44,7 +42,6 @@ const reducer = function (state, action) {
 };
 
 const resetStep = function () {
-    console.log("RESET_STEP");
     return {type: RESET_STEP};
 }
 

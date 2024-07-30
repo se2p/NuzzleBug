@@ -33,6 +33,7 @@ const DebuggingTutorialHelp = props => {
     } = props;
 
     const endRef = useRef(null);
+    const stepRegex = /^step[1-9]_1$/;
 
     useEffect(() => {
         const scrollToBottom = () => {
@@ -226,7 +227,7 @@ const DebuggingTutorialHelp = props => {
                     <div className={css.helpBoxClose} onClick={onCloseQuestionMessage}>X</div>
                 </div>}
 
-                {step !== "step1" && <button className={css.footerButton} onClick={onStepBack}>Zurück</button>}
+                {!stepRegex.test(step) && <button className={css.footerButton} onClick={onStepBack}>Zurück</button>}
                 <button className={css.footerButton} onClick={() => onCheckAnswer(tutorial)}>
                     Weiter
                     {questionMessage !== null && <div className={css.footerBorder}/>}

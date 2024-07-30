@@ -18,9 +18,9 @@ import backIcon from './images/icon--back.png'
 import Tutorial from './tutorial-menu-item.jsx';
 import TutorialStep from '../../containers/tutorial-step.jsx';
 import VirtualMachine from 'scratch-vm';
-import DebuggingTutorialStep from "../../containers/debugging-tutorial-help.jsx";
+import DebuggingTutorialHelp from "../../containers/debugging-tutorial-help.jsx";
 import DebuggingTutorialOverview from "../../containers/debugging-tutorial-overview.jsx";
-import DebuggingTutorialStep1 from "../../containers/debugging-tutorial-step.jsx";
+import DebuggingTutorialStep from "../../containers/debugging-tutorial-step.jsx";
 
 
 
@@ -252,6 +252,7 @@ const TutorialCards = props => {
                         onStartTutorial={onStartTutorial}
                         vm={vm}
                         stepCount={totalSteps}
+
                     />;
                 } else {
                     return <TutorialStep
@@ -264,20 +265,21 @@ const TutorialCards = props => {
                     />;
                 }
             case "DEBUGGING_STEP":
-                return <DebuggingTutorialStep1
+                return <DebuggingTutorialStep
                     onOpenHelp={onOpenHelp}
                     tutorialMessages={tutorialMessages}
                     projectFiles={"projectFiles"}
                     vm={vm}
                     step={step}
-                    nextStep={onNextStep}
+                    onIncreaseStep={onNextStep}
                 />;
             case "DEBUGGING_HELP":
-                return <DebuggingTutorialStep
+                return <DebuggingTutorialHelp
                     tutorial={tutorialMessages}
                     tutorialIndexData={tutorialIndexData}
+                    stepNumber={step}
                 />
-            default: //Show menu
+            default: //Show tutorial selection
                 return Array(tutorials.length).fill(0)
                     .map((_, i) => (
                         <Tutorial
@@ -327,12 +329,7 @@ const TutorialCards = props => {
                             className={expanded ? classNames(styles.stepBody, tutorialStyles.stepBody) : styles.hidden}
                             ref={cardRef}
                         >
-
                             {parseContent()}
-
-
-
-
                         </div>
                         <NextPrevButtons
                             isMenuVisible={isMenuVisible}
