@@ -252,6 +252,7 @@ class TargetPane extends React.Component {
         return (
             <TargetPaneComponent
                 {...componentProps}
+                spriteSelectionEnabled={this.props.spriteSelectionEnabled}
                 fileInputRef={this.setFileInput}
                 onActivateBlocksTab={this.handleActivateBlocksTab}
                 onChangeSpriteDirection={this.handleChangeSpriteDirection}

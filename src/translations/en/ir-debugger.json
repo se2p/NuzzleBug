@@ -59,17 +59,37 @@
             "operators": "Operators",
             "variables": "Variables",
             "lists": "Lists",
-            "execution": "Execution"
+            "execution": "Execution",
+            "block-based-testing": "Block-Based Testing"
         }
     },
     "question-hierarchy": {
         "empty": "No questions available. "
+    },
+    "bbt": {
+        "recommend-assertion-usage": "All tests should contain <span blockType=\"stack\" blockCategory=\"block-based-testing\">Check that ...</span> blocks.",
+        "recommend-right-click-on-red-blocks": "To get more information or to ask questions, right click on red-colored blocks",
+        "well-done": "Well done",
+        "value-left-side": "The value on the <b>left side</b> was <code class=\"scratchBlock\">({value} :: #ffffff)</code>.",
+        "value-right-side": "The value on the <b>right side</b> was <code class=\"scratchBlock\">({value} :: #ffffff)</code>.",
+        "block-checked-if": "This block <b>checked if</b> ",
+        "comparator-LESS": "<code class=\"scratchBlock\">({valueA} :: #ffffff)</code> is less than <code class=\"scratchBlock\">({valueB} :: #ffffff)</code>",
+        "comparator-LESS_OR_EQUAL": "<code class=\"scratchBlock\">({valueA} :: #ffffff)</code> is less than or equal to <code class=\"scratchBlock\">({valueB} :: #ffffff)</code>",
+        "comparator-GREATER": "<code class=\"scratchBlock\">({valueA} :: #ffffff)</code> is greater than <code class=\"scratchBlock\">({valueB} :: #ffffff)</code>",
+        "comparator-GREATER_OR_EQUAL": "<code class=\"scratchBlock\">({valueA} :: #ffffff)</code> is greater than or equal to <code class=\"scratchBlock\">({valueB} :: #ffffff)</code>",
+        "comparator-EQUAL": "<code class=\"scratchBlock\">({valueA} :: #ffffff)</code> is equal to <code class=\"scratchBlock\">({valueB} :: #ffffff)</code>"
     },
     "question": {
         "form": {
             "why-did": "Why did ...?",
             "why-did-not": "Why didn't ...?",
             "when-did": "When did ...?"
+        },
+        "bbt": {
+            "why-did-bbt-test-pass": "Why did the test <b>{testName}</b> pass?",
+            "why-did-bbt-test-fail": "Why did the test <b>{testName}</b> fail?",
+            "why-did-bbt-block-pass": "Why did this block turn <span style=\"color: green;\"><b>green</b></span>?",
+            "why-did-bbt-check-fail": "Why did this check <span style=\"color: red;\"><b>fail</b></span>?"
         },
         "motion": {
             "why-did-move": "Why did the <b>position</b> of sprite <i>{sprite}</i> change?",
@@ -185,6 +205,11 @@
         }
     },
     "behavior": {
+        "bbt": {
+            "bbt-test-pass": "The test <b>{testName}</b> passed",
+            "bbt-test-fail": "The test <b>{testName}</b> failed",
+            "bbt-check-fail": "This check <span style=\"color: red;\"><b>failed</b></span>"
+        },
         "motion": {
             "move": "The position changed",
             "not-move": "The position didn't change",
@@ -319,6 +344,31 @@
         }
     },
     "reason": {
+        "bbt": {
+            "single-error-occurred": "<b>one error</b> occurred",
+            "errors-occurred": "<b>{numberOfErrors} errors</b> occurred",
+            "no-errors-occurred": "no errors occurred",
+            "only-assertion-passed": "the only check in the test script passed",
+            "all-assertions-passed": "all {numberOfAssertions} checks in the test script passed",
+
+            "OTHER_TEST_ALREADY_RUNNING": "another test is currently already in progress. Please wait for it to finish before starting another one.",
+            "TOP_BLOCK_NOT_A_BBT_TEST_HAT": "the top block of this script is not a \"Start test\" block. The program state can only be reset at the end of a test.",
+            "SAVED_STATE_EMPTY": "the saved state is unexpectedly empty. This shouldn't happen.",
+            "ASSERTION_MISSING_CONDITION": "it doesn't contain a condition. Please insert a condition block.",
+            "ASSERTION_MISSING_VALUE": "a <b>value is missing</b>. Ensure all fields contain a value.",
+            "ASSERTION_NOT_EQUAL": "<code class=\"scratchBlock\">({valueA} :: #ffffff)</code> is <b>not equal to</b> <code class=\"scratchBlock\">({valueB} :: #ffffff)</code>",
+            "ASSERTION_NOT_A_NUMBER": "<code class=\"scratchBlock\">({value} :: #ffffff)</code> is <b>not a number</b>.",
+            "ASSERTION_VALUE_GREATER": "<code class=\"scratchBlock\">({valueA} :: #ffffff)</code> is <b>greater than</b> <code class=\"scratchBlock\">({valueB} :: #ffffff)</code>",
+            "ASSERTION_VALUE_GREATER_OR_EQUAL": "<code class=\"scratchBlock\">({valueA} :: #ffffff)</code> is <b>greater than or equal to</b> <code class=\"scratchBlock\">({valueB} :: #ffffff)</code>",
+            "ASSERTION_VALUE_LESS": "<code class=\"scratchBlock\">({valueA} :: #ffffff)</code> is <b>less than</b> <code class=\"scratchBlock\">({valueB} :: #ffffff)</code>",
+            "ASSERTION_VALUE_LESS_OR_EQUAL": "<code class=\"scratchBlock\">({valueA} :: #ffffff)</code> is <b>less than or equal to</b> <code class=\"scratchBlock\">({valueB} :: #ffffff)</code>",
+            "CONDITION_IS_FALSE": "the condition <b>evaluated to false</b>.",
+            "CONDITION_IS_TRUE": "the condition <b>evaluated to true</b>.",
+            "SPRITE_DOES_NOT_EXIST": "The specified sprite does not exist.",
+            "STAGE_DOES_NOT_EXIST": "The stage does not exist. This shouldn't happen.",
+            "TEST_ABORTED": "you aborted the test execution.",
+            "TIMEOUT": "the test has timed out. Use the \"Set timeout to\" block to increase the waiting time."
+        },
         "behavior-block": {
             "executed": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block was executed",
             "executed-with-value": "the <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> block was executed with value <code class=\"scratchBlock\">({value} :: #ffffff)</code>",
@@ -362,6 +412,8 @@
             "interrupted-for-behavior": "all subsequent blocks that could lead to the behavior were not executed"
         },
         "event": {
+            "bbt-test-started": "the block-based test <b style=\"color: #8695b6\"><i>{testName}</i></b> was started",
+            "not-bbt-test-started": "the block-based test <b style=\"color: #8695b6\"><i>{testName}</i></b> wasn't started",
             "flag-clicked": "<code class=\"scratchBlock\">@greenFlag :: events reporter</code> was clicked",
             "not-flag-clicked": "<code class=\"scratchBlock\">@greenFlag :: events reporter</code> wasn't clicked",
             "not-flag-clicked-during-lifetime": "a clone does not react to the event <b style=\"color: #ffab19\"><i>click on</i></b> <code class=\"scratchBlock\">@greenFlag :: events reporter</code>",

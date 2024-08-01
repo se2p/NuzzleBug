@@ -93,6 +93,10 @@
     font-size: 0.65rem;
 }
 
+.blocks :global(.scratchCategoryId-bbt) {
+    hyphens: auto;
+}
+
 .blocks :global(.blocklyMinimalBody) {
     min-width: auto;
     min-height: auto;

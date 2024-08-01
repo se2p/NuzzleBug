@@ -6,7 +6,6 @@ const SET_TRACING_ACTIVE_STATE = 'scratch-gui/vm-status/SET_TRACING_ACTIVE_STATE
 const LOCK = 'scratch-gui/vm-status/LOCK';
 const UNLOCK = 'scratch-gui/vm-status/UNLOCK';
 
-
 const initialState = {
     running: false,
     started: false,
@@ -17,34 +16,39 @@ const initialState = {
 };
 
 const reducer = function (state, action) {
-    if (typeof state === 'undefined') {
-        state = initialState;
-    }
-    const baseState = JSON.parse(JSON.stringify(state));
+    if (typeof state === 'undefined') state = initialState;
     switch (action.type) {
     case SET_STARTED_STATE:
-        baseState.started = action.started;
-        break;
+        return Object.assign({}, state, {
+            started: action.started
+        });
     case SET_RUNNING_STATE:
-        baseState.running = action.running;
-        break;
+        return Object.assign({}, state, {
+            running: action.running
+        });
     case SET_PAUSE_STATE:
-        baseState.paused = action.paused;
-        break;
+        return Object.assign({}, state, {
+            paused: action.paused
+        });
     case SET_TURBO_STATE:
-        baseState.turbo = action.turbo;
-        break;
+        return Object.assign({}, state, {
+            turbo: action.turbo
+        });
     case SET_TRACING_ACTIVE_STATE:
-        baseState.tracingActive = action.tracingActive;
-        break;
+        return Object.assign({}, state, {
+            tracingActive: action.tracingActive
+        });
     case LOCK:
-        baseState.locked = true;
-        break;
+        return Object.assign({}, state, {
+            locked: true
+        });
     case UNLOCK:
-        baseState.locked = false;
-        break;
+        return Object.assign({}, state, {
+            locked: false
+        });
+    default:
+        return state;
     }
-    return baseState;
 };
 
 const setStartedState = function (started) {
