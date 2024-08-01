@@ -217,6 +217,7 @@ class IRDebugger extends React.Component {
                 this.props.vm,
                 this.allTraces,
                 this.relevantTraces,
+                this.props.bbtTests,
                 this.target,
                 this.block,
                 this.translate
@@ -235,6 +236,7 @@ class IRDebugger extends React.Component {
                 this.props.vm,
                 this.allTraces,
                 this.relevantTraces,
+                this.props.bbtTests,
                 this.target,
                 this.block,
                 this.translate
@@ -252,6 +254,7 @@ class IRDebugger extends React.Component {
             this.cfg,
             this.allTraces,
             this.relevantTraces,
+            this.props.bbtTests,
             this.target,
             this.currentBlockId,
             this.translate
@@ -724,6 +727,7 @@ IRDebugger.propTypes = {
     visible: PropTypes.bool.isRequired,
     expanded: PropTypes.bool.isRequired,
     abstractCategories: PropTypes.arrayOf(PropTypes.instanceOf(QuestionCategory)),
+    bbtTests: PropTypes.object.isRequired,
     helpMenuInjected: PropTypes.bool.isRequired,
     helpMenuChooseCategories: PropTypes.bool.isRequired,
     helpMenuChooseQuestionType: PropTypes.bool.isRequired,
@@ -741,6 +745,7 @@ IRDebugger.propTypes = {
 };
 
 const mapStateToProps = state => ({
+    bbtTests: state.scratchGui.blockBasedTesting.bbtTests,
     helpMenuInjected: state.scratchGui.helpMenu.injected,
     helpMenuChooseCategories: state.scratchGui.helpMenu.chooseCategory,
     helpMenuChooseQuestionType: state.scratchGui.helpMenu.chooseQuestionType,

@@ -33,6 +33,7 @@ import {
     activateTab,
     SOUNDS_TAB_INDEX
 } from '../reducers/editor-tab';
+import {replaceBBTTests, setRequestToolboxUpdateRemotely} from '../reducers/block-based-testing';
 
 const addFunctionListener = (object, property, callback) => {
     const oldFn = object[property];
@@ -152,10 +153,21 @@ class Blocks extends React.Component {
             this.props.customProceduresVisible !== nextProps.customProceduresVisible ||
             this.props.locale !== nextProps.locale ||
             this.props.anyModalVisible !== nextProps.anyModalVisible ||
-            this.props.stageSize !== nextProps.stageSize
+            this.props.stageSize !== nextProps.stageSize ||
+            this.props.requestToolboxUpdateRemotely !== nextProps.requestToolboxUpdateRemotely
         );
     }
     componentDidUpdate (prevProps) {
+
+        // a toolbox update can be called "remotely" (from the bbt batch eval window)
+        // because variables might have been restored
+        if (!prevProps.requestToolboxUpdateRemotely &&
+            this.props.requestToolboxUpdateRemotely) {
+
+            this.props.setRequestToolboxUpdateRemotely(false);
+            this.requestToolboxUpdate();
+        }
+
         // If any modals are open, call hideChaff to close z-indexed field editors
         if (this.props.anyModalVisible && !prevProps.anyModalVisible) {
             this.ScratchBlocks.hideChaff();
@@ -580,11 +592,15 @@ class Blocks extends React.Component {
             onRequestCloseCustomProcedures,
             toolboxXML,
             updateMetrics: updateMetricsProp,
+            dispatchReplaceBBTTests,
+            bbtTests,
             workspaceMetrics,
+            interrogationSupported,
+            requestToolboxUpdateRemotely,
+            setRequestToolboxUpdateRemotely: setRequestToolboxUpdateRemotelyProp,
             ...props
         } = this.props;
-        /* eslint-enable no-unused-vars */
-        delete props.interrogationSupported;
+
         return (
             <React.Fragment>
                 <DroppableBlocks
@@ -627,6 +643,8 @@ class Blocks extends React.Component {
 }
 
 Blocks.propTypes = {
+    bbtTests: PropTypes.object.isRequired,
+    requestToolboxUpdateRemotely: PropTypes.bool.isRequired,
     anyModalVisible: PropTypes.bool,
     canUseCloud: PropTypes.bool,
     customProceduresVisible: PropTypes.bool,
@@ -635,6 +653,7 @@ Blocks.propTypes = {
     isVisible: PropTypes.bool,
     locale: PropTypes.string.isRequired,
     messages: PropTypes.objectOf(PropTypes.string),
+    setRequestToolboxUpdateRemotely: PropTypes.func.isRequired,
     onActivateColorPicker: PropTypes.func,
     onActivateCustomProcedures: PropTypes.func,
     onOpenConnectionModal: PropTypes.func,
@@ -642,6 +661,7 @@ Blocks.propTypes = {
     onHighlightTarget: PropTypes.func,
     onRequestCloseCustomProcedures: PropTypes.func,
     onRequestCloseExtensionLibrary: PropTypes.func,
+    dispatchReplaceBBTTests: PropTypes.func.isRequired,
     options: PropTypes.shape({
         media: PropTypes.string,
         zoom: PropTypes.shape({
@@ -709,6 +729,8 @@ Blocks.defaultProps = {
 };
 
 const mapStateToProps = state => ({
+    bbtTests: state.scratchGui.blockBasedTesting.bbtTests,
+    requestToolboxUpdateRemotely: state.scratchGui.blockBasedTesting.requestToolboxUpdateRemotely,
     anyModalVisible: (
         Object.keys(state.scratchGui.modals).some(key => state.scratchGui.modals[key]) ||
         state.scratchGui.mode.isFullScreen
@@ -724,6 +746,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+    setRequestToolboxUpdateRemotely: newValue => dispatch(setRequestToolboxUpdateRemotely(newValue)),
     onActivateColorPicker: callback => dispatch(activateColorPicker(callback)),
     onActivateCustomProcedures: (data, callback) => dispatch(activateCustomProcedures(data, callback)),
     onOpenConnectionModal: id => {
@@ -748,6 +771,9 @@ const mapDispatchToProps = dispatch => ({
     },
     updateMetrics: metrics => {
         dispatch(updateMetrics(metrics));
+    },
+    dispatchReplaceBBTTests: newTests => {
+        dispatch(replaceBBTTests(newTests));
     }
 });
 

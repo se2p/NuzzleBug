@@ -65,6 +65,9 @@ class TargetPane extends React.Component {
 
     render () {
         const {
+            onSpriteSelected, // eslint-disable-line no-unused-vars
+            onChooseCategory, // eslint-disable-line no-unused-vars
+            spriteSelectionEnabled, // eslint-disable-line no-unused-vars
             editingTarget,
             fileInputRef,
             hoveredTarget,

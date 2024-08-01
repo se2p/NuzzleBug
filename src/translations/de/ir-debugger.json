@@ -17,6 +17,18 @@
         "deactivated": "Die Aufzeichnung wurde deaktiviert, da kein Speicherplatz verfügbar ist!",
         "impossible": "Eine Aufzeichnung ist nicht möglich, da kein Speicherplatz verfügbar ist!"
     },
+    "abstract-category": {
+        "type":{
+            "movement": "es handelt sich um eine Bewegung.",
+            "turn": "es handelt sich um eine Drehung.",
+            "say": "es handelt sich um was Gesagtes oder Gedachtes.",
+            "size": "es handelt sich um eine Veränderung der Größe.",
+            "visibility": "man sieht etwas, das man nicht sehen darf oder man sieht etwas nicht.",
+            "costume": "das Problem liegt beim Kostüm oder dem Hintergrund der Figur.",
+            "sound": "es handelt sich um ein Problem mit Tönen.",
+            "placeholder": "es ist etwas anderes."
+        }
+    },
     "header": {
         "title-sprite": "Interrogativer Debugger für die Figur <i>{sprite}</i>",
         "title-stage": "Interrogativer Debugger für die Bühne",
@@ -34,18 +46,6 @@
         "original": "Original",
         "clone": "Klon {index}"
     },
-    "abstract-category": {
-        "type":{
-            "movement": "es handelt sich um eine Art Bewegung.",
-            "turn": "es handelt sich um eine Drehung.",
-            "say": "es handelt sich um was Gesagtes oder Gedachtes.",
-            "size": "es handelt sich um eine Veränderung der Größe.",
-            "visibility": "man sieht etwas das man nicht sehen darf oder man sieht etwas nicht.",
-            "costume": "das Problem liegt beim Kostüm oder dem Hintergrund der Figur.",
-            "sound": "es handelt sich um ein Problem mit Tönen.",
-            "placeholder": "es ist etwas anderes."
-        }
-    },
     "category": {
         "expand": "Kategorie aufklappen",
         "close": "Kategorie zuklappen",
@@ -59,17 +59,37 @@
             "operators": "Operatoren",
             "variables": "Variablen",
             "lists": "Listen",
-            "execution": "Ausführung"
+            "execution": "Ausführung",
+            "block-based-testing": "Blockbasiertes Testen"
         }
     },
     "question-hierarchy": {
         "empty": "Keine Fragen verfügbar. "
+    },
+    "bbt": {
+        "recommend-assertion-usage": "Alle Tests sollten <span blockType=\"stack\" blockCategory=\"block-based-testing\">Prüfe, ob ...</span> Blöcke enthalten",
+        "recommend-right-click-on-red-blocks": "Um mehr Informationen zu erhalten oder Fragen zu stellen, klicke mit der rechten Maustaste auf rot gefärbte Blöcke",
+        "well-done": "Gut gemacht",
+        "value-left-side": "Der Wert auf der <b>linken Seite</b> war <code class=\"scratchBlock\">({value} :: #ffffff)</code>.",
+        "value-right-side": "Der Wert auf der <b>rechten Seite</b> war <code class=\"scratchBlock\">({value} :: #ffffff)</code>.",
+        "block-checked-if": "Dieser Block <b>hat geprüft, ob</b> ",
+        "comparator-LESS": "<code class=\"scratchBlock\">({valueA} :: #ffffff)</code> kleiner als <code class=\"scratchBlock\">({valueB} :: #ffffff)</code> ist",
+        "comparator-LESS_OR_EQUAL": "<code class=\"scratchBlock\">({valueA} :: #ffffff)</code> kleiner oder gleich <code class=\"scratchBlock\">({valueB} :: #ffffff)</code> ist",
+        "comparator-GREATER": "<code class=\"scratchBlock\">({valueA} :: #ffffff)</code> größer als <code class=\"scratchBlock\">({valueB} :: #ffffff)</code> ist",
+        "comparator-GREATER_OR_EQUAL": "<code class=\"scratchBlock\">({valueA} :: #ffffff)</code> größer oder gleich <code class=\"scratchBlock\">({valueB} :: #ffffff)</code> ist",
+        "comparator-EQUAL": "<code class=\"scratchBlock\">({valueA} :: #ffffff)</code> gleich <code class=\"scratchBlock\">({valueB} :: #ffffff)</code> ist"
     },
     "question": {
         "form": {
             "why-did": "Warum ...?",
             "why-did-not": "Warum nicht ...?",
             "when-did": "Wann ...?"
+        },
+        "bbt": {
+            "why-did-bbt-test-pass": "Warum wurde der Test <b>{testName}</b> bestanden?",
+            "why-did-bbt-test-fail": "Warum schlug der Test <b>{testName}</b> fehl?",
+            "why-did-bbt-block-pass": "Warum hat sich dieser Block <span style=\"color: green;\"><b>grün</b></span> gefärbt?",
+            "why-did-bbt-check-fail": "Warum ist diese Prüfung <span style=\"color: red;\"><b>fehlgeschlagen</b></span>?"
         },
         "motion": {
             "why-did-move": "Warum hat sich die <b>Position</b> von Figur <i>{sprite}</i> verändert?",
@@ -185,6 +205,11 @@
         }
     },
     "behavior": {
+        "bbt": {
+            "bbt-test-pass": "Der Test <b>{testName}</b> wurde bestanden",
+            "bbt-test-fail": "Der Test <b>{testName}</b> ist fehlgeschlagen",
+            "bbt-check-fail": "Diese Prüfung ist <span style=\"color: red;\"><b>fehlgeschlagen</b></span>"
+        },
         "motion": {
             "move": "Die Position hat sich verändert",
             "not-move": "Die Position hat sich nicht verändert",
@@ -319,6 +344,31 @@
         }
     },
     "reason": {
+        "bbt": {
+            "single-error-occurred": "<b>ein Fehler</b> aufgetreten ist",
+            "errors-occurred": "<b>{numberOfErrors} Fehler</b> aufgetreten sind",
+            "no-errors-occurred": "keine Fehler aufgetreten sind",
+            "only-assertion-passed": "die einzige Prüfung im Testskript erfolgreich war",
+            "all-assertions-passed": "alle {numberOfAssertions} Prüfungen im Testskript erfolgreich waren",
+
+            "OTHER_TEST_ALREADY_RUNNING": "ein anderer Test bereits läuft. Bitte warte, bis dieser abgeschlossen ist, bevor du einen weiteren startest.",
+            "TOP_BLOCK_NOT_A_BBT_TEST_HAT": "der oberste Block dieses Skripts kein \"Starte Test\"-Block ist. Der Programmzustand kann nur am Ende eines Tests wiederhergestellt werden.",
+            "SAVED_STATE_EMPTY": "der gespeicherte Zustand unerwartet leer ist. Das sollte nicht passieren.",
+            "ASSERTION_MISSING_CONDITION": "er keine Bedingung enthält. Bitte füge einen Bedingungsblock ein.",
+            "ASSERTION_MISSING_VALUE": "ein <b>Wert fehlt</b>. Stelle sicher, dass alle Felder einen Wert enthalten.",
+            "ASSERTION_NOT_EQUAL": "<code class=\"scratchBlock\">({valueA} :: #ffffff)</code> <b>nicht gleich</b> <code class=\"scratchBlock\">({valueB} :: #ffffff)</code> ist",
+            "ASSERTION_NOT_A_NUMBER": "<code class=\"scratchBlock\">({value} :: #ffffff)</code> <b>keine Zahl</b> ist.",
+            "ASSERTION_VALUE_GREATER": "<code class=\"scratchBlock\">({valueA} :: #ffffff)</code> <b>größer als</b> <code class=\"scratchBlock\">({valueB} :: #ffffff)</code> ist",
+            "ASSERTION_VALUE_GREATER_OR_EQUAL": "<code class=\"scratchBlock\">({valueA} :: #ffffff)</code> <b>größer als oder gleich</b> <code class=\"scratchBlock\">({valueB} :: #ffffff)</code> ist",
+            "ASSERTION_VALUE_LESS": "<code class=\"scratchBlock\">({valueA} :: #ffffff)</code> <b>kleiner als</b> <code class=\"scratchBlock\">({valueB} :: #ffffff)</code> ist",
+            "ASSERTION_VALUE_LESS_OR_EQUAL": "<code class=\"scratchBlock\">({valueA} :: #ffffff)</code> <b>kleiner als oder gleich</b> <code class=\"scratchBlock\">({valueB} :: #ffffff)</code> ist",
+            "CONDITION_IS_FALSE": "die Bedingung <b>falsch</b> ergab.",
+            "CONDITION_IS_TRUE": "die Bedingung <b>wahr</b> ergab.",
+            "SPRITE_DOES_NOT_EXIST": "Die angegebene Figur existiert nicht.",
+            "STAGE_DOES_NOT_EXIST": "Die Bühne existiert nicht. Das sollte nicht passieren.",
+            "TEST_ABORTED": "du die Testausführung abgebrochen hast.",
+            "TIMEOUT": "der Test das Zeitlimit überschritten hat. Verwende den Block \"Setze Timeout auf\"-Block, um die Zeit zu erhöhen."
+        },
         "behavior-block": {
             "executed": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block ausgeführt wurde",
             "executed-with-value": "der <span blockType=\"stack\" blockCategory=\"{blockCategory}\">{blockType}</span> Block mit dem Wert <code class=\"scratchBlock\">({value} :: #ffffff)</code> ausgeführt wurde",
@@ -362,6 +412,8 @@
             "interrupted-for-behavior": "alle darauffolgenden Blöcke, die dazu führen könnten, nicht ausgeführt wurden"
         },
         "event": {
+            "bbt-test-started": "der blockbasierte Test <b style=\"color: #8695b6\"><i>{testName}</i></b> gestartet wurde",
+            "not-bbt-test-started": "der blockbasierte Test <b style=\"color: #8695b6\"><i>{testName}</i> nicht</b> gestartet wurde",
             "flag-clicked": "<code class=\"scratchBlock\">@greenFlag :: events reporter</code> angeklickt wurde",
             "not-flag-clicked": "<code class=\"scratchBlock\">@greenFlag :: events reporter</code> nicht angeklickt wurde",
             "not-flag-clicked-during-lifetime": "ein Klon nicht auf das Ereignis <b style=\"color: #ffab19\"><i>Klick auf</i></b> <code class=\"scratchBlock\">@greenFlag :: events reporter</code> reagiert",
@@ -388,7 +440,7 @@
             "not-backdrop-switched-during-lifetime": "das Bühnenbild während der Lebenszeit des Klons nicht zu <span blockType=\"reporter\" blockCategory=\"look\">{backdrop}</span> gewechselt hat",
             "loudness-greater-than": "die <b style=\"color: #ffbf00\">Lautstärke</b> größer als {value} war",
             "not-loudness-greater-than": "die <b style=\"color: #ffbf00\">Lautstärke</b> nicht größer als {value} war",
-            "loudness-greater-than-during-lifetime": "die <b style=\"color: #ffbf00\">Lautstärke</b> während der Lebenszeit des Klons nicht größer als {value} war",
+            "not-loudness-greater-than-during-lifetime": "die <b style=\"color: #ffbf00\">Lautstärke</b> während der Lebenszeit des Klons nicht größer als {value} war",
             "timer-greater-than": "die <b style=\"color: #ffbf00\">Stoppuhr</b> größer als {value} war",
             "not-timer-greater-than": "die <b style=\"color: #ffbf00\">Stoppuhr</b> nicht größer als {value} war",
             "not-timer-greater-than-during-lifetime": "die <b style=\"color: #ffbf00\">Stoppuhr</b> während der Lebenszeit des Klons nicht größer als {value} war"
@@ -589,7 +641,7 @@
         "left-right": "links-rechts",
         "no-rotation": "nicht drehen"
     },
-    "execution":"Ausführung",
+    "execution": "Ausführung",
     "execution-stopped": "Ausführung gestoppt",
     "execution-paused": "Ausführung pausiert",
     "tracing-stopped": "Aufzeichnung gestoppt",
@@ -598,8 +650,8 @@
     "then" :  ", dann ",
     "next" :  ", danach ",
     "and-then" :  " und anschließend ",
-    "and-therefore": " und dadurch ",
     "and-because" :  " und weil ",
+    "and-therefore": " und dadurch ",
     "dot": ". ",
     "comma": ", ",
     "exclamation-mark": "! "

@@ -6,7 +6,6 @@ const SET_TRACING_ACTIVE_STATE = 'scratch-gui/vm-status/SET_TRACING_ACTIVE_STATE
 const LOCK = 'scratch-gui/vm-status/LOCK';
 const UNLOCK = 'scratch-gui/vm-status/UNLOCK';
 
-
 const initialState = {
     running: false,
     started: false,

@@ -17,6 +17,8 @@ $z-index-alerts: 490;
 $z-index-menu-bar: 491; /* menu-bar should go over monitors, alerts and tutorials */
 $z-index-help-menu:492;
 $z-index-ir-debugger: 493;
+$z-index-bbt-examples-window: 494;
+$z-index-bbt-batch-eval-window: 495;
 $z-index-loader: 500;
 $z-index-modal: 510;
 
@@ -32,3 +34,5 @@ $z-index-stage-wrapper-overlay: 5000;
 
 /* in most interfaces, the context menu is always on top */
 $z-index-context-menu: 10000;
+
+$z-index-coordinates-tooltip: 11000;
