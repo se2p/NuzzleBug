@@ -14,6 +14,7 @@ import {
     onLoadedProject,
     projectError
 } from '../reducers/project-state';
+import {replaceBBTTests} from '../reducers/block-based-testing';
 
 /*
  * Higher Order Component to manage events emitted by the VM
@@ -122,6 +123,7 @@ const vmManagerHOC = function (WrappedComponent) {
     }
 
     VMManager.propTypes = {
+        handleClearBBTTests: PropTypes.func.isRequired,
         canSave: PropTypes.bool,
         cloudHost: PropTypes.string,
         fontsLoaded: PropTypes.bool,
@@ -157,6 +159,7 @@ const vmManagerHOC = function (WrappedComponent) {
     };
 
     const mapDispatchToProps = dispatch => ({
+        handleClearBBTTests: () => dispatch(replaceBBTTests({})),
         onError: error => dispatch(projectError(error)),
         onLoadedProject: (loadingState, canSave) =>
             dispatch(onLoadedProject(loadingState, canSave, true)),

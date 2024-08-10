@@ -22,6 +22,12 @@ import MenuBar from '../menu-bar/menu-bar.jsx';
 import CostumeLibrary from '../../containers/costume-library.jsx';
 import BackdropLibrary from '../../containers/backdrop-library.jsx';
 import Watermark from '../../containers/watermark.jsx';
+import Button from '../button/button.jsx';
+
+import BBTTestInterface from '../../containers/block-based-testing.jsx';
+import BBTExamplesWindow from '../../containers/block-based-testing-examples-window.jsx';
+import BBTBatchEvaluationWindow from '../../containers/block-based-testing-batch-evaluation-window.jsx';
+import BBTCoordinatesTooltip from '../block-based-testing/bbt-coordinates-tooltip.jsx';
 
 import Backpack from '../../containers/backpack.jsx';
 import WebGlModal from '../../containers/webgl-modal.jsx';
@@ -44,6 +50,7 @@ import addExtensionIcon from './icon--extensions.svg';
 import codeIcon from './icon--code.svg';
 import costumesIcon from './icon--costumes.svg';
 import soundsIcon from './icon--sounds.svg';
+import testsIcon from '../block-based-testing/icons/rules-icon.svg';
 
 const messages = defineMessages({
     addExtension: {
@@ -69,6 +76,10 @@ const GUIComponent = props => {
         backdropLibraryVisible,
         backpackHost,
         backpackVisible,
+        blockBasedTestingInterfaceVisible,
+        bbtExamplesWindowVisible,
+        bbtBatchEvaluationWindowVisible,
+        bbtCoordinatesTooltipVisible,
         blocksTabVisible,
         cardsVisible,
         irCardsVisible,
@@ -119,6 +130,7 @@ const GUIComponent = props => {
         onRestartingProject,
         onSeeCommunity,
         onShare,
+        onShowTestInterface,
         onShowPrivacyPolicy,
         onStartSelectingFileUpload,
         onTelemetryModalCancel,
@@ -207,6 +219,17 @@ const GUIComponent = props => {
                         intl={intl}
                     />
                 ) : null}
+                {bbtExamplesWindowVisible ? (
+                    <BBTExamplesWindow />
+                ) : null}
+                {bbtBatchEvaluationWindowVisible ? (
+                    <BBTBatchEvaluationWindow
+                        vm={vm}
+                    />
+                ) : null}
+                {bbtCoordinatesTooltipVisible ? (
+                    <BBTCoordinatesTooltip />
+                ) : null}
                 {helpMenuVisible ? (
                     <HelpMenu
                         vm={vm}
@@ -283,43 +306,69 @@ const GUIComponent = props => {
                                 selectedTabPanelClassName={tabClassNames.tabPanelSelected}
                                 onSelect={onActivateTab}
                             >
-                                <TabList className={tabClassNames.tabList}>
-                                    <Tab className={tabClassNames.tab}>
-                                        <img
-                                            draggable={false}
-                                            src={codeIcon}
-                                        />
-                                        <FormattedMessage
-                                            defaultMessage="Code"
-                                            description="Button to get to the code panel"
-                                            id="gui.gui.codeTab"
-                                        />
-                                    </Tab>
-                                    <Tab
-                                        className={tabClassNames.tab}
-                                        onClick={onActivateCostumesTab}
-                                    >
-                                        <img
-                                            draggable={false}
-                                            src={costumesIcon}
-                                        />
-                                        <CostumeTabTitle />
-                                    </Tab>
-                                    <Tab
-                                        className={tabClassNames.tab}
-                                        onClick={onActivateSoundsTab}
-                                    >
-                                        <img
-                                            draggable={false}
-                                            src={soundsIcon}
-                                        />
-                                        <FormattedMessage
-                                            defaultMessage="Sounds"
-                                            description="Button to get to the sounds panel"
-                                            id="gui.gui.soundsTab"
-                                        />
-                                    </Tab>
-                                </TabList>
+                                <div className={styles.tabListWrapper}>
+                                    <TabList className={tabClassNames.tabList}>
+                                        <Tab className={tabClassNames.tab}>
+                                            <img
+                                                draggable={false}
+                                                src={codeIcon}
+                                                alt={''}
+                                            />
+                                            <FormattedMessage
+                                                defaultMessage="Code"
+                                                description="Button to get to the code panel"
+                                                id="gui.gui.codeTab"
+                                            />
+                                        </Tab>
+                                        <Tab
+                                            className={tabClassNames.tab}
+                                            onClick={onActivateCostumesTab}
+                                        >
+                                            <img
+                                                draggable={false}
+                                                src={costumesIcon}
+                                                alt={''}
+                                            />
+                                            <CostumeTabTitle />
+                                        </Tab>
+                                        <Tab
+                                            className={tabClassNames.tab}
+                                            onClick={onActivateSoundsTab}
+                                        >
+                                            <img
+                                                draggable={false}
+                                                src={soundsIcon}
+                                                alt={''}
+                                            />
+                                            <FormattedMessage
+                                                defaultMessage="Sounds"
+                                                description="Button to get to the sounds panel"
+                                                id="gui.gui.soundsTab"
+                                            />
+                                        </Tab>
+                                    </TabList>
+
+                                    {blockBasedTestingInterfaceVisible ? null : (
+                                        <Button
+                                            className={styles.showBbtInterfaceButton}
+                                            onClick={onShowTestInterface}
+                                        >
+                                            <img
+                                                className={styles.showBbtInterfaceButtonIcon}
+                                                draggable={false}
+                                                src={testsIcon}
+                                                alt={'Test Icon'}
+                                            />
+                                            <span className={styles.showBbtInterfaceButtonText}>
+                                                <FormattedMessage
+                                                    defaultMessage="Show Test Interface"
+                                                    id="gui.blockBasedTesting.openInterfaceButton"
+                                                />
+                                            </span>
+                                        </Button>
+                                    )}
+
+                                </div>
                                 <TabPanel className={tabClassNames.tabPanel}>
                                     <Box className={styles.blocksWrapper}>
                                         <Blocks
@@ -343,6 +392,7 @@ const GUIComponent = props => {
                                                 className={styles.extensionButtonIcon}
                                                 draggable={false}
                                                 src={addExtensionIcon}
+                                                alt={''}
                                             />
                                         </button>
                                     </Box>
@@ -361,6 +411,10 @@ const GUIComponent = props => {
                                 <Backpack host={backpackHost} />
                             ) : null}
                         </Box>
+
+                        <BBTTestInterface
+                            vm={vm}
+                        />
 
                         <Box className={classNames(styles.stageAndTargetWrapper, styles[stageSize])}>
                             <StageWrapper
@@ -395,6 +449,10 @@ GUIComponent.propTypes = {
     backpackHost: PropTypes.string,
     backpackVisible: PropTypes.bool,
     basePath: PropTypes.string,
+    blockBasedTestingInterfaceVisible: PropTypes.bool,
+    bbtExamplesWindowVisible: PropTypes.bool,
+    bbtBatchEvaluationWindowVisible: PropTypes.bool,
+    bbtCoordinatesTooltipVisible: PropTypes.bool,
     blocksTabVisible: PropTypes.bool,
     canChangeLanguage: PropTypes.bool,
     canCreateCopy: PropTypes.bool,
@@ -438,6 +496,7 @@ GUIComponent.propTypes = {
     onSaveProjectState: PropTypes.func,
     onSeeCommunity: PropTypes.func,
     onShare: PropTypes.func,
+    onShowTestInterface: PropTypes.func,
     onShowPrivacyPolicy: PropTypes.func,
     onStartSelectingFileUpload: PropTypes.func,
     onTabSelect: PropTypes.func,

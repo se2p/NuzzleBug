@@ -50,7 +50,7 @@ class IRDebugger extends React.Component {
             'translate'
         ]);
         if (!props.vm.runtime.paused && props.vm.runtime.active) {
-            props.vm.haltExecution();
+            props.vm.haltExecutionForDebugger();
         }
         props.vm.storeLastTrace();
         props.vm.storeEditingTarget();
