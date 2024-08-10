@@ -1,7 +1,7 @@
 {
     "name": "scratch-gui",
     "version": "0.1.0",
-    "description": "Scratch-UI extended with Debugger and Tutorial System",
+    "description": "Scratch-UI extended with Debugger, Tutorial System and Block-Based Testing",
     "main": "./dist/scratch-gui.js",
     "scripts": {
         "build": "npm run clean && webpack --colors --bail",
@@ -88,7 +88,7 @@
         "scratch-audio": "0.1.0-prerelease.20221123180128",
         "scratch-blocks": "git+https://gitlab+deploy-token-8:vQ5PEsjDsFr9WtF56a7h@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-blocks.git#develop",
         "scratch-ir": "git+https://gitlab+deploy-token-10:aXHysSQXmgmbCC-3GMzp@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-ir.git#master",
-        "scratch-l10n": "3.15.20230527032201",
+        "scratch-l10n": "git+https://gitlab+deploy-token-23:gldt-eEF7gYLbzCgz3nSXm9zh@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-l10n.git#master",
         "scratch-paint": "0.2.0-prerelease.20220409093754",
         "scratch-render": "0.1.0-prerelease.20211028200436",
         "scratch-render-fonts": "1.0.0-prerelease.20210401210003",

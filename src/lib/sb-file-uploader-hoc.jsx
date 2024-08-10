@@ -1,5 +1,6 @@
 import bindAll from 'lodash.bindall';
 import React from 'react';
+import {compose} from 'redux';
 import Renderer from 'scratch-render';
 import PropTypes from 'prop-types';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
@@ -18,6 +19,9 @@ import {
 import {setProjectTitle} from '../reducers/project-title';
 import {closeLoadingProject, openLoadingProject} from '../reducers/modals';
 import {closeFileMenu} from '../reducers/menus';
+import {replaceBBTTests, resetInfoPanelStatus} from '../reducers/block-based-testing';
+import bbtWorkspaceInteractionHOC from './bbt-workspace-interaction-hoc.jsx';
+import {BBTTestManager} from './bbt-test-execution-logic-hoc.jsx';
 
 const messages = defineMessages({
     loadError: {
@@ -147,6 +151,12 @@ const SBFileUploaderHOC = function (WrappedComponent) {
         onload () {
             if (this.fileReader) {
                 this.props.onLoadingStarted();
+
+                this.props.handleClearBBTTests();
+                this.props.clearBlockTempColorsAndScriptGlows();
+                BBTTestManager.batchEvaluationFileID = -1;
+                this.props.handleResetInfoPanelStatus();
+
                 const filename = this.fileToUpload && this.fileToUpload.name;
                 let loadingSuccess = false;
                 this.props.vm.loadProject(this.fileReader.result)
@@ -185,6 +195,7 @@ const SBFileUploaderHOC = function (WrappedComponent) {
 
         handleProjectRestart () {
             if (this.savedProjectState) {
+                this.props.handleClearBBTTests();
                 const filename = this.savedProjectState.filename;
                 this.props.vm.loadProject(this.savedProjectState.result)
                     .then(() => {
@@ -210,6 +221,9 @@ const SBFileUploaderHOC = function (WrappedComponent) {
 
         handleResetProjectState () {
             this.savedProjectState = null;
+            this.props.handleClearBBTTests();
+            this.props.clearBlockTempColorsAndScriptGlows();
+            BBTTestManager.batchEvaluationFileID = -1;
         }
 
         handleSaveProjectState (projectTitle) {
@@ -225,6 +239,7 @@ const SBFileUploaderHOC = function (WrappedComponent) {
         render () {
             const {
                 /* eslint-disable no-unused-vars */
+                onCreateNew,
                 cancelFileUpload,
                 closeFileMenu: closeFileMenuProp,
                 isLoadingUpload,
@@ -236,6 +251,18 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                 projectChanged,
                 requestProjectUpload: requestProjectUploadProp,
                 userOwnsProject,
+                handleClearBBTTests,
+                setBlockTempColor,
+                clearBlockTempColorForSpecificColor,
+                setStackResultGlow,
+                reapplyBlockTempColorsAndScriptGlows,
+                clearBlockTempColorsAndScriptGlows,
+                fixYellowGlowOfATestScript,
+                rerenderBbtTestHat,
+                rerenderBbtTestHatLater,
+                rerenderDeferredBbtTestHatsNow,
+                clearBlockTempColorsOfAllBlocksWithinScript,
+                handleResetInfoPanelStatus,
                 /* eslint-enable no-unused-vars */
                 ...componentProps
             } = this.props;
@@ -254,6 +281,20 @@ const SBFileUploaderHOC = function (WrappedComponent) {
     }
 
     SBFileUploaderComponent.propTypes = {
+
+        // provided by bbtWorkspaceInteractionHOC
+        setBlockTempColor: PropTypes.func.isRequired,
+        clearBlockTempColorForSpecificColor: PropTypes.func.isRequired,
+        clearBlockTempColorsOfAllBlocksWithinScript: PropTypes.func.isRequired,
+        setStackResultGlow: PropTypes.func.isRequired,
+        reapplyBlockTempColorsAndScriptGlows: PropTypes.func.isRequired,
+        clearBlockTempColorsAndScriptGlows: PropTypes.func.isRequired,
+        fixYellowGlowOfATestScript: PropTypes.func.isRequired,
+        rerenderBbtTestHat: PropTypes.func.isRequired,
+        rerenderBbtTestHatLater: PropTypes.func.isRequired,
+        rerenderDeferredBbtTestHatsNow: PropTypes.func.isRequired,
+
+        handleResetInfoPanelStatus: PropTypes.func.isRequired,
         canSave: PropTypes.bool,
         cancelFileUpload: PropTypes.func,
         closeFileMenu: PropTypes.func,
@@ -261,6 +302,7 @@ const SBFileUploaderHOC = function (WrappedComponent) {
         isLoadingUpload: PropTypes.bool,
         isShowingWithoutId: PropTypes.bool,
         loadingState: PropTypes.oneOf(LoadingStates),
+        handleClearBBTTests: PropTypes.func.isRequired,
         onCreateNew: PropTypes.func,
         onLoadingFinished: PropTypes.func,
         onLoadingStarted: PropTypes.func,
@@ -288,6 +330,8 @@ const SBFileUploaderHOC = function (WrappedComponent) {
         };
     };
     const mapDispatchToProps = (dispatch, ownProps) => ({
+        handleResetInfoPanelStatus: () => dispatch(resetInfoPanelStatus()),
+        handleClearBBTTests: () => dispatch(replaceBBTTests({})),
         cancelFileUpload: loadingState => dispatch(onLoadedProject(loadingState, false, false)),
         closeFileMenu: () => dispatch(closeFileMenu()),
         // transition project state from loading to regular, and close
@@ -310,11 +354,15 @@ const SBFileUploaderHOC = function (WrappedComponent) {
     const mergeProps = (stateProps, dispatchProps, ownProps) => Object.assign(
         {}, stateProps, dispatchProps, ownProps
     );
-    return injectIntl(connect(
-        mapStateToProps,
-        mapDispatchToProps,
-        mergeProps
-    )(SBFileUploaderComponent));
+
+    return injectIntl(
+        compose(
+            bbtWorkspaceInteractionHOC,
+            connect(
+                mapStateToProps,
+                mapDispatchToProps,
+                mergeProps
+            ))(SBFileUploaderComponent));
 };
 
 export {

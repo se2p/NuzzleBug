@@ -79,7 +79,7 @@ class Controls extends React.Component {
             this.props.vm.greenFlag();
         }
 
-        if (this.props.helpMenuOpen && !this.props.actionExecuted){
+        if (this.props.helpMenuOpen && !this.props.wasActionExecuted) {
             this.props.onActionExecuted();
             this.forceUpdate();
         }
@@ -101,7 +101,7 @@ class Controls extends React.Component {
         if ((this.props.projectRunning && this.props.projectPaused) || !this.props.projectRunning) {
             const x = window.innerWidth - 480 - 200;
             const y = window.innerHeight / 4;
-            this.props.repositionHelpMenuWindow(x, y);
+            this.props.doRepositionHelpMenuWindow(x, y);
             this.props.onHelpMenuButtonClick();
             if (this.props.executedOnce){
                 this.props.onActionExecuted();
@@ -126,7 +126,7 @@ class Controls extends React.Component {
 
         this.props.vm.runtime.oneStep = true;
         this.handleGreenFlagClick(e);
-        this.props.vm.haltExecution();
+        this.props.vm.haltExecutionForDebugger();
         if (logging.isActive()) {
             logging.logClickEvent('BUTTON', new Date(), 'PAUSE_EXECUTION', null);
         }
@@ -145,7 +145,7 @@ class Controls extends React.Component {
                 logging.logClickEvent('BUTTON', new Date(), 'RESUME_EXECUTION', null);
             }
         } else {
-            this.props.vm.haltExecution();
+            this.props.vm.haltExecutionForDebugger();
             if (logging.isActive()) {
                 logging.logClickEvent('BUTTON', new Date(), 'PAUSE_EXECUTION', null);
             }
@@ -166,7 +166,7 @@ class Controls extends React.Component {
         }
     }
     resetPauseResume () {
-        this.props.vm.resumeExecution();
+        this.props.vm.resumeExecutionForDebugger();
     }
     handleToggleTracingClick (e) {
         e.preventDefault();
@@ -205,6 +205,12 @@ class Controls extends React.Component {
         const {
             vm, // eslint-disable-line no-unused-vars
             isStarted, // eslint-disable-line no-unused-vars
+            helpMenuOpen, // eslint-disable-line no-unused-vars
+            onActionExecuted, // eslint-disable-line no-unused-vars
+            wasActionExecuted, // eslint-disable-line no-unused-vars
+            executedOnce, // eslint-disable-line no-unused-vars
+            projectChanged, // eslint-disable-line no-unused-vars
+            doRepositionHelpMenuWindow, // eslint-disable-line no-unused-vars
             handleIRQuestionsClick,
             projectRunning,
             projectPaused,
@@ -216,8 +222,6 @@ class Controls extends React.Component {
             tracingActive,
             ...props
         } = this.props;
-
-        delete props.projectChanged;
 
         return (
             <ControlsComponent
@@ -257,14 +261,14 @@ Controls.propTypes = {
     turbo: PropTypes.bool.isRequired,
     onHelpMenuButtonClick: PropTypes.func.isRequired,
     onActionExecuted: PropTypes.func.isRequired,
-    actionExecuted: PropTypes.bool.isRequired,
+    wasActionExecuted: PropTypes.bool.isRequired,
     helpMenuOpen: PropTypes.bool.isRequired,
     executedOnce: PropTypes.bool.isRequired,
     interrogationSupported: PropTypes.bool.isRequired,
     interrogationEnabled: PropTypes.bool.isRequired,
     tracingActive: PropTypes.bool.isRequired,
     projectChanged: PropTypes.bool.isRequired,
-    repositionHelpMenuWindow: PropTypes.func.isRequired,
+    doRepositionHelpMenuWindow: PropTypes.func.isRequired,
     vm: PropTypes.instanceOf(VM)
 };
 
@@ -277,7 +281,7 @@ const mapStateToProps = state => ({
     interrogationSupported: state.scratchGui.irDebugger.supported,
     interrogationEnabled: state.scratchGui.irDebugger.enabled,
     helpMenuOpen: state.scratchGui.helpMenu.visible,
-    actionExecuted: state.scratchGui.helpMenu.actionExecuted,
+    wasActionExecuted: state.scratchGui.helpMenu.actionExecuted,
     executedOnce: state.scratchGui.helpMenu.executedOnce,
     tracingActive: state.scratchGui.vmStatus.tracingActive,
     projectChanged: state.scratchGui.projectChanged,
@@ -289,7 +293,7 @@ const mapDispatchToProps = dispatch => ({
     onHelpMenuButtonClick: () => dispatch(openHelpMenu()),
     handleIRQuestionsClick: () => dispatch(viewCards()),
     onActionExecuted: () => dispatch(actionExecuted()),
-    repositionHelpMenuWindow: (x, y) => dispatch(repositionHelpMenuWindow(x, y)),
+    doRepositionHelpMenuWindow: (x, y) => dispatch(repositionHelpMenuWindow(x, y)),
     handleTutorialClick: () => dispatch(viewTutorial())
 });
 

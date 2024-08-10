@@ -1,13 +1,19 @@
 ![NuzzleBug Logo](logos/nuzzlebug-logo.png)
 
-NuzzleBug is a fork of the [scratch-gui](https://github.com/scratchfoundation/scratch-gui) adding debugging support.
+This repository is a fork of the [scratch-gui](https://github.com/scratchfoundation/scratch-gui).
 
+It contains:
++ NuzzleBug, adding debugging support
++ Interactive tutorial system with LitterBox integration
++ Block-Based Testing
 
 ## Description
 
 NuzzleBug is debugger for Scratch. It allows controlling the executions of Scratch programs with classical debugging functionality such as stepping and breakpoints, and it is an omniscient debugger that also allows reverse stepping. NuzzleBug is also an interrogative debugger that enables to ask questions about executions and provides answers explaining the behavior in question.
 
 This also contains the interactive tutorial system with LitterBox integration.
+
+The Block-Based Testing extension is also contained in this repository.
 
 
 ## Requirements
@@ -24,7 +30,7 @@ via `npm install --global yarn`
 - configure in ./src/components/menu-bar/menu-bar.jsx line 177 your ScratchLog URL\
 - configure in ./src/containers/tutorial-step.jsx line 41 your LitterBox-Web URL\
 
-You can start *NuzzleBug* by executing the `start.sh` script, which is responsible for installing the required dependencies and opening the NuzzleBug-UI in a browser.
+You can start the scratch gui by running `yarn install && yarn start`.
 
 Then, go to http://localhost:8601/ using your preferred browser to open the scratch-gui.
 
@@ -45,6 +51,7 @@ Stephan Gramüller\
 Fabian Häuslein\
 Florian Obermüller\
 Sebastian Schweikl\
+Siegfried Steckenbiller\
 Phil Werli
 
 
