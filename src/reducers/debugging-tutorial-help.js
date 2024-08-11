@@ -9,6 +9,9 @@ const SET_STEP = 'scratch-gui/debugging-tutorial-cards/SET_STEP';
 const RESET = 'scratch-gui/debugging-tutorial-cards/RESET';
 const SET_QUESTION_MSG = 'scratch-gui/debugging-tutorial-cards/SET_QUESTION_MSG';
 const ADD_SOLVED = 'scratch-gui/debugging-tutorial-cards/ADD_SOLVED';
+const SET_LAST_STEP = 'scratch-gui/debugging-tutorial-cards/SET_LAST_STEP';
+const RESET_COMPONENT = 'scratch-gui/debugging-tutorial-cards/RESET_COMPONENT';
+const SET_LAST_TUTORIAL = 'scratch-gui/debugging-tutorial-cards/SET_LAST_TUTORIAL';
 
 const initialState = { //TODO Remove logic from reducer!
     step: "1",
@@ -20,6 +23,8 @@ const initialState = { //TODO Remove logic from reducer!
     solvedSteps: [],
     questionMessage: null,
     showDiagramm: true,
+    lastStepNumber: -1,
+    lastTutorial: null,
 };
 
 const reducer = function (state, action) {
@@ -76,6 +81,23 @@ const reducer = function (state, action) {
         case ADD_SOLVED:
             baseState.solvedSteps = [...baseState.solvedSteps, action.step];
             break;
+        case SET_LAST_STEP:
+            baseState.lastStepNumber = action.step;
+            break;
+        case RESET_COMPONENT:
+            baseState.answers = ["", "", ""];
+            baseState.selectedAnswers = [false, false, false, false, false, false];
+            baseState.isHelpVisible = false;
+            baseState.questionMessage = null;
+            baseState.step = "1";
+            baseState.stepStack = ["1"];
+            baseState.solvedSteps = [];
+            baseState.showDiagramm = true;
+            console.log("baseStete.step = 1")
+            break;
+        case SET_LAST_TUTORIAL:
+            baseState.lastTutorial = action.tutorial;
+            break;
     }
     return baseState;
 };
@@ -125,6 +147,19 @@ const addSolvedStep = function (step) {
     return {type: ADD_SOLVED, step}
 }
 
+const setLastStepNumber = function (step) {
+    return {type: SET_LAST_STEP, step}
+}
+
+const resetComponent = function () {
+    console.log("resetting Comp")
+    return {type: RESET_COMPONENT}
+}
+
+const setLastTutorial = function (tutorial) {
+    return {type: SET_LAST_TUTORIAL, tutorial}
+}
+
 export {
     reducer as default,
     initialState as debuggingTutorialInitialState,
@@ -139,4 +174,7 @@ export {
     reset,
     setQuestionMessage,
     addSolvedStep,
+    setLastStepNumber,
+    resetComponent,
+    setLastTutorial,
 };

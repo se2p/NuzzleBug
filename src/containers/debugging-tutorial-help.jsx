@@ -12,17 +12,19 @@ import {
     setStep,
     reset,
     setQuestionMessage,
-    addSolvedStep,} from "../reducers/debugging-tutorial-help";
+    addSolvedStep,
+    setLastStepNumber,
+    resetComponent,
+    setLastTutorial,} from "../reducers/debugging-tutorial-help";
 import DebuggingTutorialStepComponent from '../components/debuggingTutorial/debuggingTutorialHelp.jsx';
 import PropTypes from "prop-types";
 
 class DebuggingTutorialHelp extends React.Component {
+
     constructor(props) {
         super(props);
         this.checkAnswer = this.checkAnswer.bind(this);
     }
-
-
 
     checkAnswer(step, tutorial) {
         switch (tutorial["questionType"]) {
@@ -56,8 +58,12 @@ class DebuggingTutorialHelp extends React.Component {
                 if (this.props.answers[0] !== "") {
                     const findOption = () => Object.entries(tutorial)
                         .find(([key, value]) => value.label === this.props.answers[0])?.[0] || null;
-                    this.props.setStep(tutorial[findOption()]["next"].slice(6));
-                    this.props.reset();
+                    if (tutorial[findOption()]["next"] !== "wrongAnswer") {
+                        this.props.setStep(tutorial[findOption()]["next"].slice(6));
+                        this.props.reset();
+                    } else {
+                        this.props.setQuestionMessage(tutorial.correctionText);
+                    }
                 }
                 break;
             case "GAP_TEXT":
@@ -65,17 +71,43 @@ class DebuggingTutorialHelp extends React.Component {
                     const nextStep = this.props.answers[2] !== "false" ?
                         tutorial.endQuestionTrueNext : tutorial.endQuestionFalseNext;
                     // The GAP TEXT was solved. Next time when visiting this specific step, solve the first 2 inputFields
-                    this.props.addSolvedStep(step);
-                    this.props.setStep(nextStep.slice(6));
-                    this.props.reset();
+                    if (nextStep !== "wrongAnswer") {
+                        this.props.addSolvedStep(step);
+                        this.props.setStep(nextStep.slice(6));
+                        this.props.reset();
+                    } else {
+                        this.props.setQuestionMessage(tutorial.correctionText);
+                    }
                 }
                 break;
         }
     }
 
+    componentDidMount() {
+        console.log("mounted");
+        if (this.props.stepNumber !== this.props.lastStepNumber || JSON.stringify(this.props.tutorial) !== JSON.stringify(this.props.lastTutorial)) {
+            console.log("resetting Component!" + this.props.stepNumber + ":" + this.props.lastStepNumber);
+
+            this.props.resetComponent();
+            this.props.setLastStepNumber(this.props.stepNumber);
+            this.props.setLastTutorial(this.props.tutorial);
+        }
+    }
+
     render () {
-        const curStep = "step" + (this.props.stepNumber + 1).toString() + "_" + this.props.level;
+        let curStep;
+        if (JSON.stringify(this.props.tutorial) !== JSON.stringify(this.props.lastTutorial)) {
+            console.log("render tutorial");
+            this.props.resetComponent();
+            this.props.setLastTutorial(this.props.tutorial);
+            return null;
+        } else {
+            curStep = "step" + (this.props.stepNumber + 1).toString() + "_" + this.props.level;
+        }
+
         const tutorialStep = this.props.tutorial[curStep];
+
+        console.log(tutorialStep + ":" + curStep)
 
         if (this.props.solvedSteps.includes(curStep)) {
             this.props.answers[0] = tutorialStep.question1.questionSolution;
@@ -112,6 +144,12 @@ DebuggingTutorialHelp.propTypes = {
     selectedAnswers: PropTypes.any,
     setQuestionMessage: PropTypes.func,
     addSolvedStep: PropTypes.func,
+    shouldReset: PropTypes.number,
+    lastStepNumber: PropTypes.number,
+    setLastStepNumber: PropTypes.func,
+    resetComponent: PropTypes.func,
+    lastTutorial: PropTypes.any,
+    setLastTutorial: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -122,6 +160,8 @@ const mapStateToProps = state => ({
     questionMessage: state.scratchGui.debuggingTutorial.questionMessage,
     showDiagramm: state.scratchGui.debuggingTutorial.showDiagramm,
     level: state.scratchGui.debuggingTutorial.step,
+    lastStepNumber: state.scratchGui.debuggingTutorial.lastStepNumber,
+    lastTutorial: state.scratchGui.debuggingTutorial.lastTutorial,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -136,6 +176,9 @@ const mapDispatchToProps = dispatch => ({
     reset: () => dispatch(reset()),
     setQuestionMessage: (content) => dispatch(setQuestionMessage(content)),
     addSolvedStep: (stepNumber) => dispatch(addSolvedStep(stepNumber)),
+    setLastStepNumber: (step) => dispatch(setLastStepNumber(step)),
+    resetComponent: () => dispatch(resetComponent()),
+    setLastTutorial: (tutorial) => dispatch(setLastTutorial(tutorial)),
 });
 
 export default connect(

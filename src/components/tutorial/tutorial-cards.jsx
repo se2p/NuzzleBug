@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import PropTypes, {func} from 'prop-types';
-import React, {Fragment} from 'react';
+import React, {Fragment, useEffect} from 'react';
 import Draggable from 'react-draggable';
 import {injectIntl, FormattedMessage} from 'react-intl';
 
@@ -238,8 +238,6 @@ const TutorialCards = props => {
     }
 
 
-
-
     const parseContent = function () {
 
         switch (contentType) {
@@ -252,7 +250,6 @@ const TutorialCards = props => {
                         onStartTutorial={onStartTutorial}
                         vm={vm}
                         stepCount={totalSteps}
-
                     />;
                 } else {
                     return <TutorialStep
@@ -271,6 +268,7 @@ const TutorialCards = props => {
                     projectFiles={"projectFiles"}
                     vm={vm}
                     step={step}
+                    stepCount={totalSteps}
                     onIncreaseStep={onNextStep}
                 />;
             case "DEBUGGING_HELP":
@@ -396,6 +394,7 @@ TutorialCards.propTypes = {
     vm: PropTypes.instanceOf(VirtualMachine).isRequired,
     onSetContentType: PropTypes.func,
     onOpenHelp: PropTypes.func,
+    onStartTutorial: PropTypes.func.isRequired,
 };
 
 export default injectIntl(TutorialCards);

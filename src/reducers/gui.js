@@ -35,6 +35,7 @@ import helpMenuReducer, {helpMenuInitialState} from './help-menu';
 import throttle from 'redux-throttle';
 import debuggingTutorialReducer, {debuggingTutorialInitialState} from './debugging-tutorial-help';
 import debuggingTutorialStepReducer, {debuggingTutorialStepInitialState} from "./debugging-tutorial-step";
+import debuggingTutorialOverviewReducer, {debuggingTutorialOverviewInitialState} from "./debugging-tutorial-overview"
 
 import decks from '../lib/libraries/decks/index.jsx';
 
@@ -51,6 +52,7 @@ const guiInitialState = {
     tutorialCards: tutorialCardsInitialState,
     debuggingTutorial: debuggingTutorialInitialState,
     debuggingTutorialStep: debuggingTutorialStepInitialState,
+    debuggingTutorialOverview: debuggingTutorialOverviewInitialState,
     tutorialStep: tutorialStepInitialState,
     colorPicker: colorPickerInitialState,
     connectionModal: connectionModalInitialState,
@@ -157,6 +159,7 @@ const guiReducer = combineReducers({
     tutorialCards: tutorialCardsReducer,
     debuggingTutorial: debuggingTutorialReducer,
     debuggingTutorialStep: debuggingTutorialStepReducer,
+    debuggingTutorialOverview: debuggingTutorialOverviewReducer,
     tutorialStep: tutorialStepReducer,
     colorPicker: colorPickerReducer,
     connectionModal: connectionModalReducer,

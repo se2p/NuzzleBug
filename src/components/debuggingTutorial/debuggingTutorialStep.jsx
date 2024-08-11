@@ -22,6 +22,7 @@ const DebuggingTutorialStep = props => {
         onResetProject,
         setLoading,
         isLoading,
+        reachedLastStep,
         ...posProps
     } = props;
 
@@ -60,76 +61,99 @@ const DebuggingTutorialStep = props => {
         progressBarRef.current.style.width = '0';
     };
 
-    return (
-        <div className={css.container}>
+    const renderStep = () => {
+        return (
+            <div className={css.container}>
+                <div style={{textAlign: "left"}}>
+                    <span className={css.descriptionHeader}>{"Schritt " + (step + 1)}</span>
+                </div>
 
-            <div style={{textAlign: "left"}}>
-                <span className={css.descriptionHeader}>{"Schritt " + (step + 1)}</span>
-            </div>
+                <p className={css.description}>
+                    {tutorialMessages[overviewStep]["description"]}
+                </p>
 
-
-            <p className={css.description}>
-                {tutorialMessages[overviewStep]["description"]}
-            </p>
-
-            <div className={css.errorBar}>
-                <span className={css.errorText}>Anzahl an Fehlern: </span>
-                <span className={css.errorNumber}>
+                <div className={css.errorBar}>
+                    <span className={css.errorText}>Anzahl an Fehlern: </span>
+                    <span className={css.errorNumber}>
                     {tutorialMessages[overviewStep]["errorAmount"]}
                 </span>
-                <button className={css.detailsButton} onClick={onErrorClicked}>Details
-                    <span className={css.tooltipText}>Falls du den Fehler nicht findest: </span>
-                </button>
-            </div>
-
-
-            {isErrorInfoVisible && <div className={css.error} onClick={onErrorClicked}>
-                {tutorialMessages[overviewStep]["errorDescription"]}
-            </div>}
-
-
-            <div className={css.buttonBar}>
-                <div className={css.resetContainer}>
-                    <button
-                        className={isLoading ? css.resetButtonPressed : css.resetButton}
-                        onMouseDown={handleMouseDown}
-                        onMouseUp={handleMouseUp}
-                        onMouseLeave={handleMouseUp} // Falls die Maus den Button verlässt, wird das gleiche wie bei mouseup ausgelöst
-                    >
-                        Zurücksetzen
-                        <div className={css.progressBar} ref={progressBarRef}></div>
+                    <button className={css.detailsButton} onClick={onErrorClicked}>Details
+                        <span className={css.tooltipText}>Falls du den Fehler nicht findest: </span>
                     </button>
                 </div>
 
-                <button className={css.buttonElement} onClick={onOpenHelp}>Hilfe</button>
 
-                <button className={(testResults !== null && testResults.passed) ? css.nextButton : css.buttonElement}
-                        onClick={(testResults !== null && testResults.passed) ? nextStep : onStartTests}>
-                    {(testResults !== null && testResults.passed) ? "Nächster Schritt" : "Testen"}
-                </button>
-            </div>
+                {isErrorInfoVisible && <div className={css.error} onClick={onErrorClicked}>
+                    {tutorialMessages[overviewStep]["errorDescription"]}
+                </div>}
 
-            {testResults!== null && <div className={css.testContainer}>
-                <div className={css.testBox}>
-                    <div className={css.testResContainer}>
+
+                <div className={css.buttonBar}>
+                    <div className={css.resetContainer}>
+                        <button
+                            className={isLoading ? css.resetButtonPressed : css.resetButton}
+                            onMouseDown={handleMouseDown}
+                            onMouseUp={handleMouseUp}
+                            onMouseLeave={handleMouseUp}
+                        >
+                            Zurücksetzen
+                            <div className={css.progressBar} ref={progressBarRef}></div>
+                        </button>
+                    </div>
+
+                    <button className={css.buttonElement} onClick={onOpenHelp}>Hilfe</button>
+
+                    <button className={(testResults !== null && testResults.passed) ? css.nextButton : css.buttonElement}
+                            onClick={(testResults !== null && testResults.passed) ? nextStep : onStartTests}>
+                        {(testResults !== null && testResults.passed) ? "Nächster Schritt" : "Testen"}
+                    </button>
+                </div>
+
+                {testResults!== null && <div className={css.testContainer}>
+                    <div className={css.testBox}>
+                        <div className={css.testResContainer}>
                         <span className={css.testNumber} style={{marginBottom: "10px", marginTop: "10px"}}>
                             {testResults.passed ? "Glückwunsch!" : "Schade!"}
                         </span>
-                        {!testResults.passed && <button className={css.testResultButton} onClick={onTestDetails}>Details</button>}
-                    </div>
+                            {!testResults.passed && <button className={css.testResultButton} onClick={onTestDetails}>Details</button>}
+                        </div>
 
-                    {showTestDetail && !testResults.passed ?
-                        <div style={{display:"flex", flexDirection:"column", alignItems:"flex"}}>
-                            {parseDetails()}
-                        </div> : <span style={{marginBottom: "5px", marginLeft: "10px", textAlign: "left"}}>
+                        {showTestDetail && !testResults.passed ?
+                            <div style={{display:"flex", flexDirection:"column", alignItems:"flex"}}>
+                                {parseDetails()}
+                            </div> : <span style={{marginBottom: "5px", marginLeft: "10px", textAlign: "left"}}>
                             {testResults.passed ? "Du hast alle Fehler gefunden." : "Du hast leider nicht alle Fehler gefunden."}
                         </span>}
 
-                </div>
-                <img style={{width: "100px", height: "auto"}} alt={"owl-picture explaining the result"} src={owl}/>
-            </div>}
-        </div>
-    )
+                    </div>
+                    <img style={{width: "100px", height: "auto"}} alt={"owl-picture explaining the result"} src={owl}/>
+                </div>}
+            </div>
+        )
+    }
+
+    const renderFinalStep = () => {
+        return (<div className={css.container}>
+
+            <div style={{textAlign: "center", width:"100%"}}>
+                <span className={css.descriptionHeader}>Glückwunsch!</span>
+            </div>
+            <img className={css.titleImage} src={tutorialMessages.levelFinishedImg} alt={"Picture of the tutorial"}/>
+            <div className={css.descriptionFinish}>
+                <p>{tutorialMessages.levelFinishedText}</p>
+            </div>
+
+
+            <div className={css.detailsBar}>
+                <div className={css.detailsBarElement}>
+                    <span className={css.detailsTitle}>Mögliche Ergänzungen: </span>
+                    <span className={css.detailsText}>{tutorialMessages.levelFinishedSuggestions}</span>
+                </div>levelFinishedText
+            </div>
+        </div>);
+    }
+
+    return reachedLastStep ? renderFinalStep() : renderStep();
 }
 
 DebuggingTutorialStep.props = {

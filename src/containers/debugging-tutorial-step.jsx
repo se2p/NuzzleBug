@@ -9,7 +9,7 @@ import VirtualMachine from "scratch-vm";
 import {lock, unlock} from '../reducers/vm-status';
 import {runTest} from 'tutorial-tests';
 import asdProject from '!arraybuffer-loader!../components/debuggingTutorial/testProject/Scratch-Projekt(1).sb3';
-
+import asdProject2 from '!arraybuffer-loader!../components/debuggingTutorial/testProject/Scratch-Projekt(3).sb3';
 
 
 class DebuggingTutorialStep extends React.Component {
@@ -22,33 +22,45 @@ class DebuggingTutorialStep extends React.Component {
 
     onTest() {
         this.props.lockVM();
-        const summary = runTest(this.props.vm, "testTutorial", 0).catch(error => {
-            console.log(`Test execution crashed: ${error}`);
-            this.props.unlockVM();
+        const summary = runTest(this.props.vm, "testTutorial", 1)
+            .catch(error => {console.log(`Test execution crashed: ${error}`);
         });
         summary.then(result => {
             this.props.updateTestResults(result);
             this.props.unlockVM();
-        });
+        }).finally(this.props.unlockVM());
     }
 
     onNextStep() {
         this.props.onIncreaseStep();
         this.props.resetStep();
-        this.props.vm.loadProject(asdProject); //TODO Load right level
-        // TODO +reset Help completely
+        this.props.vm.start();
+        this.props.vm.clear();
+        this.props.lockVM();
+        this.props.vm.loadProject(asdProject)
+            .catch(e => console.log("Error while loading project: " + e.toString())) //TODO Load right level
+            .finally(this.props.unlockVM());
     }
 
     onResetProject() {
-        this.props.vm.loadProject(asdProject);
+        this.props.vm.start();
+        this.props.vm.clear();
+        this.props.lockVM();
+        this.props.vm.loadProject(asdProject)
+            .catch(e => console.log("Error while resetting project: " + e.toString()))
+            .finally(this.props.unlockVM());
+        this.props.vm.greenFlag();
     }
 
     render () {
+        const reachedLastStep = (this.props.step === this.props.stepCount);
+
         return (
             <DebuggingTutorialStepComponent
                 onStartTests={() => this.onTest()}
                 nextStep={() => this.onNextStep()}
                 onResetProject={() => this.onResetProject()}
+                reachedLastStep={reachedLastStep}
                 {...this.props}
             />
         );
@@ -75,6 +87,7 @@ DebuggingTutorialStep.propTypes = {
     unlockVM: PropTypes.func,
     showReset: PropTypes.bool,
     showResetOptions: PropTypes.func,
+    stepCount: PropTypes.number,
 };
 
 const mapStateToProps = state => ({

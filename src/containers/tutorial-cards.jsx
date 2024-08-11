@@ -30,6 +30,7 @@ class TutorialCards extends React.Component {
         this.handleHome = this.handleHome.bind(this);
         this.handleNext = this.handleNext.bind(this);
         this.handlePrev = this.handlePrev.bind(this);
+        this.handleStartTutorial = this.handleStartTutorial.bind(this);
         this.myRef = null;
     }
 
@@ -83,6 +84,11 @@ class TutorialCards extends React.Component {
         this.myRef.scrollTop = 0;
     }
 
+    handleStartTutorial() {
+        console.log("starting tutorial")
+        this.props.startTutorial();
+    }
+
     render () {
         const tutorialsData = this.processTutorials();
 
@@ -129,6 +135,7 @@ class TutorialCards extends React.Component {
                 onNextStep={this.handleNext}
                 onPrevStep={this.handlePrev}
                 tutorialIndexData={tutorial}
+                onStartTutorial={this.handleStartTutorial}
                 {...this.props}
             />
         );
@@ -150,6 +157,7 @@ TutorialCards.propTypes = {
     step: PropTypes.number.isRequired,
     contentType: PropTypes.string,
     vm: PropTypes.instanceOf(VirtualMachine).isRequired,
+    startTutorial: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -180,7 +188,7 @@ const mapDispatchToProps = dispatch => ({
     onHome: () => dispatch(homeMenu()),
     onReset: () => dispatch(reset()),
     onSetContentType: (contentType) => dispatch(setContentType(contentType)),
-    onStartTutorial: () => dispatch(onStartTutorial()),
+    startTutorial: () => dispatch(onStartTutorial()),
     onOpenHelp: () => dispatch(onOpenHelp()),
 });
 

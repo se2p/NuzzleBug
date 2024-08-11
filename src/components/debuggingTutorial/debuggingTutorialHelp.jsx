@@ -45,7 +45,7 @@ const DebuggingTutorialHelp = props => {
         // Ein kleines Timeout setzen, um sicherzustellen, dass der Inhalt geladen ist
         const timer = setTimeout(scrollToBottom, 0);
 
-        // Cleanup-Funktion, um das Timeout zu entfernen, wenn sich der Effekt erneut auslöst
+        // Cleanup-Funktion, um den Timeout zu entfernen, wenn sich der Effekt erneut auslöst
         return () => clearTimeout(timer);
     }, [step]);
 
