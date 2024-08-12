@@ -29,7 +29,7 @@ const DebuggingTutorialStep = props => {
     const overviewStep = "overviewStep".concat((step + 1).toString());
 
 
-    const getResultFeedbackText = function () {
+    const getFeedbackText = function () {
         let userMadeError = false;
         if (testResults.details === undefined) return false;
         testResults.details.map(e => {
@@ -165,7 +165,7 @@ const DebuggingTutorialStep = props => {
     }
 
     const getResultText = () => {
-        if (getResultFeedbackText()) return "Sieht aus, als hättest du aus Versehen weitere Fehler eingebaut. " +
+        if (getFeedbackText()) return "Sieht aus, als hättest du aus Versehen weitere Fehler eingebaut. " +
             "Falls du willst, kannst du das Projekt jederzeit zurücksetzen."
         return testResults.passed ? "Du hast alle Fehler gefunden." : "Du hast leider nicht alle Fehler gefunden."
     }

@@ -8,8 +8,8 @@ import VirtualMachine from "scratch-vm";
 
 import {lock, unlock} from '../reducers/vm-status';
 import {runTest} from 'tutorial-tests';
-import asdProject from '!arraybuffer-loader!../components/debuggingTutorial/testProject/Scratch-Projekt(1).sb3';
-import asdProject2 from '!arraybuffer-loader!../components/debuggingTutorial/testProject/Scratch-Projekt(3).sb3';
+import asdProject from '!arraybuffer-loader!../components/debuggingTutorial/testProject/Scratch-Projekt(4).sb3';
+import asdProject2 from '!arraybuffer-loader!../components/debuggingTutorial/testProject/Scratch-Projekt(1).sb3';
 
 
 class DebuggingTutorialStep extends React.Component {
@@ -37,7 +37,7 @@ class DebuggingTutorialStep extends React.Component {
         this.props.vm.start();
         this.props.vm.clear();
         this.props.lockVM();
-        this.props.vm.loadProject(asdProject)
+        this.props.vm.loadProject(asdProject2)
             .catch(e => console.log("Error while loading project: " + e.toString())) //TODO Load right level
             .finally(this.props.unlockVM());
     }
@@ -46,7 +46,7 @@ class DebuggingTutorialStep extends React.Component {
         this.props.vm.start();
         this.props.vm.clear();
         this.props.lockVM();
-        this.props.vm.loadProject(asdProject)
+        this.props.vm.loadProject(asdProject2)
             .catch(e => console.log("Error while resetting project: " + e.toString()))
             .finally(this.props.unlockVM());
         this.props.vm.greenFlag();

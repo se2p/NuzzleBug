@@ -84,7 +84,7 @@ const DebuggingTutorialHelp = props => {
         return Object.keys(tutorial[step]).filter((key) => (key.startsWith("option"))).map((key) => (
             <div key={key} className={css.option}>
                 <img alt={"option picture"} className={css.smallImage}
-                     style={{width: tutorial[step][key]["width"]}}
+                     style={{height: tutorial[step][key]["width"]}}
                      src={tutorialIndexData[tutorial[step][key]["img"]]}/>
                 <div style={{display: "flex", justifyContent: "center"}}>
 
