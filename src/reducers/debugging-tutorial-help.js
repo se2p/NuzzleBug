@@ -66,8 +66,10 @@ const reducer = function (state, action) {
             baseState.showDiagramm = !baseState.showDiagramm;
             break;
         case SET_STEP:
-            baseState.stepStack = [...baseState.stepStack, baseState.step];
-            baseState.step = action.step;
+            if (baseState.step !== action.step) {
+                baseState.stepStack = [...baseState.stepStack, baseState.step];
+                baseState.step = action.step;
+            }
             break;
         case RESET:
             baseState.answers = ["", "", ""];

@@ -84,10 +84,7 @@ class DebuggingTutorialHelp extends React.Component {
     }
 
     componentDidMount() {
-        console.log("mounted");
         if (this.props.stepNumber !== this.props.lastStepNumber || JSON.stringify(this.props.tutorial) !== JSON.stringify(this.props.lastTutorial)) {
-            console.log("resetting Component!" + this.props.stepNumber + ":" + this.props.lastStepNumber);
-
             this.props.resetComponent();
             this.props.setLastStepNumber(this.props.stepNumber);
             this.props.setLastTutorial(this.props.tutorial);
@@ -97,7 +94,6 @@ class DebuggingTutorialHelp extends React.Component {
     render () {
         let curStep;
         if (JSON.stringify(this.props.tutorial) !== JSON.stringify(this.props.lastTutorial)) {
-            console.log("render tutorial");
             this.props.resetComponent();
             this.props.setLastTutorial(this.props.tutorial);
             return null;
@@ -106,8 +102,6 @@ class DebuggingTutorialHelp extends React.Component {
         }
 
         const tutorialStep = this.props.tutorial[curStep];
-
-        console.log(tutorialStep + ":" + curStep)
 
         if (this.props.solvedSteps.includes(curStep)) {
             this.props.answers[0] = tutorialStep.question1.questionSolution;

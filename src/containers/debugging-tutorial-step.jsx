@@ -22,7 +22,7 @@ class DebuggingTutorialStep extends React.Component {
 
     onTest() {
         this.props.lockVM();
-        const summary = runTest(this.props.vm, "testTutorial", 1)
+        const summary = runTest(this.props.vm, this.props.tutorialMessages.testId, this.props.step)
             .catch(error => {console.log(`Test execution crashed: ${error}`);
         });
         summary.then(result => {

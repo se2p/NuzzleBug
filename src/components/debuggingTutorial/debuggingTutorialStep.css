@@ -36,6 +36,7 @@
     justify-content: left;
     display: flex;
     text-align: left;
+    width: 90%;
 }
 
 .error-label {

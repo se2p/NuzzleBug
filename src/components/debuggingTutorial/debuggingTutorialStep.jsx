@@ -4,8 +4,8 @@ import css from "./debuggingTutorialStep.css"
 import owl from "./images/owl-b.svg"
 import accept from "./images/icon--passed.png"
 import failed from "./images/icon--failed.png"
-import acceptReset from "./images/icon--accept.png"
-import declineReset from "./images/icon--decline.png"
+import failed_debugging from "./images/icon--failed-debugging.png"
+import failed_test from "./images/icon--failed-test.png"
 
 const DebuggingTutorialStep = props => {
     const {
@@ -27,22 +27,47 @@ const DebuggingTutorialStep = props => {
     } = props;
 
     const overviewStep = "overviewStep".concat((step + 1).toString());
+    let userMadeError = false;
 
     const parseDetails = function () {
-        return testResults.details.map(e =>
-            <div className={css.resultItem}>
-                <span style={{marginLeft: "10px"}}>{e.test}</span>
-                <img alt={"resultIcon"} src={e.result === "pass" ? accept : failed} style={{width: "20px", height: "auto", marginRight: "10px"}}/>
-            </div>
-        );
+        return testResults.details.sort((a, b) => b.testId.localeCompare(a.testId)).map(e => {
+            if (e.testId.charAt(4) === (step + 1).toString()) { // Is result from this step?
+                if (e.result === "pass") {
+                    return <div className={css.resultItem}>
+                        <span style={{marginLeft: "10px"}}>{e.test}</span>
+                        <img alt={"resultIcon"} src={accept} style={{width: "20px", height: "auto", marginRight: "10px"}}/>
+                    </div>
+                } else {
+                    if (e.testDescription !== "DEBUGGING_ERROR") { userMadeError = true; }
+
+                    return <div className={css.resultItem}>
+                        <span style={{marginLeft: "10px"}}>{e.test}</span>
+                        <div style={{display: "flex", alignItems: "center", position: "relative"}}>
+                            <img alt={"resultIcon"} src={e.testDescription === "DEBUGGING_ERROR" ? failed_debugging : failed_test} style={{width: "20px", height: "auto", marginRight: "7px"}}/>
+                            <div style={{position: "absolute", left: "20px", width: "7px", height: "8px", backgroundColor: "#4D97FFFF", top: "27%"}}/>
+                            <img alt={"resultIcon"} src={failed} style={{width: "20px", height: "auto", marginRight: "10px"}}/>
+                        </div>
+                    </div>
+                }
+            } else {
+                if (e.result !== "pass") { // Only show false tests
+                    return <div className={css.resultItem}>
+                        <span style={{marginLeft: "10px"}}>{e.test}</span>
+                        <div style={{display: "flex", alignItems: "center", position: "relative"}}>
+                            <img alt={"resultIcon"} src={failed_test} style={{width: "20px", height: "auto", marginRight: "7px"}}/>
+                            <div style={{position: "absolute", left: "20px", width: "7px", height: "8px", backgroundColor: "#4D97FFFF", top: "27%"}}/>
+                            <img alt={"resultIcon"} src={failed} style={{width: "20px", height: "auto", marginRight: "10px"}}/>
+                        </div>
+                    </div>
+                }
+            }
+        });
     }
 
     const progressBarRef = useRef(null);
     const timeoutIdRef = useRef(null);
-    //const startTimeRef = useRef(null);
 
     const handleMouseDown = () => {
-        //startTimeRef.current = Date.now();
         setLoading(true);
         progressBarRef.current.style.width = '80%';
         progressBarRef.current.style.transition = 'width 1s linear';
@@ -122,7 +147,7 @@ const DebuggingTutorialStep = props => {
                             <div style={{display:"flex", flexDirection:"column", alignItems:"flex"}}>
                                 {parseDetails()}
                             </div> : <span style={{marginBottom: "5px", marginLeft: "10px", textAlign: "left"}}>
-                            {testResults.passed ? "Du hast alle Fehler gefunden." : "Du hast leider nicht alle Fehler gefunden."}
+                            {getResultText()}
                         </span>}
 
                     </div>
@@ -130,6 +155,12 @@ const DebuggingTutorialStep = props => {
                 </div>}
             </div>
         )
+    }
+
+    const getResultText = () => {
+        if (userMadeError) return "Sieht aus, als hättest du aus Versehen weitere Fehler eingebaut. Falls du nicht mehr weißt, wie du sie beheben" +
+            "sollst, kannst du jederzeit das Projekt \"zurücksetzen\""
+        return testResults.passed ? "Du hast alle Fehler gefunden." : "Du hast leider nicht alle Fehler gefunden."
     }
 
     const renderFinalStep = () => {
@@ -148,7 +179,7 @@ const DebuggingTutorialStep = props => {
                 <div className={css.detailsBarElement}>
                     <span className={css.detailsTitle}>Mögliche Ergänzungen: </span>
                     <span className={css.detailsText}>{tutorialMessages.levelFinishedSuggestions}</span>
-                </div>levelFinishedText
+                </div>
             </div>
         </div>);
     }
