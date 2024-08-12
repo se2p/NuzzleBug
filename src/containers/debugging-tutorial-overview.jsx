@@ -9,7 +9,9 @@ import {setLastTutorial} from "../reducers/debugging-tutorial-overview"
 class DebuggingTutorialOverview extends React.Component {
 
     loadProject() {
-        this.props.vm.loadProject(asdProject);
+        const isNewTutorialSelected = JSON.stringify(this.props.tutorialMessages) !== JSON.stringify((this.props.lastTutorial));
+        if (isNewTutorialSelected) this.props.vm.loadProject(asdProject); //TODO LOADING SCREEN + lock/unlock vm
+
         this.props.setLastTutorial(this.props.tutorialMessages);
         this.props.onStartTutorial();
     }
