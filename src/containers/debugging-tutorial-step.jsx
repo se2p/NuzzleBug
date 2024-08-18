@@ -1,15 +1,14 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import {resetStep, errorClicked, updateTestResults, onTestDetails, setLoading} from "../reducers/debugging-tutorial-step";
+import {resetStep, errorClicked, updateTestResults, onTestDetails, setLoading, setLoadingProject} from "../reducers/debugging-tutorial-step";
 import DebuggingTutorialStepComponent from '../components/debuggingTutorial/debuggingTutorialStep.jsx';
 import PropTypes from "prop-types";
 import VirtualMachine from "scratch-vm";
 
 import {lock, unlock} from '../reducers/vm-status';
 import {runTest} from 'tutorial-tests';
-import asdProject from '!arraybuffer-loader!../components/debuggingTutorial/testProject/Scratch-Projekt(4).sb3';
-import asdProject2 from '!arraybuffer-loader!../components/debuggingTutorial/testProject/Scratch-Projekt(1).sb3';
+import asdProject2 from '!arraybuffer-loader!../components/debuggingTutorial/testProject/Scratch-Projekt(4).sb3';
 
 
 class DebuggingTutorialStep extends React.Component {
@@ -21,6 +20,7 @@ class DebuggingTutorialStep extends React.Component {
 
 
     onTest() {
+        this.props.setLoadingProject("TEST");
         this.props.lockVM();
         const summary = runTest(this.props.vm, this.props.tutorialMessages.testId, this.props.step)
             .catch(error => {console.log(`Test execution crashed: ${error}`);
@@ -28,10 +28,14 @@ class DebuggingTutorialStep extends React.Component {
         summary.then(result => {
             this.props.updateTestResults(result);
             this.props.unlockVM();
-        }).finally(this.props.unlockVM());
+        }).finally(() => {
+            this.props.unlockVM();
+            this.props.setLoadingProject(null);
+        });
     }
 
     onNextStep() {
+        this.props.setLoadingProject("NEXT");
         this.props.onIncreaseStep();
         this.props.resetStep();
         this.props.vm.start();
@@ -39,17 +43,22 @@ class DebuggingTutorialStep extends React.Component {
         this.props.lockVM();
         this.props.vm.loadProject(asdProject2)
             .catch(e => console.log("Error while loading project: " + e.toString())) //TODO Load right level
-            .finally(this.props.unlockVM());
+            .finally(() => {
+                this.props.unlockVM();
+                this.props.setLoadingProject(null);
+            });
     }
 
     onResetProject() {
+        this.props.setLoadingProject("RESET");
         this.props.vm.start();
         this.props.vm.clear();
         this.props.lockVM();
         this.props.vm.loadProject(asdProject2)
             .catch(e => console.log("Error while resetting project: " + e.toString()))
-            .finally(this.props.unlockVM());
-        this.props.vm.greenFlag();
+            .finally(() => {
+                this.props.unlockVM();
+                this.props.setLoadingProject(null);});
     }
 
     render () {
@@ -88,6 +97,8 @@ DebuggingTutorialStep.propTypes = {
     showReset: PropTypes.bool,
     showResetOptions: PropTypes.func,
     stepCount: PropTypes.number,
+    setLoading: PropTypes.func,
+    setLoadingProject: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -96,6 +107,7 @@ const mapStateToProps = state => ({
     showTestDetail: state.scratchGui.debuggingTutorialStep.showTestDetail,
     showReset: state.scratchGui.debuggingTutorialStep.showReset,
     isLoading: state.scratchGui.debuggingTutorialStep.isLoading,
+    projectLoadingState: state.scratchGui.debuggingTutorialStep.projectLoadingState,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -106,6 +118,7 @@ const mapDispatchToProps = dispatch => ({
     lockVM: () => dispatch(lock()),
     unlockVM: () => dispatch(unlock()),
     setLoading: (isLoading) => dispatch(setLoading(isLoading)),
+    setLoadingProject: (loadingType) => dispatch(setLoadingProject(loadingType)),
 });
 
 export default connect(

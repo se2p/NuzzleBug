@@ -11,6 +11,7 @@ const DebuggingTutorialOverview = props => {
         stepCount,
         isNewTutorialSelected,
         lastTutorialTitle,
+        isLoading,
         ...posProps
     } = props;
 
@@ -42,8 +43,8 @@ const DebuggingTutorialOverview = props => {
                 </div>
             </div>
 
-            <button className={css.startButton} onClick={onStart} >{isNewTutorialSelected ? "Start" : "Tutorial fortsetzen"}
-            </button>
+            {isLoading ? <button className={css.loadingButton} disabled={true} onClick={onStart} >Lädt...</button>
+                : <button className={css.startButton} onClick={onStart} >{isNewTutorialSelected ? "Start" : "Tutorial fortsetzen"}</button>}
             {lastTutorialTitle !== null && <span>{"(ACHTUNG: Löscht deinen Fortschritt in " + lastTutorialTitle + ")"}</span>}
         </div>
     )

@@ -6,6 +6,7 @@ import accept from "./images/icon--passed.png"
 import failed from "./images/icon--failed.png"
 import failed_debugging from "./images/icon--failed-debugging.png"
 import failed_test from "./images/icon--failed-test.png"
+import {FormattedMessage} from "react-intl";
 
 const DebuggingTutorialStep = props => {
     const {
@@ -23,6 +24,7 @@ const DebuggingTutorialStep = props => {
         setLoading,
         isLoading,
         reachedLastStep,
+        projectLoadingState,
         ...posProps
     } = props;
 
@@ -121,8 +123,16 @@ const DebuggingTutorialStep = props => {
 
 
                 <div className={css.buttonBar}>
-                    <div className={css.resetContainer}>
-                        <button
+                     <div className={css.resetContainer}>
+
+                         {projectLoadingState !== null ?
+                             <button className={projectLoadingState === "RESET" ? css.resetButtonLoading : css.buttonElementDisabled} disabled={true}
+                                     onMouseUp={handleMouseUp}
+                                     onMouseLeave={handleMouseUp}>
+                                 {projectLoadingState === "RESET" ? "Lädt..." : "Warten"}
+                             </button>
+
+                        : <button
                             className={isLoading ? css.resetButtonPressed : css.resetButton}
                             onMouseDown={handleMouseDown}
                             onMouseUp={handleMouseUp}
@@ -130,15 +140,25 @@ const DebuggingTutorialStep = props => {
                         >
                             Zurücksetzen
                             <div className={css.progressBar} ref={progressBarRef}></div>
-                        </button>
+                        </button>}
                     </div>
 
-                    <button className={css.buttonElement} onClick={onOpenHelp}>Hilfe</button>
-
-                    <button className={(testResults !== null && testResults.passed) ? css.nextButton : css.buttonElement}
-                            onClick={(testResults !== null && testResults.passed) ? nextStep : onStartTests}>
-                        {(testResults !== null && testResults.passed) ? "Nächster Schritt" : "Testen"}
+                    <button className={css.buttonElement} onClick={onOpenHelp}>
+                        <FormattedMessage //TODO TRANSLATE
+                            defaultMessage="Frage Euli"
+                            description="Title for button to shrink question category"
+                            id="gui.cards.shrink"
+                        />
                     </button>
+
+                    {projectLoadingState !== null ?
+                        <button className={css.buttonElementDisabled} disabled={true}>
+                            {projectLoadingState === "TEST" ? "Lädt..." : "Warten"}
+                        </button>
+                        : <button className={(testResults !== null && testResults.passed) ? css.nextButton : css.buttonElement}
+                            onClick={(testResults !== null && testResults.passed) ? nextStep : onStartTests}>
+                        {(testResults !== null && testResults.passed) ? "Weiter gehts!" : "Testen"}
+                    </button>}
                 </div>
 
                 {testResults!== null && <div className={css.testContainer}>

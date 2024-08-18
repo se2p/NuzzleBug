@@ -104,6 +104,18 @@
     background-color: #3d77c5;
 }
 
+.button-element-disabled {
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 15px 15px;
+    cursor: pointer;
+    background-color: #4D97FF6B;
+    min-width: 150px;
+    height: 45px;
+    position: relative;
+}
+
 .next-button {
     color: white;
     border: none;
@@ -261,6 +273,17 @@
 
 .reset-button:hover {
     background-color: hsl(215, 54%, 41%);
+}
+
+.reset-button-loading {
+    position: relative;
+    overflow: hidden;
+    background-color: #4D97FF6B;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    min-width: 144px;
+    height: 41px;
 }
 
 .reset-button-pressed {
