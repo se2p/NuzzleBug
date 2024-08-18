@@ -1,3 +1,5 @@
+import {string} from "to-style";
+
 const ENTER_MULTI_ANSWER = 'scratch-gui/debugging-tutorial-cards/ENTER_MULTI_ANSWER';
 const HELP = 'scratch-gui/debugging-tutorial-cards/HELP';
 const STEP_BACK = 'scratch-gui/debugging-tutorial-cards/STEP_BACK';
@@ -20,7 +22,7 @@ const initialState = { //TODO Remove logic from reducer!
     stepStack: ["1"],
     answers: ["", "", ""],
     selectedAnswers: [false, false, false, false, false, false],
-    solvedSteps: [],
+    solvedSteps: {},
     questionMessage: null,
     showDiagramm: true,
     lastStepNumber: -1,
@@ -31,6 +33,7 @@ const reducer = function (state, action) {
     if (typeof state === 'undefined') {
         state = initialState;
     }
+
     const baseState = JSON.parse(JSON.stringify(state));
     switch (action.type) {
         case STEP_BACK:
@@ -81,7 +84,8 @@ const reducer = function (state, action) {
             baseState.questionMessage = action.content;
             break;
         case ADD_SOLVED:
-            baseState.solvedSteps = [...baseState.solvedSteps, action.step];
+            addToKey(baseState.solvedSteps, action.step, action.solution);
+            console.log("Solved Steps: " + JSON.stringify(baseState.solvedSteps));
             break;
         case SET_LAST_STEP:
             baseState.lastStepNumber = action.step;
@@ -93,9 +97,8 @@ const reducer = function (state, action) {
             baseState.questionMessage = null;
             baseState.step = "1";
             baseState.stepStack = ["1"];
-            baseState.solvedSteps = [];
+            baseState.solvedSteps = {};
             baseState.showDiagramm = true;
-            console.log("baseStete.step = 1")
             break;
         case SET_LAST_TUTORIAL:
             baseState.lastTutorial = action.tutorial;
@@ -103,6 +106,14 @@ const reducer = function (state, action) {
     }
     return baseState;
 };
+
+function addToKey(obj, key, element) {
+    if (obj.hasOwnProperty(key)) {
+        if (!obj[key].includes(element)) obj[key].push(element);
+    } else {
+        obj[key] = [element];
+    }
+}
 
 const onEnterMultiAnswer = function (answer) {
     let index = answer.charAt(6) - 1; //option1 -> 0
@@ -145,8 +156,8 @@ const setQuestionMessage = function (content) {
     return {type: SET_QUESTION_MSG, content}
 }
 
-const addSolvedStep = function (step) {
-    return {type: ADD_SOLVED, step}
+const addSolvedStep = function (step, solution) {
+    return {type: ADD_SOLVED, step, solution}
 }
 
 const setLastStepNumber = function (step) {
@@ -154,7 +165,6 @@ const setLastStepNumber = function (step) {
 }
 
 const resetComponent = function () {
-    console.log("resetting Comp")
     return {type: RESET_COMPONENT}
 }
 

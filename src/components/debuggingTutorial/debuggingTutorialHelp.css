@@ -17,7 +17,7 @@
 }
 
 .header-image {
-    width: 80%;
+    width: 90%;
     height: auto;
 }
 
@@ -98,39 +98,48 @@
     justify-content: start;
     margin-top: 10px;
     margin-bottom: 10px;
+    align-items: center;
 }
 
 .footer {
     display: flex;
     justify-content: flex-end;
     gap: 20px;
-    padding: 10px;
+    padding-top: 10px;
+
 }
 
-.multiButton {
+.checkbox {
     background-color: white;
     border: 3px solid hsla(215, 100%, 65%, 1);
     color: hsla(215, 100%, 95%, 1);
     font-weight: bolder;
     font-size: 18px;
     cursor: pointer;
-    border-radius: 100px;
+    border-radius: 2px;
     width: 15px;
     height: 15px;
-    margin-top: 10px;
 }
 
-.multiButton_active {
+.checkbox_active {
     background-color: hsla(215, 100%, 65%, 1);
     border: 3px solid hsla(215, 100%, 65%, 1);
     color: hsla(215, 100%, 95%, 1);
     font-weight: bolder;
     font-size: 18px;
     cursor: pointer;
-    border-radius: 100px;
+    border-radius: 2px;
     width: 15px;
     height: 15px;
-    margin-top: 10px;
+}
+
+.checkbox-trigger {
+    display: flex;
+    align-items: center;
+    width: 90px;
+    height: 30px;
+    justify-content: center;
+    cursor: pointer;
 }
 
 .messageText {
@@ -189,11 +198,13 @@
 }
 
 .dropdown-test {
-    position: relative;
+    position: absolute;
     display: inline-block;
-    height: 40px;
-    width: 24px;
+    height: 50px;
+    width: 30px;
     padding-right: 10px;
+    background-color: #7fff1e;
+    right: 10px;
 }
 
 .dropdown-content {

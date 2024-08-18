@@ -42,7 +42,7 @@ class TutorialCards extends React.Component {
 
             let messages = tutorial[`messages${this.props.locale.toUpperCase()}`];
             if (typeof messages === 'undefined') {
-                messages = tutorial.messagesEN;
+                messages = tutorial.messagesDE;
             }
 
             const tutorialMsg = messages.default;
@@ -96,7 +96,6 @@ class TutorialCards extends React.Component {
         let tutorial;
 
         if (this.props.selectedTutorial !== '') {
-            console.log("selected: " + this.props.selectedTutorial + " " + JSON.stringify(tutorials));
             tutorial = tutorials[`${this.props.selectedTutorial}`];
             let messages = tutorial[`messages${this.props.locale.toUpperCase()}`];
             if (typeof messages === 'undefined') {

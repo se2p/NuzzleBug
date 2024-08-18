@@ -44,8 +44,6 @@ const DebuggingTutorialHelp = props => {
 
         // Ein kleines Timeout setzen, um sicherzustellen, dass der Inhalt geladen ist
         const timer = setTimeout(scrollToBottom, 0);
-
-        // Cleanup-Funktion, um den Timeout zu entfernen, wenn sich der Effekt erneut auslöst
         return () => clearTimeout(timer);
     }, [step]);
 
@@ -69,13 +67,17 @@ const DebuggingTutorialHelp = props => {
                      style={{width: tutorial[step][key]["width"]}}
                      src={tutorialIndexData[tutorial[step][key]["img"]]}/>
 
-                <input
-                    type="radio"
-                    id={key}
-                    name="singleChoice"
-                    checked={answers[0] === key}
-                    onChange={(e) => setAnswer(0, key)}
-                />
+                <div className={css.checkboxTrigger} onClick={() => setAnswer(0, key)}>
+                    <button
+                        className={(answers[0] === key) ? css.checkbox_active : css.checkbox}
+                        key={key}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setAnswer(0, key);
+                        }}
+                        style={{borderRadius: "100px"}}
+                    />
+                </div>
             </div>
         ));
     }
@@ -87,10 +89,13 @@ const DebuggingTutorialHelp = props => {
                      style={{height: tutorial[step][key]["width"]}}
                      src={tutorialIndexData[tutorial[step][key]["img"]]}/>
                 <div style={{display: "flex", justifyContent: "center"}}>
-
-                    <button key={key} onClick={() => onEnterMultiAnswer(key)} className=
-                        {selectedAnswers[key.at(6) - 1] ? css.multiButton_active : css.multiButton}>
-                    </button>
+                    <div className={css.checkboxTrigger} onClick={() => onEnterMultiAnswer(key)}>
+                        <button key={key} onClick={(e) => {
+                            e.stopPropagation();
+                            onEnterMultiAnswer(key);}}
+                                className= {selectedAnswers[key.at(6) - 1] ? css.checkbox_active : css.checkbox}>
+                        </button>
+                    </div>
                 </div>
             </div>
         ));
@@ -188,8 +193,40 @@ const DebuggingTutorialHelp = props => {
             default:
                 console.log("Unknown questionType found: " + tutorial[step]["questionType"]);
         }
+    }
 
+    const renderMsg = function () {
+        if (questionMessage === null || questionMessage === undefined) return null;
 
+        const isCorrection = questionMessage.includes("[REVISITING]");
+        const primaryColor= isCorrection ? "#4D97FFFF" : "#623d51ff";
+        const secondaryColor= isCorrection ? "#b4d3ffff" : "#82645eff";
+
+        return <div className={css.helpBox} style={{backgroundColor: secondaryColor}}>
+            <div className={css.helpBoxHeader} style={{backgroundColor: primaryColor}}>Hinweis:</div>
+            <span style={{
+                padding: "5px 10px",
+                color: "white",
+                flexShrink: "1",
+                width: "100%",
+                textAlign: "start"
+            }}>{isCorrection ? questionMessage.toString().slice(12) : questionMessage}</span>
+            <div className={css.helpBoxClose} style={{backgroundColor: primaryColor}}
+                 onClick={onCloseQuestionMessage}>X
+            </div>
+        </div>
+    }
+
+    const renderMsgBorder = function () {
+        if (questionMessage === null || questionMessage === undefined) return null;
+
+        const isCorrection = questionMessage.includes("[REVISITING]");
+        const primaryColor= isCorrection ? "#4D97FFFF" : "#82645eff";
+
+        return <>
+            <div className={css.footerBorder} style={{borderColor: primaryColor}}/>
+            <hr className={css.footerLine} style={{borderColor: primaryColor}}/>
+        </>
     }
 
     return (
@@ -221,17 +258,12 @@ const DebuggingTutorialHelp = props => {
             </div>
 
             <div className={css.footer}>
-                {questionMessage !== null && <div className={css.helpBox}>
-                    <div className={css.helpBoxHeader}>Hinweis:</div>
-                    <span style={{padding: "5px 10px", color:"white", flexShrink: "1", width:"100%", textAlign:"start"}}>{questionMessage}</span>
-                    <div className={css.helpBoxClose} onClick={onCloseQuestionMessage}>X</div>
-                </div>}
+                {renderMsg()}
 
                 {!stepRegex.test(step) && <button className={css.footerButton} onClick={onStepBack}>Zurück</button>}
                 <button className={css.footerButton} onClick={() => onCheckAnswer(tutorial)}>
                     Weiter
-                    {questionMessage !== null && <div className={css.footerBorder}/>}
-                    {questionMessage !== null && <hr className={css.footerLine}/>}
+                    {renderMsgBorder()}
                 </button>
             </div>
 
@@ -243,7 +275,7 @@ const DebuggingTutorialHelp = props => {
 
 DebuggingTutorialHelp.props = {
     onHelp: PropTypes.func,
-    tutorial: PropTypes.object.isRequired, //TODO
+    tutorial: PropTypes.object.isRequired,
     step: PropTypes.string,
     onEnterAnswer: PropTypes.func,
     isHelpVisible: PropTypes.bool,
