@@ -5,19 +5,54 @@ import PropTypes from "prop-types";
 import VirtualMachine from "scratch-vm";
 import asdProject from '!arraybuffer-loader!../components/debuggingTutorial/testProject/Scratch-Projekt(4).sb3';
 import {setLastTutorial, setLoading} from "../reducers/debugging-tutorial-overview"
+import JSZip from "jszip";
 
 class DebuggingTutorialOverview extends React.Component {
+    constructor(props) {
+        super(props);
+    }
 
-    loadProject() {
+    loadProject() { //TODO
         const isNewTutorialSelected = JSON.stringify(this.props.tutorialMessages) !== JSON.stringify((this.props.lastTutorial));
         if (isNewTutorialSelected) {
             this.props.setLoading(true);
-            this.props.vm.loadProject(asdProject)
-                .then(() => {
-                    this.props.setLastTutorial(this.props.tutorialMessages);
-                    this.props.onStartTutorial();})
-                .catch((e) => console.log("Error loading new Project: " + e.toString()))
-                .finally(() => this.props.setLoading(false));
+            console.log("starting autosave");
+            const zip = new JSZip();
+            zip.file('project.json', this.props.vm.toJSON());
+            zip.generateAsync({
+                type: 'blob',
+                mimeType: 'application/x.scratch.sb3',
+                compression: 'DEFLATE',
+                compressionOptions: {
+                    level: 6
+                }
+            })
+                .then(output => {
+                    const url = URL.createObjectURL(output);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'backup.sb3';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    console.log("finished autosaving");
+
+
+
+
+
+                    this.props.vm.loadProject(asdProject)
+                        .then(() => {
+                            this.props.setLastTutorial(this.props.tutorialMessages);
+                            this.props.onStartTutorial();})
+                        .catch((e) => console.log("Error loading new Project: " + e.toString()))
+                        .finally(() => this.props.setLoading(false));
+                })
+                .catch(error => {
+                    console.log(error);
+                    this.props.setLoading(false);
+                });
         } else {
             this.props.onStartTutorial();
         }

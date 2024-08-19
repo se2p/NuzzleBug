@@ -29,8 +29,6 @@ const DebuggingTutorialStep = props => {
     } = props;
 
     const overviewStep = "overviewStep".concat((step + 1).toString());
-
-
     const getFeedbackText = function () {
         let userMadeError = false;
         if (testResults.details === undefined) return false;
@@ -123,24 +121,26 @@ const DebuggingTutorialStep = props => {
 
 
                 <div className={css.buttonBar}>
-                     <div className={css.resetContainer}>
 
-                         {projectLoadingState !== null ?
-                             <button className={projectLoadingState === "RESET" ? css.resetButtonLoading : css.buttonElementDisabled} disabled={true}
-                                     onMouseUp={handleMouseUp}
-                                     onMouseLeave={handleMouseUp}>
-                                 {projectLoadingState === "RESET" ? "Lädt..." : "Warten"}
-                             </button>
 
-                        : <button
-                            className={isLoading ? css.resetButtonPressed : css.resetButton}
-                            onMouseDown={handleMouseDown}
-                            onMouseUp={handleMouseUp}
-                            onMouseLeave={handleMouseUp}
-                        >
-                            Zurücksetzen
-                            <div className={css.progressBar} ref={progressBarRef}></div>
-                        </button>}
+                    <div className={css.resetContainer}>
+
+                        {projectLoadingState !== null ?
+                            <button className={projectLoadingState === "RESET" ? css.resetButtonLoading : css.buttonElementDisabled} disabled={true}
+                                    onMouseUp={handleMouseUp}
+                                    onMouseLeave={handleMouseUp}>
+                                {projectLoadingState === "RESET" ? "Lädt..." : "Warten"}
+                            </button>
+
+                            : <button
+                                className={isLoading ? css.resetButtonPressed : css.resetButton}
+                                onMouseDown={handleMouseDown}
+                                onMouseUp={handleMouseUp}
+                                onMouseLeave={handleMouseUp}
+                            >
+                                Zurücksetzen
+                                <div className={css.progressBar} ref={progressBarRef}></div>
+                            </button>}
                     </div>
 
                     <button className={css.buttonElement} onClick={onOpenHelp}>

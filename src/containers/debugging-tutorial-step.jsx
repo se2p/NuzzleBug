@@ -7,8 +7,8 @@ import PropTypes from "prop-types";
 import VirtualMachine from "scratch-vm";
 
 import {lock, unlock} from '../reducers/vm-status';
-import {runTest} from 'tutorial-tests';
 import asdProject2 from '!arraybuffer-loader!../components/debuggingTutorial/testProject/Scratch-Projekt(4).sb3';
+
 
 
 class DebuggingTutorialStep extends React.Component {
@@ -17,7 +17,6 @@ class DebuggingTutorialStep extends React.Component {
         this.onTest = this.onTest.bind(this);
         this.onNextStep = this.onNextStep.bind(this);
     }
-
 
     onTest() {
         this.props.setLoadingProject("TEST");

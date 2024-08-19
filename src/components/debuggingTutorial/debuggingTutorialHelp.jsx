@@ -1,5 +1,5 @@
 import css from "./debuggingTutorialHelp.css";
-import PropTypes from "prop-types";
+import PropTypes, {func} from "prop-types";
 import React, {useEffect, useRef} from "react";
 import dropdownIcon from "./images/icon--dropdown-selector.png";
 import infoIcon from "./images/icon--info.png"
@@ -29,6 +29,8 @@ const DebuggingTutorialHelp = props => {
         onCloseQuestionMessage,
         onToggleDiagramm,
         showDiagramm,
+        onShowDropdown,
+        showDropdown,
         ...posProps
     } = props;
 
@@ -116,12 +118,12 @@ const DebuggingTutorialHelp = props => {
                 <div className={isGapTextSolved ? css.dropdownDisabled : css.dropdown}>
                     <input className={css.dropdownBody} readOnly={isGapTextSolved} placeholder={"Anzahl eingeben"} type="text" value={answers[0]} onChange={(e) => setAnswer(0, e.target.value)}/>
 
-                    <div className={isGapTextSolved ? css.dropdownTestDisabled : css.dropdownTest}>
+                    <div className={isGapTextSolved ? css.dropdownTestDisabled : css.dropdownTest} onMouseEnter={() => isGapTextSolved ? {} : resetDropdownTimer("1")} onMouseLeave={() => isGapTextSolved ? {} : startDropdownTimer()}>
                         <img className={css.dropdownIcon} src={dropdownIcon} alt={"selectorIcon"}/>
-                        <div className={css.dropdownContent}>
+                        {showDropdown === "1" && <div className={css.dropdownContent}>
                             <span className={css.dropdownElement} onClick={() => setAnswer(0, "0")}>0</span>
                             <span className={css.dropdownElement} onClick={() => setAnswer(0, "unendlich")}>unendlich</span>
-                        </div>
+                        </div>}
                     </div>
                 </div>
                 <span className={css.textAnswerLine} style={{marginLeft: "10px"}}>{tutorial[step].question1.questionEnd}</span>
@@ -131,12 +133,12 @@ const DebuggingTutorialHelp = props => {
                 <span className={css.textAnswerLine} style={{marginRight: "10px"}}>{tutorial[step].question2.questionStart}</span>
                 <div className={isGapTextSolved ? css.dropdownDisabled : css.dropdown}>
                     <input className={css.dropdownBody} readOnly={isGapTextSolved} placeholder={"Anzahl eingeben"} type="text" value={answers[1]} onChange={(e) => setAnswer(1, e.target.value)}/>
-                    <div className={isGapTextSolved ? css.dropdownTestDisabled : css.dropdownTest}>
+                    <div className={isGapTextSolved ? css.dropdownTestDisabled : css.dropdownTest} onMouseEnter={() => isGapTextSolved ? {} : resetDropdownTimer("2")} onMouseLeave={() => isGapTextSolved ? {} : startDropdownTimer()}>
                         <img className={css.dropdownIcon} src={dropdownIcon} alt={"selectorIcon"}/>
-                        <div className={css.dropdownContent}>
+                        {showDropdown === "2" && <div className={css.dropdownContent}>
                             <span className={css.dropdownElement} onClick={() => setAnswer(1, "0")}>0</span>
                             <span className={css.dropdownElement} onClick={() => setAnswer(1, "unendlich")}>unendlich</span>
-                        </div>
+                        </div>}
                     </div>
                 </div>
                 <span className={css.textAnswerLine} style={{marginLeft: "10px"}}>{tutorial[step].question2.questionEnd}</span>
@@ -155,27 +157,40 @@ const DebuggingTutorialHelp = props => {
         </div>
     }
 
+
+
     const renderDropdown = () => {
         return (
             <div className={css.textAnswerContainer}>
                 <span className={css.textAnswerLine} style={{marginRight: "10px"}}>{tutorial[step]["questionText1_0"]}</span>
                 <div className={css.dropdown}>
                     <input className={css.dropdownBody} readOnly={true} placeholder={"Wähle aus"} type="text" value={answers[0]}/>
-                    <div className={css.dropdownTest}>
+                    <div className={css.dropdownTest} onMouseEnter={() => resetDropdownTimer("1")} onMouseLeave={() => startDropdownTimer()}>
                         <img className={css.dropdownIcon} src={dropdownIcon} alt={"selectorIcon"}/>
-                        <div className={css.dropdownContent}>
+                        {showDropdown !== null && <div className={css.dropdownContent}>
                             {Object.keys(tutorial[step]).filter((key) => (key.startsWith("option"))).map((key) =>
 
                                 <span className={css.dropdownElement} onClick={() => setAnswer(0, tutorial[step][key]["label"])}>
                                         {tutorial[step][key]["label"]}
                                     </span>)
                             }
-                        </div>
+                        </div>}
                     </div>
                 </div>
                 <span className={css.textAnswerLine} style={{marginLeft: "10px"}}>{tutorial[step]["questionText1_1"]}</span>
             </div>
         );
+    }
+    const timeoutIdRef = useRef(null);
+    const startDropdownTimer = function() {
+        timeoutIdRef.current = setTimeout(() => {
+            onShowDropdown(null);
+        }, 100);
+    }
+
+    const resetDropdownTimer = function(id) {
+        onShowDropdown(id);
+        clearTimeout(timeoutIdRef.current);
     }
 
     const parseQuestion = function (){

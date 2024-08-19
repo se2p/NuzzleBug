@@ -12,6 +12,7 @@ const SET_LAST_STEP = 'scratch-gui/debugging-tutorial-cards/SET_LAST_STEP';
 const RESET_COMPONENT = 'scratch-gui/debugging-tutorial-cards/RESET_COMPONENT';
 const SET_LAST_TUTORIAL = 'scratch-gui/debugging-tutorial-cards/SET_LAST_TUTORIAL';
 const SET_MULTI_ANSWER = 'scratch-gui/debugging-tutorial-cards/SET_MULTI_ANSWER';
+const SHOW_DROPDOWN = 'scratch-gui/debugging-tutorial-cards/SHOW_DROPDOWN';
 
 const initialState = { //TODO Remove logic from reducer!
     step: "1",
@@ -25,6 +26,7 @@ const initialState = { //TODO Remove logic from reducer!
     showDiagramm: true,
     lastStepNumber: -1,
     lastTutorial: null,
+    showDropdown: null,
 };
 
 const reducer = function (state, action) {
@@ -41,6 +43,7 @@ const reducer = function (state, action) {
                 baseState.selectedAnswers = [false, false, false, false, false, false];
                 baseState.isHelpVisible = false;
                 baseState.questionMessage = null;
+                baseState.showDropdown = null;
             }
             break;
         case ENTER_MULTI_ANSWER:
@@ -69,6 +72,7 @@ const reducer = function (state, action) {
             baseState.selectedAnswers = [false, false, false, false, false, false];
             baseState.isHelpVisible = false;
             baseState.questionMessage = null;
+            baseState.showDropdown = null;
             break;
         case SET_QUESTION_MSG:
             baseState.questionMessage = action.content;
@@ -88,12 +92,16 @@ const reducer = function (state, action) {
             baseState.stepStack = ["1"];
             baseState.solvedSteps = {};
             baseState.showDiagramm = true;
+            baseState.showDropdown = null;
             break;
         case SET_LAST_TUTORIAL:
             baseState.lastTutorial = action.tutorial;
             break;
         case SET_MULTI_ANSWER:
             baseState.selectedAnswers = action.answers;
+            break;
+        case SHOW_DROPDOWN:
+            baseState.showDropdown = action.show;
             break;
     }
     return baseState;
@@ -164,6 +172,10 @@ const setLastTutorial = function (tutorial) {
     return {type: SET_LAST_TUTORIAL, tutorial}
 }
 
+const showDropdown = function (show) {
+    return {type: SHOW_DROPDOWN, show}
+}
+
 export {
     reducer as default,
     initialState as debuggingTutorialInitialState,
@@ -181,4 +193,5 @@ export {
     resetComponent,
     setLastTutorial,
     setMultiAnswer,
+    showDropdown,
 };

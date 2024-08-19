@@ -6,7 +6,6 @@ import {
     onStepBack,
     onEnterMultiAnswer,
     setAnswer,
-    onGapTextButton,
     onCloseQuestionMessage,
     onToggleDiagramm,
     setStep,
@@ -16,7 +15,8 @@ import {
     setLastStepNumber,
     resetComponent,
     setLastTutorial,
-    setMultiAnswer,} from "../reducers/debugging-tutorial-help";
+    setMultiAnswer,
+    showDropdown,} from "../reducers/debugging-tutorial-help";
 import DebuggingTutorialStepComponent from '../components/debuggingTutorial/debuggingTutorialHelp.jsx';
 import PropTypes from "prop-types";
 
@@ -160,9 +160,10 @@ class DebuggingTutorialHelp extends React.Component {
 
         const tutorialStep = this.props.tutorial[curStep];
 
-        const isGapTextSolved = tutorialStep.questionType === "GAP_TEXT" //TODO
+        const isGapTextSolved = tutorialStep.questionType === "GAP_TEXT"
             && this.props.answers[0].toLowerCase() === tutorialStep.question1.questionSolution
             && this.props.answers[1].toLowerCase() === tutorialStep.question2.questionSolution;
+
         return (
             <DebuggingTutorialStepComponent
                 step={curStep}
@@ -203,6 +204,7 @@ DebuggingTutorialHelp.propTypes = {
     onGapTextButton: PropTypes.func,
     enterMultiAnswer: PropTypes.func,
     setMultiAnswer: PropTypes.func,
+    onShowDropdown: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -215,6 +217,7 @@ const mapStateToProps = state => ({
     level: state.scratchGui.debuggingTutorial.step,
     lastStepNumber: state.scratchGui.debuggingTutorial.lastStepNumber,
     lastTutorial: state.scratchGui.debuggingTutorial.lastTutorial,
+    showDropdown: state.scratchGui.debuggingTutorial.showDropdown,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -232,6 +235,7 @@ const mapDispatchToProps = dispatch => ({
     resetComponent: () => dispatch(resetComponent()),
     setLastTutorial: (tutorial) => dispatch(setLastTutorial(tutorial)),
     setMultiAnswer: (answers) => dispatch(setMultiAnswer(answers)),
+    onShowDropdown: (show) => dispatch(showDropdown(show)),
 });
 
 export default connect(
