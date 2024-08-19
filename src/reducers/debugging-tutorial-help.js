@@ -1,9 +1,6 @@
-import {string} from "to-style";
-
 const ENTER_MULTI_ANSWER = 'scratch-gui/debugging-tutorial-cards/ENTER_MULTI_ANSWER';
 const HELP = 'scratch-gui/debugging-tutorial-cards/HELP';
 const STEP_BACK = 'scratch-gui/debugging-tutorial-cards/STEP_BACK';
-const GAP_TEXT_BUTTON = 'scratch-gui/debugging-tutorial-cards/GAP_TEXT_BUTTON';
 const SET_ANSWER = 'scratch-gui/debugging-tutorial-cards/SET_ANSWER';
 const CLOSE_QUESTION = 'scratch-gui/debugging-tutorial-cards/CLOSE_QUESTION';
 const TOGGLE_DIAGRAMM = 'scratch-gui/debugging-tutorial-cards/TOGGLE_DIAGRAMM';
@@ -14,6 +11,7 @@ const ADD_SOLVED = 'scratch-gui/debugging-tutorial-cards/ADD_SOLVED';
 const SET_LAST_STEP = 'scratch-gui/debugging-tutorial-cards/SET_LAST_STEP';
 const RESET_COMPONENT = 'scratch-gui/debugging-tutorial-cards/RESET_COMPONENT';
 const SET_LAST_TUTORIAL = 'scratch-gui/debugging-tutorial-cards/SET_LAST_TUTORIAL';
+const SET_MULTI_ANSWER = 'scratch-gui/debugging-tutorial-cards/SET_MULTI_ANSWER';
 
 const initialState = { //TODO Remove logic from reducer!
     step: "1",
@@ -51,14 +49,6 @@ const reducer = function (state, action) {
         case HELP:
             baseState.isHelpVisible = !baseState.isHelpVisible;
             break;
-        case GAP_TEXT_BUTTON:
-            if (baseState.answers[2] === "") {
-                baseState.answers[2] = "true";
-            } else {
-                baseState.answers[2] === "true" ?
-                    baseState.answers[2] = "false" : baseState.answers[2] = "true";
-            }
-            break;
         case SET_ANSWER:
             baseState.answers[action.index] = action.value;
             break;
@@ -85,7 +75,6 @@ const reducer = function (state, action) {
             break;
         case ADD_SOLVED:
             addToKey(baseState.solvedSteps, action.step, action.solution);
-            console.log("Solved Steps: " + JSON.stringify(baseState.solvedSteps));
             break;
         case SET_LAST_STEP:
             baseState.lastStepNumber = action.step;
@@ -103,21 +92,28 @@ const reducer = function (state, action) {
         case SET_LAST_TUTORIAL:
             baseState.lastTutorial = action.tutorial;
             break;
+        case SET_MULTI_ANSWER:
+            baseState.selectedAnswers = action.answers;
+            break;
     }
     return baseState;
 };
 
 function addToKey(obj, key, element) {
     if (obj.hasOwnProperty(key)) {
-        if (!obj[key].includes(element)) obj[key].push(element);
+        obj[key].push(element);
     } else {
         obj[key] = [element];
     }
 }
 
-const onEnterMultiAnswer = function (answer) {
+const onEnterMultiAnswer = function (answer) { //TODO REMOVE
     let index = answer.charAt(6) - 1; //option1 -> 0
     return {type: ENTER_MULTI_ANSWER, index};
+}
+
+const setMultiAnswer = function (answers) {
+    return {type: SET_MULTI_ANSWER, answers};
 }
 
 const onHelp = function () {
@@ -126,10 +122,6 @@ const onHelp = function () {
 
 const onStepBack = function () {
     return {type: STEP_BACK};
-}
-
-const onGapTextButton = function () {
-    return {type: GAP_TEXT_BUTTON};
 }
 
 const setAnswer = function (value, index) {
@@ -179,7 +171,6 @@ export {
     onStepBack,
     onEnterMultiAnswer,
     setAnswer,
-    onGapTextButton,
     onCloseQuestionMessage,
     onToggleDiagramm,
     setStep,
@@ -189,4 +180,5 @@ export {
     setLastStepNumber,
     resetComponent,
     setLastTutorial,
+    setMultiAnswer,
 };

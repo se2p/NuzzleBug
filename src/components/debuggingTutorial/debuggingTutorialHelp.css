@@ -286,6 +286,7 @@
     border-radius: 5px;
     display: flex;
     align-items: center;
+    margin-bottom: 10px;
 }
 
 .help-box-header {
@@ -354,6 +355,7 @@
     border-radius: 5px;
     position: relative;
     flex-shrink: 0;
+    margin-bottom: 10px;
 }
 
 .footer-button:hover {

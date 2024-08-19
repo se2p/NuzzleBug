@@ -15,7 +15,8 @@ import {
     addSolvedStep,
     setLastStepNumber,
     resetComponent,
-    setLastTutorial,} from "../reducers/debugging-tutorial-help";
+    setLastTutorial,
+    setMultiAnswer,} from "../reducers/debugging-tutorial-help";
 import DebuggingTutorialStepComponent from '../components/debuggingTutorial/debuggingTutorialHelp.jsx';
 import PropTypes from "prop-types";
 
@@ -26,6 +27,8 @@ class DebuggingTutorialHelp extends React.Component {
         this.checkAnswer = this.checkAnswer.bind(this);
         this.setAnswer = this.setAnswer.bind(this);
         this.onGapTextButton = this.onGapTextButton.bind(this);
+        this.solveStep = this.solveStep.bind(this);
+        this.onEnterMultiAnswer = this.onEnterMultiAnswer.bind(this);
     }
 
     checkAnswer(step, tutorial) {
@@ -45,7 +48,6 @@ class DebuggingTutorialHelp extends React.Component {
                 this.props.addSolvedStep(step, this.props.answers[0]);
                 this.props.setStep(tutorial[this.props.answers[0]]["next"].slice(6)); //step1_12 -> 12
                 this.props.reset();
-
                 break;
             case "MULTIPLE_CHOICE":
                 if (JSON.stringify(this.props.selectedAnswers) === JSON.stringify(tutorial["solution"])) {
@@ -92,6 +94,33 @@ class DebuggingTutorialHelp extends React.Component {
         }
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.level !== this.props.level) {
+            const curStep = "step" + (this.props.stepNumber + 1).toString() + "_" + this.props.level;
+            const tutorialStep = this.props.tutorial[curStep];
+            this.solveStep(curStep, tutorialStep);
+        }
+    }
+
+    solveStep(step, tutorial) {
+        if (!this.props.solvedSteps.hasOwnProperty(step)) return;
+        switch (tutorial["questionType"]) {
+            case "SINGLE_CHOICE":
+            case "DROPDOWN":
+                this.props.onSetAnswer(0, this.props.solvedSteps[step][this.props.solvedSteps[step].length - 1])
+                break;
+            case "MULTIPLE_CHOICE":
+                console.log("set multi: " + JSON.stringify(tutorial["solution"]));
+                this.props.setMultiAnswer(tutorial["solution"]);
+                break;
+            case "GAP_TEXT":
+                this.props.onSetAnswer(0, tutorial.question1.questionSolution);
+                this.props.onSetAnswer(1, tutorial.question2.questionSolution);
+                this.props.onSetAnswer(2,this.props.solvedSteps[step][this.props.solvedSteps[step].length - 1]);
+                break;
+        }
+    }
+
     setAnswer(index, value, step) {
         this.props.onSetAnswer(index, value);
         if (this.props.solvedSteps.hasOwnProperty(step) && this.props.solvedSteps[step].includes(value)) {
@@ -103,6 +132,11 @@ class DebuggingTutorialHelp extends React.Component {
 
     onGapTextButton(step) {
         this.setAnswer(2, this.props.answers[2] === "true" ? "false" : "true", step);
+    }
+
+    onEnterMultiAnswer(step, answers) {
+        this.props.enterMultiAnswer(answers);
+        this.props.addSolvedStep(step, "solved :)");
     }
 
     componentDidMount() {
@@ -136,6 +170,7 @@ class DebuggingTutorialHelp extends React.Component {
                 onCheckAnswer={() => this.checkAnswer(curStep, tutorialStep)}
                 setAnswer={(index, value) => this.setAnswer(index, value, curStep)}
                 onGapTextButton={() => this.onGapTextButton(curStep)}
+                onEnterMultiAnswer={(answer) => this.onEnterMultiAnswer(curStep, answer)}
                 {...this.props}
             />
         );
@@ -166,6 +201,8 @@ DebuggingTutorialHelp.propTypes = {
     setLastTutorial: PropTypes.func,
     onSetAnswer: PropTypes.func,
     onGapTextButton: PropTypes.func,
+    enterMultiAnswer: PropTypes.func,
+    setMultiAnswer: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -183,9 +220,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     onHelp: () => dispatch(onHelp()),
     onStepBack: () => dispatch(onStepBack()),
-    onEnterMultiAnswer: (answer) => dispatch(onEnterMultiAnswer(answer)),
+    enterMultiAnswer: (answer) => dispatch(onEnterMultiAnswer(answer)),
     onSetAnswer: (index, value) => dispatch(setAnswer(value, index)),
-    onGapTextButtonssssssssss: () => dispatch(onGapTextButton()),
     onCloseQuestionMessage: () => dispatch(onCloseQuestionMessage()),
     onToggleDiagramm: () => dispatch(onToggleDiagramm()),
     setStep: (step) => dispatch(setStep(step)),
@@ -195,6 +231,7 @@ const mapDispatchToProps = dispatch => ({
     setLastStepNumber: (step) => dispatch(setLastStepNumber(step)),
     resetComponent: () => dispatch(resetComponent()),
     setLastTutorial: (tutorial) => dispatch(setLastTutorial(tutorial)),
+    setMultiAnswer: (answers) => dispatch(setMultiAnswer(answers)),
 });
 
 export default connect(

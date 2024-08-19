@@ -147,7 +147,7 @@ const DebuggingTutorialStep = props => {
                         <FormattedMessage //TODO TRANSLATE
                             defaultMessage="Frage Euli"
                             description="Title for button to shrink question category"
-                            id="gui.cards.shrink"
+                            id="gui.cards.shrinkk"
                         />
                     </button>
 
