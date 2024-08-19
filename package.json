@@ -70,7 +70,6 @@
         "react-dom": "^16.0.0",
         "react-draggable": "3.0.5",
         "react-dropzone": "^14.2.3",
-        "react-ga": "2.5.3",
         "react-intl": "2.9.0",
         "react-modal": "3.9.1",
         "react-popover": "0.5.10",
