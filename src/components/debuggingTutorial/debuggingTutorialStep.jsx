@@ -7,6 +7,7 @@ import failed from "./images/icon--failed.png"
 import failed_debugging from "./images/icon--failed-debugging.png"
 import failed_test from "./images/icon--failed-test.png"
 import {FormattedMessage} from "react-intl";
+import owlIcon from "./images/owl-b.svg"
 
 const DebuggingTutorialStep = props => {
     const {
@@ -144,11 +145,14 @@ const DebuggingTutorialStep = props => {
                     </div>
 
                     <button className={css.buttonElement} onClick={onOpenHelp}>
+
                         <FormattedMessage //TODO TRANSLATE
                             defaultMessage="Frage Euli"
                             description="Title for button to shrink question category"
                             id="gui.cards.shrinkk"
                         />
+                        <img alt={"Owl-Icon"} style={{width:"auto", height: "30px", marginLeft:"10px"}} src={owlIcon}/>
+
                     </button>
 
                     {projectLoadingState !== null ?
@@ -157,7 +161,7 @@ const DebuggingTutorialStep = props => {
                         </button>
                         : <button className={(testResults !== null && testResults.passed) ? css.nextButton : css.buttonElement}
                             onClick={(testResults !== null && testResults.passed) ? nextStep : onStartTests}>
-                        {(testResults !== null && testResults.passed) ? "Weiter gehts!" : "Testen"}
+                        {(testResults !== null && testResults.passed) ? "Weiter gehts!" : "Überprüfen"}
                     </button>}
                 </div>
 
@@ -185,8 +189,7 @@ const DebuggingTutorialStep = props => {
     }
 
     const getResultText = () => {
-        if (getFeedbackText()) return "Sieht aus, als hättest du aus Versehen weitere Fehler eingebaut. " +
-            "Falls du willst, kannst du das Projekt jederzeit zurücksetzen."
+        if (getFeedbackText()) return "Sieht aus, als hätten sich zusätzliche Fehler eingeschlichen.";
         return testResults.passed ? "Du hast alle Fehler gefunden." : "Du hast leider nicht alle Fehler gefunden."
     }
 

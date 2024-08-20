@@ -166,6 +166,7 @@ class DebuggingTutorialHelp extends React.Component {
 
         return (
             <DebuggingTutorialStepComponent
+                cardRef={ref => (this.myRef = ref)}
                 step={curStep}
                 isGapTextSolved={isGapTextSolved}
                 onCheckAnswer={() => this.checkAnswer(curStep, tutorialStep)}

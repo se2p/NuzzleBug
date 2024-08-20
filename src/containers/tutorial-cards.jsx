@@ -89,6 +89,10 @@ class TutorialCards extends React.Component {
         this.props.startTutorial();
     }
 
+    scrollToBottom() {
+        this.myRef.scrollTop = this.myRef.scrollHeight; //TODO NUTZEN!!!!!!!!!!
+    }
+
     render () {
         const tutorialsData = this.processTutorials();
 

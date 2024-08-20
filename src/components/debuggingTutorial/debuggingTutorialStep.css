@@ -97,7 +97,9 @@
     background-color: hsla(215, 100%, 65%, 1);
     min-width: 150px;
     height: 45px;
-    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .button-element:hover {

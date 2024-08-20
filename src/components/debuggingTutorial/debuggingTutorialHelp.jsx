@@ -31,24 +31,11 @@ const DebuggingTutorialHelp = props => {
         showDiagramm,
         onShowDropdown,
         showDropdown,
+        cardRef,
         ...posProps
     } = props;
 
-    const endRef = useRef(null);
     const stepRegex = /^step[1-9]_1$/;
-
-    useEffect(() => {
-        const scrollToBottom = () => {
-            if (endRef.current) {
-                endRef.current.scrollIntoView({ behavior: "smooth" });
-            }
-        };
-
-        // Ein kleines Timeout setzen, um sicherzustellen, dass der Inhalt geladen ist
-        const timer = setTimeout(scrollToBottom, 0);
-        return () => clearTimeout(timer);
-    }, [step]);
-
 
     const gapTextButtonState = function () {
         if (answers[2] === "") {
