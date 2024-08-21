@@ -250,6 +250,7 @@ const TutorialCards = props => {
                         onStartTutorial={onStartTutorial}
                         vm={vm}
                         stepCount={totalSteps}
+                        tutorialIndexData={tutorialIndexData}
                     />;
                 } else {
                     return <TutorialStep
@@ -270,6 +271,7 @@ const TutorialCards = props => {
                     step={step}
                     stepCount={totalSteps}
                     onIncreaseStep={onNextStep}
+                    tutorialIndexData={tutorialIndexData}
                 />;
             case "DEBUGGING_HELP":
                 return <DebuggingTutorialHelp

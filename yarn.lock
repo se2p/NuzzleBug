@@ -11279,9 +11279,9 @@ tunnel-agent@^0.6.0:
   dependencies:
     safe-buffer "^5.0.1"
 
-"tutorial-tests@git+https://gitlab+deploy-token-15:qc77PRV6uAkzGH-71sXW@gitlab.infosun.fim.uni-passau.de/scratch-tutorial/tutorials.git":
+"tutorial-tests@git+https://gitlab+deploy-token-15:qc77PRV6uAkzGH-71sXW@gitlab.infosun.fim.uni-passau.de/scratch-tutorial/tutorials.git#debugging-tutorial":
   version "0.1.0"
-  resolved "git+https://gitlab+deploy-token-15:qc77PRV6uAkzGH-71sXW@gitlab.infosun.fim.uni-passau.de/scratch-tutorial/tutorials.git#7f685ca87689a439f4f52722266cd51f5d796914"
+  resolved "git+https://gitlab+deploy-token-15:qc77PRV6uAkzGH-71sXW@gitlab.infosun.fim.uni-passau.de/scratch-tutorial/tutorials.git#e1af41d62078b133edd9220666ec241ce4938bf3"
   dependencies:
     whisker-main "git+https://gitlab+deploy-token-13:NRiPPX3fbpKk4b2rs5t2@gitlab.infosun.fim.uni-passau.de/se2/whisker/whisker-main.git#master"
 

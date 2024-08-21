@@ -201,8 +201,8 @@ const DebuggingTutorialHelp = props => {
         if (questionMessage === null || questionMessage === undefined) return null;
 
         const isCorrection = questionMessage.includes("[REVISITING]");
-        const primaryColor= isCorrection ? "#4D97FFFF" : "#623d51ff";
-        const secondaryColor= isCorrection ? "#b4d3ffff" : "#82645eff";
+        const primaryColor= isCorrection ? "#FF1DACFF" : "#ff8a1b";
+        const secondaryColor= isCorrection ? "#ff7dcb" : "#fdb17b";
 
         return <div className={css.helpBox} style={{backgroundColor: secondaryColor}}>
             <div className={css.helpBoxHeader} style={{backgroundColor: primaryColor}}>Hinweis:</div>
@@ -223,7 +223,7 @@ const DebuggingTutorialHelp = props => {
         if (questionMessage === null || questionMessage === undefined) return null;
 
         const isCorrection = questionMessage.includes("[REVISITING]");
-        const primaryColor= isCorrection ? "#4D97FFFF" : "#82645eff";
+        const primaryColor= isCorrection ? "#FF1DACFF" : "#ff8a1b";
 
         return <>
             <div className={css.footerBorder} style={{borderColor: primaryColor}}/>
@@ -268,9 +268,6 @@ const DebuggingTutorialHelp = props => {
                     {renderMsgBorder()}
                 </button>
             </div>
-
-
-            <div ref={endRef} />
         </div>
     );
 };

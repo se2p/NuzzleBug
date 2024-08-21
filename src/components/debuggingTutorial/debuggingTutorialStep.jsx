@@ -44,30 +44,19 @@ const DebuggingTutorialStep = props => {
             .sort((a, b) => b.testId.localeCompare(a.testId))
             .map(e => {
                 const isCurrentStep = e.testId.charAt(4) === (step + 1).toString();
-                const isPass = e.result === "pass";
+                const passed = e.result === "pass";
                 const isDebuggingError = e.testDescription === "DEBUGGING_ERROR";
 
-                const resultIcon = isCurrentStep ? (isPass ? accept : (isDebuggingError ? failed_debugging : failed_test)) : failed_test;
-                const resultContent = (
-                    <div className={css.resultItem}>
-                        <span style={{ marginLeft: "10px" }}>{e.test}</span>
-                        <div style={{ display: "flex", alignItems: "center", position: "relative" }}>
-                            <img alt="resultIcon" src={resultIcon} style={{ width: "20px", height: "auto", marginRight: "7px" }} />
-                            <div style={{ position: "absolute", left: "20px", width: "7px", height: "8px", backgroundColor: "#4D97FFFF", top: "27%" }} />
-                            <img alt="resultIcon" src={failed} style={{ width: "20px", height: "auto", marginRight: "10px" }} />
-                        </div>
-                    </div>
-                );
-
                 if (isCurrentStep) {
-                    return isPass ? (
-                        <div className={css.resultItem}>
-                            <span style={{ marginLeft: "10px" }}>{e.test}</span>
-                            <img alt="resultIcon" src={accept} style={{ width: "20px", height: "auto", marginRight: "10px" }} />
-                        </div>
-                    ) : resultContent;
-                } else if (!isPass) {
-                    return resultContent;
+                    return <div className={css.resultItem}>
+                        <span style={{ marginLeft: "10px", color: passed? "#48a231" : "#a60b0b"}}>{e.test}</span>
+                        {!isDebuggingError && !passed && <img alt="resultIcon" src={failed_debugging} style={{ width: "20px", height: "auto", marginRight: "7px" }} />}
+                    </div>
+                } else if (!passed) {
+                    return <div className={css.resultItem}>
+                        <span style={{ marginLeft: "10px", color: "#a60b0b"}}>{e.test}</span>
+                        <img alt="resultIcon" src={failed_debugging} style={{ width: "20px", height: "auto", marginRight: "7px" }} />
+                    </div>
                 }
             });
     };

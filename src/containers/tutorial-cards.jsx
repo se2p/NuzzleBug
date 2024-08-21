@@ -107,6 +107,7 @@ class TutorialCards extends React.Component {
             }
             tutorialMessages = messages.default;
         }
+        console.log("selected: " + this.props.selectedTutorial + "  /  " + JSON.stringify(tutorial))
 
         let guiMessagesContainer;
         try {
@@ -121,8 +122,6 @@ class TutorialCards extends React.Component {
         const title = this.props.isMenuVisible ? guiMessages.headerTitle : tutorialMessages.title;
         const homeButtonTitle = guiMessages.homeButtonTitle;
         const backButtonTitle = guiMessages.backButtonTitle;
-
-
 
         return (
             <TutorialCardsComponent

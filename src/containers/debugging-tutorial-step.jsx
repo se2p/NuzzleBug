@@ -8,6 +8,7 @@ import VirtualMachine from "scratch-vm";
 
 import {lock, unlock} from '../reducers/vm-status';
 import asdProject2 from '!arraybuffer-loader!../components/debuggingTutorial/testProject/Scratch-Projekt(4).sb3';
+import {runTest} from "tutorial-tests";
 
 
 
@@ -35,17 +36,17 @@ class DebuggingTutorialStep extends React.Component {
 
     onNextStep() {
         this.props.setLoadingProject("NEXT");
-        this.props.onIncreaseStep();
         this.props.resetStep();
         this.props.vm.start();
         this.props.vm.clear();
         this.props.lockVM();
-        this.props.vm.loadProject(asdProject2)
-            .catch(e => console.log("Error while loading project: " + e.toString())) //TODO Load right level
+        this.props.vm.loadProject(this.props.tutorialIndexData["project" + (this.props.step + 2).toString()])
+            .catch(e => console.log("Error while loading project: " + e.toString())) //TODO Stop loading on end
             .finally(() => {
                 this.props.unlockVM();
                 this.props.setLoadingProject(null);
             });
+        this.props.onIncreaseStep();
     }
 
     onResetProject() {
@@ -53,7 +54,7 @@ class DebuggingTutorialStep extends React.Component {
         this.props.vm.start();
         this.props.vm.clear();
         this.props.lockVM();
-        this.props.vm.loadProject(asdProject2)
+        this.props.vm.loadProject(this.props.tutorialIndexData["project" + (this.props.step + 1).toString()])
             .catch(e => console.log("Error while resetting project: " + e.toString()))
             .finally(() => {
                 this.props.unlockVM();
@@ -62,7 +63,6 @@ class DebuggingTutorialStep extends React.Component {
 
     render () {
         const reachedLastStep = (this.props.step === this.props.stepCount);
-
         return (
             <DebuggingTutorialStepComponent
                 onStartTests={() => this.onTest()}
@@ -74,9 +74,6 @@ class DebuggingTutorialStep extends React.Component {
         );
     }
 }
-
-
-
 
 DebuggingTutorialStep.propTypes = {
     onOpenHelp: PropTypes.func,
@@ -98,6 +95,7 @@ DebuggingTutorialStep.propTypes = {
     stepCount: PropTypes.number,
     setLoading: PropTypes.func,
     setLoadingProject: PropTypes.func,
+    tutorialIndexData: PropTypes.any,
 };
 
 const mapStateToProps = state => ({
