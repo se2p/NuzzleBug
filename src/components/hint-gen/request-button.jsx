@@ -243,12 +243,16 @@ start sound (Meow v)`;
         const prePromptStudentSolution = 'This is the student solution:';
         const prePromptMasterSolution = 'This is the master solution:';
         const postPrompt = 'Give the next step hint. Give only the hint. Do not give a code solution.';
+        // const language = 'german';
+        const languagePrompt = `Answer in the language with this locale key: ${this.props.locale}`;
+
         // Construct the full prompt
         const fullPrompt = `${prePromptStudentSolution}\n
             ${scratchblocks}\n
             ${prePromptMasterSolution}\n
             ${this.getMasterSolution()}\n
-            ${postPrompt}`;
+            ${postPrompt}\n
+            ${languagePrompt}`;
         const requestBody = {
             model: 'gpt-4o',
             messages: [
@@ -348,7 +352,8 @@ RequestHintButton.propTypes = {
     }),
     saveProjectSb3: PropTypes.func,
     loadProjectSb3: PropTypes.func,
-    toJson: PropTypes.func
+    toJson: PropTypes.func,
+    locale: PropTypes.string
 };
 
 RequestHintButton.defaultProps = {
@@ -361,7 +366,8 @@ const mapStateToProps = state => ({
     hintsExplanationCard: state.scratchGui.hintsExplanationCard,
     saveProjectSb3: state.scratchGui.vm.saveProjectSb3.bind(state.scratchGui.vm),
     loadProjectSb3: state.scratchGui.vm.loadProject.bind(state.scratchGui.vm),
-    toJson: state.scratchGui.vm.toJSON.bind(state.scratchGui.vm)
+    toJson: state.scratchGui.vm.toJSON.bind(state.scratchGui.vm),
+    locale: state.locales.locale
 });
 
 const mapDispatchToProps = () => ({});
