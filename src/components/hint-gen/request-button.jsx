@@ -81,14 +81,21 @@ class RequestHintButton extends React.Component {
         this.props.hintsExplanationCard.content = 'Fetching Hints...';
         this.props.vm.emitWorkspaceUpdate();
 
-        // const enable = () => this.setState({enabled: true});
+        const enable = () => this.setState({enabled: true});
 
         // this.requestHints()
         //     .then(h => this.showHints(h))
         //     .then(enable())
         //     .catch(() => enable());
 
-        this.showHints(this.getGPTHints());
+        this.showHintsWithGPTHints();
+        enable();
+
+    }
+
+    async showHintsWithGPTHints () {
+        const hints = await this.getGPTHints();
+        this.showHints(hints);
     }
 
     /**
@@ -117,12 +124,14 @@ class RequestHintButton extends React.Component {
 
         if (testsSuccessFul) {
             this.props.hintsExplanationCard.content = testsSuccessfulMessage;
-        } else if (hints.hints.length === 0) {
-            this.props.hintsExplanationCard.content = 'No hints found. You program seems to already be correct.';
-        } else {
-            this.props.hintsExplanationCard.content = hints;
-            this.createBlockAnnotations(hints.hints);
         }
+        // else if (hints.hints.length === 0) {
+        //     this.props.hintsExplanationCard.content = 'No hints found. You program seems to already be correct.';
+        // }
+        // else {
+        //     this.props.hintsExplanationCard.content = hints;
+        //     this.createBlockAnnotations(hints.hints);
+        // }
 
         this.props.hintsExplanationCard.visible = true;
         this.props.vm.emitWorkspaceUpdate();
@@ -216,10 +225,49 @@ class RequestHintButton extends React.Component {
         this.props.vm.emitWorkspaceUpdate();
     }
 
-    getGPTHints () {
-        return {testsSuccessFul: 'success',
-            testsSuccessfulMessage: 'hint generation successful',
-            hints: ['hint1', 'hint2']};
+    async convertScratchJsonToScratchblocks (projectJson) {
+        const url = 'https://scratch.fim.uni-passau.de/litterbox-api/converter/scratchblocks';
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: projectJson
+            });
+
+            if (!response.ok) {
+                throw new Error('Litterbox was not able to transform the provided project');
+            }
+
+            return await response.text();
+        } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error('Error converting Scratch project JSON to Scratchblocks:', error);
+            throw error;
+        }
+    }
+
+    async getGPTHints () {
+        const projectJson = this.props.toJson();
+
+        try {
+            const scratchblocks = await this.convertScratchJsonToScratchblocks(projectJson);
+            return {
+                testsSuccessFul: true,
+                testsSuccessfulMessage: scratchblocks,
+                hints: [{hintId: 1, value: 'hint'}]
+            };
+        } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error('Failed to convert Scratch project JSON to Scratchblocks:', error);
+            return {
+                testsSuccessFul: false,
+                testsSuccessfulMessage: 'Conversion failed',
+                hints: [{hintId: 1, value: 'hint'}]
+            };
+        }
     }
 
     generateRandomHint () {
@@ -242,6 +290,7 @@ class RequestHintButton extends React.Component {
 }
 
 RequestHintButton.propTypes = {
+    // eslint-disable-next-line react/no-unused-prop-types
     enabled: PropTypes.bool,
     vm: PropTypes.instanceOf(VirtualMachine),
     hintsExplanationCard: PropTypes.shape({
@@ -253,7 +302,8 @@ RequestHintButton.propTypes = {
         dragging: PropTypes.bool
     }),
     saveProjectSb3: PropTypes.func,
-    loadProjectSb3: PropTypes.func
+    loadProjectSb3: PropTypes.func,
+    toJson: PropTypes.func
 };
 
 RequestHintButton.defaultProps = {
@@ -265,9 +315,10 @@ const mapStateToProps = state => ({
     vm: state.scratchGui.vm,
     hintsExplanationCard: state.scratchGui.hintsExplanationCard,
     saveProjectSb3: state.scratchGui.vm.saveProjectSb3.bind(state.scratchGui.vm),
-    loadProjectSb3: state.scratchGui.vm.loadProject.bind(state.scratchGui.vm)
+    loadProjectSb3: state.scratchGui.vm.loadProject.bind(state.scratchGui.vm),
+    toJson: state.scratchGui.vm.toJSON.bind(state.scratchGui.vm)
 });
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = () => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(RequestHintButton);
