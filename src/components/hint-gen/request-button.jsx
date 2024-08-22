@@ -88,14 +88,10 @@ class RequestHintButton extends React.Component {
         //     .then(enable())
         //     .catch(() => enable());
 
-        this.showHintsWithGPTHints();
-        enable();
-
-    }
-
-    async showHintsWithGPTHints () {
-        const hints = await this.getGPTHints();
-        this.showHints(hints);
+        this.getGPTHints()
+            .then(hints => this.showHints(hints))
+            .then(enable())
+            .catch(() => enable());
     }
 
     /**
@@ -124,14 +120,12 @@ class RequestHintButton extends React.Component {
 
         if (testsSuccessFul) {
             this.props.hintsExplanationCard.content = testsSuccessfulMessage;
+        } else if (hints.hints.length === 0) {
+            this.props.hintsExplanationCard.content = 'No hints found. You program seems to already be correct.';
+        } else {
+            this.props.hintsExplanationCard.content = hints;
+            this.createBlockAnnotations(hints.hints);
         }
-        // else if (hints.hints.length === 0) {
-        //     this.props.hintsExplanationCard.content = 'No hints found. You program seems to already be correct.';
-        // }
-        // else {
-        //     this.props.hintsExplanationCard.content = hints;
-        //     this.createBlockAnnotations(hints.hints);
-        // }
 
         this.props.hintsExplanationCard.visible = true;
         this.props.vm.emitWorkspaceUpdate();
@@ -249,25 +243,22 @@ class RequestHintButton extends React.Component {
         }
     }
 
-    async getGPTHints () {
+    getGPTHints () {
         const projectJson = this.props.toJson();
 
-        try {
-            const scratchblocks = await this.convertScratchJsonToScratchblocks(projectJson);
-            return {
-                testsSuccessFul: true,
-                testsSuccessfulMessage: scratchblocks,
-                hints: [{hintId: 1, value: 'hint'}]
-            };
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error('Failed to convert Scratch project JSON to Scratchblocks:', error);
-            return {
-                testsSuccessFul: false,
-                testsSuccessfulMessage: 'Conversion failed',
-                hints: [{hintId: 1, value: 'hint'}]
-            };
-        }
+        return this.convertScratchJsonToScratchblocks(projectJson)
+            .then(scratchblocks => ({
+                testsSuccessFul: 'success',
+                testsSuccessfulMessage: scratchblocks
+            }))
+            .catch(error => {
+                // eslint-disable-next-line no-console
+                console.error('Failed to convert Scratch project JSON to Scratchblocks:', error);
+                return {
+                    testsSuccessFul: 'failure',
+                    testsSuccessfulMessage: 'Conversion failed'
+                };
+            });
     }
 
     generateRandomHint () {
