@@ -219,45 +219,98 @@ class RequestHintButton extends React.Component {
         this.props.vm.emitWorkspaceUpdate();
     }
 
-    async convertScratchJsonToScratchblocks (projectJson) {
+    getMasterSolution () {
+        return `//Sprite: Stage
+//Sprite: Sprite1
+//Script: A^ysK3~oo^xZU4KL9c+F
+when green flag clicked
+wait (1) seconds
+set volume to (100) %
+start sound (Meow v)`;
+    }
+
+    sendScratchblocksToChatGPT (scratchblocks) {
+        const apiUrl = 'https://api.openai.com/v1/chat/completions';
+        // Configuration Variables
+        const apiKey = 'sk-proj-7GX9UaYfPMNo2W2jei5dT3BlbkFJkknPBtzePuevc6lKVZN0'; // Replace with your actual API key
+        const systemRole = 'You are a teacher. I’m a student currently learning Scratch.' +
+            'You only give hints for the next step to implement.' +
+            "You have the master solution as a reference and the student's solution which needs the next step hint." +
+            'Do not repeat the provided code. Do not show scratch blocks.' +
+            'If the student solution has already the same functionality as the master solution,' +
+            'than do not give a hint but a success message!';
+            // "Don't be too strict, leave some room for creativity of the students."; // leads to hallucinations in the end
+        const prePromptStudentSolution = 'This is the student solution:';
+        const prePromptMasterSolution = 'This is the master solution:';
+        const postPrompt = 'Give the next step hint. Give only the hint. Do not give a code solution.';
+        // Construct the full prompt
+        const fullPrompt = `${prePromptStudentSolution}\n
+            ${scratchblocks}\n
+            ${prePromptMasterSolution}\n
+            ${this.getMasterSolution()}\n
+            ${postPrompt}`;
+        const requestBody = {
+            model: 'gpt-4o',
+            messages: [
+                {role: 'system', content: systemRole},
+                {role: 'user', content: fullPrompt}
+            ],
+            max_tokens: 1000,
+            temperature: 0.7
+        };
+
+        return fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify(requestBody)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => data.choices[0].message.content);
+    }
+
+    convertScratchJsonToScratchblocks (projectJson) {
         const url = 'https://scratch.fim.uni-passau.de/litterbox-api/converter/scratchblocks';
 
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: projectJson
+        return fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(projectJson)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Litterbox was not able to transform the provided project');
+                }
+                return response.text();
             });
-
-            if (!response.ok) {
-                // eslint-disable-next-line no-console
-                console.error('Litterbox was not able to transform the provided project');
-            }
-
-            return await response.text();
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error('Error converting Scratch project JSON to Scratchblocks:', error);
-            throw error;
-        }
     }
 
     getGPTHints () {
         const projectJson = this.props.toJson();
 
-        return this.convertScratchJsonToScratchblocks(projectJson)
-            .then(scratchblocks => ({
-                testsSuccessFul: 'success',
-                testsSuccessfulMessage: scratchblocks
-            }))
+        return this.convertScratchJsonToScratchblocks(JSON.parse(projectJson))
+            .then(scratchblocks =>
+                this.sendScratchblocksToChatGPT(scratchblocks)
+                    .then(chatGptResponse => ({
+                        testsSuccessFul: 'success',
+                        testsSuccessfulMessage: chatGptResponse
+                    }))
+            )
             .catch(error => {
                 // eslint-disable-next-line no-console
-                console.error('Failed to convert Scratch project JSON to Scratchblocks:', error);
+                console.error('Failed to get GPT hints:', error);
                 return {
                     testsSuccessFul: 'failure',
-                    testsSuccessfulMessage: 'Conversion failed'
+                    testsSuccessfulMessage: 'Conversion or ChatGPT API call failed'
                 };
             });
     }
