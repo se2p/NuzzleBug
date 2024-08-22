@@ -232,7 +232,8 @@ class RequestHintButton extends React.Component {
             });
 
             if (!response.ok) {
-                throw new Error('Litterbox was not able to transform the provided project');
+                // eslint-disable-next-line no-console
+                console.error('Litterbox was not able to transform the provided project');
             }
 
             return await response.text();
