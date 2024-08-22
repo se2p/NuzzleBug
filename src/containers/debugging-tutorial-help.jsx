@@ -157,7 +157,6 @@ class DebuggingTutorialHelp extends React.Component {
             curStep = "step" + (this.props.stepNumber + 1).toString() + "_" + this.props.level;
         }
 
-
         const tutorialStep = this.props.tutorial[curStep];
 
         const isGapTextSolved = tutorialStep.questionType === "GAP_TEXT"

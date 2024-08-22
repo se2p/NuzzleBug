@@ -22,13 +22,6 @@ const reducer = function (state, action) {
     }
     const baseState = JSON.parse(JSON.stringify(state));
     switch (action.type) {
-        case RESET_STEP:
-            baseState.isErrorInfoVisible = false;
-            baseState.showTestDetail = false;
-            baseState.testResults = null;
-            baseState.projectLoadingState = null;
-            baseState.isLoading = false;
-            break;
         case ERROR_CLICKED:
             baseState.isErrorInfoVisible = !baseState.isErrorInfoVisible;
             break;
@@ -43,6 +36,13 @@ const reducer = function (state, action) {
             break;
         case SET_LOADING_PROJECT:
             baseState.projectLoadingState = action.loadingType;
+            break;
+        case RESET_STEP:
+            baseState.isErrorInfoVisible = false;
+            baseState.showTestDetail = false;
+            baseState.testResults = null;
+            baseState.projectLoadingState = null;
+            baseState.isLoading = false;
             break;
     }
     return baseState;

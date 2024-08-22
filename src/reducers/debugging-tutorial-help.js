@@ -107,6 +107,7 @@ const reducer = function (state, action) {
     return baseState;
 };
 
+// For whatever reason, I could not get Map to start working. This is the workaround
 function addToKey(obj, key, element) {
     if (obj.hasOwnProperty(key)) {
         obj[key].push(element);
@@ -115,7 +116,7 @@ function addToKey(obj, key, element) {
     }
 }
 
-const onEnterMultiAnswer = function (answer) { //TODO REMOVE
+const onEnterMultiAnswer = function (answer) { //TODO REMOVE LOGIC
     let index = answer.charAt(6) - 1; //option1 -> 0
     return {type: ENTER_MULTI_ANSWER, index};
 }

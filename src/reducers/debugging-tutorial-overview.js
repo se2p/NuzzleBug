@@ -16,7 +16,6 @@ const reducer = function (state, action) {
             baseState.lastTutorial = action.tutorial;
             break;
         case SET_LOADING:
-            console.log("loading: " + action.isLoading)
             baseState.isLoading = action.isLoading;
             break;
     }

@@ -7,7 +7,6 @@ import PropTypes from "prop-types";
 import VirtualMachine from "scratch-vm";
 
 import {lock, unlock} from '../reducers/vm-status';
-import asdProject2 from '!arraybuffer-loader!../components/debuggingTutorial/testProject/Scratch-Projekt(4).sb3';
 import {runTest} from "tutorial-tests";
 
 
