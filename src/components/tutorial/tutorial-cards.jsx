@@ -214,6 +214,7 @@ const TutorialCards = props => {
         projectFiles,
         onOpenHelp,
         tutorialIndexData,
+        onScrollBottom,
         ...posProps
     } = props;
     let {x, y} = posProps;
@@ -278,6 +279,7 @@ const TutorialCards = props => {
                     tutorial={tutorialMessages}
                     tutorialIndexData={tutorialIndexData}
                     stepNumber={step}
+                    onScrollBottom={onScrollBottom}
                 />
             default: //Show tutorial selection
                 return Array(tutorials.length).fill(0)
@@ -328,7 +330,6 @@ const TutorialCards = props => {
                         <div
                             className={expanded ? classNames(styles.stepBody, tutorialStyles.stepBody) : styles.hidden}
                             ref={cardRef}
-                            id={"PHIIIIIIIIIIIIIIIIL"}
                         >
                             {parseContent()}
                         </div>
@@ -398,6 +399,7 @@ TutorialCards.propTypes = {
     onSetContentType: PropTypes.func,
     onOpenHelp: PropTypes.func,
     onStartTutorial: PropTypes.func.isRequired,
+    onScrollBottom: PropTypes.func, //TODO
 };
 
 export default injectIntl(TutorialCards);

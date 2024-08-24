@@ -99,6 +99,8 @@ class DebuggingTutorialHelp extends React.Component {
             const curStep = "step" + (this.props.stepNumber + 1).toString() + "_" + this.props.level;
             const tutorialStep = this.props.tutorial[curStep];
             this.solveStep(curStep, tutorialStep);
+            this.props.onScrollBottom();
+            console.log("scrollingmDown");
         }
     }
 
@@ -205,6 +207,7 @@ DebuggingTutorialHelp.propTypes = {
     enterMultiAnswer: PropTypes.func,
     setMultiAnswer: PropTypes.func,
     onShowDropdown: PropTypes.func,
+    onScrollBottom: PropTypes.func,
 };
 
 const mapStateToProps = state => ({

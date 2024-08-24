@@ -1,6 +1,6 @@
 import css from "./debuggingTutorialHelp.css";
-import PropTypes, {func} from "prop-types";
-import React, {useEffect, useRef} from "react";
+import PropTypes from "prop-types";
+import React, {useRef} from "react";
 import dropdownIcon from "./images/icon--dropdown-selector.png";
 import infoIcon from "./images/icon--info.png"
 import shrinkIcon from './images/icon--shrink.svg';
@@ -37,139 +37,241 @@ const DebuggingTutorialHelp = props => {
 
     const stepRegex = /^step[1-9]_1$/;
 
-    const gapTextButtonState = function () {
-        if (answers[2] === "") {
-            return ["wähle aus", "", "#4D97FFFF"];
-        } else {
-            if (answers[2] === "true") {
-                return ["ja", tutorial[step].endQuestionTrue, "#70a45f"];
-            } else {
-                return ["nein", tutorial[step].endQuestionFalse, "#ff8b4d"];
-            }
-        }
-    }
-
     const renderSingleChoice = () => {
-        return Object.keys(tutorial[step]).filter((key) => (key.startsWith("option"))).map((key) => (
-            <div key={key} className={css.option}>
-                <img alt={"option picture"} className={css.smallImage}
-                     style={{width: tutorial[step][key]["width"]}}
-                     src={tutorialIndexData[tutorial[step][key]["img"]]}/>
+        if (!tutorial || !tutorial[step]) {
+            console.error("Missing tutorial or tutorial[step]");
+            return null;
+        }
 
-                <div className={css.checkboxTrigger} onClick={() => setAnswer(0, key)}>
-                    <button
-                        className={(answers[0] === key) ? css.checkbox_active : css.checkbox}
-                        key={key}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            setAnswer(0, key);
-                        }}
-                        style={{borderRadius: "100px"}}
-                    />
-                </div>
-            </div>
-        ));
+        return Object.keys(tutorial[step])
+            .filter(key => key.startsWith("option"))
+            .map(key => {
+                const option = tutorial[step][key];
+                const isSelected = answers[0] === key;
+
+                if (!option) {
+                    console.error(`Missing option for key: ${key}`);
+                    return null;
+                }
+
+                return (
+                    <div key={key} className={css.option}>
+                        <img
+                            alt="option picture"
+                            className={css.smallImage}
+                            style={{width: option["width"]}}
+                            src={tutorialIndexData[option["img"]] || undefined}
+                        />
+
+                        <div className={css.checkboxTrigger} onClick={() => setAnswer(0, key)}>
+                            <button
+                                className={isSelected ? css.checkboxActive : css.checkbox}
+                                key={key}
+                                onClick={e => {
+                                    e.stopPropagation();
+                                    setAnswer(0, key);
+                                }}
+                                style={{borderRadius: "100px"}}
+                            />
+                        </div>
+                    </div>
+                );
+            });
     }
 
     const renderMultipleChoice = () => {
-        return Object.keys(tutorial[step]).filter((key) => (key.startsWith("option"))).map((key) => (
-            <div key={key} className={css.option}>
-                <img alt={"option picture"} className={css.smallImage}
-                     style={{height: tutorial[step][key]["width"]}}
-                     src={tutorialIndexData[tutorial[step][key]["img"]]}/>
-                <div style={{display: "flex", justifyContent: "center"}}>
-                    <div className={css.checkboxTrigger} onClick={() => onEnterMultiAnswer(key)}>
-                        <button key={key} onClick={(e) => {
-                            e.stopPropagation();
-                            onEnterMultiAnswer(key);}}
-                                className= {selectedAnswers[key.at(6) - 1] ? css.checkbox_active : css.checkbox}>
-                        </button>
+        return Object.keys(tutorial[step])
+            .filter(key => key.startsWith("option"))
+            .map(key => {
+                const option = tutorial[step][key];
+                const isSelected = selectedAnswers[key.charAt(6) - 1];
+
+                return (
+                    <div key={key} className={css.option}>
+                        <img
+                            alt="option picture"
+                            className={css.smallImage}
+                            style={{height: option["width"]} || "auto"}
+                            src={tutorialIndexData[option["img"]] || undefined}
+                        />
+                        <div className={css.checkboxTrigger} onClick={() => onEnterMultiAnswer(key)}>
+                            <button
+                                className={isSelected ? css.checkboxActive : css.checkbox}
+                                onClick={e => {
+                                    e.stopPropagation();
+                                    onEnterMultiAnswer(key);
+                                }}
+                            />
+                        </div>
                     </div>
-                </div>
-            </div>
-        ));
+                );
+            });
     }
 
     const renderMessage = () => {
-        return <div style={{display:"flex", flexDirection:"column", alignItems:"center", marginTop:"20px", marginBottom:"20px"}}>
-            <span className={css.messageText}>{tutorial[step]["message"]}</span>
-            {tutorial[step].img !== null &&
-                <img src={tutorialIndexData[tutorial[step].img]} style={{height:"auto", width:tutorial[step].width}} alt={"messageContent"}/>}
-        </div>
+        const message = tutorial[step]["message"];
+        const img = tutorial[step].img;
+        const imgSrc = tutorialIndexData[img];
+        const width = tutorial[step].width;
+
+        return (
+            <div className={css.messageTextContainer}>
+                {message && <span className={css.messageText}>{message}</span>}
+                {img &&
+                <img src={imgSrc} style={{height:"auto", width}}
+                     draggable={false} alt={"messageContent"}/>}
+            </div>
+        );
     }
 
     const renderGapText = () => {
-        return <div style={{width:"80%"}}>
-            <div className={css.textAnswerContainer}>
-                <span className={css.textAnswerLine} style={{marginRight: "10px"}}>{tutorial[step].question1.questionStart}</span>
-                <div className={isGapTextSolved ? css.dropdownDisabled : css.dropdown}>
-                    <input className={css.dropdownBody} readOnly={isGapTextSolved} placeholder={"Anzahl eingeben"} type="text" value={answers[0]} onChange={(e) => setAnswer(0, e.target.value)}/>
+        if (isGapTextSolved) {hideDropDowns()}
+        const { questionStart: gapStart1, questionEnd: gapEnd1 } = tutorial[step].question1;
+        const { questionStart: gapStart2, questionEnd: gapEnd2 } = tutorial[step].question2;
+        const { endQuestion: endText } = tutorial[step];
 
-                    <div className={isGapTextSolved ? css.dropdownTestDisabled : css.dropdownTest} onMouseEnter={() => isGapTextSolved ? {} : resetDropdownTimer("1")} onMouseLeave={() => isGapTextSolved ? {} : startDropdownTimer()}>
-                        <img className={css.dropdownIcon} src={dropdownIcon} alt={"selectorIcon"}/>
-                        {showDropdown === "1" && <div className={css.dropdownContent}>
-                            <span className={css.dropdownElement} onClick={() => setAnswer(0, "0")}>0</span>
-                            <span className={css.dropdownElement} onClick={() => setAnswer(0, "unendlich")}>unendlich</span>
-                        </div>}
+        return (
+            <div style={{ width: '80%' }}>
+                <div className={css.textAnswerContainer}>
+                    <span className={css.textAnswerLine} style={{ marginRight: '10px' }}>{gapStart1}</span>
+                    <div className={isGapTextSolved ? css.dropdownDisabled : css.dropdown}>
+                        <input
+                            className={css.dropdownBody}
+                            readOnly={isGapTextSolved}
+                            placeholder={'Anzahl eingeben'}
+                            type="text"
+                            value={answers[0]}
+                            onChange={e => setAnswer(0, e.target.value)}
+                        />
+                        <div
+                            className={isGapTextSolved ? css.dropdownTestDisabled : css.dropdownTest}
+                            onMouseEnter={() => (isGapTextSolved ? {} : resetDropdownTimer('1'))}
+                            onMouseLeave={() => (isGapTextSolved ? {} : startDropdownTimer())}
+                        >
+                            <img className={css.dropdownIcon} src={dropdownIcon} alt="selectorIcon" />
+                            {showDropdown === '1' && (
+                                <div className={css.dropdownContent}>
+                                    <span className={css.dropdownElement} onClick={() => setAnswer(0, '0')}>
+                                        0
+                                    </span>
+                                    <span className={css.dropdownElement} onClick={() => setAnswer(0, 'unendlich')}>
+                                        unendlich
+                                    </span>
+                                </div>
+                            )}
+                        </div>
                     </div>
+                    <span className={css.textAnswerLine} style={{ marginLeft: '10px' }}>{gapEnd1}</span>
                 </div>
-                <span className={css.textAnswerLine} style={{marginLeft: "10px"}}>{tutorial[step].question1.questionEnd}</span>
+                <div className={css.textAnswerContainer}>
+                    <span className={css.textAnswerLine} style={{ marginRight: '10px' }}>{gapStart2}</span>
+                    <div className={isGapTextSolved ? css.dropdownDisabled : css.dropdown}>
+                        <input
+                            className={css.dropdownBody}
+                            readOnly={isGapTextSolved}
+                            placeholder={'Anzahl eingeben'}
+                            type="text"
+                            value={answers[1]}
+                            onChange={e => setAnswer(1, e.target.value)}
+                        />
+                        <div
+                            className={isGapTextSolved ? css.dropdownTestDisabled : css.dropdownTest}
+                            onMouseEnter={() => (isGapTextSolved ? {} : resetDropdownTimer('2'))}
+                            onMouseLeave={() => (isGapTextSolved ? {} : startDropdownTimer())}
+                        >
+                            <img className={css.dropdownIcon} src={dropdownIcon} alt="selectorIcon" />
+                            {showDropdown === '2' && (
+                                <div className={css.dropdownContent}>
+                                    <span className={css.dropdownElement} onClick={() => setAnswer(1, '0')}>
+                                        0
+                                    </span>
+                                    <span className={css.dropdownElement} onClick={() => setAnswer(1, 'unendlich')}>
+                                        unendlich
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                    <span className={css.textAnswerLine} style={{ marginLeft: '10px' }}>{gapEnd2}</span>
+                </div>
+                {isGapTextSolved && (
+                    <div>
+                        <span className={css.textAnswerHeader}>{endText}</span>
+                        <div className={css.textAnswerBar}>
+                            <button
+                                className={css.textAnswerButton}
+                                style={{ backgroundColor: gapButtonState()[2] }}
+                                onClick={onGapTextButton}
+                            >
+                                {gapButtonState()[0]}
+                            </button>
+                            <span className={css.textAnswerText}>{gapButtonState()[1]}</span>
+                        </div>
+                    </div>
+                )}
             </div>
+        );
+    }
 
-            <div className={css.textAnswerContainer}>
-                <span className={css.textAnswerLine} style={{marginRight: "10px"}}>{tutorial[step].question2.questionStart}</span>
-                <div className={isGapTextSolved ? css.dropdownDisabled : css.dropdown}>
-                    <input className={css.dropdownBody} readOnly={isGapTextSolved} placeholder={"Anzahl eingeben"} type="text" value={answers[1]} onChange={(e) => setAnswer(1, e.target.value)}/>
-                    <div className={isGapTextSolved ? css.dropdownTestDisabled : css.dropdownTest} onMouseEnter={() => isGapTextSolved ? {} : resetDropdownTimer("2")} onMouseLeave={() => isGapTextSolved ? {} : startDropdownTimer()}>
-                        <img className={css.dropdownIcon} src={dropdownIcon} alt={"selectorIcon"}/>
-                        {showDropdown === "2" && <div className={css.dropdownContent}>
-                            <span className={css.dropdownElement} onClick={() => setAnswer(1, "0")}>0</span>
-                            <span className={css.dropdownElement} onClick={() => setAnswer(1, "unendlich")}>unendlich</span>
-                        </div>}
-                    </div>
-                </div>
-                <span className={css.textAnswerLine} style={{marginLeft: "10px"}}>{tutorial[step].question2.questionEnd}</span>
-            </div>
-            {isGapTextSolved && <div>
-                        <span className={css.textAnswerLine} style={{marginTop: "30px", fontWeight:"bold", textDecoration:"underline"}}>
-                            {tutorial[step].endQuestion}
-                        </span>
-                <div className={css.textAnswerBar}>
-                    <button className={css.textAnswerButton} style={{backgroundColor:gapTextButtonState()[2]}} onClick={onGapTextButton}>
-                        {gapTextButtonState()[0]}
-                    </button>
-                    <span className={css.textAnswerText}>{gapTextButtonState()[1]}</span>
-                </div>
-            </div>}
-        </div>
+    const hideDropDowns = () => {
+        // Timeout necessary, as update in render() can lead to errors.
+        timeoutIdRef.current = setTimeout(() => {
+            onShowDropdown(null);
+        }, 0);
+    }
+
+    /**
+     * Returns the state of the gap gap button based on the current answer.
+     *
+     * @return {Array} An array containing the button text, description, and background color.
+     */
+    const gapButtonState = () => {
+        const answer = answers[2];
+        const states = {
+            "": ["wähle aus", "", "#4D97FFFF"],
+            "true": ["ja", tutorial[step].endQuestionTrue, "#70a45f"],
+            "false": ["nein", tutorial[step].endQuestionFalse, "#ff8b4d"],
+        };
+        return states[answer] || states[""];
     }
 
 
-
     const renderDropdown = () => {
+        const questionStart = tutorial[step]["questionText1_0"];
+        const questionEnd = tutorial[step]["questionText1_1"];
+        const options = Object.keys(tutorial[step])
+            .filter((key) => key.startsWith("option"))
+            .map((key) => tutorial[step][key]);
+
         return (
             <div className={css.textAnswerContainer}>
-                <span className={css.textAnswerLine} style={{marginRight: "10px"}}>{tutorial[step]["questionText1_0"]}</span>
+                <span className={css.textAnswerLine} style={{marginRight: "10px"}}>{questionStart}</span>
                 <div className={css.dropdown}>
-                    <input className={css.dropdownBody} readOnly={true} placeholder={"Wähle aus"} type="text" value={answers[0]}/>
+                    <input className={css.dropdownBody} readOnly={true} placeholder={"Wähle aus"} type="text" value={answers[0]} />
                     <div className={css.dropdownTest} onMouseEnter={() => resetDropdownTimer("1")} onMouseLeave={() => startDropdownTimer()}>
-                        <img className={css.dropdownIcon} src={dropdownIcon} alt={"selectorIcon"}/>
-                        {showDropdown !== null && <div className={css.dropdownContent}>
-                            {Object.keys(tutorial[step]).filter((key) => (key.startsWith("option"))).map((key) =>
-
-                                <span className={css.dropdownElement} onClick={() => setAnswer(0, tutorial[step][key]["label"])}>
-                                        {tutorial[step][key]["label"]}
-                                    </span>)
-                            }
-                        </div>}
+                        <img className={css.dropdownIcon} src={dropdownIcon} alt={"selectorIcon"} />
+                        {showDropdown !== null && (
+                            <div className={css.dropdownContent}>
+                                {options.map((option) => (
+                                    <span
+                                        className={css.dropdownElement}
+                                        key={option.label}
+                                        onClick={() => setAnswer(0, option.label)}
+                                    >
+                                        {option.label}
+                                    </span>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
-                <span className={css.textAnswerLine} style={{marginLeft: "10px"}}>{tutorial[step]["questionText1_1"]}</span>
+                <span className={css.textAnswerLine} style={{marginLeft: "10px"}}>{questionEnd}</span>
             </div>
         );
     }
     const timeoutIdRef = useRef(null);
-    const startDropdownTimer = function() {
+
+    const startDropdownTimer = () => {
         timeoutIdRef.current = setTimeout(() => {
             onShowDropdown(null);
         }, 100);
@@ -197,56 +299,65 @@ const DebuggingTutorialHelp = props => {
         }
     }
 
-    const renderMsg = function () {
-        if (questionMessage === null || questionMessage === undefined) return null;
+    const renderMsg = () => {
+        if (!questionMessage) {
+            return null;
+        }
 
-        const isCorrection = questionMessage.includes("[REVISITING]");
-        const primaryColor= isCorrection ? "#FF1DACFF" : "#ff8a1b";
-        const secondaryColor= isCorrection ? "#ff7dcb" : "#fdb17b";
+        const pageRevisit = questionMessage.includes("[REVISITING]");
+        const primaryColor = pageRevisit ? "#575e75" : "#ff8b4d";
+        const secondaryColor = pageRevisit ? "rgb(121,128,161)" : "#fdb17b";
+        const trimmedMessage = pageRevisit ? questionMessage.slice(12) : questionMessage;
 
-        return <div className={css.helpBox} style={{backgroundColor: secondaryColor}}>
-            <div className={css.helpBoxHeader} style={{backgroundColor: primaryColor}}>Hinweis:</div>
-            <span style={{
-                padding: "5px 10px",
-                color: "white",
-                flexShrink: "1",
-                width: "100%",
-                textAlign: "start"
-            }}>{isCorrection ? questionMessage.toString().slice(12) : questionMessage}</span>
-            <div className={css.helpBoxClose} style={{backgroundColor: primaryColor}}
-                 onClick={onCloseQuestionMessage}>X
+        return (
+            <div className={css.helpBox} style={{ backgroundColor: secondaryColor }}>
+                <div className={css.helpBoxHeader} style={{ backgroundColor: primaryColor }}>
+                    {pageRevisit? "Hinweis" : "Achtung"}
+                </div>
+                <span className={css.helpText}>{trimmedMessage}</span>
+                <div className={css.helpBoxClose} style={{ backgroundColor: primaryColor }} onClick={onCloseQuestionMessage}>
+                    X
+                </div>
             </div>
-        </div>
+        );
     }
 
-    const renderMsgBorder = function () {
-        if (questionMessage === null || questionMessage === undefined) return null;
+    const renderMessageBorder = () => {
+        if (!questionMessage) return null;
 
-        const isCorrection = questionMessage.includes("[REVISITING]");
-        const primaryColor= isCorrection ? "#FF1DACFF" : "#ff8a1b";
+        const isCorrection = questionMessage.includes('[REVISITING]');
+        const primaryColor = isCorrection ? '#575e75' : '#ff8b4d';
 
-        return <>
-            <div className={css.footerBorder} style={{borderColor: primaryColor}}/>
-            <hr className={css.footerLine} style={{borderColor: primaryColor}}/>
-        </>
+        return (
+            <>
+                <div className={css.footerBorder} style={{ borderColor: primaryColor }} />
+                <hr className={css.footerLine} style={{ borderColor: primaryColor }} />
+            </>
+        );
     }
 
     return (
         <div className={css.cardContainer}>
-
-            <div className={css.header} style={{backgroundColor: showDiagramm ? "transparent" : "rgba(77,151,255,0.42)",
+            <div className={css.header} style={{backgroundColor: showDiagramm ? "transparent" : "#4D97FF6B",
                 borderColor: showDiagramm ? "#4D97FFFF" : "transparent"}}>
-                <div style={{position:"relative", width:"100%", display: "flex", alignItems: "flex-end"}}>
-                    <img onClick={onToggleDiagramm} src={showDiagramm ? expandIcon : shrinkIcon} style={{width:"20px", height:"auto",marginLeft:"auto", marginRight:"10px", paddingBottom:"3px", paddingTop:"3px", cursor: "pointer"}} alt={"expandButton"}/>
+                <div className={css.diagrammButtonContainer}>
+                    <img className={css.diagrammButton}
+                         onClick={onToggleDiagramm}
+                         src={showDiagramm ? expandIcon : shrinkIcon}
+                         draggable={false} alt={"expandButton"}/>
                 </div>
-                {showDiagramm && <img draggable={false} src={tutorialIndexData["diagramm" + tutorial[step]["diagrammStep"]]} alt="Diagramm of the debugging process." className={css.headerImage} />}
+                {showDiagramm && <img
+                    draggable={false}
+                    src={tutorialIndexData["diagramm" + tutorial[step]["diagrammStep"]]}
+                    alt="Diagramm of the debugging process." className={css.headerImage}
+                />}
             </div>
 
             <div className={css.questionSection}>
                 <div className={css.questionHeader}>
                     <span style={{marginTop:"5px", marginBottom:"5px"}}>{tutorial[step]["text"]}</span>
                     {tutorial[step]["help"] !== null && <div className={isHelpVisible ? css.infoButtonBackground : css.infoButtonBackgroundInvisible} onClick={props.onHelp}>
-                        <img className={css.helpButton} style={{width:"15px", height:"auto", paddingTop:"6px"}} src={infoIcon} alt={"infoButton"}/>
+                        <img className={css.helpButton} src={infoIcon} alt={"infoButton"}/>
                     </div>}
                 </div>
 
@@ -261,11 +372,10 @@ const DebuggingTutorialHelp = props => {
 
             <div className={css.footer}>
                 {renderMsg()}
-
                 {!stepRegex.test(step) && <button className={css.footerButton} onClick={onStepBack}>Zurück</button>}
                 <button className={css.footerButton} onClick={() => onCheckAnswer(tutorial)}>
                     Weiter
-                    {renderMsgBorder()}
+                    {renderMessageBorder()}
                 </button>
             </div>
         </div>

@@ -31,6 +31,7 @@ class TutorialCards extends React.Component {
         this.handleNext = this.handleNext.bind(this);
         this.handlePrev = this.handlePrev.bind(this);
         this.handleStartTutorial = this.handleStartTutorial.bind(this);
+        this.scrollToBottom = this.scrollToBottom.bind(this);
         this.myRef = null;
     }
 
@@ -85,12 +86,15 @@ class TutorialCards extends React.Component {
     }
 
     handleStartTutorial() {
-        console.log("starting tutorial")
         this.props.startTutorial();
     }
 
-    scrollToBottom() {
-        this.myRef.scrollTop = this.myRef.scrollHeight; //TODO NUTZEN!!!!!!!!!!
+    scrollToBottom = () => {
+        requestAnimationFrame(() => {
+            if (this.myRef) {
+                this.myRef.scrollTop = this.myRef.scrollHeight;
+            }
+        });
     }
 
     render () {
@@ -107,7 +111,6 @@ class TutorialCards extends React.Component {
             }
             tutorialMessages = messages.default;
         }
-        console.log("selected: " + this.props.selectedTutorial + "  /  " + JSON.stringify(tutorial))
 
         let guiMessagesContainer;
         try {
@@ -139,6 +142,7 @@ class TutorialCards extends React.Component {
                 onPrevStep={this.handlePrev}
                 tutorialIndexData={tutorial}
                 onStartTutorial={this.handleStartTutorial}
+                onScrollBottom={() => this.scrollToBottom()}
                 {...this.props}
             />
         );
