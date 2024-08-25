@@ -7,59 +7,56 @@ import asdProject from '!arraybuffer-loader!../components/debuggingTutorial/test
 import p1 from '!arraybuffer-loader!tutorial-tests/src/tutorials/Scratch-Projekt(4).sb3';
 import * as tutorials from "tutorial-tests/src/tutorials";
 import tut from "tutorial-tests/src/tutorials/testTutorial/index"
-import {setLastTutorial, setLoading} from "../reducers/debugging-tutorial-overview"
+import {setLastTutorial, setLoading, toggleAutosave} from "../reducers/debugging-tutorial-overview"
 import JSZip from "jszip";
 
 class DebuggingTutorialOverview extends React.Component {
     constructor(props) {
         super(props);
+        this.autoSave = this.autoSave.bind(this);
     }
 
     loadProject() { //TODO
 
         const isNewTutorialSelected = JSON.stringify(this.props.tutorialMessages) !== JSON.stringify((this.props.lastTutorial));
-        /*if (isNewTutorialSelected) {
-            this.props.setLoading(true);
-            console.log("starting autosave");
-            const zip = new JSZip();
-            zip.file('project.json', this.props.vm.toJSON());
-            zip.generateAsync({
-                type: 'blob',
-                mimeType: 'application/x.scratch.sb3',
-                compression: 'DEFLATE',
-                compressionOptions: {
-                    level: 6
-                }
-            })
-                .then(output => {
-                    const url = URL.createObjectURL(output);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'backup.sb3';
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                    console.log("finished autosaving");
-
-
-
-
-
-                    this.props.vm.loadProject(asdProject)
-                        .then(() => {
-                            this.props.setLastTutorial(this.props.tutorialMessages);
-                            this.props.onStartTutorial();})
-                        .catch((e) => console.log("Error loading new Project: " + e.toString()))
-                        .finally(() => this.props.setLoading(false));
+        if (isNewTutorialSelected) {
+            if (this.props.autoSave) {
+                this.props.setLoading(true);
+                const zip = new JSZip();
+                zip.file('project.json', this.props.vm.toJSON());
+                zip.generateAsync({
+                    type: 'blob',
+                    mimeType: 'application/x.scratch.sb3',
+                    compression: 'DEFLATE',
+                    compressionOptions: {
+                        level: 6
+                    }
                 })
-                .catch(error => {
-                    console.log(error);
-                    this.props.setLoading(false);
-                });
+                    .then(output => {
+                        const url = URL.createObjectURL(output);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'backup.sb3';
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+
+                        this.autoSave();
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        this.props.setLoading(false);
+                    });
+            } else {
+                this.autoSave();
+            }
         } else {
             this.props.onStartTutorial();
-        }*/
+        }
+    }
+
+    autoSave() {
         this.props.setLoading(true);
         this.props.vm.loadProject(this.props.tutorialIndexData["project1"])
             .then(() => {
@@ -82,6 +79,7 @@ class DebuggingTutorialOverview extends React.Component {
                 onStart={() => this.loadProject()}
                 isNewTutorialSelected={isNewTutorialSelected}
                 lastTutorialTitle={lastTutorialTitle}
+                toggleAutosave={toggleAutosave}
                 {...this.props}
             />
         );
@@ -99,15 +97,18 @@ DebuggingTutorialOverview.propTypes = {
     setLoading: PropTypes.func,
     isLoading: PropTypes.bool,
     tutorialIndexData: PropTypes.any,
+    autoSave: PropTypes.bool,
 };
 
 const mapStateToProps = state => ({
     lastTutorial: state.scratchGui.debuggingTutorialOverview.lastTutorial,
     isLoading: state.scratchGui.debuggingTutorialOverview.isLoading,
+    autoSave: state.scratchGui.debuggingTutorialOverview.autoSave,
 });
 const mapDispatchToProps = dispatch => ({
     setLastTutorial: (tutorial) => dispatch(setLastTutorial(tutorial)),
     setLoading: (isLoading) => dispatch(setLoading(isLoading)),
+    toggleAutosave: () => dispatch(toggleAutosave()),
 });
 
 export default connect(

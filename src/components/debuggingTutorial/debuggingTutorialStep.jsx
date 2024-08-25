@@ -2,10 +2,7 @@ import PropTypes from "prop-types";
 import React, {useRef} from "react";
 import css from "./debuggingTutorialStep.css"
 import owl from "./images/owl-b.svg"
-import accept from "./images/icon--passed.png"
-import failed from "./images/icon--failed.png"
 import failed_debugging from "./images/icon--failed-debugging.png"
-import failed_test from "./images/icon--failed-test.png"
 import {FormattedMessage} from "react-intl";
 import owlIcon from "./images/owl-b.svg"
 
@@ -115,22 +112,16 @@ const DebuggingTutorialStep = props => {
 
                     <div className={css.resetContainer}>
 
-                        {projectLoadingState !== null ?
-                            <button className={projectLoadingState === "RESET" ? css.resetButtonLoading : css.buttonElementDisabled} disabled={true}
-                                    onMouseUp={handleMouseUp}
-                                    onMouseLeave={handleMouseUp}>
-                                {projectLoadingState === "RESET" ? "Lädt..." : "Warten"}
-                            </button>
-
-                            : <button
-                                className={isLoading ? css.resetButtonPressed : css.resetButton}
+                        <button
+                                className={projectLoadingState !== null ? projectLoadingState === "RESET" ? css.resetButtonLoading : css.buttonElementDisabled :isLoading ? css.resetButtonPressed : css.resetButton}
                                 onMouseDown={handleMouseDown}
                                 onMouseUp={handleMouseUp}
                                 onMouseLeave={handleMouseUp}
                             >
-                                Zurücksetzen
+
+                                {projectLoadingState !== null ? projectLoadingState === "RESET" ? "Lädt..." : "Warten" : "Zurücksetzen"}
                                 <div className={css.progressBar} ref={progressBarRef}></div>
-                            </button>}
+                            </button>
                     </div>
 
                     <button className={css.buttonElement} onClick={onOpenHelp}>

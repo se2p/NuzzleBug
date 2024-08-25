@@ -1,9 +1,11 @@
 const SET_LAST_TUTORIAL = 'scratch-gui/debugging-tutorial-cards/SET_LAST_TUTORIAL';
 const SET_LOADING = 'scratch-gui/debugging-tutorial-cards/SET_LOADING';
+const TOGGLE_AUTO_SAVE = 'scratch-gui/debugging-tutorial-cards/TOGGLE_AUTO_SAVE';
 
 const initialState = {
     lastTutorial: null,
     isLoading: false,
+    autoSave: true,
 };
 
 const reducer = function (state, action) {
@@ -18,6 +20,9 @@ const reducer = function (state, action) {
         case SET_LOADING:
             baseState.isLoading = action.isLoading;
             break;
+        case TOGGLE_AUTO_SAVE:
+            baseState.autoSave = !baseState.autoSave;
+            break;
     }
     return baseState;
 };
@@ -30,9 +35,14 @@ const setLoading = function (isLoading) {
     return {type: SET_LOADING, isLoading};
 }
 
+const toggleAutosave = function () {
+    return {type: TOGGLE_AUTO_SAVE};
+}
+
 export {
     reducer as default,
     initialState as debuggingTutorialOverviewInitialState,
     setLastTutorial,
     setLoading,
+    toggleAutosave,
 };

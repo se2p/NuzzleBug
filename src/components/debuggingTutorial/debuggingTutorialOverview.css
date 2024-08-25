@@ -53,6 +53,19 @@
     margin-top: 10px;
 }
 
+.auto-save-button {
+    width: 50px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    color: white;
+    background-color: #575E75FF;
+    border-color: transparent;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 5px;
+    box-shadow: none;
+}
+
 .title-image {
     width: 200px;
     height: auto;
