@@ -221,12 +221,232 @@ class RequestHintButton extends React.Component {
 
     getMasterSolution () {
         return `//Sprite: Stage
-//Sprite: Sprite1
-//Script: A^ysK3~oo^xZU4KL9c+F
+//Script: u*;kMNBI!JQ!TOk8u1{~
 when green flag clicked
+set [Zeit v] to (30)
+set [Punkte v] to (0)
+repeat until <(Zeit) = (0)>
 wait (1) seconds
-set volume to (100) %
-start sound (Meow v)`;
+change [Zeit v] by (-1)
+end
+
+//Sprite: Bowl
+//Script: l*NuJ}xlNu1:Xuo7=Km#
+when green flag clicked
+go to x: (0) y: (-145)
+wait until <(Zeit) = (30)>
+repeat until <(Zeit) = (0)>
+if <key (right arrow v) pressed?> then
+move (10) steps
+end
+if <key (left arrow v) pressed?> then
+move (-10) steps
+end
+end
+say [Ende!] for (1) seconds
+stop [all v]
+
+//Sprite: Apple
+//Script: ]S-Ob(vMeaZ?6L)ognrr
+when green flag clicked
+set size to (50) %
+go to (random position v)
+set y to (170)
+repeat until <(Zeit) = (0)>
+change y by (-5)
+if <touching (Bowl v) ?> then
+change [Punkte v] by (5)
+hide
+go to (random position v)
+set y to (170)
+show
+end
+if <touching color [#ff0000] ?> then
+say [Game over!] for (1) seconds
+stop [all v]
+end
+end
+
+//Sprite: Bananas
+//Script: HdR\`VM[I;yzZ?[DA]HPa
+when green flag clicked
+hide
+set size to (50) %
+go to (random position v)
+set y to (170)
+wait (1) seconds
+repeat until <(Zeit) = (0)>
+show
+change y by (-7)
+if <touching (Bowl v) ?> then
+change [Punkte v] by (8)
+hide
+go to (random position v)
+set y to (170)
+show
+end
+if <touching color [#ff0000] ?> then
+change [Punkte v] by (-8)
+say [-8] for (1) seconds
+hide
+go to (random position v)
+set y to (170)
+wait (1) seconds
+show
+end
+end
+`;
+    }
+
+    getMasterSolutions () {
+        return [`//Sprite: Stage
+//Script: u*;kMNBI!JQ!TOk8u1{~
+when green flag clicked
+set [Zeit v] to (30)
+set [Punkte v] to (0)
+repeat until <(Zeit) = (0)>
+wait (1) seconds
+change [Zeit v] by (-1)
+end
+
+//Sprite: Bowl
+//Script: l*NuJ}xlNu1:Xuo7=Km#
+when green flag clicked
+go to x: (0) y: (-145)
+wait until <(Zeit) = (30)>
+repeat until <(Zeit) = (0)>
+if <key (right arrow v) pressed?> then
+move (10) steps
+end
+if <key (left arrow v) pressed?> then
+move (-10) steps
+end
+end
+say [Ende!] for (1) seconds
+stop [all v]
+
+//Sprite: Apple
+//Script: ]S-Ob(vMeaZ?6L)ognrr
+when green flag clicked
+set size to (50) %
+go to (random position v)
+set y to (170)
+repeat until <(Zeit) = (0)>
+change y by (-5)
+if <touching (Bowl v) ?> then
+change [Punkte v] by (5)
+hide
+go to (random position v)
+set y to (170)
+show
+end
+if <touching color [#ff0000] ?> then
+say [Game over!] for (1) seconds
+stop [all v]
+end
+end
+
+//Sprite: Bananas
+//Script: HdR\`VM[I;yzZ?[DA]HPa
+when green flag clicked
+hide
+set size to (50) %
+go to (random position v)
+set y to (170)
+wait (1) seconds
+repeat until <(Zeit) = (0)>
+show
+change y by (-7)
+if <touching (Bowl v) ?> then
+change [Punkte v] by (8)
+hide
+go to (random position v)
+set y to (170)
+show
+end
+if <touching color [#ff0000] ?> then
+change [Punkte v] by (-8)
+say [-8] for (1) seconds
+hide
+go to (random position v)
+set y to (170)
+wait (1) seconds
+show
+end
+end`, `//Sprite: Stage
+//Script: Alternative Stage
+when green flag clicked
+set [Time v] to (30)
+set [Score v] to (0)
+forever
+  if <(Time) > (0)> then
+    wait (1) seconds
+    change [Time v] by (-1)
+  else
+    stop [all v]
+  end
+end
+
+//Sprite: Bowl
+//Script: Alternative Bowl
+when green flag clicked
+go to x: (0) y: (-145)
+forever
+  if <key (right arrow v) pressed?> then
+    change x by (10)
+  end
+  if <key (left arrow v) pressed?> then
+    change x by (-10)
+  end
+end
+
+//Sprite: Apple
+//Script: Alternative Apple
+when green flag clicked
+set size to (50) %
+go to x: (pick random (-240) to (240)) y: (170)
+forever
+  if <(Time) > (0)> then
+    change y by (-5)
+    if <touching (Bowl v) ?> then
+      change [Score v] by (5)
+      go to x: (pick random (-240) to (240)) y: (170)
+    end
+    if <touching color [#ff0000] ?> then
+      say [Game over!] for (1) seconds
+      stop [all v]
+    end
+  else
+    hide
+  end
+end
+
+//Sprite: Bananas
+//Script: Alternative Bananas
+when green flag clicked
+hide
+set size to (50) %
+go to x: (pick random (-240) to (240)) y: (170)
+wait (1) seconds
+forever
+  if <(Time) > (0)> then
+    show
+    change y by (-7)
+    if <touching (Bowl v) ?> then
+      change [Score v] by (8)
+      go to x: (pick random (-240) to (240)) y: (170)
+    end
+    if <touching color [#ff0000] ?> then
+      change [Score v] by (-8)
+      say [-8] for (1) seconds
+      go to x: (pick random (-240) to (240)) y: (170)
+      wait (1) seconds
+    end
+  else
+    hide
+  end
+end
+`];
     }
 
     sendScratchblocksToChatGPT (scratchblocks) {
@@ -242,10 +462,12 @@ start sound (Meow v)`;
             // "Don't be too strict, leave some room for creativity of the students."; // leads to hallucinations in the end
         const prePromptStudentSolution = 'This is the student solution:';
         const prePromptMasterSolution = 'This is the master solution:';
+        // const prePromptMasterSolution = 'These are the master solutions:';
         const postPrompt = 'Give the next step hint. Give only the hint. Do not give a code solution.';
         // const language = 'german';
         const languagePrompt = `Answer in the language with this locale key: ${this.props.locale}`;
 
+        // ${this.getMasterSolutions().join('; ')}\n
         // Construct the full prompt
         const fullPrompt = `${prePromptStudentSolution}\n
             ${scratchblocks}\n
