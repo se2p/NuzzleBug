@@ -3,10 +3,6 @@ import {connect} from 'react-redux';
 import DebuggingTutorialOverviewComponent from '../components/debuggingTutorial/debuggingTutorialOverview.jsx';
 import PropTypes from "prop-types";
 import VirtualMachine from "scratch-vm";
-import asdProject from '!arraybuffer-loader!../components/debuggingTutorial/testProject/Scratch-Projekt(4).sb3';
-import p1 from '!arraybuffer-loader!tutorial-tests/src/tutorials/Scratch-Projekt(4).sb3';
-import * as tutorials from "tutorial-tests/src/tutorials";
-import tut from "tutorial-tests/src/tutorials/testTutorial/index"
 import {setLastTutorial, setLoading, toggleAutosave} from "../reducers/debugging-tutorial-overview"
 import JSZip from "jszip";
 
