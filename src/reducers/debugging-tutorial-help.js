@@ -13,6 +13,8 @@ const RESET_COMPONENT = 'scratch-gui/debugging-tutorial-cards/RESET_COMPONENT';
 const SET_LAST_TUTORIAL = 'scratch-gui/debugging-tutorial-cards/SET_LAST_TUTORIAL';
 const SET_MULTI_ANSWER = 'scratch-gui/debugging-tutorial-cards/SET_MULTI_ANSWER';
 const SHOW_DROPDOWN = 'scratch-gui/debugging-tutorial-cards/SHOW_DROPDOWN';
+const ADD_SELECTED_BLOCK = 'scratch-gui/debugging-tutorial-cards/ADD_SELECTED_BLOCK';
+const REMOVE_SELECTED_BLOCK = 'scratch-gui/debugging-tutorial-cards/REMOVE_SELECTED_BLOCK';
 
 const initialState = { //TODO Remove logic from reducer!
     step: "1",
@@ -22,6 +24,7 @@ const initialState = { //TODO Remove logic from reducer!
     answers: ["", "", ""],
     selectedAnswers: [false, false, false, false, false, false],
     solvedSteps: {},
+    selectedBlocks: {},
     questionMessage: null,
     showDiagramm: true,
     lastStepNumber: -1,
@@ -91,6 +94,7 @@ const reducer = function (state, action) {
             baseState.step = "1";
             baseState.stepStack = ["1"];
             baseState.solvedSteps = {};
+            baseState.selectedBlocks = {};
             baseState.showDiagramm = true;
             baseState.showDropdown = null;
             break;
@@ -103,18 +107,15 @@ const reducer = function (state, action) {
         case SHOW_DROPDOWN:
             baseState.showDropdown = action.show;
             break;
+        case ADD_SELECTED_BLOCK:
+            addToKey(baseState.selectedBlocks, action.option, action.id);
+            break;
+        case REMOVE_SELECTED_BLOCK:
+            removeKey(baseState.selectedBlocks, action.option, action.id);
+            break;
     }
     return baseState;
 };
-
-// For whatever reason, I could not get Map to start working. This is the workaround
-function addToKey(obj, key, element) {
-    if (obj.hasOwnProperty(key)) {
-        obj[key].push(element);
-    } else {
-        obj[key] = [element];
-    }
-}
 
 const onEnterMultiAnswer = function (answer) { //TODO REMOVE LOGIC
     let index = answer.charAt(6) - 1; //option1 -> 0
@@ -177,6 +178,29 @@ const showDropdown = function (show) {
     return {type: SHOW_DROPDOWN, show}
 }
 
+const addSelectedBlock = function (option, id) {
+    return {type: ADD_SELECTED_BLOCK, option, id}
+}
+
+const removeSelectedBlock = function (option, id) {
+    return {type: REMOVE_SELECTED_BLOCK, option, id}
+}
+
+// For whatever reason, I could not get Map to start working. This is the workaround
+function addToKey(obj, key, element) {
+    if (obj.hasOwnProperty(key)) {
+        obj[key].push(element);
+    } else {
+        obj[key] = [element];
+    }
+}
+
+function removeKey(obj, key, element) {
+    if (obj.hasOwnProperty(key) && obj[key].includes(element)) {
+        obj[key] = obj[key].filter(e => e !== element);
+    }
+}
+
 export {
     reducer as default,
     initialState as debuggingTutorialInitialState,
@@ -195,4 +219,6 @@ export {
     setLastTutorial,
     setMultiAnswer,
     showDropdown,
+    addSelectedBlock,
+    removeSelectedBlock,
 };

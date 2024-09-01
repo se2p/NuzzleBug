@@ -32,6 +32,9 @@ const DebuggingTutorialHelp = props => {
         onShowDropdown,
         showDropdown,
         cardRef,
+        addSelectedBlock,
+        removeSelectedBlock,
+        selectedBlocks,
         ...posProps
     } = props;
 
@@ -269,6 +272,104 @@ const DebuggingTutorialHelp = props => {
             </div>
         );
     }
+
+    const renderMark = () => {
+        if (answers[0] === null || answers[0] === undefined || answers[0] === "") {
+            setAnswer(0, "option1");
+            return;
+        }
+        const curOption = answers[0];
+        console.log("curOption: " + curOption + " answers[0]: " + answers[0]);
+        const optionKeys = Object.keys(tutorial[step]).filter(key => key.startsWith('option'))
+
+        return (
+            <div style={{ display: "flex", alignItems: "center", width:"100%", marginLeft: "40px", marginRight: "auto", marginBottom: "20px", marginTop: "20px"}}>
+                <div style={{display: "flex", alignItems: "end", width: "100%"}}>
+                    <div style={{display: "flex", flexDirection: "column", height: tutorial[step][curOption]["height"]}}>
+                    {tutorial[step][curOption]["selectorData"].map((e, index) => (
+                        <button
+                            key={index}
+                            className={selectedBlocks.hasOwnProperty(curOption) && selectedBlocks[curOption].includes(index) ? css.checkboxActive : css.checkbox}
+                            onClick={e => {
+                                if (selectedBlocks.hasOwnProperty(curOption) && selectedBlocks[curOption].includes(index)) {
+                                    removeSelectedBlock(curOption, index);
+                                } else {
+                                    addSelectedBlock(curOption, index);
+                                }
+                            }}
+                            style={{marginTop: e.height}}
+                        />
+                    ))}
+                </div>
+
+                <img src={tutorialIndexData[tutorial[step][curOption]["img"]]}
+                     style={{height: tutorial[step][curOption]["height"], marginLeft: "5px"}}
+                     draggable={false}
+                     alt={"codeSnippets"}/>
+            </div>
+
+                <div style={{marginTop: "20px", marginBottom: "auto", display: "flex", flexDirection:"column", marginRight: "40px", marginLeft: "auto", borderRadius:"10px", border: "2px solid #575E75FF", padding: "10px"}}>
+                    {optionKeys.map((e) => (
+                        <div style={{display: "flex", alignItems: "start", height: "50px"}}>
+                            <div style={{display: "flex", height: "100%", alignItems: "center",justifyContent: "center"}}>
+                                <button
+                                    className={answers[0] === e ? css.checkboxActive : css.checkbox}
+                                    onClick={() => {
+                                        setAnswer(0, e);
+                                    }}
+                                    style={{borderRadius: "100px", marginRight: "10px"}}
+                                />
+                            </div>
+
+                            <img className={css.spriteImage} src={tutorialIndexData[tutorial[step][e]["sprite"]]} draggable={false} alt={"codeSnippetSprite"}/>
+                        </div>
+                        ))}
+                </div>
+            </div>
+        );
+    }
+
+    const renderMarkChoice = () => {
+        const selection = [];
+        for (const [option, values] of Object.entries(selectedBlocks)) {
+            values.forEach(value => {
+                selection.push(`${option}_${value}`);
+            });
+        }
+
+        console.log(JSON.stringify(selection))
+
+        return selection.map(key => {
+            const option = tutorial[step][key];
+                    const isSelected = answers[0] === key;
+
+            return (
+                <div key={key} className={css.option}>
+                    <img
+                        alt="option picture"
+                        className={css.smallImage}
+                        style={{width: option["width"]}}
+                        src={tutorialIndexData[option["img"]] || undefined}
+                    />
+
+                    <div className={css.checkboxTrigger} onClick={() => setAnswer(0, key)}>
+                        <button
+                            className={isSelected ? css.checkboxActive : css.checkbox}
+                            key={key}
+                            onClick={e => {
+                                e.stopPropagation();
+                                setAnswer(0, key);
+                            }}
+                            style={{borderRadius: "100px"}}
+                        />
+                    </div>
+                </div>
+            );
+        });
+    }
+
+
+
     const timeoutIdRef = useRef(null);
 
     const startDropdownTimer = () => {
@@ -294,6 +395,10 @@ const DebuggingTutorialHelp = props => {
                 return renderGapText();
             case "MESSAGE":
                 return renderMessage();
+            case "MARK":
+                return renderMark();
+            case "MARK_CHOICE":
+                return renderMarkChoice();
             default:
                 console.log("Unknown questionType found: " + tutorial[step]["questionType"]);
         }

@@ -418,3 +418,8 @@
     position: absolute;
     z-index: -2;
 }
+
+.sprite-image {
+    width: auto;
+    height: 50px;
+}

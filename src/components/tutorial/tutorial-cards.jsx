@@ -333,13 +333,13 @@ const TutorialCards = props => {
                         >
                             {parseContent()}
                         </div>
-                        <NextPrevButtons
+                        {!isDebuggingTutorialSelected && <NextPrevButtons
                             isMenuVisible={isMenuVisible}
                             expanded={expanded}
                             onNextStep={step < totalSteps - 1 && step < currentTutorialStep ?
                                 onNextStep : null}
                             onPrevStep={step > 0 ? onPrevStep : null}
-                        />
+                        />}
                         {expanded ?
                             <div className={tutorialStyles.footer}>
                                 <p className={tutorialStyles.footerText}>{guiMessages.codeClub}</p>

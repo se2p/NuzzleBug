@@ -16,7 +16,9 @@ import {
     resetComponent,
     setLastTutorial,
     setMultiAnswer,
-    showDropdown,} from "../reducers/debugging-tutorial-help";
+    showDropdown,
+    addSelectedBlock,
+    removeSelectedBlock,} from "../reducers/debugging-tutorial-help";
 import DebuggingTutorialStepComponent from '../components/debuggingTutorial/debuggingTutorialHelp.jsx';
 import PropTypes from "prop-types";
 
@@ -34,6 +36,7 @@ class DebuggingTutorialHelp extends React.Component {
     checkAnswer(step, tutorial) {
         switch (tutorial["questionType"]) {
             case "SINGLE_CHOICE":
+            case "MARK_CHOICE":
                 if (this.props.answers[0] === "") {
                     break;
                 }
@@ -91,6 +94,29 @@ class DebuggingTutorialHelp extends React.Component {
                     }
                 }
                 break;
+            case "MARK":
+                let correctSelection = false;
+                tutorial.necessaryAnswers.forEach(answer => {
+                    if (this.props.selectedBlocks.hasOwnProperty(answer.slice(0, 7)) && this.props.selectedBlocks[answer.slice(0, 7)].includes(Number(answer.slice(8)))) {
+                        correctSelection = true;
+                    }
+                });
+
+                Object.entries(this.props.selectedBlocks).forEach(([option, idList]) => {
+                    if (idList.some(element => !tutorial.possibleAnswers.includes(option +"_"+ element) && !tutorial.necessaryAnswers.includes(option +"_"+ element))) {
+                        correctSelection = false;
+                    }
+                });
+
+                if (correctSelection) {
+                    this.props.setStep(tutorial["next"].slice(6));
+                    this.props.reset();
+                } else {
+                    this.props.setQuestionMessage(tutorial.correctionText);
+                }
+                break;
+            default:
+                console.log("Unknown QuestionType encountered: " + tutorial["questionType"])
         }
     }
 
@@ -108,6 +134,7 @@ class DebuggingTutorialHelp extends React.Component {
         if (!this.props.solvedSteps.hasOwnProperty(step)) return;
         switch (tutorial["questionType"]) {
             case "SINGLE_CHOICE":
+            case "MARK_CHOICE":
             case "DROPDOWN":
                 this.props.onSetAnswer(0, this.props.solvedSteps[step][this.props.solvedSteps[step].length - 1])
                 break;
@@ -208,6 +235,7 @@ DebuggingTutorialHelp.propTypes = {
     setMultiAnswer: PropTypes.func,
     onShowDropdown: PropTypes.func,
     onScrollBottom: PropTypes.func,
+    selectedBlocks: PropTypes.any,
 };
 
 const mapStateToProps = state => ({
@@ -221,6 +249,7 @@ const mapStateToProps = state => ({
     lastStepNumber: state.scratchGui.debuggingTutorial.lastStepNumber,
     lastTutorial: state.scratchGui.debuggingTutorial.lastTutorial,
     showDropdown: state.scratchGui.debuggingTutorial.showDropdown,
+    selectedBlocks: state.scratchGui.debuggingTutorial.selectedBlocks,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -239,6 +268,8 @@ const mapDispatchToProps = dispatch => ({
     setLastTutorial: (tutorial) => dispatch(setLastTutorial(tutorial)),
     setMultiAnswer: (answers) => dispatch(setMultiAnswer(answers)),
     onShowDropdown: (show) => dispatch(showDropdown(show)),
+    addSelectedBlock: (option, id) => dispatch(addSelectedBlock(option, id)),
+    removeSelectedBlock: (option, id) => dispatch(removeSelectedBlock(option, id)),
 });
 
 export default connect(
