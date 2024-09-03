@@ -221,80 +221,13 @@ class RequestHintButton extends React.Component {
 
     getMasterSolution () {
         return `//Sprite: Stage
-//Script: u*;kMNBI!JQ!TOk8u1{~
+//Sprite: Milk
+//Sprite: Cat
+//Script: Q~@Uh]o]=F2kP}XIf8/9
 when green flag clicked
-set [Zeit v] to (30)
-set [Punkte v] to (0)
-repeat until <(Zeit) = (0)>
-wait (1) seconds
-change [Zeit v] by (-1)
-end
-
-//Sprite: Bowl
-//Script: l*NuJ}xlNu1:Xuo7=Km#
-when green flag clicked
-go to x: (0) y: (-145)
-wait until <(Zeit) = (30)>
-repeat until <(Zeit) = (0)>
-if <key (right arrow v) pressed?> then
-move (10) steps
-end
-if <key (left arrow v) pressed?> then
-move (-10) steps
-end
-end
-say [Ende!] for (1) seconds
-stop [all v]
-
-//Sprite: Apple
-//Script: ]S-Ob(vMeaZ?6L)ognrr
-when green flag clicked
-set size to (50) %
-go to (random position v)
-set y to (170)
-repeat until <(Zeit) = (0)>
-change y by (-5)
-if <touching (Bowl v) ?> then
-change [Punkte v] by (5)
-hide
-go to (random position v)
-set y to (170)
-show
-end
-if <touching color [#ff0000] ?> then
-say [Game over!] for (1) seconds
-stop [all v]
-end
-end
-
-//Sprite: Bananas
-//Script: HdR\`VM[I;yzZ?[DA]HPa
-when green flag clicked
-hide
-set size to (50) %
-go to (random position v)
-set y to (170)
-wait (1) seconds
-repeat until <(Zeit) = (0)>
-show
-change y by (-7)
-if <touching (Bowl v) ?> then
-change [Punkte v] by (8)
-hide
-go to (random position v)
-set y to (170)
-show
-end
-if <touching color [#ff0000] ?> then
-change [Punkte v] by (-8)
-say [-8] for (1) seconds
-hide
-go to (random position v)
-set y to (170)
-wait (1) seconds
-show
-end
-end
+go to x: (-180) y: (-110)
+glide (4) secs to (Milk v)
+say [Yummy!]
 `;
     }
 
@@ -320,8 +253,8 @@ end
             ' does not have to be the same as in the master solution. ' +
             'If the student solution has the same functionality as the master solution, ' +
             'than give a success message. ' +
-            'For complex tasks with multiple sprites focus on clear answers on what sprite to work first. ' +
-            'Include hints for creating or adding sprites with clear instructions.';
+            'For complex tasks with multiple sprites focus on clear and simple answers on what sprite to work first. ' +
+            'Include hints for creating or adding sprites with clear and simple instructions.';
         // 'Give the next step hint. Give only the hint. Do not give a code solution.';
         // const language = 'german';
         const languagePrompt = `Answer in the language with this locale key: ${this.props.locale}`;
