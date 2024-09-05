@@ -30,6 +30,7 @@ class Stage extends React.Component {
             'detachMouseEvents',
             'handleDoubleClick',
             'handleQuestionAnswered',
+            'onQuestionAnsweredProgrammatically',
             'onMouseUp',
             'onMouseMove',
             'onMouseDown',
@@ -76,6 +77,7 @@ class Stage extends React.Component {
         this.attachMouseEvents(this.canvas);
         this.updateRect();
         this.props.vm.runtime.addListener('QUESTION', this.questionListener);
+        this.props.vm.runtime.addListener('ANSWERED_PROGRAMMATICALLY', this.onQuestionAnsweredProgrammatically);
     }
     shouldComponentUpdate (nextProps, nextState) {
         return this.props.stageSize !== nextProps.stageSize ||
@@ -100,6 +102,7 @@ class Stage extends React.Component {
         this.detachRectEvents();
         this.stopColorPickingLoop();
         this.props.vm.runtime.removeListener('QUESTION', this.questionListener);
+        this.props.vm.runtime.removeListener('ANSWERED_PROGRAMMATICALLY', this.onQuestionAnsweredProgrammatically);
     }
     questionListener (question) {
         this.setState({question: question});
@@ -109,6 +112,15 @@ class Stage extends React.Component {
             this.props.vm.runtime.emit('ANSWER', answer);
         });
     }
+
+    /**
+     * Close the question input field on the stage if the question was answered programmatically,
+     * e.g. by a Whisker or BBT instruction.
+     */
+    onQuestionAnsweredProgrammatically () {
+        this.setState({question: null});
+    }
+
     startColorPickingLoop () {
         this.intervalId = setInterval(() => {
             if (typeof this.pickX === 'number') {
