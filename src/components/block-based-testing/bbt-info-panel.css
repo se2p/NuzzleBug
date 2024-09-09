@@ -1,0 +1,94 @@
+@import "../../css/colors.css";
+
+.info-panel {
+    background-color: white;
+    border: 1px solid #C3CCD9;
+    margin: 5px;
+    box-shadow: 0 0 5px 2px #bfbfbf;
+    padding: 10px;
+    user-select: none;
+}
+
+.head-line {
+    padding-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.head-line-text {
+    color: hsla(225, 15%, 40%, 1);
+    font-weight: bold;
+}
+
+.icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 0.25rem;
+    user-select: none;
+    cursor: pointer;
+}
+
+.icon:hover {
+    background-color: $motion-light-transparent;
+}
+
+.progress-bar-outer {
+    width: 100%;
+    height: 20px;
+}
+
+.progress-bar-inner {
+    height: 100%;
+    color: white;
+    padding-top: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.progress-bar-inner-running {
+    background-color: orange;
+}
+
+.progress-bar-outer-running {
+    background-color: lightblue;
+}
+
+.progress-bar-inner-finished {
+    background-color: green;
+}
+
+.progress-bar-outer-finished {
+    background-color: red;
+}
+
+.results-outer {
+    width: 100%;
+    display: flex;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.results-inner {
+    text-align: center;
+    width: 50%;
+}
+
+.results-inner-left {
+    color: green;
+    border-right: 1px solid #C3CCD9;
+}
+
+.results-inner-right {
+    color: red;
+    border-left: 1px solid #C3CCD9;
+}
+
+.results-inner-number {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.full-width {
+    width: 100%;
+}

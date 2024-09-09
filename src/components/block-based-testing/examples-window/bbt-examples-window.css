@@ -1,0 +1,94 @@
+@import "../../../css/colors.css";
+@import "../../../css/z-index.css";
+
+.examples-window {
+    position: absolute;
+    z-index: $z-index-bbt-examples-window;
+    cursor: move;
+    width: 900px;
+    margin: 0.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 5px 25px 5px $ui-black-transparent;
+    overflow: hidden;
+    background: white;
+    user-select: none;
+}
+
+.header {
+    background: #0FBD8C;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.header-left {
+    font-size: 1rem;
+    color: white;
+    font-weight: bold;
+    align-items: center;
+    display: flex;
+    margin-left: 1em;
+    margin-top: 0.3em;
+}
+
+.header-right {
+    font-size: 0.625rem;
+    font-weight: bold;
+    display: flex;
+    flex-direction: row;
+}
+
+.middle {
+    background: $ui-secondary;
+    width: 100%;
+    min-height: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-top: 1px solid #C3CCD9;
+    border-bottom: 1px solid #C3CCD9;
+}
+
+.middle-left {
+    font-size: 0.9rem;
+    text-align: justify;
+    align-items: center;
+    display: flex;
+    margin-left: 1em;
+    margin-right: 2em;
+    margin-top: 0.3em;
+}
+
+.middle-right {
+    width: 20em;
+    padding: 0.5em;
+}
+
+.body {
+    height: 600px;
+    overflow: auto;
+    padding: 0.6em;
+}
+
+.example-entry {
+    border: 1px solid darkgray;
+    border-radius: 0.3rem;
+    overflow: hidden;
+    display: flex;
+    margin-bottom: 0.6em;
+}
+
+.example-entry-description {
+    padding: 0.6em;
+}
+
+.example-entry-description-title {
+    font-weight: bold;
+}
+
+.example-entry-description-text {
+    font-size: 0.9rem;
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
+}

@@ -9,6 +9,10 @@ npm-*
 /.nyc_output
 /coverage
 
+# Editor
+/.idea
+/.vscode
+
 # Build
 /build
 /dist
@@ -17,5 +21,3 @@ npm-*
 # Generated translation files
 /translations
 /locale
-
-*.idea

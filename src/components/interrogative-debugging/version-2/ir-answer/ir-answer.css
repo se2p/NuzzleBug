@@ -146,11 +146,11 @@
   .zoom-button {
     right: 31px;
   }
-  
+
   .zoom-in-button {
     bottom: 61px;
   }
-  
+
   .zoom-out-button {
     bottom: 31px;
   }
@@ -181,20 +181,20 @@
   width: 100%;
   height: 15px;
   background: rgba(211, 211, 211, 0.5);
-  border-radius: 7.5px;  
+  border-radius: 7.5px;
   border: 1px solid rgba(143, 143, 143, 0.5);
   outline: none;
   opacity: 0.99;
   -webkit-transition: .1s;
   transition: opacity .1s;
 }
-  
+
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 15px;
   height: 15px;
-  border-radius: 50%; 
+  border-radius: 50%;
   background: #4D97FF;
   cursor: default;
 }
@@ -322,4 +322,8 @@ span[blockCategory=lists] {
 
 span[blockCategory=procedure] {
   background-color: #FF6680;
+}
+
+span[blockCategory='block-based-testing'] {
+    background-color: #8695b6;
 }

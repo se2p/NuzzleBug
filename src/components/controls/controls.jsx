@@ -3,14 +3,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import VM from 'scratch-vm';
-import Test from 'whisker-main/whisker-main/src/test-runner/test';
 
 import GreenFlag from '../green-flag/green-flag.jsx';
-import RunTest from '../run-test/run-test.jsx';
 import PauseResume from '../pause-resume/pause-resume.jsx';
 import StepOver from '../step-over/step-over.jsx';
 import InitialStep from '../initial-step/initial-step.jsx';
-import InitialTestStep from '../initial-test-step/initial-test-step.jsx';
 import StepBack from '../step-back/step-back.jsx';
 import HelpMenuButton from '../help-menu-button/help-menu-button.jsx';
 import StopAll from '../stop-all/stop-all.jsx';
@@ -95,14 +92,12 @@ const Controls = function (props) {
         className,
         intl,
         onGreenFlagClick,
-        onRunTestClick,
         onPauseResumeClick,
         onStopAllClick,
         onStepBackClick,
         onStepOverClick,
         onHelpMenuButtonClick,
         onInitialStepClick,
-        onInitialTestStepClick,
         onIRQuestionsClick,
         onToggleTracingClick,
         irDisabled,
@@ -115,7 +110,6 @@ const Controls = function (props) {
         interrogationEnabled,
         tracingState,
         tracingActive,
-        whiskerTest,
         locale,
         tutorialCardsVisible,
         ...componentProps
@@ -129,26 +123,13 @@ const Controls = function (props) {
             {...componentProps}
         >
             <GreenFlag
-                active={active && !paused && !whiskerTest?.isRunning}
+                active={active && !paused}
                 title={intl.formatMessage(messages.goTitle)}
                 onClick={onGreenFlagClick}
             />
-            {whiskerTest ? <RunTest
-                testResult={whiskerTest.resultStatus}
-                active={active && !paused && whiskerTest.isRunning}
-                title={intl.formatMessage(messages.runTestTitle, {name: whiskerTest.name})}
-                onClick={onRunTestClick}
-            /> : null}
-            {whiskerTest && whiskerTest.isLoading ? (
-                <div className={styles.loader} />
-            ) : null}
             {interrogationSupported ? (<InitialStep
                 title={intl.formatMessage(messages.initialStepTitle)}
                 onClick={onInitialStepClick}
-            />) : null}
-            {whiskerTest && interrogationSupported ? (<InitialTestStep
-                title={intl.formatMessage(messages.initialTestStepTitle, {name: whiskerTest.name})}
-                onClick={onInitialTestStepClick}
             />) : null}
             {interrogationSupported ? <PauseResume
                 active={active}
@@ -213,13 +194,11 @@ Controls.propTypes = {
     className: PropTypes.string,
     intl: intlShape.isRequired,
     onGreenFlagClick: PropTypes.func.isRequired,
-    onRunTestClick: PropTypes.func.isRequired,
     onPauseResumeClick: PropTypes.func.isRequired,
     onStepBackClick: PropTypes.func.isRequired,
     onStepOverClick: PropTypes.func.isRequired,
     onHelpMenuButtonClick: PropTypes.func.isRequired,
     onInitialStepClick: PropTypes.func.isRequired,
-    onInitialTestStepClick: PropTypes.func.isRequired,
     onStopAllClick: PropTypes.func.isRequired,
     onIRQuestionsClick: PropTypes.func.isRequired,
     onToggleTracingClick: PropTypes.func.isRequired,
@@ -230,7 +209,6 @@ Controls.propTypes = {
     vm: PropTypes.instanceOf(VM),
     tracingState: PropTypes.oneOf(Object.values(TracingState)).isRequired,
     tracingActive: PropTypes.bool,
-    whiskerTest: PropTypes.instanceOf(Test),
     onTutorialClick: PropTypes.func.isRequired,
     tutorialCardsVisible: PropTypes.bool,
     locale: PropTypes.string.isRequired,

@@ -25,6 +25,8 @@ import {
     openExtensionLibrary
 } from '../reducers/modals';
 
+import {showInterface} from '../reducers/block-based-testing';
+
 import FontLoaderHOC from '../lib/font-loader-hoc.jsx';
 import LocalizationHOC from '../lib/localization-hoc.jsx';
 import SBFileUploaderHOC from '../lib/sb-file-uploader-hoc.jsx';
@@ -80,12 +82,11 @@ class GUI extends React.Component {
             fetchingProject,
             isLoading,
             loadingStateVisible,
-            isWhiskerProjectLoading,
             ...componentProps
         } = this.props;
         return (
             <GUIComponent
-                loading={fetchingProject || isLoading || loadingStateVisible || isWhiskerProjectLoading}
+                loading={fetchingProject || isLoading || loadingStateVisible}
                 {...componentProps}
             >
                 {children}
@@ -103,7 +104,6 @@ GUI.propTypes = {
     intl: intlShape,
     isError: PropTypes.bool,
     isLoading: PropTypes.bool,
-    isWhiskerProjectLoading: PropTypes.bool,
     isScratchDesktop: PropTypes.bool,
     isShowingProject: PropTypes.bool,
     loadingStateVisible: PropTypes.bool,
@@ -132,6 +132,10 @@ const mapStateToProps = state => { //TODO ADD DINGE
         activeTabIndex: state.scratchGui.editorTab.activeTabIndex,
         alertsVisible: state.scratchGui.alerts.visible,
         backdropLibraryVisible: state.scratchGui.modals.backdropLibrary,
+        blockBasedTestingInterfaceVisible: state.scratchGui.blockBasedTesting.interfaceVisible,
+        bbtExamplesWindowVisible: state.scratchGui.blockBasedTesting.examplesWindowVisible,
+        bbtBatchEvaluationWindowVisible: state.scratchGui.blockBasedTesting.batchEvaluationWindowVisible,
+        bbtCoordinatesTooltipVisible: state.scratchGui.blockBasedTesting.coordinatesTooltipVisible,
         blocksTabVisible: state.scratchGui.editorTab.activeTabIndex === BLOCKS_TAB_INDEX,
         cardsVisible: state.scratchGui.cards.visible,
         debuggingTutorialVisible: state.scratchGui.debuggingTutorial.visible, //TODO ADDED THE PROP TYPE
@@ -149,7 +153,6 @@ const mapStateToProps = state => { //TODO ADD DINGE
         isRtl: state.locales.isRtl,
         isShowingProject: getIsShowingProject(loadingState),
         loadingStateVisible: state.scratchGui.modals.loadingProject,
-        isWhiskerProjectLoading: state.scratchGui.vmStatus.isWhiskerProjectLoading,
         projectId: state.scratchGui.projectState.projectId,
         soundsTabVisible: state.scratchGui.editorTab.activeTabIndex === SOUNDS_TAB_INDEX,
         telemetryModalVisible: state.scratchGui.modals.telemetryModal,
@@ -165,7 +168,8 @@ const mapDispatchToProps = dispatch => ({
     onActivateSoundsTab: () => dispatch(activateTab(SOUNDS_TAB_INDEX)),
     onRequestCloseBackdropLibrary: () => dispatch(closeBackdropLibrary()),
     onRequestCloseCostumeLibrary: () => dispatch(closeCostumeLibrary()),
-    onRequestCloseTelemetryModal: () => dispatch(closeTelemetryModal())
+    onRequestCloseTelemetryModal: () => dispatch(closeTelemetryModal()),
+    onShowTestInterface: () => dispatch(showInterface())
 });
 
 const ConnectedGUI = injectIntl(connect(
