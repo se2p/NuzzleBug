@@ -221,13 +221,79 @@ class RequestHintButton extends React.Component {
 
     getMasterSolution () {
         return `//Sprite: Stage
-//Sprite: Milk
-//Sprite: Cat
-//Script: Q~@Uh]o]=F2kP}XIf8/9
+//Sprite: Ball
+//Script: N.cu7z(];digIr0}3NTI
 when green flag clicked
-go to x: (-180) y: (-110)
-glide (4) secs to (Milk v)
-say [Yummy!]
+go to x: (-100) y: (0)
+point in direction (pick random (20) to (70))
+forever
+if on edge, bounce
+move (10) steps
+end
+
+//Script: 5.8|MHtM\`fD60es\`65bQ
+when green flag clicked
+forever
+if <<touching (Spieler v) ?> or <touching (Computer v) ?>> then
+point in direction ((360)-(direction))
+move (20) steps
+end
+end
+
+//Sprite: Spieler
+//Script: @XE#MW0fc60!GA?3C3zh
+when green flag clicked
+set drag mode [not draggable v]
+set x to (-210)
+forever
+if <key (Pfeil nach oben v) pressed?> then
+change y by (15)
+end
+if <key (Pfeil nach unten v) pressed?> then
+change y by (-15)
+end
+end
+
+//Script: m9dLlwmyZVS(VLK(|#G8
+when green flag clicked
+forever
+if <[Meine Punkte] > (1)> then
+set [Status v] to [Experte]
+else
+set [Status v] to [Anf�nger]
+end
+end
+
+//Sprite: Aus-Linie Spieler
+//Script: twFdH9r6p}iZa*;}y15*
+when green flag clicked
+switch backdrop to (Stars v)
+go to x: (-30) y: (25)
+wait until <touching (Ball v) ?>
+change [Meine Punkte v] by (-1)
+switch backdrop to (Galaxy v)
+wait (0.1) seconds
+stop [all v]
+
+//Sprite: Computer
+//Script: N{9o!e))@MdZH\`O!?cS%
+when green flag clicked
+go to x: (207) y: (0)
+set drag mode [not draggable v]
+forever
+glide (1) secs to x: (207) y: (136)
+glide (1) secs to x: (207) y: (-136)
+end
+
+//Sprite: Aus-Linie Computer
+//Script: BgQzWqQ8pR}eGZehh_t(
+when green flag clicked
+go to x: (420) y: (-10)
+wait until <touching (Ball v) ?>
+change [Meine Punkte v] by (1)
+switch backdrop to (Galaxy v)
+wait (0.1) seconds
+stop [all v]
 `;
     }
 
