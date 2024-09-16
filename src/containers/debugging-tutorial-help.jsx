@@ -18,7 +18,8 @@ import {
     setMultiAnswer,
     showDropdown,
     addSelectedBlock,
-    removeSelectedBlock,} from "../reducers/debugging-tutorial-help";
+    removeSelectedBlock,
+    onDiagrammExplanation,} from "../reducers/debugging-tutorial-help";
 import DebuggingTutorialStepComponent from '../components/debuggingTutorial/debuggingTutorialHelp.jsx';
 import PropTypes from "prop-types";
 
@@ -126,7 +127,6 @@ class DebuggingTutorialHelp extends React.Component {
             const tutorialStep = this.props.tutorial[curStep];
             this.solveStep(curStep, tutorialStep);
             this.props.onScrollBottom();
-            console.log("scrollingmDown");
         }
     }
 
@@ -139,7 +139,6 @@ class DebuggingTutorialHelp extends React.Component {
                 this.props.onSetAnswer(0, this.props.solvedSteps[step][this.props.solvedSteps[step].length - 1])
                 break;
             case "MULTIPLE_CHOICE":
-                console.log("set multi: " + JSON.stringify(tutorial["solution"]));
                 this.props.setMultiAnswer(tutorial["solution"]);
                 break;
             case "GAP_TEXT":
@@ -170,17 +169,24 @@ class DebuggingTutorialHelp extends React.Component {
 
     componentDidMount() {
         if (this.props.stepNumber !== this.props.lastStepNumber || JSON.stringify(this.props.tutorial) !== JSON.stringify(this.props.lastTutorial)) {
-            this.props.resetComponent();
-            this.props.setLastStepNumber(this.props.stepNumber);
-            this.props.setLastTutorial(this.props.tutorial);
+            //this.props.resetComponent();
+            //this.props.setLastStepNumber(this.props.stepNumber);
+            //this.props.setLastTutorial(this.props.tutorial);
         }
     }
 
     render () {
+        //console.log(this.props.lastTutorial.title);
+        //console.log(this.props.tutorial.title);
         let curStep;
-        if (JSON.stringify(this.props.tutorial) !== JSON.stringify(this.props.lastTutorial)) {
+        console.log((JSON.stringify(this.props.tutorial) !== JSON.stringify(this.props.lastTutorial)).toString() + "  /  " + JSON.stringify(this.props.tutorial) + " AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA " + JSON.stringify(this.props.lastTutorial))
+
+        if (this.props.tutorial === null) return;
+
+        if (this.props.lastTutorial === null || JSON.stringify(this.props.tutorial) !== JSON.stringify(this.props.lastTutorial)) {
             this.props.resetComponent();
             this.props.setLastTutorial(this.props.tutorial);
+            console.log("RESET HELP ABC")
             return null;
         } else {
             curStep = "step" + (this.props.stepNumber + 1).toString() + "_" + this.props.level;
@@ -236,6 +242,7 @@ DebuggingTutorialHelp.propTypes = {
     onShowDropdown: PropTypes.func,
     onScrollBottom: PropTypes.func,
     selectedBlocks: PropTypes.any,
+    showExplanation: PropTypes.bool,
 };
 
 const mapStateToProps = state => ({
@@ -250,6 +257,7 @@ const mapStateToProps = state => ({
     lastTutorial: state.scratchGui.debuggingTutorial.lastTutorial,
     showDropdown: state.scratchGui.debuggingTutorial.showDropdown,
     selectedBlocks: state.scratchGui.debuggingTutorial.selectedBlocks,
+    showExplanation: state.scratchGui.debuggingTutorial.explanation,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -270,6 +278,7 @@ const mapDispatchToProps = dispatch => ({
     onShowDropdown: (show) => dispatch(showDropdown(show)),
     addSelectedBlock: (option, id) => dispatch(addSelectedBlock(option, id)),
     removeSelectedBlock: (option, id) => dispatch(removeSelectedBlock(option, id)),
+    onDiagrammExplanation: () => dispatch(onDiagrammExplanation())
 });
 
 export default connect(

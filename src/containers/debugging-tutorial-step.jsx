@@ -1,7 +1,16 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import {resetStep, errorClicked, updateTestResults, onTestDetails, setLoading, setLoadingProject} from "../reducers/debugging-tutorial-step";
+import {
+    resetStep,
+    errorClicked,
+    updateTestResults,
+    onTestDetails,
+    setLoading,
+    setLoadingProject,
+    setLastTutorial,
+
+} from "../reducers/debugging-tutorial-step";
 import DebuggingTutorialStepComponent from '../components/debuggingTutorial/debuggingTutorialStep.jsx';
 import PropTypes from "prop-types";
 import VirtualMachine from "scratch-vm";
@@ -60,6 +69,20 @@ class DebuggingTutorialStep extends React.Component {
                 this.props.setLoadingProject(null);});
     }
 
+    componentDidMount() {
+        //const isNewTutorialSelected = JSON.stringify(this.props.tutorialMessages) !== JSON.stringify((this.props.lastTutorial));
+
+        if (this.props.lastTutorial === null) {
+            this.props.setLastTutorial(JSON.stringify(this.props.tutorialMessages));
+        } else {
+            if (JSON.stringify(this.props.tutorialMessages) !== this.props.lastTutorial) {
+                this.props.setLastTutorial(JSON.stringify(this.props.tutorialMessages));
+                this.props.resetStep();
+                console.log("RESETTING STEPABC")
+            }
+        }
+    }
+
     render () {
         const reachedLastStep = (this.props.step === this.props.stepCount);
         return (
@@ -95,6 +118,8 @@ DebuggingTutorialStep.propTypes = {
     setLoading: PropTypes.func,
     setLoadingProject: PropTypes.func,
     tutorialIndexData: PropTypes.any,
+    lastTutorial: PropTypes.any,
+    setLastTutorial: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -104,6 +129,7 @@ const mapStateToProps = state => ({
     showReset: state.scratchGui.debuggingTutorialStep.showReset,
     isLoading: state.scratchGui.debuggingTutorialStep.isLoading,
     projectLoadingState: state.scratchGui.debuggingTutorialStep.projectLoadingState,
+    lastTutorial: state.scratchGui.debuggingTutorialStep.lastTutorial,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -115,6 +141,7 @@ const mapDispatchToProps = dispatch => ({
     unlockVM: () => dispatch(unlock()),
     setLoading: (isLoading) => dispatch(setLoading(isLoading)),
     setLoadingProject: (loadingType) => dispatch(setLoadingProject(loadingType)),
+    setLastTutorial: (tutorial) => dispatch(setLastTutorial(tutorial))
 });
 
 export default connect(

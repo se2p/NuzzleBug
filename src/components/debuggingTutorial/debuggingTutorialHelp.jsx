@@ -5,6 +5,8 @@ import dropdownIcon from "./images/icon--dropdown-selector.png";
 import infoIcon from "./images/icon--info.png"
 import shrinkIcon from './images/icon--shrink.svg';
 import expandIcon from './images/icon--expand.png';
+import diagrammExplanation from './images/diagrammExplanation.png';
+import explanationPage from './images/explanationPage.png'
 
 const DebuggingTutorialHelp = props => {
     const {
@@ -35,11 +37,13 @@ const DebuggingTutorialHelp = props => {
         addSelectedBlock,
         removeSelectedBlock,
         selectedBlocks,
+        onDiagrammExplanation,
+        showExplanation,
         ...posProps
     } = props;
 
     const stepRegex = /^step[1-9]_1$/;
-
+    const timeoutIdRef = useRef(null);
     const renderSingleChoice = () => {
         if (!tutorial || !tutorial[step]) {
             console.error("Missing tutorial or tutorial[step]");
@@ -224,7 +228,7 @@ const DebuggingTutorialHelp = props => {
     }
 
     /**
-     * Returns the state of the gap gap button based on the current answer.
+     * Returns the state of the gap button based on the current answer.
      *
      * @return {Array} An array containing the button text, description, and background color.
      */
@@ -337,8 +341,6 @@ const DebuggingTutorialHelp = props => {
             });
         }
 
-        console.log(JSON.stringify(selection))
-
         return selection.map(key => {
             const option = tutorial[step][key];
                     const isSelected = answers[0] === key;
@@ -367,10 +369,6 @@ const DebuggingTutorialHelp = props => {
             );
         });
     }
-
-
-
-    const timeoutIdRef = useRef(null);
 
     const startDropdownTimer = () => {
         timeoutIdRef.current = setTimeout(() => {
@@ -446,6 +444,10 @@ const DebuggingTutorialHelp = props => {
             <div className={css.header} style={{backgroundColor: showDiagramm ? "transparent" : "#4D97FF6B",
                 borderColor: showDiagramm ? "#4D97FFFF" : "transparent"}}>
                 <div className={css.diagrammButtonContainer}>
+                    {showDiagramm ? <img className={css.diagrammButton}
+                         onClick={onDiagrammExplanation}
+                         src={diagrammExplanation}
+                         draggable={false} alt={"explanationButton"}/> : null}
                     <img className={css.diagrammButton}
                          onClick={onToggleDiagramm}
                          src={showDiagramm ? expandIcon : shrinkIcon}
@@ -453,7 +455,7 @@ const DebuggingTutorialHelp = props => {
                 </div>
                 {showDiagramm && <img
                     draggable={false}
-                    src={tutorialIndexData["diagramm" + tutorial[step]["diagrammStep"]]}
+                    src={showExplanation ? explanationPage : tutorialIndexData["diagramm" + tutorial[step]["diagrammStep"]]}
                     alt="Diagramm of the debugging process." className={css.headerImage}
                 />}
             </div>

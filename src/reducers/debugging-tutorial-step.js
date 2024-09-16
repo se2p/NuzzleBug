@@ -4,6 +4,7 @@ const UPDATE_TEST_RESULTS = 'scratch-gui/debugging-tutorial-cards/UPDATE_TEST_RE
 const TEST_DETAILS = 'scratch-gui/debugging-tutorial-cards/TEST_DETAILS';
 const SET_LOADING = 'scratch-gui/debugging-tutorial-cards/SET_LOADING';
 const SET_LOADING_PROJECT = 'scratch-gui/debugging-tutorial-cards/SET_LOADING_PROJECT';
+const SET_TUTORIAL = 'scratch-gui/debugging-tutorial-cards/SET_TUTORIAL';
 
 
 
@@ -14,6 +15,7 @@ const initialState = {
     showTestDetail: false,
     isLoading: false,
     projectLoadingState: null,
+    lastTutorial: null,
 };
 
 const reducer = function (state, action) {
@@ -36,6 +38,9 @@ const reducer = function (state, action) {
             break;
         case SET_LOADING_PROJECT:
             baseState.projectLoadingState = action.loadingType;
+            break;
+        case SET_TUTORIAL:
+            baseState.lastTutorial = action.tutorial;
             break;
         case RESET_STEP:
             baseState.isErrorInfoVisible = false;
@@ -72,6 +77,10 @@ const setLoadingProject = function (loadingType) {
     return {type: SET_LOADING_PROJECT, loadingType};
 }
 
+const setLastTutorial = function (tutorial) {
+    return {type: SET_TUTORIAL, tutorial};
+}
+
 export {
     reducer as default,
     initialState as debuggingTutorialStepInitialState,
@@ -81,4 +90,5 @@ export {
     onTestDetails,
     setLoading,
     setLoadingProject,
+    setLastTutorial,
 };

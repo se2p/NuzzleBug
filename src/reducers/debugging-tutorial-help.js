@@ -1,3 +1,5 @@
+import {act} from "react";
+
 const ENTER_MULTI_ANSWER = 'scratch-gui/debugging-tutorial-cards/ENTER_MULTI_ANSWER';
 const HELP = 'scratch-gui/debugging-tutorial-cards/HELP';
 const STEP_BACK = 'scratch-gui/debugging-tutorial-cards/STEP_BACK';
@@ -15,6 +17,7 @@ const SET_MULTI_ANSWER = 'scratch-gui/debugging-tutorial-cards/SET_MULTI_ANSWER'
 const SHOW_DROPDOWN = 'scratch-gui/debugging-tutorial-cards/SHOW_DROPDOWN';
 const ADD_SELECTED_BLOCK = 'scratch-gui/debugging-tutorial-cards/ADD_SELECTED_BLOCK';
 const REMOVE_SELECTED_BLOCK = 'scratch-gui/debugging-tutorial-cards/REMOVE_SELECTED_BLOCK';
+const DIAGRAMM_EXPLANATION = 'scratch-gui/debugging-tutorial-cards/DIAGRAMM_EXPLANATION';
 
 const initialState = { //TODO Remove logic from reducer!
     step: "1",
@@ -30,6 +33,7 @@ const initialState = { //TODO Remove logic from reducer!
     lastStepNumber: -1,
     lastTutorial: null,
     showDropdown: null,
+    explanation: false,
 };
 
 const reducer = function (state, action) {
@@ -47,6 +51,7 @@ const reducer = function (state, action) {
                 baseState.isHelpVisible = false;
                 baseState.questionMessage = null;
                 baseState.showDropdown = null;
+                baseState.explanation = false;
             }
             break;
         case ENTER_MULTI_ANSWER:
@@ -76,6 +81,7 @@ const reducer = function (state, action) {
             baseState.isHelpVisible = false;
             baseState.questionMessage = null;
             baseState.showDropdown = null;
+            baseState.explanation = false;
             break;
         case SET_QUESTION_MSG:
             baseState.questionMessage = action.content;
@@ -97,9 +103,10 @@ const reducer = function (state, action) {
             baseState.selectedBlocks = {};
             baseState.showDiagramm = true;
             baseState.showDropdown = null;
+            baseState.explanation = false;
             break;
         case SET_LAST_TUTORIAL:
-            baseState.lastTutorial = action.tutorial;
+            baseState.lastTutorial = action.lastTutorial;
             break;
         case SET_MULTI_ANSWER:
             baseState.selectedAnswers = action.answers;
@@ -112,6 +119,9 @@ const reducer = function (state, action) {
             break;
         case REMOVE_SELECTED_BLOCK:
             removeKey(baseState.selectedBlocks, action.option, action.id);
+            break;
+        case DIAGRAMM_EXPLANATION:
+            baseState.explanation = !baseState.explanation;
             break;
     }
     return baseState;
@@ -170,8 +180,9 @@ const resetComponent = function () {
     return {type: RESET_COMPONENT}
 }
 
-const setLastTutorial = function (tutorial) {
-    return {type: SET_LAST_TUTORIAL, tutorial}
+const setLastTutorial = function (lastTutorial) {
+    console.log("SetLastTutorial(): " + lastTutorial.title)
+    return {type: SET_LAST_TUTORIAL, lastTutorial}
 }
 
 const showDropdown = function (show) {
@@ -184,6 +195,10 @@ const addSelectedBlock = function (option, id) {
 
 const removeSelectedBlock = function (option, id) {
     return {type: REMOVE_SELECTED_BLOCK, option, id}
+}
+
+const onDiagrammExplanation = function () {
+    return {type: DIAGRAMM_EXPLANATION}
 }
 
 // For whatever reason, I could not get Map to start working. This is the workaround
@@ -221,4 +236,5 @@ export {
     showDropdown,
     addSelectedBlock,
     removeSelectedBlock,
+    onDiagrammExplanation,
 };

@@ -25,13 +25,13 @@
     position: relative;
     width: 100%;
     display: flex;
-    align-items: flex-end;
+    justify-content: flex-end;
 }
 
 .diagramm-button {
     width: 20px;
     height: auto;
-    margin-left: auto;
+    margin-left: 10px;
     margin-right: 10px;
     padding-bottom: 3px;
     padding-top: 3px;

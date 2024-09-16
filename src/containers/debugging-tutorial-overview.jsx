@@ -13,8 +13,8 @@ class DebuggingTutorialOverview extends React.Component {
     }
 
     loadProject() { //TODO
-
         const isNewTutorialSelected = JSON.stringify(this.props.tutorialMessages) !== JSON.stringify((this.props.lastTutorial));
+        console.log("LOAD PROJECT: " + isNewTutorialSelected);
         if (isNewTutorialSelected) {
             if (this.props.autoSave) {
                 this.props.setLoading(true);
@@ -37,7 +37,6 @@ class DebuggingTutorialOverview extends React.Component {
                         a.click();
                         document.body.removeChild(a);
                         URL.revokeObjectURL(url);
-
                         this.autoSave();
                     })
                     .catch(error => {
@@ -66,7 +65,7 @@ class DebuggingTutorialOverview extends React.Component {
         const isNewTutorialSelected = JSON.stringify(this.props.tutorialMessages) !== JSON.stringify((this.props.lastTutorial));
 
         let lastTutorialTitle = null;
-        if (isNewTutorialSelected && this.props.lastTutorial !== null) {
+        if (isNewTutorialSelected && this.props.lastTutorial !== null && this.props.lastTutorial !== undefined) {
             lastTutorialTitle = this.props.lastTutorial.title;
         }
 
