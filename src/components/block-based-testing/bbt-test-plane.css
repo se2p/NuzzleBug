@@ -1,0 +1,50 @@
+.main {
+    height: calc(100% - 54px);
+    overflow: auto;
+    display: flex;
+    flex-flow: column;
+    background-color: #fafafa;
+    border: 1px solid #C3CCD9;
+    border-radius: 0.5rem;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.scroll-wrapper {
+    height: 100%;
+    overflow: auto;
+}
+
+.tutorial-screen {
+    opacity: 0.4;
+    user-select: none;
+}
+
+.tutorial-screen-img {
+    text-align: center;
+}
+
+.tutorial-screen-text {
+    hyphens: auto;
+    text-align: center;
+}
+
+.welcome-msg {
+    text-align: center;
+    padding: 0.5em 2em 0.25em 2em;
+    font-size: 1.2rem;
+    border-bottom: 1px solid black;
+}
+
+.tutorial-element {
+    font-size: 0.8rem;
+    padding: 0.6em;
+    border-bottom: 1px solid black;
+}
+
+.tutorial-element-bottom {
+    font-size: 0.8rem;
+    padding: 0.6em 0.6em 0 0.6em;
+}

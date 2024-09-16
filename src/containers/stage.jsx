@@ -16,6 +16,7 @@ import {
     activateColorPicker,
     deactivateColorPicker
 } from '../reducers/color-picker';
+import {setCanvasCoordinates} from '../reducers/stage-size';
 
 const colorPickerRadius = 20;
 const dragThreshold = 3; // Same as the block drag threshold
@@ -29,6 +30,7 @@ class Stage extends React.Component {
             'detachMouseEvents',
             'handleDoubleClick',
             'handleQuestionAnswered',
+            'onQuestionAnsweredProgrammatically',
             'onMouseUp',
             'onMouseMove',
             'onMouseDown',
@@ -75,6 +77,7 @@ class Stage extends React.Component {
         this.attachMouseEvents(this.canvas);
         this.updateRect();
         this.props.vm.runtime.addListener('QUESTION', this.questionListener);
+        this.props.vm.runtime.addListener('ANSWERED_PROGRAMMATICALLY', this.onQuestionAnsweredProgrammatically);
     }
     shouldComponentUpdate (nextProps, nextState) {
         return this.props.stageSize !== nextProps.stageSize ||
@@ -99,6 +102,7 @@ class Stage extends React.Component {
         this.detachRectEvents();
         this.stopColorPickingLoop();
         this.props.vm.runtime.removeListener('QUESTION', this.questionListener);
+        this.props.vm.runtime.removeListener('ANSWERED_PROGRAMMATICALLY', this.onQuestionAnsweredProgrammatically);
     }
     questionListener (question) {
         this.setState({question: question});
@@ -108,6 +112,15 @@ class Stage extends React.Component {
             this.props.vm.runtime.emit('ANSWER', answer);
         });
     }
+
+    /**
+     * Close the question input field on the stage if the question was answered programmatically,
+     * e.g. by a Whisker or BBT instruction.
+     */
+    onQuestionAnsweredProgrammatically () {
+        this.setState({question: null});
+    }
+
     startColorPickingLoop () {
         this.intervalId = setInterval(() => {
             if (typeof this.pickX === 'number') {
@@ -146,6 +159,7 @@ class Stage extends React.Component {
     }
     updateRect () {
         this.rect = this.canvas.getBoundingClientRect();
+        this.props.onUpdateRect(this.rect.left, this.rect.top);
     }
     getScratchCoords (x, y) {
         const nativeSize = this.renderer.getNativeSize();
@@ -172,7 +186,7 @@ class Stage extends React.Component {
         this.props.vm.setEditingTarget(targetId);
     }
     onMouseMove (e) {
-        if (this.props.testRunning || this.props.locked) {
+        if (this.props.locked) {
             return;
         }
 
@@ -218,8 +232,6 @@ class Stage extends React.Component {
         this.props.vm.postIOData('mouse', coordinates);
     }
     onMouseUp (e) {
-        if (this.props.testRunning) return;
-
         const {x, y} = getEventXY(e);
         const mousePosition = [x - this.rect.left, y - this.rect.top];
         this.cancelMouseDownTimeout();
@@ -257,7 +269,7 @@ class Stage extends React.Component {
         }
     }
     onMouseDown (e) {
-        if (this.props.testRunning || this.props.locked) {
+        if (this.props.locked) {
             return;
         }
 
@@ -300,7 +312,7 @@ class Stage extends React.Component {
         }
     }
     onWheel (e) {
-        if (this.props.testRunning || this.props.locked) {
+        if (this.props.locked) {
             return;
         }
 
@@ -443,11 +455,11 @@ Stage.propTypes = {
     isColorPicking: PropTypes.bool,
     isFullScreen: PropTypes.bool.isRequired,
     isStarted: PropTypes.bool,
-    testRunning: PropTypes.bool,
     locked: PropTypes.bool,
     micIndicator: PropTypes.bool,
     onActivateColorPicker: PropTypes.func,
     onDeactivateColorPicker: PropTypes.func,
+    onUpdateRect: PropTypes.func,
     stageSize: PropTypes.oneOf(Object.keys(STAGE_DISPLAY_SIZES)).isRequired,
     useEditorDragStyle: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired
@@ -461,7 +473,6 @@ const mapStateToProps = state => ({
     isColorPicking: state.scratchGui.colorPicker.active,
     isFullScreen: state.scratchGui.mode.isFullScreen,
     isStarted: state.scratchGui.vmStatus.started,
-    testRunning: state.scratchGui.vmStatus.testRunning,
     micIndicator: state.scratchGui.micIndicator,
     locked: state.scratchGui.vmStatus.locked,
     // Do not use editor drag style in fullscreen or player mode.
@@ -470,7 +481,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     onActivateColorPicker: () => dispatch(activateColorPicker()),
-    onDeactivateColorPicker: color => dispatch(deactivateColorPicker(color))
+    onDeactivateColorPicker: color => dispatch(deactivateColorPicker(color)),
+    onUpdateRect: (canvasLeft, canvasTop) => dispatch(setCanvasCoordinates(canvasLeft, canvasTop))
 });
 
 export default connect(

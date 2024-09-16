@@ -2,6 +2,7 @@ import {applyMiddleware, compose, combineReducers} from 'redux';
 
 import alertsReducer, {alertsInitialState} from './alerts';
 import assetDragReducer, {assetDragInitialState} from './asset-drag';
+import blockBasedTestingReducer, {blockBasedTestingInitialState} from './block-based-testing';
 import cardsReducer, {cardsInitialState} from './cards';
 import tutorialCardsReducer, {tutorialCardsInitialState} from './tutorial-cards';
 import tutorialStepReducer, {tutorialStepInitialState} from './tutorial-step';
@@ -44,6 +45,7 @@ const guiMiddleware = compose(applyMiddleware(throttle(300, {leading: true, trai
 const guiInitialState = {
     alerts: alertsInitialState,
     assetDrag: assetDragInitialState,
+    blockBasedTesting: blockBasedTestingInitialState,
     blockDrag: blockDragInitialState,
     cards: cardsInitialState,
     ircards: irCardsInitialState,
@@ -151,6 +153,7 @@ const initTelemetryModal = function (currentState) {
 const guiReducer = combineReducers({
     alerts: alertsReducer,
     assetDrag: assetDragReducer,
+    blockBasedTesting: blockBasedTestingReducer,
     blockDrag: blockDragReducer,
     cards: cardsReducer,
     ircards: irCardsReducer,

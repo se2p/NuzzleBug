@@ -1,0 +1,28 @@
+image: node:16
+
+stages:
+    - build
+
+before_script:
+    # Test scratch-gui against a specific commit of the scratch-vm.
+    # Can be used either by pipelines in other projects to trigger a downstream
+    # build while using a specific commit, or when manually triggering a CI
+    # pipeline via the GitLab UI.
+    - yarn ci:prepare-downstream-build
+    - yarn install --cache-folder .yarn
+
+cache:
+    paths:
+        - node_modules/
+        - .yarn
+        - .cache
+
+build:
+    stage: build
+    script:
+        - yarn install
+        - yarn run build
+    artifacts:
+        paths:
+            - build/
+        expire_in: 1 hour

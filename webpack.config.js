@@ -28,8 +28,8 @@ const base = {
         chunkFilename: 'chunks/[name].js'
     },
     resolve: {
-        symlinks: true, // avoid unreadable symlinks to make debugging easier
-        extensions: ['.ts', '.tsx', '.js'], // including typescript is necessary as whisker includes some
+        symlinks: false,
+        extensions: ['.ts', '.tsx', '.js'] // including typescript is necessary as whisker includes some
     },
     module: {
         rules: [{
@@ -57,10 +57,15 @@ const base = {
         },
         {
             test: /\.tsx?$/,
-            loader: 'ts-loader',
-            options: {
-                allowTsInNodeModules: true
-            }
+            use: [
+                {
+                    loader: 'ts-loader',
+                    options: {
+                        allowTsInNodeModules: true,
+                        transpileOnly: true // This seems to fix problems with linking whisker locally
+                    }
+                }
+            ]
         },
         {
             test: /\.css$/,
@@ -140,8 +145,7 @@ module.exports = [
         plugins: base.plugins.concat([
             new webpack.DefinePlugin({
                 'process.env.NODE_ENV': '"' + process.env.NODE_ENV + '"',
-                'process.env.DEBUG': Boolean(process.env.DEBUG),
-                'process.env.GA_ID': '"' + (process.env.GA_ID || 'UA-000000-01') + '"'
+                'process.env.DEBUG': Boolean(process.env.DEBUG)
             }),
             new HtmlWebpackPlugin({
                 chunks: ['lib.min', 'gui'],
