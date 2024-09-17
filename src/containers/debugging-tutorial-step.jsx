@@ -78,7 +78,6 @@ class DebuggingTutorialStep extends React.Component {
             if (JSON.stringify(this.props.tutorialMessages) !== this.props.lastTutorial) {
                 this.props.setLastTutorial(JSON.stringify(this.props.tutorialMessages));
                 this.props.resetStep();
-                console.log("RESETTING STEPABC")
             }
         }
     }

@@ -29,7 +29,7 @@ const initialState = { //TODO Remove logic from reducer!
     solvedSteps: {},
     selectedBlocks: {},
     questionMessage: null,
-    showDiagramm: true,
+    showDiagramm: false,
     lastStepNumber: -1,
     lastTutorial: null,
     showDropdown: null,
@@ -101,7 +101,7 @@ const reducer = function (state, action) {
             baseState.stepStack = ["1"];
             baseState.solvedSteps = {};
             baseState.selectedBlocks = {};
-            baseState.showDiagramm = true;
+            baseState.showDiagramm = false;
             baseState.showDropdown = null;
             baseState.explanation = false;
             break;

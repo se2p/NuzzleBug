@@ -161,8 +161,8 @@ const DebuggingTutorialHelp = props => {
                                     <span className={css.dropdownElement} onClick={() => setAnswer(0, '0')}>
                                         0
                                     </span>
-                                    <span className={css.dropdownElement} onClick={() => setAnswer(0, 'unendlich')}>
-                                        unendlich
+                                    <span className={css.dropdownElement} onClick={() => setAnswer(0, 'mehrmals')}>
+                                        mehrmals
                                     </span>
                                 </div>
                             )}
@@ -192,8 +192,8 @@ const DebuggingTutorialHelp = props => {
                                     <span className={css.dropdownElement} onClick={() => setAnswer(1, '0')}>
                                         0
                                     </span>
-                                    <span className={css.dropdownElement} onClick={() => setAnswer(1, 'unendlich')}>
-                                        unendlich
+                                    <span className={css.dropdownElement} onClick={() => setAnswer(1, 'mehrmals')}>
+                                        mehrmals
                                     </span>
                                 </div>
                             )}
@@ -445,9 +445,9 @@ const DebuggingTutorialHelp = props => {
                 borderColor: showDiagramm ? "#4D97FFFF" : "transparent"}}>
                 <div className={css.diagrammButtonContainer}>
                     {showDiagramm ? <img className={css.diagrammButton}
-                         onClick={onDiagrammExplanation}
-                         src={diagrammExplanation}
-                         draggable={false} alt={"explanationButton"}/> : null}
+                                         onClick={onDiagrammExplanation}
+                                         src={diagrammExplanation}
+                                         draggable={false} alt={"explanationButton"}/> : null}
                     <img className={css.diagrammButton}
                          onClick={onToggleDiagramm}
                          src={showDiagramm ? expandIcon : shrinkIcon}

@@ -170,26 +170,30 @@ class DebuggingTutorialHelp extends React.Component {
     componentDidMount() {
         if (this.props.stepNumber !== this.props.lastStepNumber || JSON.stringify(this.props.tutorial) !== JSON.stringify(this.props.lastTutorial)) {
             //this.props.resetComponent();
-            //this.props.setLastStepNumber(this.props.stepNumber);
+           // this.props.setLastStepNumber(this.props.stepNumber);
             //this.props.setLastTutorial(this.props.tutorial);
         }
     }
 
     render () {
-        //console.log(this.props.lastTutorial.title);
-        //console.log(this.props.tutorial.title);
+
+        if (this.props.stepNumber !== this.props.lastStepNumber) {
+            this.props.resetComponent();
+            this.props.setLastStepNumber(this.props.stepNumber);
+            return null;
+        }
+
         let curStep;
-        console.log((JSON.stringify(this.props.tutorial) !== JSON.stringify(this.props.lastTutorial)).toString() + "  /  " + JSON.stringify(this.props.tutorial) + " AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA " + JSON.stringify(this.props.lastTutorial))
 
         if (this.props.tutorial === null) return;
 
         if (this.props.lastTutorial === null || JSON.stringify(this.props.tutorial) !== JSON.stringify(this.props.lastTutorial)) {
             this.props.resetComponent();
             this.props.setLastTutorial(this.props.tutorial);
-            console.log("RESET HELP ABC")
             return null;
         } else {
             curStep = "step" + (this.props.stepNumber + 1).toString() + "_" + this.props.level;
+            console.log("STEP: " + curStep);
         }
 
         const tutorialStep = this.props.tutorial[curStep];

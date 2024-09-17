@@ -5,7 +5,7 @@ const TOGGLE_AUTO_SAVE = 'scratch-gui/debugging-tutorial-cards/TOGGLE_AUTO_SAVE'
 const initialState = {
     lastTutorial: null,
     isLoading: false,
-    autoSave: true,
+    autoSave: false,
 };
 
 const reducer = function (state, action) {
