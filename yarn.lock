@@ -9738,9 +9738,8 @@ schema-utils@^3.0.0:
     ajv "^6.12.5"
     ajv-keywords "^3.5.2"
 
-"scratch-analysis@git+https://gitlab+deploy-token-26:gldt-JnhezqQAx-v4JyLZBw7P@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-analysis.git", "scratch-analysis@git+https://gitlab+deploy-token-26:gldt-JnhezqQAx-v4JyLZBw7P@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-analysis.git#main":
+"scratch-analysis@git+https://gitlab+deploy-token-26:gldt-JnhezqQAx-v4JyLZBw7P@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-analysis.git#main":
   version "1.0.0"
-  uid f8a13946dbe601941fffde64608c726845d7c068
   resolved "git+https://gitlab+deploy-token-26:gldt-JnhezqQAx-v4JyLZBw7P@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-analysis.git#f8a13946dbe601941fffde64608c726845d7c068"
 
 scratch-audio@0.1.0-prerelease.20221123180128:
@@ -9754,7 +9753,7 @@ scratch-audio@0.1.0-prerelease.20221123180128:
 
 "scratch-blocks@git+https://gitlab+deploy-token-8:vQ5PEsjDsFr9WtF56a7h@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-blocks.git#develop":
   version "0.1.0"
-  resolved "git+https://gitlab+deploy-token-8:vQ5PEsjDsFr9WtF56a7h@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-blocks.git#c2d55a497231fa3800182304f26e05e6dfedc8fd"
+  resolved "git+https://gitlab+deploy-token-8:vQ5PEsjDsFr9WtF56a7h@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-blocks.git#eea668222ddc70170a2a47354f1cb7216d0efebf"
   dependencies:
     exports-loader "0.6.3"
     google-closure-library "20190301.0.0"
@@ -9763,10 +9762,10 @@ scratch-audio@0.1.0-prerelease.20221123180128:
 
 "scratch-ir@git+https://gitlab+deploy-token-10:aXHysSQXmgmbCC-3GMzp@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-ir.git#master":
   version "0.1.0"
-  resolved "git+https://gitlab+deploy-token-10:aXHysSQXmgmbCC-3GMzp@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-ir.git#ce393be055a736e319660d45432c60f6f585138d"
+  resolved "git+https://gitlab+deploy-token-10:aXHysSQXmgmbCC-3GMzp@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-ir.git#d746b5b89f9c90e1e606f410cb7260924383b889"
   dependencies:
     lodash.bindall "4.4.0"
-    scratch-analysis "git+https://gitlab+deploy-token-26:gldt-JnhezqQAx-v4JyLZBw7P@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-analysis.git"
+    scratch-analysis "git+https://gitlab+deploy-token-26:gldt-JnhezqQAx-v4JyLZBw7P@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-analysis.git#main"
 
 scratch-l10n@3.14.20220329031539:
   version "3.14.20220329031539"
@@ -9780,7 +9779,7 @@ scratch-l10n@3.14.20220329031539:
 
 "scratch-l10n@git+https://gitlab+deploy-token-23:gldt-eEF7gYLbzCgz3nSXm9zh@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-l10n.git#master":
   version "3.14.0"
-  resolved "git+https://gitlab+deploy-token-23:gldt-eEF7gYLbzCgz3nSXm9zh@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-l10n.git#02a13cde7e72816b65e409f1d0e0a6c463981938"
+  resolved "git+https://gitlab+deploy-token-23:gldt-eEF7gYLbzCgz3nSXm9zh@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-l10n.git#5cdb4d56ee32097f0f7f3cbb9e1f274fc962f2d2"
   dependencies:
     "@babel/cli" "^7.1.2"
     "@babel/core" "^7.1.2"
@@ -9885,7 +9884,7 @@ scratch-translate-extension-languages@0.0.20191118205314:
 
 "scratch-vm@git+https://gitlab+deploy-token-3:i8XTz2vnGPewCoYALnoy@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-vm.git#develop":
   version "1.5.76"
-  resolved "git+https://gitlab+deploy-token-3:i8XTz2vnGPewCoYALnoy@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-vm.git#5a551f43fcff1fdb39afeab692b5da8f9a057d45"
+  resolved "git+https://gitlab+deploy-token-3:i8XTz2vnGPewCoYALnoy@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-vm.git#76c75dd2c33166092f2c500511dab5baf8d4997f"
   dependencies:
     "@vernier/godirect" "1.5.0"
     arraybuffer-loader "^1.0.6"
