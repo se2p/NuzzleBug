@@ -84,7 +84,7 @@ class DebuggingTutorialHelp extends React.Component {
                 if (this.props.answers[2] !== "") {
                     const nextStep = this.props.answers[2] !== "false" ?
                         tutorial.endQuestionTrueNext : tutorial.endQuestionFalseNext;
-                    // The GAP TEXT was solved. Next time when visiting this specific step, solve the first 2 inputFields
+
                     if (nextStep !== "wrongAnswer") { //TODO
                         this.props.addSolvedStep(step, this.props.answers[2]);
                         this.props.setStep(nextStep.slice(6));
@@ -93,6 +93,8 @@ class DebuggingTutorialHelp extends React.Component {
                         this.props.addSolvedStep(step, this.props.answers[2]);
                         this.props.setQuestionMessage(tutorial.correctionText);
                     }
+                } else {
+                   this.props.setQuestionMessage("Die beiden Felder sind noch nicht korrekt ausgefüllt");
                 }
                 break;
             case "MARK":
@@ -152,7 +154,7 @@ class DebuggingTutorialHelp extends React.Component {
     setAnswer(index, value, step) {
         this.props.onSetAnswer(index, value);
         if (this.props.solvedSteps.hasOwnProperty(step) && this.props.solvedSteps[step].includes(value)) {
-            this.props.setQuestionMessage("[REVISITING]Schon gelöst!");
+            this.props.setQuestionMessage("[REVISITING]Bereits untersucht");
         } else {
             this.props.setQuestionMessage(null);
         }
@@ -167,16 +169,7 @@ class DebuggingTutorialHelp extends React.Component {
         this.props.addSolvedStep(step, "solved :)");
     }
 
-    componentDidMount() {
-        if (this.props.stepNumber !== this.props.lastStepNumber || JSON.stringify(this.props.tutorial) !== JSON.stringify(this.props.lastTutorial)) {
-            //this.props.resetComponent();
-           // this.props.setLastStepNumber(this.props.stepNumber);
-            //this.props.setLastTutorial(this.props.tutorial);
-        }
-    }
-
     render () {
-
         if (this.props.stepNumber !== this.props.lastStepNumber) {
             this.props.resetComponent();
             this.props.setLastStepNumber(this.props.stepNumber);
@@ -185,7 +178,7 @@ class DebuggingTutorialHelp extends React.Component {
 
         let curStep;
 
-        if (this.props.tutorial === null) return;
+        if (this.props.tutorial === null) return null;
 
         if (this.props.lastTutorial === null || JSON.stringify(this.props.tutorial) !== JSON.stringify(this.props.lastTutorial)) {
             this.props.resetComponent();
@@ -193,7 +186,6 @@ class DebuggingTutorialHelp extends React.Component {
             return null;
         } else {
             curStep = "step" + (this.props.stepNumber + 1).toString() + "_" + this.props.level;
-            console.log("STEP: " + curStep);
         }
 
         const tutorialStep = this.props.tutorial[curStep];

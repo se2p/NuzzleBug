@@ -14,7 +14,6 @@ class DebuggingTutorialOverview extends React.Component {
 
     loadProject() { //TODO
         const isNewTutorialSelected = JSON.stringify(this.props.tutorialMessages) !== JSON.stringify((this.props.lastTutorial));
-        console.log("LOAD PROJECT: " + isNewTutorialSelected);
         if (isNewTutorialSelected) {
             if (this.props.autoSave) {
                 this.props.setLoading(true);
@@ -62,8 +61,12 @@ class DebuggingTutorialOverview extends React.Component {
     }
 
     render () {
-        const isNewTutorialSelected = JSON.stringify(this.props.tutorialMessages) !== JSON.stringify((this.props.lastTutorial));
-
+        const isNewTutorialSelected = this.props.lastTutorial !== null && this.props.lastTutorial !== undefined ? this.props.tutorialMessages.title !== this.props.lastTutorial.title : true;
+        if (this.props.lastTutorial !== null && this.props.lastTutorial !== undefined) {
+            console.log(isNewTutorialSelected.toString() + " Render: " + this.props.tutorialMessages.title + " / " + this.props.lastTutorial.title)
+        } else {
+            console.log("TRUE");
+        }
         let lastTutorialTitle = null;
         if (isNewTutorialSelected && this.props.lastTutorial !== null && this.props.lastTutorial !== undefined) {
             lastTutorialTitle = this.props.lastTutorial.title;

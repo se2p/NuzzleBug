@@ -283,7 +283,6 @@ const DebuggingTutorialHelp = props => {
             return;
         }
         const curOption = answers[0];
-        console.log("curOption: " + curOption + " answers[0]: " + answers[0]);
         const optionKeys = Object.keys(tutorial[step]).filter(key => key.startsWith('option'))
 
         return (
@@ -321,7 +320,7 @@ const DebuggingTutorialHelp = props => {
                                     onClick={() => {
                                         setAnswer(0, e);
                                     }}
-                                    style={{borderRadius: "100px", marginRight: "10px"}}
+                                    style={{borderRadius: "100px", marginRight: "10px", marginBottom: "10px"}}
                                 />
                             </div>
 

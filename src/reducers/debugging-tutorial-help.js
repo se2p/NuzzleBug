@@ -181,7 +181,6 @@ const resetComponent = function () {
 }
 
 const setLastTutorial = function (lastTutorial) {
-    console.log("SetLastTutorial(): " + lastTutorial.title)
     return {type: SET_LAST_TUTORIAL, lastTutorial}
 }
 

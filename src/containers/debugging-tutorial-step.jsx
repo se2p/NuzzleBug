@@ -70,8 +70,6 @@ class DebuggingTutorialStep extends React.Component {
     }
 
     componentDidMount() {
-        //const isNewTutorialSelected = JSON.stringify(this.props.tutorialMessages) !== JSON.stringify((this.props.lastTutorial));
-
         if (this.props.lastTutorial === null) {
             this.props.setLastTutorial(JSON.stringify(this.props.tutorialMessages));
         } else {
