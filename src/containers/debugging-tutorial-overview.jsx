@@ -52,6 +52,8 @@ class DebuggingTutorialOverview extends React.Component {
 
     autoSave() {
         this.props.setLoading(true);
+        this.props.vm.start();
+        this.props.vm.clear();
         this.props.vm.loadProject(this.props.tutorialIndexData["project1"])
             .then(() => {
                 this.props.setLastTutorial(this.props.tutorialMessages);

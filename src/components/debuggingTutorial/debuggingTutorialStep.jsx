@@ -5,6 +5,7 @@ import owl from "./images/owl-b.svg"
 import failed_debugging from "./images/icon--failed-debugging.png"
 import {FormattedMessage} from "react-intl";
 import owlIcon from "./images/owl-b.svg"
+import congratulations from "./images/Glückwunsch.png"
 
 const DebuggingTutorialStep = props => {
     const {
@@ -107,6 +108,17 @@ const DebuggingTutorialStep = props => {
                 </div>}
 
 
+
+                <div className={css.explanationBar}>
+                    <span className={css.explanationText}>
+                    <u><b>Das ist zu tun:</b></u> Finde den Fehler und klicke auf <b>Überprüfen</b>, damit Euli deinen Code checkt. Wenn alles passt,
+                    klicke auf <b>Weiter gehts</b>. Brauchst du Hilfe, klicke auf <b>Frage Euli</b>.
+                    </span>
+                </div>
+
+
+
+
                 <div className={css.buttonBar}>
 
 
@@ -175,11 +187,7 @@ const DebuggingTutorialStep = props => {
 
     const renderFinalStep = () => {
         return (<div className={css.container}>
-
-            <div style={{textAlign: "center", width:"100%"}}>
-                <span className={css.descriptionHeader}>Glückwunsch!</span>
-            </div>
-            <img className={css.titleImage} src={tutorialMessages.levelFinishedImg} alt={"Picture of the tutorial"}/>
+            <img className={css.titleImage} src={congratulations} alt={"Picture of the tutorial"} style={{marginTop:"15px", width: "300px", height: "auto"}}/>
             <div className={css.descriptionFinish}>
                 <p>{tutorialMessages.levelFinishedText}</p>
             </div>

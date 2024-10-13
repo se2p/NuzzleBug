@@ -45,15 +45,20 @@ class DebuggingTutorialStep extends React.Component {
     onNextStep() {
         this.props.setLoadingProject("NEXT");
         this.props.resetStep();
-        this.props.vm.start();
-        this.props.vm.clear();
-        this.props.lockVM();
-        this.props.vm.loadProject(this.props.tutorialIndexData["project" + (this.props.step + 2).toString()])
-            .catch(e => console.log("Error while loading project: " + e.toString())) //TODO Stop loading on end
-            .finally(() => {
-                this.props.unlockVM();
-                this.props.setLoadingProject(null);
-            });
+
+        if (this.props.step + 1 !== this.props.tutorialIndexData.totalSteps) {
+            this.props.vm.start();
+            this.props.vm.clear();
+            this.props.lockVM();
+
+            this.props.vm.loadProject(this.props.tutorialIndexData["project" + (this.props.step + 2).toString()])
+                .catch(e => console.log("Error while loading project: " + e.toString())) //TODO Stop loading on end
+                .finally(() => {
+                    this.props.unlockVM();
+                    this.props.setLoadingProject(null);
+                });
+        }
+
         this.props.onIncreaseStep();
     }
 

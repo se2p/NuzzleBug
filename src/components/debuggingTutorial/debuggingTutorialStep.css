@@ -10,7 +10,7 @@
 }
 
 .description {
-    text-align: left;
+    text-align: justify;
     margin: 20px 0;
     width: 100%;
     display: flex;
@@ -51,6 +51,22 @@
     border-radius: 10px;
     padding: 5px 5px;
     width: 90%;
+}
+
+.explanation-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid #4D97FFFF;
+    border-radius: 10px;
+    width: 90%;
+    margin-top: 5px;
+    padding: 10px 10px;
+}
+
+.explanation-text {
+    text-align: justify;
+    width: 100%;
 }
 
 .error-text {

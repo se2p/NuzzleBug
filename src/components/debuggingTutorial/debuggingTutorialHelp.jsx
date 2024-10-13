@@ -161,6 +161,9 @@ const DebuggingTutorialHelp = props => {
                                     <span className={css.dropdownElement} onClick={() => setAnswer(0, '0')}>
                                         0
                                     </span>
+                                    <span className={css.dropdownElement} onClick={() => setAnswer(0, '1')}>
+                                        1
+                                    </span>
                                     <span className={css.dropdownElement} onClick={() => setAnswer(0, 'mehrmals')}>
                                         mehrmals
                                     </span>
@@ -191,6 +194,9 @@ const DebuggingTutorialHelp = props => {
                                 <div className={css.dropdownContent}>
                                     <span className={css.dropdownElement} onClick={() => setAnswer(1, '0')}>
                                         0
+                                    </span>
+                                    <span className={css.dropdownElement} onClick={() => setAnswer(1, '1')}>
+                                        1
                                     </span>
                                     <span className={css.dropdownElement} onClick={() => setAnswer(1, 'mehrmals')}>
                                         mehrmals

@@ -187,7 +187,7 @@ const TutorialCards = props => {
         cardRef,
         tutorials,
         selectedTutorial,
-        isMenuVisible, //TODO löschen
+        isMenuVisible,
         isRtl,
         currentTutorialStep,
         title,
