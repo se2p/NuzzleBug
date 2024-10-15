@@ -14,6 +14,14 @@ var postcssImport = require('postcss-import');
 
 const STATIC_PATH = process.env.STATIC_PATH || '/static';
 
+// dotenv for environment variables in .env
+const dotenv = require('dotenv');
+const env = dotenv.config().parsed;
+const envKeys = Object.keys(env).reduce((obj, key) => {
+    obj[`process.env.${key}`] = JSON.stringify(env[key]);
+    return obj;
+}, {});
+
 const base = {
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
     devtool: 'cheap-module-source-map',
@@ -145,8 +153,10 @@ module.exports = [
         plugins: base.plugins.concat([
             new webpack.DefinePlugin({
                 'process.env.NODE_ENV': '"' + process.env.NODE_ENV + '"',
-                'process.env.DEBUG': Boolean(process.env.DEBUG)
+                'process.env.DEBUG': Boolean(process.env.DEBUG),
+                'process.env.ALL_ENV_FILE_VARIABLES': envKeys
             }),
+            new webpack.DefinePlugin(envKeys),
             new HtmlWebpackPlugin({
                 chunks: ['lib.min', 'gui'],
                 template: 'src/playground/index.ejs',

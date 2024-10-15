@@ -31,6 +31,12 @@ class HiddenDebuggingWindow extends React.Component {
                         {'Log Runtime to console'}
                     </button>
                 </div>
+                <br/>
+                <div>
+                    <button type="button" onClick={() => console.log(process.env.ALL_ENV_FILE_VARIABLES)}>
+                        {'Log all variables from .env file to console'}
+                    </button>
+                </div>
 
                 <br/>
                 <br/>
