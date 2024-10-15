@@ -28,6 +28,7 @@ import BBTTestInterface from '../../containers/block-based-testing.jsx';
 import BBTExamplesWindow from '../../containers/block-based-testing-examples-window.jsx';
 import BBTBatchEvaluationWindow from '../../containers/block-based-testing-batch-evaluation-window.jsx';
 import BBTCoordinatesTooltip from '../block-based-testing/bbt-coordinates-tooltip.jsx';
+import HiddenDebuggingWindow from '../../containers/hidden-debugging-window.jsx';
 
 import Backpack from '../../containers/backpack.jsx';
 import WebGlModal from '../../containers/webgl-modal.jsx';
@@ -79,6 +80,7 @@ const GUIComponent = props => {
         blockBasedTestingInterfaceVisible,
         bbtExamplesWindowVisible,
         bbtBatchEvaluationWindowVisible,
+        hiddenDebuggingWindowVisible,
         bbtCoordinatesTooltipVisible,
         blocksTabVisible,
         cardsVisible,
@@ -226,6 +228,9 @@ const GUIComponent = props => {
                     <BBTBatchEvaluationWindow
                         vm={vm}
                     />
+                ) : null}
+                {hiddenDebuggingWindowVisible ? (
+                    <HiddenDebuggingWindow />
                 ) : null}
                 {bbtCoordinatesTooltipVisible ? (
                     <BBTCoordinatesTooltip />
@@ -452,6 +457,7 @@ GUIComponent.propTypes = {
     blockBasedTestingInterfaceVisible: PropTypes.bool,
     bbtExamplesWindowVisible: PropTypes.bool,
     bbtBatchEvaluationWindowVisible: PropTypes.bool,
+    hiddenDebuggingWindowVisible: PropTypes.bool,
     bbtCoordinatesTooltipVisible: PropTypes.bool,
     blocksTabVisible: PropTypes.bool,
     canChangeLanguage: PropTypes.bool,

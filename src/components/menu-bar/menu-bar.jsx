@@ -12,6 +12,8 @@ import VM from 'scratch-vm';
 import Box from '../box/box.jsx';
 import Button from '../button/button.jsx';
 import CommunityButton from './community-button.jsx';
+import HiddenDebuggingButton from '../hidden-debugging-window/hidden-debugging-button.jsx';
+import {toggleHiddenDebuggingWindowVisibility} from '../../reducers/hidden-debugging';
 import ShareButton from './share-button.jsx';
 import Scratch1984Button from './scratch1984-button.jsx';
 import {ComingSoonTooltip} from '../coming-soon/coming-soon.jsx';
@@ -669,6 +671,7 @@ class MenuBar extends React.Component {
                             </MenuBarItemTooltip>
                         ) : [])}
                     </div>
+                    <HiddenDebuggingButton onClick={this.props.onClickHiddenDebugging} />
                 </div>
 
                 {/* show the proper UI in the account menu, given whether the user is
@@ -894,7 +897,8 @@ MenuBar.propTypes = {
     vm: PropTypes.instanceOf(VM).isRequired,
     saveProjectBeforeFinish: PropTypes.func,
     saveProjectSb3: PropTypes.func,
-    onSaveFinished: PropTypes.func
+    onSaveFinished: PropTypes.func,
+    onClickHiddenDebugging: PropTypes.func
 };
 
 MenuBar.defaultProps = {
@@ -946,7 +950,8 @@ const mapDispatchToProps = dispatch => ({
     onClickRemix: () => dispatch(remixProject()),
     onClickSave: () => dispatch(manualUpdateProject()),
     onClickSaveAsCopy: () => dispatch(saveProjectAsCopy()),
-    onSeeCommunity: () => dispatch(setPlayer(true))
+    onSeeCommunity: () => dispatch(setPlayer(true)),
+    onClickHiddenDebugging: () => dispatch(toggleHiddenDebuggingWindowVisibility())
 });
 
 export default compose(

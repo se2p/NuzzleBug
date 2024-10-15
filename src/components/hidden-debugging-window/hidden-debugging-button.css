@@ -1,0 +1,7 @@
+@import "../../css/colors.css";
+
+.hidden-debugging-button {
+    width: 20px;
+    height: 32px;
+    background-color: $motion-primary;
+}
