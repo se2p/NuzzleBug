@@ -671,7 +671,10 @@ class MenuBar extends React.Component {
                             </MenuBarItemTooltip>
                         ) : [])}
                     </div>
-                    <HiddenDebuggingButton onClick={this.props.onClickHiddenDebugging} />
+                    {process.env.SHOW_HIDDEN_DEBUGGING_BUTTON === 'true' ? (
+                        <HiddenDebuggingButton onClick={this.props.onClickHiddenDebugging}/>
+                    ) : null
+                    }
                 </div>
 
                 {/* show the proper UI in the account menu, given whether the user is
@@ -682,15 +685,20 @@ class MenuBar extends React.Component {
                             <SaveStatus />
                         )}
                     </div>
+
                     {/* scratch1984 */}
-                    <div>
-                        <Scratch1984Button
-                            className={styles.menuBarButton}
-                            onClick={() => {
-                                this.handleFinishExperiment();
-                            }} // check if called correctly
-                        />
-                    </div>
+                    {process.env.SHOW_FINISH_BUTTON === 'true' ? (
+                        <div>
+                            <Scratch1984Button
+                                className={styles.menuBarButton}
+                                onClick={() => {
+                                    this.handleFinishExperiment();
+                                }} // check if called correctly
+                            />
+                        </div>
+                    ) : null
+                    }
+
                     {this.props.sessionExists ? (
                         this.props.username ? (
                             // ************ user is logged in ************
