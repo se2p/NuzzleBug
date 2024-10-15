@@ -3,6 +3,7 @@ import {applyMiddleware, compose, combineReducers} from 'redux';
 import alertsReducer, {alertsInitialState} from './alerts';
 import assetDragReducer, {assetDragInitialState} from './asset-drag';
 import blockBasedTestingReducer, {blockBasedTestingInitialState} from './block-based-testing';
+import hiddenDebuggingReducer, {hiddenDebuggingInitialState} from './hidden-debugging';
 import cardsReducer, {cardsInitialState} from './cards';
 import tutorialCardsReducer, {tutorialCardsInitialState} from './tutorial-cards';
 import tutorialStepReducer, {tutorialStepInitialState} from './tutorial-step';
@@ -43,6 +44,7 @@ const guiInitialState = {
     alerts: alertsInitialState,
     assetDrag: assetDragInitialState,
     blockBasedTesting: blockBasedTestingInitialState,
+    hiddenDebugging: hiddenDebuggingInitialState,
     blockDrag: blockDragInitialState,
     cards: cardsInitialState,
     ircards: irCardsInitialState,
@@ -148,6 +150,7 @@ const guiReducer = combineReducers({
     alerts: alertsReducer,
     assetDrag: assetDragReducer,
     blockBasedTesting: blockBasedTestingReducer,
+    hiddenDebugging: hiddenDebuggingReducer,
     blockDrag: blockDragReducer,
     cards: cardsReducer,
     ircards: irCardsReducer,

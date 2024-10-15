@@ -135,6 +135,7 @@ const mapStateToProps = state => {
         blockBasedTestingInterfaceVisible: state.scratchGui.blockBasedTesting.interfaceVisible,
         bbtExamplesWindowVisible: state.scratchGui.blockBasedTesting.examplesWindowVisible,
         bbtBatchEvaluationWindowVisible: state.scratchGui.blockBasedTesting.batchEvaluationWindowVisible,
+        hiddenDebuggingWindowVisible: state.scratchGui.hiddenDebugging.windowVisible,
         bbtCoordinatesTooltipVisible: state.scratchGui.blockBasedTesting.coordinatesTooltipVisible,
         blocksTabVisible: state.scratchGui.editorTab.activeTabIndex === BLOCKS_TAB_INDEX,
         cardsVisible: state.scratchGui.cards.visible,
