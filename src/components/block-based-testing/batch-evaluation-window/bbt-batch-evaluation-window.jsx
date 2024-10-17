@@ -45,6 +45,10 @@ const messages = defineMessages({
         id: 'gui.cards.close',
         defaultMessage: 'Close'
     },
+    stage: {
+        id: 'gui.stageSelector.stage',
+        defaultMessage: 'Stage'
+    },
     currentProject: {
         id: 'gui.blockBasedTesting.batchEvaluationWindow.currentProject',
         defaultMessage: 'Current Project'
@@ -189,7 +193,10 @@ const BBTBatchEvaluationWindowComponent = props => {
                                             <div>{props.intl.formatMessage(messages.noTests)}</div> :
                                             currentProjectTestStatsKeys.map(spriteName => (
                                                 <div key={spriteName}>
-                                                    {`${spriteName}: ${props.currentProjectTestStats[spriteName]}`}
+                                                    {`${spriteName === '_stage_' ?
+                                                        props.intl.formatMessage(messages.stage) :
+                                                        spriteName
+                                                    }: ${props.currentProjectTestStats[spriteName]}`}
                                                 </div>
                                             ))}
                                     </div>
@@ -237,7 +244,10 @@ const BBTBatchEvaluationWindowComponent = props => {
                                             <div>{props.intl.formatMessage(messages.empty)}</div> :
                                             testStoreStatsKeys.map(spriteName => (
                                                 <div key={spriteName}>
-                                                    {`${spriteName}: ${props.testStoreStats[spriteName]}`}
+                                                    {`${spriteName === '_stage_' ?
+                                                        props.intl.formatMessage(messages.stage) :
+                                                        spriteName
+                                                    }: ${props.testStoreStats[spriteName]}`}
                                                 </div>
                                             ))}
                                     </div>
