@@ -178,7 +178,6 @@ class MenuBar extends React.Component {
             'restoreOptionMessage',
             'handleFinishExperiment'
         ]);
-        this.scratchlogURL = ''; // localhost default: http://localhost:8090
     }
     componentDidMount () {
         document.addEventListener('keydown', this.handleKeyPress);
@@ -265,8 +264,7 @@ class MenuBar extends React.Component {
                 }
                 this.props.saveProjectBeforeFinish(content);
             });
-            //TODO baseurl scratchlog setzen
-            window.location.href = `${this.scratchlogURL}/participant/stop?user=${userId}&experiment=${experimentId}&secret=${secret}`;
+            window.location.href = `${process.env.SCRATCHLOG_BASE_URL}/participant/stop?user=${userId}&experiment=${experimentId}&secret=${secret}`;
         }
     }
     handleRestoreOption (restoreFun) {
