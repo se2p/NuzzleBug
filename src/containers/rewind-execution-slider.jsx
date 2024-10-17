@@ -28,8 +28,9 @@ class RewindExecutionSlider extends React.Component {
             this.forceUpdate();
         }
         const newLastTrace = this.props.vm.runtime.newLastTrace;
-        const traces = this.props.vm.runtime.traceInfo.tracer.traces;
-        const newLastTraceIndex = newLastTrace ? traces.indexOf(newLastTrace) : traces.length - 1;
+        const traces = this.props.vm.getTraces().debugTrace;
+        const traceLength = traces ? traces.length : 0;
+        const newLastTraceIndex = newLastTrace ? traces.indexOf(newLastTrace) : traceLength;
         if (this.value !== newLastTraceIndex) {
             this.value = newLastTraceIndex;
             this.forceUpdate();
@@ -37,8 +38,8 @@ class RewindExecutionSlider extends React.Component {
     }
 
     updateRange () {
-        const traces = this.props.vm.runtime.traceInfo.tracer.traces;
-        if (traces.length) {
+        const traces = this.props.vm.getTraces().debugTrace;
+        if (traces && traces.length) {
             this.min = 0;
             this.max = traces.length - 1;
         } else {
@@ -49,7 +50,7 @@ class RewindExecutionSlider extends React.Component {
 
     updateValue () {
         if (this.props.vm.runtime.newLastTrace) {
-            const traces = this.props.vm.runtime.traceInfo.tracer.traces;
+            const traces = this.props.vm.getTraces().debugTrace;
             this.value = traces.indexOf(this.props.vm.runtime.newLastTrace);
         } else {
             this.value = this.max;

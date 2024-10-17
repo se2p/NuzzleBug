@@ -9745,7 +9745,7 @@ schema-utils@^3.0.0:
 
 "scratch-analysis@git+https://gitlab+deploy-token-26:gldt-JnhezqQAx-v4JyLZBw7P@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-analysis.git#main":
   version "1.0.0"
-  resolved "git+https://gitlab+deploy-token-26:gldt-JnhezqQAx-v4JyLZBw7P@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-analysis.git#f8a13946dbe601941fffde64608c726845d7c068"
+  resolved "git+https://gitlab+deploy-token-26:gldt-JnhezqQAx-v4JyLZBw7P@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-analysis.git#a2756cb6b290851ab1f4526278a7c1e88af04f34"
 
 scratch-audio@0.1.0-prerelease.20221123180128:
   version "0.1.0-prerelease.20221123180128"
@@ -9767,7 +9767,7 @@ scratch-audio@0.1.0-prerelease.20221123180128:
 
 "scratch-ir@git+https://gitlab+deploy-token-10:aXHysSQXmgmbCC-3GMzp@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-ir.git#master":
   version "0.1.0"
-  resolved "git+https://gitlab+deploy-token-10:aXHysSQXmgmbCC-3GMzp@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-ir.git#d746b5b89f9c90e1e606f410cb7260924383b889"
+  resolved "git+https://gitlab+deploy-token-10:aXHysSQXmgmbCC-3GMzp@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-ir.git#aba6dee2c123ee47f393cfa904a58a08fa109286"
   dependencies:
     lodash.bindall "4.4.0"
     scratch-analysis "git+https://gitlab+deploy-token-26:gldt-JnhezqQAx-v4JyLZBw7P@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-analysis.git#main"
@@ -9889,7 +9889,7 @@ scratch-translate-extension-languages@0.0.20191118205314:
 
 "scratch-vm@git+https://gitlab+deploy-token-3:i8XTz2vnGPewCoYALnoy@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-vm.git#develop":
   version "1.5.76"
-  resolved "git+https://gitlab+deploy-token-3:i8XTz2vnGPewCoYALnoy@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-vm.git#c932119a684b829b573e949ade3dc5e61cb91901"
+  resolved "git+https://gitlab+deploy-token-3:i8XTz2vnGPewCoYALnoy@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-vm.git#d9400cf93c86d78366e90f6eee39897672e3e1c8"
   dependencies:
     "@vernier/godirect" "1.5.0"
     arraybuffer-loader "^1.0.6"

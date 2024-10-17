@@ -28,10 +28,12 @@ class Controls extends React.Component {
             'handleToggleTracingClick'
         ]);
 
-        props.vm.runtime.branchDistTracingActive = false;
-
         this.tracingState = props.tracingActive ?
             TracingState.ACTIVE : TracingState.INACTIVE;
+
+        if (this.tracingState === TracingState.ACTIVE){
+            this.tracerID = props.vm.registerDebugTracer();
+        }
     }
     componentDidMount () {
         document.addEventListener('keydown', this.handleKeyDown);
@@ -183,8 +185,8 @@ class Controls extends React.Component {
         }
     }
     activateTracing () {
-        this.props.vm.activateTracing();
-        if (this.props.vm.runtime.tracingActive) {
+        this.tracerID = this.props.vm.registerDebugTracer();
+        if (this.tracerID) {
             this.setTracingState(TracingState.ACTIVATED);
             setTimeout(() => this.setTracingState(TracingState.ACTIVE), 200);
         } else {
@@ -193,7 +195,7 @@ class Controls extends React.Component {
         }
     }
     deactivateTracing () {
-        this.props.vm.deactivateTracing();
+        this.props.vm.unregisterTracer(this.tracerID);
         this.setTracingState(TracingState.DEACTIVATED);
         setTimeout(() => this.setTracingState(TracingState.INACTIVE), 200);
     }
