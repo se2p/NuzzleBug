@@ -26,9 +26,7 @@ via `npm install --global yarn`
 
 ## Running NuzzleBug
 
-- configure in ./node_modules/scratch-vm/src/util/logging.js line 23 your ScratchLog URL\
-- configure in ./src/components/menu-bar/menu-bar.jsx line 177 your ScratchLog URL\
-- configure in ./src/containers/tutorial-step.jsx line 41 your LitterBox-Web URL\
+Before starting, ensure the ScratchLog and the LitterBox base URLs are configured correctly in the .env file.
 
 You can start the scratch gui by running `yarn install && yarn start`.
 
