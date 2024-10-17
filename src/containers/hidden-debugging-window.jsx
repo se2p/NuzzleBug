@@ -37,6 +37,12 @@ class HiddenDebuggingWindow extends React.Component {
                         {'Log all variables from .env file to console'}
                     </button>
                 </div>
+                <br/>
+                <div>
+                    <button type="button" onClick={() => console.log(this.props.bbtTestStore)}>
+                        {'Log BBT teststore to console'}
+                    </button>
+                </div>
 
                 <br/>
                 <br/>
@@ -70,13 +76,15 @@ class HiddenDebuggingWindow extends React.Component {
 HiddenDebuggingWindow.propTypes = {
     isHiddenDebuggingWindowVisible: PropTypes.bool.isRequired,
     vm: PropTypes.instanceOf(VM).isRequired,
+    bbtTestStore: PropTypes.object.isRequired,
 
     onToggleWindowVisibility: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
     isHiddenDebuggingWindowVisible: state.scratchGui.hiddenDebugging.windowVisible,
-    vm: state.scratchGui.vm
+    vm: state.scratchGui.vm,
+    bbtTestStore: state.scratchGui.blockBasedTesting.testStore
 });
 
 const mapDispatchToProps = dispatch => ({
