@@ -45,7 +45,7 @@ class IRCards extends React.Component {
             return;
         }
         const vm = this.props.vm;
-        if (this.props.vm.runtime.traceInfo.isEmpty()) {
+        if (this.props.vm.getTraces.debugTrace.length === 0) {
             this.props.onCloseCards();
             this.props.onDisableCards();
             this.cancel = true;

@@ -267,7 +267,7 @@ class IRDebugger extends React.Component {
 
     calculateAllTraces () {
         const vm = this.props.vm;
-        let traces = vm.runtime.traceInfo.tracer.traces;
+        let traces = vm.getTraces().debugTrace;
         const newLastTrace = vm.runtime.newLastTrace;
         if (newLastTrace) {
             const newLastTraceIndex = traces.indexOf(newLastTrace);
@@ -611,7 +611,7 @@ class IRDebugger extends React.Component {
                 (this.selectedQuestion.category === QuestionCategoryType.SENSING ||
                     this.selectedQuestion.content === QuestionContent.BLOCK_EXECUTION_TIME) ?
                 this.selectedBlockExecution.lastTrace : this.props.vm.storedLastTrace;
-            const traces = this.props.vm.runtime.traceInfo.tracer.traces;
+            const traces = this.props.vm.getTraces().debugTrace;
             const lastTrace = this.props.vm.runtime.newLastTrace ?
                 this.props.vm.runtime.newLastTrace : traces[traces.length - 1];
             if (newLastTrace.uniqueId !== lastTrace.uniqueId ||
