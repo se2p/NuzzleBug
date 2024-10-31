@@ -5,7 +5,7 @@
     position: absolute;
     z-index: $z-index-hidden-debugging-window;
     cursor: move;
-    width: 300px;
+    width: 550px;
     margin: 0.5rem;
     border-radius: 0.75rem;
     box-shadow: 0 5px 25px 5px $ui-black-transparent;
