@@ -8,8 +8,9 @@ import bindAll from 'lodash.bindall';
 import VirtualMachine from 'scratch-vm';
 import logging from 'scratch-vm/src/util/logging.js';
 import ScratchBlocks from 'scratch-blocks';
-import {AnswerV2 as Answer, QuestionV2 as Question, targetForBlockId, QuestionCategoryType} from 'scratch-ir';
+import {AnswerV2 as Answer, QuestionV2 as Question, QuestionCategoryType} from 'scratch-ir';
 import {getContentMessageKey} from 'scratch-ir/src/version-2/questions/question';
+import {getHostingTarget} from 'scratch-analysis';
 
 import scratchblocks from 'scratchblocks';
 
@@ -316,7 +317,7 @@ class IRAnswer extends React.Component {
         const blockId = graphNode.block.id;
         const block = this._getScratchBlock(blockId);
         const executionInfo = this._getNodeExecutionInfo(graphNode);
-        let targetForBlock = targetForBlockId(this.targets, blockId);
+        let targetForBlock = getHostingTarget(this.targets, blockId);
         if (!targetForBlock) {
             targetForBlock = this.target;
         }
