@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import {toggleHiddenDebuggingWindowVisibility} from '../reducers/hidden-debugging';
 import HiddenDebuggingWindowComponent from '../components/hidden-debugging-window/hidden-debugging-window.jsx';
 import VM from 'scratch-vm';
+import ScratchBlocks from 'scratch-blocks';
 
 class HiddenDebuggingWindow extends React.Component {
     constructor(props) {
@@ -15,6 +16,9 @@ class HiddenDebuggingWindow extends React.Component {
     }
 
     render() {
+
+        const params = new URL(window.location.href).searchParams;
+        const urlParams = Object.fromEntries(params);
 
         const content = (
             <div>
@@ -33,8 +37,15 @@ class HiddenDebuggingWindow extends React.Component {
                 </div>
                 <br/>
                 <div>
-                    <button type="button" onClick={() => console.log(process.env.ALL_ENV_FILE_VARIABLES)}>
-                        {'Log all variables from .env file to console'}
+                    <button type="button" onClick={() => console.log(ScratchBlocks)}>
+                        {'Log ScratchBlocks to console'}
+                    </button>
+                </div>
+                <br/>
+                <div>
+                    <button type="button"
+                            onClick={() => console.log(ScratchBlocks.getMainWorkspace().getFlyout().getWorkspace())}>
+                        {'Log Flyout Workspace to console'}
                     </button>
                 </div>
                 <br/>
@@ -59,7 +70,46 @@ class HiddenDebuggingWindow extends React.Component {
                         {'Set workspace background to pure white'}
                     </button>
                 </div>
+                <br/>
+                <div>
+                    <button
+                        type="button"
+                        onClick={() => {
 
+                            const classNamesToHide = [
+                                'blocklyMainWorkspaceScrollbar',
+                                'blocklyFlyoutScrollbar',
+                                'blocklyZoom'
+                            ];
+
+                            for (const cl of classNamesToHide) {
+                                const elements = document.getElementsByClassName(cl);
+
+                                for (const element of [...elements]) {
+                                    element.style.display = 'none';
+                                }
+                            }
+
+                            const watermark = document.querySelectorAll('[ class^="gui_watermark" ]');
+                            watermark[0].style.display = 'none';
+                        }}
+                    >
+                        {'Hide workspace elements'}
+                    </button>
+                </div>
+
+                <br/>
+                <br/>
+
+                <div>{'Info'}</div>
+                <pre>
+                    {'.env file variables:\n'}
+                    {JSON.stringify(process.env.ALL_ENV_FILE_VARIABLES, null, 2)}
+                </pre>
+                <pre>
+                    {'URL parameters:\n'}
+                    {JSON.stringify(urlParams, null, 2)}
+                </pre>
             </div>
         );
 
