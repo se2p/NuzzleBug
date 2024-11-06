@@ -18,11 +18,7 @@ class HiddenDebuggingWindow extends React.Component {
     render() {
 
         const params = new URL(window.location.href).searchParams;
-        const urlParams = {};
-
-        params.forEach((value, key) => {
-            urlParams[key] = value;
-        });
+        const urlParams = Object.fromEntries(params);
 
         const content = (
             <div>
