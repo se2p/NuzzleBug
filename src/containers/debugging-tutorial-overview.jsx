@@ -9,10 +9,15 @@ import JSZip from "jszip";
 class DebuggingTutorialOverview extends React.Component {
     constructor(props) {
         super(props);
-        this.autoSave = this.autoSave.bind(this);
+        this.loadProject = this.loadProject.bind(this);
     }
 
-    loadProject() { //TODO
+    /**
+     * Handles the click on 'Start'. If a new tutorial is selected, the tutorial gets loaded
+     * and, if the option was selected, a backup of the current project downloaded. After this,
+     * the user gets directed to the step-Overview of the current tutorial.
+     */
+    handleStart() {
         const isNewTutorialSelected = JSON.stringify(this.props.tutorialMessages) !== JSON.stringify((this.props.lastTutorial));
         if (isNewTutorialSelected) {
             if (this.props.autoSave) {
@@ -36,21 +41,24 @@ class DebuggingTutorialOverview extends React.Component {
                         a.click();
                         document.body.removeChild(a);
                         URL.revokeObjectURL(url);
-                        this.autoSave();
+                        this.loadProject();
                     })
                     .catch(error => {
                         console.log(error);
                         this.props.setLoading(false);
                     });
             } else {
-                this.autoSave();
+                this.loadProject();
             }
         } else {
             this.props.onStartTutorial();
         }
     }
 
-    autoSave() {
+    /**
+     * Loads the new tutorial. This includes the required sprites, code, etc.
+     */
+    loadProject() {
         this.props.setLoading(true);
         this.props.vm.start();
         this.props.vm.clear();
@@ -64,11 +72,6 @@ class DebuggingTutorialOverview extends React.Component {
 
     render () {
         const isNewTutorialSelected = this.props.lastTutorial !== null && this.props.lastTutorial !== undefined ? this.props.tutorialMessages.title !== this.props.lastTutorial.title : true;
-        if (this.props.lastTutorial !== null && this.props.lastTutorial !== undefined) {
-            console.log(isNewTutorialSelected.toString() + " Render: " + this.props.tutorialMessages.title + " / " + this.props.lastTutorial.title)
-        } else {
-            console.log("TRUE");
-        }
         let lastTutorialTitle = null;
         if (isNewTutorialSelected && this.props.lastTutorial !== null && this.props.lastTutorial !== undefined) {
             lastTutorialTitle = this.props.lastTutorial.title;
@@ -76,7 +79,7 @@ class DebuggingTutorialOverview extends React.Component {
 
         return (
             <DebuggingTutorialOverviewComponent
-                onStart={() => this.loadProject()}
+                onStart={() => this.handleStart()}
                 isNewTutorialSelected={isNewTutorialSelected}
                 lastTutorialTitle={lastTutorialTitle}
                 toggleAutosave={toggleAutosave}

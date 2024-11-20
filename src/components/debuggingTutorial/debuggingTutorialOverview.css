@@ -5,7 +5,7 @@
     flex-direction: column;
     align-items: center;
     height: 100vh;
-    justify-content: start;
+    justify-content: flex-start;
     width: 100%;
     color: hsla(225, 15%, 40%, 1);
 }
@@ -83,7 +83,7 @@
 .details-bar {
     display: flex;
     flex-direction: column;
-    align-items: start;
+    align-items: flex-start;
     border: 2px solid #4381d7;
     border-radius: 10px;
     padding: 5px 5px;
@@ -92,7 +92,7 @@
 
 .details-bar-element {
     display: flex;
-    align-items: start;
+    align-items: flex-start;
     padding: 5px 5px;
     width: 80%;
 }

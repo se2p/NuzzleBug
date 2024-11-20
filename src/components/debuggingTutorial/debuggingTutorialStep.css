@@ -239,7 +239,7 @@
 .testBox {
     width: 300px;
     display: flex;
-    align-items: start;
+    align-items: flex-start;
     border: 2px solid hsla(215, 100%, 65%, 1);
     border-radius: 10px;
     flex-direction: column;
@@ -265,13 +265,13 @@
 
 .test-res-container {
     display: flex;
-    align-items: start;
+    align-items: flex-start;
     width: 298px;
 }
 
 .result-item {
     display: flex;
-    align-items: start;
+    align-items: flex-start;
     margin-bottom: 5px;
     width: 297px;
     justify-content: space-between;
@@ -356,7 +356,7 @@
     flex-direction: column;
     align-items: center;
     height: 100vh;
-    justify-content: start;
+    justify-content: flex-start;
     width: 100%;
     color: hsla(225, 15%, 40%, 1);
 }
@@ -396,7 +396,7 @@
 .details-bar {
     display: flex;
     flex-direction: column;
-    align-items: start;
+    align-items: flex-start;
     border: 2px solid #4381d7;
     border-radius: 10px;
     padding: 5px 5px;
@@ -405,7 +405,7 @@
 
 .details-bar-element {
     display: flex;
-    align-items: start;
+    align-items: flex-start;
     padding: 5px 5px;
     width: 80%;
 }

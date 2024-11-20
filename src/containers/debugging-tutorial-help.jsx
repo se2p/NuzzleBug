@@ -34,6 +34,9 @@ class DebuggingTutorialHelp extends React.Component {
         this.onEnterMultiAnswer = this.onEnterMultiAnswer.bind(this);
     }
 
+    /**
+     * Checks if the current answers are correct. If true, the next Question gets displayed.
+     */
     checkAnswer(step, tutorial) {
         switch (tutorial["questionType"]) {
             case "SINGLE_CHOICE":
@@ -48,7 +51,6 @@ class DebuggingTutorialHelp extends React.Component {
                     break;
                 }
 
-                //TODO if (tutorial[this.props.answers[0]]["next"] !== step)???
                 this.props.addSolvedStep(step, this.props.answers[0]);
                 this.props.setStep(tutorial[this.props.answers[0]]["next"].slice(6)); //step1_12 -> 12
                 this.props.reset();
@@ -132,6 +134,9 @@ class DebuggingTutorialHelp extends React.Component {
         }
     }
 
+    /**
+     * opulates the most recent user inputs for a specific question if the question has been answered before.
+     */
     solveStep(step, tutorial) {
         if (!this.props.solvedSteps.hasOwnProperty(step)) return;
         switch (tutorial["questionType"]) {
@@ -208,9 +213,6 @@ class DebuggingTutorialHelp extends React.Component {
         );
     }
 }
-
-
-
 
 DebuggingTutorialHelp.propTypes = {
     tutorial: PropTypes.any.isRequired,

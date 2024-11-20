@@ -115,7 +115,7 @@
 .option {
     display: flex;
     flex-direction: column;
-    justify-content: start;
+    justify-content: flex-start;
     margin-top: 10px;
     margin-bottom: 10px;
     align-items: center;
@@ -292,7 +292,7 @@
 
 .text-answer-bar {
     display: flex;
-    align-items: start;
+    align-items: flex-start;
     border: 2px solid #4D97FFFF;
     border-radius: 10px;
     padding: 5px 5px;

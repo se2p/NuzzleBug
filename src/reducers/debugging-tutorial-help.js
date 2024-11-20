@@ -127,7 +127,7 @@ const reducer = function (state, action) {
     return baseState;
 };
 
-const onEnterMultiAnswer = function (answer) { //TODO REMOVE LOGIC
+const onEnterMultiAnswer = function (answer) {
     let index = answer.charAt(6) - 1; //option1 -> 0
     return {type: ENTER_MULTI_ANSWER, index};
 }

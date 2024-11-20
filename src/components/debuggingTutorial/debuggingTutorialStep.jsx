@@ -28,15 +28,32 @@ const DebuggingTutorialStep = props => {
     } = props;
 
     const overviewStep = "overviewStep".concat((step + 1).toString());
-    const getFeedbackText = function () {
+
+    /**
+     * Returns true, if the user has created more errors, which lead to at least one additional testcase to fail.
+     */
+    const checkUserMadeErrors = function () {
         let userMadeError = false;
         if (testResults.details === undefined) return false;
         testResults.details.map(e => {
-            if (e.result !== "passed" && e.testDescription !== "DEBUGGING_ERROR") { userMadeError = true; }
+            if (e.result !== "passed" && e.testDescription !== "DEBUGGING_ERROR") {
+                userMadeError = true;
+            }
         });
         return userMadeError;
     }
 
+    /**
+     * Returns the feedback-summary for Euli.
+     */
+    const getResultText = () => {
+        if (checkUserMadeErrors()) return "Sieht aus, als hätten sich zusätzliche Fehler eingeschlichen.";
+        return testResults.passed ? "Du hast alle Fehler gefunden." : "Du hast leider nicht alle Fehler gefunden."
+    }
+
+    /**
+     * Returns Euli's feedback-details containing all test results.
+     */
     const parseDetails = () => {
         return testResults.details
             .sort((a, b) => b.testId.localeCompare(a.testId))
@@ -62,6 +79,9 @@ const DebuggingTutorialStep = props => {
     const progressBarRef = useRef(null);
     const timeoutIdRef = useRef(null);
 
+    /**
+     * Helper-function for the delayed reset button.
+     */
     const handleMouseDown = () => {
         setLoading(true);
         progressBarRef.current.style.width = '80%';
@@ -74,6 +94,9 @@ const DebuggingTutorialStep = props => {
         }, 1100);
     };
 
+    /**
+     * Helper-function for the delayed reset button.
+     */
     const handleMouseUp = () => {
         setLoading(false);
         clearTimeout(timeoutIdRef.current);
@@ -81,6 +104,9 @@ const DebuggingTutorialStep = props => {
         progressBarRef.current.style.width = '0';
     };
 
+    /**
+     * Renders the current step.
+     */
     const renderStep = () => {
         return (
             <div className={css.container}>
@@ -102,12 +128,9 @@ const DebuggingTutorialStep = props => {
                     </button>
                 </div>
 
-
                 {isErrorInfoVisible && <div className={css.error} onClick={onErrorClicked}>
                     {tutorialMessages[overviewStep]["errorDescription"]}
                 </div>}
-
-
 
                 <div className={css.explanationBar}>
                     <span className={css.explanationText}>
@@ -116,12 +139,7 @@ const DebuggingTutorialStep = props => {
                     </span>
                 </div>
 
-
-
-
                 <div className={css.buttonBar}>
-
-
                     <div className={css.resetContainer}>
 
                         <button
@@ -130,21 +148,18 @@ const DebuggingTutorialStep = props => {
                                 onMouseUp={handleMouseUp}
                                 onMouseLeave={handleMouseUp}
                             >
-
                                 {projectLoadingState !== null ? projectLoadingState === "RESET" ? "Lädt..." : "Warten" : "Zurücksetzen"}
                                 <div className={css.progressBar} ref={progressBarRef}></div>
                             </button>
                     </div>
 
                     <button className={css.buttonElement} onClick={onOpenHelp}>
-
                         <FormattedMessage //TODO TRANSLATE
                             defaultMessage="Frage Euli"
                             description="Title for button to shrink question category"
                             id="gui.cards.shrinkk"
                         />
                         <img alt={"Owl-Icon"} style={{width:"auto", height: "30px", marginLeft:"10px"}} src={owlIcon}/>
-
                     </button>
 
                     {projectLoadingState !== null ?
@@ -180,18 +195,15 @@ const DebuggingTutorialStep = props => {
         )
     }
 
-    const getResultText = () => {
-        if (getFeedbackText()) return "Sieht aus, als hätten sich zusätzliche Fehler eingeschlichen.";
-        return testResults.passed ? "Du hast alle Fehler gefunden." : "Du hast leider nicht alle Fehler gefunden."
-    }
-
+    /**
+     * Renders the final message, after finishing a tutorial.
+     */
     const renderFinalStep = () => {
         return (<div className={css.container}>
-            <img className={css.titleImage} src={congratulations} alt={"Picture of the tutorial"} style={{marginTop:"15px", width: "300px", height: "auto"}}/>
+            <img className={css.titleImage} src={congratulations} alt={"Picture of the final step"} style={{marginTop:"15px", width: "300px", height: "auto"}}/>
             <div className={css.descriptionFinish}>
                 <p>{tutorialMessages.levelFinishedText}</p>
             </div>
-
 
             <div className={css.detailsBar}>
                 <div className={css.detailsBarElement}>
@@ -211,6 +223,5 @@ DebuggingTutorialStep.props = {
     onStartTests: PropTypes.func,
     onReset: PropTypes.func,
 }
-
 
 export default DebuggingTutorialStep;

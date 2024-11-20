@@ -44,6 +44,28 @@ const DebuggingTutorialHelp = props => {
 
     const stepRegex = /^step[1-9]_1$/;
     const timeoutIdRef = useRef(null);
+
+    const parseQuestion = function (){
+        switch (tutorial[step]["questionType"]) {
+            case "SINGLE_CHOICE":
+                return renderSingleChoice();
+            case "DROPDOWN":
+                return renderDropdown();
+            case "MULTIPLE_CHOICE":
+                return renderMultipleChoice();
+            case "GAP_TEXT":
+                return renderGapText();
+            case "MESSAGE":
+                return renderMessage();
+            case "MARK":
+                return renderMark();
+            case "MARK_CHOICE":
+                return renderMarkChoice();
+            default:
+                console.log("Unknown questionType found: " + tutorial[step]["questionType"]);
+        }
+    }
+
     const renderSingleChoice = () => {
         if (!tutorial || !tutorial[step]) {
             console.error("Missing tutorial or tutorial[step]");
@@ -329,7 +351,6 @@ const DebuggingTutorialHelp = props => {
                                     style={{borderRadius: "100px", marginRight: "10px", marginBottom: "10px"}}
                                 />
                             </div>
-
                             <img className={css.spriteImage} src={tutorialIndexData[tutorial[step][e]["sprite"]]} draggable={false} alt={"codeSnippetSprite"}/>
                         </div>
                         ))}
@@ -349,14 +370,13 @@ const DebuggingTutorialHelp = props => {
         return selection.map(key => {
             const option = tutorial[step][key];
                     const isSelected = answers[0] === key;
-
             return (
                 <div key={key} className={css.option}>
                     <img
                         alt="option picture"
                         className={css.smallImage}
                         style={{width: option["width"]}}
-                        src={tutorialIndexData[option["img"]] || undefined}
+                        src={tutorialIndexData[option["img"]]}
                     />
 
                     <div className={css.checkboxTrigger} onClick={() => setAnswer(0, key)}>
@@ -384,27 +404,6 @@ const DebuggingTutorialHelp = props => {
     const resetDropdownTimer = function(id) {
         onShowDropdown(id);
         clearTimeout(timeoutIdRef.current);
-    }
-
-    const parseQuestion = function (){
-        switch (tutorial[step]["questionType"]) {
-            case "SINGLE_CHOICE":
-                return renderSingleChoice();
-            case "DROPDOWN":
-                return renderDropdown();
-            case "MULTIPLE_CHOICE":
-                return renderMultipleChoice();
-            case "GAP_TEXT":
-                return renderGapText();
-            case "MESSAGE":
-                return renderMessage();
-            case "MARK":
-                return renderMark();
-            case "MARK_CHOICE":
-                return renderMarkChoice();
-            default:
-                console.log("Unknown questionType found: " + tutorial[step]["questionType"]);
-        }
     }
 
     const renderMsg = () => {
@@ -501,6 +500,5 @@ DebuggingTutorialHelp.props = {
     onEnterAnswer: PropTypes.func,
     isHelpVisible: PropTypes.bool,
 }
-
 
 export default DebuggingTutorialHelp;
