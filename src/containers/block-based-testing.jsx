@@ -27,7 +27,6 @@ import ScratchBlocks from 'scratch-blocks';
 import {activateTab, BLOCKS_TAB_INDEX} from '../reducers/editor-tab';
 import BBTWrapperComponent from '../components/block-based-testing/bbt-wrapper.jsx';
 import BBTTestCollapsibleComponent from '../components/block-based-testing/bbt-test-collapsible.jsx';
-import {getIsShowingProject} from '../reducers/project-state';
 
 import bbtTestExecutionLogicHOC, {BBTTestManager} from '../lib/bbt-test-execution-logic-hoc.jsx';
 import bbtWorkspaceInteractionHOC from '../lib/bbt-workspace-interaction-hoc.jsx';
@@ -78,6 +77,7 @@ class BBTTestInterface extends React.Component {
         this.props.vm.addListener('BBT_TEST_TIMEOUT', this.onBBTTestTimeout);
         this.props.vm.addListener('PROJECT_RUN_STOP', this.onProjectRunStop);
         this.props.vm.addListener('SYNC_BBT_INTERFACE', this.onSyncBBTTestsAndReplaceDuplicateTestNames);
+        this.props.vm.runtime.addListener('PROJECT_LOADED', this.onSyncBBTTestsAndReplaceDuplicateTestNames);
         this.props.vm.addListener('workspaceUpdate', this.props.reapplyBlockTempColorsAndScriptGlows);
     }
 
@@ -98,6 +98,7 @@ class BBTTestInterface extends React.Component {
         this.props.vm.removeListener('BBT_TEST_TIMEOUT', this.onBBTTestTimeout);
         this.props.vm.removeListener('PROJECT_RUN_STOP', this.onProjectRunStop);
         this.props.vm.removeListener('SYNC_BBT_INTERFACE', this.onSyncBBTTestsAndReplaceDuplicateTestNames);
+        this.props.vm.runtime.removeListener('PROJECT_LOADED', this.onSyncBBTTestsAndReplaceDuplicateTestNames);
         this.props.vm.removeListener('workspaceUpdate', this.props.reapplyBlockTempColorsAndScriptGlows);
     }
 
@@ -233,10 +234,6 @@ class BBTTestInterface extends React.Component {
     }
 
     onSyncBBTTestsAndReplaceDuplicateTestNames (bbtTestHatBlockId) {
-        if (!this.props.isShowingProject) {
-            // only sync bbt tests if the vm is in "showing project" state and not currently loading a project
-            return;
-        }
 
         const newName = this.props.onBBTSync(bbtTestHatBlockId);
 
@@ -391,7 +388,6 @@ BBTTestInterface.propTypes = {
     sprites: PropTypes.object.isRequired,
     stage: PropTypes.object.isRequired,
     vm: PropTypes.instanceOf(VM).isRequired,
-    isShowingProject: PropTypes.bool.isRequired,
     numberOfPassedTests: PropTypes.number.isRequired,
     numberOfFailedTests: PropTypes.number.isRequired,
     numberOfTotalTests: PropTypes.number.isRequired,
@@ -422,7 +418,6 @@ const mapStateToProps = state => ({
     whiskerTests: state.scratchGui.blockBasedTesting.whiskerTests,
     sprites: state.scratchGui.targets.sprites,
     stage: state.scratchGui.targets.stage,
-    isShowingProject: getIsShowingProject(state.scratchGui.projectState.loadingState),
     isInfoPanelVisible: state.scratchGui.blockBasedTesting.infoPanelVisible,
     runAllTestsEnabled: state.scratchGui.blockBasedTesting.runAllTestsEnabled,
     numberOfFailedTests: state.scratchGui.blockBasedTesting.infoPanelFailedTests,
