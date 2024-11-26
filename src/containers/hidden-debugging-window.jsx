@@ -54,6 +54,12 @@ class HiddenDebuggingWindow extends React.Component {
                         {'Log BBT teststore to console'}
                     </button>
                 </div>
+                <br/>
+                <div>
+                    <button type="button" onClick={() => console.log(this.props.vm.runtime.targets[1].blocks)}>
+                        {'Log first sprite blocks to console'}
+                    </button>
+                </div>
 
                 <br/>
                 <br/>
