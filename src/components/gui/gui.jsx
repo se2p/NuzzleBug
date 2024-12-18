@@ -109,6 +109,7 @@ const GUIComponent = props => {
         isRtl,
         isShared,
         isTelemetryEnabled,
+        isLoggingActive,
         loading,
         logo,
         renderLogin,
@@ -282,6 +283,7 @@ const GUIComponent = props => {
                     className={styles.menuBarPosition}
                     enableCommunity={enableCommunity}
                     isShared={isShared}
+                    isFinishExperimentButtonVisible={isLoggingActive}
                     logo={logo}
                     renderLogin={renderLogin}
                     showComingSoon={showComingSoon}
@@ -483,6 +485,7 @@ GUIComponent.propTypes = {
     isPlayerOnly: PropTypes.bool,
     isRtl: PropTypes.bool,
     isShared: PropTypes.bool,
+    isLoggingActive: PropTypes.bool,
     loading: PropTypes.bool,
     logo: PropTypes.string,
     onActivateCostumesTab: PropTypes.func,
@@ -535,6 +538,7 @@ GUIComponent.defaultProps = {
     enableCommunity: false,
     isCreating: false,
     isShared: false,
+    isLoggingActive: false,
     loading: false,
     showComingSoon: false,
     stageSizeMode: STAGE_SIZE_MODES.large

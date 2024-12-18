@@ -685,13 +685,11 @@ class MenuBar extends React.Component {
                     </div>
 
                     {/* scratch1984 */}
-                    {process.env.SHOW_FINISH_BUTTON === 'true' ? (
+                    {this.props.isFinishExperimentButtonVisible ? (
                         <div>
                             <Scratch1984Button
                                 className={styles.menuBarButton}
-                                onClick={() => {
-                                    this.handleFinishExperiment();
-                                }} // check if called correctly
+                                onClick={this.handleFinishExperiment} // check if called correctly
                             />
                         </div>
                     ) : null
@@ -850,6 +848,7 @@ MenuBar.propTypes = {
     isShared: PropTypes.bool,
     isShowingProject: PropTypes.bool,
     isUpdating: PropTypes.bool,
+    isFinishExperimentButtonVisible: PropTypes.bool,
     languageMenuOpen: PropTypes.bool,
     locale: PropTypes.string.isRequired,
     loginMenuOpen: PropTypes.bool,
