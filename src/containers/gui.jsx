@@ -47,6 +47,12 @@ class GUI extends React.Component {
         setIsScratchDesktop(this.props.isScratchDesktop);
         this.props.onStorageInit(storage);
         this.props.onVmInit(this.props.vm);
+
+        const urlParams = new URL(window.location.href).searchParams;
+        const urlParamsObj = Object.fromEntries(urlParams);
+
+        this.isLoggingActive = ['uid', 'expid', 'secret'].every(
+            key => urlParamsObj.hasOwnProperty(key) && urlParamsObj[key] !== null);
     }
     componentDidUpdate (prevProps) {
         if (this.props.projectId !== prevProps.projectId && this.props.projectId !== null) {
@@ -87,6 +93,7 @@ class GUI extends React.Component {
         return (
             <GUIComponent
                 loading={fetchingProject || isLoading || loadingStateVisible}
+                isLoggingActive={this.isLoggingActive}
                 {...componentProps}
             >
                 {children}
