@@ -43,16 +43,21 @@ import GUIComponent from '../components/gui/gui.jsx';
 import {setIsScratchDesktop} from '../lib/isScratchDesktop.js';
 
 class GUI extends React.Component {
-    componentDidMount () {
-        setIsScratchDesktop(this.props.isScratchDesktop);
-        this.props.onStorageInit(storage);
-        this.props.onVmInit(this.props.vm);
+
+    constructor (props) {
+        super(props);
 
         const urlParams = new URL(window.location.href).searchParams;
         const urlParamsObj = Object.fromEntries(urlParams);
 
         this.isLoggingActive = ['uid', 'expid', 'secret'].every(
             key => urlParamsObj.hasOwnProperty(key) && urlParamsObj[key] !== null);
+    }
+
+    componentDidMount () {
+        setIsScratchDesktop(this.props.isScratchDesktop);
+        this.props.onStorageInit(storage);
+        this.props.onVmInit(this.props.vm);
     }
     componentDidUpdate (prevProps) {
         if (this.props.projectId !== prevProps.projectId && this.props.projectId !== null) {

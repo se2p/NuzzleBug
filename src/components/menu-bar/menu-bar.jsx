@@ -264,7 +264,9 @@ class MenuBar extends React.Component {
                 }
                 this.props.saveProjectBeforeFinish(content);
             });
-            window.location.href = `${process.env.SCRATCHLOG_BASE_URL}/participant/stop?user=${userId}&experiment=${experimentId}&secret=${secret}`;
+            const url = `${process.env.SCRATCHLOG_BASE_URL}/participant/stop`;
+            const queryParams = `?user=${userId}&experiment=${experimentId}&secret=${secret}`;
+            window.location.href = url + queryParams;
         }
     }
     handleRestoreOption (restoreFun) {
@@ -670,7 +672,7 @@ class MenuBar extends React.Component {
                         ) : [])}
                     </div>
                     {process.env.SHOW_HIDDEN_DEBUGGING_BUTTON === 'true' ? (
-                        <HiddenDebuggingButton onClick={this.props.onClickHiddenDebugging}/>
+                        <HiddenDebuggingButton onClick={this.props.onClickHiddenDebugging} />
                     ) : null
                     }
                 </div>
@@ -684,12 +686,12 @@ class MenuBar extends React.Component {
                         )}
                     </div>
 
-                    {/* scratch1984 */}
+                    {/* scratch1984/ScratchLog */}
                     {this.props.isFinishExperimentButtonVisible ? (
                         <div>
                             <Scratch1984Button
                                 className={styles.menuBarButton}
-                                onClick={this.handleFinishExperiment} // check if called correctly
+                                onClick={this.handleFinishExperiment}
                             />
                         </div>
                     ) : null
@@ -883,7 +885,6 @@ MenuBar.propTypes = {
     onRequestCloseFile: PropTypes.func,
     onRequestCloseLanguage: PropTypes.func,
     onRequestCloseLogin: PropTypes.func,
-    saveProjectBeforeFinish: PropTypes.func,
     onSaveFinished: PropTypes.func,
     onResetProjectState: PropTypes.func,
     onRestartingProject: PropTypes.func,
@@ -902,7 +903,6 @@ MenuBar.propTypes = {
     vm: PropTypes.instanceOf(VM).isRequired,
     saveProjectBeforeFinish: PropTypes.func,
     saveProjectSb3: PropTypes.func,
-    onSaveFinished: PropTypes.func,
     onClickHiddenDebugging: PropTypes.func
 };
 

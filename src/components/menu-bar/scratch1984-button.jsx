@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import {FormattedMessage} from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Button from '../button/button.jsx';
@@ -16,7 +17,11 @@ const Scratch1984Button = ({
         )}
         onClick={onClick}
     >
-        {'Beenden'}
+        <FormattedMessage
+            defaultMessage="Finish"
+            description="Button text for the 'Finish' - ScratchLog experiment button"
+            id="gui.scratch1984.buttonLabel"
+        />
     </Button>
 );
 
