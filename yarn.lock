@@ -9784,7 +9784,7 @@ scratch-l10n@3.14.20220329031539:
 
 "scratch-l10n@git+https://gitlab+deploy-token-23:gldt-eEF7gYLbzCgz3nSXm9zh@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-l10n.git#master":
   version "3.14.0"
-  resolved "git+https://gitlab+deploy-token-23:gldt-eEF7gYLbzCgz3nSXm9zh@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-l10n.git#5cdb4d56ee32097f0f7f3cbb9e1f274fc962f2d2"
+  resolved "git+https://gitlab+deploy-token-23:gldt-eEF7gYLbzCgz3nSXm9zh@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-l10n.git#526bea40735f2f0c76d47ea4325748321751e104"
   dependencies:
     "@babel/cli" "^7.1.2"
     "@babel/core" "^7.1.2"
