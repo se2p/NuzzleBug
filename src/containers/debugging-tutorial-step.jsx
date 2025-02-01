@@ -3,13 +3,16 @@ import {connect} from 'react-redux';
 
 import {
     resetStep,
-    errorClicked,
+    showErrorInfo,
     updateTestResults,
     onTestDetails,
     setLoading,
     setLoadingProject,
     setLastTutorial,
-
+    setContentType,
+    setResponseType,
+    setCurPage,
+    showQuickHandle,
 } from "../reducers/debugging-tutorial-step";
 import DebuggingTutorialStepComponent from '../components/debuggingTutorial/debuggingTutorialStep.jsx';
 import PropTypes from "prop-types";
@@ -18,7 +21,7 @@ import VirtualMachine from "scratch-vm";
 import {lock, unlock} from '../reducers/vm-status';
 import {runTest} from "tutorial-tests";
 
-
+const RESPONSE_TESTING_FINISHED = 'scratch-gui/debugging-tutorial-cards/RESPONSE_TESTING_FINISHED'; //TODO REMOVE
 
 class DebuggingTutorialStep extends React.Component {
     constructor(props) {
@@ -38,7 +41,8 @@ class DebuggingTutorialStep extends React.Component {
             this.props.unlockVM();
         }).finally(() => {
             this.props.unlockVM();
-            this.props.setLoadingProject(null);
+            this.props.setLoadingProject(null); //TODO REMOVE!
+            this.props.setResponseType(RESPONSE_TESTING_FINISHED);
         });
     }
 
@@ -52,7 +56,7 @@ class DebuggingTutorialStep extends React.Component {
             this.props.lockVM();
 
             this.props.vm.loadProject(this.props.tutorialIndexData["project" + (this.props.step + 2).toString()])
-                .catch(e => console.log("Error while loading project: " + e.toString())) //TODO Stop loading on end
+                .catch(e => console.log("Error while loading project: " + e.toString()))
                 .finally(() => {
                     this.props.unlockVM();
                     this.props.setLoadingProject(null);
@@ -86,6 +90,7 @@ class DebuggingTutorialStep extends React.Component {
     }
 
     render () {
+        console.log("KOKOKOKOKOK " + JSON.stringify(this.props.tutorialIndexData));
         const reachedLastStep = (this.props.step === this.props.stepCount);
         return (
             <DebuggingTutorialStepComponent
@@ -104,7 +109,7 @@ DebuggingTutorialStep.propTypes = {
     tutorialMessages: PropTypes.any,
     step: PropTypes.number,
     startTests: PropTypes.func,
-    onErrorClicked: PropTypes.func,
+    showErrorInfo: PropTypes.func,
     projectFiles: PropTypes.any,
     updateTestResults: PropTypes.func,
     testResults: PropTypes.any,
@@ -122,6 +127,14 @@ DebuggingTutorialStep.propTypes = {
     tutorialIndexData: PropTypes.any,
     lastTutorial: PropTypes.any,
     setLastTutorial: PropTypes.func,
+    setContentType: PropTypes.func,
+    contentType: PropTypes.any,
+    setResponseType: PropTypes.func,
+    responseType: PropTypes.any,
+    setCurPage: PropTypes.func,
+    curPage: PropTypes.any,
+    isShowingQuickHandle: PropTypes.any,
+    showQuickHandle: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -132,10 +145,14 @@ const mapStateToProps = state => ({
     isLoading: state.scratchGui.debuggingTutorialStep.isLoading,
     projectLoadingState: state.scratchGui.debuggingTutorialStep.projectLoadingState,
     lastTutorial: state.scratchGui.debuggingTutorialStep.lastTutorial,
+    contentType: state.scratchGui.debuggingTutorialStep.contentType,
+    responseType: state.scratchGui.debuggingTutorialStep.responseType,
+    curPage: state.scratchGui.debuggingTutorialStep.page,
+    isShowingQuickHandle: state.scratchGui.debuggingTutorialStep.isShowingQuickHandle,
 });
 
 const mapDispatchToProps = dispatch => ({
-    onErrorClicked: () => dispatch(errorClicked()),
+    showErrorInfo: () => dispatch(showErrorInfo()),
     resetStep: () => dispatch(resetStep()),
     updateTestResults: (results) => dispatch(updateTestResults(results)),
     onTestDetails: () => dispatch(onTestDetails()),
@@ -143,7 +160,11 @@ const mapDispatchToProps = dispatch => ({
     unlockVM: () => dispatch(unlock()),
     setLoading: (isLoading) => dispatch(setLoading(isLoading)),
     setLoadingProject: (loadingType) => dispatch(setLoadingProject(loadingType)),
-    setLastTutorial: (tutorial) => dispatch(setLastTutorial(tutorial))
+    setLastTutorial: (tutorial) => dispatch(setLastTutorial(tutorial)),
+    setContentType: (contentType) => dispatch(setContentType(contentType)),
+    setResponseType: (responseType) => dispatch(setResponseType(responseType)),
+    setCurPage: (page) => dispatch(setCurPage(page)),
+    showQuickHandle: () => dispatch(showQuickHandle()),
 });
 
 export default connect(

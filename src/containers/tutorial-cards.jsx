@@ -112,6 +112,8 @@ class TutorialCards extends React.Component {
             tutorialMessages = messages.default;
         }
 
+        console.log("EEEEEEEE " + this.props.selectedTutorial + " " + JSON.stringify(tutorial))
+
         let guiMessagesContainer;
         try {
             guiMessagesContainer =

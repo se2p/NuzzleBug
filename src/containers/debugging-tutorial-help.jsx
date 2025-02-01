@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React from 'react';
 import {connect} from 'react-redux';
 
 import {
@@ -19,7 +19,9 @@ import {
     showDropdown,
     addSelectedBlock,
     removeSelectedBlock,
-    onDiagrammExplanation,} from "../reducers/debugging-tutorial-help";
+    onDiagrammExplanation,
+    setResponseType,
+} from "../reducers/debugging-tutorial-help";
 import DebuggingTutorialStepComponent from '../components/debuggingTutorial/debuggingTutorialHelp.jsx';
 import PropTypes from "prop-types";
 
@@ -87,7 +89,7 @@ class DebuggingTutorialHelp extends React.Component {
                     const nextStep = this.props.answers[2] !== "false" ?
                         tutorial.endQuestionTrueNext : tutorial.endQuestionFalseNext;
 
-                    if (nextStep !== "wrongAnswer") { //TODO
+                    if (nextStep !== "wrongAnswer") {
                         this.props.addSolvedStep(step, this.props.answers[2]);
                         this.props.setStep(nextStep.slice(6));
                         this.props.reset();
@@ -241,6 +243,8 @@ DebuggingTutorialHelp.propTypes = {
     onScrollBottom: PropTypes.func,
     selectedBlocks: PropTypes.any,
     showExplanation: PropTypes.bool,
+    responseType: PropTypes.any,
+    setResponseType: PropTypes.func
 };
 
 const mapStateToProps = state => ({
@@ -256,6 +260,7 @@ const mapStateToProps = state => ({
     showDropdown: state.scratchGui.debuggingTutorial.showDropdown,
     selectedBlocks: state.scratchGui.debuggingTutorial.selectedBlocks,
     showExplanation: state.scratchGui.debuggingTutorial.explanation,
+    responseType: state.scratchGui.debuggingTutorial.responseType,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -276,7 +281,8 @@ const mapDispatchToProps = dispatch => ({
     onShowDropdown: (show) => dispatch(showDropdown(show)),
     addSelectedBlock: (option, id) => dispatch(addSelectedBlock(option, id)),
     removeSelectedBlock: (option, id) => dispatch(removeSelectedBlock(option, id)),
-    onDiagrammExplanation: () => dispatch(onDiagrammExplanation())
+    onDiagrammExplanation: () => dispatch(onDiagrammExplanation()),
+    setResponseType: (responseType) => dispatch(setResponseType(responseType)),
 });
 
 export default connect(

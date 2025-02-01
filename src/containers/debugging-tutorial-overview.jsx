@@ -76,7 +76,7 @@ class DebuggingTutorialOverview extends React.Component {
         if (isNewTutorialSelected && this.props.lastTutorial !== null && this.props.lastTutorial !== undefined) {
             lastTutorialTitle = this.props.lastTutorial.title;
         }
-
+        console.log("KKKKKK " + JSON.stringify(this.props.tutorialIndexData));
         return (
             <DebuggingTutorialOverviewComponent
                 onStart={() => this.handleStart()}

@@ -1,12 +1,348 @@
-.card-container {
+.page-container {
     position:absolute;
     pointer-events: auto;
     z-index: 1000;
     margin: 0.5rem 2rem;
     min-width: 468px;
     resize: both;
-    width: 90%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
+
+/* Sprechblase */
+.bubble-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    width: 100%;
+    margin-bottom: 20px;
+    justify-content: flex-end;
+}
+
+.bubble {
+    display: inline-block;
+    position: relative;
+    border-radius: 10px;
+    background: #575E75FF;
+    margin-bottom: auto;
+    margin-right: 20px;
+    width: 100%;
+    margin-left: 20px;
+}
+
+.bubble-indicator {
+    position: absolute;
+    width: 50px;
+    height: auto;
+    right: 0; /* Direkt am rechten Rand */
+    top: 50%; /* Mittig der Höhe */
+    transform: translateX(65%) translateY(-40%); /* Exakte Zentrierung */
+}
+
+.bubble p {
+    color: #FFFFFF;
+    z-index: 15;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    padding-right: 25px;
+    text-align: justify;
+}
+
+.owl-image {
+    width: 100px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.bubble-box-container {
+    padding-top: 10px;
+    padding-left: 7px;
+    display: flex; /* Aktiviert Flexbox */
+    width: 100%; /* Gesamtbreite des Containers */
+    gap: 10px; /* Abstand zwischen den Boxen */
+    box-sizing: border-box; /* Beachtet Padding und Border in der Breite */
+    justify-content: flex-end;
+    height: 100%;
+}
+
+
+
+
+
+
+.white-box {
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+    width: 96%;
+    min-height: 450px;
+    border-radius: 8px;
+    display: inline-flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    padding: 10px;
+    box-sizing: border-box;
+    box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    -moz-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    margin-bottom: 80px;
+}
+
+
+
+/* FOOTER */
+.footer {
+    display: inline-flex;
+    justify-content: flex-end;
+    gap: 20px;
+    position: fixed;
+    bottom: 50px;
+    left: 50%; /* Zentrieren auf der horizontalen Achse */
+    transform: translateX(-50%); /* Zentrieren ausgleichen */
+    background-color: #575E75FF;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.footer-button {
+    background-color: #c7b4b0ff;
+    color: #575E75FF;
+    height: 20px;
+    min-width: 30px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.1s ease-in-out;
+    margin-right: 10px;
+}
+
+.footer-button:hover {
+    background-color: #a1908c;
+}
+
+.footer-next-button {
+    width: 22px; /* Breite entspricht der Bildbreite */
+    height: 20px; /* Höhe entspricht der Bildhöhe */
+    cursor: pointer;
+    margin-left: 10px;
+    background-image: url('./images/nextButton.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.footer-next-button:hover {
+    background-image: url('./images/nextButtonHover.png');
+}
+
+.preload-footer-next-button {
+    background-image: url('./images/nextButtonHover.png');
+    visibility: hidden;
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+.footer-back-button {
+    width: 22px; /* Breite entspricht der Bildbreite */
+    height: 20px; /* Höhe entspricht der Bildhöhe */
+    cursor: pointer;
+    margin-left: 10px;
+    background-image: url('./images/backButton.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.footer-back-button:hover {
+    background-image: url('./images/backButtonHover.png');
+}
+
+.preload-footer-back-button {
+    background-image: url('./images/backButtonHover.png');
+    visibility: hidden;
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+
+/* RESPONSE BUBBLE */
+.response-container {
+    flex-direction: column;
+    display: inline-flex;
+    width: 100%;
+    text-align: start;
+    font-size: 0.9rem;
+    color: #ffffff;
+    font-weight: normal;
+    margin-left: 15px;
+    margin-bottom: 10px;
+}
+
+.response-button-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    margin-right: 15px;
+}
+
+.response-button {
+    display: flex;
+    align-items: center;
+}
+
+.response-bullet {
+    width: 5px;
+    height: 5px;
+    background-color: white;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-right: 5px;
+    margin-left: 10px;
+}
+
+.response-text-area p {
+    font-weight: normal;
+    text-align: start;
+    font-size: 0.9rem;
+    color: #ffffff;
+}
+
+.response-button-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.response-button-next {
+    padding-right: 5px;
+    padding-left: 5px;
+    border-radius: 5px;
+    text-align: center;
+    border-color: transparent;
+    min-width: 40px;
+    color: #575E75FF;
+    background-color: white;
+    cursor: pointer;
+}
+
+.response-button-next:hover {
+    filter: brightness(90%);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* Button 8 TOGGLE*/
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 90px;
+    height: 34px;
+}
+
+.switch input {display:none;}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ca2222;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #2ab934;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(55px);
+}
+
+/*------ ADDED CSS ---------*/
+.slider:after
+{
+    content:'Nein';
+    color: white;
+    display: block;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    top: 50%;
+    left: 50%;
+    font-size: 10px;
+    font-family: Verdana, sans-serif;
+}
+
+input:checked + .slider:after
+{
+    content:'Ja';
+}
+
+/*--------- END --------*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .header {
     border: 3px solid hsla(215, 100%, 65%, 1);
@@ -39,11 +375,14 @@
 }
 
 .question-section {
-    width: 100%;
+    position: relative;
+    width: 90%;
     text-align: center;
     border: 3px solid hsla(215, 100%, 65%, 1);
     font-size: 0.9rem;
     border-radius: 10px;
+    z-index: 10;
+    margin-left: 40px;
 }
 
 .infoButtonBackgroundInvisible:hover {
@@ -69,15 +408,21 @@
 }
 
 .question-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     font-weight: bold;
+    text-align: start;
     background-color: hsla(215, 100%, 65%, 1);
     width: 100%;
-    padding-left: 100px;
-    padding-right: 0px;
-    color: hsla(215, 100%, 95%, 1);
+    padding: 5px 0 5px 20px;
+    color: white;
+}
+
+.response-bubble-indicator {
+    width: 40px;
+    height: auto;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateX(-100%) translateY(-40%);
 }
 
 .help-section {
@@ -121,13 +466,16 @@
     align-items: center;
 }
 
-.footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 20px;
-    padding-top: 10px;
 
-}
+
+
+
+
+
+
+
+
+
 
 .checkbox {
     background-color: white;
@@ -242,7 +590,7 @@
     border: 3px solid hsl(226, 15%, 40%);
     border-radius: 10px;
     width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
     z-index: 1;
     right: -10px;
     top: 40px;
@@ -391,22 +739,7 @@
     right: -5px;
 }
 
-.footer-button {
-    background-color: hsla(215, 100%, 65%, 1);
-    border: none;
-    color: hsla(215, 100%, 95%, 1);
-    height: 30px;
-    width: 80px;
-    cursor: pointer;
-    border-radius: 5px;
-    position: relative;
-    flex-shrink: 0;
-    margin-bottom: 10px;
-}
 
-.footer-button:hover {
-    background-color: hsl(215, 59%, 52%);
-}
 
 .footerLine {
     width: 200px;
@@ -423,3 +756,7 @@
     width: auto;
     height: 50px;
 }
+
+
+/* TOGGLE */
+

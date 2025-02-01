@@ -261,6 +261,7 @@ const TutorialCards = props => {
                         step={step}
                         nextStep={onNextStep}
                         vm={vm}
+                        tutorialIndexData={tutorialIndexData}
                     />;
                 }
             case "DEBUGGING_STEP":

@@ -1,5 +1,3 @@
-import {act} from "react";
-
 const ENTER_MULTI_ANSWER = 'scratch-gui/debugging-tutorial-cards/ENTER_MULTI_ANSWER';
 const HELP = 'scratch-gui/debugging-tutorial-cards/HELP';
 const STEP_BACK = 'scratch-gui/debugging-tutorial-cards/STEP_BACK';
@@ -18,6 +16,11 @@ const SHOW_DROPDOWN = 'scratch-gui/debugging-tutorial-cards/SHOW_DROPDOWN';
 const ADD_SELECTED_BLOCK = 'scratch-gui/debugging-tutorial-cards/ADD_SELECTED_BLOCK';
 const REMOVE_SELECTED_BLOCK = 'scratch-gui/debugging-tutorial-cards/REMOVE_SELECTED_BLOCK';
 const DIAGRAMM_EXPLANATION = 'scratch-gui/debugging-tutorial-cards/DIAGRAMM_EXPLANATION';
+const SET_RESPONSE_TYPE = 'scratch-gui/debugging-tutorial-cards/SET_RESPONSE_TYPE';
+
+
+const RESPONSE_START = 'scratch-gui/debugging-tutorial-help/START';
+
 
 const initialState = { //TODO Remove logic from reducer!
     step: "1",
@@ -34,6 +37,7 @@ const initialState = { //TODO Remove logic from reducer!
     lastTutorial: null,
     showDropdown: null,
     explanation: false,
+    responseType: RESPONSE_START,
 };
 
 const reducer = function (state, action) {
@@ -123,6 +127,9 @@ const reducer = function (state, action) {
         case DIAGRAMM_EXPLANATION:
             baseState.explanation = !baseState.explanation;
             break;
+        case SET_RESPONSE_TYPE:
+            baseState.responseType = action.responseType;
+            break;
     }
     return baseState;
 };
@@ -200,6 +207,12 @@ const onDiagrammExplanation = function () {
     return {type: DIAGRAMM_EXPLANATION}
 }
 
+const setResponseType = function (responseType) {
+    return {type: SET_RESPONSE_TYPE, responseType}
+}
+
+
+
 // For whatever reason, I could not get Map to start working. This is the workaround
 function addToKey(obj, key, element) {
     if (obj.hasOwnProperty(key)) {
@@ -236,4 +249,5 @@ export {
     addSelectedBlock,
     removeSelectedBlock,
     onDiagrammExplanation,
+    setResponseType,
 };

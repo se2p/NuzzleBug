@@ -357,7 +357,7 @@ TutorialStep.propTypes = {
     solutionExpanded: PropTypes.bool,
     onSolution: PropTypes.func,
     failureMessage: PropTypes.string,
-    vm: PropTypes.instanceOf(VirtualMachine).isRequired
+    vm: PropTypes.instanceOf(VirtualMachine).isRequired,
 };
 
 const mapStateToProps = state => ({

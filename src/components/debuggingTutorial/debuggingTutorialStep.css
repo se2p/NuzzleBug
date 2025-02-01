@@ -1,13 +1,5 @@
 
 
-.container {
-    padding: 20px;
-    margin: 0 auto;
-    text-align: center;
-    width: 100%;
-    height: 100%;
-    color: hsla(225, 15%, 40%, 1);
-}
 
 .description {
     text-align: justify;
@@ -277,63 +269,6 @@
     justify-content: space-between;
 }
 
-.reset-button {
-    position: relative;
-    cursor: pointer;
-    overflow: hidden;
-    background-color: hsla(215, 100%, 65%, 1);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    min-width: 150px;
-    height: 45px;
-}
-
-.reset-button:hover {
-    background-color: hsl(215, 54%, 41%);
-}
-
-.reset-button-loading {
-    position: relative;
-    overflow: hidden;
-    background-color: #4D97FF6B;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    min-width: 144px;
-    height: 41px;
-}
-
-.reset-button-pressed {
-    position: relative;
-    cursor: pointer;
-    overflow: hidden;
-    background-color: hsl(215, 54%, 41%);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    min-width: 144px;
-    height: 41px;
-}
-
-.reset-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-width: 150px;
-    height: 45px;
-}
-
-.progressBar {
-    position: absolute;
-    left: 10%;
-    bottom: 6px;
-    height: 4px;
-    width: 0;
-    border-radius: 3px;
-    background-color: white;
-    transition: width 1s linear;
-}
 
 
 
@@ -349,17 +284,6 @@
 
 
 
-.container {
-    padding: 20px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100vh;
-    justify-content: flex-start;
-    width: 100%;
-    color: hsla(225, 15%, 40%, 1);
-}
 
 .heading {
     font-size: 2em;
@@ -422,4 +346,721 @@
     font-weight: bold;
     text-align: left;
     margin-left: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.tab-container {
+    display: flex;
+    width: 90%;
+    margin: 5% auto 0;
+    position: relative;
+    z-index: 1; /* Unter dem Content */
+}
+
+.tab-button {
+    padding-bottom: 33px;
+    padding-right: 10px;
+    padding-left: 10px;
+    border: none;
+    border-radius: 15px 15px 0 0;
+    background-color: #575E75FF;
+    color: white;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-align: center;
+    min-width: 150px;
+    position: relative;
+    z-index: 1;
+    height: 68px;
+    top: 30px; /* Button ragt nach oben */
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tab-button:hover {
+    text-decoration: underline;
+}
+
+.icon {
+    top: -5px;
+    width: auto;
+    height: 15px;
+    margin-right: 5px;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 15px;
+    padding-right: 15px;
+    border: 4px solid #4D97FFFF;
+    border-radius: 20px;
+    width: 90%;
+    height: 280px;
+    margin: 0 auto;
+    background-color: #FFFFFF;
+    position: relative;
+    z-index: 2; /* Content liegt über dem Button */
+}
+.details-container {
+    padding-top: 10px;
+    padding-left: 7px;
+    display: flex; /* Aktiviert Flexbox */
+    width: 100%; /* Gesamtbreite des Containers */
+    gap: 10px; /* Abstand zwischen den Boxen */
+    box-sizing: border-box; /* Beachtet Padding und Border in der Breite */
+    justify-content: flex-end;
+    height: 100%;
+}
+
+.control-container {
+    display: flex; /* Aktiviert Flexbox */
+    align-items: center;
+    width: 100%; /* Gesamtbreite des Containers */
+    gap: 10px; /* Abstand zwischen den Boxen */
+    box-sizing: border-box; /* Beachtet Padding und Border in der Breite */
+    justify-content: center; /* Zentriert horizontal */
+}
+
+.control-image {
+    width: 40%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.text-area {
+    flex: 2;
+    padding: 10px;
+    text-align: justify;
+}
+
+.text-area h1 {
+    font-size: 24px;
+    color: #575E75FF;
+}
+
+.text-area p {
+    font-size: 0.9rem;
+    line-height: 1.2;
+    color: #575E75FF;
+}
+
+.image-area {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.vertical-line-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.vertical-line {
+    border-left: 3px solid #4D97FFFF;
+    height: 150px;
+}
+
+.image {
+    width: 150px;
+    height: auto;
+}
+
+.overview-image {
+    width: 250px;
+    height: auto;
+    border-radius: 15px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center; /* Zentriert den Button horizontal */
+    align-items: center; /* Zentriert den Button vertikal */
+    padding: 20px;
+}
+
+.custom-button {
+    background-color: #575E75FF; /* Dunkelgraue Hintergrundfarbe */
+    color: white; /* Weiße Schriftfarbe */
+    border: none; /* Entfernt den Standardrahmen */
+    border-radius: 10px; /* Abgerundete Ecken */
+    padding: 10px 20px; /* Abstand innerhalb des Buttons */
+    font-size: 0.9rem; /* Schriftgröße */
+    cursor: pointer; /* Zeigt eine Hand beim Hover an */
+    text-align: center; /* Text zentrieren */
+}
+
+.custom-button:hover {
+    background-color: #3d3d3d; /* Etwas dunklerer Farbton beim Hover */
+}
+
+
+/* Container für Eule und Sprechblase */
+.error-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    width: 100%;
+    margin-bottom: 20px;
+    justify-content: flex-end;
+}
+
+.error-button {
+    margin-left: 6px;
+    background-color: #cf3b28FF;
+    color: white;
+    min-width: 70px;
+    border-radius: 5px;
+    padding: 3px 5px;
+    border-color: transparent;
+    transform: translateY(-17%);
+}
+
+.error-button:hover {
+    background-color: #9a2719;
+}
+
+.p {
+    font-size: 0.9rem;
+    color: #575E75FF;
+    margin-left: 20px;
+}
+
+
+/* BUTTON ANIMATION BAR */
+.reset-button {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    background-color: #575E75FF;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    height: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 0.9rem;
+}
+
+.reset-button:hover {
+    background-color: #393d4f;
+}
+
+.reset-button-pressed {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    background-color: #393d4f;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    height: 38px;
+    font-size: 0.9rem;
+    padding-left: 18px;
+    padding-right: 18px;
+}
+
+.reset-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 150px;
+    height: 45px;
+}
+
+.progressBar {
+    position: absolute;
+    left: 5%;
+    bottom: 6px;
+    height: 3px;
+    width: 0;
+    border-radius: 3px;
+    background-color: white;
+    transition: width 1s linear;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* CP - Control Panel */
+.cpContainer {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.white-box {
+    background-color: white;
+    width: 80%;
+    height: 250px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: flex-start;
+    padding: 10px;
+    box-sizing: border-box;
+    box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    -moz-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+}
+
+.response-bubble {
+    background-color: #575E75FF;
+    border-radius: 15px;
+    min-height: 40px;
+    display: inline-block;
+    margin-top: 5px;
+    margin-bottom: auto;
+    padding: 10px;
+    position: relative;
+    margin-left: 60px;
+}
+
+.response-bubble-indicator {
+    width: 50px;
+    height: auto;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateX(-95%) translateY(-40%); /* Exakte Zentrierung */
+}
+
+.controlPanelImageSmall {
+    width: 19%;
+    height: fit-content;
+    transform: rotateY(180deg);
+}
+
+.cpButton-row {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    margin-top: 40px;
+}
+
+.cpButton {
+    cursor: pointer;
+    flex-grow: 0;
+    width: 50%;
+    height: auto;
+    margin: 0 auto 10px;
+    transition: all 0.1s ease-in-out;
+    will-change: transform;
+    overflow: hidden;
+    backface-visibility: hidden;
+}
+
+.cpButtonDescription {
+    font-size: 0.6rem;
+    color: #575E75FF;
+    text-align: center;
+}
+
+.cpButton:hover {
+    transform: scale(1.1) translateZ(0);
+}
+
+.controlPanelButtonParent {
+    display: flex;
+    flex-direction: column;
+}
+
+.cpBack-button {
+    margin-bottom: 20px;
+    cursor: pointer;
+    width: 35px;
+    height: auto;
+}
+
+.cpBack-button:hover {
+    scale: 1.1;
+    transition: all 0.1s ease;
+}
+
+.response-container {
+    flex-direction: column;
+    display: flex;
+    width: 340px;
+    min-height: 50px;
+}
+
+.response-text-area {
+    text-align: start;
+    font-size: 0.9rem;
+    color: #ffffff;
+    font-weight: normal;
+}
+
+.response-text-area p {
+    font-weight: normal;
+    margin-top: 0;
+    margin-bottom: 0;
+    text-align: start;
+    font-size: 0.9rem;
+    color: #ffffff;
+}
+
+.response-button-accept {
+    padding-right: 5px;
+    padding-left: 5px;
+    border-radius: 5px;
+    text-align: center;
+    border-color: transparent;
+    min-width: 40px;
+    color: white;
+    margin-left: 20px;
+    margin-right: 20px;
+    background-color: #0fbd8cff;
+    cursor: pointer;
+}
+
+.response-button-accept:hover {
+    background-color: #109a74;
+}
+
+.response-button-decline {
+    padding-right: 5px;
+    padding-left: 5px;
+    border-radius: 5px;
+    text-align: center;
+    border-color: transparent;
+    min-width: 40px;
+    color: white;
+    margin-left: 20px;
+    margin-right: 20px;
+    background-color: #e63c39ff;
+    cursor: pointer;
+}
+
+.response-button-decline:hover {
+    background-color: #b02e2c;
+}
+
+.response-button-next {
+    padding-right: 5px;
+    padding-left: 5px;
+    border-radius: 5px;
+    text-align: center;
+    border-color: transparent;
+    min-width: 40px;
+    color: #575E75FF;
+    background-color: white;
+    cursor: pointer;
+}
+
+.response-button-next:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.response-button-Test-Results {
+    padding-right: 5px;
+    padding-left: 5px;
+    border-radius: 5px;
+    text-align: center;
+    border-color: transparent;
+    min-width: 40px;
+    color: #575E75FF;
+    margin-left: 10px;
+    background-color: #8531d0;
+    cursor: pointer;
+}
+
+.response-button-Test-Results:hover {
+    background-color: #69239f;
+}
+
+.response-button-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin-top: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Sprechblase */
+.bubble {
+    display: inline-block;
+    position: relative;
+    border-radius: 10px;
+    background: #cf3b28ff;
+    min-height: 40px;
+    margin-bottom: auto;
+    margin-right: 20px;
+    width: 100%;
+}
+
+.bubble-indicator {
+    position: absolute;
+    width: 50px;
+    height: auto;
+    right: 0; /* Direkt am rechten Rand */
+    top: 50%; /* Mittig der Höhe */
+    transform: translateX(65%) translateY(-40%); /* Exakte Zentrierung */
+}
+
+.bubble p {
+    color: #FFFFFF;
+    z-index: 15;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    padding: 0px 25px 0px 15px;
+    text-align: justify;
+}
+
+
+
+
+
+
+/* LOADING ANIMATION */
+.loader {
+    margin-top: 10px;
+    width: 100%;
+    height: 5px;
+    display: inline-block;
+    position: relative;
+    background: #4D97FFFF;
+    overflow: hidden;
+}
+.loader::after {
+    content: '';
+    width: 192px;
+    height: 4.8px;
+    background: #ffffff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    animation: animloader 2s linear infinite;
+}
+
+@keyframes animloader {
+    0% {
+        left: 0;
+        transform: translateX(-100%);
+    }
+    100% {
+        left: 100%;
+        transform: translateX(0%);
+    }
+}
+
+
+
+
+
+
+/* CERTIFICATE */
+.certificate-frame {
+    position: relative;
+    width: 80%; /* Rahmen nimmt 80% der Elternbreite ein */
+    max-width: 800px; /* Maximalbreite für große Bildschirme aspect-ratio: 3 / 2 */
+    background-color: white; /* Innenbereich */
+    border: 1.6vw solid #96c2c8ff; /* Blauer Rahmen mit relativer Dicke */
+    margin-bottom: auto;
+    z-index: 1;
+    height: 80%;
+}
+
+/* Positionierung der Kreise */
+.corner-top-left {
+    position: absolute;
+    width: 10%; /* Kreise skalieren relativ zur Breite */
+    aspect-ratio: 1 / 1; /* Kreise bleiben perfekt rund */
+    background-color: white;
+    border: 1.2vw solid #96c2c8ff; /* Rand der Kreise skaliert */
+    border-radius: 50%;
+    top: -3%; /* Position relativ zur Größe */
+    left: -4%;
+    z-index: 2;
+}
+
+.corner-top-right {
+    position: absolute;
+    width: 10%; /* Kreise skalieren relativ zur Breite */
+    aspect-ratio: 1 / 1; /* Kreise bleiben perfekt rund */
+    background-color: white;
+    border: 1.2vw solid #96c2c8ff; /* Rand der Kreise skaliert */
+    border-radius: 50%;
+    top: -3%;
+    right: -4%;
+    z-index: 2;
+}
+
+.corner-bottom-left {
+    position: absolute;
+    width: 10%; /* Kreise skalieren relativ zur Breite */
+    aspect-ratio: 1 / 1; /* Kreise bleiben perfekt rund */
+    background-color: white;
+    border: 1.2vw solid #96c2c8ff; /* Rand der Kreise skaliert */
+    border-radius: 50%;
+    bottom: -3%;
+    left: -4%;
+    z-index: 2;
+}
+
+.corner-bottom-right {
+    position: absolute;
+    width: 10%; /* Kreise skalieren relativ zur Breite */
+    aspect-ratio: 1 / 1; /* Kreise bleiben perfekt rund */
+    background-color: #ffffff;
+    border: 1.2vw solid #96c2c8ff; /* Rand der Kreise skaliert */
+    border-radius: 50%;
+    bottom: -3%;
+    right: -4%;
+    z-index: 2;
+}
+
+.certificate-title {
+    font-family: "Frank Ruehl CLM", ui-serif;
+    text-align: center;
+    font-size: 3rem;
+    font-weight: bold;
+    color: #575E75FF
+}
+
+.certificate-banner {
+    width: 70%;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.certificate-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.certificate-content {
+    width: 100%;
+    height: 200px;
+}
+
+.certificate-footer {
+    width: 100%;
+    height: 150px;
+    display: flex;
+    flex: 0;
+    justify-content: flex-end;
+}
+
+.certificate-signature {
+    width: 170px;
+    height: auto;
+    margin-right: 60px;
+    margin-bottom: 60px;
+}
+
+.certificate-result-medal {
+    position: absolute;
+    width: 140px;
+    height: auto;
+    bottom: 0;
+    left: 2%; /* Zentriert den Text horizontal */
+    z-index: 10;
+}
+
+/* CERTIFICATE ELEMENT */
+.certificate-element {
+    width: auto;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.certificate-element-medal {
+    height: 33px;
+    width: auto;
+    position: absolute;
+    top: 50%; /* Zentriert den Text vertikal */
+    left: 85%; /* Zentriert den Text horizontal */
+    transform: translate(-50%, -50%); /* Exakte Zentrierung */
+}
+
+.certificate-element-body {
+    display: block;
+    width: auto; /* Passt das Bild an den Container an */
+    height: 20px;
+}
+
+.certificate-element-container {
+    position: relative;
+    display: inline-block;
+}
+
+.certificate-element-text {
+    position: absolute;
+    top: 50%; /* Zentriert den Text vertikal */
+    left: 10%; /* Zentriert den Text horizontal */
+    transform: translate(0, -50%); /* Exakte Zentrierung */
+    color: white;
+    font-size: 0.9rem;
+    text-align: start;
+}
+
+.certificate-element-button {
+    display: block;
+    width: auto; /* Passt das Bild an den Container an transform: scale(0.9) translateZ(0); */
+    height: 20px;
+    will-change: transform;
+    cursor: pointer;
+}
+
+.certificate-element-button:hover {
+    transform: scale(1.1) translateZ(0);
 }
