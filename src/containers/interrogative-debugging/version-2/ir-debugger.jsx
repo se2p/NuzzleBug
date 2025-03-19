@@ -6,6 +6,7 @@ import {intlShape} from 'react-intl';
 import ScratchBlocks from 'scratch-blocks';
 import VirtualMachine from 'scratch-vm';
 import logging from 'scratch-vm/src/util/logging.js';
+import log from '../../../lib/log.js';
 
 import {
     QuestionHierarchyProvider,
@@ -108,6 +109,8 @@ class IRDebugger extends React.Component {
             this.cdg = generateCDG(this.cfg);
         } catch (e) {
             this.crashed = true;
+            log.error('Error during IR graph generation!');
+            log.error(e);
             return;
         }
 
@@ -223,8 +226,10 @@ class IRDebugger extends React.Component {
                 this.translate
             );
             this.questionHierarchy = questionHierarchyProvider.generateQuestionHierarchy();
-        } catch {
+        } catch (e) {
             this.crashed = true;
+            log.error('Error during IR question hierarchy generation!');
+            log.error(e);
         }
     }
 
@@ -242,8 +247,10 @@ class IRDebugger extends React.Component {
                 this.translate
             );
             this.abstractCategories = questionHierarchyProvider.generateAbstractQuestionCategories();
-        } catch {
+        } catch (e) {
             this.crashed = true;
+            log.error('Error during IR abstract question categories generation!');
+            log.error(e);
         }
     }
 
@@ -621,8 +628,10 @@ class IRDebugger extends React.Component {
                 this.initAnswerProvider();
             }
             this.answer = this.answerProvider.generateAnswer(this.selectedQuestion);
-        } catch {
+        } catch (e) {
             this.crashed = true;
+            log.error('Error during IR answer generation!');
+            log.error(e);
         }
         this.answerLoading = false;
         this.forceUpdateIfMounted();
