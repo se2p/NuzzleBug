@@ -103,7 +103,7 @@ class BBTTestInterface extends React.Component {
     }
 
     handleRunAllTests () {
-        if (BBTTestManager.testChainRunning || this.props.vm.runtime.bbtTestRunning) {
+        if (BBTTestManager.testChainRunning || this.props.vm.runtime.testRunning) {
             return;
         }
 
