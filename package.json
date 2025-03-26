@@ -90,7 +90,7 @@
         "scratch-ir": "git+https://gitlab+deploy-token-10:aXHysSQXmgmbCC-3GMzp@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-ir.git#master",
         "scratch-l10n": "git+https://gitlab+deploy-token-23:gldt-eEF7gYLbzCgz3nSXm9zh@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-l10n.git#master",
         "scratch-paint": "0.2.0-prerelease.20220409093754",
-        "scratch-render": "0.1.0-prerelease.20211028200436",
+        "scratch-render": "git+https://gitlab+deploy-token-28:gldt-jJYfv7JHVyMGyCEr7FxK@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-render.git#develop",
         "scratch-render-fonts": "1.0.0-prerelease.20210401210003",
         "scratch-storage": "2.2.1",
         "scratch-svg-renderer": "0.2.0-prerelease.20210727023023",

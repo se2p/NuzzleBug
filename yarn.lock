@@ -9821,10 +9821,9 @@ scratch-render-fonts@1.0.0-prerelease.20210401210003:
   dependencies:
     base64-loader "1.0.0"
 
-scratch-render@0.1.0-prerelease.20211028200436:
-  version "0.1.0-prerelease.20211028200436"
-  resolved "https://registry.yarnpkg.com/scratch-render/-/scratch-render-0.1.0-prerelease.20211028200436.tgz#fb4ef8f337a733876d990d9aa5e75d05f8a086bf"
-  integrity sha512-6IU0mEQpx5ipm2PsmdJXA/MIbrgq5wisn0rOpmCJZQFssyPyZMeanvh6T9j/VlTn13kiDO+67Do2nKRrZa46bA==
+"scratch-render@git+https://gitlab+deploy-token-28:gldt-jJYfv7JHVyMGyCEr7FxK@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-render.git#develop":
+  version "0.1.0"
+  resolved "git+https://gitlab+deploy-token-28:gldt-jJYfv7JHVyMGyCEr7FxK@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-render.git#ed904207e86eebf5b76650f6df6f94122f7dfb97"
   dependencies:
     grapheme-breaker "0.3.2"
     hull.js "0.2.10"
