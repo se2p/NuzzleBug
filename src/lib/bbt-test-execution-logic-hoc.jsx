@@ -62,7 +62,7 @@ const bbtTestExecutionLogicHOC = function (WrappedComponent) {
         }
 
         runAllTests (optCallbackAfterAllTestsAreDone) {
-            if (BBTTestManager.testChainRunning || this.props._vm.runtime.bbtTestRunning) {
+            if (BBTTestManager.testChainRunning || this.props._vm.runtime.testRunning) {
                 return;
             }
 
@@ -78,7 +78,7 @@ const bbtTestExecutionLogicHOC = function (WrappedComponent) {
         }
 
         runNextTest () {
-            if (this.props._vm.runtime.bbtTestRunning) {
+            if (this.props._vm.runtime.testRunning) {
                 return;
             }
 
@@ -107,7 +107,7 @@ const bbtTestExecutionLogicHOC = function (WrappedComponent) {
         }
 
         runBBTTest (testId) {
-            if (this.props._vm.runtime.bbtTestRunning) {
+            if (this.props._vm.runtime.testRunning) {
                 return;
             }
 
@@ -127,7 +127,7 @@ const bbtTestExecutionLogicHOC = function (WrappedComponent) {
         }
 
         async runAllWhiskerTests () {
-            if (this.props._vm.runtime.bbtTestRunning) {
+            if (this.props._vm.runtime.testRunning) {
                 return;
             }
 
@@ -137,11 +137,11 @@ const bbtTestExecutionLogicHOC = function (WrappedComponent) {
         }
 
         async runWhiskerTest (testID) {
-            if (this.props._vm.runtime.bbtTestRunning) {
+            if (this.props._vm.runtime.testRunning) {
                 return;
             }
 
-            this.props._vm.runtime.bbtTestRunning = true;
+            this.props._vm.runtime.testRunning = true;
             this.props._setBusyWithTestStuff(true);
             this.props._handleClearTestStatus(testID, 'running');
 
@@ -168,7 +168,7 @@ const bbtTestExecutionLogicHOC = function (WrappedComponent) {
                 this.props._handleIncrementInfoPanelFailedTests();
             }
 
-            this.props._vm.runtime.bbtTestRunning = false;
+            this.props._vm.runtime.testRunning = false;
             this.props._setBusyWithTestStuff(false);
         }
 
