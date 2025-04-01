@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
+import util from 'util';
 
 import {toggleHiddenDebuggingWindowVisibility} from '../reducers/hidden-debugging';
 import HiddenDebuggingWindowComponent from '../components/hidden-debugging-window/hidden-debugging-window.jsx';
@@ -58,6 +59,15 @@ class HiddenDebuggingWindow extends React.Component {
                 <div>
                     <button type="button" onClick={() => console.log(this.props.vm.runtime.targets[1].blocks)}>
                         {'Log first sprite blocks to console'}
+                    </button>
+                </div>
+                <br/>
+                <div>
+                    <button type="button" onClick={() => {
+                        console.log(this.props.vm.renderer);
+                        console.log(util.inspect(this.props.vm.renderer, { depth: null }));
+                    }}>
+                        {'Log Renderer to console'}
                     </button>
                 </div>
 
