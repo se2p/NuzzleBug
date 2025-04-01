@@ -78,3 +78,20 @@ doi = {10.1145/3587102.3588803},
 booktitle = {Proceedings of the 2023 Conference on Innovation and Technology in Computer Science Education V. 1}
 }
 ```
+```
+@inproceedings{10.1145/3699538.3699547,
+author = {Feldmeier, Patric and Fraser, Gordon and Heuer, Ute and Oberm\"{u}ller, Florian and Steckenbiller, Siegfried},
+title = {A Block-Based Testing Framework for Scratch},
+year = {2024},
+isbn = {9798400710384},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3699538.3699547},
+doi = {10.1145/3699538.3699547},
+booktitle = {Proceedings of the 24th Koli Calling International Conference on Computing Education Research},
+articleno = {1},
+numpages = {12},
+keywords = {Scratch, Block-based Programming, Automated Testing, Feedback},
+series = {Koli Calling '24}
+}
+```
