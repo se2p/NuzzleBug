@@ -4,10 +4,12 @@ import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import util from 'util';
 
-import {toggleHiddenDebuggingWindowVisibility} from '../reducers/hidden-debugging';
-import HiddenDebuggingWindowComponent from '../components/hidden-debugging-window/hidden-debugging-window.jsx';
 import VM from 'scratch-vm';
 import ScratchBlocks from 'scratch-blocks';
+
+import {toggleHiddenDebuggingWindowVisibility} from '../reducers/hidden-debugging';
+import HiddenDebuggingWindowComponent from '../components/hidden-debugging-window/hidden-debugging-window.jsx';
+import {downloadWorkspace} from '../lib/download-workspace-as-svg';
 
 class HiddenDebuggingWindow extends React.Component {
     constructor(props) {
@@ -111,6 +113,15 @@ class HiddenDebuggingWindow extends React.Component {
                         }}
                     >
                         {'Hide workspace elements'}
+                    </button>
+                </div>
+                <br/>
+                <div>
+                    <button
+                        type="button"
+                        onClick={downloadWorkspace}
+                    >
+                        {'Download workspace as SVG (destructive)'}
                     </button>
                 </div>
 
