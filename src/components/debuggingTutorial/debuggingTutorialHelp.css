@@ -2,7 +2,6 @@
     position:absolute;
     pointer-events: auto;
     z-index: 1000;
-    margin: 0.5rem 2rem;
     min-width: 468px;
     resize: both;
     width: 100%;
@@ -51,9 +50,8 @@
 }
 
 .owl-image {
-    width: 100px;
+    width: 115px;
     height: auto;
-    margin-right: 10px;
 }
 
 .bubble-box-container {
@@ -82,7 +80,9 @@
     display: inline-flex;
     justify-content: flex-start;
     flex-direction: column;
-    padding: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
     box-sizing: border-box;
     box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
     -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
@@ -103,7 +103,7 @@
     transform: translateX(-50%); /* Zentrieren ausgleichen */
     background-color: #575E75FF;
     color: white;
-    padding: 10px 20px;
+    padding: 10px 10px;
     border-radius: 5px;
 }
 
@@ -383,6 +383,8 @@ input:checked + .slider:after
     border-radius: 10px;
     z-index: 10;
     margin-left: 40px;
+    transition: 0.2s linear;
+    margin-right: 10px;
 }
 
 .infoButtonBackgroundInvisible:hover {
@@ -446,11 +448,6 @@ input:checked + .slider:after
     width: 15px;
     height: auto;
     padding-top: 6px;
-}
-
-.options {
-    display: flex;
-    justify-content: space-around;
 }
 
 .smallImage {
@@ -760,3 +757,8 @@ input:checked + .slider:after
 
 /* TOGGLE */
 
+.question-container {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}

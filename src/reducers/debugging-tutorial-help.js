@@ -19,7 +19,7 @@ const DIAGRAMM_EXPLANATION = 'scratch-gui/debugging-tutorial-cards/DIAGRAMM_EXPL
 const SET_RESPONSE_TYPE = 'scratch-gui/debugging-tutorial-cards/SET_RESPONSE_TYPE';
 
 
-const RESPONSE_START = 'scratch-gui/debugging-tutorial-help/START';
+const RESPONSE_START = 'scratch-gui/debugging-tutorial-help/DEFAULT';
 
 
 const initialState = { //TODO Remove logic from reducer!

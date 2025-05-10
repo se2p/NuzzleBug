@@ -48,7 +48,9 @@ class DebuggingTutorialHelp extends React.Component {
                 }
 
                 if (tutorial[this.props.answers[0]]["next"] === "wrongAnswer") {
-                    this.props.setQuestionMessage(tutorial.correctionText);
+                    let correctionText = tutorial[this.props.answers[0]].correctionText === null
+                        ? tutorial.correctionText : tutorial[this.props.answers[0]].correctionText;
+                    this.props.setQuestionMessage(correctionText);
                     this.props.addSolvedStep(step, this.props.answers[0]);
                     break;
                 }
