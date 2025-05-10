@@ -5,14 +5,17 @@
     flex-direction: column;
     align-items: center;
     height: 100vh;
-    justify-content: flex-start;
     width: 100%;
     color: hsla(225, 15%, 40%, 1);
+    justify-content: space-between; /* Sorgt für gleichmäßige Abstände */
+    background: radial-gradient(circle, rgb(255, 255, 255) 0%, rgba(223,223,223,1) 100%);
 }
 
 .heading {
-    font-size: 2em;
-    margin-bottom: 20px;
+    font-size: 3em;
+    font-weight: bold;
+    color: #4D97FFFF;
+    transition: all 0.2s linear;
 }
 
 .description {
@@ -81,32 +84,573 @@
 }
 
 .details-bar {
+    flex: 2;
+    padding-top: 10px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    border: 2px solid #4381d7;
     border-radius: 10px;
-    padding: 5px 5px;
-    width: 80%;
+    margin-right: 10px;
 }
 
 .details-bar-element {
     display: flex;
     align-items: flex-start;
-    padding: 5px 5px;
-    width: 80%;
+    margin-top: 10px;
 }
 
 .details-text {
     flex-grow: 1;
-    font-size: 16px;
+    font-size: 0.9rem;
     text-align: left;
     margin-left: 5px;
+    color: #a77e76ff;
 }
 
 .details-title {
-    font-size: 16px;
+    font-size: 0.9rem;
     font-weight: bold;
     text-align: left;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* BUBBLE */
+.bubble-container {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    justify-content: flex-end;
+}
+
+.bubble {
+    display: inline-block;
+    position: relative;
+    border-radius: 15px;
+    border: solid 3px #575E75FF;
+    margin-right: 35px;
+    width: 100%;
+    z-index: 100;
+}
+
+.bubble-indicator {
+    position: absolute;
+    width: 35px;
+    height: auto;
+    right: 0;
+    top: 50%;
+    transform: translateX(102%) translateY(-40%);
+    z-index: -1;
+}
+
+.selectionBubbleIndicator {
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    top: 50%;
+    left: 0;
+    z-index: -1;
+    transform: translateX(-102%) translateY(-40%);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url('./images/selectionBubbleDecalLight.png');
+}
+
+.selectionBubble:hover .selectionBubbleIndicator {
+    background-image: url('./images/selectionBubbleDecalGrey.png');
+}
+
+.selectionIcon {
+    width: auto;
+    height: 1.1rem;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.bubble p {
+    color: #FFFFFF;
+    z-index: 15;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    padding-right: 25px;
+    text-align: justify;
+}
+
+.owl-image {
+    width: 120px;
+    height: auto;
+}
+
+.image-container {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.bubble-box-container {
+    display: flex; /* Aktiviert Flexbox */
+    width: 100%; /* Gesamtbreite des Containers */
+    gap: 10px; /* Abstand zwischen den Boxen */
+    box-sizing: border-box; /* Beachtet Padding und Border in der Breite */
+    justify-content: flex-end;
+    height: 100%;
+}
+
+.response-button {
+    padding-right: 5px;
+    padding-left: 5px;
+    border-radius: 5px;
+    text-align: center;
+    border-color: transparent;
+    color: white;
+    background-color: #575E75FF;
+    cursor: pointer;
+    width: 100px;
+    font-weight: bold;
+    transition: all 0.1s ease-in-out;
+    will-change: transform;
+    overflow: hidden;
+    backface-visibility: hidden;
+    margin-top: 15px;
+}
+
+
+.response-button:hover {
+    background-color: #44485b;
+    transform: scale(1.1) translateZ(0);
+}
+
+
+
+
+
+
+
+/* Button-Stile */
+.effect {
+    text-align: center;
+    display: inline-block;
+    position: relative;
+    text-decoration: none;
+    color: white; /* Beispielwert für die Textfarbe */
+    text-transform: capitalize;
+    font-family: 'Roboto', sans-serif; /* Schriftart */
+    font-size: 0.9rem;
+    font-weight: bold;
+    min-width: 105px;
+    padding: 10px;
+    border-radius: 10px; /* Beispielwert für border-radius */
+    overflow: hidden;
+    background-color: #4D97FFFF;
+    height: calc(0.9rem + 20px);
+}
+
+/* Effekt-1 Stile */
+.effect.effect-1 {
+    transition: all 0.2s linear;
+}
+
+/* Stile für das Icon */
+.effect.effect-1 .button-icon {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    opacity: 0;
+    height: auto;
+    width: 12px;
+    transition: all 0.3s linear;
+    transform:  translateY(-50%);
+}
+
+/* Hover-Effekte */
+.effect.effect-1:hover {
+    text-indent: -15px;
+    background-color: #3a77cc;
+}
+
+.effect.effect-1:hover .button-icon {
+    opacity: 1;
+}
+
+
+
+/* Effekt-2 Stile */
+.effect.effect-2 {
+    transition: all 0.2s linear;
+}
+
+/* Stile für das Icon */
+.effect.effect-2 .button-icon {
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    opacity: 0;
+    height: auto;
+    width: 12px;
+    transition: all 0.3s linear;
+    transform:  translateY(-50%) scaleX(-1);
+}
+
+/* Hover-Effekte */
+.effect.effect-2:hover {
+    text-indent: 15px;
+    background-color: #44495b;
+}
+
+.effect.effect-2:hover .button-icon {
+    opacity: 1;
+}
+
+
+
+
+/*Details*/
+.details-container {
+    padding-left: 20px;
+    display: flex; /* Aktiviert Flexbox */
+    width: 100%; /* Gesamtbreite des Containers */
+    gap:13px;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.details-area {
+    display: flex;
+    flex-direction: column;
+    background-color: #EEEEEEFF;
+    width: 100%;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    padding-top: 13px;
+    text-align: left;
+    padding-left: 5px;
+    font-size: 0.8rem;
+    color: #3a4964;
+    padding-bottom: 3px;
+    border: none;
+    position: relative;
+    top: -10px;
+}
+
+.start-container {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    min-height: 190px;
+}
+
+.text-area {
+    flex: 2;
+    padding-top: 10px;
+    padding-right: 10px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: 100%;
+    scrollbar-color: #4D97FFFF rgba(255, 255, 255, 0);
+    text-align: left;
+}
+
+.text-area::-webkit-scrollbar-track {  /*TESTEN*/
+    background: rgba(255, 255, 255, 0);
+}
+
+.text-area::-webkit-scrollbar-thumb {  /*TESTEN*/
+    background-color: #4D97FF;
+    border-radius: 4px;
+}
+
+.difficultyIcon {
+    height: 1rem;
+    width: auto;
     margin-left: 5px;
+}
+
+.stepNumber {
+    background-color: #575E75FF;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 20px;
+    color: white;
+    margin-left: 5px;
+}
+
+.text-area p {
+    font-size: 0.9rem;
+    line-height: 1.2;
+    color: #575E75FF;
+    display: block; /* Sicherstellen, dass <p> sich wie ein Blockelement verhält */
+    width: 100%; /* Volle Breite des Containers nutzen */
+    margin: 0; /* Standardmargen entfernen */
+    padding: 0; /* Falls Padding Einfluss hat */
+}
+
+.image-area {
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    display: flex;
+    height: fit-content;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    background-color: #eeeeee;
+    margin-right: 2px;
+}
+
+.imageAreaShadow {
+    display: flex;
+    position: relative;
+    background-color: transparent;
+    height: fit-content;
+}
+
+.text-image {
+    width: auto;
+    height: 0.9rem;
+}
+
+.vertical-line-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.vertical-line {
+    border-left: 2px solid #575E75FF;
+    height: 140px;
+    width: 1px;
+}
+
+.overview-image {
+    width: 200px;
+    height: auto;
+    margin-right: auto;
+    border-radius: 10px;
+    z-index: 100;
+}
+
+
+/* Start tutorial*/
+.start-tutorial-container {
+    color: white;
+    text-align: center;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 80%;
+}
+
+.start-tutorial-container h1 {
+    font-size: 1.5rem;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    width: 100%;
+    min-height: 50px;
+}
+
+/* Jede Spalte nimmt gleich viel Platz ein */
+.left,
+.center,
+.right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+/* Links soll ganz links, Mitte zentriert, Rechts bleibt leer */
+.left {
+    justify-content: flex-start;
+}
+.center {
+    justify-content: center;
+}
+.right {
+    justify-content: flex-end;
+}
+
+.backButton {
+    width: 40px;
+    height: auto;
+    margin-left: 30px;
+    object-fit: contain;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+}
+
+.backButtonContainer {
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+    z-index: 10;
+}
+
+.backButtonContainer:hover .arrowFill {
+    width: 25px;
+}
+
+.backButtonContainer:active .backButton {
+    transform: scale(0.9);
+}
+
+.arrowFill {
+    position: absolute;
+    right: 5px;
+    height: 24px;
+    top:50%;
+    width: 0;
+    background-color: #63a2ff;
+    transform: translateY(-50%);
+    transition: width 0.25s ease-in-out;
+    z-index: 1;
+    border-radius: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Grüner Button */
+.save-button {
+    background-color: #cc5bf3;
+    font-weight: bold;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    min-width: 150px;
+    transition: 0.1s ease-in-out;
+}
+
+.save-button:hover {
+    background-color: #cffff2;
+}
+
+/* Roter Button */
+.no-save-button {
+    background-color: #e39c43;
+    font-weight: bold;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    min-width: 150px;
+    transition: 0.1s ease-in-out;
+}
+
+.no-save-button:hover {
+    background-color: #efcbc5;
+}
+
+
+
+.white-box {
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+    width: 96%;
+    border-radius: 8px;
+    display: inline-flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    padding-bottom: 30px;
+    padding-top: 30px;
+    padding-left: 30px;
+    box-sizing: border-box;
+    box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    -moz-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    margin-bottom: 60px;
+    align-items: flex-start;
+}
+
+
+
+
+
+
+.start-bubble {
+    display: inline-block;
+    position: relative;
+    border-radius: 15px;
+    border: solid 3px #4D97FFFF;
+    background-color: #e4f0ff;
+    width: 100%;
+    z-index: 100;
+    text-align: left;
+    padding: 10px;
+    min-height: calc(2 * 0.9rem + 20px + 1.2rem); /*2 Zeilen + Padding oben und unten + Zeilenabstand*/
+}
+
+.selectionBubble {
+    display: inline-block;
+    position: relative;
+    border-radius: 15px;
+    background-color: #ededed;
+    border: solid 3px #ededed;
+    width: 100%;
+    z-index: 100;
+    text-align: left;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.selectionBubble.selected {
+    background-color: #5a6077ff;
+    border: solid 3px #5a6077ff;
+    color: white;
+}
+
+.selectionBubble.selected .selectionBubbleIndicator {
+    background-image: url('./images/selectionBubbleDecalDark.png');
+}
+
+.selectionBubble:not(.selected):hover {
+    cursor: pointer;
+    background-color: #cecece;
+    border-color: #CECECEFF;
+    z-index: 100;
+}
+
+.selectionContainer {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    width: 100%;
+    justify-content: flex-end;
+    flex-direction: column;
+    margin-right: 35px; /*Account for the length of the bubble-indicators*/
+    margin-left: 35px; /*Account for the length of the bubble-indicators*/
 }

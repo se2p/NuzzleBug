@@ -3,13 +3,15 @@ import {connect} from 'react-redux';
 import DebuggingTutorialOverviewComponent from '../components/debuggingTutorial/debuggingTutorialOverview.jsx';
 import PropTypes from "prop-types";
 import VirtualMachine from "scratch-vm";
-import {setLastTutorial, setLoading, toggleAutosave} from "../reducers/debugging-tutorial-overview"
+import {setLastTutorial, setLoading, setAutoSave, setContentType, reset, lastStartedTutorial} from "../reducers/debugging-tutorial-overview"
 import JSZip from "jszip";
+import {CONTENT_START_TUTORIAL} from "../components/debuggingTutorial/tutorial-constants.jsx";
 
 class DebuggingTutorialOverview extends React.Component {
     constructor(props) {
         super(props);
         this.loadProject = this.loadProject.bind(this);
+        this.openAutoSaveSelection = this.openAutoSaveSelection.bind((this));
     }
 
     /**
@@ -18,9 +20,11 @@ class DebuggingTutorialOverview extends React.Component {
      * the user gets directed to the step-Overview of the current tutorial.
      */
     handleStart() {
-        const isNewTutorialSelected = JSON.stringify(this.props.tutorialMessages) !== JSON.stringify((this.props.lastTutorial));
+        const isNewTutorialSelected = this.props.tutorialMessages?.title !== this.props.lastStartedTutorial;
+
         if (isNewTutorialSelected) {
-            if (this.props.autoSave) {
+            this.props.setLastStartedTutorial(this.props.tutorialMessages?.title);
+            if (this.props.autoSave === "YES") {
                 this.props.setLoading(true);
                 const zip = new JSZip();
                 zip.file('project.json', this.props.vm.toJSON());
@@ -61,28 +65,38 @@ class DebuggingTutorialOverview extends React.Component {
     loadProject() {
         this.props.setLoading(true);
         this.props.vm.start();
-        this.props.vm.clear();
-        this.props.vm.loadProject(this.props.tutorialIndexData["project1"])
-            .then(() => {
-                this.props.setLastTutorial(this.props.tutorialMessages);
-                this.props.onStartTutorial();})
-            .catch((e) => console.log("Error loading new Project: " + e.toString()))
-            .finally(() => this.props.setLoading(false));
+
+        if ("project1" in this.props.tutorialIndexData && this.props.tutorialIndexData["project1"] != null) { //Lädt nur, wenn projectData angegeben wurde
+            this.props.vm.loadProject(this.props.tutorialIndexData["project1"])
+                .then(() => {
+                    this.props.onStartTutorial();})
+                .catch((e) => console.log("Error loading new Project: " + e.toString()))
+                .finally(() => {this.props.setLoading(false);});
+        } else {
+            this.props.onStartTutorial();
+        }
+    }
+
+    openAutoSaveSelection() {
+        this.props.setLastTutorial(this.props.tutorialMessages.title);
+        this.props.setContentType1(CONTENT_START_TUTORIAL);
     }
 
     render () {
-        const isNewTutorialSelected = this.props.lastTutorial !== null && this.props.lastTutorial !== undefined ? this.props.tutorialMessages.title !== this.props.lastTutorial.title : true;
-        let lastTutorialTitle = null;
-        if (isNewTutorialSelected && this.props.lastTutorial !== null && this.props.lastTutorial !== undefined) {
-            lastTutorialTitle = this.props.lastTutorial.title;
+
+        const isNewTutorialSelected = this.props.lastTutorial !== null
+            && this.props.tutorialMessages?.title !== this.props.lastTutorial;
+
+        if (this.props.lastTutorial === null || this.props.lastTutorial === undefined) {
+            this.props.setLastTutorial(this.props.tutorialMessages.title);
+        } else if (isNewTutorialSelected) {
+            this.props.reset();
         }
-        console.log("KKKKKK " + JSON.stringify(this.props.tutorialIndexData));
+
         return (
             <DebuggingTutorialOverviewComponent
                 onStart={() => this.handleStart()}
-                isNewTutorialSelected={isNewTutorialSelected}
-                lastTutorialTitle={lastTutorialTitle}
-                toggleAutosave={toggleAutosave}
+                openAutoSaveSelection={() => this.openAutoSaveSelection()}
                 {...this.props}
             />
         );
@@ -90,7 +104,6 @@ class DebuggingTutorialOverview extends React.Component {
 }
 
 DebuggingTutorialOverview.propTypes = {
-    title: PropTypes.string,
     tutorialMessages: PropTypes.any,
     tutorialPicture: PropTypes.any,
     onStartTutorial: PropTypes.func.isRequired,
@@ -100,18 +113,30 @@ DebuggingTutorialOverview.propTypes = {
     setLoading: PropTypes.func,
     isLoading: PropTypes.bool,
     tutorialIndexData: PropTypes.any,
-    autoSave: PropTypes.bool,
+    autoSave: PropTypes.string,
+    setContentType1: PropTypes.func,
+    contentType1: PropTypes.any,
+    setAutoSave: PropTypes.func,
+    reset: PropTypes.func,
+    openAutoSaveSelection: PropTypes.func,
+    lastStartedTutorial: PropTypes.string,
+    setLastStartedTutorial: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
     lastTutorial: state.scratchGui.debuggingTutorialOverview.lastTutorial,
     isLoading: state.scratchGui.debuggingTutorialOverview.isLoading,
     autoSave: state.scratchGui.debuggingTutorialOverview.autoSave,
+    contentType1: state.scratchGui.debuggingTutorialOverview.contentType,
+    lastStartedTutorial: state.scratchGui.debuggingTutorialOverview.lastStartedTutorial,
 });
 const mapDispatchToProps = dispatch => ({
     setLastTutorial: (tutorial) => dispatch(setLastTutorial(tutorial)),
     setLoading: (isLoading) => dispatch(setLoading(isLoading)),
-    toggleAutosave: () => dispatch(toggleAutosave()),
+    setAutoSave: (type) => dispatch(setAutoSave(type)),
+    setContentType1: (contentType) => dispatch(setContentType(contentType)),
+    reset: () => dispatch(reset()),
+    setLastStartedTutorial: (tutorial) => dispatch(lastStartedTutorial(tutorial)),
 });
 
 export default connect(
