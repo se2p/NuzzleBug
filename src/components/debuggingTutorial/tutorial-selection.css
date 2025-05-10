@@ -1,0 +1,143 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: radial-gradient(circle, rgb(255, 255, 255) 0%, rgba(223,223,223,1) 100%);
+    width: 100%;
+    height: 100vh;
+}
+
+.header {
+    color: #575E75FF;
+    font-size: 3em;
+    font-weight: bold;
+    position: relative;
+    width: 100%;
+}
+
+.help {
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+    background-color: #575E75FF;
+    color: white;
+    font-size: 0.9rem;
+    padding: 10px;
+    text-align: center;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+.help:hover {
+    background-color: #474d60;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+.tutorialCardContainer {
+    height: fit-content;
+    gap: 15px;
+    display: grid;
+    padding: 15px;
+    justify-items: center;
+    grid-template-columns: repeat(2, 1fr);
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+    width: fit-content;
+    border-radius: 8px;
+    box-sizing: border-box;
+    box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    -moz-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    margin-bottom: 40px;
+}
+
+/* Sprechblase */
+.bubble-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    width: 90%;
+    margin-bottom: 20px;
+    justify-content: flex-end;
+    margin-left: 10%;
+}
+
+.bubble {
+    position: relative;
+    border-radius: 10px;
+    background: #575E75FF;
+    margin-bottom: auto;
+    margin-right: 20px;
+    width: 100%;
+    margin-left: 20px;
+    display: flex;
+    height: fit-content;
+    padding: 10px;
+}
+
+.bubble-indicator {
+    position: absolute;
+    width: 50px;
+    height: auto;
+    right: 0;
+    top: 30%;
+    transform: translateX(65%) translateY(-40%);
+}
+
+.bubble span {
+    color: #FFFFFF;
+    z-index: 15;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    text-align: justify;
+    font-weight: normal;
+}
+
+.arrowIcon {
+    height: 0.8rem;
+    width: auto;
+    margin-left: 5px;
+}
+
+.closeHelpButton {
+    border-radius: 5px;
+    background-color: white;
+    color: #575E75FF;
+    padding: 2px 5px;
+    width: fit-content;
+    cursor: pointer;
+    margin-top: 10px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.closeHelpButton:hover {
+    background-color: #d5d5d5;
+}
+
+.owl-image {
+    width: 115px;
+    height: auto;
+}
+
+.bubble-box-container {
+    padding-top: 10px;
+    padding-left: 7px;
+    display: flex;
+    width: 100%;
+    gap: 10px;
+    box-sizing: border-box;
+    justify-content: flex-end;
+    height: fit-content;
+}

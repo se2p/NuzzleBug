@@ -32,6 +32,7 @@ class TutorialCards extends React.Component {
         this.handlePrev = this.handlePrev.bind(this);
         this.handleStartTutorial = this.handleStartTutorial.bind(this);
         this.scrollToBottom = this.scrollToBottom.bind(this);
+        this.onBackToTutorialSelection = this.onBackToTutorialSelection.bind(this);
         this.myRef = null;
     }
 
@@ -64,7 +65,7 @@ class TutorialCards extends React.Component {
 
     handleHome () {
         // Go to the tutorialOverview (Home) if the button was clocked in the DebuggingOverview or
-        // the tutorialStep, otherwise go to the DebuggingOverview.
+        // the tutorialStep, otherwise go to the DebuggingOverview. TODO remove
         if (this.props.contentType === "DEBUGGING_STEP") {
             this.props.onSetContentType("TUTORIAL_SELECTED");
         } else if (this.props.contentType === "DEBUGGING_HELP") {
@@ -73,6 +74,11 @@ class TutorialCards extends React.Component {
             this.props.onReset();
             this.props.onHome();
         }
+    }
+
+    onBackToTutorialSelection() {
+        this.props.onReset();
+        this.props.onHome();
     }
 
     handlePrev () {
@@ -86,6 +92,7 @@ class TutorialCards extends React.Component {
     }
 
     handleStartTutorial() {
+        console.log("Starting Tutorial");
         this.props.startTutorial();
     }
 
@@ -111,8 +118,6 @@ class TutorialCards extends React.Component {
             }
             tutorialMessages = messages.default;
         }
-
-        console.log("EEEEEEEE " + this.props.selectedTutorial + " " + JSON.stringify(tutorial))
 
         let guiMessagesContainer;
         try {
@@ -144,7 +149,8 @@ class TutorialCards extends React.Component {
                 onPrevStep={this.handlePrev}
                 tutorialIndexData={tutorial}
                 onStartTutorial={this.handleStartTutorial}
-                onScrollBottom={() => this.scrollToBottom()}
+                onScrollBottom={this.scrollToBottom}
+                onBackToTutorialSelection={this.onBackToTutorialSelection}
                 {...this.props}
             />
         );
@@ -167,6 +173,7 @@ TutorialCards.propTypes = {
     contentType: PropTypes.string,
     vm: PropTypes.instanceOf(VirtualMachine).isRequired,
     startTutorial: PropTypes.func,
+    onBackToTutorialSelection: PropTypes.func
 };
 
 const mapStateToProps = state => ({

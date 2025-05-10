@@ -212,7 +212,7 @@ Controls.propTypes = {
     onTutorialClick: PropTypes.func.isRequired,
     tutorialCardsVisible: PropTypes.bool,
     locale: PropTypes.string.isRequired,
-    debuggingTutorialVisible: PropTypes.bool //TODO Speichert, ob das menü sichtbar ist. Wird im Button verwendet
+    debuggingTutorialVisible: PropTypes.bool
 };
 
 Controls.defaultProps = {

@@ -126,7 +126,7 @@ GUI.defaultProps = {
     onVmInit: (/* vm */) => {}
 };
 
-const mapStateToProps = state => { //TODO ADD DINGE
+const mapStateToProps = state => {
     const loadingState = state.scratchGui.projectState.loadingState;
     return {
         activeTabIndex: state.scratchGui.editorTab.activeTabIndex,
@@ -138,11 +138,11 @@ const mapStateToProps = state => { //TODO ADD DINGE
         bbtCoordinatesTooltipVisible: state.scratchGui.blockBasedTesting.coordinatesTooltipVisible,
         blocksTabVisible: state.scratchGui.editorTab.activeTabIndex === BLOCKS_TAB_INDEX,
         cardsVisible: state.scratchGui.cards.visible,
-        debuggingTutorialVisible: state.scratchGui.debuggingTutorial.visible, //TODO ADDED THE PROP TYPE
+        debuggingTutorialVisible: state.scratchGui.debuggingTutorial.visible,
         irCardsVisible: state.scratchGui.ircards.visible,
         irDebuggerVisible: state.scratchGui.irDebugger.visible,
         helpMenuVisible: state.scratchGui.helpMenu.visible,
-        tutorialCardsVisible: state.scratchGui.tutorialCards.visible, //TODO OOOOOOOOOOOOOOOOOOOO
+        tutorialCardsVisible: state.scratchGui.tutorialCards.visible,
         connectionModalVisible: state.scratchGui.modals.connectionModal,
         costumeLibraryVisible: state.scratchGui.modals.costumeLibrary,
         costumesTabVisible: state.scratchGui.editorTab.activeTabIndex === COSTUMES_TAB_INDEX,

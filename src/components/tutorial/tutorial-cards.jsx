@@ -21,6 +21,8 @@ import VirtualMachine from 'scratch-vm';
 import DebuggingTutorialHelp from "../../containers/debugging-tutorial-help.jsx";
 import DebuggingTutorialOverview from "../../containers/debugging-tutorial-overview.jsx";
 import DebuggingTutorialStep from "../../containers/debugging-tutorial-step.jsx";
+import TutorialItem from "../debuggingTutorial/tutorial-item.jsx";
+import TutorialSelection from "../debuggingTutorial/tutorial-selection.jsx";
 
 
 
@@ -91,7 +93,7 @@ const TutorialHeader = props => {
     if (contentType === "DEBUGGING_STEP") {
         homeButtonText = backButtonTitle;
     } else if (contentType === "DEBUGGING_HELP") {
-        homeButtonText = "Aktueller Schritt"; //TODO add buttonText
+        homeButtonText = "Aktueller Schritt";
     } else {homeButtonText = homeButtonTitle;}
 
     return (
@@ -215,6 +217,7 @@ const TutorialCards = props => {
         onOpenHelp,
         tutorialIndexData,
         onScrollBottom,
+        onBackToTutorialSelection,
         ...posProps
     } = props;
     let {x, y} = posProps;
@@ -243,9 +246,36 @@ const TutorialCards = props => {
 
         switch (contentType) {
             case "TUTORIAL_SELECTED":
-                if (isDebuggingTutorialSelected) {
+                /*return <TutorialStep
+                guiMessages={guiMessages}
+                tutorialMessages={tutorialMessages}
+                detectors={detectors}
+                step={step}
+                nextStep={onNextStep}
+                vm={vm}
+                tutorialIndexData={tutorialIndexData}
+            />;*/
+                return <DebuggingTutorialOverview
+                    tutorialMessages={tutorialMessages}
+                    tutorialPicture={tut[0].img}
+                    onStartTutorial={onStartTutorial}
+                    vm={vm}
+                    stepCount={totalSteps}
+                    tutorialIndexData={tutorialIndexData}
+                />
+
+                /*return <TutorialStep
+                    guiMessages={guiMessages}
+                    tutorialMessages={tutorialMessages}
+                    detectors={detectors}
+                    step={step}
+                    nextStep={onNextStep}
+                    vm={vm}
+                    tutorialIndexData={tutorialIndexData}
+                />;*/
+
+                /*if (isDebuggingTutorialSelected) { //TODO vereinheitlichen
                     return <DebuggingTutorialOverview
-                        title={title}
                         tutorialMessages={tutorialMessages}
                         tutorialPicture={tut[0].img}
                         onStartTutorial={onStartTutorial}
@@ -254,7 +284,16 @@ const TutorialCards = props => {
                         tutorialIndexData={tutorialIndexData}
                     />;
                 } else {
-                    return <TutorialStep
+                    return <DebuggingTutorialOverview
+                        tutorialMessages={tutorialMessages}
+                        vm={vm}
+                        tutorialIndexData={tutorialIndexData}
+
+                        onStartTutorial={onStartTutorial}
+                        tutorialPicture={tut[0].img}
+                        stepCount={totalSteps}
+                    />
+                    /*return <TutorialStep
                         guiMessages={guiMessages}
                         tutorialMessages={tutorialMessages}
                         detectors={detectors}
@@ -262,8 +301,8 @@ const TutorialCards = props => {
                         nextStep={onNextStep}
                         vm={vm}
                         tutorialIndexData={tutorialIndexData}
-                    />;
-                }
+                    />;*/
+
             case "DEBUGGING_STEP":
                 return <DebuggingTutorialStep
                     onOpenHelp={onOpenHelp}
@@ -274,6 +313,9 @@ const TutorialCards = props => {
                     stepCount={totalSteps}
                     onIncreaseStep={onNextStep}
                     tutorialIndexData={tutorialIndexData}
+                    isDebuggingTutorial={isDebuggingTutorialSelected}
+                    detectors={detectors}
+                    onBackToTutorialSelection={onBackToTutorialSelection}
                 />;
             case "DEBUGGING_HELP":
                 return <DebuggingTutorialHelp
@@ -283,7 +325,13 @@ const TutorialCards = props => {
                     onScrollBottom={onScrollBottom}
                 />
             default: //Show tutorial selection
-                return Array(tutorials.length).fill(0)
+                return <TutorialSelection
+                    onSelectTutorial={onSelectTutorial}
+                    tutorials={tutorials}
+                />
+
+
+                /*return Array(tutorials.length).fill(0)
                     .map((_, i) => (
                         <Tutorial
                             isDebuggingTutorial={tutorials[i].isDebuggingTutorial}
@@ -291,7 +339,14 @@ const TutorialCards = props => {
                             content={tutorials[i]}
                             onSelect={onSelectTutorial}
                         />
-                    ));
+
+                        <TutorialItem
+                            isDebuggingTutorial={tutorials[i].isDebuggingTutorial}
+                            key={tutorials[i].id}
+                            content={tutorials[i]}
+                            onSelect={onSelectTutorial}
+                        />
+                    ));*/
         }
     }
 
@@ -334,13 +389,14 @@ const TutorialCards = props => {
                         >
                             {parseContent()}
                         </div>
-                        {!isDebuggingTutorialSelected && <NextPrevButtons
+                        {/*!isDebuggingTutorialSelected && <NextPrevButtons
                             isMenuVisible={isMenuVisible}
                             expanded={expanded}
                             onNextStep={step < totalSteps - 1 && step < currentTutorialStep ?
                                 onNextStep : null}
                             onPrevStep={step > 0 ? onPrevStep : null}
-                        />}
+                        />*/ //TODO In my opinion unnecessary and distracting for users
+                        }
                         {expanded ?
                             <div className={tutorialStyles.footer}>
                                 <p className={tutorialStyles.footerText}>{guiMessages.codeClub}</p>
@@ -366,7 +422,7 @@ TutorialCards.propTypes = {
             id: PropTypes.string.isRequired,
             title: PropTypes.string.isRequired,
             img: PropTypes.node.isRequired,
-            difficulty: PropTypes.string.isRequired,
+            difficulty: PropTypes.number.isRequired,
             totalSteps: PropTypes.number.isRequired,
             detectors: PropTypes.string
         })),
@@ -400,7 +456,7 @@ TutorialCards.propTypes = {
     onSetContentType: PropTypes.func,
     onOpenHelp: PropTypes.func,
     onStartTutorial: PropTypes.func.isRequired,
-    onScrollBottom: PropTypes.func, //TODO
+    onScrollBottom: PropTypes.func,
 };
 
 export default injectIntl(TutorialCards);
