@@ -1,3 +1,5 @@
+import {act} from "react";
+
 const RESET_STEP = 'scratch-gui/debugging-tutorial-cards/RESET_STEP';
 const ERROR_CLICKED = 'scratch-gui/debugging-tutorial-cards/ERROR_CLICKED';
 const UPDATE_TEST_RESULTS = 'scratch-gui/debugging-tutorial-cards/UPDATE_TEST_RESULTS';
@@ -9,7 +11,10 @@ const SET_CONTENT_TYPE = 'scratch-gui/debugging-tutorial-cards/SET_CONTENT_TYPE'
 const SET_RESPONSE = 'scratch-gui/debugging-tutorial-cards/SET_RESPONSE';
 const SET_PAGE = 'scratch-gui/debugging-tutorial-cards/SET_PAGE';
 const SHOW_QUICK_HANDLE = 'scratch-gui/debugging-tutorial-cards/SHOW_QUICK_HANDLE';
-
+const SET_TEST_DETAILS = 'scratch-gui/debugging-tutorial-cards/SET_TEST_DETAILS';
+const ADD_DOWNLOAD = 'scratch-gui/debugging-tutorial-cards/ADD_DOWNLOAD';
+const SET_QUALITY_RESULTS = 'scratch-gui/debugging-tutorial-cards/SET_QUALITY_RESULTS';
+const SET_HELP_TYPE = 'scratch-gui/debugging-tutorial-cards/SET_HELP_TYPE';
 
 const RESPONSE_START_VALUE = 'scratch-gui/debugging-tutorial-cards/RESPONSE_START'
 
@@ -25,6 +30,10 @@ const initialState = {
     responseType: RESPONSE_START_VALUE,
     page: "OVERVIEW",
     isShowingQuickHandle: false,
+    curTestDetails: "",
+    downloaded: [],
+    qualityResults: [],
+    helpType: "",
 };
 
 const reducer = function (state, action) {
@@ -63,12 +72,32 @@ const reducer = function (state, action) {
         case SHOW_QUICK_HANDLE:
             baseState.isShowingQuickHandle = true;
             break;
+        case SET_TEST_DETAILS:
+            baseState.curTestDetails = action.testId;
+            break;
+        case ADD_DOWNLOAD:
+            baseState.downloaded.push(action.addedName);
+            break;
+        case SET_QUALITY_RESULTS:
+            baseState.qualityResults = action.results;
+            break;
+        case SET_HELP_TYPE:
+            baseState.helpType = action.helpType;
+            break;
         case RESET_STEP:
             baseState.isErrorInfoVisible = false;
             baseState.showTestDetail = false;
             baseState.testResults = null;
             baseState.projectLoadingState = null;
             baseState.isLoading = false;
+            baseState.downloaded = [];
+            baseState.curTestDetails = "";
+            baseState.page = "OVERVIEW";
+            baseState.responseType = RESPONSE_START_VALUE;
+            baseState.contentType = "DETAILS";
+            baseState.isShowingQuickHandle = false;
+            baseState.qualityResults = [];
+            baseState.helpType = "";
             break;
     }
     return baseState;
@@ -118,6 +147,22 @@ const showQuickHandle = function () {
     return {type: SHOW_QUICK_HANDLE};
 }
 
+const setCurTestDetails = function (testId) {
+    return {type: SET_TEST_DETAILS, testId};
+}
+
+const addDownloaded = function (addedName) {
+    return {type: ADD_DOWNLOAD, addedName};
+}
+
+const setQualityResults = function (results) {
+    return {type: SET_QUALITY_RESULTS, results};
+}
+
+const setHelpType = function (helpType) {
+    return {type: SET_HELP_TYPE, helpType};
+}
+
 export {
     reducer as default,
     initialState as debuggingTutorialStepInitialState,
@@ -132,4 +177,8 @@ export {
     setResponseType,
     setCurPage,
     showQuickHandle,
+    setCurTestDetails,
+    addDownloaded,
+    setQualityResults,
+    setHelpType,
 };

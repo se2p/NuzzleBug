@@ -1,12 +1,11 @@
 import PropTypes from "prop-types";
 import React, {useRef} from "react";
 import css from "./debuggingTutorialStep.css"
-import owl from "./images/owl-b.svg"
+import owl from "./images/OwlBranchRight.png"
 import failed_debugging from "./images/icon--failed-debugging.png"
 import {FormattedMessage} from "react-intl";
 import owlIcon from "./images/owl-b.svg"
 import congratulations from "./images/Glückwunsch.png"
-import euliLeft from "./images/euliLeft.png"
 import iconErrors from "./images/icon--Errors.png"
 import iconDescription from "./images/icon--Description.png"
 import iconControls from "./images/icon--Controls.png"
@@ -16,24 +15,35 @@ import buttonOwly from "./images/buttonOwly.png"
 import buttonReset from "./images/buttonReset.png"
 import buttonResult from "./images/buttonResults.png"
 import buttonTest from "./images/buttonTest.png"
-import certificateBanner from "./images/CertificateBanner.png"
-import certificateSignature from "./images/certificateSignature.png"
-import certificateElementBody from "./images/certificateElementBody.png"
-import certificateElementButton from "./images/certificateElementButton.png"
-import certificateElementMedal from "./images/certificateElementMedall.png"
-import certificateResultMedal from "./images/certificateMedalOverall.png"
 import bubbleIndicator from "./images/SpeachBubbleRed.png"
 import bubbleIndicatorGray from "./images/bubbleDecalGrey.png"
+import bubbleIndicatorBlue from "./images/bubbleIDecalBlue2.png";
+import downButton from "./images/downButton.png"
+import upButton from "./images/upButton.png"
+import backButton from "./images/nextButton3.png";
+import closeIcon from "./images/iconClose.png"
+import downloadIcon from "./images/downloadIcon.png"
+import bubbleIndicatorPurple from "./images/bubbleDecalPurple.png"
+import owl2 from "./images/owlTransparent.png"
+import {renderResponse2, renderResponseClassic, renderResponseDebugging} from "./tutorial-step-response-renderer.jsx";
 
-const RESPONSE_START = 'scratch-gui/debugging-tutorial-cards/RESPONSE_START'; // Also present in the reducer class
-const RESPONSE_DEFAULT = 'scratch-gui/debugging-tutorial-cards/RESPONSE_DEFAULT';
-const RESPONSE_RELOAD = 'scratch-gui/debugging-tutorial-cards/RESPONSE_RELOAD';
-const RESPONSE_TESTING = 'scratch-gui/debugging-tutorial-cards/RESPONSE_TESTING';
-const RESPONSE_TESTING_FINISHED = 'scratch-gui/debugging-tutorial-cards/RESPONSE_TESTING_FINISHED'; // Also present in the container class
-const RESPONSE_EXPLANATION1 = 'scratch-gui/debugging-tutorial-cards/RESPONSE_EXPLANATION1';
-const RESPONSE_EXPLANATION2 = 'scratch-gui/debugging-tutorial-cards/RESPONSE_EXPLANATION2';
-const RESPONSE_EXPLANATION3 = 'scratch-gui/debugging-tutorial-cards/RESPONSE_EXPLANATION3';
-const RESPONSE_EXPLANATION4 = 'scratch-gui/debugging-tutorial-cards/RESPONSE_EXPLANATION4';
+import {
+    RESPONSE_START,
+    RESPONSE_DEFAULT,
+    RESPONSE_RELOAD,
+    RESPONSE_TESTING,
+    RESPONSE_TESTING_FINISHED,
+    RESPONSE_EXPLANATION1,
+    RESPONSE_EXPLANATION2,
+    RESPONSE_EXPLANATION3,
+    RESPONSE_EXPLANATION4,
+    RESPONSE_ASK_TEST_START
+} from './tutorial-constants.jsx';
+import scratchblocks from "scratchblocks";
+import stylesHints from "../tutorial/styles/tutorial-code-quality.css";
+import ScratchBlocks from "scratchblocks-react";
+import saveTrueIcon from "./images/saveTrueIcon.png";
+import saveTrueIconWhite from "./images/autoSaveOnWhite.png";
 
 
 const DebuggingTutorialStep = props => {
@@ -62,45 +72,29 @@ const DebuggingTutorialStep = props => {
         showQuickHandle,
         isShowingQuickHandle,
         tutorialIndexData,
+        setCurTestDetails,
+        curTestDetails,
+        onDownload,
+        downloaded,
+        isDebuggingTutorial,
+        overviewStep,
+        showControlOverview,
+        showDownloadsOverview,
+        curQualityResult,
+        setHelpType,
+        helpType,
+        onBackToTutorialSelection,
         ...posProps
     } = props;
 
-    const overviewStep = "overviewStep".concat((step + 1).toString());
 
 
 
 
 
 
-    /**
-     * Returns Euli's feedback-details containing all test results.
-     */
-    const parseDetails = () => {
-        return testResults.details
-            .sort((a, b) => b.testId.localeCompare(a.testId))
-            .map(e => {
-                const isCurrentStep = e.testId.charAt(4) === (step + 1).toString();
-                const passed = e.result === "pass";
-                const isDebuggingError = e.testDescription === "DEBUGGING_ERROR";
 
-                if (isCurrentStep) {
-                    return <div className={css.resultItem}>
-                        <span style={{marginLeft: "10px", color: passed ? "#48a231" : "#a60b0b"}}>{e.test}</span>
-                        {!isDebuggingError && !passed && <img alt="resultIcon" src={failed_debugging} style={{
-                            width: "20px",
-                            height: "auto",
-                            marginRight: "7px"
-                        }}/>}
-                    </div>
-                } else if (!passed) {
-                    return <div className={css.resultItem}>
-                        <span style={{marginLeft: "10px", color: "#a60b0b"}}>{e.test}</span>
-                        <img alt="resultIcon" src={failed_debugging}
-                             style={{width: "20px", height: "auto", marginRight: "7px"}}/>
-                    </div>
-                }
-            });
-    };
+
 
     const progressBarRef = useRef(null);
     const timeoutIdRef = useRef(null);
@@ -109,6 +103,8 @@ const DebuggingTutorialStep = props => {
      * Helper-function for the delayed reset button.
      */
     const handleMouseDown = () => {
+        if (progressBarRef.current === null) return;
+
         setLoading(true);
         progressBarRef.current.style.width = '90%';
         progressBarRef.current.style.transition = 'width 1s linear';
@@ -116,8 +112,10 @@ const DebuggingTutorialStep = props => {
         timeoutIdRef.current = setTimeout(() => {
             setCurPage("RESPONSE");
             showQuickHandle();
-            progressBarRef.current.style.transition = 'none';
-            progressBarRef.current.style.width = '0';
+            if (progressBarRef.current !== null) {
+                progressBarRef.current.style.transition = 'none';
+                progressBarRef.current.style.width = '0';
+            }
         }, 1100);
     };
 
@@ -132,129 +130,41 @@ const DebuggingTutorialStep = props => {
     };
 
     /**
-     * Renders the current step.
-     */
-    const renderStep = () => {
-        return (
-            <div className={css.container}>
-                <div style={{textAlign: "left"}}>
-                    <span className={css.descriptionHeader}>{"Schritt " + (step + 1)}</span>
-                </div>
-
-                <p className={css.description}>
-                    {tutorialMessages[overviewStep]["description"]}
-                </p>
-
-                <div className={css.errorBar}>
-                    <span className={css.errorText}>Anzahl an Fehlern: </span>
-                    <span className={css.errorNumber}>
-                    {tutorialMessages[overviewStep]["errorAmount"]}
-                </span>
-                    <button className={css.detailsButton} onClick={onErrorClicked}>Details
-                        <span className={css.tooltipText}>Falls du den Fehler nicht findest: </span>
-                    </button>
-                </div>
-
-                {isErrorInfoVisible && <div className={css.error} onClick={onErrorClicked}>
-                    {tutorialMessages[overviewStep]["errorDescription"]}
-                </div>}
-
-                <div className={css.explanationBar}>
-                    <span className={css.explanationText}>
-                    <u><b>Das ist zu tun:</b></u> Finde den Fehler und klicke auf <b>Überprüfen</b>, damit Euli deinen Code checkt. Wenn alles passt,
-                    klicke auf <b>Weiter gehts</b>. Brauchst du Hilfe, klicke auf <b>Frage Euli</b>.
-                    </span>
-                </div>
-
-                <div className={css.buttonBar}>
-                    <div className={css.resetContainer}>
-
-                        <button
-                            className={projectLoadingState !== null ? projectLoadingState === "RESET" ? css.resetButtonLoading : css.buttonElementDisabled : isLoading ? css.resetButtonPressed : css.resetButton}
-                            onMouseDown={handleMouseDown}
-                            onMouseUp={handleMouseUp}
-                            onMouseLeave={handleMouseUp}
-                        >
-                            {projectLoadingState !== null ? projectLoadingState === "RESET" ? "Lädt..." : "Warten" : "Zurücksetzen"}
-                            <div className={css.progressBar} ref={progressBarRef}></div>
-                        </button>
-                    </div>
-
-                    <button className={css.buttonElement} onClick={onOpenHelp}>
-                        <FormattedMessage //TODO TRANSLATE
-                            defaultMessage="Frage Euli"
-                            description="Title for button to shrink question category"
-                            id="gui.cards.shrinkk"
-                        />
-                        <img alt={"Owl-Icon"} style={{width: "auto", height: "30px", marginLeft: "10px"}}
-                             src={owlIcon}/>
-                    </button>
-
-                    {projectLoadingState !== null ?
-                        <button className={css.buttonElementDisabled} disabled={true}>
-                            {projectLoadingState === "TEST" ? "Lädt..." : "Warten"}
-                        </button>
-                        : <button
-                            className={(testResults !== null && testResults.passed) ? css.nextButton : css.buttonElement}
-                            onClick={(testResults !== null && testResults.passed) ? nextStep : onStartTests}>
-                            {(testResults !== null && testResults.passed) ? "Weiter gehts!" : "Überprüfen"}
-                        </button>}
-                </div>
-
-                {testResults !== null && <div className={css.testContainer}>
-                    <div className={css.testBox}>
-                        <div className={css.testResContainer}>
-                        <span className={css.testNumber} style={{marginBottom: "10px", marginTop: "10px"}}>
-                            {testResults.passed ? "Glückwunsch!" : "Schade!"}
-                        </span>
-                            {!testResults.passed &&
-                                <button className={css.testResultButton} onClick={onTestDetails}>Details</button>}
-                        </div>
-
-                        {showTestDetail && !testResults.passed ?
-                            <div style={{display: "flex", flexDirection: "column", alignItems: "flex"}}>
-                                {parseDetails()}
-                            </div> : <span style={{marginBottom: "5px", marginLeft: "10px", textAlign: "left"}}>
-                            {getResultText()}
-                        </span>}
-
-                    </div>
-                    <img style={{width: "100px", height: "auto"}} alt={"owl-picture explaining the result"} src={owl}/>
-                </div>}
-            </div>
-        )
-    }
-
-    /**
      * Renders the final message, after finishing a tutorial.
      */
     const renderFinalStep = () => {
-        return (<div className={css.container}>
-            <img className={css.titleImage} src={congratulations} alt={"Picture of the final step"}
-                 style={{marginTop: "15px", width: "300px", height: "auto"}}/>
-            <div className={css.descriptionFinish}>
-                <p>{tutorialMessages.levelFinishedText}</p>
-            </div>
-
-            <div className={css.detailsBar}>
-                <div className={css.detailsBarElement}>
-                    <span className={css.detailsTitle}>Mögliche Ergänzungen: </span>
-                    <span className={css.detailsText}>{tutorialMessages.levelFinishedSuggestions}</span>
+        return (
+            <div className={css.cpContainer}>
+                <span className={css.finalTitle}>Glückwunsch!</span>
+                <div className={css.whiteBox}>
+                    <div className={css.bubbleContainer}>
+                        <div className={css.testStartBubble}>
+                            <img className={css.testBubbleIndicator} alt={"Bubble-Decal"} src={bubbleIndicatorBlue}/>
+                            {tutorialMessages.levelFinishedText}
+                        </div>
+                        <img src={owl2} alt={"Picture of Euli"} className={css.owlImage} draggable={false}/>
+                    </div>
                 </div>
+                <div className={css.backToMenuButton} onClick={() => onBackToTutorialSelection()}>Weiter</div>
             </div>
-        </div>);
+        );
     }
-
-    //return reachedLastStep ? renderFinalStep() : renderStep();
 
     const renderResponse = () => {
         return (
             <div className={css.cpContainer}>
-                <div style={{display: "flex", alignItems: "center"}}>
-                    <img className={css.cpBackButton} src={iconBack} onClick={() => setCurPage("OVERVIEW")} alt={"Return Button"}/>
+                <div className={css.arrowButtonContainer}>
+                    <div className={css.upArrowFill}/>
+                    <img className={css.backButton}
+                         src={upButton}
+                         onClick={() => setCurPage("OVERVIEW")}
+                         alt={"Next page button"}
+                         draggable={false}
+                    />
                 </div>
+
                 <div className={css.whiteBox}>
-                    <img className={css.controlPanelImageSmall} src={euliLeft} alt={"Owl picture"} draggable={false}/>
+                    <img className={css.controlPanelImageSmall} src={owl} alt={"Owl picture"} draggable={false}/>
 
                     <div>
                         <div className={css.responseBubble}>
@@ -262,8 +172,8 @@ const DebuggingTutorialStep = props => {
                             {getResponse()}
                         </div>
                     </div>
-
                 </div>
+
                 <div className={css.cpButtonRow}>
                     <div className={css.controlPanelButtonParent}>
                         <img
@@ -271,7 +181,7 @@ const DebuggingTutorialStep = props => {
                             src={buttonTest}
                             alt={"Button Icon"}
                             draggable={false}
-                            onClick={() => handleTestStart()}
+                            onClick={() => {if (!testResults?.passed) handleTestStart()}}
                             style={{
                                 filter: responseType === RESPONSE_START
                                 || responseType === RESPONSE_DEFAULT
@@ -289,9 +199,16 @@ const DebuggingTutorialStep = props => {
                             draggable={false}
                             style={{
                                 filter: responseType === RESPONSE_START
+                                || responseType === RESPONSE_ASK_TEST_START
                                 || responseType === RESPONSE_DEFAULT ? "none" : "grayscale(100%) brightness(2.6)",
                             }}
-                            onClick={() => setCurPage("TEST_RESULTS")}
+                            onClick={() => {
+                                if (testResults === null || testResults === undefined) {
+                                    setResponseType(RESPONSE_ASK_TEST_START);
+                                } else if (!testResults?.passed) {
+                                    setCurPage("TEST_RESULTS");setResponseType(RESPONSE_DEFAULT);
+                                }
+                            }}
                         />
                         <span className={css.cpButtonDescription}>Testergebnisse</span>
                     </div>
@@ -305,7 +222,13 @@ const DebuggingTutorialStep = props => {
                                 filter: responseType === RESPONSE_START
                                 || responseType === RESPONSE_DEFAULT ? "none" : "grayscale(100%) brightness(1.6)",
                             }}
-                            onClick={onOpenHelp}
+                            onClick={() => {if (!testResults?.passed) {
+                                if (isDebuggingTutorial) {
+                                    onOpenHelp();
+                                } else {
+                                    setCurPage("HELP");
+                                }
+                            }}}
                         />
                         <span className={css.cpButtonDescription}>Frage Euli</span>
                     </div>
@@ -313,7 +236,7 @@ const DebuggingTutorialStep = props => {
                         <img
                             className={css.cpButton}
                             src={buttonHelp}
-                            onClick={() => setResponseType(RESPONSE_EXPLANATION1)}
+                            onClick={() => {if (!testResults?.passed) setResponseType(RESPONSE_EXPLANATION1)}}
                             alt={"Button Icon"}
                             draggable={false}
                             style={{
@@ -331,7 +254,7 @@ const DebuggingTutorialStep = props => {
                         <img
                             className={css.cpButton}
                             src={buttonReset}
-                            onClick={() => setResponseType(RESPONSE_RELOAD)}
+                            onClick={() => {if (!testResults?.passed) setResponseType(RESPONSE_RELOAD)}}
                             alt={"Button Icon"}
                             style={{
                                 filter: responseType === RESPONSE_START
@@ -349,43 +272,69 @@ const DebuggingTutorialStep = props => {
 
     const renderOverview = () => {
         return (
-            <div style={{width: "100%"}}>
-                {/* Tabs */}
-                <div className={css.tabContainer}>
-                    <button className={css.tabButton}
-                            style={{backgroundColor: contentType === "DETAILS" ? "#4D97FFFF" : ""}} id="beschreibungTab"
-                            onClick={() => setContentType("DETAILS")}>
-                        <div style={{display: "flex", alignItems: "center"}}>
-                            <img className={css.icon} src={iconDescription} alt={"errorIcon"}/>
-                            Beschreibung
+            <div className={css.cpContainer}>
+                <div className={css.whiteBoxOverview}>
+                    <div style={{width: "100%"}}>
+                        {/* Tabs */}
+                        <div className={css.tabContainer}>
+                            <button className={css.tabButton}
+                                    style={{backgroundColor: contentType === "DETAILS" ? "#4D97FFFF" : ""}} id="beschreibungTab"
+                                    onClick={() => setContentType("DETAILS")}>
+                                <div style={{display: "flex", alignItems: "center"}}>
+                                    <img className={css.icon} src={iconDescription} alt={"errorIcon"}/>
+                                    Beschreibung
+                                </div>
+                            </button>
+
+                            {isDebuggingTutorial ?
+                                <button className={css.tabButton}
+                                        style={{backgroundColor: contentType === "ERRORS" ? "#cf3b28FF" : ""}} id="fehlerTab"
+                                        onClick={() => setContentType("ERRORS")}>
+                                    <div style={{display: "flex", alignItems: "center"}}>
+                                        <img className={css.icon} src={iconErrors} alt={"errorIcon"}/>
+                                        Fehler
+                                    </div>
+                                </button>
+                                :
+                                (showDownloadsOverview && <button className={css.tabButton}
+                                        style={{backgroundColor: contentType === "DOWNLOADS" ? "#b14eea" : ""}} id="downloadTab"
+                                        onClick={() => setContentType("DOWNLOADS")}>
+                                    <div style={{display: "flex", alignItems: "center"}}>
+                                        <img className={css.icon} src={downloadIcon} alt={"downloadIcon"}/>
+                                        Downloads
+                                    </div>
+                                </button>)
+                            }
+
+                            {showControlOverview && <button className={css.tabButton}
+                                    style={{backgroundColor: contentType === "CONTROLS" ? "#ffab19ff" : ""}} id="steuerungTab"
+                                    onClick={() => setContentType("CONTROLS")}>
+                                <div style={{display: "flex", alignItems: "center"}}>
+                                    <img className={css.icon} src={iconControls} alt={"errorIcon"}/>
+                                    Steuerung
+                                </div>
+                            </button>}
                         </div>
-                    </button>
-                    <button className={css.tabButton}
-                            style={{backgroundColor: contentType === "ERRORS" ? "#cf3b28FF" : ""}} id="fehlerTab"
-                            onClick={() => setContentType("ERRORS")}>
-                        <div style={{display: "flex", alignItems: "center"}}>
-                            <img className={css.icon} src={iconErrors} alt={"errorIcon"}/>
-                            Fehler
+                        {/* Content */}
+                        <div className={css.container} style={{borderColor: getBorderColor()}}>
+                            {getContent()}
                         </div>
-                    </button>
-                    <button className={css.tabButton}
-                            style={{backgroundColor: contentType === "CONTROLS" ? "#ffab19ff" : ""}} id="steuerungTab"
-                            onClick={() => setContentType("CONTROLS")}>
-                        <div style={{display: "flex", alignItems: "center"}}>
-                            <img className={css.icon} src={iconControls} alt={"errorIcon"}/>
-                            Steuerung
-                        </div>
-                    </button>
+                    </div>
                 </div>
-                {/* Content */}
-                <div className={css.container} style={{borderColor: getBorderColor()}}>
-                    {getContent()}
-                </div>
+
                 {/* Next Button */}
                 <div className={css.buttonContainer}>
                     {isShowingQuickHandle ?
-                        <img className={css.cpBackButton} src={iconBack} onClick={() => setCurPage("RESPONSE")} style={{transform: "scaleY(-1)"}} alt={"Next page button"}/>
-                            :
+                        <div className={css.arrowButtonContainer}>
+                            <div className={css.downArrowFill}/>
+                            <img className={css.backButton}
+                                 src={downButton}
+                                 onClick={() => setCurPage("RESPONSE")}
+                                 alt={"Next page button"}
+                                 draggable={false}
+                            />
+                        </div>
+                        :
                         <button
                             className={isLoading ? css.resetButtonPressed : css.resetButton}
                             onMouseDown={handleMouseDown}
@@ -401,29 +350,82 @@ const DebuggingTutorialStep = props => {
         );
     }
 
-    const renderTestResults = () => {
-        return (
-            <div style={{display: "flex", alignItems: "center", flexDirection: "column", marginTop: "20px"}}>
-                <img className={css.cpBackButton} src={iconBack} onClick={() => setCurPage("RESPONSE")} alt={"Return Button"}/>
 
-                <div className={css.certificateFrame}>
-                    <div className={css.cornerTopLeft}></div>
-                    <div className={css.cornerTopRight}></div>
-                    <div className={css.cornerBottomLeft}></div>
-                    <div className={css.cornerBottomRight}></div>
-                    <div>
-                        <span className={css.certificateTitle}>ZERTIFIKAT</span>
-                        <img className={css.certificateBanner} src={certificateBanner} alt={"Banner"}/>
-                        <div className={css.certificateContainer}>
-                            <div className={css.certificateContent}>
-                                {generateCertificateElement()}
-                                {generateCertificateElement()}
-                                {generateCertificateElement()}
-                            </div>
-                            <div className={css.certificateFooter}>
-                                <img src={certificateResultMedal} alt={"medal"} className={css.certificateResultMedal}/>
-                                <img src={certificateSignature} alt={"Signature"} className={css.certificateSignature}/>
-                            </div>
+
+    const renderCodeQuality = () => {
+        return (
+            <div className={css.cpContainer}>
+                <div className={css.whiteBoxOverview}>
+                    <div style={{width: "100%"}}>
+                        {/* Tabs */}
+                        <div className={css.tabContainer}>
+                            <button className={css.tabButton}
+                                    style={{backgroundColor: contentType === "DETAILS" ? "#4D97FFFF" : ""}} id="beschreibungTab"
+                                    onClick={() => setContentType("DETAILS")}>
+                                <div style={{display: "flex", alignItems: "center"}}>
+                                    <img className={css.icon} src={iconDescription} alt={"errorIcon"}/>
+                                    Smells
+                                </div>
+                            </button>
+
+                            <button className={css.tabButton}
+                                    style={{backgroundColor: contentType === "ERRORS" ? "#cf3b28FF" : ""}} id="fehlerTab"
+                                    onClick={() => setContentType("ERRORS")}>
+                                <div style={{display: "flex", alignItems: "center"}}>
+                                    <img className={css.icon} src={iconErrors} alt={"errorIcon"}/>
+                                    Good
+                                </div>
+                            </button>
+
+                        </div>
+
+                        {/* Content */}
+                        <div className={css.container} style={{borderColor: getBorderColor()}}>
+                            {getCodeQualityContent()}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    const getCodeQualityContent = () => {
+        return(
+            <div className={css.qualityContainer}>
+                <div className={css.arrowButtonContainer}>
+                    <div className={css.upArrowFill}/>
+                    <img className={css.backButton}
+                         src={upButton}
+                         onClick={() => setCurPage("OVERVIEW")}
+                         alt={"Next page button"}
+                         draggable={false}
+                    />
+                </div>
+
+
+                <div className={css.qualityHeader}>
+                    <div className={css.qualitySpriteTitle}>
+                    </div>
+                    <div className={css.qualityTitle}>
+
+                    </div>
+
+                    <div className={css.qualityContent}>
+                        <div className={css.qualityButtonContainer}>
+                            <img className={css.qualityButton} alt={"back"}/>
+                        </div>
+                        <div className={css.qualityDescription}>
+
+                        </div>
+                        <div className={css.qualityCodeImg}>
+                            {curQualityResult !== undefined &&
+                            <ScratchBlocksImage
+                                scratchBlocksText={curQualityResult.codeSnippet}
+                                locale={props.locale}
+                            />}
+                        </div>
+                        <div className={css.qualityButtonContainer}>
+                            <img className={css.qualityButton} alt={"next"}/>
                         </div>
                     </div>
                 </div>
@@ -431,18 +433,125 @@ const DebuggingTutorialStep = props => {
     }
 
 
-    const generateCertificateElement = () => {
+
+    const renderTestResults = () => {
         return (
-            <div className={css.certificateElement}>
-                <div className={css.certificateElementContainer}>
-                    <span className={css.certificateElementText}>1) Schale bewegt sich</span>
-                    <img className={css.certificateElementBody} src={certificateElementBody} alt={"Background"}/>
-                    <img className={css.certificateElementMedal} src={certificateElementMedal} alt={"Medal"}/>
+            <div className={css.testContainer}>
+                <div className={css.arrowButtonContainer}>
+                    <div className={css.upArrowFill}/>
+                    <img className={css.backButton}
+                         src={upButton}
+                         onClick={() => setCurPage("RESPONSE")}
+                         alt={"Next page button"}
+                         draggable={false}
+                    />
                 </div>
-                <img className={css.certificateElementButton} src={certificateElementButton} alt={"button"}/>
+
+                <div className={css.testWhiteBox} style={{marginTop: "20px", display:"flex", flexDirection:"column", padding: "10px 0px 10px 10px"}}>
+
+                    <div className={css.bubbleContainer}>
+                        <div className={css.testStartBubble}>
+                            <img className={css.testBubbleIndicator} alt={"Bubble-Decal"} src={bubbleIndicatorBlue}/>
+                            {getTestText()}
+                        </div>
+                        <img src={owl2} alt={"Picture of Euli"} className={css.owlImage} draggable={false}/>
+                    </div>
+
+                    {(curTestDetails !== "") ?
+                        <div className={css.testResultContainer}>
+                            {parseTestDetails(curTestDetails)}
+                        </div>
+                        :
+                        <div className={css.testResultContainer}>
+                            {parseTestResults()}
+                        </div>}
+                </div>
             </div>
         );
     }
+
+    const getTestText = () => {
+        if (curTestDetails !== "") return <span>Hier siehst du Details zum Test</span>
+
+        return (testResults !== null) ? <span>Hier siehst du die einzelnen Tests. Dabei hast du die grünen Tests bestanden und musst bei den roten noch etwas nachbessern.<br/>Für genauere Informationen, klicke "Details".</span>
+            : <span>Es wurden noch keine Tests durchgeführt, die ich dir hier anzeigen kann.</span>;
+    }
+
+    const parseTestDetails = (testID) => {
+        if (testResults === null || testResults === undefined) return null;
+
+        return testResults.details.filter(a => a.testId === testID)
+            .map(e => {
+                const isCurrentStep = e.testId.charAt(4) === (step + 1).toString(); //TODO charAt(4) ersetzen
+                const passed = e.result === "pass";
+                const isDebuggingError = e.testDescription === "DEBUGGING_ERROR";
+                let message = "";
+
+                if (isDebuggingError) {
+                    if (isCurrentStep) {
+                        message = "Dies ist der aktuelle DebuggingFehler";
+                    }
+                } else {
+                    if (isCurrentStep) {
+                        message = "Dieser Test gehört zum aktuellen Schritt";
+                    } else {
+                        message = "Du hattest den Test in einem vorherigen Schritt bereits gelöst.";
+                    }
+                }
+
+
+                return (
+                    <div className={css.testDetailContainer}>
+                        <div className={css.testDetailHeader}>
+                            <span className={css.testDetailLeft}>{testID}</span>
+                            <span className={css.testDetailTitle}>{e.test}</span>
+                            <img className={css.testDetailRight} onClick={() => setCurTestDetails("")} src={closeIcon} alt={"back"}/>
+                        </div>
+
+                        <span>{e.testDescription}</span>
+                        <span>{message}</span>
+                        <span>{passed ? "Glückwunsch! Dein Code hat diesen Test bestanden." : "Dein Code hat diesen Test leider nicht bestanden."}</span>
+                    </div>
+                );
+            });
+    };
+
+
+    /**
+     * Returns Euli's feedback-details containing all test results.
+     */
+    const parseTestResults = () => {
+        if (testResults === null || testResults === undefined) return (
+            <div className={css.testStartButton}
+                 onClick={() => {setResponseType(RESPONSE_TESTING); handleTestStart(); setCurPage("RESPONSE")}}>
+                Test Starten
+            </div>
+        );
+
+        return testResults.details //TODO Extend!
+            .sort((a, b) => b.testId.localeCompare(a.testId))
+            .map((e, index) => {
+                const isCurrentStep = e.testId.charAt(4) === (step + 1).toString();
+                const passed = e.result === "pass";
+                const isDebuggingError = e.testDescription === "DEBUGGING_ERROR";
+                return createTestElement(passed, e.test, e.testId, (index + 1));
+            });
+    };
+
+
+    const createTestElement = (passed, testName, testId, testElementNumber) => {
+        return (
+            <div key={testId} className={css.testElementContainer} style={{borderColor: passed ? "#63d57c" : "#ea6a5d"}} onClick={() => setCurTestDetails(testId)}>
+                <span>{testElementNumber}</span>
+                <span style={{marginLeft:"20px"}}>{testName}</span>
+                <div className={css.bottom}>
+                    <div className={css.cursorIcon}></div>
+                    <span className={css.testDetailsText}>Details</span>
+                </div>
+            </div>
+        );
+    }
+
 
     const handleTestStart = () => {
         setResponseType(RESPONSE_TESTING);
@@ -455,120 +564,20 @@ const DebuggingTutorialStep = props => {
     }
 
     const getResponse = () => {
-        switch (responseType) {
-            case RESPONSE_START:
-                return (
-                    <div className={css.responseContainer}>
-                        <div className={css.responseTextArea}>
-                            <p> Wie kann ich dir helfen? </p>
-                            <p style={{marginTop: "15px"}}>
-                                Wenn du nicht weißt, wie du anfangen sollst, drücke einfach auf
-                                <span style={{color: "#ffae2f", fontWeight:"bold"}}> Was sol ich tun?</span>
-                            </p>
-                        </div>
-                    </div>
-                );
-            case RESPONSE_DEFAULT:
-                return (
-                    <div className={css.responseContainer}>
-                        <div className={css.responseTextArea}>
-                            <p> Alles klar! </p>
-                            <p style={{marginTop: "15px"}}>
-                                Wenn ich noch irgendetwas für dich tun kann, lass es mich wissen :)
-                            </p>
-                        </div>
-                    </div>
-                );
-            case RESPONSE_RELOAD:
-                return (
-                    <div className={css.responseContainer}>
-                        <div className={css.responseTextArea}>
-                            <p> Natürlich kann ich deinen Code zurücksetzen, damit du mit der Fehlersuche von vorne
-                                beginnen kannst. Möchtest du fortfahren? </p>
-
-                            <div className={css.responseButtonContainer}>
-                                <button className={css.responseButtonAccept} onClick={() => handleProjectReset()}>Ja</button>
-                                <button className={css.responseButtonDecline} onClick={() => setResponseType(RESPONSE_DEFAULT)}>Nein</button>
-                            </div>
-                        </div>
-                    </div>
-                );
-            case RESPONSE_TESTING:
-                return (
-                    <div className={css.responseContainer}>
-                        <div className={css.responseTextArea}>
-                            <p> Warte bitte kurz, während ich mir deinen Code genauer anschaue...</p>
-                        </div>
-
-                        <span className={css.loader}></span>
-                    </div>
-                );
-            case RESPONSE_TESTING_FINISHED:
-                return (
-                    <div className={css.responseContainer}>
-                        {getResultText()}
-                    </div>
-                );
-            case RESPONSE_EXPLANATION1:
-                return (
-                    <div className={css.responseContainer}>
-                        <div className={css.responseTextArea}>
-                            <p style={{marginBottom: "15px"}}>Deine Aufgabe ist es, alle Fehler im Code zu finden.</p>
-                            <p>Sobald du glaubst, alle gefunden zu haben, klicke auf <span style={{color: "#52ddb6ff", fontWeight: "bold"}}>Lösung Testen</span>
-                                . Ich überprüfe dann, ob der Code korrekt funktioniert.</p>
-                            <div className={css.responseButtonContainer}>
-                                <button className={css.responseButtonNext}
-                                        onClick={() => setResponseType(RESPONSE_EXPLANATION2)}>Weiter
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                );
-            case RESPONSE_EXPLANATION2:
-                return (
-                    <div className={css.responseContainer}>
-                        <div className={css.responseTextArea}>
-                            <p> Mit einem Klick auf <span style={{color: "#c276ff", fontWeight: "bold"}}>Testergebnisse </span> kannst du dir jederzeit die Ergebnisse meiner letzten Prüfung anschauen.</p>
-
-                            <div className={css.responseButtonContainer}>
-                                <button className={css.responseButtonNext}
-                                        onClick={() => setResponseType(RESPONSE_EXPLANATION3)}>Weiter
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                );
-            case RESPONSE_EXPLANATION3:
-                return (
-                    <div className={css.responseContainer}>
-                        <div className={css.responseTextArea}>
-                            <p> Wenn du mal nicht weiterkommst oder Hilfe brauchst, kannst du mich jederzeit über <span style={{color: "#62a4ffff", fontWeight: "bold"}}>Frag Euli </span>
-                                um Unterstützung bitten. Gemeinsam finden wir die Fehler bestimmt!</p>
-
-                            <div className={css.responseButtonContainer}>
-                                <button className={css.responseButtonNext}
-                                        onClick={() => setResponseType(RESPONSE_EXPLANATION4)}>Weiter
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                );
-            case RESPONSE_EXPLANATION4:
-                return (
-                    <div className={css.responseContainer}>
-                        <div className={css.responseTextArea}>
-                            <p> Und falls du versehentlich ein paar Codeblöcke gelöscht hast, kein Problem: Klicke einfach auf <span style={{color: "#ff5a57", fontWeight: "bold"}}>Neu Laden</span>
-                                , und der Code wird zurückgesetzt. Danach kannst du mit frischem Elan weiter auf Fehlersuche gehen!</p>
-
-                            <div className={css.responseButtonContainer}>
-                                <button className={css.responseButtonNext}
-                                        onClick={() => setResponseType(RESPONSE_DEFAULT)}>Alles klar!
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                );
-            default: return null;
+        if (isDebuggingTutorial) {
+            return renderResponseDebugging(responseType, {
+                setResponseType,
+                handleProjectReset,
+                handleTestStart,
+                getResultText
+            });
+        } else {
+            return renderResponseClassic(responseType, {
+                setResponseType,
+                handleProjectReset,
+                handleTestStart,
+                getResultText
+            });
         }
     }
 
@@ -578,7 +587,7 @@ const DebuggingTutorialStep = props => {
                 return (
                     <div className={css.detailsContainer}>
                         <div className={css.textArea}>
-                            <h1>Schritt 1</h1>
+                            <h1>{tutorialMessages[overviewStep]["title"]}</h1>
                             <p>
                                 {tutorialMessages[overviewStep]["description"]}
                             </p>
@@ -589,6 +598,25 @@ const DebuggingTutorialStep = props => {
                         <div className={css.imageArea}>
                             <img src={tutorialIndexData[tutorialMessages[overviewStep]["image"]]} draggable={false} className={css.overviewImage} alt={"StepImage"}/>
                         </div>
+                    </div>
+                );
+            case "DOWNLOADS":
+                return (
+                    <div className={css.errorContainer}>
+                        <div style={{display:"flex", flexDirection: "column", width: "100%", justifyContent: "space-between", height: "200px"}}>
+                            <div className={css.downloadContainer2}>
+                                <div className={css.bubble} style={{backgroundColor:"#c276ff"}}>
+                                    <img className={css.bubbleIndicator} alt={"Bubble-Decal"} src={bubbleIndicatorPurple}/>
+                                    <p>
+                                        Hier kannst du alle bilder downloaden, die du für den aktuellen Schritt brauchst
+                                    </p>
+                                </div>
+                                <div className={css.downloadContainer}>
+                                    {generateDownloadButtons()}
+                                </div>
+                            </div>
+                        </div>
+                        <img src={owl} alt={"Picture of Euli"} className={css.image} draggable={false}/>
                     </div>
                 );
             case "ERRORS":
@@ -602,9 +630,9 @@ const DebuggingTutorialStep = props => {
 
                                     {isErrorInfoVisible ?
                                         <p>
-                                            <strong>Gerne!</strong> <br/><br/> Der Fehler besteht darin, dass sich die Schale nicht wie gewünscht mit den beiden Pfeiltasten nach links und rechts steuern lässt.
+                                            <strong>Gerne!</strong> <br/><br/> {tutorialMessages[overviewStep]["errorDescription"]}
                                         </p> : <p>
-                                            In dem Programm wurde <strong>1 Fehler</strong> eingebaut.
+                                            In dem Programm wurde <strong>{tutorialMessages[overviewStep]["errorAmount"]} Fehler</strong> eingebaut.
                                             Kannst du ihn finden?
                                         </p>
                                     }
@@ -614,17 +642,17 @@ const DebuggingTutorialStep = props => {
                             {!isErrorInfoVisible &&
                                 <div style={{display:"flex", justifyContent:"flex-start"}}>
                                     <span className={css.p}>Falls nicht, kannst du ihn jederzeit</span>
-                                    <button onClick={showErrorInfo} className={css.errorButton}>Aufdecken</button>
+                                    <button onClick={showErrorInfo} className={css.errorButton}>aufdecken</button>
                                 </div>
                             }
 
                         </div>
-                        <img src={euliLeft} alt={"Picture of Euli"} className={css.image} draggable={false}/>
+                        <img src={owl} alt={"Picture of Euli"} className={css.image} draggable={false}/>
                     </div>
                 );
             case "CONTROLS":
                 return (
-                    <div style={{width:"100%", display:"flex", flexDirection:"column"}}>
+                    <div style={{width:"100%", display:"flex", flexDirection:"column", marginRight:"15px", alignItems:"center"}}>
                         <div className={css.controlContainer}>
                             {generateControlImages()}
                         </div>
@@ -634,6 +662,30 @@ const DebuggingTutorialStep = props => {
             default:
                 console.warn(contentType + " is unknown!");
         }
+    }
+
+    const generateDownloadButtons = () => {
+        return Object.keys(tutorialMessages[overviewStep])
+            .filter(key => key.startsWith("download"))
+            .map(key => {
+                return (generateDownloadButton3((key.match(/\d+$/)[0])));
+            });
+    }
+
+    const generateDownloadButton3 = (id) => {
+        const downloadTitle = tutorialMessages[overviewStep]["download" + id.toString()];
+        const downloadImg = tutorialIndexData["downloadContent" + id.toString()];
+        const isDownloaded = downloaded.includes(downloadTitle);
+
+        return (
+            <div key={id} className={`${css.downloadBox} ${isDownloaded ? css.downloadBoxFinished : ''}`}>
+                <img className={css.downloadImage}
+                     src={downloadImg} alt={"Download Preview"}/>
+                <div className={css.downloadButton} onClick={() => onDownload(downloadTitle, downloadImg)}>
+                    {isDownloaded ? "Fertig" : ("Download " + downloadTitle)}
+                </div>
+            </div>
+        );
     }
 
     const generateControlImages = () => {
@@ -662,8 +714,11 @@ const DebuggingTutorialStep = props => {
             case "ERRORS":
                 col = "#cf3b28FF"
                 break;
+            case "DOWNLOADS":
+                col = "#b14eea"
+                break;
             default:
-                console.warn("unknown contentType: " + contentType)
+                console.log("unknown contentType: " + contentType)
         }
         return col;
     }
@@ -671,24 +726,21 @@ const DebuggingTutorialStep = props => {
     /**
      * Returns the feedback-summary for Euli.
      */
-    const getResultText = () => {
+    const getResultText = () => { //TODO Refactor!
         if (checkUserMadeErrors()) {
             return (
                 <div className={css.responseTextArea}>
                     <p>Hoppla, anscheinend haben sich noch weitere Fehler eingeschlichen!</p>
                     <p>Du kannst jederzeit <span style={{color: "#62A4FFFF", fontWeight: "bold"}}>Euli fragen</span> oder das Projekt <span style={{color: "#ff5a57", fontWeight: "bold"}}>zurücksetzen</span>.</p>
                     <p style={{marginTop: "15px"}}>
-                        Dann schaue ich mir die
                         <button
                             className={css.responseButtonTestResults}
-                            onClick={() => setCurPage("TEST_RESULTS")}
+                            onClick={() => {setCurPage("TEST_RESULTS"); setResponseType(RESPONSE_DEFAULT);}}
                         >Testergebnisse</button>
-                        an oder suche direkt
                         <button
                             className={css.responseButtonNext}
                             onClick={() => setResponseType(RESPONSE_DEFAULT)}
-                        >weiter</button>
-                        .
+                        >Schließen</button>
                     </p>
                 </div>);
         } else if (testResults.passed) {
@@ -723,7 +775,7 @@ const DebuggingTutorialStep = props => {
      */
     const checkUserMadeErrors = function () {
         let userMadeError = false;
-        if (testResults.details === undefined) return false;
+        if (testResults === null || testResults.details === undefined) return false;
         testResults.details.map(e => {
             if (e.result !== "passed" && e.testDescription !== "DEBUGGING_ERROR") {
                 userMadeError = true;
@@ -732,7 +784,60 @@ const DebuggingTutorialStep = props => {
         return userMadeError;
     }
 
+    const renderHelp = () => {
+        return (
+            <div className={css.testContainer}>
+                <div className={css.arrowButtonContainer}>
+                    <div className={css.upArrowFill}/>
+                    <img className={css.backButton}
+                         src={upButton}
+                         onClick={() => setCurPage("RESPONSE")}
+                         alt={"Back"}
+                         draggable={false}
+                    />
+                </div>
+
+                <div className={css.testWhiteBox} style={{marginTop: "10px", padding: "10px 0px 10px 10px"}}>
+                    <div className={css.helpContainer}>
+                        <div className={css.helpBubbleEuli}>
+                            <img className={css.helpBubbleEuliIndicator} alt={"Bubble-Decal"} src={bubbleIndicatorBlue}/>
+                            <span>Eigene Programme zu schreiben, kann manchmal ganz schön knifflig sein.<br/>Möchtest du einen Tipp von mir?</span>
+                        </div>
+
+                        <div className={`${css.helpBubble} ${(helpType === "") ? '' : css.selected}`} onClick={() => {
+                            if (helpType === "") {
+                                setHelpType("HINT");
+                            }
+                        }}>
+                            <div className={css.selectionBubbleIndicator} />
+                            Ja bitte, gib mir einen Hinweis
+                        </div>
+
+                        {helpType !== "" && <div className={css.helpBubbleEuli}>
+                            <img className={css.helpBubbleEuliIndicator} alt={"Bubble-Decal"} src={bubbleIndicatorBlue}/>
+                            {(helpType === "HINT") ? <span>Klar: Nutze folgende Blöcke</span> : <span>Hier die Lösung</span>}
+                            <div style={{width:"100%", display:"flex", alignItems:"center", justifyContent:"center", marginTop:"10px"}}>
+                                <img src={(helpType === "SOLUTION") ? tutorialIndexData["imageSolutionDE" + (step + 1).toString()] : tutorialIndexData["imageStep" + (step + 1).toString()]} alt={"Solution"} className={css.helpImage}/>
+                            </div>
+                        </div>}
+
+                        {helpType !== "" && <div className={`${css.helpBubble} ${(helpType === "HINT") ? '' : css.selected}`} onClick={() => setHelpType("SOLUTION")}>
+                            <div className={css.selectionBubbleIndicator} />
+                            Kannst du mit stattdessen die fertige Lösung zeigen?
+                        </div>}
+                    </div>
+
+                    <div className={css.imageContainer}>
+                        <img src={owl} alt={"Picture of Euli"} className={css.owlImage} draggable={false}/>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     const renderPage = () => {
+        if (reachedLastStep) return renderFinalStep();
+
         switch (curPage) {
             case "OVERVIEW":
                 return renderOverview();
@@ -740,8 +845,14 @@ const DebuggingTutorialStep = props => {
                 return renderResponse();
             case "TEST_RESULTS":
                 return renderTestResults();
+            case "CODE_QUALITY":
+                return renderCodeQuality(); // TODO delete
+            case "HELP":
+                return renderHelp();
         }
     }
+
+
 
     return renderPage();
 }
@@ -754,3 +865,38 @@ DebuggingTutorialStep.props = {
 }
 
 export default DebuggingTutorialStep;
+
+
+
+
+
+
+
+
+
+
+const translate = (scratchBlocksText, locale) => {
+    const block = scratchblocks.parse(scratchBlocksText, {
+        languages: ['en', 'de']
+    });
+    if (locale === 'de') {
+        block.translate(scratchblocks.allLanguages.de);
+    }
+    return block.stringify();
+};
+
+const ScratchBlocksImage = props => (
+    <div className={stylesHints.scratchImage}>
+        <ScratchBlocks
+            blockStyle="scratch3"
+            languages={['en', 'de']}
+        >
+            {translate(props.scratchBlocksText, props.locale)}
+        </ScratchBlocks>
+    </div>
+);
+
+ScratchBlocksImage.propTypes = {
+    scratchBlocksText: PropTypes.string,
+    locale: PropTypes.string
+};
