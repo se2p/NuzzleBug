@@ -6,12 +6,14 @@ import VirtualMachine from "scratch-vm";
 import {setLastTutorial, setLoading, setAutoSave, setContentType, reset, lastStartedTutorial} from "../reducers/debugging-tutorial-overview"
 import JSZip from "jszip";
 import {CONTENT_START_TUTORIAL} from "../components/debuggingTutorial/tutorial-constants.jsx";
+import {isEmptyValue} from "enzyme/build/Utils";
 
 class DebuggingTutorialOverview extends React.Component {
     constructor(props) {
         super(props);
         this.loadProject = this.loadProject.bind(this);
-        this.openAutoSaveSelection = this.openAutoSaveSelection.bind((this));
+        this.openAutoSaveSelection = this.openAutoSaveSelection.bind(this);
+        this.isEmptyProject = this.isEmptyProject.bind(this);
     }
 
     /**
@@ -82,6 +84,23 @@ class DebuggingTutorialOverview extends React.Component {
         this.props.setContentType1(CONTENT_START_TUTORIAL);
     }
 
+    /**
+     * Checks, if the current project includes at least one codeblocks.
+     */
+    isEmptyProject() {
+        const jsonString = this.props.vm.toJSON();
+        const project = JSON.parse(jsonString);
+        let blockCount = 0;
+
+        for (const target of project.targets) {
+            if (target.blocks) {
+                blockCount += Object.keys(target.blocks).length;
+            }
+        }
+
+        return blockCount === 0;
+    }
+
     render () {
 
         const isNewTutorialSelected = this.props.lastTutorial !== null
@@ -97,6 +116,7 @@ class DebuggingTutorialOverview extends React.Component {
             <DebuggingTutorialOverviewComponent
                 onStart={() => this.handleStart()}
                 openAutoSaveSelection={() => this.openAutoSaveSelection()}
+                isProjectEmpty={this.isEmptyProject()}
                 {...this.props}
             />
         );
@@ -121,6 +141,7 @@ DebuggingTutorialOverview.propTypes = {
     openAutoSaveSelection: PropTypes.func,
     lastStartedTutorial: PropTypes.string,
     setLastStartedTutorial: PropTypes.func,
+    isProjectEmpty: PropTypes.bool,
 };
 
 const mapStateToProps = state => ({
