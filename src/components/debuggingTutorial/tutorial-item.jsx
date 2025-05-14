@@ -12,10 +12,12 @@ const TutorialItem = ({content, onSelect, isDebuggingTutorial}) => (
             <span>{content.title}</span>
         </div>
         <div className={css.container}>
-            <img className={css.titleImage} alt={"banner"} src={content.img}/>
+            <img className={css.titleImage} alt={"banner"} src={content.img} draggable={false}/>
             <div className={css.data}>
                 <span>Schwierigkeit:</span>
                 {renderDifficultlyIcon(content)}
+                <span>Schritte:</span>
+                <strong>{content.totalSteps}</strong>
             </div>
         </div>
     </div>
