@@ -9,7 +9,7 @@ import arrow from "./images/arrow-next.png"
 import iconDescription from "./images/icon--Description.png";
 import iconDebugging from "./images/debuggingIcon.png";
 
-const TutorialSelection = ({tutorials, onSelectTutorial}) => {
+const TutorialSelection = ({tutorials, onSelectTutorial, guiMessages}) => {
     const [showingHelp, setShowingHelp] = useState("");
 
     const setHelp = (nextState) => {
@@ -27,7 +27,7 @@ const TutorialSelection = ({tutorials, onSelectTutorial}) => {
         <h1 className={css.header}>
             {showingHelp === "" && <div className={css.help} onClick={() => setHelp("1")}>
                 <span>?</span>
-                <span style={{fontSize: "0.6rem"}}>Erklärung</span>
+                <span style={{fontSize: "0.6rem"}}>{guiMessages.selection.explanation}</span>
             </div>}
         </h1>
 
@@ -38,7 +38,7 @@ const TutorialSelection = ({tutorials, onSelectTutorial}) => {
                     onClick={() => showDebuggingTutorial(false)}>
                 <div style={{display: "flex", alignItems: "center"}}>
                     <img className={css.icon} src={iconDescription} alt={"errorIcon"}/>
-                    Programmieren
+                    {guiMessages.selection.coding}
                 </div>
             </button>}
             {showingHelp === "" && <button className={css.tabButton}
@@ -47,7 +47,7 @@ const TutorialSelection = ({tutorials, onSelectTutorial}) => {
                     onClick={() => showDebuggingTutorial(true)}>
                 <div style={{display: "flex", alignItems: "center"}}>
                     <img className={css.icon} src={iconDebugging} alt={"errorIcon"}/>
-                    Fehlerfinden
+                    {guiMessages.selection.debugging}
                 </div>
             </button>}
         </div>
@@ -60,7 +60,7 @@ const TutorialSelection = ({tutorials, onSelectTutorial}) => {
             }),
         }}>
 
-            {renderTutorialCards(tutorials, onSelectTutorial, showingHelp, setHelp, showDebuggingTutorials)}
+            {renderTutorialCards(tutorials, onSelectTutorial, showingHelp, setHelp, showDebuggingTutorials, guiMessages)}
         </div>
     </div>);
 };
@@ -70,21 +70,21 @@ const TutorialSelection = ({tutorials, onSelectTutorial}) => {
 
 
 
-const getText = (setHelp, showingHelp) => {
-    if (showingHelp === "1") return (<span>Hier unterstütze ich dich dabei, noch besser im Programmieren zu werden!<br/>Dafür habe ich dir hier einige Tutorials vorbereitet.<div className={css.closeHelpButton} onClick={() => setHelp("2")}>Interessant<img src={arrow} className={css.arrowIcon} alt={"->"}/></div></span>);
+const getText = (setHelp, showingHelp, guiMessages) => {
+    if (showingHelp === "1") return (<span>{guiMessages.selection.bubble_text1}<div className={css.closeHelpButton} onClick={() => setHelp("2")}>{guiMessages.selection.interesting}<img src={arrow} className={css.arrowIcon} alt={"->"}/></div></span>);
     if (showingHelp === "2") return (<span>Möchtest du Schritt für Schritt ein eigenes Spiel erstellen? Dann wähle ein <span style={{color: "#67a5ff", fontWeight: "bold"}}>blaues Tutorial</span>.<br/><br/>
                             Oder willst du lieber herausfinden und üben, wie man Fehler findet und behebt? Dann klicke
                             auf ein <span style={{color: "#87b772", fontWeight: "bold"}}>grünes Tutorial</span>. <div className={css.closeHelpButton} onClick={() => setHelp("")}>Los gehts!<img src={arrow} className={css.arrowIcon} alt={"->"}/></div> </span>);
 }
 
-const renderTutorialCards = (tutorials, onSelectTutorial, showingHelp, setHelp, showDebuggingTutorials) => {
+const renderTutorialCards = (tutorials, onSelectTutorial, showingHelp, setHelp, showDebuggingTutorials, guiMessages) => {
     if (showingHelp) {
         return (
             <div className={css.bubbleContainer}>
                 <div className={css.bubbleBoxContainer}>
                     <div className={css.bubble}>
                         <img className={css.bubbleIndicator} alt={"Bubble-Decal"} src={bubbleIndicator}/>
-                        {getText(setHelp, showingHelp)}
+                        {getText(setHelp, showingHelp, guiMessages)}
                     </div>
                 </div>
                 <img src={euliLeft} alt={"Picture of Euli"} className={css.owlImage} draggable={false}/>
@@ -103,6 +103,7 @@ const renderTutorialCards = (tutorials, onSelectTutorial, showingHelp, setHelp, 
                 key={tutorial.id}
                 content={tutorial}
                 onSelect={onSelectTutorial}
+                guiMessages={guiMessages}
             />
         ));
     }

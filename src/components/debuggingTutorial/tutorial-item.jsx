@@ -6,7 +6,7 @@ import difficulty_easy from "./images/difficultyIconEasy.png"
 import difficulty_medium from "./images/difficultyIconMedium.png"
 import difficulty_hard from "./images/difficultyIconHard.png"
 
-const TutorialItem = ({content, onSelect, isDebuggingTutorial}) => (
+const TutorialItem = ({content, onSelect, isDebuggingTutorial, guiMessages}) => (
     <div className={css.box} onClick={() => onSelect(content.id, content.totalSteps)}>
         <div className={css.header} style={{backgroundColor: isDebuggingTutorial ? "#70a45b" : "#4D97FFFF"}}>
             <span>{content.title}</span>
@@ -14,9 +14,9 @@ const TutorialItem = ({content, onSelect, isDebuggingTutorial}) => (
         <div className={css.container}>
             <img className={css.titleImage} alt={"banner"} src={content.img} draggable={false}/>
             <div className={css.data}>
-                <span>Schwierigkeit:</span>
+                <span>{guiMessages.selection.difficulty}</span>
                 {renderDifficultlyIcon(content)}
-                <span>Schritte:</span>
+                <span>{guiMessages.selection.steps}</span>
                 <strong>{content.totalSteps}</strong>
             </div>
         </div>

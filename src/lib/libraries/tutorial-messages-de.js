@@ -32,5 +32,18 @@ export default {
 
     solutionHeader: 'Lösung',
 
-    backButtonTitle: 'Übersicht'
+    backButtonTitle: 'Übersicht',
+
+
+
+    selection: {
+        explanation: "Erklärung",
+        coding: "Programmieren",
+        debugging: "Fehlerfinden",
+        difficulty: "Schwierigkeit",
+        steps: "Schritte",
+        interesting: "Interessant",
+        bubble_text1: "Hier unterstütze ich dich dabei, noch besser im Programmieren zu werden!\nDafür habe ich dir hier einige Tutorials vorbereitet.",
+        bubble_text2: "",
+    }
 };

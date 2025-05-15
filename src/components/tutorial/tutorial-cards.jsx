@@ -328,6 +328,7 @@ const TutorialCards = props => {
                 return <TutorialSelection
                     onSelectTutorial={onSelectTutorial}
                     tutorials={tutorials}
+                    guiMessages={guiMessages}
                 />
 
 
@@ -399,14 +400,8 @@ const TutorialCards = props => {
                         }
                         {expanded ?
                             <div className={tutorialStyles.footer}>
-                                <p className={tutorialStyles.footerText}>{guiMessages.codeClub}</p>
-                                <div
-                                    /* eslint-disable-next-line react/jsx-no-bind */
-                                    onClick={() =>
-                                        window.open('https://projects.raspberrypi.org/en/codeclub', '_blank')}
-                                    className={tutorialStyles.footerLink}
-                                    /* eslint-disable-next-line react/jsx-no-literals */
-                                >Code Club</div>
+                                <p className={tutorialStyles.footerText}>Du schaffst das!</p>
+
                             </div> : null}
                     </div>
                 </div>
