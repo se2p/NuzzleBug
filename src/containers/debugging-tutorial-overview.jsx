@@ -5,8 +5,10 @@ import PropTypes from "prop-types";
 import VirtualMachine from "scratch-vm";
 import {setLastTutorial, setLoading, setAutoSave, setContentType, reset, lastStartedTutorial} from "../reducers/debugging-tutorial-overview"
 import JSZip from "jszip";
-import {CONTENT_START_TUTORIAL} from "../components/debuggingTutorial/tutorial-constants.jsx";
-import {isEmptyValue} from "enzyme/build/Utils";
+import {CONTENT_START_TUTORIAL, CONTENT_DESCRIPTION} from "../components/debuggingTutorial/tutorial-constants.jsx";
+
+import bootImage from "../components/debuggingTutorial/images/owlTransparent.png";
+import {spriteUpload} from "../lib/file-uploader"; // Bild importieren
 
 class DebuggingTutorialOverview extends React.Component {
     constructor(props) {
@@ -59,6 +61,7 @@ class DebuggingTutorialOverview extends React.Component {
         } else {
             this.props.onStartTutorial();
         }
+        this.props.setContentType1(CONTENT_DESCRIPTION);
     }
 
     /**
@@ -97,7 +100,6 @@ class DebuggingTutorialOverview extends React.Component {
                 blockCount += Object.keys(target.blocks).length;
             }
         }
-
         return blockCount === 0;
     }
 
@@ -117,6 +119,7 @@ class DebuggingTutorialOverview extends React.Component {
                 onStart={() => this.handleStart()}
                 openAutoSaveSelection={() => this.openAutoSaveSelection()}
                 isProjectEmpty={this.isEmptyProject()}
+                isNewTutorialSelected={isNewTutorialSelected}
                 {...this.props}
             />
         );
@@ -142,6 +145,7 @@ DebuggingTutorialOverview.propTypes = {
     lastStartedTutorial: PropTypes.string,
     setLastStartedTutorial: PropTypes.func,
     isProjectEmpty: PropTypes.bool,
+    isNewTutorialSelected: PropTypes.bool,
 };
 
 const mapStateToProps = state => ({

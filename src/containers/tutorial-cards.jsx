@@ -92,7 +92,6 @@ class TutorialCards extends React.Component {
     }
 
     handleStartTutorial() {
-        console.log("Starting Tutorial");
         this.props.startTutorial();
     }
 

@@ -8,7 +8,12 @@
     width: 100%;
     color: hsla(225, 15%, 40%, 1);
     justify-content: space-between; /* Sorgt für gleichmäßige Abstände */
-    background: radial-gradient(circle, rgb(255, 255, 255) 0%, rgba(223,223,223,1) 100%);
+
+
+    background-repeat: repeat;
+    background-size: auto;
+    background-color: #ffffff;
+    background-image: url("https://www.transparenttextures.com/patterns/skulls.png");
 }
 
 .heading {

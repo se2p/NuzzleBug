@@ -39,6 +39,7 @@ const DebuggingTutorialOverview = props => {
         tutorialIndexData,
         openAutoSaveSelection,
         isProjectEmpty,
+        isNewTutorialSelected,
         ...posProps
     } = props;
 
@@ -114,7 +115,7 @@ const DebuggingTutorialOverview = props => {
             return (
                 <div className={css.buttonContainer}>
                     <a href="#" className={`${css.effect} ${css["effect-1"]}`}
-                       onClick={() => { if (isProjectEmpty) {onStart()} else {openAutoSaveSelection()}}}
+                       onClick={() => { if (isProjectEmpty) {onStart()} else {openAutoSaveSelection()}}} // || !isNewTutorialSelected
                     >
                         Los gehts!
                         <img src={arrowNext} alt="Icon" className={css.buttonIcon}/>
