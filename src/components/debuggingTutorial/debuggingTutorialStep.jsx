@@ -26,6 +26,10 @@ import downloadIcon from "./images/downloadIcon.png"
 import bubbleIndicatorPurple from "./images/bubbleDecalPurple.png"
 import owl2 from "./images/owlTransparent.png"
 import {renderResponse2, renderResponseClassic, renderResponseDebugging} from "./tutorial-step-response-renderer.jsx";
+import testSuccess from "./images/icon--testSuccess.png"
+import testFailed from "./images/icon--testFailed.png"
+import testRunning from "./images/icon--testRunning.png"
+
 
 import {
     RESPONSE_START,
@@ -84,16 +88,11 @@ const DebuggingTutorialStep = props => {
         setHelpType,
         helpType,
         onBackToTutorialSelection,
+        hasUpdatedSinceLastTest,
+        hasUpdatedSinceLastTest2,//TODO remove
+        hasCodeUpdated,
         ...posProps
     } = props;
-
-
-
-
-
-
-
-
 
 
     const progressBarRef = useRef(null);
@@ -139,7 +138,7 @@ const DebuggingTutorialStep = props => {
                 <div className={css.whiteBox}>
                     <div className={css.bubbleContainer}>
                         <div className={css.testStartBubble}>
-                            <img className={css.testBubbleIndicator} alt={"Bubble-Decal"} src={bubbleIndicatorBlue}/>
+                            <img className={css.finalBubbleIndicator} alt={"Bubble-Decal"} src={bubbleIndicatorBlue}/>
                             {tutorialMessages.levelFinishedText}
                         </div>
                         <img src={owl2} alt={"Picture of Euli"} className={css.owlImage} draggable={false}/>
@@ -447,75 +446,45 @@ const DebuggingTutorialStep = props => {
                     />
                 </div>
 
-                <div className={css.testWhiteBox} style={{marginTop: "20px", display:"flex", flexDirection:"column", padding: "10px 0px 10px 10px"}}>
+                <div className={css.testWhiteBoxTop}>
 
                     <div className={css.bubbleContainer}>
-                        <div className={css.testStartBubble}>
-                            <img className={css.testBubbleIndicator} alt={"Bubble-Decal"} src={bubbleIndicatorBlue}/>
-                            {getTestText()}
+                        <div className={css.columnFlex}>
+                            <div className={css.testStartBubble}>
+                                <img className={css.testBubbleIndicator} alt={"Bubble-Decal"} src={bubbleIndicatorGray}/>
+                                {getTestText()}
+                            </div>
+                            {(hasCodeUpdated || (projectLoadingState === "TEST")) && <div className={`${css.helpBubble} ${(projectLoadingState !== "TEST") ? '' : css.selected}`} onClick={() => { if (projectLoadingState !== "TEST") handleTestStart()}}>
+                                <div className={css.selectionBubbleIndicator} />
+                                Ja, teste erneut!
+                            </div>}
                         </div>
+
                         <img src={owl2} alt={"Picture of Euli"} className={css.owlImage} draggable={false}/>
                     </div>
+                </div>
 
-                    {(curTestDetails !== "") ?
-                        <div className={css.testResultContainer}>
-                            {parseTestDetails(curTestDetails)}
-                        </div>
-                        :
-                        <div className={css.testResultContainer}>
-                            {parseTestResults()}
-                        </div>}
+
+                <div className={css.testWhiteBox} style={{marginTop: "20px", display:"flex", flexDirection:"column", padding: "10px 0px 0px 10px", marginBottom:"10px"}}>
+                    <strong style={{fontSize:"1.2rem"}}>Testergebnisse</strong>
+                    <div className={css.testResultContainer}>
+                        {parseTestResults()}
+                    </div>
                 </div>
             </div>
         );
     }
 
     const getTestText = () => {
+        if (projectLoadingState === "TEST") return <span>Warte bitte kurz, bis ich deinen Code überprüft habe!</span>
+
+        if (hasUpdatedSinceLastTest2) return <span>Anscheinend hat sich dein Code seit dem letzten Testlauf verändert.</span>
+
         if (curTestDetails !== "") return <span>Hier siehst du Details zum Test</span>
 
-        return (testResults !== null) ? <span>Hier siehst du die einzelnen Tests. Dabei hast du die grünen Tests bestanden und musst bei den roten noch etwas nachbessern.<br/>Für genauere Informationen, klicke "Details".</span>
+        return (testResults !== null) ? <span>Hier siehst du deine einzelnen Testergebnisse</span>
             : <span>Es wurden noch keine Tests durchgeführt, die ich dir hier anzeigen kann.</span>;
     }
-
-    const parseTestDetails = (testID) => {
-        if (testResults === null || testResults === undefined) return null;
-
-        return testResults.details.filter(a => a.testId === testID)
-            .map(e => {
-                const isCurrentStep = e.testId.charAt(4) === (step + 1).toString(); //TODO charAt(4) ersetzen
-                const passed = e.result === "pass";
-                const isDebuggingError = e.testDescription === "DEBUGGING_ERROR";
-                let message = "";
-
-                if (isDebuggingError) {
-                    if (isCurrentStep) {
-                        message = "Dies ist der aktuelle DebuggingFehler";
-                    }
-                } else {
-                    if (isCurrentStep) {
-                        message = "Dieser Test gehört zum aktuellen Schritt";
-                    } else {
-                        message = "Du hattest den Test in einem vorherigen Schritt bereits gelöst.";
-                    }
-                }
-
-
-                return (
-                    <div className={css.testDetailContainer}>
-                        <div className={css.testDetailHeader}>
-                            <span className={css.testDetailLeft}>{testID}</span>
-                            <span className={css.testDetailTitle}>{e.test}</span>
-                            <img className={css.testDetailRight} onClick={() => setCurTestDetails("")} src={closeIcon} alt={"back"}/>
-                        </div>
-
-                        <span>{e.testDescription}</span>
-                        <span>{message}</span>
-                        <span>{passed ? "Glückwunsch! Dein Code hat diesen Test bestanden." : "Dein Code hat diesen Test leider nicht bestanden."}</span>
-                    </div>
-                );
-            });
-    };
-
 
     /**
      * Returns Euli's feedback-details containing all test results.
@@ -528,25 +497,65 @@ const DebuggingTutorialStep = props => {
             </div>
         );
 
+        hasUpdatedSinceLastTest();
+
         return testResults.details //TODO Extend!
             .sort((a, b) => b.testId.localeCompare(a.testId))
             .map((e, index) => {
                 const isCurrentStep = e.testId.charAt(4) === (step + 1).toString();
                 const passed = e.result === "pass";
                 const isDebuggingError = e.testDescription === "DEBUGGING_ERROR";
-                return createTestElement(passed, e.test, e.testId, (index + 1));
+                return createTestElement(passed, e, (index + 1));
             });
     };
 
 
-    const createTestElement = (passed, testName, testId, testElementNumber) => {
+    const createTestElement = (passed, e, testElementNumber) => {
+        const headerBgColor = (projectLoadingState === "TEST")
+            ? "#afd8fd"
+            : passed
+                ? "#89ddaf"
+                : "#d16857";
+
+        const iconSrc = (projectLoadingState === "TEST")
+            ? testRunning
+            : passed
+                ? testSuccess
+                : testFailed;
+
+        const headerText = (projectLoadingState === "TEST")
+            ? "Lädt…"
+            : passed
+                ? "Bestanden"
+                : "Gescheitert";
+
+
+        if (curTestDetails === e.testId) {
+            return (
+                <div key={e.testId} className={css.testElementContainer} style={{width:"450px"}}>
+                    <div className={css.testElementHeader} style={{backgroundColor: headerBgColor, height:"60px"}}>
+                        <div className={css.testElementTitleExtended}>
+                            <img src={iconSrc} style={{width: "43px", marginRight: "10px"}} className={css.testElementIcon} alt={"ResultIcon"}/>
+                            {headerText}
+                        </div>
+                    </div>
+                    <span className={css.testElementTitle}>{e.test}</span>
+                    <p className={css.testElementText}>{e.testDescription}</p>
+                    <div className={css.testElementButton} style={{borderColor: headerBgColor}} onClick={() => setCurTestDetails("")}>
+                        Schließen
+                    </div>
+                </div>);
+        }
+
         return (
-            <div key={testId} className={css.testElementContainer} style={{borderColor: passed ? "#63d57c" : "#ea6a5d"}} onClick={() => setCurTestDetails(testId)}>
-                <span>{testElementNumber}</span>
-                <span style={{marginLeft:"20px"}}>{testName}</span>
-                <div className={css.bottom}>
-                    <div className={css.cursorIcon}></div>
-                    <span className={css.testDetailsText}>Details</span>
+            <div key={e.testId} className={css.testElementContainer} onClick={() => setCurTestDetails(e.testId)}>
+                <div className={css.testElementHeader} style={{backgroundColor: headerBgColor}}>
+                    <img src={iconSrc} className={css.testElementIcon} alt={"ResultIcon"}/>
+                    {headerText}
+                </div>
+                <span className={css.testElementTitle}>{e.test}</span>
+                <div className={css.testElementButton} style={{borderColor: headerBgColor}}>
+                    Details
                 </div>
             </div>
         );

@@ -2,21 +2,24 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import {
-    resetStep,
-    showErrorInfo,
-    updateTestResults,
+    addDownloaded,
     onTestDetails,
+    resetStep,
+    setCodeResetPoint,
+    setContentType,
+    setCurPage,
+    setCurTestDetails,
+    setHelpType,
+    setLastTutorial,
     setLoading,
     setLoadingProject,
-    setLastTutorial,
-    setContentType,
-    setResponseType,
-    setCurPage,
-    showQuickHandle,
-    setCurTestDetails,
-    addDownloaded,
     setQualityResults,
-    setHelpType,
+    setResponseType,
+    showErrorInfo,
+    showQuickHandle,
+    updateTestResults,
+    setLastTestedProject,
+    setHasCodeUpdated,
 } from "../reducers/debugging-tutorial-step";
 import DebuggingTutorialStepComponent from '../components/debuggingTutorial/debuggingTutorialStep.jsx';
 import PropTypes from "prop-types";
@@ -25,6 +28,8 @@ import VirtualMachine from "scratch-vm";
 import {lock, unlock} from '../reducers/vm-status';
 import {runTest} from "tutorial-tests";
 import downloadBlob from "../lib/download-blob";
+import bootImage from "../components/debuggingTutorial/images/owlTransparent.png";
+import {spriteUpload} from "../lib/file-uploader";
 
 const RESPONSE_TESTING_FINISHED = 'scratch-gui/debugging-tutorial-cards/RESPONSE_TESTING_FINISHED'; //TODO REMOVE
 
@@ -35,13 +40,21 @@ class DebuggingTutorialStep extends React.Component {
         this.onNextStep = this.onNextStep.bind(this);
         this.handleDownload = this.handleDownload.bind(this);
         this.requestHints = this.requestHints.bind(this);
+        this.addSprite = this.addSprite.bind(this);
+        this.convertToBuffer = this.convertToBuffer.bind(this);
+        this.hasUpdatedSinceLastTest = this.hasUpdatedSinceLastTest.bind(this);
+        this.checkForCodeUpdate = this.checkForCodeUpdate.bind(this);
         this.litterboxWebURL = 'https://scratch.fim.uni-passau.de/litterbox-api'; // localhost default: http://localhost:8080
 
+        this.interval = null;
     }
 
     onTest() {
         this.props.setLoadingProject("TEST");
         this.props.lockVM();
+
+        this.props.setLastTestedProject(this.props.vm.toJSON());
+
         const summary = runTest(this.props.vm, this.props.tutorialIndexData.testId, this.props.step)
             .catch(error => {console.log(`Test execution crashed: ${error}`);
         });
@@ -52,29 +65,79 @@ class DebuggingTutorialStep extends React.Component {
             this.props.unlockVM();
             this.props.setLoadingProject(null); //TODO REMOVE!
             this.props.setResponseType(RESPONSE_TESTING_FINISHED);
+            this.props.setHasCodeUpdated(false);
         });
     }
 
     onNextStep() {
         this.props.setLoadingProject("NEXT");
         this.props.resetStep();
-        if (this.props.step + 1 !== this.props.tutorialIndexData.totalSteps) {
-            const projectDataExists = this.props.tutorialIndexData["project" + (this.props.step + 2).toString()];
 
-            if (projectDataExists) {
-                this.props.vm.start();
-                this.props.vm.clear();
-                this.props.lockVM();
-                this.props.vm.loadProject(this.props.tutorialIndexData["project" + (this.props.step + 2).toString()])
-                    .catch(e => console.log("Error while loading project: " + e.toString()))
-                    .finally(() => {
-                        this.props.unlockVM();
-                        this.props.setLoadingProject(null);
-                    });
+        if (this.props.step + 1 !== this.props.tutorialIndexData.totalSteps) {
+
+            if (this.props.isDebuggingTutorial) {
+                const projectDataExists = this.props.tutorialIndexData["project" + (this.props.step + 2).toString()];
+
+                if (projectDataExists) {
+                    this.props.vm.start();
+                    this.props.vm.clear();
+                    this.props.lockVM();
+                    this.props.vm.loadProject(this.props.tutorialIndexData["project" + (this.props.step + 2).toString()])
+                        .catch(e => console.log("Error while loading project: " + e.toString()))
+                        .finally(() => {
+                            this.props.unlockVM();
+                            this.props.setLoadingProject(null);
+                        });
+                }
+            } else {
+                //Save current project for future resets
+                this.props.setCodeResetPoint(this.props.vm.toJSON());
+
+
+                Object.keys(this.props.tutorialIndexData).forEach((key) => {
+                    // Prüfe, ob der Schlüssel zu einem Costume gehört (z.B. "step1_Costume1")
+                    if (key.startsWith("step" + (this.props.step + 1).toString() + "_Costume")) {
+                        // Rufe addSprite() für jedes Costume auf
+                        const costume = this.props.tutorialIndexData[key];
+                        this.addSprite(costume, "Schiff1");
+                    }
+                });
             }
+
         }
         this.props.onIncreaseStep();
     }
+
+
+
+
+
+
+
+
+// Handle Sprite Upload ohne Benutzerinteraktion
+    addSprite(sprite, title) {
+        const storage = this.props.vm.runtime.storage;
+        const fileType = 'image/png';
+        this.convertToBuffer(sprite).then(r => spriteUpload(r, fileType, title, storage, newSprite => {
+                this.props.vm.addSprite(newSprite).catch(e => console.log(e))
+            }, () => console.log("fertig 31"))
+        )
+
+    };
+
+    async convertToBuffer(sprite) {
+        try {
+            const response = await fetch(sprite);
+            return await response.arrayBuffer();
+        } catch (error) {
+            console.error('Error fetching the image:', error);
+        }
+    }
+
+
+
+
 
     requestHints() {
         const program = this.props.toJson();
@@ -121,7 +184,18 @@ class DebuggingTutorialStep extends React.Component {
         this.props.vm.start();
         this.props.vm.clear();
         this.props.lockVM();
-        this.props.vm.loadProject(this.props.tutorialIndexData["project" + (this.props.step + 1).toString()])
+
+        let data;
+
+        if (this.props.codeResetPoint !== null) {
+            data = this.props.codeResetPoint;
+        } else {
+            data = this.props.tutorialIndexData["project" + (this.props.step + 1).toString()];
+        }
+
+        console.log("resetting: " + data);
+
+        this.props.vm.loadProject(data)
             .catch(e => console.log("Error while resetting project: " + e.toString()))
             .finally(() => {
                 this.props.unlockVM();
@@ -149,7 +223,6 @@ class DebuggingTutorialStep extends React.Component {
 
     componentDidMount() {
         //this.requestHints();
-
         if (this.props.lastTutorial === null) {
             this.props.setLastTutorial(JSON.stringify(this.props.tutorialMessages));
         } else {
@@ -158,6 +231,28 @@ class DebuggingTutorialStep extends React.Component {
                 this.props.resetStep();
             }
         }
+
+        this.interval = setInterval(() => {
+            this.checkForCodeUpdate();
+        }, 1000);
+        console.log("Started updating!");
+
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval); // Wichtig, sonst bleibt das Intervall aktiv!
+        console.log("Stopped updating!");
+    }
+
+
+    hasUpdatedSinceLastTest () {
+         //= (this.props.vm.toJSON() === this.props.lastTestedProject);
+    }
+
+    checkForCodeUpdate() { //TODO inline
+        if (this.props.curPage === "TEST_RESULTS") { //Only check while the user sees their test-results
+            this.props.setHasCodeUpdated((this.props.vm.toJSON() !== this.props.lastTestedProject));
+        }
     }
 
     render () {
@@ -165,7 +260,6 @@ class DebuggingTutorialStep extends React.Component {
         const overviewStep = "overviewStep".concat((this.props.step + 1).toString());
         const showControlOverview = this.props.tutorialMessages?.["overviewStep" + (this.props.step + 1).toString()]?.controlImage1 !== null;
         const showDownloadsOverview = this.props.tutorialMessages?.["overviewStep" + (this.props.step + 1).toString()]?.download1 !== null;
-
 
         return( <DebuggingTutorialStepComponent
                 onStartTests={() => this.onTest()}
@@ -177,6 +271,8 @@ class DebuggingTutorialStep extends React.Component {
                 overviewStep={overviewStep}
                 showDownloadsOverview={showDownloadsOverview}
                 curQualityResult={this.props.qualityResults?.at(0)}
+                hasUpdatedSinceLastTest={() => this.hasUpdatedSinceLastTest()}
+                hasUpdatedSinceLastTest2={this.props.hasCodeUpdated}
                 {...this.props}
             />
         );
@@ -232,6 +328,14 @@ DebuggingTutorialStep.propTypes = {
     setHelpType: PropTypes.func,
     helpType: PropTypes.string,
     onBackToTutorialSelection: PropTypes.func,
+    setCodeResetPoint: PropTypes.func,
+    codeResetPoint: PropTypes.any,
+    lastTestedProject: PropTypes.any,
+    setLastTestedProject: PropTypes.func,
+    hasUpdatedSinceLastTest: PropTypes.func, //TODO REMOVE
+    hasUpdatedSinceLastTest2: PropTypes.bool,
+    setHasCodeUpdated: PropTypes.func,
+    hasCodeUpdated: PropTypes.bool,
 };
 
 const mapStateToProps = state => ({
@@ -252,6 +356,9 @@ const mapStateToProps = state => ({
     locale: state.locales.locale,
     qualityResults: state.scratchGui.debuggingTutorialStep.qualityResults,
     helpType: state.scratchGui.debuggingTutorialStep.helpType,
+    codeResetPoint: state.scratchGui.debuggingTutorialStep.codeResetPoint,
+    lastTestedProject: state.scratchGui.debuggingTutorialStep.lastTestedProject,
+    hasCodeUpdated: state.scratchGui.debuggingTutorialStep.hasUpdated,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -272,6 +379,9 @@ const mapDispatchToProps = dispatch => ({
     addDownloaded: (addedName) => dispatch(addDownloaded(addedName)),
     setQualityResults: (results) => dispatch(setQualityResults(results)),
     setHelpType: (type) => dispatch(setHelpType(type)),
+    setCodeResetPoint: (project) => dispatch(setCodeResetPoint(project)),
+    setLastTestedProject: (newCode) => dispatch(setLastTestedProject(newCode)),
+    setHasCodeUpdated: (value) => dispatch(setHasCodeUpdated(value))
 });
 
 export default connect(

@@ -15,8 +15,12 @@ const SET_TEST_DETAILS = 'scratch-gui/debugging-tutorial-cards/SET_TEST_DETAILS'
 const ADD_DOWNLOAD = 'scratch-gui/debugging-tutorial-cards/ADD_DOWNLOAD';
 const SET_QUALITY_RESULTS = 'scratch-gui/debugging-tutorial-cards/SET_QUALITY_RESULTS';
 const SET_HELP_TYPE = 'scratch-gui/debugging-tutorial-cards/SET_HELP_TYPE';
+const SET_CODE_RESET_POINT = 'scratch-gui/debugging-tutorial-cards/SET_CODE_RESET_POINT';
+const SET_LAST_TESTED_PROJECT = 'scratch-gui/debugging-tutorial-cards/SET_LAST_TESTED_PROJECT';
+const SET_HAS_CODE_UPDATED = 'scratch-gui/debugging-tutorial-cards/SET_HAS_CODE_UPDATED';
 
-const RESPONSE_START_VALUE = 'scratch-gui/debugging-tutorial-cards/RESPONSE_START'
+
+const RESPONSE_START_VALUE = 'scratch-gui/debugging-tutorial-cards/RESPONSE_START';
 
 const initialState = {
     step: 0,
@@ -34,6 +38,9 @@ const initialState = {
     downloaded: [],
     qualityResults: [],
     helpType: "",
+    codeResetPoint: null,
+    lastTestedProject: null,
+    hasUpdated: false,
 };
 
 const reducer = function (state, action) {
@@ -84,6 +91,15 @@ const reducer = function (state, action) {
         case SET_HELP_TYPE:
             baseState.helpType = action.helpType;
             break;
+        case SET_CODE_RESET_POINT:
+            baseState.codeResetPoint = action.project;
+            break;
+        case SET_LAST_TESTED_PROJECT:
+            baseState.lastTestedProject = action.newProject;
+            break;
+        case SET_HAS_CODE_UPDATED:
+            baseState.hasUpdated = action.hasUpdated;
+            break;
         case RESET_STEP:
             baseState.isErrorInfoVisible = false;
             baseState.showTestDetail = false;
@@ -98,6 +114,9 @@ const reducer = function (state, action) {
             baseState.isShowingQuickHandle = false;
             baseState.qualityResults = [];
             baseState.helpType = "";
+            baseState.codeResetPoint = null;
+            baseState.lastTestedProject = null;
+            baseState.hasUpdated = false;
             break;
     }
     return baseState;
@@ -163,6 +182,18 @@ const setHelpType = function (helpType) {
     return {type: SET_HELP_TYPE, helpType};
 }
 
+const setCodeResetPoint = function (project) {
+    return {type: SET_CODE_RESET_POINT, project};
+}
+
+const setLastTestedProject = function (newProject) {
+    return {type: SET_LAST_TESTED_PROJECT, newProject};
+}
+
+const setHasCodeUpdated = function (hasUpdated) {
+    return {type: SET_HAS_CODE_UPDATED, hasUpdated};
+}
+
 export {
     reducer as default,
     initialState as debuggingTutorialStepInitialState,
@@ -181,4 +212,7 @@ export {
     addDownloaded,
     setQualityResults,
     setHelpType,
+    setCodeResetPoint,
+    setLastTestedProject,
+    setHasCodeUpdated,
 };
