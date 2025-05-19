@@ -105,9 +105,8 @@ class DebuggingTutorialOverview extends React.Component {
 
     render () {
 
-        const isNewTutorialSelected = this.props.lastTutorial !== null
-            && this.props.tutorialMessages?.title !== this.props.lastTutorial;
-
+        const isNewTutorialSelected = this.props.tutorialMessages?.title !== this.props.lastTutorial;
+        console.log("last: " + this.props.lastTutorial);
         if (this.props.lastTutorial === null || this.props.lastTutorial === undefined) {
             this.props.setLastTutorial(this.props.tutorialMessages.title);
         } else if (isNewTutorialSelected) {
@@ -146,6 +145,7 @@ DebuggingTutorialOverview.propTypes = {
     setLastStartedTutorial: PropTypes.func,
     isProjectEmpty: PropTypes.bool,
     isNewTutorialSelected: PropTypes.bool,
+    guiMessages: PropTypes.any,
 };
 
 const mapStateToProps = state => ({

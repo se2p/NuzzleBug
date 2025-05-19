@@ -1,3 +1,5 @@
+import React from "react";
+
 export default {
 
     /**
@@ -45,5 +47,17 @@ export default {
         interesting: "Interessant",
         bubble_text1: "Hier unterstütze ich dich dabei, noch besser im Programmieren zu werden!\nDafür habe ich dir hier einige Tutorials vorbereitet.",
         bubble_text2: "",
-    }
+    },
+
+    overview: {
+        difficulty: "Schwierigkeit",
+        steps: "Schritte",
+        nextButton: "Los gehts!",
+        auto_save_question: "Um das Tutorial zu starten, muss ich deinen aktuellen Code überschreiben.\nSoll ich deinen aktuellen Codes speichern?",
+        auto_save_answer_yes: "Ja, ich brauche meinen Code noch",
+        auto_save_answer_no: "Nein, du kannst meinen Code löschen",
+        auto_save_response_yes: "Alles Klar, ich werde deinen Code für dich speichern!\nKlicke unten auf den blauen Knopf um zu starten.",
+        auto_save_response_no: "Gut, ich werde deinen Code überschreiben!\nKlicke unten auf den blauen Knopf um zu starten.",
+        start_tutorial: "Starte das Tutorial"
+    },
 };

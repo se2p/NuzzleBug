@@ -40,6 +40,7 @@ const DebuggingTutorialOverview = props => {
         openAutoSaveSelection,
         isProjectEmpty,
         isNewTutorialSelected,
+        guiMessages,
         ...posProps
     } = props;
 
@@ -58,11 +59,11 @@ const DebuggingTutorialOverview = props => {
                             <img src={tutorialPicture} draggable={false} className={css.overviewImage} alt={"StepImage"}/>
                             <div className={css.detailsArea}>
                                 <div style={{display: "flex"}}>
-                                    <span>Schritte:</span>
+                                    <span>{guiMessages.overview.steps}</span>
                                     <div className={css.stepNumber}>{tutorialIndexData.totalSteps}</div>
                                 </div>
                                 <div style={{display: "flex"}}>
-                                    <span>Schwierigkeit:</span>
+                                    <span>{guiMessages.overview.difficulty}</span>
                                     <img className={css.difficultyIcon} src={difficultyImages[tutorialIndexData.difficulty]} alt={"difficultyIcon"}/>
                                 </div>
                             </div>
@@ -95,12 +96,12 @@ const DebuggingTutorialOverview = props => {
                     <div className={`${css.selectionBubble} ${(autoSave === "" || autoSave === "NO") ? '' : css.selected}`} onClick={() => setAutoSave("YES")}>
                         <div className={css.selectionBubbleIndicator} />
                         <img src={(autoSave === "" || autoSave === "NO") ? saveTrueIcon : saveTrueIconWhite} className={css.selectionIcon} alt={"Icon"}/>
-                        Ja, ich brauche meinen Code noch
+                        {guiMessages.overview.auto_save_answer_yes}
                     </div>
                     <div className={`${css.selectionBubble} ${(autoSave === "" || autoSave === "YES") ? '' : css.selected}`} onClick={() => setAutoSave("NO")}>
                         <div className={css.selectionBubbleIndicator} />
                         <img src={(autoSave === "" || autoSave === "YES") ? saveFalseIcon : saveFalseIconWhite} className={css.selectionIcon} alt={"Icon"}/>
-                        Nein, du kannst meinen Code löschen
+                        {guiMessages.overview.auto_save_answer_no}
                     </div>
                 </div>
                 <div className={css.imageContainer}>
@@ -115,9 +116,9 @@ const DebuggingTutorialOverview = props => {
             return (
                 <div className={css.buttonContainer}>
                     <a href="#" className={`${css.effect} ${css["effect-1"]}`}
-                       onClick={() => { if (isProjectEmpty) {onStart()} else {openAutoSaveSelection()}}} // || !isNewTutorialSelected
+                       onClick={() => { console.log("LOGGG" + isNewTutorialSelected + ", " + isProjectEmpty); if (isNewTutorialSelected && !isProjectEmpty) {openAutoSaveSelection()} else {onStart()}}} // || !isNewTutorialSelected
                     >
-                        Los gehts!
+                        {guiMessages.overview.nextButton}
                         <img src={arrowNext} alt="Icon" className={css.buttonIcon}/>
                     </a>
                 </div>
@@ -142,7 +143,7 @@ const DebuggingTutorialOverview = props => {
                         {autoSaveOptionSelected && <a href="#" className={`${css.effect} ${css["effect-1"]}`}
                            onClick={onStart}
                         >
-                            Starte das Tutorial
+                            <span>{guiMessages.overview.start_tutorial}</span>
                             <img src={arrowNext} alt="Icon" className={css.buttonIcon}/>
                         </a>}
                     </div>
@@ -218,11 +219,11 @@ const DebuggingTutorialOverview = props => {
      */
     const getSelectionBubbleMessage = () => {
         if (autoSave === "") {
-            return <span>Um das Tutorial zu starten, muss ich deinen aktuellen Code überschreiben. Soll ich deinen aktuellen Codes speichern?</span>
+            return <span>{parseColoredText(guiMessages.overview.auto_save_question)}</span>
         } else if (autoSave === "YES") {
-            return <span>Alles Klar, ich werde deinen Code für dich speichern!<br/>Klicke unten auf den blauen Knopf um zu starten.</span>
+            return <span>{parseColoredText(guiMessages.overview.auto_save_response_yes)}</span>
         } else {
-            return <span>Gut, ich werde deinen Code überschreiben!<br/>Klicke unten auf den blauen Knopf um zu starten.</span>
+            return <span>{parseColoredText(guiMessages.overview.auto_save_response_no)}</span>
         }
     }
 

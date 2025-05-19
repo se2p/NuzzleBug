@@ -262,6 +262,7 @@ const TutorialCards = props => {
                     vm={vm}
                     stepCount={totalSteps}
                     tutorialIndexData={tutorialIndexData}
+                    guiMessages={guiMessages}
                 />
 
                 /*return <TutorialStep
