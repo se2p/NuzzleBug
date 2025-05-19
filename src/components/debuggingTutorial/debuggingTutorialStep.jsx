@@ -137,7 +137,7 @@ const DebuggingTutorialStep = props => {
                 <span className={css.finalTitle}>Glückwunsch!</span>
                 <div className={css.whiteBox}>
                     <div className={css.bubbleContainer}>
-                        <div className={css.testStartBubble}>
+                        <div className={css.testStartBubble} style={{borderColor:"#4D97FFFF"}}>
                             <img className={css.finalBubbleIndicator} alt={"Bubble-Decal"} src={bubbleIndicatorBlue}/>
                             {tutorialMessages.levelFinishedText}
                         </div>
@@ -262,7 +262,7 @@ const DebuggingTutorialStep = props => {
                             }}
                             draggable={false}
                         />
-                        <span className={css.cpButtonDescription}>Neu laden</span>
+                        <span className={css.cpButtonDescription}>Erneut versuchen</span>
                     </div>
                 </div>
             </div>
@@ -285,7 +285,7 @@ const DebuggingTutorialStep = props => {
                                 </div>
                             </button>
 
-                            {isDebuggingTutorial ?
+                            {isDebuggingTutorial &&
                                 <button className={css.tabButton}
                                         style={{backgroundColor: contentType === "ERRORS" ? "#cf3b28FF" : ""}} id="fehlerTab"
                                         onClick={() => setContentType("ERRORS")}>
@@ -294,15 +294,6 @@ const DebuggingTutorialStep = props => {
                                         Fehler
                                     </div>
                                 </button>
-                                :
-                                (showDownloadsOverview && <button className={css.tabButton}
-                                        style={{backgroundColor: contentType === "DOWNLOADS" ? "#b14eea" : ""}} id="downloadTab"
-                                        onClick={() => setContentType("DOWNLOADS")}>
-                                    <div style={{display: "flex", alignItems: "center"}}>
-                                        <img className={css.icon} src={downloadIcon} alt={"downloadIcon"}/>
-                                        Downloads
-                                    </div>
-                                </button>)
                             }
 
                             {showControlOverview && <button className={css.tabButton}
@@ -350,89 +341,6 @@ const DebuggingTutorialStep = props => {
     }
 
 
-
-    const renderCodeQuality = () => {
-        return (
-            <div className={css.cpContainer}>
-                <div className={css.whiteBoxOverview}>
-                    <div style={{width: "100%"}}>
-                        {/* Tabs */}
-                        <div className={css.tabContainer}>
-                            <button className={css.tabButton}
-                                    style={{backgroundColor: contentType === "DETAILS" ? "#4D97FFFF" : ""}} id="beschreibungTab"
-                                    onClick={() => setContentType("DETAILS")}>
-                                <div style={{display: "flex", alignItems: "center"}}>
-                                    <img className={css.icon} src={iconDescription} alt={"errorIcon"}/>
-                                    Smells
-                                </div>
-                            </button>
-
-                            <button className={css.tabButton}
-                                    style={{backgroundColor: contentType === "ERRORS" ? "#cf3b28FF" : ""}} id="fehlerTab"
-                                    onClick={() => setContentType("ERRORS")}>
-                                <div style={{display: "flex", alignItems: "center"}}>
-                                    <img className={css.icon} src={iconErrors} alt={"errorIcon"}/>
-                                    Good
-                                </div>
-                            </button>
-
-                        </div>
-
-                        {/* Content */}
-                        <div className={css.container} style={{borderColor: getBorderColor()}}>
-                            {getCodeQualityContent()}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    const getCodeQualityContent = () => {
-        return(
-            <div className={css.qualityContainer}>
-                <div className={css.arrowButtonContainer}>
-                    <div className={css.upArrowFill}/>
-                    <img className={css.backButton}
-                         src={upButton}
-                         onClick={() => setCurPage("OVERVIEW")}
-                         alt={"Next page button"}
-                         draggable={false}
-                    />
-                </div>
-
-
-                <div className={css.qualityHeader}>
-                    <div className={css.qualitySpriteTitle}>
-                    </div>
-                    <div className={css.qualityTitle}>
-
-                    </div>
-
-                    <div className={css.qualityContent}>
-                        <div className={css.qualityButtonContainer}>
-                            <img className={css.qualityButton} alt={"back"}/>
-                        </div>
-                        <div className={css.qualityDescription}>
-
-                        </div>
-                        <div className={css.qualityCodeImg}>
-                            {curQualityResult !== undefined &&
-                            <ScratchBlocksImage
-                                scratchBlocksText={curQualityResult.codeSnippet}
-                                locale={props.locale}
-                            />}
-                        </div>
-                        <div className={css.qualityButtonContainer}>
-                            <img className={css.qualityButton} alt={"next"}/>
-                        </div>
-                    </div>
-                </div>
-            </div>);
-    }
-
-
-
     const renderTestResults = () => {
         return (
             <div className={css.testContainer}>
@@ -460,13 +368,13 @@ const DebuggingTutorialStep = props => {
                             </div>}
                         </div>
 
-                        <img src={owl2} alt={"Picture of Euli"} className={css.owlImage} draggable={false}/>
+                        <img src={owl2} alt={"Picture of Euli"} className={css.owlImage} style={{marginBottom:"10px"}} draggable={false}/>
                     </div>
                 </div>
 
 
                 <div className={css.testWhiteBox} style={{marginTop: "20px", display:"flex", flexDirection:"column", padding: "10px 0px 0px 10px", marginBottom:"10px"}}>
-                    <strong style={{fontSize:"1.2rem"}}>Testergebnisse</strong>
+
                     <div className={css.testResultContainer}>
                         {parseTestResults()}
                     </div>
@@ -476,28 +384,32 @@ const DebuggingTutorialStep = props => {
     }
 
     const getTestText = () => {
-        if (projectLoadingState === "TEST") return <span>Warte bitte kurz, bis ich deinen Code überprüft habe!</span>
+        if (projectLoadingState === "TEST") return <span>Klar doch! Warte bitte kurz, bis ich deinen Code überprüft habe</span>
 
-        if (hasUpdatedSinceLastTest2) return <span>Anscheinend hat sich dein Code seit dem letzten Testlauf verändert.</span>
+        if (testResults.passed) return <span>Super! Du hast alle Tests erfolgreich geschafft.<br/>Du kannst nun zum <button className={css.responseButtonAccept} style={{marginLeft: "0", marginRight: "0"}} onClick={() => nextStep()}>nächsten Level</button> gehen.</span>
 
-        if (curTestDetails !== "") return <span>Hier siehst du Details zum Test</span>
 
-        return (testResults !== null) ? <span>Hier siehst du deine einzelnen Testergebnisse</span>
-            : <span>Es wurden noch keine Tests durchgeführt, die ich dir hier anzeigen kann.</span>;
+        if (curTestDetails !== "") {
+            // Finde das vom Nutzer angeklickte Testergebnis
+            const element = testResults.details.find(e => e.testId === curTestDetails);
+
+            if (element.result === "pass") {
+                return <span>Dieser Test sieht schon mal richtig gut aus.<br/>Super gemacht!</span>
+            } else {
+                return <span>In diesem Test hat sich noch ein Fehler eingeschlichen.</span>
+            } //TODO ADD response if test is from older step
+        }
+
+        if (hasCodeUpdated) return <span>Ich sehe gerade, dass sich dein Code seit dem letzten Testlauf verändert hat. Soll ich deine Änderungen überprüfen?</span>
+
+        return <span>Hier habe ich deine einzelnen Testergebnisse aufgelistet</span>;
     }
 
     /**
      * Returns Euli's feedback-details containing all test results.
      */
     const parseTestResults = () => {
-        if (testResults === null || testResults === undefined) return (
-            <div className={css.testStartButton}
-                 onClick={() => {setResponseType(RESPONSE_TESTING); handleTestStart(); setCurPage("RESPONSE")}}>
-                Test Starten
-            </div>
-        );
-
-        hasUpdatedSinceLastTest();
+        if (testResults.passed) return null;
 
         return testResults.details //TODO Extend!
             .sort((a, b) => b.testId.localeCompare(a.testId))
@@ -529,6 +441,12 @@ const DebuggingTutorialStep = props => {
                 ? "Bestanden"
                 : "Gescheitert";
 
+        const buttonStyle = (projectLoadingState === "TEST")
+            ? css.testElementButton
+            : passed
+                ? css.testElementButtonPassed
+                : css.testElementButtonFailed;
+
 
         if (curTestDetails === e.testId) {
             return (
@@ -541,7 +459,7 @@ const DebuggingTutorialStep = props => {
                     </div>
                     <span className={css.testElementTitle}>{e.test}</span>
                     <p className={css.testElementText}>{e.testDescription}</p>
-                    <div className={css.testElementButton} style={{borderColor: headerBgColor}} onClick={() => setCurTestDetails("")}>
+                    <div className={buttonStyle} onClick={() => setCurTestDetails("")}>
                         Schließen
                     </div>
                 </div>);
@@ -554,7 +472,7 @@ const DebuggingTutorialStep = props => {
                     {headerText}
                 </div>
                 <span className={css.testElementTitle}>{e.test}</span>
-                <div className={css.testElementButton} style={{borderColor: headerBgColor}}>
+                <div className={buttonStyle}>
                     Details
                 </div>
             </div>
@@ -621,7 +539,7 @@ const DebuggingTutorialStep = props => {
                                     </p>
                                 </div>
                                 <div className={css.downloadContainer}>
-                                    {generateDownloadButtons()}
+                                    generateDownloadButtons()
                                 </div>
                             </div>
                         </div>
@@ -673,29 +591,7 @@ const DebuggingTutorialStep = props => {
         }
     }
 
-    const generateDownloadButtons = () => {
-        return Object.keys(tutorialMessages[overviewStep])
-            .filter(key => key.startsWith("download"))
-            .map(key => {
-                return (generateDownloadButton3((key.match(/\d+$/)[0])));
-            });
-    }
 
-    const generateDownloadButton3 = (id) => {
-        const downloadTitle = tutorialMessages[overviewStep]["download" + id.toString()];
-        const downloadImg = tutorialIndexData["downloadContent" + id.toString()];
-        const isDownloaded = downloaded.includes(downloadTitle);
-
-        return (
-            <div key={id} className={`${css.downloadBox} ${isDownloaded ? css.downloadBoxFinished : ''}`}>
-                <img className={css.downloadImage}
-                     src={downloadImg} alt={"Download Preview"}/>
-                <div className={css.downloadButton} onClick={() => onDownload(downloadTitle, downloadImg)}>
-                    {isDownloaded ? "Fertig" : ("Download " + downloadTitle)}
-                </div>
-            </div>
-        );
-    }
 
     const generateControlImages = () => {
         return Object.keys(tutorialMessages[overviewStep])
@@ -735,7 +631,7 @@ const DebuggingTutorialStep = props => {
     /**
      * Returns the feedback-summary for Euli.
      */
-    const getResultText = () => { //TODO Refactor!
+    const getResultText = () => { //TODO Refactor! (Gehört in eulis response code!)
         if (checkUserMadeErrors()) {
             return (
                 <div className={css.responseTextArea}>
@@ -854,8 +750,6 @@ const DebuggingTutorialStep = props => {
                 return renderResponse();
             case "TEST_RESULTS":
                 return renderTestResults();
-            case "CODE_QUALITY":
-                return renderCodeQuality(); // TODO delete
             case "HELP":
                 return renderHelp();
         }
@@ -881,7 +775,7 @@ export default DebuggingTutorialStep;
 
 
 
-
+/*
 
 
 const translate = (scratchBlocksText, locale) => {
@@ -909,3 +803,132 @@ ScratchBlocksImage.propTypes = {
     scratchBlocksText: PropTypes.string,
     locale: PropTypes.string
 };
+
+
+
+
+
+
+
+    const generateDownloadButtons = () => {
+        return Object.keys(tutorialMessages[overviewStep])
+            .filter(key => key.startsWith("download"))
+            .map(key => {
+                return (generateDownloadButton3((key.match(/\d+$/)[0])));
+            });
+    }
+
+    const generateDownloadButton3 = (id) => {
+        const downloadTitle = tutorialMessages[overviewStep]["download" + id.toString()];
+        const downloadImg = tutorialIndexData["downloadContent" + id.toString()];
+        const isDownloaded = downloaded.includes(downloadTitle);
+
+        return (
+            <div key={id} className={`${css.downloadBox} ${isDownloaded ? css.downloadBoxFinished : ''}`}>
+                <img className={css.downloadImage}
+                     src={downloadImg} alt={"Download Preview"}/>
+                <div className={css.downloadButton} onClick={() => onDownload(downloadTitle, downloadImg)}>
+                    {isDownloaded ? "Fertig" : ("Download " + downloadTitle)}
+                </div>
+            </div>
+        );
+    }
+
+
+
+
+
+const renderCodeQuality = () => {
+        return (
+            <div className={css.cpContainer}>
+                <div className={css.whiteBoxOverview}>
+                    <div style={{width: "100%"}}>
+
+<div className={css.tabContainer}>
+    <button className={css.tabButton}
+            style={{backgroundColor: contentType === "DETAILS" ? "#4D97FFFF" : ""}} id="beschreibungTab"
+            onClick={() => setContentType("DETAILS")}>
+        <div style={{display: "flex", alignItems: "center"}}>
+            <img className={css.icon} src={iconDescription} alt={"errorIcon"}/>
+            Smells
+        </div>
+    </button>
+
+    <button className={css.tabButton}
+            style={{backgroundColor: contentType === "ERRORS" ? "#cf3b28FF" : ""}} id="fehlerTab"
+            onClick={() => setContentType("ERRORS")}>
+        <div style={{display: "flex", alignItems: "center"}}>
+            <img className={css.icon} src={iconErrors} alt={"errorIcon"}/>
+            Good
+        </div>
+    </button>
+
+</div>
+
+<div className={css.container} style={{borderColor: getBorderColor()}}>
+    {getCodeQualityContent()}
+</div>
+</div>
+</div>
+</div>
+);
+}
+
+const getCodeQualityContent = () => {
+    return(
+        <div className={css.qualityContainer}>
+            <div className={css.arrowButtonContainer}>
+                <div className={css.upArrowFill}/>
+                <img className={css.backButton}
+                     src={upButton}
+                     onClick={() => setCurPage("OVERVIEW")}
+                     alt={"Next page button"}
+                     draggable={false}
+                />
+            </div>
+
+
+            <div className={css.qualityHeader}>
+                <div className={css.qualitySpriteTitle}>
+                </div>
+                <div className={css.qualityTitle}>
+
+                </div>
+
+                <div className={css.qualityContent}>
+                    <div className={css.qualityButtonContainer}>
+                        <img className={css.qualityButton} alt={"back"}/>
+                    </div>
+                    <div className={css.qualityDescription}>
+
+                    </div>
+                    <div className={css.qualityCodeImg}>
+                        {curQualityResult !== undefined &&
+                            <ScratchBlocksImage
+                                scratchBlocksText={curQualityResult.codeSnippet}
+                                locale={props.locale}
+                            />}
+                    </div>
+                    <div className={css.qualityButtonContainer}>
+                        <img className={css.qualityButton} alt={"next"}/>
+                    </div>
+                </div>
+            </div>
+        </div>);
+}
+
+
+
+//download buttons:
+
+                                :
+                                (showDownloadsOverview && <button className={css.tabButton}
+                                        style={{backgroundColor: contentType === "DOWNLOADS" ? "#b14eea" : ""}} id="downloadTab"
+                                        onClick={() => setContentType("DOWNLOADS")}>
+                                    <div style={{display: "flex", alignItems: "center"}}>
+                                        <img className={css.icon} src={downloadIcon} alt={"downloadIcon"}/>
+                                        Downloads
+                                    </div>
+                                </button>)
+
+*/

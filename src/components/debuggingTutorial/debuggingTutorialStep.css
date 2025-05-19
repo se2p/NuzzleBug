@@ -1074,9 +1074,37 @@
     }
 }
 
+.testElementButtonFailed {
+    border-radius: 30px;
+    border: 3px #D16857FF solid;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color: #575E75FF;
+    margin: auto 10px 10px;
+}
+
+.testElementButtonFailed:hover {
+    color: white;
+    background-color: #D16857FF;
+}
+
+.testElementButtonPassed {
+    border-radius: 30px;
+    border: 3px #89DDAFFF solid;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color: #575E75FF;
+    margin: auto 10px 10px;
+}
+
+.testElementButtonPassed:hover {
+    color: white;
+    background-color: #89DDAFFF;
+}
+
 .testElementButton {
     border-radius: 30px;
-    border: 3px red solid;
+    border: 3px #AFD8FDFF solid;
     padding-top: 5px;
     padding-bottom: 5px;
     color: #575E75FF;
@@ -1085,7 +1113,7 @@
 
 .testElementButton:hover {
     color: white;
-    background-color: #D16857FF;
+    background-color: #AFD8FDFF;
 }
 
 
@@ -1181,7 +1209,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    gap: 20px;
+    gap: 15px;
     padding-left: 30px;
     padding-right: 20px;
 }
@@ -1499,6 +1527,7 @@
     align-items: center;   /* vertikal zentriert */
     justify-content: center; /* horizontal zentriert */
     text-align: center;    /* optional, für mehrzeiligen Text */
+    cursor: pointer;
 }
 
 .backToMenuButton:hover {

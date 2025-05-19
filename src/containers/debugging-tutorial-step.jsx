@@ -90,17 +90,25 @@ class DebuggingTutorialStep extends React.Component {
                         });
                 }
             } else {
-                //Save current project for future resets
-                this.props.setCodeResetPoint(this.props.vm.toJSON());
+                const keys = Object.keys(this.props.tutorialIndexData).filter((key) =>
+                    key.startsWith("step" + (this.props.step + 2).toString() + "_Costume")
+                );
 
+                const promises = keys.map(async (key) => {
+                    const costume = this.props.tutorialIndexData[key];
+                    console.log("adding: " + key.toString());
+                    await this.addSprite(costume, "Schiff1");
+                });
 
-                Object.keys(this.props.tutorialIndexData).forEach((key) => {
-                    // Prüfe, ob der Schlüssel zu einem Costume gehört (z.B. "step1_Costume1")
-                    if (key.startsWith("step" + (this.props.step + 1).toString() + "_Costume")) {
-                        // Rufe addSprite() für jedes Costume auf
-                        const costume = this.props.tutorialIndexData[key];
-                        this.addSprite(costume, "Schiff1");
-                    }
+                // Warte auf alle .addSprite() Aufrufe
+                Promise.all(promises).then(() => {
+                    console.log("added all sprites!");
+                    this.props.vm.start();
+
+                    this.setSavepoint();
+
+                    //Save current project for future resets
+                    //this.props.setCodeResetPoint(this.props.vm.toJSON());
                 });
             }
 
@@ -109,7 +117,12 @@ class DebuggingTutorialStep extends React.Component {
     }
 
 
+    async setSavepoint() {
+        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+        await sleep(1000);
+        await this.props.setCodeResetPoint(this.props.vm.toJSON());
+    }
 
 
 
@@ -169,6 +182,7 @@ class DebuggingTutorialStep extends React.Component {
                     codeSnippet: hint.scratchBlocksCode
                 }));
                 console.log(result);
+
                 this.props.setQualityResults(result);
             })
             // ignore errors to avoid crashing the tutorial tab
@@ -247,6 +261,7 @@ class DebuggingTutorialStep extends React.Component {
 
     hasUpdatedSinceLastTest () {
          //= (this.props.vm.toJSON() === this.props.lastTestedProject);
+
     }
 
     checkForCodeUpdate() { //TODO inline
