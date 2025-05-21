@@ -29,7 +29,8 @@ import {renderResponse2, renderResponseClassic, renderResponseDebugging} from ".
 import testSuccess from "./images/icon--testSuccess.png"
 import testFailed from "./images/icon--testFailed.png"
 import testRunning from "./images/icon--testRunning.png"
-
+import nextTestGrey from "./images/nextTestArrowGrey.png"
+import nextTestWhite from "./images/nextTestArrowWhite.png"
 
 import {
     RESPONSE_START,
@@ -91,6 +92,9 @@ const DebuggingTutorialStep = props => {
         hasUpdatedSinceLastTest,
         hasUpdatedSinceLastTest2,//TODO remove
         hasCodeUpdated,
+        testPageIndex,
+        onIncreaseTestPageIndex,
+        onDecreaseTestPageIndex,
         ...posProps
     } = props;
 
@@ -262,7 +266,7 @@ const DebuggingTutorialStep = props => {
                             }}
                             draggable={false}
                         />
-                        <span className={css.cpButtonDescription}>Erneut versuchen</span>
+                        <span className={css.cpButtonDescription}>Schritt neu starten</span>
                     </div>
                 </div>
             </div>
@@ -342,6 +346,21 @@ const DebuggingTutorialStep = props => {
 
 
     const renderTestResults = () => {
+        let showPageIndexArrows = false;
+
+        if (testResults.details) {
+            const sortedDetails = [...testResults.details];
+
+            const visibleResults = sortedDetails.filter(e => {
+                const isCurrentStep    = e.testId.charAt(4) === (step + 1).toString();
+                const passed           = e.result === "pass";
+                return isCurrentStep || !passed;
+            })
+
+            showPageIndexArrows = visibleResults.length >= 5;
+        }
+
+
         return (
             <div className={css.testContainer}>
                 <div className={css.arrowButtonContainer}>
@@ -372,12 +391,18 @@ const DebuggingTutorialStep = props => {
                     </div>
                 </div>
 
-
-                <div className={css.testWhiteBox} style={{marginTop: "20px", display:"flex", flexDirection:"column", padding: "10px 0px 0px 10px", marginBottom:"10px"}}>
-
-                    <div className={css.testResultContainer}>
-                        {parseTestResults()}
+                <div style={{width:"100%",display:"flex", justifyContent:"center", alignItems:"center", marginTop:"30px", marginBottom:"10px"}}>
+                    {showPageIndexArrows && <div className={css.testLeftArrow} onClick={() => onDecreaseTestPageIndex()}>
+                        <div className={css.nextTestIcon}/>
+                    </div>}
+                    <div className={css.testWhiteBox} style={{marginTop: "0px", display:"flex", flexDirection:"column", marginBottom:"0px", padding:"0px"}}>
+                        <div className={css.testResultContainer}>
+                            {parseTestResults()}
+                        </div>
                     </div>
+                    {showPageIndexArrows && <div className={css.testRightArrow} onClick={() => onIncreaseTestPageIndex()}>
+                        <div className={css.nextTestIcon} style={{transform:"ScaleX(-1)"}}/>
+                    </div>}
                 </div>
             </div>
         );
@@ -411,18 +436,70 @@ const DebuggingTutorialStep = props => {
     const parseTestResults = () => {
         if (testResults.passed) return null;
 
-        return testResults.details //TODO Extend!
-            .sort((a, b) => b.testId.localeCompare(a.testId))
-            .map((e, index) => {
-                const isCurrentStep = e.testId.charAt(4) === (step + 1).toString();
-                const passed = e.result === "pass";
-                const isDebuggingError = e.testDescription === "DEBUGGING_ERROR";
-                return createTestElement(passed, e, (index + 1));
-            });
+        // 1) Sortieren (absteigend nach Test-ID)
+        const sortedDetails = [...testResults.details]
+            .sort((a, b) => b.testId.localeCompare(a.testId));
+
+        // Anzahl Items pro Seite
+        const itemsPerPage = 4;
+
+        // Berechne den Offset für pageIndex (0 → 0–3, 1 → 4–7, …)
+        const start = testPageIndex * itemsPerPage;
+
+        // 2) Default-Filter anwenden (Nur Tests aus aktuellem Schritt + fehlgeschlagene aus letzten Schritten)
+        const filteredDetails = sortedDetails.filter(e => {
+            const isCurrentStep    = e.testId.charAt(4) === (step + 1).toString();
+            const passed           = e.result === "pass";
+            return isCurrentStep || !passed;
+        }).slice(start, start + itemsPerPage);
+
+        // 3) Im Details-Modus: Slice um das ausgewählte Element, sonst ganzes Filter-Array
+        let visibleDetails;
+
+        if (curTestDetails) {
+            // a) Index im gefilterten Array finden
+            const targetIndex = filteredDetails.findIndex(t => t.testId === curTestDetails);
+            const len         = filteredDetails.length;
+
+            if (targetIndex !== -1 && len > 0) {
+                // b) Start/End für 3-Zone berechnen
+                let start = targetIndex - 1;
+                let end   = targetIndex + 1;
+
+                if (start < 0)        { start = 0; end = Math.min(2, len - 1); }
+                if (end   > len - 1)  { end   = len - 1; start = Math.max(len - 3, 0); }
+
+                // c) slice aus dem gefilterten Array
+                visibleDetails = filteredDetails.slice(start, end + 1);
+
+            } else {
+                // Fallback: wenn curTestDetails nicht gefunden, zeige das ganze filteredDetails
+                visibleDetails = filteredDetails;
+            }
+
+        } else {
+            // kein Element ausgewählt → ganz normal alle gefilterten
+            visibleDetails = filteredDetails;
+        }
+
+        return visibleDetails.map((e, idx) => {
+            // Nummer für das UI: Original-Index in sortedDetails + 1
+            const originalIdx = sortedDetails.findIndex(t => t === e);
+
+            const isCurrentStep = e.testId.charAt(4) === (step + 1).toString();
+            const passed        = e.result === "pass";
+
+            return createTestElement(
+                passed,
+                e,
+                originalIdx + 1,
+                isCurrentStep
+            );
+        });
     };
 
 
-    const createTestElement = (passed, e, testElementNumber) => {
+    const createTestElement = (passed, e, testElementNumber, isCurrentStep) => {
         const headerBgColor = (projectLoadingState === "TEST")
             ? "#afd8fd"
             : passed

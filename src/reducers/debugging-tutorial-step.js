@@ -18,7 +18,7 @@ const SET_HELP_TYPE = 'scratch-gui/debugging-tutorial-cards/SET_HELP_TYPE';
 const SET_CODE_RESET_POINT = 'scratch-gui/debugging-tutorial-cards/SET_CODE_RESET_POINT';
 const SET_LAST_TESTED_PROJECT = 'scratch-gui/debugging-tutorial-cards/SET_LAST_TESTED_PROJECT';
 const SET_HAS_CODE_UPDATED = 'scratch-gui/debugging-tutorial-cards/SET_HAS_CODE_UPDATED';
-
+const SET_TEST_PAGE_INDEX = 'scratch-gui/debugging-tutorial-cards/SET_TEST_PAGE_INDEX';
 
 const RESPONSE_START_VALUE = 'scratch-gui/debugging-tutorial-cards/RESPONSE_START';
 
@@ -41,6 +41,7 @@ const initialState = {
     codeResetPoint: null,
     lastTestedProject: null,
     hasUpdated: false,
+    testPageIndex: 0,
 };
 
 const reducer = function (state, action) {
@@ -100,6 +101,9 @@ const reducer = function (state, action) {
         case SET_HAS_CODE_UPDATED:
             baseState.hasUpdated = action.hasUpdated;
             break;
+        case SET_TEST_PAGE_INDEX:
+            baseState.testPageIndex = action.index;
+            break;
         case RESET_STEP:
             baseState.isErrorInfoVisible = false;
             baseState.showTestDetail = false;
@@ -117,6 +121,7 @@ const reducer = function (state, action) {
             baseState.codeResetPoint = null;
             baseState.lastTestedProject = null;
             baseState.hasUpdated = false;
+            baseState.testPageIndex = 0;
             break;
     }
     return baseState;
@@ -194,6 +199,10 @@ const setHasCodeUpdated = function (hasUpdated) {
     return {type: SET_HAS_CODE_UPDATED, hasUpdated};
 }
 
+const setTestPageIndex = function (index) {
+    return {type: SET_TEST_PAGE_INDEX, index};
+}
+
 export {
     reducer as default,
     initialState as debuggingTutorialStepInitialState,
@@ -215,4 +224,5 @@ export {
     setCodeResetPoint,
     setLastTestedProject,
     setHasCodeUpdated,
+    setTestPageIndex,
 };

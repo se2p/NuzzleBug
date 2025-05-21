@@ -20,6 +20,7 @@ import {
     updateTestResults,
     setLastTestedProject,
     setHasCodeUpdated,
+    setTestPageIndex,
 } from "../reducers/debugging-tutorial-step";
 import DebuggingTutorialStepComponent from '../components/debuggingTutorial/debuggingTutorialStep.jsx';
 import PropTypes from "prop-types";
@@ -44,6 +45,7 @@ class DebuggingTutorialStep extends React.Component {
         this.convertToBuffer = this.convertToBuffer.bind(this);
         this.hasUpdatedSinceLastTest = this.hasUpdatedSinceLastTest.bind(this);
         this.checkForCodeUpdate = this.checkForCodeUpdate.bind(this);
+        this.onIncreaseTestPageIndex = this.onIncreaseTestPageIndex.bind(this);
         this.litterboxWebURL = 'https://scratch.fim.uni-passau.de/litterbox-api'; // localhost default: http://localhost:8080
 
         this.interval = null;
@@ -97,7 +99,7 @@ class DebuggingTutorialStep extends React.Component {
                 const promises = keys.map(async (key) => {
                     const costume = this.props.tutorialIndexData[key];
                     console.log("adding: " + key.toString());
-                    await this.addSprite(costume, "Schiff1");
+                    await this.addSprite(costume, "Schiff1", 50);
                 });
 
                 // Warte auf alle .addSprite() Aufrufe
@@ -106,9 +108,6 @@ class DebuggingTutorialStep extends React.Component {
                     this.props.vm.start();
 
                     this.setSavepoint();
-
-                    //Save current project for future resets
-                    //this.props.setCodeResetPoint(this.props.vm.toJSON());
                 });
             }
 
@@ -129,15 +128,22 @@ class DebuggingTutorialStep extends React.Component {
 
 
 // Handle Sprite Upload ohne Benutzerinteraktion
-    addSprite(sprite, title) {
+    addSprite(sprite, title, size) {
         const storage = this.props.vm.runtime.storage;
         const fileType = 'image/png';
         this.convertToBuffer(sprite).then(r => spriteUpload(r, fileType, title, storage, newSprite => {
-                this.props.vm.addSprite(newSprite).catch(e => console.log(e))
+                const spriteJSON = this.setSpriteAttributes(newSprite, title, size);
+                this.props.vm.addSprite(spriteJSON).catch(e => console.log(e));
             }, () => console.log("fertig 31"))
         )
-
     };
+
+    setSpriteAttributes(sprite, name, size) {
+        const spriteJSON = JSON.parse(sprite);
+        spriteJSON.name = name;
+        spriteJSON.size = size;
+        return JSON.stringify(spriteJSON);
+    }
 
     async convertToBuffer(sprite) {
         try {
@@ -270,7 +276,14 @@ class DebuggingTutorialStep extends React.Component {
         }
     }
 
+    onIncreaseTestPageIndex(amount) {
+        const newIndex = this.props.testPageIndex + amount;
+        this.props.setTestPageIndex(Math.max(newIndex, 0));
+        console.log("set pageIndex: " + Math.max(newIndex, 0))
+    }
+
     render () {
+        console.log("QQQQ" + this.props.testPageIndex);
         const reachedLastStep = (this.props.step === this.props.stepCount);
         const overviewStep = "overviewStep".concat((this.props.step + 1).toString());
         const showControlOverview = this.props.tutorialMessages?.["overviewStep" + (this.props.step + 1).toString()]?.controlImage1 !== null;
@@ -288,6 +301,8 @@ class DebuggingTutorialStep extends React.Component {
                 curQualityResult={this.props.qualityResults?.at(0)}
                 hasUpdatedSinceLastTest={() => this.hasUpdatedSinceLastTest()}
                 hasUpdatedSinceLastTest2={this.props.hasCodeUpdated}
+                onIncreaseTestPageIndex={() => this.onIncreaseTestPageIndex(1)}
+                onDecreaseTestPageIndex={() => this.onIncreaseTestPageIndex(-1)}
                 {...this.props}
             />
         );
@@ -351,6 +366,8 @@ DebuggingTutorialStep.propTypes = {
     hasUpdatedSinceLastTest2: PropTypes.bool,
     setHasCodeUpdated: PropTypes.func,
     hasCodeUpdated: PropTypes.bool,
+    setTestPageIndex: PropTypes.func,
+    testPageIndex: PropTypes.number,
 };
 
 const mapStateToProps = state => ({
@@ -374,6 +391,7 @@ const mapStateToProps = state => ({
     codeResetPoint: state.scratchGui.debuggingTutorialStep.codeResetPoint,
     lastTestedProject: state.scratchGui.debuggingTutorialStep.lastTestedProject,
     hasCodeUpdated: state.scratchGui.debuggingTutorialStep.hasUpdated,
+    testPageIndex: state.scratchGui.debuggingTutorialStep.testPageIndex,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -396,7 +414,8 @@ const mapDispatchToProps = dispatch => ({
     setHelpType: (type) => dispatch(setHelpType(type)),
     setCodeResetPoint: (project) => dispatch(setCodeResetPoint(project)),
     setLastTestedProject: (newCode) => dispatch(setLastTestedProject(newCode)),
-    setHasCodeUpdated: (value) => dispatch(setHasCodeUpdated(value))
+    setHasCodeUpdated: (value) => dispatch(setHasCodeUpdated(value)),
+    setTestPageIndex: (index) => dispatch(setTestPageIndex(index)),
 });
 
 export default connect(
