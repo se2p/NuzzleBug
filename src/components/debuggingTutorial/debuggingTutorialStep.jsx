@@ -346,7 +346,8 @@ const DebuggingTutorialStep = props => {
 
 
     const renderTestResults = () => {
-        let showPageIndexArrows = false;
+        let showLeftArrow = false;
+        let showRightArrow = false;
 
         if (testResults.details) {
             const sortedDetails = [...testResults.details];
@@ -357,7 +358,8 @@ const DebuggingTutorialStep = props => {
                 return isCurrentStep || !passed;
             })
 
-            showPageIndexArrows = visibleResults.length >= 5;
+            showLeftArrow = visibleResults.length >= 5 && testPageIndex > 0;
+            showRightArrow = visibleResults.length >= 5 && testPageIndex < (Math.ceil(visibleResults.length / 4) - 1);
         }
 
 
@@ -392,17 +394,21 @@ const DebuggingTutorialStep = props => {
                 </div>
 
                 <div style={{width:"100%",display:"flex", justifyContent:"center", alignItems:"center", marginTop:"30px", marginBottom:"10px"}}>
-                    {showPageIndexArrows && <div className={css.testLeftArrow} onClick={() => onDecreaseTestPageIndex()}>
+                    <div className={css.testLeftArrow} onClick={() => onDecreaseTestPageIndex()} style={{
+                        visibility: showLeftArrow ? 'visible' : 'hidden'
+                    }}>
                         <div className={css.nextTestIcon}/>
-                    </div>}
+                    </div>
                     <div className={css.testWhiteBox} style={{marginTop: "0px", display:"flex", flexDirection:"column", marginBottom:"0px", padding:"0px"}}>
                         <div className={css.testResultContainer}>
                             {parseTestResults()}
                         </div>
                     </div>
-                    {showPageIndexArrows && <div className={css.testRightArrow} onClick={() => onIncreaseTestPageIndex()}>
+                    <div className={css.testRightArrow} onClick={() => onIncreaseTestPageIndex()} style={{
+                        visibility: showRightArrow ? 'visible' : 'hidden'
+                    }}>
                         <div className={css.nextTestIcon} style={{transform:"ScaleX(-1)"}}/>
-                    </div>}
+                    </div>
                 </div>
             </div>
         );
