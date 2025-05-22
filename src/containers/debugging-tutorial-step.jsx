@@ -135,7 +135,7 @@ class DebuggingTutorialStep extends React.Component {
                 const spriteJSON = this.setSpriteAttributes(newSprite, title, size);
                 this.props.vm.addSprite(spriteJSON).catch(e => console.log(e));
             }, () => console.log("fertig 31"))
-        )
+        );
     };
 
     setSpriteAttributes(sprite, name, size) {

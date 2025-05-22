@@ -1624,6 +1624,7 @@
     padding-left: 10px;
     padding-top: 10px;
     padding-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 .helpBubble:hover .selectionBubbleIndicator {
@@ -1690,10 +1691,11 @@
     display: flex;
     align-items: flex-start;
     width: 100%;
-    justify-content: flex-end;
+    justify-content: flex-start;
     flex-direction: column;
     margin-right: 35px; /*Account for the length of the bubble-indicators*/
     margin-left: 35px; /*Account for the length of the bubble-indicators*/
+    padding-top: 10px;
 }
 
 .helpContainer > * {
@@ -1704,7 +1706,7 @@
 .animatedBubble-enter {
     opacity: 0;
     margin-bottom: 0;
-    transform: translateY(20px) scale(0);
+    transform: translateY(20px) scale(0.5);
 }
 .animatedBubble-enter-active {
     opacity: 1;
@@ -1726,7 +1728,8 @@
     margin-bottom: 0;
 }
 
-
+.myTypewriterText {
+}
 
 
 
