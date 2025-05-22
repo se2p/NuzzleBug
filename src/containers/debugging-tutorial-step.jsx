@@ -279,11 +279,9 @@ class DebuggingTutorialStep extends React.Component {
     onIncreaseTestPageIndex(amount) {
         const newIndex = this.props.testPageIndex + amount;
         this.props.setTestPageIndex(Math.max(newIndex, 0));
-        console.log("set pageIndex: " + Math.max(newIndex, 0))
     }
 
     render () {
-        console.log("QQQQ" + this.props.testPageIndex);
         const reachedLastStep = (this.props.step === this.props.stepCount);
         const overviewStep = "overviewStep".concat((this.props.step + 1).toString());
         const showControlOverview = this.props.tutorialMessages?.["overviewStep" + (this.props.step + 1).toString()]?.controlImage1 !== null;
