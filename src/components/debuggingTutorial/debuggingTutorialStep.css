@@ -1612,12 +1612,17 @@
 
 
 
-.helpBubble {
+
+
+
+
+.nextBubble {
     display: inline-block;
     position: relative;
     border-radius: 15px;
-    background-color: #ededed;
-    border: solid 3px #ededed;
+    background-color: #0fbd8cff;
+    border: solid 3px #0fbd8cff;
+    color: white;
     width: 100%;
     z-index: 100;
     text-align: left;
@@ -1625,30 +1630,19 @@
     padding-top: 10px;
     padding-bottom: 10px;
     margin-bottom: 20px;
-}
-
-.helpBubble:hover .selectionBubbleIndicator {
-    background-image: url('./images/selectionBubbleDecalGrey.png');
-}
-
-.helpBubble.selected {
-    background-color: #5a6077ff;
-    border: solid 3px #5a6077ff;
-    color: white;
-}
-
-.helpBubble.selected .selectionBubbleIndicator {
-    background-image: url('./images/selectionBubbleDecalDark.png');
-}
-
-.helpBubble:not(.selected):hover {
     cursor: pointer;
-    background-color: #cecece;
-    border-color: #CECECEFF;
-    z-index: 100;
 }
 
-.selectionBubbleIndicator {
+.nextBubble:hover {
+    background-color: #0da177ff;
+    border: solid 3px #0da177ff;
+}
+
+.nextBubble:hover .nextBubbleIndicator {
+    background-image: url('./images/bubbleDecalGreenDark.png');
+}
+
+.nextBubbleIndicator {
     position: absolute;
     width: 35px;
     height: 35px;
@@ -1658,78 +1652,22 @@
     transform: translateX(-102%) translateY(-40%);
     background-size: contain;
     background-repeat: no-repeat;
-    background-image: url('./images/selectionBubbleDecalLight.png');
+    background-image: url('./images/bubbleDecalGreenLight.png');
 }
 
 
-.helpBubbleEuli {
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    border-radius: 15px;
-    border: solid 3px #4D97FFFF;
-    background-color: #e4f0ff;
-    width: 100%;
-    z-index: 100;
-    text-align: left;
-    padding: 10px;
-    min-height: calc(2 * 0.9rem + 20px + 1.2rem); /*2 Zeilen + Padding oben und unten + Zeilenabstand*/
-}
 
-.helpBubbleEuliIndicator {
-    position: absolute;
-    width: 35px;
-    height: auto;
-    right: 0;
-    top: 50%;
-    transform: translateX(102%) translateY(-40%);
-    z-index: -1;
-}
 
-.helpContainer {
-    display: flex;
-    align-items: flex-start;
-    width: 100%;
-    justify-content: flex-start;
-    flex-direction: column;
-    margin-right: 35px; /*Account for the length of the bubble-indicators*/
-    margin-left: 35px; /*Account for the length of the bubble-indicators*/
-    padding-top: 10px;
-}
 
-.helpContainer > * {
-    transition: transform 300ms, opacity 300ms;
-}
 
-/* Wenn ein Bubble reinkommt */
-.animatedBubble-enter {
-    opacity: 0;
-    margin-bottom: 0;
-    transform: translateY(20px) scale(0.5);
-}
-.animatedBubble-enter-active {
-    opacity: 1;
-    margin-bottom: 20px;
-    transform: translateY(0) scale(1);
-    transition: opacity 300ms ease-out, transform 300ms ease-out, margin-bottom 300ms ease-in-out;
-}
 
-/* Wenn ein Bubble rausgeht */
-.animatedBubble-exit {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    margin-bottom: 20px;
-}
-.animatedBubble-exit-active {
-    opacity: 0;
-    transform: translateY(0px) scale(0.8);
-    transition: opacity 300ms linear, transform 300ms ease-in-out, margin-bottom 300ms ease-in-out;
-    margin-bottom: 0;
-}
 
-.myTypewriterText {
-}
+
+
+
+
+
+
 
 
 
@@ -1743,4 +1681,40 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-end;
+}
+
+
+
+
+/*HelpSection*/
+.helpWhiteBox {
+    background-color: white;
+    width: 90%;
+    min-height: 200px;
+    border-radius: 8px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    -moz-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    padding: 10px 0 10px 10px;
+    height: fit-content;
+}
+
+.helpContainer {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    justify-content: flex-start;
+    flex-direction: column;
+    margin-right: 35px; /*Berücksichtigt die Breite der Bubble-Indikatoren*/
+    margin-left: 35px; /*Berücksichtigt die Breite der Bubble-Indikatoren*/
+    padding-top: 10px;
+}
+
+.helpContainer > * {
+    transition: transform 300ms, opacity 300ms;
 }

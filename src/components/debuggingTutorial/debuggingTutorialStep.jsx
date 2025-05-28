@@ -49,6 +49,7 @@ import stylesHints from "../tutorial/styles/tutorial-code-quality.css";
 import ScratchBlocks from "scratchblocks-react";
 import saveTrueIcon from "./images/saveTrueIcon.png";
 import saveTrueIconWhite from "./images/autoSaveOnWhite.png";
+import {EuliBubble, UserBubble} from "./bubbles.jsx";
 
 
 const DebuggingTutorialStep = props => {
@@ -383,9 +384,13 @@ const DebuggingTutorialStep = props => {
                                 <img className={css.testBubbleIndicator} alt={"Bubble-Decal"} src={bubbleIndicatorGray}/>
                                 {getTestText()}
                             </div>
-                            {(hasCodeUpdated || (projectLoadingState === "TEST")) && <div className={`${css.helpBubble} ${(projectLoadingState !== "TEST") ? '' : css.selected}`} onClick={() => { if (projectLoadingState !== "TEST") handleTestStart()}} style={{marginBottom: "20px"}}>
+                            {/*(hasCodeUpdated || (projectLoadingState === "TEST")) && <div className={`${css.helpBubble} ${(projectLoadingState !== "TEST") ? '' : css.selected}`} onClick={() => { if (projectLoadingState !== "TEST") handleTestStart()}} style={{marginBottom: "0px"}}>
                                 <div className={css.selectionBubbleIndicator} />
                                 Ja, teste erneut!
+                            </div>*/}
+                            {(!hasCodeUpdated && testResults.passed) && <div className={css.nextBubble} onClick={() => nextStep()}>
+                                <div className={css.nextBubbleIndicator} />
+                                Weiter zum nächsten Schritt
                             </div>}
                         </div>
 
@@ -417,7 +422,7 @@ const DebuggingTutorialStep = props => {
     const getTestText = () => {
         if (projectLoadingState === "TEST") return <span>Klar doch! Warte bitte kurz, bis ich deinen Code überprüft habe</span>
 
-        if (testResults.passed) return <span>Super! Du hast alle Tests erfolgreich geschafft.<br/>Du kannst nun zum <button className={css.responseButtonAccept} style={{marginLeft: "0", marginRight: "0"}} onClick={() => nextStep()}>nächsten Level</button> gehen.</span>
+        if (testResults.passed) return <span>Super! Du hast alle Tests erfolgreich geschafft.<br/>Du kannst nun zum nächsten Level gehen.</span>
 
 
         if (curTestDetails !== "") {
@@ -777,7 +782,6 @@ const DebuggingTutorialStep = props => {
 
 
     const renderHelp = () => {
-        console.log("helpIndex: " + helpIndex)
         return (
             <div className={css.testContainer}>
                 <div className={css.arrowButtonContainer}>
@@ -790,119 +794,12 @@ const DebuggingTutorialStep = props => {
                     />
                 </div>
 
-                <div className={css.testWhiteBox} style={{marginTop: "10px", padding: "10px 0px 10px 10px", marginBottom:"10px"}}>
+                <div className={css.helpWhiteBox}>
                     <div className={css.helpContainer}>
                         <TransitionGroup component={null}>
-                            {helpIndex <= 4 && (
-                                <CSSTransition key="question" timeout={300} classNames={{
-                                    enter:       css['animatedBubble-enter'],
-                                    enterActive: css['animatedBubble-enter-active'],
-                                    exit:        css['animatedBubble-exit'],
-                                    exitActive:  css['animatedBubble-exit-active']
-                                }}>
-                                    <div className={css.helpBubbleEuli}>
-                                        <img className={css.helpBubbleEuliIndicator} alt={"Bubble-Decal"} src={bubbleIndicatorBlue}/>
-
-                                        {helpIndex === 0 ? <TypewriterText
-                                            text={"Eigene Programme zu schreiben, kann manchmal ganz schön knifflig sein.\nMöchtest du einen Tipp von mir?"}
-                                            speed={20}
-                                            className={css.myTypewriterText}
-                                            onComplete={() => setHelpIndex(1)}
-                                        /> : <span>Eigene Programme zu schreiben, kann manchmal ganz schön knifflig sein.<br/>Möchtest du einen Tipp von mir?</span>}
-                                    </div>
-                                </CSSTransition>
-                            )}
-
-
-
-                            {helpIndex >= 1 && helpIndex <= 4 && (
-                                <CSSTransition key="question_hint" timeout={500} classNames={{
-                                    enter:       css['animatedBubble-enter'],
-                                    enterActive: css['animatedBubble-enter-active'],
-                                    exit:        css['animatedBubble-exit'],
-                                    exitActive:  css['animatedBubble-exit-active']
-                                }}>
-                                    <div className={`${css.helpBubble} ${(helpType === "") ? '' : css.selected}`} onClick={() => {
-                                        if (helpType === "") {
-                                            setHelpType("HINT");
-                                            setHelpIndex(2);
-                                        }
-                                    }} style={{ transitionDelay: '200ms' }}>
-                                        <div className={css.selectionBubbleIndicator} />
-                                        <span>Ja bitte, gib mir einen Hinweis</span>
-                                    </div>
-                                </CSSTransition>
-                            )}
-                            {helpType === "HINT" && helpIndex <= 5 && (
-                                <CSSTransition key="response_hint" timeout={700}   classNames={{
-                                    enter:       css['animatedBubble-enter'],
-                                    enterActive: css['animatedBubble-enter-active'],
-                                    exit:        css['animatedBubble-exit'],
-                                    exitActive:  css['animatedBubble-exit-active']
-                                }} onEntered={() => setHelpIndex(3)}
-                                onExit={() => setHelpIndex(7)}>
-                                    <div className={css.helpBubbleEuli} style={{ transitionDelay: '400ms' }}>
-                                        <img className={css.helpBubbleEuliIndicator} alt={"Bubble-Decal"} src={bubbleIndicatorBlue}/>
-
-                                        {helpIndex === 2 ? <span>&nbsp;</span>: <span>{helpIndex === 3 ? <TypewriterText
-                                            text="Gerne! Nutze einfach folgende Blöcke:"
-                                            speed={20}
-                                            onComplete={() => setHelpIndex(4)}
-                                        /> : <span>Gerne! Nutze einfach folgende Blöcke:</span>}</span>}
-
-                                        {helpIndex === 4 && <div style={{width:"100%", display:"flex", alignItems:"center", justifyContent:"center", transform: "scale(0.8)"}}>
-                                            <ScratchBlocks
-                                                blockStyle="scratch3"
-                                                languages={['en', 'de']}
-                                            >
-                                                {tutorialMessages["step" + (step+1).toString()]["hint"]}
-                                            </ScratchBlocks>
-                                        </div>}
-                                    </div>
-                                </CSSTransition>
-                            )}
-                            {helpIndex >= 4 && (
-                                <CSSTransition key="question_solution" timeout={700}   classNames={{
-                                    enter:       css['animatedBubble-enter'],
-                                    enterActive: css['animatedBubble-enter-active'],
-                                    exit:        css['animatedBubble-exit'],
-                                    exitActive:  css['animatedBubble-exit-active']
-                                }}>
-                                    <div className={`${css.helpBubble} ${(helpType === "HINT") ? '' : css.selected}`} onClick={() => {setHelpType("SOLUTION"); setHelpIndex(5);}} style={{ transitionDelay: '400ms'}}>
-                                        <div className={css.selectionBubbleIndicator} />
-                                        Kannst du mit stattdessen die fertige Lösung zeigen?
-                                    </div>
-                                </CSSTransition>
-                            )}
-                            {helpType === "SOLUTION" && (
-                                <CSSTransition key="response_solution" timeout={1000}   classNames={{
-                                    enter:       css['animatedBubble-enter'],
-                                    enterActive: css['animatedBubble-enter-active'],
-                                    exit:        css['animatedBubble-exit'],
-                                    exitActive:  css['animatedBubble-exit-active']
-                                }} onEntered={() => setHelpIndex(8)}>
-                                    <div className={css.helpBubbleEuli} style={{ transitionDelay: '700ms'}}>
-                                        <img className={css.helpBubbleEuliIndicator} alt={"Bubble-Decal"} src={bubbleIndicatorBlue}/>
-
-                                        {helpIndex === 7 ? <span>&nbsp;</span>: <span>{helpIndex ===8 ? <TypewriterText
-                                            text="Klar! Hier die fertige Lösung:"
-                                            speed={20}
-                                            onComplete={() => setHelpIndex(9)}
-                                        /> : <span>Klar! Hier die fertige Lösung:</span>}</span>}
-
-                                        {helpIndex === 9 && <div style={{width:"100%", display:"flex", alignItems:"center", justifyContent:"center", transform: "scale(0.8)"}}>
-                                            <ScratchBlocks
-                                                blockStyle="scratch3"
-                                                languages={['en', 'de']}
-                                            >
-                                                {tutorialMessages["step" + (step+1).toString()]["solution"]}
-                                            </ScratchBlocks>
-                                        </div>}
-                                    </div>
-                                </CSSTransition>
-                            )}
+                            <EuliBubble text={"Florian, YAY"} isVisible={true} key={"aaa"} onTypewriterComplete={() => setHelpIndex(8)} isTypewriterFinished={helpIndex === 8}/>
+                            <UserBubble text={"abcdef"} isVisible={helpIndex === 8} key={"asdad"}/>
                         </TransitionGroup>
-
                     </div>
 
                     <div className={css.imageContainer}>
@@ -927,9 +824,6 @@ const DebuggingTutorialStep = props => {
                 return renderHelp();
         }
     }
-
-
-
     return renderPage();
 }
 
@@ -942,319 +836,3 @@ DebuggingTutorialStep.props = {
 
 export default DebuggingTutorialStep;
 
-
-
-
-
-
-
-/*
-
-
-const translate = (scratchBlocksText, locale) => {
-    const block = scratchblocks.parse(scratchBlocksText, {
-        languages: ['en', 'de']
-    });
-    if (locale === 'de') {
-        block.translate(scratchblocks.allLanguages.de);
-    }
-    return block.stringify();
-};
-
-const ScratchBlocksImage = props => (
-    <div className={stylesHints.scratchImage}>
-        <ScratchBlocks
-            blockStyle="scratch3"
-            languages={['en', 'de']}
-        >
-            {translate(props.scratchBlocksText, props.locale)}
-        </ScratchBlocks>
-    </div>
-);
-
-ScratchBlocksImage.propTypes = {
-    scratchBlocksText: PropTypes.string,
-    locale: PropTypes.string
-};
-
-
-
-
-
-
-
-    const generateDownloadButtons = () => {
-        return Object.keys(tutorialMessages[overviewStep])
-            .filter(key => key.startsWith("download"))
-            .map(key => {
-                return (generateDownloadButton3((key.match(/\d+$/)[0])));
-            });
-    }
-
-    const generateDownloadButton3 = (id) => {
-        const downloadTitle = tutorialMessages[overviewStep]["download" + id.toString()];
-        const downloadImg = tutorialIndexData["downloadContent" + id.toString()];
-        const isDownloaded = downloaded.includes(downloadTitle);
-
-        return (
-            <div key={id} className={`${css.downloadBox} ${isDownloaded ? css.downloadBoxFinished : ''}`}>
-                <img className={css.downloadImage}
-                     src={downloadImg} alt={"Download Preview"}/>
-                <div className={css.downloadButton} onClick={() => onDownload(downloadTitle, downloadImg)}>
-                    {isDownloaded ? "Fertig" : ("Download " + downloadTitle)}
-                </div>
-            </div>
-        );
-    }
-
-
-
-
-
-const renderCodeQuality = () => {
-        return (
-            <div className={css.cpContainer}>
-                <div className={css.whiteBoxOverview}>
-                    <div style={{width: "100%"}}>
-
-<div className={css.tabContainer}>
-    <button className={css.tabButton}
-            style={{backgroundColor: contentType === "DETAILS" ? "#4D97FFFF" : ""}} id="beschreibungTab"
-            onClick={() => setContentType("DETAILS")}>
-        <div style={{display: "flex", alignItems: "center"}}>
-            <img className={css.icon} src={iconDescription} alt={"errorIcon"}/>
-            Smells
-        </div>
-    </button>
-
-    <button className={css.tabButton}
-            style={{backgroundColor: contentType === "ERRORS" ? "#cf3b28FF" : ""}} id="fehlerTab"
-            onClick={() => setContentType("ERRORS")}>
-        <div style={{display: "flex", alignItems: "center"}}>
-            <img className={css.icon} src={iconErrors} alt={"errorIcon"}/>
-            Good
-        </div>
-    </button>
-
-</div>
-
-<div className={css.container} style={{borderColor: getBorderColor()}}>
-    {getCodeQualityContent()}
-</div>
-</div>
-</div>
-</div>
-);
-}
-
-const getCodeQualityContent = () => {
-    return(
-        <div className={css.qualityContainer}>
-            <div className={css.arrowButtonContainer}>
-                <div className={css.upArrowFill}/>
-                <img className={css.backButton}
-                     src={upButton}
-                     onClick={() => setCurPage("OVERVIEW")}
-                     alt={"Next page button"}
-                     draggable={false}
-                />
-            </div>
-
-
-            <div className={css.qualityHeader}>
-                <div className={css.qualitySpriteTitle}>
-                </div>
-                <div className={css.qualityTitle}>
-
-                </div>
-
-                <div className={css.qualityContent}>
-                    <div className={css.qualityButtonContainer}>
-                        <img className={css.qualityButton} alt={"back"}/>
-                    </div>
-                    <div className={css.qualityDescription}>
-
-                    </div>
-                    <div className={css.qualityCodeImg}>
-                        {curQualityResult !== undefined &&
-                            <ScratchBlocksImage
-                                scratchBlocksText={curQualityResult.codeSnippet}
-                                locale={props.locale}
-                            />}
-                    </div>
-                    <div className={css.qualityButtonContainer}>
-                        <img className={css.qualityButton} alt={"next"}/>
-                    </div>
-                </div>
-            </div>
-        </div>);
-}
-
-
-
-//download buttons:
-
-                                :
-                                (showDownloadsOverview && <button className={css.tabButton}
-                                        style={{backgroundColor: contentType === "DOWNLOADS" ? "#b14eea" : ""}} id="downloadTab"
-                                        onClick={() => setContentType("DOWNLOADS")}>
-                                    <div style={{display: "flex", alignItems: "center"}}>
-                                        <img className={css.icon} src={downloadIcon} alt={"downloadIcon"}/>
-                                        Downloads
-                                    </div>
-                                </button>)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                       return (
-            <div className={css.testContainer}>
-                <div className={css.arrowButtonContainer}>
-                    <div className={css.upArrowFill}/>
-                    <img className={css.backButton}
-                         src={upButton}
-                         onClick={() => setCurPage("RESPONSE")}
-                         alt={"Back"}
-                         draggable={false}
-                    />
-                </div>
-
-                <div className={css.testWhiteBox} style={{marginTop: "10px", padding: "10px 0px 10px 10px", marginBottom:"10px"}}>
-                    <div className={css.helpContainer}>
-
-<div className={css.helpBubbleEuli}>
-    <img className={css.helpBubbleEuliIndicator} alt={"Bubble-Decal"} src={bubbleIndicatorBlue}/>
-    <span>Eigene Programme zu schreiben, kann manchmal ganz schön knifflig sein.<br/>Möchtest du einen Tipp von mir?</span>
-</div>
-
-
-<TransitionGroup component={null}>
-    {helpType === 'HINT' && (
-        <CSSTransition key="hint" timeout={300}   classNames={{
-            enter:       css['animatedBubbleEnter'],
-            enterActive: css['animatedBubble-enter-active'],
-            exit:        css['animatedBubble-exit'],
-            exitActive:  css['animatedBubble-exit-active']
-        }}>
-            <div className={css.helpBubbleEuli}>
-                …dein Hint-Bubble–JSX…
-            </div>
-        </CSSTransition>
-    )}
-    {helpType === 'SOLUTION' && (
-        <CSSTransition key="solution" timeout={300}   classNames={{
-            enter:       css['animatedBubble-enter'],
-            enterActive: css['animatedBubble-enter-active'],
-            exit:        css['animatedBubble-exit'],
-            exitActive:  css['animatedBubble-exit-active']
-        }}>
-            <div className={css.helpBubbleEuli}>
-                …dein Solution-Bubble–JSX…
-            </div>
-        </CSSTransition>
-    )}
-</TransitionGroup>
-
-
-
-
-
-
-{helpType !== "SOLUTION" && <div className={`${css.helpBubble} ${(helpType === "") ? '' : css.selected}`} onClick={() => {
-    if (helpType === "") {
-        setHelpType("HINT");
-    }
-}}>
-    <div className={css.selectionBubbleIndicator} />
-    Ja bitte, gib mir einen Hinweis
-</div>}
-
-{helpType === "HINT" && <div className={css.helpBubbleEuli}>
-    <img className={css.helpBubbleEuliIndicator} alt={"Bubble-Decal"} src={bubbleIndicatorBlue}/>
-
-    <span>Klar: Nutze folgende Blöcke</span>
-    <div style={{width:"100%", display:"flex", alignItems:"center", justifyContent:"center", transform: "scale(0.8)"}}>
-        <ScratchBlocks
-            blockStyle="scratch3"
-            languages={['en', 'de']}
-        >
-            {(helpType === "SOLUTION") ? tutorialMessages["step" + (step+1).toString()]["solution"] : tutorialMessages["step" + (step+1).toString()]["hint"]}
-        </ScratchBlocks>
-    </div>
-
-</div>}
-
-
-{helpType !== "" && <div className={`${css.helpBubble} ${(helpType === "HINT") ? '' : css.selected}`} onClick={() => setHelpType("SOLUTION")}>
-    <div className={css.selectionBubbleIndicator} />
-    Kannst du mit stattdessen die fertige Lösung zeigen?
-</div>}
-
-{helpType === "SOLUTION" && <div className={css.helpBubbleEuli}>
-    <img className={css.helpBubbleEuliIndicator} alt={"Bubble-Decal"} src={bubbleIndicatorBlue}/>
-    <span>Hier die Lösung</span>
-    <div style={{width:"100%", display:"flex", alignItems:"center", justifyContent:"center", transform: "scale(0.8)"}}>
-        <ScratchBlocks
-            blockStyle="scratch3"
-            languages={['en', 'de']}
-        >
-            {(helpType === "SOLUTION") ? tutorialMessages["step" + (step+1).toString()]["solution"] : tutorialMessages["step" + (step+1).toString()]["hint"]}
-        </ScratchBlocks>
-    </div>
-</div>}
-
-</div>
-
-<div className={css.imageContainer}>
-    <img src={owl} alt={"Picture of Euli"} className={css.owlImage} draggable={false}/>
-</div>
-</div>
-</div>
-);
-
-*/
-function TypewriterText({
-                            text,
-                            speed = 50,
-                            className,
-                            onComplete = () => {}   // neuer Parameter mit Default-NOP
-                        }) {
-    const [displayed, setDisplayed] = useState('');
-
-    useEffect(() => {
-        let idx = 0;
-        setDisplayed('');
-        const timer = setInterval(() => {
-            setDisplayed(prev => prev + text[idx]);
-            idx += 1;
-            if (idx >= text.length) {
-                clearInterval(timer);
-                onComplete();         // Callback hier aufrufen
-            }
-        }, speed);
-        return () => clearInterval(timer);
-    }, [text, speed, onComplete]);  // onComplete als Dependency
-
-    return (
-        <span className={className} style={{ whiteSpace: 'pre-wrap' }}>
-      {displayed}
-    </span>
-    );
-}
