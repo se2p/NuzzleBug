@@ -50,6 +50,7 @@ import ScratchBlocks from "scratchblocks-react";
 import saveTrueIcon from "./images/saveTrueIcon.png";
 import saveTrueIconWhite from "./images/autoSaveOnWhite.png";
 import {EuliBubble, UserBubble} from "./bubbles.jsx";
+import TestResults from "./test-results.jsx";
 
 
 const DebuggingTutorialStep = props => {
@@ -96,6 +97,7 @@ const DebuggingTutorialStep = props => {
         testPageIndex,
         onIncreaseTestPageIndex,
         onDecreaseTestPageIndex,
+        guiMessages,
         ...posProps
     } = props;
 
@@ -345,228 +347,23 @@ const DebuggingTutorialStep = props => {
         );
     }
 
-
     const renderTestResults = () => {
-        let showLeftArrow = false;
-        let showRightArrow = false;
-
-        if (testResults.details) {
-            const sortedDetails = [...testResults.details];
-
-            const visibleResults = sortedDetails.filter(e => {
-                const isCurrentStep    = e.testId.charAt(4) === (step + 1).toString();
-                const passed           = e.result === "pass";
-                return isCurrentStep || !passed;
-            })
-
-            showLeftArrow = visibleResults.length >= 5 && testPageIndex > 0;
-            showRightArrow = visibleResults.length >= 5 && testPageIndex < (Math.ceil(visibleResults.length / 4) - 1);
-        }
-
-
-        return (
-            <div className={css.testContainer}>
-                <div className={css.arrowButtonContainer}>
-                    <div className={css.upArrowFill}/>
-                    <img className={css.backButton}
-                         src={upButton}
-                         onClick={() => setCurPage("RESPONSE")}
-                         alt={"Next page button"}
-                         draggable={false}
-                    />
-                </div>
-
-                <div className={css.testWhiteBoxTop}>
-
-                    <div className={css.bubbleContainer}>
-                        <div className={css.columnFlex}>
-                            <div className={css.testStartBubble}>
-                                <img className={css.testBubbleIndicator} alt={"Bubble-Decal"} src={bubbleIndicatorGray}/>
-                                {getTestText()}
-                            </div>
-                            {/*(hasCodeUpdated || (projectLoadingState === "TEST")) && <div className={`${css.helpBubble} ${(projectLoadingState !== "TEST") ? '' : css.selected}`} onClick={() => { if (projectLoadingState !== "TEST") handleTestStart()}} style={{marginBottom: "0px"}}>
-                                <div className={css.selectionBubbleIndicator} />
-                                Ja, teste erneut!
-                            </div>*/}
-                            {(!hasCodeUpdated && testResults.passed) && <div className={css.nextBubble} onClick={() => nextStep()}>
-                                <div className={css.nextBubbleIndicator} />
-                                Weiter zum nächsten Schritt
-                            </div>}
-                        </div>
-
-                        <img src={owl2} alt={"Picture of Euli"} className={css.owlImage} style={{marginBottom:"10px"}} draggable={false}/>
-                    </div>
-                </div>
-
-                <div style={{width:"100%",display:"flex", justifyContent:"center", alignItems:"center", marginTop:"30px", marginBottom:"10px"}}>
-                    <div className={css.testLeftArrow} onClick={() => onDecreaseTestPageIndex()} style={{
-                        visibility: showLeftArrow ? 'visible' : 'hidden'
-                    }}>
-                        <div className={css.nextTestIcon}/>
-                    </div>
-                    <div className={css.testWhiteBox} style={{marginTop: "0px", display:"flex", flexDirection:"column", marginBottom:"0px", padding:"0px"}}>
-                        <div className={css.testResultContainer}>
-                            {parseTestResults()}
-                        </div>
-                    </div>
-                    <div className={css.testRightArrow} onClick={() => onIncreaseTestPageIndex()} style={{
-                        visibility: showRightArrow ? 'visible' : 'hidden'
-                    }}>
-                        <div className={css.nextTestIcon} style={{transform:"ScaleX(-1)"}}/>
-                    </div>
-                </div>
-            </div>
-        );
+        return <TestResults
+            testResults={testResults}
+            step={step}
+            testPageIndex={testPageIndex}
+            setCurPage={setCurPage}
+            hasCodeUpdated={hasCodeUpdated}
+            nextStep={nextStep}
+            onDecreaseTestPageIndex={onDecreaseTestPageIndex}
+            onIncreaseTestPageIndex={onIncreaseTestPageIndex}
+            projectLoadingState={projectLoadingState}
+            curTestDetails={curTestDetails}
+            guiMessages={guiMessages}
+            setCurTestDetails={setCurTestDetails}
+            handleTestStart={handleTestStart}
+        />
     }
-
-    const getTestText = () => {
-        if (projectLoadingState === "TEST") return <span>Klar doch! Warte bitte kurz, bis ich deinen Code überprüft habe</span>
-
-        if (testResults.passed) return <span>Super! Du hast alle Tests erfolgreich geschafft.<br/>Du kannst nun zum nächsten Level gehen.</span>
-
-
-        if (curTestDetails !== "") {
-            // Finde das vom Nutzer angeklickte Testergebnis
-            const element = testResults.details.find(e => e.testId === curTestDetails);
-
-            if (element.result === "pass") {
-                return <span>Dieser Test sieht schon mal richtig gut aus.<br/>Super gemacht!</span>
-            } else {
-                return <span>In diesem Test hat sich noch ein Fehler eingeschlichen.</span>
-            } //TODO ADD response if test is from older step
-        }
-
-        if (hasCodeUpdated) return <span>Ich sehe gerade, dass sich dein Code seit dem letzten Testlauf verändert hat. Soll ich deine Änderungen überprüfen?</span>
-
-        return <span>Hier habe ich deine einzelnen Testergebnisse aufgelistet</span>;
-    }
-
-    /**
-     * Returns Euli's feedback-details containing all test results.
-     */
-    const parseTestResults = () => {
-        if (testResults.passed) return null;
-
-        // 1) Sortieren (absteigend nach Test-ID)
-        const sortedDetails = [...testResults.details]
-            .sort((a, b) => b.testId.localeCompare(a.testId));
-
-        // Anzahl Items pro Seite
-        const itemsPerPage = 4;
-
-        // Berechne den Offset für pageIndex (0 → 0–3, 1 → 4–7, …)
-        const start = testPageIndex * itemsPerPage;
-
-        // 2) Default-Filter anwenden (Nur Tests aus aktuellem Schritt + fehlgeschlagene aus letzten Schritten)
-        const filteredDetails = sortedDetails.filter(e => {
-            const isCurrentStep    = e.testId.charAt(4) === (step + 1).toString();
-            const passed           = e.result === "pass";
-            return isCurrentStep || !passed;
-        }).slice(start, start + itemsPerPage);
-
-        // 3) Im Details-Modus: Slice um das ausgewählte Element, sonst ganzes Filter-Array
-        let visibleDetails;
-
-        if (curTestDetails) {
-            // a) Index im gefilterten Array finden
-            const targetIndex = filteredDetails.findIndex(t => t.testId === curTestDetails);
-            const len         = filteredDetails.length;
-
-            if (targetIndex !== -1 && len > 0) {
-                // b) Start/End für 3-Zone berechnen
-                let start = targetIndex - 1;
-                let end   = targetIndex + 1;
-
-                if (start < 0)        { start = 0; end = Math.min(2, len - 1); }
-                if (end   > len - 1)  { end   = len - 1; start = Math.max(len - 3, 0); }
-
-                // c) slice aus dem gefilterten Array
-                visibleDetails = filteredDetails.slice(start, end + 1);
-
-            } else {
-                // Fallback: wenn curTestDetails nicht gefunden, zeige das ganze filteredDetails
-                visibleDetails = filteredDetails;
-            }
-
-        } else {
-            // kein Element ausgewählt → ganz normal alle gefilterten
-            visibleDetails = filteredDetails;
-        }
-
-        return visibleDetails.map((e, idx) => {
-            // Nummer für das UI: Original-Index in sortedDetails + 1
-            const originalIdx = sortedDetails.findIndex(t => t === e);
-
-            const isCurrentStep = e.testId.charAt(4) === (step + 1).toString();
-            const passed        = e.result === "pass";
-
-            return createTestElement(
-                passed,
-                e,
-                originalIdx + 1,
-                isCurrentStep
-            );
-        });
-    };
-
-
-    const createTestElement = (passed, e, testElementNumber, isCurrentStep) => {
-        const headerBgColor = (projectLoadingState === "TEST")
-            ? "#afd8fd"
-            : passed
-                ? "#89ddaf"
-                : "#d16857";
-
-        const iconSrc = (projectLoadingState === "TEST")
-            ? testRunning
-            : passed
-                ? testSuccess
-                : testFailed;
-
-        const headerText = (projectLoadingState === "TEST")
-            ? "Lädt…"
-            : passed
-                ? "Bestanden"
-                : "Gescheitert";
-
-        const buttonStyle = (projectLoadingState === "TEST")
-            ? css.testElementButton
-            : passed
-                ? css.testElementButtonPassed
-                : css.testElementButtonFailed;
-
-
-        if (curTestDetails === e.testId) {
-            return (
-                <div key={e.testId} className={css.testElementContainer} style={{width:"450px"}}>
-                    <div className={css.testElementHeader} style={{backgroundColor: headerBgColor, height:"60px"}}>
-                        <div className={css.testElementTitleExtended}>
-                            <img src={iconSrc} style={{width: "43px", marginRight: "10px"}} className={css.testElementIcon} alt={"ResultIcon"}/>
-                            {headerText}
-                        </div>
-                    </div>
-                    <span className={css.testElementTitle}>{e.test}</span>
-                    <p className={css.testElementText}>{e.testDescription}</p>
-                    <div className={buttonStyle} onClick={() => setCurTestDetails("")}>
-                        Schließen
-                    </div>
-                </div>);
-        }
-
-        return (
-            <div key={e.testId} className={css.testElementContainer} onClick={() => setCurTestDetails(e.testId)}>
-                <div className={css.testElementHeader} style={{backgroundColor: headerBgColor}}>
-                    <img src={iconSrc} className={css.testElementIcon} alt={"ResultIcon"}/>
-                    {headerText}
-                </div>
-                <span className={css.testElementTitle}>{e.test}</span>
-                <div className={buttonStyle}>
-                    Details
-                </div>
-            </div>
-        );
-    }
-
 
     const handleTestStart = () => {
         setResponseType(RESPONSE_TESTING);
@@ -765,7 +562,7 @@ const DebuggingTutorialStep = props => {
 
     /**
      * Returns true, if the user has created more errors, which lead to at least one additional testcase to fail.
-     */
+     */ //TODO DELETE?
     const checkUserMadeErrors = function () {
         let userMadeError = false;
         if (testResults === null || testResults.details === undefined) return false;

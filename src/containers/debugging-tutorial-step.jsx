@@ -97,9 +97,10 @@ class DebuggingTutorialStep extends React.Component {
                 );
 
                 const promises = keys.map(async (key) => {
+                    const costumeKey = key.split('_')[1].toLowerCase();
+                    console.log("ZZZZZ: " + costumeKey + " , " + "step" + (this.props.step + 2).toString());
                     const costume = this.props.tutorialIndexData[key];
-                    console.log("adding: " + key.toString());
-                    await this.addSprite(costume, "Schiff1", 50);
+                    await this.addSprite(costume, this.props.tutorialMessages["step" + (this.props.step + 2).toString()][costumeKey]["name"], this.props.tutorialMessages["step" + (this.props.step + 2).toString()][costumeKey]["size"]);
                 });
 
                 // Warte auf alle .addSprite() Aufrufe
@@ -242,7 +243,6 @@ class DebuggingTutorialStep extends React.Component {
 
 
     componentDidMount() {
-        //this.requestHints();
         if (this.props.lastTutorial === null) {
             this.props.setLastTutorial(JSON.stringify(this.props.tutorialMessages));
         } else {
@@ -256,7 +256,6 @@ class DebuggingTutorialStep extends React.Component {
             this.checkForCodeUpdate();
         }, 1000);
         console.log("Started updating!");
-
     }
 
     componentWillUnmount() {
@@ -366,6 +365,7 @@ DebuggingTutorialStep.propTypes = {
     hasCodeUpdated: PropTypes.bool,
     setTestPageIndex: PropTypes.func,
     testPageIndex: PropTypes.number,
+    guiMessages: PropTypes.any,
 };
 
 const mapStateToProps = state => ({

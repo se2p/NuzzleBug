@@ -60,4 +60,15 @@ export default {
         auto_save_response_no: "Gut, ich werde deinen Code überschreiben!\nKlicke unten auf den blauen Knopf um zu starten.",
         start_tutorial: "Starte das Tutorial"
     },
+
+    test_results: {
+        response: {
+            loading: "Klar doch! Warte bitte kurz, bis ich deinen Code überprüft habe",
+            passed_all: "Super! Du hast alle Tests erfolgreich geschafft.\nDu kannst nun zum nächsten Level gehen.",
+            test_passed: "Dieser Test sieht schon mal richtig gut aus.\nSuper gemacht!",
+            test_failed: "In diesem Test hat sich noch ein Fehler eingeschlichen.",
+            code_changed: "Ich sehe gerade, dass sich dein Code seit dem letzten Testlauf verändert hat. Soll ich deine Änderungen überprüfen?",
+            default: "Hier habe ich deine einzelnen Testergebnisse aufgelistet"
+        }
+    },
 };

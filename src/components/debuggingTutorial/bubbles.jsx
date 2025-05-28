@@ -131,7 +131,7 @@ function TypewriterText({
         }, speed);
 
         return () => clearInterval(timer);
-    }, []); // ❗ wichtig: nur beim ersten Mount starten
+    }, []);
 
     return (
         <span className={className} style={{ whiteSpace: 'pre-wrap' }}>

@@ -57,6 +57,17 @@ export default {
         start_tutorial: "Beginn the tutorial",
     },
 
+    test_results: {
+        response: {
+            loading: "Sure! Please wait a moment while I check your code.",
+            passed_all: "Great job! You passed all the tests.\nYou can now move on to the next level.",
+            test_passed: "This test looks really good.\nWell done!",
+            test_failed: "There’s still a small mistake in this test.",
+            code_changed: "Looks like you’ve changed your code since the last test. Want me to check it again?",
+            default: "Here’s a list of your individual test results."
+        }
+    },
+
     step_overview: {
         description: "",
         error: "",
