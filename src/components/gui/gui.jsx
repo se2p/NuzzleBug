@@ -5,7 +5,7 @@ import React from 'react';
 import {defineMessages, FormattedMessage, injectIntl, intlShape} from 'react-intl';
 import {connect} from 'react-redux';
 import MediaQuery from 'react-responsive';
-import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
+import {Tab, TabList, TabPanel, Tabs} from 'react-tabs';
 import tabStyles from 'react-tabs/style/react-tabs.css';
 import VM from 'scratch-vm';
 import Renderer from 'scratch-render';
@@ -52,6 +52,8 @@ import costumesIcon from './icon--costumes.svg';
 import soundsIcon from './icon--sounds.svg';
 import testsIcon from '../block-based-testing/icons/rules-icon.svg';
 
+import HintsExplanationCard from '../hint-gen/hints-explanation-card.jsx';
+
 const messages = defineMessages({
     addExtension: {
         id: 'gui.gui.addExtension',
@@ -82,6 +84,7 @@ const GUIComponent = props => {
         bbtCoordinatesTooltipVisible,
         blocksTabVisible,
         cardsVisible,
+        hintsExplanationCardVisible,
         debuggingTutorialVisible, //TODO Added the show debuggingProp
         irCardsVisible,
         irDebuggerVisible,
@@ -174,7 +177,7 @@ const GUIComponent = props => {
                 vm={vm}
             >
                 {alertsVisible ? (
-                    <Alerts className={styles.alertsContainer} />
+                    <Alerts className={styles.alertsContainer}/>
                 ) : null}
             </StageWrapper>
         ) : (
@@ -195,19 +198,19 @@ const GUIComponent = props => {
                     />
                 ) : null}
                 {loading ? (
-                    <Loader />
+                    <Loader/>
                 ) : null}
                 {isCreating ? (
-                    <Loader messageId="gui.loader.creating" />
+                    <Loader messageId="gui.loader.creating"/>
                 ) : null}
                 {isRendererSupported ? null : (
-                    <WebGlModal isRtl={isRtl} />
+                    <WebGlModal isRtl={isRtl}/>
                 )}
                 {tipsLibraryVisible ? (
-                    <TipsLibrary />
+                    <TipsLibrary/>
                 ) : null}
                 {cardsVisible ? (
-                    <Cards />
+                    <Cards/>
                 ) : null}
                 {irCardsVisible ? (
                     <IRCards
@@ -242,9 +245,12 @@ const GUIComponent = props => {
                         vm={vm}
                     />
                 ) : null}
+                {hintsExplanationCardVisible ? (
+                    <HintsExplanationCard/>
+                ) : null}
 
                 {alertsVisible ? (
-                    <Alerts className={styles.alertsContainer} />
+                    <Alerts className={styles.alertsContainer}/>
                 ) : null}
                 {connectionModalVisible ? (
                     <ConnectionModal
@@ -308,6 +314,43 @@ const GUIComponent = props => {
                                 selectedTabPanelClassName={tabClassNames.tabPanelSelected}
                                 onSelect={onActivateTab}
                             >
+                                <TabList className={tabClassNames.tabList}>
+                                    <Tab className={tabClassNames.tab}>
+                                        <img
+                                            draggable={false}
+                                            src={codeIcon}
+                                        />
+                                        <FormattedMessage
+                                            defaultMessage="Code"
+                                            description="Button to get to the code panel"
+                                            id="gui.gui.codeTab"
+                                        />
+                                    </Tab>
+                                    <Tab
+                                        className={tabClassNames.tab}
+                                        onClick={onActivateCostumesTab}
+                                    >
+                                        <img
+                                            draggable={false}
+                                            src={costumesIcon}
+                                        />
+                                        <CostumeTabTitle/>
+                                    </Tab>
+                                    <Tab
+                                        className={tabClassNames.tab}
+                                        onClick={onActivateSoundsTab}
+                                    >
+                                        <img
+                                            draggable={false}
+                                            src={soundsIcon}
+                                        />
+                                        <FormattedMessage
+                                            defaultMessage="Sounds"
+                                            description="Button to get to the sounds panel"
+                                            id="gui.gui.soundsTab"
+                                        />
+                                    </Tab>
+                                </TabList>
                                 <div className={styles.tabListWrapper}>
                                     <TabList className={tabClassNames.tabList}>
                                         <Tab className={tabClassNames.tab}>
@@ -399,18 +442,18 @@ const GUIComponent = props => {
                                         </button>
                                     </Box>
                                     <Box className={styles.watermark}>
-                                        <Watermark />
+                                        <Watermark/>
                                     </Box>
                                 </TabPanel>
                                 <TabPanel className={tabClassNames.tabPanel}>
-                                    {costumesTabVisible ? <CostumeTab vm={vm} /> : null}
+                                    {costumesTabVisible ? <CostumeTab vm={vm}/> : null}
                                 </TabPanel>
                                 <TabPanel className={tabClassNames.tabPanel}>
-                                    {soundsTabVisible ? <SoundTab vm={vm} /> : null}
+                                    {soundsTabVisible ? <SoundTab vm={vm}/> : null}
                                 </TabPanel>
                             </Tabs>
                             {backpackVisible ? (
-                                <Backpack host={backpackHost} />
+                                <Backpack host={backpackHost}/>
                             ) : null}
                         </Box>
 
@@ -435,7 +478,7 @@ const GUIComponent = props => {
                         </Box>
                     </Box>
                 </Box>
-                <DragLayer />
+                <DragLayer/>
             </Box>
         );
     }}</MediaQuery>);
@@ -466,6 +509,7 @@ GUIComponent.propTypes = {
     canShare: PropTypes.bool,
     canUseCloud: PropTypes.bool,
     cardsVisible: PropTypes.bool,
+    hintsExplanationCardVisible: PropTypes.bool,
     irCardsVisible: PropTypes.bool,
     irDebuggerVisible: PropTypes.bool,
     helpMenuVisible: PropTypes.bool,

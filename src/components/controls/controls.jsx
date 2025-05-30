@@ -17,6 +17,7 @@ import ToggleTracing, {TracingState} from '../toggle-tracing/toggle-tracing.jsx'
 import Tutorial from '../tutorial-button/tutorial-button.jsx';
 
 import styles from './controls.css';
+import RequestHintButton from '../hint-gen/request-button.jsx';
 
 const messages = defineMessages({
     goTitle: {
@@ -156,7 +157,7 @@ const Controls = function (props) {
                 title={intl.formatMessage(messages.stopTitle)}
                 onClick={onStopAllClick}
             />
-
+            <RequestHintButton />
             {turbo ? (
                 <TurboMode />
             ) : null}
