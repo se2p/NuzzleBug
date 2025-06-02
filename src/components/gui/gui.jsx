@@ -314,43 +314,6 @@ const GUIComponent = props => {
                                 selectedTabPanelClassName={tabClassNames.tabPanelSelected}
                                 onSelect={onActivateTab}
                             >
-                                <TabList className={tabClassNames.tabList}>
-                                    <Tab className={tabClassNames.tab}>
-                                        <img
-                                            draggable={false}
-                                            src={codeIcon}
-                                        />
-                                        <FormattedMessage
-                                            defaultMessage="Code"
-                                            description="Button to get to the code panel"
-                                            id="gui.gui.codeTab"
-                                        />
-                                    </Tab>
-                                    <Tab
-                                        className={tabClassNames.tab}
-                                        onClick={onActivateCostumesTab}
-                                    >
-                                        <img
-                                            draggable={false}
-                                            src={costumesIcon}
-                                        />
-                                        <CostumeTabTitle/>
-                                    </Tab>
-                                    <Tab
-                                        className={tabClassNames.tab}
-                                        onClick={onActivateSoundsTab}
-                                    >
-                                        <img
-                                            draggable={false}
-                                            src={soundsIcon}
-                                        />
-                                        <FormattedMessage
-                                            defaultMessage="Sounds"
-                                            description="Button to get to the sounds panel"
-                                            id="gui.gui.soundsTab"
-                                        />
-                                    </Tab>
-                                </TabList>
                                 <div className={styles.tabListWrapper}>
                                     <TabList className={tabClassNames.tabList}>
                                         <Tab className={tabClassNames.tab}>
