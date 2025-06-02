@@ -127,16 +127,13 @@
 }
 
 .WhiteBoxBottom {
-    background-color: white;
+
     width: 90%;
     min-height: 200px;
     border-radius: 8px;
     display: flex;
     justify-content: flex-start;
     box-sizing: border-box;
-    box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
-    -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
-    -moz-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
     padding: 10px;
     height: fit-content;
 }
@@ -225,32 +222,107 @@
 
 
 /*Test element*/
+.buttonWrapper {
+    padding: 10px;
+    margin-top: auto;
+    margin-right: 0;
+    margin-left: 0;
+    margin-bottom: 0;
+    display: inline-block;
+    width: 100%;
+}
+
 .testElementButtonFailed {
     border-radius: 30px;
     border: 3px #D16857FF solid;
     padding-top: 5px;
     padding-bottom: 5px;
     color: #575E75FF;
-    margin: auto 10px 10px;
+    cursor: pointer;
+
+    background-color: white;
+    box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
 }
 
-.testElementButtonFailed:hover {
+.buttonWrapper:hover .testElementButtonFailed {
     color: white;
     background-color: #D16857FF;
+
+    letter-spacing: 3px;
+    box-shadow: rgba(0, 0, 0, 0.53) 0px 7px 10px 0px;
+    transform: translateY(-5px);
+}
+
+.buttonWrapper:hover .testElementButtonFailed:active  {
+    color: white;
+    background-color: #D16857FF;
+    transform: translateY(0);
+    letter-spacing: 3px;
+    box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+}
+
+
+.testElementButtonHelp {
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+    border: 3px #4D97FFFF solid;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color: #575E75FF;
+    cursor: pointer;
+    background-color: white;
+    box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+}
+
+.buttonWrapper:hover .testElementButtonHelp {
+    color: white;
+    background-color: #4D97FFFF;
+
+    letter-spacing: 3px;
+    box-shadow: rgba(0, 0, 0, 0.53) 0px 7px 10px 0px;
+    transform: translateY(-5px);
+}
+
+.buttonWrapper:hover .testElementButtonHelp:active  {
+    color: white;
+    background-color: #4D97FFFF;
+    transform: translateY(0);
+    letter-spacing: 3px;
+    box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
 }
 
 .testElementButtonPassed {
     border-radius: 30px;
-    border: 3px #89DDAFFF solid;
+    border: 3px #89DDAFFF  solid;
     padding-top: 5px;
     padding-bottom: 5px;
     color: #575E75FF;
-    margin: auto 10px 10px;
+    cursor: pointer;
+    background-color: white;
+    box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
 }
 
-.testElementButtonPassed:hover {
+.buttonWrapper:hover .testElementButtonPassed {
     color: white;
     background-color: #89DDAFFF;
+
+    letter-spacing: 3px;
+    box-shadow: rgba(0, 0, 0, 0.53) 0px 7px 10px 0px;
+    transform: translateY(-5px);
+}
+
+.buttonWrapper:hover .testElementButtonPassed:active  {
+    color: white;
+    background-color: #89DDAFFF;
+    transform: translateY(0);
+    letter-spacing: 3px;
+    box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
 }
 
 .testElementButton {
@@ -259,12 +331,39 @@
     padding-top: 5px;
     padding-bottom: 5px;
     color: #575E75FF;
-    margin: auto 10px 10px;
+    cursor: pointer;
+    background-color: white;
+    box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
 }
 
-.testElementButton:hover {
+.buttonWrapper:hover .testElementButton {
     color: white;
     background-color: #AFD8FDFF;
+
+    letter-spacing: 3px;
+    box-shadow: rgba(0, 0, 0, 0.53) 0px 7px 10px 0px;
+    transform: translateY(-5px);
+}
+
+.buttonWrapper:hover .testElementButton:active  {
+    color: white;
+    background-color: #AFD8FDFF;
+    transform: translateY(0);
+    letter-spacing: 3px;
+    box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+}
+
+
+
+
+
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
 
 .testElementContainer {
@@ -273,7 +372,6 @@
     height: fit-content;
 
     border-radius: 10px;
-
     box-shadow: 0px 8px 13px 0px rgba(0,0,0,0.63);
     -webkit-box-shadow: 0px 8px 13px 0px rgba(0,0,0,0.63);
     -moz-box-shadow: 0px 8px 13px 0px rgba(0,0,0,0.63);
@@ -302,6 +400,8 @@
 
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
     background-color: #65d21b;
     display: flex;
     flex-direction: column;

@@ -1,5 +1,5 @@
 import css from "./test-results.css"
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 import owl from "./images/OwlBranchRight.png"
 import owlDown from "./images/owlDown.png"
@@ -29,8 +29,8 @@ const TestResults = ({
     const { showLeftArrow, showRightArrow } = getPaginationInfo(testResults, step, testPageIndex);
     const showNextStepButton = !hasCodeUpdated && testResults.passed;
 
-    return (
-        <div className={css.container}>
+
+    /*
             <div className={css.arrowButtonContainer}>
                 <div className={css.upArrowFill}/>
                 <img className={css.backButton}
@@ -40,7 +40,10 @@ const TestResults = ({
                      draggable={false}
                 />
             </div>
+*/
 
+    return (
+        <div className={css.container}>
             <div className={css.whiteBoxTop}>
                 <div className={css.bubbleContainer}>
                     <div className={css.columnFlex}>
@@ -48,16 +51,7 @@ const TestResults = ({
                             <img className={css.bubbleIndicator} alt="Bubble-Decal" src={bubbleIndicatorGray}/>
                             {getTestText({ projectLoadingState, testResults, curTestDetails, hasCodeUpdated, guiMessages })}
                         </div>
-                        {(hasCodeUpdated || (projectLoadingState === "TEST")) && <div className={`${css.helpBubble} ${(projectLoadingState !== "TEST") ? '' : css.selected}`} onClick={() => { if (projectLoadingState !== "TEST") handleTestStart()}} style={{marginBottom: "0px"}}>
-                                <div className={css.selectionBubbleIndicator} />
-                                Ja, teste erneut!
-                            </div>}
-                        {showNextStepButton && (
-                            <div className={css.nextBubble} onClick={nextStep}>
-                                <div className={css.nextBubbleIndicator} />
-                                Weiter zum nächsten Schritt
-                            </div>
-                        )}
+                        {renderResponse({hasCodeUpdated, projectLoadingState, curTestDetails, nextStep, showNextStepButton, testResults, handleTestStart})}
                     </div>
                     <img src={curTestDetails === "" ? owl : owlDown} alt="Picture of Euli" className={css.owlImage} draggable={false}/>
                 </div>
@@ -106,6 +100,27 @@ const getTestText = ({ projectLoadingState, testResults, curTestDetails, hasCode
     return <span>{msg.default}</span>;
 };
 
+/**
+ * The answer-bubbles, the user can select to answer eulis questions. (e.g. next step)
+ */
+const renderResponse = ({hasCodeUpdated, projectLoadingState, curTestDetails, nextStep, showNextStepButton, testResults, handleTestStart}) => {
+    if (hasCodeUpdated || (projectLoadingState === "TEST")) {
+        return (
+            <div className={`${css.helpBubble} ${(projectLoadingState !== "TEST") ? '' : css.selected}`} onClick={() => { if (projectLoadingState !== "TEST") handleTestStart()}} style={{marginBottom: "0px"}}>
+                <div className={css.selectionBubbleIndicator} />
+                Ja, teste erneut!
+            </div>
+        );
+    }
+    if (showNextStepButton) {
+        return (
+            <div className={css.nextBubble} onClick={nextStep}>
+                <div className={css.nextBubbleIndicator} />
+                Weiter zum nächsten Schritt
+            </div>
+        );
+    }
+}
 
 /**
  * Returns Euli's feedback-details containing all test results.
@@ -192,11 +207,7 @@ const createTestElement = (passed, e, testElementNumber, isCurrentStep, projectL
             ? testSuccess
             : testFailed;
 
-    const headerText = (projectLoadingState === "TEST")
-        ? "Lädt…"
-        : passed
-            ? "Bestanden"
-            : "Gescheitert";
+    const headerText = passed ? "Bestanden" : "Gescheitert";
 
     const buttonStyle = (projectLoadingState === "TEST")
         ? css.testElementButton
@@ -211,26 +222,45 @@ const createTestElement = (passed, e, testElementNumber, isCurrentStep, projectL
                 <div className={css.testElementHeader} style={{backgroundColor: headerBgColor, height:"60px"}}>
                     <div className={css.testElementTitleExtended}>
                         <img src={iconSrc} style={{width: "43px", marginRight: "10px"}} className={css.testElementIcon} alt={"ResultIcon"} draggable={false}/>
-                        {headerText}
+                        {(projectLoadingState === "TEST") ? <TypewriterText text={"Lädt..."}/> : <span>{headerText}</span>}
                     </div>
                 </div>
                 <span className={css.testElementTitle}>{e.test}</span>
-                <p className={css.testElementText}>{e.testDescription}</p>
-                <div className={buttonStyle} onClick={() => setCurTestDetails("")}>
-                    Schließen
-                </div>
+                <p className={css.testElementText} key={e.testId}>{e.testDescription}</p>
+                {passed ?
+                    <div className={css.buttonWrapper}>
+                        <div className={buttonStyle} onClick={() => setCurTestDetails("")}>
+                            Schließen
+                        </div>
+                    </div>
+                    :
+                    <div className={css.buttonContainer}>
+                        <div className={css.buttonWrapper} style={{paddingRight:"5px"}}>
+                            <div className={buttonStyle} style={{borderBottomRightRadius:"0px", borderTopRightRadius:"0px"}} onClick={() => setCurTestDetails("")}>
+                                Schließen
+                            </div>
+                        </div>
+                        <div className={css.buttonWrapper} style={{paddingLeft:"5px"}}>
+                            <div className={css.testElementButtonHelp} onClick={() => setCurTestDetails("")}>
+                                Hilfe
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>);
     }
 
     return (
-        <div key={e.testId} className={css.testElementContainer} onClick={() => setCurTestDetails(e.testId)}>
+        <div key={e.testId} className={css.testElementContainer}>
             <div className={css.testElementHeader} style={{backgroundColor: headerBgColor}}>
                 <img src={iconSrc} className={css.testElementIcon} alt={"ResultIcon"} draggable={false}/>
-                {headerText}
+                {(projectLoadingState === "TEST") ? <TypewriterText text={"Lädt..."}/> : <span>{headerText}</span>}
             </div>
             <span className={css.testElementTitle}>{e.test}</span>
-            <div className={buttonStyle}>
-                Details
+            <div className={css.buttonWrapper}>
+                <div className={buttonStyle} onClick={() => setCurTestDetails(e.testId)}>
+                    Details
+                </div>
             </div>
         </div>
     );
@@ -263,3 +293,48 @@ const getPaginationInfo = (testResults, step, testPageIndex) => {
 
 
 export default TestResults;
+
+
+
+
+/**
+ * Animiert den Text, indem er ähnlich zu einer Schreibmaschine Buchstabe für Buchstabe des Textes ergänzt.
+ */
+function TypewriterText({
+                            text,
+                            speed = 40,
+                            pauseAfterComplete = 40,
+                            className = '',
+                        }) {
+    const [displayed, setDisplayed] = useState('');
+    const idxRef = useRef(0);
+    const timerRef = useRef(null);
+
+    useEffect(() => {
+        function startTyping() {
+            setDisplayed('\u00A0');
+            idxRef.current = 0;
+
+            timerRef.current = setInterval(() => {
+                idxRef.current += 1;
+                setDisplayed(text.substring(0, idxRef.current));
+
+                if (idxRef.current >= text.length) {
+                    clearInterval(timerRef.current);
+                    setTimeout(startTyping, pauseAfterComplete);
+                }
+            }, speed);
+        }
+
+        startTyping();
+
+        return () => clearInterval(timerRef.current);
+    }, [text, speed, pauseAfterComplete]);
+
+    return (
+        <span className={className} style={{ whiteSpace: 'pre-wrap' }}>
+            {displayed}
+        </span>
+    );
+}
+
