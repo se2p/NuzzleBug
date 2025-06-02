@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useRef, useState} from "react";
 import PropTypes from 'prop-types';
 import {injectIntl} from "react-intl";
 import css from "./tutorial-selection.css"
@@ -33,18 +33,18 @@ const TutorialSelection = ({tutorials, onSelectTutorial, guiMessages}) => {
 
         <div className={css.tabContainer}>
             {showingHelp === "" && <button className={css.tabButton}
-                    id="classicTab"
-                    style={{backgroundColor:showDebuggingTutorials ? "#575e75" : "#4c97ff"}}
-                    onClick={() => showDebuggingTutorial(false)}>
+                                           id="classicTab"
+                                           style={{backgroundColor:showDebuggingTutorials ? "#575e75" : "#4c97ff"}}
+                                           onClick={() => showDebuggingTutorial(false)}>
                 <div style={{display: "flex", alignItems: "center"}}>
                     <img className={css.icon} src={iconDescription} alt={"errorIcon"}/>
                     {guiMessages.selection.coding}
                 </div>
             </button>}
             {showingHelp === "" && <button className={css.tabButton}
-                    id="debuggingTab"
-                    style={{backgroundColor:showDebuggingTutorials ? "#70a45b" : "#575E75FF"}}
-                    onClick={() => showDebuggingTutorial(true)}>
+                                           id="debuggingTab"
+                                           style={{backgroundColor:showDebuggingTutorials ? "#70a45b" : "#575E75FF"}}
+                                           onClick={() => showDebuggingTutorial(true)}>
                 <div style={{display: "flex", alignItems: "center"}}>
                     <img className={css.icon} src={iconDebugging} alt={"errorIcon"}/>
                     {guiMessages.selection.debugging}
@@ -57,7 +57,7 @@ const TutorialSelection = ({tutorials, onSelectTutorial, guiMessages}) => {
                 display: "flex",
                 paddingRight: "0",
                 paddingLeft: "0",
-            }),
+            }), borderColor: showingHelp ? "#575E75FF" : showDebuggingTutorials ? "#70a45b" : "#4c97ff"
         }}>
 
             {renderTutorialCards(tutorials, onSelectTutorial, showingHelp, setHelp, showDebuggingTutorials, guiMessages)}
@@ -91,21 +91,26 @@ const renderTutorialCards = (tutorials, onSelectTutorial, showingHelp, setHelp, 
             </div>
         );
     } else {
-        return tutorials.filter(tutorial => {
-            if (showDebuggingTutorials) {
-                return tutorial.isDebuggingTutorial === true;
-            } else {
-                return tutorial.isDebuggingTutorial !== true;
-            }
-        }).map((tutorial) => (
-            <TutorialItem
-                isDebuggingTutorial={tutorial.isDebuggingTutorial}
-                key={tutorial.id}
-                content={tutorial}
-                onSelect={onSelectTutorial}
-                guiMessages={guiMessages}
-            />
-        ));
+        const filteredTutorials = tutorials
+            .filter(tutorial =>
+                showDebuggingTutorials
+                    ? tutorial.isDebuggingTutorial === true
+                    : tutorial.isDebuggingTutorial !== true
+            );
+
+        return (
+            filteredTutorials.map((tutorial, index) => {
+                return (
+                    <TutorialItem
+                        key={tutorial.id + index}
+                        isDebuggingTutorial={tutorial.isDebuggingTutorial}
+                        content={tutorial}
+                        onSelect={onSelectTutorial}
+                        guiMessages={guiMessages}
+                    />
+                );
+            })
+        );
     }
 }
 
@@ -115,6 +120,3 @@ TutorialSelection.propTypes = {
 };
 
 export default injectIntl(TutorialSelection);
-
-
-
