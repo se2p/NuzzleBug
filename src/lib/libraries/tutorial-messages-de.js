@@ -58,7 +58,8 @@ export default {
         auto_save_answer_no: "Nein, du kannst meinen Code löschen",
         auto_save_response_yes: "Alles Klar, ich werde deinen Code für dich speichern!\nKlicke unten auf den blauen Knopf um zu starten.",
         auto_save_response_no: "Gut, ich werde deinen Code überschreiben!\nKlicke unten auf den blauen Knopf um zu starten.",
-        start_tutorial: "Starte das Tutorial"
+        start_tutorial: "Starte das Tutorial",
+        next: "Weiter",
     },
 
     test_results: {
@@ -68,7 +69,15 @@ export default {
             test_passed: "Dieser Test sieht schon mal richtig gut aus.\nSuper gemacht!",
             test_failed: "In diesem Test hat sich noch ein Fehler eingeschlichen.",
             code_changed: "Ich sehe gerade, dass sich dein Code seit dem letzten Testlauf verändert hat. Soll ich deine Änderungen überprüfen?",
-            default: "Hier habe ich deine einzelnen Testergebnisse aufgelistet"
-        }
+            default: "Hier habe ich deine einzelnen Testergebnisse aufgelistet. Im Moment hast du noch nicht alle bestanden."
+        },
+        details_button: "Details",
+        help_button: "Hilfe",
+        close_button: "Schließen",
+        failed: "Gescheitert",
+        passed: "Bestanden",
+        loading: "Lade...",
+        test_again: "Ja, teste erneut!",
+        next_step: "Zum nächsten Schritt",
     },
 };

@@ -55,6 +55,7 @@ export default {
         auto_save_response_yes: "Alright, I’ll save your code for you!\nClick the blue button below to get started.",
         auto_save_response_no: "Okay, I’ll overwrite your code!\nClick the blue button below to get started.",
         start_tutorial: "Beginn the tutorial",
+        next: "Continue",
     },
 
     test_results: {
@@ -64,8 +65,16 @@ export default {
             test_passed: "This test looks really good.\nWell done!",
             test_failed: "There’s still a small mistake in this test.",
             code_changed: "Looks like you’ve changed your code since the last test. Want me to check it again?",
-            default: "Here’s a list of your individual test results."
-        }
+            default: "Here’s a list of your individual test results. Currently not all have been passed."
+        },
+        details_button: "Details",
+        help_button: "Help",
+        close_button: "Close",
+        failed: "Failed",
+        passed: "Passed",
+        loading: "Loading...",
+        test_again: "Test again",
+        next_step: "Go to next step",
     },
 
     step_overview: {
