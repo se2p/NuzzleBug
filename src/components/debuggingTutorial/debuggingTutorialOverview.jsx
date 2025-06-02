@@ -15,6 +15,7 @@ import difficulty2 from "./images/difficultyIconMedium.png"
 import difficulty3 from "./images/difficultyIconHard.png"
 
 import {CONTENT_START_TUTORIAL, CONTENT_DESCRIPTION} from "./tutorial-constants.jsx";
+import rightArrow from "../cards/icon--next.svg";
 
 const difficultyImages = {
     1: difficulty1,
@@ -64,7 +65,7 @@ const DebuggingTutorialOverview = props => {
                                 </div>
                                 <div style={{display: "flex"}}>
                                     <span>{guiMessages.overview.difficulty}</span>
-                                    <img className={css.difficultyIcon} src={difficultyImages[tutorialIndexData.difficulty]} alt={"difficultyIcon"}/>
+                                    <img className={css.difficultyIcon} src={difficultyImages[tutorialIndexData.difficulty]} alt={"difficultyIcon"} draggable={false}/>
                                 </div>
                             </div>
                         </div>
@@ -115,12 +116,18 @@ const DebuggingTutorialOverview = props => {
         if (contentType1 === CONTENT_DESCRIPTION) {
             return (
                 <div className={css.buttonContainer}>
-                    <a href="#" className={`${css.effect} ${css["effect-1"]}`}
-                       onClick={() => { console.log("LOGGG" + isNewTutorialSelected + ", " + isProjectEmpty); if (isNewTutorialSelected && !isProjectEmpty) {openAutoSaveSelection()} else {onStart()}}} // || !isNewTutorialSelected
+                    <div className={css.rightCard}></div>
+                    <div
+                        className={css.rightButton}
+                        onClick={() => { if (isNewTutorialSelected && !isProjectEmpty) {openAutoSaveSelection()} else {onStart()}}} //TODO || !isNewTutorialSelected
                     >
-                        {guiMessages.overview.nextButton}
-                        <img src={arrowNext} alt="Icon" className={css.buttonIcon}/>
-                    </a>
+                        <span>{guiMessages.overview.next}</span>
+                        <img
+                            draggable={false}
+                            src={rightArrow}
+                            alt="Arrow pointing right"
+                        />
+                    </div>
                 </div>
             );
         } else {

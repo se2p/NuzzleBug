@@ -335,19 +335,16 @@
 .details-area {
     display: flex;
     flex-direction: column;
-    background-color: #EEEEEEFF;
     width: 100%;
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
-    padding-top: 13px;
     text-align: left;
-    padding-left: 5px;
+    justify-content: flex-start;
+    padding: 5px;
     font-size: 0.8rem;
     color: #3a4964;
-    padding-bottom: 3px;
     border: none;
     position: relative;
-    top: -10px;
 }
 
 .start-container {
@@ -416,7 +413,7 @@
     height: fit-content;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
     border-radius: 10px;
-    background-color: #eeeeee;
+    background-color: #ffffff;
     margin-right: 2px;
 }
 
@@ -474,6 +471,7 @@
     margin-bottom: 10px;
     width: 100%;
     min-height: 50px;
+    position: relative;
 }
 
 /* Jede Spalte nimmt gleich viel Platz ein */
@@ -658,4 +656,79 @@
     flex-direction: column;
     margin-right: 35px; /*Account for the length of the bubble-indicators*/
     margin-left: 35px; /*Account for the length of the bubble-indicators*/
+}
+
+
+
+
+
+
+
+
+
+
+/*Next Button*/
+.right-card {
+    height: 90%;
+    position: absolute;
+    top: 5%;
+    background: white;
+    border: 1px solid lightgray;
+    width: 0.75rem;
+    z-index: 10;
+    opacity: 0.9;
+    overflow: hidden;
+    right: -0.75rem;
+    border-left: 0;
+    border-top-right-radius: 0.75rem;
+    border-bottom-right-radius: 0.75rem;
+}
+
+
+
+.right-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #4c97ff;
+    box-shadow: 0 0 0 4px rgba(76, 151, 255, 0.25);
+    height: 44px;
+    width: 44px;
+    border-radius: 50px;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.25s ease;
+    position: relative;
+}
+
+.right-button:hover {
+    box-shadow: 0 0 0 4px rgba(76, 151, 255, 0.25);
+    width: 140px;
+}
+
+.right-button:active {
+    transform: scale(0.8);
+}
+
+.right-button span {
+    position: absolute;
+    color: white;
+    font-weight: bold;
+    font-size: 0;
+    transition: all 0.25s ease;
+}
+
+.right-button:hover span {
+    font-size: 1rem;
+}
+
+.right-button img {
+    width: 1.75rem;
+    transition: all 0.25s ease;
+    opacity: 1;
+}
+
+.right-button:hover img {
+    opacity: 0;
+    transform: translateX(40px);
 }
