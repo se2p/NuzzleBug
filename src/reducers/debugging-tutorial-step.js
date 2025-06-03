@@ -19,6 +19,8 @@ const SET_CODE_RESET_POINT = 'scratch-gui/debugging-tutorial-cards/SET_CODE_RESE
 const SET_LAST_TESTED_PROJECT = 'scratch-gui/debugging-tutorial-cards/SET_LAST_TESTED_PROJECT';
 const SET_HAS_CODE_UPDATED = 'scratch-gui/debugging-tutorial-cards/SET_HAS_CODE_UPDATED';
 const SET_TEST_PAGE_INDEX = 'scratch-gui/debugging-tutorial-cards/SET_TEST_PAGE_INDEX';
+const SET_SELECTED_SPRITE = 'scratch-gui/debugging-tutorial-cards/SET_SELECTED_SPRITE';
+
 
 const RESPONSE_START_VALUE = 'scratch-gui/debugging-tutorial-cards/RESPONSE_START';
 
@@ -42,6 +44,7 @@ const initialState = {
     lastTestedProject: null,
     hasUpdated: false,
     testPageIndex: 0,
+    selectedSprite: null,
 };
 
 const reducer = function (state, action) {
@@ -104,6 +107,9 @@ const reducer = function (state, action) {
         case SET_TEST_PAGE_INDEX:
             baseState.testPageIndex = action.index;
             break;
+        case SET_SELECTED_SPRITE:
+            baseState.selectedSprite = action.key;
+            break;
         case RESET_STEP:
             baseState.isErrorInfoVisible = false;
             baseState.showTestDetail = false;
@@ -122,6 +128,7 @@ const reducer = function (state, action) {
             baseState.lastTestedProject = null;
             baseState.hasUpdated = false;
             baseState.testPageIndex = 0;
+            baseState.selectedSprite = null;
             break;
     }
     return baseState;
@@ -203,6 +210,10 @@ const setTestPageIndex = function (index) {
     return {type: SET_TEST_PAGE_INDEX, index};
 }
 
+const setSelectedSprite = function (key) {
+    return {type: SET_SELECTED_SPRITE, key};
+}
+
 export {
     reducer as default,
     initialState as debuggingTutorialStepInitialState,
@@ -225,4 +236,5 @@ export {
     setLastTestedProject,
     setHasCodeUpdated,
     setTestPageIndex,
+    setSelectedSprite,
 };

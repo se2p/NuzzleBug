@@ -13,7 +13,8 @@ const UserBubble = ({
                         onExit,
                         isSelected = false,
                         transitionDelay = '0ms',
-                        timeout = 500
+                        timeout = 500,
+                        children = null,
                     }) => {
     return (
         <CSSTransition
@@ -37,6 +38,7 @@ const UserBubble = ({
             >
                 <div className={css.selectionBubbleIndicator} />
                 <span>{text}</span>
+                {children}
             </div>
         </CSSTransition>
     );
@@ -58,7 +60,21 @@ const EuliBubble = ({
                         timeout = 300
                     }) => {
     const renderContent = () => {
-        if (children) return children;
+        if (children) {
+            return (
+                <div>
+                    <TypewriterText
+                        text={text}
+                        speed={typewriterSpeed}
+                        onComplete={onTypewriterComplete}
+                        isFinished={isTypewriterFinished}
+                    />
+                    <div style={{marginTop: "5px"}}>
+                        {children}
+                    </div>
+                </div>
+            );
+        }
 
         return (
             <TypewriterText
@@ -109,7 +125,7 @@ function TypewriterText({
                             isFinished = false,
                             onComplete = () => {}
                         }) {
-    if (isFinished) return <span>{text}</span>
+    if (isFinished) return <span style={{whiteSpace: 'pre-wrap' }}>{text}</span>
 
 
     const [displayed, setDisplayed] = useState('');

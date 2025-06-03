@@ -1,15 +1,10 @@
 import PropTypes from "prop-types";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useRef, useState} from "react";
 import css from "./debuggingTutorialStep.css"
 import owl from "./images/OwlBranchRight.png"
-import failed_debugging from "./images/icon--failed-debugging.png"
-import {FormattedMessage} from "react-intl";
-import owlIcon from "./images/owl-b.svg"
-import congratulations from "./images/Glückwunsch.png"
 import iconErrors from "./images/icon--Errors.png"
 import iconDescription from "./images/icon--Description.png"
 import iconControls from "./images/icon--Controls.png"
-import iconBack from "./images/icon--backButton.png"
 import buttonHelp from "./images/buttonHelp.png"
 import buttonOwly from "./images/buttonOwly.png"
 import buttonReset from "./images/buttonReset.png"
@@ -20,18 +15,10 @@ import bubbleIndicatorGray from "./images/bubbleDecalGrey.png"
 import bubbleIndicatorBlue from "./images/bubbleIDecalBlue2.png";
 import downButton from "./images/downButton.png"
 import upButton from "./images/upButton.png"
-import backButton from "./images/nextButton3.png";
-import closeIcon from "./images/iconClose.png"
-import downloadIcon from "./images/downloadIcon.png"
 import bubbleIndicatorPurple from "./images/bubbleDecalPurple.png"
 import owl2 from "./images/owlTransparent.png"
-import {renderResponse2, renderResponseClassic, renderResponseDebugging} from "./tutorial-step-response-renderer.jsx";
-import testSuccess from "./images/icon--testSuccess.png"
-import testFailed from "./images/icon--testFailed.png"
-import testRunning from "./images/icon--testRunning.png"
-import nextTestGrey from "./images/nextTestArrowGrey.png"
-import nextTestWhite from "./images/nextTestArrowWhite.png"
-import { TransitionGroup, CSSTransition } from 'react-transition-group'
+import {renderResponseClassic, renderResponseDebugging} from "./tutorial-step-response-renderer.jsx";
+import { TransitionGroup } from 'react-transition-group'
 import {
     RESPONSE_START,
     RESPONSE_DEFAULT,
@@ -44,13 +31,13 @@ import {
     RESPONSE_EXPLANATION4,
     RESPONSE_ASK_TEST_START
 } from './tutorial-constants.jsx';
-import scratchblocks from "scratchblocks";
-import stylesHints from "../tutorial/styles/tutorial-code-quality.css";
-import ScratchBlocks from "scratchblocks-react";
-import saveTrueIcon from "./images/saveTrueIcon.png";
-import saveTrueIconWhite from "./images/autoSaveOnWhite.png";
 import {EuliBubble, UserBubble} from "./bubbles.jsx";
 import TestResults from "./test-results.jsx";
+import rightArrow from "../cards/icon--next.svg";
+import leftArrow from "../cards/icon--prev.svg";
+import ScratchBlocks from "scratchblocks-react";
+
+
 
 
 const DebuggingTutorialStep = props => {
@@ -98,6 +85,9 @@ const DebuggingTutorialStep = props => {
         onIncreaseTestPageIndex,
         onDecreaseTestPageIndex,
         guiMessages,
+        sprites,
+        setSelectedSprite,
+        selectedSprite,
         ...posProps
     } = props;
 
@@ -159,7 +149,7 @@ const DebuggingTutorialStep = props => {
     const renderResponse = () => {
         return (
             <div className={css.cpContainer}>
-                <div className={css.arrowButtonContainer}>
+                {/*<div className={css.arrowButtonContainer}>
                     <div className={css.upArrowFill}/>
                     <img className={css.backButton}
                          src={upButton}
@@ -167,9 +157,13 @@ const DebuggingTutorialStep = props => {
                          alt={"Next page button"}
                          draggable={false}
                     />
-                </div>
+                </div>*/}
 
-                <div className={css.whiteBox}>
+
+
+
+
+                <div className={css.whiteBox} style={{marginTop: "60px", width: "80%", border: "#575E75FF solid 3px"}}>
                     <img className={css.controlPanelImageSmall} src={owl} alt={"Owl picture"} draggable={false}/>
 
                     <div>
@@ -232,6 +226,7 @@ const DebuggingTutorialStep = props => {
                                 if (isDebuggingTutorial) {
                                     onOpenHelp();
                                 } else {
+                                    setReturnToTestResults(false);
                                     setCurPage("HELP");
                                 }
                             }}}
@@ -322,13 +317,26 @@ const DebuggingTutorialStep = props => {
                 {/* Next Button */}
                 <div className={css.buttonContainer}>
                     {isShowingQuickHandle ?
-                        <div className={css.arrowButtonContainer}>
+                        /*<div className={css.arrowButtonContainer}>
                             <div className={css.downArrowFill}/>
                             <img className={css.backButton}
                                  src={downButton}
                                  onClick={() => setCurPage("RESPONSE")}
                                  alt={"Next page button"}
                                  draggable={false}
+                            />
+                        </div>*/
+
+
+                        <div
+                            className={css.overviewNextButton}
+                            onClick={() => setCurPage("RESPONSE")}
+                        >
+                            <span>Weiter</span>
+                            <img
+                                draggable={false}
+                                src={rightArrow}
+                                alt="Arrow pointing right"
                             />
                         </div>
                         :
@@ -362,6 +370,7 @@ const DebuggingTutorialStep = props => {
             guiMessages={guiMessages}
             setCurTestDetails={setCurTestDetails}
             handleTestStart={handleTestStart}
+            openHelpPage={openHelp}
         />
     }
 
@@ -412,7 +421,7 @@ const DebuggingTutorialStep = props => {
                         </div>
                     </div>
                 );
-            case "DOWNLOADS":
+            case "DOWNLOADS": //TODO remove
                 return (
                     <div className={css.errorContainer}>
                         <div style={{display:"flex", flexDirection: "column", width: "100%", justifyContent: "space-between", height: "200px"}}>
@@ -504,9 +513,6 @@ const DebuggingTutorialStep = props => {
             case "ERRORS":
                 col = "#cf3b28FF"
                 break;
-            case "DOWNLOADS":
-                col = "#b14eea"
-                break;
             default:
                 console.log("unknown contentType: " + contentType)
         }
@@ -574,28 +580,63 @@ const DebuggingTutorialStep = props => {
         return userMadeError;
     }
 
-
+    //TODO move to reducer
     const [helpIndex, setHelpIndex] = useState(0);
-
+    const [returnToTestResults, setReturnToTestResults] = useState(false);
+    const openHelp = (spriteKey) => {
+        setSelectedSprite(spriteKey);
+        setHelpIndex(30);
+        setCurPage("HELP");
+        setReturnToTestResults(true);
+    }
 
     const renderHelp = () => {
+        const selectedSpriteName = selectedSprite
+            ? tutorialMessages?.[selectedSprite.split("_")[0]]?.[selectedSprite.split("_")[1]?.toLowerCase()]?.["name"]
+            : "";
         return (
             <div className={css.testContainer}>
-                <div className={css.arrowButtonContainer}>
-                    <div className={css.upArrowFill}/>
-                    <img className={css.backButton}
-                         src={upButton}
-                         onClick={() => setCurPage("RESPONSE")}
-                         alt={"Back"}
-                         draggable={false}
-                    />
+                <div className={css.spriteSelection}>
+                    {sprites.map(key =>
+                        <div className={selectedSprite === key ? css.spriteElementSelected : css.spriteElement} onClick={() => {setSelectedSprite(key); setHelpIndex(30)}} style={{opacity: helpIndex >= 2 ? 1 : 0}}>
+                            <img src={tutorialIndexData[key]} className={css.spriteElementIcon} alt={"SpriteImage"} draggable={false}/>
+                        </div>
+                    )}
                 </div>
+
 
                 <div className={css.helpWhiteBox}>
                     <div className={css.helpContainer}>
                         <TransitionGroup component={null}>
-                            <EuliBubble text={"Florian, YAY"} isVisible={true} key={"aaa"} onTypewriterComplete={() => setHelpIndex(8)} isTypewriterFinished={helpIndex === 8}/>
-                            <UserBubble text={"abcdef"} isVisible={helpIndex === 8} key={"asdad"}/>
+                            <EuliBubble text={"Programmieren ist oft ganz schön schwer. Soll ich dir helfen?\nWähle zuerst eine Figur aus, bei der ich dir helfen kann:"} isVisible={helpIndex >= 0 && helpIndex < 10} key={"aaa"} onTypewriterComplete={() => setHelpIndex(1)} isTypewriterFinished={helpIndex >= 1}/>
+                            <UserBubble text={"Mich interessiert die Figur: " + selectedSpriteName} isVisible={helpIndex >= 1 && helpIndex < 10} key={"asdad"} isSelected={helpIndex >= 2}>
+                                {helpIndex < 2 && <div className={css.spriteSelection} style={{marginTop:"5px"}}>
+                                    {sprites.map(key =>
+                                        <div className={selectedSprite === key ? css.spriteElementSelected : css.spriteElement} onClick={() => {setSelectedSprite(key); setHelpIndex(2)}}>
+                                            <img src={tutorialIndexData[key]} className={css.spriteElementIcon} alt={"SpriteImage"} draggable={false}/>
+                                        </div>
+                                    )}
+                                </div>}
+                            </UserBubble>
+                            <EuliBubble text={"Die Katze ist wie eine echte Katze.\nSie liegt nur rum ohne irgendetwas zu machen, außer manchmal zu miauen."} isVisible={helpIndex >= 2 && helpIndex < 10} key={"aa23as"} onTypewriterComplete={() => setHelpIndex(3)} isTypewriterFinished={helpIndex >= 3}/>
+                            <UserBubble text={"Gib mir einen weiteren Hinweis!"} isVisible={helpIndex >= 3 && helpIndex < 20} key={"asdad2"} onClick={() => setHelpIndex(10)} isSelected={helpIndex >= 10}/>
+                            <EuliBubble text={"Selbstverständlich! Nutze folgenden Block:"} isVisible={helpIndex >= 10 && helpIndex < 20} key={"aaas3"} onTypewriterComplete={() => setHelpIndex(11)} isTypewriterFinished={helpIndex >= 11}>
+                                <div style={{transform: "scale(0.8)"}}>
+                                    <ScratchBlocks
+                                        blockStyle="scratch3"
+                                        languages={['en', 'de']}
+                                    >
+                                        {"Sage [Miau]"}
+                                    </ScratchBlocks>
+                                </div>
+                            </EuliBubble>
+
+                            <UserBubble text={"Bitte noch einen weiteren Hinweis!"} isVisible={helpIndex >= 11 && helpIndex < 20} key={"asdad24"}/>
+
+                            <EuliBubble text={"Hier ein Hinweis zur Figur " + selectedSpriteName + ":\nDas Boot muss sich durchgehend zum Mauszeiger drehen."} isVisible={helpIndex >= 30 && helpIndex < 40} key={"aaa6"} onTypewriterComplete={() => setHelpIndex(31)} isTypewriterFinished={helpIndex >= 31}/>
+                            <UserBubble text={"Ich brauche noch mehr Hilfe"} isVisible={helpIndex >= 31 && helpIndex < 40} key={"asd23ad2"} onClick={() => setHelpIndex(40)} isSelected={helpIndex >= 40}/>
+                            <EuliBubble text={"Hier die vollständige Lösung von " + selectedSpriteName + "."} isVisible={helpIndex >= 40 && helpIndex < 50} key={"aaa9"} onTypewriterComplete={() => setHelpIndex(43)} isTypewriterFinished={helpIndex >= 43}/>
+
                         </TransitionGroup>
                     </div>
 
@@ -621,7 +662,21 @@ const DebuggingTutorialStep = props => {
                 return renderHelp();
         }
     }
-    return renderPage();
+    return <>
+        {curPage === "RESPONSE" && <div className={css.leftButton} onClick={() => setCurPage("OVERVIEW")}>
+            <img src={leftArrow} alt="Next" draggable={false} />
+        </div>}
+        {curPage === "TEST_RESULTS" && <div className={css.leftButton} onClick={() => setCurPage("RESPONSE")}>
+            <img src={leftArrow} alt="Next" draggable={false} />
+        </div>}
+        {curPage === "HELP" && <div className={css.leftButton} onClick={() => {returnToTestResults ? setCurPage("TEST_RESULTS") : setCurPage("RESPONSE")}}>
+            <img src={leftArrow} alt="Next" draggable={false} />
+        </div>}
+        {renderPage()}
+        {false && <div className={css.rightButton} onClick={null}>
+            <img src={rightArrow} alt="Next" draggable={false} />
+        </div>}
+    </>
 }
 
 DebuggingTutorialStep.props = {

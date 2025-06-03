@@ -21,6 +21,7 @@ import {
     setLastTestedProject,
     setHasCodeUpdated,
     setTestPageIndex,
+    setSelectedSprite,
 } from "../reducers/debugging-tutorial-step";
 import DebuggingTutorialStepComponent from '../components/debuggingTutorial/debuggingTutorialStep.jsx';
 import PropTypes from "prop-types";
@@ -46,6 +47,7 @@ class DebuggingTutorialStep extends React.Component {
         this.hasUpdatedSinceLastTest = this.hasUpdatedSinceLastTest.bind(this);
         this.checkForCodeUpdate = this.checkForCodeUpdate.bind(this);
         this.onIncreaseTestPageIndex = this.onIncreaseTestPageIndex.bind(this);
+        this.getSprites = this.getSprites.bind(this);
         this.litterboxWebURL = 'https://scratch.fim.uni-passau.de/litterbox-api'; // localhost default: http://localhost:8080
 
         this.interval = null;
@@ -280,12 +282,28 @@ class DebuggingTutorialStep extends React.Component {
         this.props.setTestPageIndex(Math.max(newIndex, 0));
     }
 
+    /**
+     * Returns the keys of all current Sprites (up until this step)
+     */
+    getSprites() {
+        const maxStep = this.props.step + 1;
+
+        return Object.keys(this.props.tutorialIndexData).filter((key) => {
+            const match = key.match(/^step(\d+)_Costume/);
+            if (match) {
+                const stepNumber = parseInt(match[1], 10);
+                return stepNumber >= 1 && stepNumber <= maxStep;
+            }
+            return false;
+        });
+    }
+
     render () {
         const reachedLastStep = (this.props.step === this.props.stepCount);
         const overviewStep = "overviewStep".concat((this.props.step + 1).toString());
         const showControlOverview = this.props.tutorialMessages?.["overviewStep" + (this.props.step + 1).toString()]?.controlImage1 !== null;
         const showDownloadsOverview = this.props.tutorialMessages?.["overviewStep" + (this.props.step + 1).toString()]?.download1 !== null;
-
+console.log(this.props.selectedSprite);
         return( <DebuggingTutorialStepComponent
                 onStartTests={() => this.onTest()}
                 nextStep={() => this.onNextStep()}
@@ -300,6 +318,7 @@ class DebuggingTutorialStep extends React.Component {
                 hasUpdatedSinceLastTest2={this.props.hasCodeUpdated}
                 onIncreaseTestPageIndex={() => this.onIncreaseTestPageIndex(1)}
                 onDecreaseTestPageIndex={() => this.onIncreaseTestPageIndex(-1)}
+                sprites={this.getSprites()}
                 {...this.props}
             />
         );
@@ -366,6 +385,9 @@ DebuggingTutorialStep.propTypes = {
     setTestPageIndex: PropTypes.func,
     testPageIndex: PropTypes.number,
     guiMessages: PropTypes.any,
+    sprites: PropTypes.any,
+    setSelectedSprite: PropTypes.func,
+    selectedSprite: PropTypes.string
 };
 
 const mapStateToProps = state => ({
@@ -390,6 +412,7 @@ const mapStateToProps = state => ({
     lastTestedProject: state.scratchGui.debuggingTutorialStep.lastTestedProject,
     hasCodeUpdated: state.scratchGui.debuggingTutorialStep.hasUpdated,
     testPageIndex: state.scratchGui.debuggingTutorialStep.testPageIndex,
+    selectedSprite: state.scratchGui.debuggingTutorialStep.selectedSprite,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -414,6 +437,7 @@ const mapDispatchToProps = dispatch => ({
     setLastTestedProject: (newCode) => dispatch(setLastTestedProject(newCode)),
     setHasCodeUpdated: (value) => dispatch(setHasCodeUpdated(value)),
     setTestPageIndex: (index) => dispatch(setTestPageIndex(index)),
+    setSelectedSprite: (key) => dispatch(setSelectedSprite(key)),
 });
 
 export default connect(

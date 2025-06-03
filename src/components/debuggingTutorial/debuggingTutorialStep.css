@@ -570,7 +570,7 @@
     background-color: #575E75FF;
     color: white;
     border: none;
-    border-radius: 10px;
+    border-radius: 30px;
     height: 40px;
     padding-left: 20px;
     padding-right: 20px;
@@ -588,7 +588,7 @@
     background-color: #393d4f;
     color: white;
     border: none;
-    border-radius: 10px;
+    border-radius: 30px;
     height: 38px;
     font-size: 0.9rem;
     padding-left: 18px;
@@ -657,9 +657,9 @@
     justify-content: flex-start;
     padding-bottom: 10px;
     box-sizing: border-box;
-    box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
-    -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
-    -moz-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.56);
+    -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.56);
+    -moz-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.56);
     margin-top: 40px;
 }
 
@@ -717,7 +717,7 @@
     display: flex;
     justify-content: space-between;
     width: 80%;
-    margin-top: 50px;
+    margin-top: 60px;
 }
 
 .cpButton {
@@ -1215,6 +1215,192 @@
 .helpContainer > * {
     transition: transform 300ms, opacity 300ms;
 }
+
+
+
+
+
+/*SideButtons (next / prev)*/
+.right-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    user-select: none;
+    cursor: pointer;
+    background: #4D97FFFF; /* z.B. motion-primary als Hex */
+    box-shadow: 0 0 0 4px rgba(75, 148, 252, 0.38); /* motion-transparent */
+    height: 44px;
+    width: 40px;
+    border-bottom-left-radius: 50px;
+    border-top-left-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.25s ease;
+    right: 0;
+}
+
+.right-button:hover {
+    box-shadow: 0 0 0 6px rgba(75, 148, 252, 0.38); /* motion-transparent */
+    width: 60px;
+}
+
+.right-button img {
+    width: 1.75rem;
+    transition: all 0.1s linear;
+}
+
+.right-button:active img {
+    transform: scale(0.75);
+}
+
+
+.left-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    user-select: none;
+    cursor: pointer;
+    background: #4D97FFFF; /* z.B. motion-primary als Hex */
+    box-shadow: 0 0 0 4px rgba(75, 148, 252, 0.38); /* motion-transparent */
+    height: 44px;
+    width: 40px;
+    border-bottom-right-radius: 50px;
+    border-top-right-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.25s ease;
+    left: 0;
+}
+
+.left-button:hover {
+    box-shadow: 0 0 0 6px rgba(75, 148, 252, 0.38); /* motion-transparent */
+    width: 60px;
+}
+
+.left-button img {
+    width: 1.75rem;
+    transition: all 0.1s linear;
+}
+
+.left-button:active img {
+    transform: scale(0.75);
+}
+
+
+
+
+
+
+
+/*Overview: Next Button*/
+.overviewNextButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #4c97ff;
+    box-shadow: 0 0 0 4px rgba(76, 151, 255, 0.25);
+    height: 44px;
+    width: 44px;
+    border-radius: 50px;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.25s ease;
+    position: relative;
+}
+
+.overviewNextButton:hover {
+    box-shadow: 0 0 0 4px rgba(76, 151, 255, 0.25);
+    width: 140px;
+}
+
+.overviewNextButton:active {
+    transform: scale(0.8);
+}
+
+.overviewNextButton span {
+    position: absolute;
+    color: white;
+    font-weight: bold;
+    font-size: 0;
+    transition: all 0.25s ease;
+}
+
+.overviewNextButton:hover span {
+    font-size: 1rem;
+}
+
+.overviewNextButton img {
+    width: 1.75rem;
+    transition: all 0.25s ease;
+    opacity: 1;
+}
+
+.overviewNextButton:hover img {
+    opacity: 0;
+    transform: translateX(40px);
+}
+
+
+
+
+/*Help: Sprite Selection */
+.spriteSelection {
+    display: flex;
+    gap: 20px;
+    width: 90%;
+}
+
+.spriteElement {
+    border-radius: 100%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    -moz-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    cursor: pointer;
+}
+
+.spriteElementIcon {
+    width: auto;
+    height: auto;
+    max-width: 28px;
+    max-height: 28px;
+    border-radius: 7px;
+}
+
+.spriteElement:hover {
+    border: #88b8ff solid 3px;
+}
+
+.spriteElementSelected {
+    border-radius: 100%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    -moz-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    cursor: pointer;
+    border: #4c97ff solid 3px;
+}
+
+
+
+
+
+
+
 
 
 /*DELETE*/

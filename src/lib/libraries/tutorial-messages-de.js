@@ -65,7 +65,7 @@ export default {
     test_results: {
         response: {
             loading: "Klar doch! Warte bitte kurz, bis ich deinen Code überprüft habe",
-            passed_all: "Super! Du hast alle Tests erfolgreich geschafft.\nDu kannst nun zum nächsten Level gehen.",
+            passed_all: "Super! Du hast alle Tests erfolgreich geschafft.\nDu kannst nun zum nächsten Schritt gehen.",
             test_passed: "Dieser Test sieht schon mal richtig gut aus.\nSuper gemacht!",
             test_failed: "In diesem Test hat sich noch ein Fehler eingeschlichen.",
             code_changed: "Ich sehe gerade, dass sich dein Code seit dem letzten Testlauf verändert hat. Soll ich deine Änderungen überprüfen?",
