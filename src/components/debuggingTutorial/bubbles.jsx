@@ -54,6 +54,7 @@ const EuliBubble = ({
                         onExit,
                         onTypewriterComplete,
                         isTypewriterFinished = false,
+                        showChild,
                         typewriterSpeed = 20,
                         children = null,
                         transitionDelay = "0ms",
@@ -69,9 +70,9 @@ const EuliBubble = ({
                         onComplete={onTypewriterComplete}
                         isFinished={isTypewriterFinished}
                     />
-                    <div style={{marginTop: "5px"}}>
+                    {showChild && <div style={{marginTop: "5px"}}>
                         {children}
-                    </div>
+                    </div>}
                 </div>
             );
         }

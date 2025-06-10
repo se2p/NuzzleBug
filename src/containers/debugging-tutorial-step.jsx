@@ -30,7 +30,6 @@ import VirtualMachine from "scratch-vm";
 import {lock, unlock} from '../reducers/vm-status';
 import {runTest} from "tutorial-tests";
 import downloadBlob from "../lib/download-blob";
-import bootImage from "../components/debuggingTutorial/images/owlTransparent.png";
 import {spriteUpload} from "../lib/file-uploader";
 
 const RESPONSE_TESTING_FINISHED = 'scratch-gui/debugging-tutorial-cards/RESPONSE_TESTING_FINISHED'; //TODO REMOVE
@@ -67,10 +66,23 @@ class DebuggingTutorialStep extends React.Component {
             this.props.unlockVM();
         }).finally(() => {
             this.props.unlockVM();
-            this.props.setLoadingProject(null); //TODO REMOVE!
-            this.props.setResponseType(RESPONSE_TESTING_FINISHED);
+            this.props.setLoadingProject("TEST_PAUSE"); //TODO REMOVE!
+            if (this.props.curPage !== "TEST_RESULTS") { //Wenn bereits in TestResults, dann braucht man keine Antwort von Euli in der Übersicht
+                this.props.setResponseType(RESPONSE_TESTING_FINISHED);
+            } else if (this.props.testResults.passed) {
+                this.props.setResponseType(RESPONSE_TESTING_FINISHED);
+            }
             this.props.setHasCodeUpdated(false);
+            this.delayTestPause();
         });
+    }
+
+
+    async delayTestPause() {
+        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+        await sleep(1000);
+        await this.props.setLoadingProject(null);
     }
 
     onNextStep() {
@@ -100,7 +112,6 @@ class DebuggingTutorialStep extends React.Component {
 
                 const promises = keys.map(async (key) => {
                     const costumeKey = key.split('_')[1].toLowerCase();
-                    console.log("ZZZZZ: " + costumeKey + " , " + "step" + (this.props.step + 2).toString());
                     const costume = this.props.tutorialIndexData[key];
                     await this.addSprite(costume, this.props.tutorialMessages["step" + (this.props.step + 2).toString()][costumeKey]["name"], this.props.tutorialMessages["step" + (this.props.step + 2).toString()][costumeKey]["size"]);
                 });
@@ -194,8 +205,6 @@ class DebuggingTutorialStep extends React.Component {
 
                 this.props.setQualityResults(result);
             })
-            // ignore errors to avoid crashing the tutorial tab
-            // eslint-disable-next-line no-unused-vars
             .catch(ignored => {console.log("Cached! " + ignored.toString())});
     }
 
@@ -215,8 +224,6 @@ class DebuggingTutorialStep extends React.Component {
         } else {
             data = this.props.tutorialIndexData["project" + (this.props.step + 1).toString()];
         }
-
-        console.log("resetting: " + data);
 
         this.props.vm.loadProject(data)
             .catch(e => console.log("Error while resetting project: " + e.toString()))
@@ -272,7 +279,7 @@ class DebuggingTutorialStep extends React.Component {
     }
 
     checkForCodeUpdate() { //TODO inline
-        if (this.props.curPage === "TEST_RESULTS") { //Only check while the user sees their test-results
+        if (this.props.curPage === "TEST_RESULTS" && this.props.projectLoadingState !== "TEST") { //Only check while the user sees their test-results
             this.props.setHasCodeUpdated((this.props.vm.toJSON() !== this.props.lastTestedProject));
         }
     }
@@ -303,7 +310,9 @@ class DebuggingTutorialStep extends React.Component {
         const overviewStep = "overviewStep".concat((this.props.step + 1).toString());
         const showControlOverview = this.props.tutorialMessages?.["overviewStep" + (this.props.step + 1).toString()]?.controlImage1 !== null;
         const showDownloadsOverview = this.props.tutorialMessages?.["overviewStep" + (this.props.step + 1).toString()]?.download1 !== null;
-console.log(this.props.selectedSprite);
+
+        console.log("HasCodeUpdated: " + this.props.hasCodeUpdated);
+
         return( <DebuggingTutorialStepComponent
                 onStartTests={() => this.onTest()}
                 nextStep={() => this.onNextStep()}
@@ -315,7 +324,6 @@ console.log(this.props.selectedSprite);
                 showDownloadsOverview={showDownloadsOverview}
                 curQualityResult={this.props.qualityResults?.at(0)}
                 hasUpdatedSinceLastTest={() => this.hasUpdatedSinceLastTest()}
-                hasUpdatedSinceLastTest2={this.props.hasCodeUpdated}
                 onIncreaseTestPageIndex={() => this.onIncreaseTestPageIndex(1)}
                 onDecreaseTestPageIndex={() => this.onIncreaseTestPageIndex(-1)}
                 sprites={this.getSprites()}
@@ -387,7 +395,8 @@ DebuggingTutorialStep.propTypes = {
     guiMessages: PropTypes.any,
     sprites: PropTypes.any,
     setSelectedSprite: PropTypes.func,
-    selectedSprite: PropTypes.string
+    selectedSprite: PropTypes.string,
+    projectLoadingState: PropTypes.string,
 };
 
 const mapStateToProps = state => ({

@@ -249,3 +249,53 @@ export function renderResponseDebugging(responseType, {
         });
     }
 }
+
+
+/*const testResultResponse = ({
+                                 checkUserMadeErrors,
+                                 testResults,
+                                 nextStep,
+                                 setCurPage,
+                                 setResponseType,
+                             }) => {
+    if (checkUserMadeErrors()) {
+        return (
+            <div className={css.responseTextArea}>
+                <p>Hoppla, anscheinend haben sich noch weitere Fehler eingeschlichen!</p>
+                <p>Du kannst jederzeit <span style={{color: "#62A4FFFF", fontWeight: "bold"}}>Euli fragen</span> oder das Projekt <span style={{color: "#ff5a57", fontWeight: "bold"}}>zurücksetzen</span>.</p>
+                <p style={{marginTop: "15px"}}>
+                    <button
+                        className={css.responseButtonTestResults}
+                        onClick={() => {setCurPage("TEST_RESULTS"); setResponseType(RESPONSE_DEFAULT);}}
+                    >Testergebnisse</button>
+                    <button
+                        className={css.responseButtonNext}
+                        onClick={() => setResponseType(RESPONSE_DEFAULT)}
+                    >Schließen</button>
+                </p>
+            </div>);
+    } else if (testResults.passed) {
+        return (
+            <div className={css.responseTextArea}>
+                <p>Sieht super aus!</p>
+                <p style={{marginTop: "15px"}}>Du kannst nun zum <button className={css.responseButtonAccept} style={{marginLeft: "0", marginRight: "0"}} onClick={() => nextStep()}>nächsten Level</button> gehen.</p>
+            </div>);
+    } else {
+        return (
+            <div className={css.responseTextArea}>
+                <p>Huch! Da sind noch nicht alle eingebauten Fehler behoben.</p>
+                <p>Wenn du Hilfe brauchst, klicke auf <span style={{color: "#62A4FFFF", fontWeight: "bold"}}>Frag Euli </span>.</p>
+
+                <div style={{marginTop:"15px"}}>
+                    <button
+                        className={css.responseButtonNext}
+                        onClick={() => setResponseType(RESPONSE_DEFAULT)}
+                    >Schließen</button>
+                    <button
+                        className={css.responseButtonTestResults}
+                        onClick={() => {setCurPage("TEST_RESULTS"); setResponseType(RESPONSE_DEFAULT)}}
+                    >Testergebnisse</button>
+                </div>
+            </div>);
+    }
+};*/
