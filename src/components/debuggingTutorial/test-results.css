@@ -75,8 +75,8 @@
     display: inline-block;
     position: relative;
     border-radius: 15px;
-    background-color: #0fbd8cff;
-    border: solid 3px #0fbd8cff;
+    background-color: #89DDAFFF;
+    border: solid 3px #89DDAFFF;
     color: white;
     width: 100%;
     z-index: 100;
@@ -89,8 +89,8 @@
 }
 
 .nextBubble:hover {
-    background-color: #0da177ff;
-    border: solid 3px #0da177ff;
+    background-color: #73c99a;
+    border: solid 3px #73c99a;
 }
 
 .nextBubble:hover .nextBubbleIndicator {

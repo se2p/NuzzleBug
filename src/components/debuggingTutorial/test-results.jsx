@@ -9,6 +9,9 @@ import bubbleIndicatorGray from "./images/bubbleDecalGrey.png"
 import testSuccess from "./images/icon--testSuccess.png"
 import testFailed from "./images/icon--testFailed.png"
 import testRunning from "./images/icon--testRunning.png"
+import hintGeneration from "./hint-generation";
+import RequestHintButton2 from "./hint-generation";
+import projectData from "../../lib/default-project/project-data";
 
 // Hauptkomponente
 const TestResults = ({
@@ -25,22 +28,11 @@ const TestResults = ({
                          guiMessages,
                          setCurTestDetails,
                          handleTestStart,
+                         openHelpPage,
+                         project,
                      }) => {
     const { showLeftArrow, showRightArrow } = getPaginationInfo(testResults, step, testPageIndex);
-    const showNextStepButton = !hasCodeUpdated && testResults.passed;
 
-
-    /*
-            <div className={css.arrowButtonContainer}>
-                <div className={css.upArrowFill}/>
-                <img className={css.backButton}
-                     src={upButton}
-                     onClick={() => setCurPage("RESPONSE")}
-                     alt="Next page button"
-                     draggable={false}
-                />
-            </div>
-*/
 
     return (
         <div className={css.container}>
@@ -51,7 +43,7 @@ const TestResults = ({
                             <img className={css.bubbleIndicator} alt="Bubble-Decal" src={bubbleIndicatorGray}/>
                             {getTestText({ projectLoadingState, testResults, curTestDetails, hasCodeUpdated, guiMessages })}
                         </div>
-                        {renderResponse({hasCodeUpdated, projectLoadingState, curTestDetails, nextStep, showNextStepButton, testResults, handleTestStart, guiMessages})}
+                        {renderResponse({hasCodeUpdated, projectLoadingState, curTestDetails, nextStep, testResults, handleTestStart, guiMessages})}
                     </div>
                     <img src={curTestDetails === "" ? owl : owlDown} alt="Picture of Euli" className={css.owlImage} draggable={false}/>
                 </div>
@@ -64,7 +56,7 @@ const TestResults = ({
 
                 <div className={css.WhiteBoxBottom}>
                     <div className={css.testResultContainer}>
-                        {parseTestResults({testResults, testPageIndex, curTestDetails, projectLoadingState, step, setCurTestDetails, guiMessages})}
+                        {parseTestResults({testResults, testPageIndex, curTestDetails, projectLoadingState, step, setCurTestDetails, guiMessages, openHelpPage, project})}
                     </div>
                 </div>
 
@@ -93,7 +85,7 @@ const getTestText = ({ projectLoadingState, testResults, curTestDetails, hasCode
         return <span>{result === "pass" ? msg.test_passed : msg.test_failed}</span>;
     }
 
-    if (hasCodeUpdated) {
+    if (hasCodeUpdated && projectLoadingState !== "TEST_PAUSE") {
         return <span>{msg.code_changed}</span>;
     }
 
@@ -103,22 +95,23 @@ const getTestText = ({ projectLoadingState, testResults, curTestDetails, hasCode
 /**
  * The answer-bubbles, the user can select to answer eulis questions. (e.g. next step)
  */
-const renderResponse = ({hasCodeUpdated, projectLoadingState, curTestDetails, nextStep, showNextStepButton, testResults, handleTestStart, guiMessages}) => {
+const renderResponse = ({hasCodeUpdated, projectLoadingState, curTestDetails, nextStep, testResults, handleTestStart, guiMessages}) => {
     const msg = guiMessages.test_results;
 
-    if (hasCodeUpdated || (projectLoadingState === "TEST")) {
-        return (
-            <div className={`${css.helpBubble} ${(projectLoadingState !== "TEST") ? '' : css.selected}`} onClick={() => { if (projectLoadingState !== "TEST") handleTestStart()}} style={{marginBottom: "0px"}}>
-                <div className={css.selectionBubbleIndicator} />
-                {msg.test_again}
-            </div>
-        );
-    }
-    if (showNextStepButton) {
+    if (testResults?.passed) {
         return (
             <div className={css.nextBubble} onClick={nextStep}>
                 <div className={css.nextBubbleIndicator} />
                 {msg.next_step}
+            </div>
+        );
+    }
+
+    if ((hasCodeUpdated || (projectLoadingState === "TEST")) && projectLoadingState !== "TEST_PAUSE") {
+        return (
+            <div className={`${css.helpBubble} ${(projectLoadingState !== "TEST") ? '' : css.selected}`} onClick={() => { if (projectLoadingState !== "TEST") handleTestStart()}} style={{marginBottom: "0px"}}>
+                <div className={css.selectionBubbleIndicator} />
+                {msg.test_again}
             </div>
         );
     }
@@ -127,8 +120,8 @@ const renderResponse = ({hasCodeUpdated, projectLoadingState, curTestDetails, ne
 /**
  * Returns Euli's feedback-details containing all test results.
  */
-const parseTestResults = ({testResults, testPageIndex, curTestDetails, projectLoadingState, step, setCurTestDetails, guiMessages}) => {
-    if (testResults.passed) return null;
+const parseTestResults = ({testResults, testPageIndex, curTestDetails, projectLoadingState, step, setCurTestDetails, guiMessages, openHelpPage, project}) => {
+    //if (testResults.passed) return null;
 
     // 1) Sortieren (absteigend nach Test-ID)
     const sortedDetails = [...testResults.details]
@@ -191,13 +184,15 @@ const parseTestResults = ({testResults, testPageIndex, curTestDetails, projectLo
             projectLoadingState,
             curTestDetails,
             setCurTestDetails,
-            guiMessages
+            guiMessages,
+            openHelpPage,
+            project,
         );
     });
 };
 
 
-const createTestElement = (passed, e, testElementNumber, isCurrentStep, projectLoadingState, curTestDetails, setCurTestDetails, guiMessages) => {
+const createTestElement = (passed, e, testElementNumber, isCurrentStep, projectLoadingState, curTestDetails, setCurTestDetails, guiMessages, openHelpPage, project) => {
     const msg = guiMessages.test_results;
 
     const headerBgColor = (projectLoadingState === "TEST")
@@ -246,7 +241,7 @@ const createTestElement = (passed, e, testElementNumber, isCurrentStep, projectL
                             </div>
                         </div>
                         <div className={css.buttonWrapper} style={{paddingLeft:"5px"}}>
-                            <div className={css.testElementButtonHelp} onClick={() => setCurTestDetails("")}>
+                            <div className={css.testElementButtonHelp} onClick={() => {openHelpPage("step1_Costume1");}}>
                                 {msg.help_button}
                             </div>
                         </div>

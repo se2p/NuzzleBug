@@ -80,4 +80,17 @@ export default {
         test_again: "Ja, teste erneut!",
         next_step: "Zum nächsten Schritt",
     },
+
+    step: {
+        description: "Beschreibung",
+        error: "Fehler",
+        controls: "Steuerung",
+        next: "Weiter",
+        startTutorial: "Ich habe die Aufgabenstellung gelesen",
+        testButton: "Lösung Testen",
+        resultButton: "Testergebnisse",
+        euliButton: "Frage Euli",
+        todoButton: "Was soll ich tun?",
+        resetButton: "Schritt neu starten",
+    },
 };

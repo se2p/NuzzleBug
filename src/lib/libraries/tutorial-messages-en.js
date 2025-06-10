@@ -83,5 +83,18 @@ export default {
         controls: "",
         next_button: "",
         step_title: "",
-    }
+    },
+
+    step: {
+        description: "Description",
+        error: "Error",
+        controls: "Control",
+        next: "Next",
+        startTutorial: "I have read the task",
+        testButton: "Test solution",
+        resultButton: "Results",
+        euliButton: "Ask Euli",
+        todoButton: "What should I do?",
+        resetButton: "Restart step",
+    },
 };
