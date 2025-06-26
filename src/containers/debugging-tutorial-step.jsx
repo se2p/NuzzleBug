@@ -2,7 +2,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import {
-    addDownloaded,
     onTestDetails,
     resetStep,
     setCodeResetPoint,
@@ -13,7 +12,6 @@ import {
     setLastTutorial,
     setLoading,
     setLoadingProject,
-    setQualityResults,
     setResponseType,
     showErrorInfo,
     showQuickHandle,
@@ -28,9 +26,21 @@ import PropTypes from "prop-types";
 import VirtualMachine from "scratch-vm";
 
 import {lock, unlock} from '../reducers/vm-status';
-import {runTest} from "tutorial-tests";
-import downloadBlob from "../lib/download-blob";
 import {spriteUpload} from "../lib/file-uploader";
+import {runTest2} from "tutorial-tests/src/test-runner/test-runner";
+
+
+import logging from 'scratch-vm/src/util/logging.js';
+const experimentId = new URL(window.location.href).searchParams.get('expid');
+const userId = new URL(window.location.href).searchParams.get('uid');
+const secret = new URL(window.location.href).searchParams.get('secret');
+logging._experimentId = experimentId;
+logging._userId = userId;
+logging._secret = secret;
+
+
+
+
 
 const RESPONSE_TESTING_FINISHED = 'scratch-gui/debugging-tutorial-cards/RESPONSE_TESTING_FINISHED'; //TODO REMOVE
 
@@ -39,11 +49,8 @@ class DebuggingTutorialStep extends React.Component {
         super(props);
         this.onTest = this.onTest.bind(this);
         this.onNextStep = this.onNextStep.bind(this);
-        this.handleDownload = this.handleDownload.bind(this);
-        this.requestHints = this.requestHints.bind(this);
         this.addSprite = this.addSprite.bind(this);
         this.convertToBuffer = this.convertToBuffer.bind(this);
-        this.hasUpdatedSinceLastTest = this.hasUpdatedSinceLastTest.bind(this);
         this.checkForCodeUpdate = this.checkForCodeUpdate.bind(this);
         this.onIncreaseTestPageIndex = this.onIncreaseTestPageIndex.bind(this);
         this.getSprites = this.getSprites.bind(this);
@@ -56,8 +63,29 @@ class DebuggingTutorialStep extends React.Component {
         this.props.setLoadingProject("TEST");
         this.props.lockVM();
 
-        this.props.setLastTestedProject(this.props.vm.toJSON());
+        console.log("is Logging: " + logging.isActive()?.toString());
+        logging.logClickEvent('BUTTON', new Date(), 'CHECK_CODE_QUALITY2', null);
 
+
+
+       // this.props.setLastTestedProject(this.props.vm.toJSON());
+
+        runTest2(this.props.vm, this.props.tutorialIndexData.testId, this.props.step, (update) => {
+            this.props.updateTestResults(update);
+        }).then(finalResult => {
+            this.props.updateTestResults(finalResult);
+        }).finally(() => {
+            this.props.unlockVM();
+            this.props.setLoadingProject("TEST_PAUSE"); //TODO REMOVE!
+            if (this.props.curPage !== "TEST_RESULTS") { //Wenn bereits in TestResults, dann braucht man keine Antwort von Euli in der Übersicht
+                this.props.setResponseType(RESPONSE_TESTING_FINISHED);
+            } else if (this.props.testResults.passed) {
+                this.props.setResponseType(RESPONSE_TESTING_FINISHED);
+            }
+            this.props.setHasCodeUpdated(true);
+            this.delayTestPause();
+        });
+/*
         const summary = runTest(this.props.vm, this.props.tutorialIndexData.testId, this.props.step)
             .catch(error => {console.log(`Test execution crashed: ${error}`);
         });
@@ -74,7 +102,7 @@ class DebuggingTutorialStep extends React.Component {
             }
             this.props.setHasCodeUpdated(false);
             this.delayTestPause();
-        });
+        });*/
     }
 
 
@@ -113,7 +141,17 @@ class DebuggingTutorialStep extends React.Component {
                 const promises = keys.map(async (key) => {
                     const costumeKey = key.split('_')[1].toLowerCase();
                     const costume = this.props.tutorialIndexData[key];
-                    await this.addSprite(costume, this.props.tutorialMessages["step" + (this.props.step + 2).toString()][costumeKey]["name"], this.props.tutorialMessages["step" + (this.props.step + 2).toString()][costumeKey]["size"]);
+
+                    const stepKey = "step" + (this.props.step + 2).toString();
+                    const stepMessages = this.props.tutorialMessages?.[stepKey];
+
+
+                    if (!stepMessages || !stepMessages[costumeKey]) return;
+
+                    const name = stepMessages[costumeKey].name;
+                    const size = stepMessages[costumeKey].size;
+
+                    await this.addSprite(costume, name, size);
                 });
 
                 // Warte auf alle .addSprite() Aufrufe
@@ -168,49 +206,6 @@ class DebuggingTutorialStep extends React.Component {
         }
     }
 
-
-
-
-
-    requestHints() {
-        const program = this.props.toJson();
-        const url = `${this.litterboxWebURL}/tutorial-system/generate-feedback`;
-        let detectors = 'default';
-        if (this.props.detectors) {
-            detectors = this.props.detectors;
-        }
-        const language = this.props.locale === 'de' ? 'de' : 'en';
-        const jsonBody = JSON.stringify({
-            language: language, detectors: detectors, program: program
-        });
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: jsonBody,
-            referrerPolicy: 'origin-when-cross-origin'
-        })
-            .then(response => response.json())
-            .then(problems => {
-                const result = problems.map(hint => ({
-                    title: hint.name,
-                    description: hint.hint,
-                    sprite: hint.sprite,
-                    costume: hint.costume,
-                    type: hint.type,
-                    codeSnippet: hint.scratchBlocksCode
-                }));
-                console.log(result);
-
-                this.props.setQualityResults(result);
-            })
-            .catch(ignored => {console.log("Cached! " + ignored.toString())});
-    }
-
-
-
-
     onResetProject() {
         this.props.setLoadingProject("RESET");
         this.props.vm.start();
@@ -232,25 +227,6 @@ class DebuggingTutorialStep extends React.Component {
                 this.props.setLoadingProject(null);});
     }
 
-
-    handleDownload (name, content) {
-        const img = new Image();
-        img.src = content;
-        const c = document.createElement('canvas');
-        const ctx = c.getContext('2d');
-
-        img.onload = function () {
-            c.width = this.naturalWidth;
-            c.height = this.naturalHeight;
-            ctx.drawImage(this, 0, 0);
-            c.toBlob(blob => {
-                downloadBlob(name.concat('.png'), blob);
-            }, 'image/png', 1);
-        };
-        this.props.addDownloaded(name);
-    }
-
-
     componentDidMount() {
         if (this.props.lastTutorial === null) {
             this.props.setLastTutorial(JSON.stringify(this.props.tutorialMessages));
@@ -261,10 +237,10 @@ class DebuggingTutorialStep extends React.Component {
             }
         }
 
-        this.interval = setInterval(() => {
+       /* this.interval = setInterval(() => {
             this.checkForCodeUpdate();
         }, 1000);
-        console.log("Started updating!");
+        console.log("Started updating!");*/
     }
 
     componentWillUnmount() {
@@ -272,13 +248,7 @@ class DebuggingTutorialStep extends React.Component {
         console.log("Stopped updating!");
     }
 
-
-    hasUpdatedSinceLastTest () {
-         //= (this.props.vm.toJSON() === this.props.lastTestedProject);
-
-    }
-
-    checkForCodeUpdate() { //TODO inline
+    checkForCodeUpdate() {
         if (this.props.curPage === "TEST_RESULTS" && this.props.projectLoadingState !== "TEST") { //Only check while the user sees their test-results
             this.props.setHasCodeUpdated((this.props.vm.toJSON() !== this.props.lastTestedProject));
         }
@@ -308,22 +278,15 @@ class DebuggingTutorialStep extends React.Component {
     render () {
         const reachedLastStep = (this.props.step === this.props.stepCount);
         const overviewStep = "overviewStep".concat((this.props.step + 1).toString());
-        const showControlOverview = this.props.tutorialMessages?.["overviewStep" + (this.props.step + 1).toString()]?.controlImage1 !== null;
-        const showDownloadsOverview = this.props.tutorialMessages?.["overviewStep" + (this.props.step + 1).toString()]?.download1 !== null;
-
-        console.log("HasCodeUpdated: " + this.props.hasCodeUpdated);
+        const showControlOverview = this.props.tutorialMessages?.["overviewStep" + (this.props.step + 1).toString()]?.controlImage1 != null;
 
         return( <DebuggingTutorialStepComponent
                 onStartTests={() => this.onTest()}
                 nextStep={() => this.onNextStep()}
                 onResetProject={() => this.onResetProject()}
                 reachedLastStep={reachedLastStep}
-                onDownload={(name, content) => this.handleDownload(name, content)}
                 showControlOverview={showControlOverview}
                 overviewStep={overviewStep}
-                showDownloadsOverview={showDownloadsOverview}
-                curQualityResult={this.props.qualityResults?.at(0)}
-                hasUpdatedSinceLastTest={() => this.hasUpdatedSinceLastTest()}
                 onIncreaseTestPageIndex={() => this.onIncreaseTestPageIndex(1)}
                 onDecreaseTestPageIndex={() => this.onIncreaseTestPageIndex(-1)}
                 sprites={this.getSprites()}
@@ -366,19 +329,12 @@ DebuggingTutorialStep.propTypes = {
     showQuickHandle: PropTypes.func,
     setCurTestDetails: PropTypes.func,
     curTestDetails: PropTypes.string,
-    onDownload: PropTypes.func,
-    addDownloaded: PropTypes.func,
-    downloaded: PropTypes.any,
     isDebuggingTutorial: PropTypes.bool,
     showControlOverview: PropTypes.bool,
     overviewStep: PropTypes.string,
-    showDownloadsOverview: PropTypes.bool,
     toJson: PropTypes.func,
     locale: PropTypes.string.isRequired,
     detectors: PropTypes.string,
-    setQualityResults: PropTypes.func,
-    qualityResults: PropTypes.array,
-    curQualityResult: PropTypes.array,
     setHelpType: PropTypes.func,
     helpType: PropTypes.string,
     onBackToTutorialSelection: PropTypes.func,
@@ -386,8 +342,6 @@ DebuggingTutorialStep.propTypes = {
     codeResetPoint: PropTypes.any,
     lastTestedProject: PropTypes.any,
     setLastTestedProject: PropTypes.func,
-    hasUpdatedSinceLastTest: PropTypes.func, //TODO REMOVE
-    hasUpdatedSinceLastTest2: PropTypes.bool,
     setHasCodeUpdated: PropTypes.func,
     hasCodeUpdated: PropTypes.bool,
     setTestPageIndex: PropTypes.func,
@@ -412,10 +366,8 @@ const mapStateToProps = state => ({
     curPage: state.scratchGui.debuggingTutorialStep.page,
     isShowingQuickHandle: state.scratchGui.debuggingTutorialStep.isShowingQuickHandle,
     curTestDetails: state.scratchGui.debuggingTutorialStep.curTestDetails,
-    downloaded: state.scratchGui.debuggingTutorialStep.downloaded,
     toJson: state.scratchGui.vm.toJSON.bind(state.scratchGui.vm),
     locale: state.locales.locale,
-    qualityResults: state.scratchGui.debuggingTutorialStep.qualityResults,
     helpType: state.scratchGui.debuggingTutorialStep.helpType,
     codeResetPoint: state.scratchGui.debuggingTutorialStep.codeResetPoint,
     lastTestedProject: state.scratchGui.debuggingTutorialStep.lastTestedProject,
@@ -439,8 +391,6 @@ const mapDispatchToProps = dispatch => ({
     setCurPage: (page) => dispatch(setCurPage(page)),
     showQuickHandle: () => dispatch(showQuickHandle()),
     setCurTestDetails: (testId) => dispatch(setCurTestDetails(testId)),
-    addDownloaded: (addedName) => dispatch(addDownloaded(addedName)),
-    setQualityResults: (results) => dispatch(setQualityResults(results)),
     setHelpType: (type) => dispatch(setHelpType(type)),
     setCodeResetPoint: (project) => dispatch(setCodeResetPoint(project)),
     setLastTestedProject: (newCode) => dispatch(setLastTestedProject(newCode)),

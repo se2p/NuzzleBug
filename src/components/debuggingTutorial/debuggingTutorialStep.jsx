@@ -13,9 +13,6 @@ import buttonTest from "./images/buttonTest.png"
 import bubbleIndicator from "./images/SpeachBubbleRed.png"
 import bubbleIndicatorGray from "./images/bubbleDecalGrey.png"
 import bubbleIndicatorBlue from "./images/bubbleIDecalBlue2.png";
-import downButton from "./images/downButton.png"
-import upButton from "./images/upButton.png"
-import bubbleIndicatorPurple from "./images/bubbleDecalPurple.png"
 import owl2 from "./images/owlTransparent.png"
 import {renderResponseClassic, renderResponseDebugging} from "./tutorial-step-response-renderer.jsx";
 import { TransitionGroup } from 'react-transition-group'
@@ -37,9 +34,6 @@ import rightArrow from "../cards/icon--next.svg";
 import leftArrow from "../cards/icon--prev.svg";
 import ScratchBlocks from "scratchblocks-react";
 import RequestHintButton2 from "./hint-generation";
-
-
-
 
 const DebuggingTutorialStep = props => {
     const {
@@ -69,18 +63,12 @@ const DebuggingTutorialStep = props => {
         tutorialIndexData,
         setCurTestDetails,
         curTestDetails,
-        onDownload,
-        downloaded,
         isDebuggingTutorial,
         overviewStep,
         showControlOverview,
-        showDownloadsOverview,
-        curQualityResult,
         setHelpType,
         helpType,
         onBackToTutorialSelection,
-        hasUpdatedSinceLastTest,
-        hasUpdatedSinceLastTest2,//TODO remove
         hasCodeUpdated,
         testPageIndex,
         onIncreaseTestPageIndex,
@@ -108,7 +96,7 @@ const DebuggingTutorialStep = props => {
         progressBarRef.current.style.transition = 'width 1s linear';
 
         timeoutIdRef.current = setTimeout(() => {
-            setCurPage("RESPONSE");
+            setCurPage("TEST_RESULTS");//TODO REvert
             showQuickHandle();
             if (progressBarRef.current !== null) {
                 progressBarRef.current.style.transition = 'none';
@@ -138,7 +126,7 @@ const DebuggingTutorialStep = props => {
                     <div className={css.bubbleContainer}>
                         <div className={css.testStartBubble} style={{borderColor:"#4D97FFFF"}}>
                             <img className={css.finalBubbleIndicator} alt={"Bubble-Decal"} src={bubbleIndicatorBlue}/>
-                            {tutorialMessages.levelFinishedText}
+                            {tutorialMessages.successMsg}
                         </div>
                         <img src={owl2} alt={"Picture of Euli"} className={css.owlImage} draggable={false}/>
                     </div>
@@ -163,7 +151,7 @@ const DebuggingTutorialStep = props => {
                 </div>
 
                 <div className={css.cpButtonRow}>
-                    <div className={css.controlPanelButtonParent}>
+                    {/* <div className={css.controlPanelButtonParent}>
                         <img
                             className={css.cpButton}
                             src={buttonTest}
@@ -178,7 +166,7 @@ const DebuggingTutorialStep = props => {
                             }}
                         />
                         <span className={css.cpButtonDescription}>{guiMessages.step.testButton}</span>
-                    </div>
+                    </div>*/}
                     <div className={css.controlPanelButtonParent}>
                         <img
                             className={css.cpButton}
@@ -201,6 +189,7 @@ const DebuggingTutorialStep = props => {
                         />
                         <span className={css.cpButtonDescription}>{guiMessages.step.resultButton}</span>
                     </div>
+                    {/*
                     <div className={css.controlPanelButtonParent}>
                         <img
                             className={css.cpButton}
@@ -255,6 +244,7 @@ const DebuggingTutorialStep = props => {
                         />
                         <span className={css.cpButtonDescription}>{guiMessages.step.resetButton}</span>
                     </div>
+                    */}
                 </div>
             </div>
         );
@@ -308,7 +298,7 @@ const DebuggingTutorialStep = props => {
                     {isShowingQuickHandle ?
                         <div
                             className={css.overviewNextButton}
-                            onClick={() => setCurPage("RESPONSE")}
+                            onClick={() => setCurPage("TEST_RESULTS")}
                         >
                             <span>{guiMessages.step.next}</span>
                             <img
@@ -481,7 +471,7 @@ const DebuggingTutorialStep = props => {
      * Returns the feedback-summary for Euli.
      */
     const getResultText = () => { //TODO Refactor! (Gehört in eulis response code!)
-        if (testResults.passed) {
+        if (testResults?.passed) {
             return (
                 <div className={css.responseTextArea}>
                     <p>Sieht super aus!</p>
@@ -556,7 +546,7 @@ const DebuggingTutorialStep = props => {
         setShowInitialText(true);
         setIsGeneratingHint(true);
         setSelectedSprite(spriteKey);
-        setHelpIndex(30);
+        setHelpIndex(40);
         setCurPage("HELP");
         setReturnToTestResults(true);
         RequestHintButton2.generateHint(vm.toJSON(), result, passedDescriptions, vm.getLocale())
@@ -590,13 +580,13 @@ const DebuggingTutorialStep = props => {
 
         return (
             <div className={css.testContainer}>
-                <div className={css.spriteSelection}>
+                {/*<div className={css.spriteSelection}>
                     {sprites.map(key =>
                         <div className={selectedSprite === key ? css.spriteElementSelected : css.spriteElement} onClick={() => {setSelectedSprite(key); setHelpIndex(30)}} style={{opacity: helpIndex >= 2 ? 1 : 0}}>
-                            <img src={tutorialIndexData[key]} className={css.spriteElementIcon} alt={"SpriteImage"} draggable={false}/>
+                            <img src={tutorialIndexData[key]} className={css.spriteElementIcon} alt={"SpriteImage"} draggable={false} style={{visibility: "hidden"}}/>
                         </div>
                     )}
-                </div>
+                </div>*/}
 
 
                 <div className={css.helpWhiteBox}>
@@ -632,7 +622,7 @@ const DebuggingTutorialStep = props => {
 
 
                             <EuliBubble text={"Möchtest du einen Hinweis zu dem Test: " + selectedTestTitle + "?"} isVisible={helpIndex >= 30 && showInitialText && helpIndex < 40} key={"openingQuestion"} onTypewriterComplete={() => setHelpIndex(31)} isTypewriterFinished={helpIndex >= 31}/>
-                            <UserBubble text={"Ja, bitte!"} isVisible={helpIndex >= 31 && showInitialText} key={"openingAnswer"} onClick={() => setHelpIndex(40)} isSelected={helpIndex >= 40}/>
+                            <UserBubble text={"Ja, bitte!"} isVisible={helpIndex >= 31999999999 && showInitialText} key={"openingAnswer"} onClick={() => setHelpIndex(40)} isSelected={helpIndex >= 40}/>
                             <EuliBubble text={isGeneratingHint ? "Überlege..." : help?.Text} isVisible={helpIndex >= 40 && helpIndex < 50} key={"aaa9"} onTypewriterComplete={() => setHelpIndex(43)} isTypewriterFinished={helpIndex >= 43 || isGeneratingHint} showChild={helpIndex >= 43}>
                                 {!isGeneratingHint &&<div style={{display:"flex", justifyContent:"center"}}>
                                     <div style={{transform:"Scale(0.8)"}}>
@@ -645,7 +635,7 @@ const DebuggingTutorialStep = props => {
                                     </div>
                                 </div>}
                             </EuliBubble>
-                            {help?.finishedHelpFlag ? <UserBubble text={"Dann gehe ich zurück"} isVisible={helpIndex >= 43} key={"asd23ad2"} onClick={() => {setCurPage("TEST_RESULTS"); handleTestStart(); setCurTestDetails("");}} isSelected={helpIndex >= 44}/> : <UserBubble text={"Ich brauche einen neuen Hinweis"} isVisible={helpIndex >= 43} key={"asd23ad2"} onClick={() => generateNewHint()} isSelected={helpIndex >= 44}/>}
+                            {help?.finishedHelpFlag ? <UserBubble text={"Dann gehe ich zurück"} isVisible={helpIndex >= 43} key={"goBackToHelp"} onClick={() => {setCurPage("TEST_RESULTS"); handleTestStart(); setCurTestDetails("");}} isSelected={helpIndex >= 44}/> : <UserBubble text={"Ich brauche einen neuen Hinweis"} isVisible={helpIndex >= 43} key={"asd23ad2"} onClick={() => generateNewHint()} isSelected={helpIndex >= 44}/>}
 
                         </TransitionGroup>
                     </div>
@@ -673,10 +663,14 @@ const DebuggingTutorialStep = props => {
         }
     }
     return <>
+        <img src={bubbleIndicatorBlue} style={{display: "none"}} alt={"preload"}/>
+        <img src={bubbleIndicatorGray} style={{display: "none"}} alt={"preload"}/>
+        <img src={bubbleIndicator} style={{display: "none"}} alt={"preload"}/>
+
         {curPage === "RESPONSE" && <div className={css.leftButton} onClick={() => setCurPage("OVERVIEW")}>
             <img src={leftArrow} alt="Next" draggable={false} />
         </div>}
-        {curPage === "TEST_RESULTS" && <div className={css.leftButton} onClick={() => setCurPage("RESPONSE")}>
+        {curPage === "TEST_RESULTS" && <div className={css.leftButton} onClick={() => {setCurPage("OVERVIEW"); if (testResults?.passed) {setResponseType(RESPONSE_TESTING_FINISHED)} else {setResponseType(RESPONSE_DEFAULT)}}}>
             <img src={leftArrow} alt="Next" draggable={false} />
         </div>}
         {curPage === "HELP" && !help?.finishedHelpFlag && <div className={css.leftButton} onClick={() => {returnToTestResults ? setCurPage("TEST_RESULTS") : setCurPage("RESPONSE")}}>
