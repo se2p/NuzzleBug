@@ -22,7 +22,7 @@ import {
     onDiagrammExplanation,
     setResponseType,
 } from "../reducers/debugging-tutorial-help";
-import DebuggingTutorialStepComponent from '../components/debuggingTutorial/debuggingTutorialHelp.jsx';
+import DebuggingTutorialStepComponent from '../components/debuggingTutorial/debugging/debuggingTutorialHelp.jsx';
 import PropTypes from "prop-types";
 
 class DebuggingTutorialHelp extends React.Component {

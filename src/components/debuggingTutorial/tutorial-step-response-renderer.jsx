@@ -31,8 +31,8 @@ function renderCommonResponse(responseType, {
                     <div className={css.responseTextArea}>
                         <p> Wie kann ich dir helfen? </p>
                         <p style={{marginTop: "15px"}}>
-                            Wenn du nicht weißt, wie du anfangen sollst, drücke einfach auf
-                            <span style={{color: "#ffae2f", fontWeight:"bold"}}> Was soll ich tun?</span>
+                            Wenn du deinen Code von mir überprüfen lassen willst, klicke auf
+                            <span style={{color: "#C276FFFF", fontWeight:"bold"}}> Testergebnisse</span>
                         </p>
                     </div>
                 </div>
@@ -103,7 +103,7 @@ export function renderResponseClassic(responseType, {
     setResponseType,
     handleProjectReset,
     handleTestStart,
-    getResultText
+    getResultText,
 }) {
     switch (responseType) {
 
@@ -179,7 +179,7 @@ export function renderResponseDebugging(responseType, {
     setResponseType,
     handleProjectReset,
     handleTestStart,
-    getResultText
+    getResultText,
 }) {
     switch (responseType) {
 

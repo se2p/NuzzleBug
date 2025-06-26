@@ -645,7 +645,8 @@
     flex-direction: column;
     align-items: center;
     background-color: #ffffff;
-    background-image: url("https://www.transparenttextures.com/patterns/skulls.png");}
+    background-image: url("../debuggingTutorial/images/skulls.png");
+}
 
 .white-box {
     padding-top: 15px;
@@ -715,15 +716,16 @@
 
 .cpButton-row {
     display: flex;
-    justify-content: space-between;
+    justify-content: center; /*space-between;*/
     width: 80%;
     margin-top: 60px;
+    gap: 120px;
 }
 
 .cpButton {
     cursor: pointer;
     flex-grow: 0;
-    width: 50%;
+    width: 90px;
     height: auto;
     transition: all 0.1s ease-in-out;
     will-change: transform;
@@ -732,7 +734,7 @@
     box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
     -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
     -moz-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
-    border-radius: 12px;
+    border-radius: 22px;
 }
 
 .cpButton:hover:active {
@@ -969,7 +971,7 @@
     color: #575E75FF;
     padding-top: 10px;
     background-color: #ffffff;
-    background-image: url("https://www.transparenttextures.com/patterns/skulls.png");
+    background-image: url("./images/skulls.png");
 }
 
 
@@ -1403,440 +1405,440 @@
 
 
 
-/*DELETE*/
-.testWhiteBoxTop { /*Minimize*/
-    background-color: white;
-    width: 90%;
-    border-radius: 8px;
-    display: flex;
-    justify-content: flex-start;
-    box-sizing: border-box;
-    box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
-    -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
-    -moz-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
-    margin-top: 5px;
-    height: fit-content;
-    flex-direction: column;
-}
-.columnFlex {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 15px;
-    padding-left: 30px;
-    padding-right: 20px;
-}
-.testBubbleIndicator {
-    position: absolute;
-    width: 35px;
-    height: auto;
-    right: 0;
-    top: 50%;
-    transform: translateX(102%) translateY(-40%) scaleX(-1);
-    z-index: -1;
-}
-.nextBubble {
-    display: inline-block;
-    position: relative;
-    border-radius: 15px;
-    background-color: #0fbd8cff;
-    border: solid 3px #0fbd8cff;
-    color: white;
-    width: 100%;
-    z-index: 100;
-    text-align: left;
-    padding-left: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-    cursor: pointer;
-}
-.nextBubble:hover {
-    background-color: #0da177ff;
-    border: solid 3px #0da177ff;
-}
-.nextBubble:hover .nextBubbleIndicator {
-    background-image: url('./images/bubbleDecalGreenDark.png');
-}
-.nextBubbleIndicator {
-    position: absolute;
-    width: 35px;
-    height: 35px;
-    top: 50%;
-    left: 0;
-    z-index: -1;
-    transform: translateX(-102%) translateY(-40%);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-image: url('./images/bubbleDecalGreenLight.png');
-}
-.testLeftArrow {
-    height: 150px;
-    width: 30px;
-    background-color: white;
-    border-top-left-radius: 40px;
-    border-bottom-left-radius: 40px;
-    margin-right: auto;
-    margin-left: auto;
-    box-shadow: -1px 7px 8px -1px rgba(0,0,0,0.75);
-    -webkit-box-shadow: -1px 7px 8px -1px rgba(0,0,0,0.75);
-    -moz-box-shadow: -1px 7px 8px -1px rgba(0,0,0,0.75);
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-.testRightArrow:hover {
-    background-color: #575E75FF;
-}
-.testLeftArrow:hover {
-    background-color: #575E75FF;
-}
-.testRightArrow {
-    height: 150px;
-    width: 30px;
-    background-color: white;
-    border-top-right-radius: 40px;
-    border-bottom-right-radius: 40px;
-    margin-right: auto;
-    margin-left: auto;
-    box-shadow: 1px 7px 8px -1px rgba(0,0,0,0.75);
-    -webkit-box-shadow: 1px 7px 8px -1px rgba(0,0,0,0.75);
-    -moz-box-shadow: 1px 7px 8px -1px rgba(0,0,0,0.75);
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-.testLeftArrow:hover .nextTestIcon{
-    background-image: url("./images/nextTestArrowWhite.png");
-}
-.testRightArrow:hover .nextTestIcon{
-    background-image: url("./images/nextTestArrowWhite.png");
-}
-.testRightArrow:active {
-    background-color: #6b728d;
-}
-.testLeftArrow:active {
-    background-color: #6b728d;
-}
-.testWhiteBox { /*Minimize*/
-    background-color: white;
-    width: 90%;
-    min-height: 200px;
-    border-radius: 8px;
-    display: flex;
-    justify-content: flex-start;
-    box-sizing: border-box;
-    box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
-    -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
-    -moz-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
-    padding: 10px;
-    height: fit-content;
-    margin-top: 50px;
-}
-.testResultContainer {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 10px;
-    overflow-x: auto;
-    padding-bottom: 20px;
-}
-.testElementButtonFailed {
-    border-radius: 30px;
-    border: 3px #D16857FF solid;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    color: #575E75FF;
-    margin: auto 10px 10px;
-}
-.testElementButtonFailed:hover {
-    color: white;
-    background-color: #D16857FF;
-}
-.testElementButtonPassed {
-    border-radius: 30px;
-    border: 3px #89DDAFFF solid;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    color: #575E75FF;
-    margin: auto 10px 10px;
-}
-.testElementButtonPassed:hover {
-    color: white;
-    background-color: #89DDAFFF;
-}
-.testElementButton {
-    border-radius: 30px;
-    border: 3px #AFD8FDFF solid;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    color: #575E75FF;
-    margin: auto 10px 10px;
-}
-.testElementButton:hover {
-    color: white;
-    background-color: #AFD8FDFF;
-}
-.testElementContainer {
-    width: 160px;
-    min-height: 240px;
-    height: fit-content;
-
-    border-radius: 10px;
-
-    box-shadow: 0px 8px 13px 0px rgba(0,0,0,0.63);
-    -webkit-box-shadow: 0px 8px 13px 0px rgba(0,0,0,0.63);
-    -moz-box-shadow: 0px 8px 13px 0px rgba(0,0,0,0.63);
-
-    background-color: #f5f5f5ff;
-    display: flex;
-    flex-direction: column;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-
-    margin-left: 10px;
-    margin-right: 10px;
-}
-.testElementText {
-    color: #575E75FF;
-    font-size: 0.9rem;
-    margin-top: 10px;
-    font-weight: normal;
-}
-.testElementHeader {
-    width: 100%;
-    height: 90px;
-
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    background-color: #65d21b;
-    display: flex;
-    flex-direction: column;
-    color: white;
-    font-weight: bold;
-    padding: 12px 20px;
-    cursor: pointer;
-    justify-content: center;
-    align-items: center;
-}
-.testElementIcon {
-    width: 50px;
-    height: auto;
-}
-.testElementContainer {
-    width: 160px;
-    min-height: 240px;
-    height: fit-content;
-
-    border-radius: 10px;
-
-    box-shadow: 0px 8px 13px 0px rgba(0,0,0,0.63);
-    -webkit-box-shadow: 0px 8px 13px 0px rgba(0,0,0,0.63);
-    -moz-box-shadow: 0px 8px 13px 0px rgba(0,0,0,0.63);
-
-    background-color: #f5f5f5ff;
-    display: flex;
-    flex-direction: column;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-
-    margin-left: 10px;
-    margin-right: 10px;
-}
-
-.testElementText {
-    color: #575E75FF;
-    font-size: 0.9rem;
-    margin-top: 10px;
-    font-weight: normal;
-}
-
-.testElementHeader {
-    width: 100%;
-    height: 90px;
-
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    background-color: #65d21b;
-    display: flex;
-    flex-direction: column;
-    color: white;
-    font-weight: bold;
-    padding: 12px 20px;
-    cursor: pointer;
-    justify-content: center;
-    align-items: center;
-}
-
-.testElementIcon {
-    width: 50px;
-    height: auto;
-}
-
-.testElementIconRotating {
-    width: 50px;
-    height: auto;
-    border: 5px #4370caff solid;
-    border-radius: 100px;
-    animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
+    /*DELETE*/
+    .testWhiteBoxTop { /*Minimize*/
+        background-color: white;
+        width: 90%;
+        border-radius: 8px;
+        display: flex;
+        justify-content: flex-start;
+        box-sizing: border-box;
+        box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+        -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+        -moz-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+        margin-top: 5px;
+        height: fit-content;
+        flex-direction: column;
     }
-    to {
-        transform: rotate(360deg);
+    .columnFlex {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 15px;
+        padding-left: 30px;
+        padding-right: 20px;
     }
-}
-.testElementTitle {
-    color: #575E75FF;
-    font-weight: bold;
-    font-size: 1.2rem;
-    padding: 10px;
-}
+    .testBubbleIndicator {
+        position: absolute;
+        width: 35px;
+        height: auto;
+        right: 0;
+        top: 50%;
+        transform: translateX(102%) translateY(-40%) scaleX(-1);
+        z-index: -1;
+    }
+    .nextBubble {
+        display: inline-block;
+        position: relative;
+        border-radius: 15px;
+        background-color: #0fbd8cff;
+        border: solid 3px #0fbd8cff;
+        color: white;
+        width: 100%;
+        z-index: 100;
+        text-align: left;
+        padding-left: 10px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        cursor: pointer;
+    }
+    .nextBubble:hover {
+        background-color: #0da177ff;
+        border: solid 3px #0da177ff;
+    }
+    .nextBubble:hover .nextBubbleIndicator {
+        background-image: url('./images/bubbleDecalGreenDark.png');
+    }
+    .nextBubbleIndicator {
+        position: absolute;
+        width: 35px;
+        height: 35px;
+        top: 50%;
+        left: 0;
+        z-index: -1;
+        transform: translateX(-102%) translateY(-40%);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-image: url('./images/bubbleDecalGreenLight.png');
+    }
+    .testLeftArrow {
+        height: 150px;
+        width: 30px;
+        background-color: white;
+        border-top-left-radius: 40px;
+        border-bottom-left-radius: 40px;
+        margin-right: auto;
+        margin-left: auto;
+        box-shadow: -1px 7px 8px -1px rgba(0,0,0,0.75);
+        -webkit-box-shadow: -1px 7px 8px -1px rgba(0,0,0,0.75);
+        -moz-box-shadow: -1px 7px 8px -1px rgba(0,0,0,0.75);
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .testRightArrow:hover {
+        background-color: #575E75FF;
+    }
+    .testLeftArrow:hover {
+        background-color: #575E75FF;
+    }
+    .testRightArrow {
+        height: 150px;
+        width: 30px;
+        background-color: white;
+        border-top-right-radius: 40px;
+        border-bottom-right-radius: 40px;
+        margin-right: auto;
+        margin-left: auto;
+        box-shadow: 1px 7px 8px -1px rgba(0,0,0,0.75);
+        -webkit-box-shadow: 1px 7px 8px -1px rgba(0,0,0,0.75);
+        -moz-box-shadow: 1px 7px 8px -1px rgba(0,0,0,0.75);
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .testLeftArrow:hover .nextTestIcon{
+        background-image: url("./images/nextTestArrowWhite.png");
+    }
+    .testRightArrow:hover .nextTestIcon{
+        background-image: url("./images/nextTestArrowWhite.png");
+    }
+    .testRightArrow:active {
+        background-color: #6b728d;
+    }
+    .testLeftArrow:active {
+        background-color: #6b728d;
+    }
+    .testWhiteBox { /*Minimize*/
+        background-color: white;
+        width: 90%;
+        min-height: 200px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: flex-start;
+        box-sizing: border-box;
+        box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+        -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+        -moz-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+        padding: 10px;
+        height: fit-content;
+        margin-top: 50px;
+    }
+    .testResultContainer {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 10px;
+        overflow-x: auto;
+        padding-bottom: 20px;
+    }
+    .testElementButtonFailed {
+        border-radius: 30px;
+        border: 3px #D16857FF solid;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        color: #575E75FF;
+        margin: auto 10px 10px;
+    }
+    .testElementButtonFailed:hover {
+        color: white;
+        background-color: #D16857FF;
+    }
+    .testElementButtonPassed {
+        border-radius: 30px;
+        border: 3px #89DDAFFF solid;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        color: #575E75FF;
+        margin: auto 10px 10px;
+    }
+    .testElementButtonPassed:hover {
+        color: white;
+        background-color: #89DDAFFF;
+    }
+    .testElementButton {
+        border-radius: 30px;
+        border: 3px #AFD8FDFF solid;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        color: #575E75FF;
+        margin: auto 10px 10px;
+    }
+    .testElementButton:hover {
+        color: white;
+        background-color: #AFD8FDFF;
+    }
+    .testElementContainer {
+        width: 160px;
+        min-height: 240px;
+        height: fit-content;
 
-.testElementTitleExtended {
-    margin-right: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.nextTestIcon {
-    width: 15px;
-    height: 40px;
+        border-radius: 10px;
 
-    background-image: url("./images/nextTestArrowGrey.png");
-    background-size: cover;   /* skaliert, damit das gesamte Div gefüllt wird */
-    background-position: center center; /* Bild zentrieren */
-    background-repeat: no-repeat;
-}
+        box-shadow: 0px 8px 13px 0px rgba(0,0,0,0.63);
+        -webkit-box-shadow: 0px 8px 13px 0px rgba(0,0,0,0.63);
+        -moz-box-shadow: 0px 8px 13px 0px rgba(0,0,0,0.63);
+
+        background-color: #f5f5f5ff;
+        display: flex;
+        flex-direction: column;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    .testElementText {
+        color: #575E75FF;
+        font-size: 0.9rem;
+        margin-top: 10px;
+        font-weight: normal;
+    }
+    .testElementHeader {
+        width: 100%;
+        height: 90px;
+
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        background-color: #65d21b;
+        display: flex;
+        flex-direction: column;
+        color: white;
+        font-weight: bold;
+        padding: 12px 20px;
+        cursor: pointer;
+        justify-content: center;
+        align-items: center;
+    }
+    .testElementIcon {
+        width: 50px;
+        height: auto;
+    }
+    .testElementContainer {
+        width: 160px;
+        min-height: 240px;
+        height: fit-content;
+
+        border-radius: 10px;
+
+        box-shadow: 0px 8px 13px 0px rgba(0,0,0,0.63);
+        -webkit-box-shadow: 0px 8px 13px 0px rgba(0,0,0,0.63);
+        -moz-box-shadow: 0px 8px 13px 0px rgba(0,0,0,0.63);
+
+        background-color: #f5f5f5ff;
+        display: flex;
+        flex-direction: column;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    .testElementText {
+        color: #575E75FF;
+        font-size: 0.9rem;
+        margin-top: 10px;
+        font-weight: normal;
+    }
+
+    .testElementHeader {
+        width: 100%;
+        height: 90px;
+
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        background-color: #65d21b;
+        display: flex;
+        flex-direction: column;
+        color: white;
+        font-weight: bold;
+        padding: 12px 20px;
+        cursor: pointer;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .testElementIcon {
+        width: 50px;
+        height: auto;
+    }
+
+    .testElementIconRotating {
+        width: 50px;
+        height: auto;
+        border: 5px #4370caff solid;
+        border-radius: 100px;
+        animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+    .testElementTitle {
+        color: #575E75FF;
+        font-weight: bold;
+        font-size: 1.2rem;
+        padding: 10px;
+    }
+
+    .testElementTitleExtended {
+        margin-right: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .nextTestIcon {
+        width: 15px;
+        height: 40px;
+
+        background-image: url("./images/nextTestArrowGrey.png");
+        background-size: cover;   /* skaliert, damit das gesamte Div gefüllt wird */
+        background-position: center center; /* Bild zentrieren */
+        background-repeat: no-repeat;
+    }
 
 
 
 
 
-.downloadContainer2 {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    align-items: center;
-    padding-top: 10px;
-    padding-left: 30px;
-    padding-right: 15px;
-    box-sizing: border-box;
-}
+    .downloadContainer2 {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+        padding-top: 10px;
+        padding-left: 30px;
+        padding-right: 15px;
+        box-sizing: border-box;
+    }
 
-.downloadContainer {
-    display: flex;
-    flex-direction: column;
-    width: 90%;
-    margin-top: 20px;
-    overflow-y: auto;
-    gap: 5px;
-    max-height: 125px;
-    padding-right: 10px;
-}
+    .downloadContainer {
+        display: flex;
+        flex-direction: column;
+        width: 90%;
+        margin-top: 20px;
+        overflow-y: auto;
+        gap: 5px;
+        max-height: 125px;
+        padding-right: 10px;
+    }
 
-.downloadBox {
-    display: flex;
-    border: 3px solid #575E75FF;
-    border-radius: 10px;
-    width: 100%;
-    height: 50px;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 3px 3px 3px 20px;
-}
+    .downloadBox {
+        display: flex;
+        border: 3px solid #575E75FF;
+        border-radius: 10px;
+        width: 100%;
+        height: 50px;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 3px 3px 3px 20px;
+    }
 
-.downloadBoxFinished {
-    border: 3px solid #9ea3b4;
-}
+    .downloadBoxFinished {
+        border: 3px solid #9ea3b4;
+    }
 
-.downloadBoxFinished .downloadButton {
-    background-color: #ffffff;
-    color: #575E75FF;
-}
+    .downloadBoxFinished .downloadButton {
+        background-color: #ffffff;
+        color: #575E75FF;
+    }
 
-.downloadBoxFinished .downloadButton:hover {
-    background-color: #ffffff;
-}
+    .downloadBoxFinished .downloadButton:hover {
+        background-color: #ffffff;
+    }
 
-.downloadHeader {
+    .downloadHeader {
 
-}
+    }
 
-.downloadImage {
-    height: 30px;
-    width: auto;
-}
+    .downloadImage {
+        height: 30px;
+        width: auto;
+    }
 
-.downloadButton {
-    background-color: #575E75FF;
-    margin-left: auto;
-    padding: 5px;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-}
+    .downloadButton {
+        background-color: #575E75FF;
+        margin-left: auto;
+        padding: 5px;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+    }
 
-.downloadButton:hover {
-    background-color: #3d4252;
-}
-
-
+    .downloadButton:hover {
+        background-color: #3d4252;
+    }
 
 
 
 
 
-.qualityContainer {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    background-color: #9a2719;
-    height: fit-content;
-}
 
-.qualityHeader {
-    width: 90%;
-    background-color: #FFD33D;
-}
 
-.qualitySpriteTitle {
+    .qualityContainer {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        background-color: #9a2719;
+        height: fit-content;
+    }
 
-}
+    .qualityHeader {
+        width: 90%;
+        background-color: #FFD33D;
+    }
 
-.qualityTitle {
+    .qualitySpriteTitle {
 
-}
+    }
 
-.qualityContent {
+    .qualityTitle {
 
-}
+    }
 
-.qualityDescription {
+    .qualityContent {
 
-}
+    }
 
-.qualityCodeImg {
-}
+    .qualityDescription {
 
-.qualityButtonContainer {
+    }
 
-}
+    .qualityCodeImg {
+    }
 
-.qualityButton {
+    .qualityButtonContainer {
 
-}
+    }
+
+    .qualityButton {
+
+    }
 
 
