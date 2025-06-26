@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import css from "./debuggingTutorialHelp.css";
+import css from "../debuggingTutorialHelp.css";
 
 const SingleChoice = ({ tutorial, step, tutorialIndexData, answers, setAnswer }) => {
     // Überprüfe, ob die notwendigen Daten vorhanden sind

@@ -128,18 +128,18 @@
     height: 20px; /* Höhe entspricht der Bildhöhe */
     cursor: pointer;
     margin-left: 10px;
-    background-image: url('./images/nextButton.png');
+    background-image: url('../images/nextButton.png');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
 }
 
 .footer-next-button:hover {
-    background-image: url('./images/nextButtonHover.png');
+    background-image: url('../images/nextButtonHover.png');
 }
 
 .preload-footer-next-button {
-    background-image: url('./images/nextButtonHover.png');
+    background-image: url('../images/nextButtonHover.png');
     visibility: hidden;
     position: absolute;
     width: 0;
@@ -152,18 +152,18 @@
     height: 20px; /* Höhe entspricht der Bildhöhe */
     cursor: pointer;
     margin-left: 10px;
-    background-image: url('./images/backButton.png');
+    background-image: url('../images/backButton.png');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
 }
 
 .footer-back-button:hover {
-    background-image: url('./images/backButtonHover.png');
+    background-image: url('../images/backButtonHover.png');
 }
 
 .preload-footer-back-button {
-    background-image: url('./images/backButtonHover.png');
+    background-image: url('../images/backButtonHover.png');
     visibility: hidden;
     position: absolute;
     width: 0;
