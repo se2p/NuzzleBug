@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import {injectIntl} from "react-intl";
 import css from "./tutorial-selection.css"
 import TutorialItem from "./tutorial-item.jsx";
-import bubbleIndicator from "./images/bubbleDecalGreyHelp.png";
-import euliLeft from "./images/OwlBranchRight.png";
-import arrow from "./images/arrow-next.png"
-import iconDescription from "./images/icon--Description.png";
-import iconDebugging from "./images/debuggingIcon.png";
+import bubbleIndicator from "../images/bubbleDecalGreyHelp.png";
+import euliLeft from "../images/OwlBranchRight.png";
+import arrow from "../images/arrow-next.png"
+import iconDescription from "../images/icon--Description.png";
+import iconDebugging from "../images/debuggingIcon.png";
 
 const TutorialSelection = ({tutorials, onSelectTutorial, guiMessages}) => {
     const [showingHelp, setShowingHelp] = useState("");
@@ -25,10 +25,10 @@ const TutorialSelection = ({tutorials, onSelectTutorial, guiMessages}) => {
 
     return (<div className={css.container}>
         <h1 className={css.header}>
-            {showingHelp === "" && <div className={css.help} onClick={() => setHelp("1")}>
+            {/*showingHelp === "" && <div className={css.help} onClick={() => setHelp("1")}>
                 <span>?</span>
                 <span style={{fontSize: "0.6rem"}}>{guiMessages.selection.explanation}</span>
-            </div>}
+            </div>*/}
         </h1>
 
         <div className={css.tabContainer}>
@@ -41,7 +41,7 @@ const TutorialSelection = ({tutorials, onSelectTutorial, guiMessages}) => {
                     {guiMessages.selection.coding}
                 </div>
             </button>}
-            {showingHelp === "" && <button className={css.tabButton}
+            {/*showingHelp === "" && <button className={css.tabButton}
                                            id="debuggingTab"
                                            style={{backgroundColor:showDebuggingTutorials ? "#70a45b" : "#575E75FF"}}
                                            onClick={() => showDebuggingTutorial(true)}>
@@ -49,7 +49,8 @@ const TutorialSelection = ({tutorials, onSelectTutorial, guiMessages}) => {
                     <img className={css.icon} src={iconDebugging} alt={"errorIcon"}/>
                     {guiMessages.selection.debugging}
                 </div>
-            </button>}
+            </button>*/} {//TODO
+                }
         </div>
 
         <div className={css.tutorialCardContainer} style={{

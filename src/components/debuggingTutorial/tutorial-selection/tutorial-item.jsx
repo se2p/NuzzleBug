@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import {injectIntl} from "react-intl";
 import css from "./tutorial-item.css";
 
-import difficulty_easy from "./images/difficultyIconEasy.png"
-import difficulty_medium from "./images/difficultyIconMedium.png"
-import difficulty_hard from "./images/difficultyIconHard.png"
+import difficulty_easy from "../images/difficultyIconEasy.png"
+import difficulty_medium from "../images/difficultyIconMedium.png"
+import difficulty_hard from "../images/difficultyIconHard.png"
 
 const TutorialItem = ({content, onSelect, isDebuggingTutorial, guiMessages}) => (
     <div className={css.box} onClick={() => onSelect(content.id, content.totalSteps)}>
