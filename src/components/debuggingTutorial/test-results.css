@@ -7,7 +7,7 @@
     color: #575E75FF;
     padding-top: 10px;
     background-color: #ffffff;
-    background-image: url("https://www.transparenttextures.com/patterns/skulls.png");
+    background-image: url("./images/skulls.png");
 }
 
 /*Top box*/
@@ -398,7 +398,6 @@
 .testElementHeader {
     width: 100%;
     height: 90px;
-
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     border-bottom-left-radius: 10px;
@@ -417,6 +416,7 @@
 .testElementIcon {
     width: 50px;
     height: auto;
+    transition: all 0.2s ease;
 }
 
 .testElementTitle {
