@@ -12,7 +12,7 @@
         "start": "webpack-dev-server",
         "test": "npm run test:lint && npm run test:unit && npm run build && npm run test:integration",
         "test:integration": "jest --runInBand test[\\\\/]integration",
-        "test:lint": "eslint . --ext .js,.jsx",
+        "test:lint": "eslint . --ext .js,.jsx,.tsx,.ts",
         "test:unit": "jest test[\\\\/]unit",
         "test:smoke": "jest --runInBand test[\\\\/]smoke",
         "watch": "webpack --colors --watch"
@@ -26,6 +26,8 @@
     },
     "dependencies": {
         "@types/jest": "^29.5.12",
+        "@types/react": "^16.0.0",
+        "@types/react-dom": "^16.0.0",
         "arraybuffer-loader": "^1.0.6",
         "autoprefixer": "^9.0.1",
         "base64-loader": "1.0.0",
@@ -119,6 +121,7 @@
         "@babel/plugin-transform-async-to-generator": "7.14.5",
         "@babel/preset-env": "7.14.8",
         "@babel/preset-react": "7.14.5",
+        "@babel/preset-typescript": "^7.27.1",
         "babel-core": "7.0.0-bridge.0",
         "babel-eslint": "10.0.3",
         "babel-loader": "8.2.2",

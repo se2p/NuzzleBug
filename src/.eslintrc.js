@@ -16,7 +16,8 @@ module.exports = {
         'react/jsx-no-literals': 'error',
         'no-confusing-arrow': ['error', {
             'allowParens': true
-        }]
+        }],
+        'react/jsx-filename-extension': [1, {extensions: ['.jsx', '.tsx']}]
     },
     settings: {
         react: {

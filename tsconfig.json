@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "rootDir": "src",
+        "outDir": "build",
+        "esModuleInterop": true,
+        "jsx": "react",
+        "target": "ES5"
+    },
+}
