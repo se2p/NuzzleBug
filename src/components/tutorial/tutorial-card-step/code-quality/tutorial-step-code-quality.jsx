@@ -1,42 +1,13 @@
 import PropTypes from 'prop-types';
 import React, {useEffect, useState} from 'react';
 import styles from '../../styles/tutorial-cards.css';
-import stylesHints from '../../styles/tutorial-code-quality.css';
 import arrow from '../../images/icon--arrow-top.svg';
 
 import scratchblocks from 'scratchblocks';
-import ScratchBlocks from 'scratchblocks-react';
-import de from 'scratchblocks/locales/de.json';
 
 import logging from 'scratch-vm/src/util/logging.js';
+import ScratchBlocksImage from './scratch-blocks-image';
 
-scratchblocks.loadLanguages({de});
-
-const translate = (scratchBlocksText, locale) => {
-    const block = scratchblocks.parse(scratchBlocksText, {
-        languages: ['en', 'de']
-    });
-    if (locale === 'de') {
-        block.translate(scratchblocks.allLanguages.de);
-    }
-    return block.stringify();
-};
-
-const ScratchBlocksImage = props => (
-    <div className={stylesHints.scratchImage}>
-        <ScratchBlocks
-            blockStyle="scratch3"
-            languages={['en', 'de']}
-        >
-            {translate(props.scratchBlocksText, props.locale)}
-        </ScratchBlocks>
-    </div>
-);
-
-ScratchBlocksImage.propTypes = {
-    scratchBlocksText: PropTypes.string,
-    locale: PropTypes.string
-};
 
 const CodeQualityHints = props => {
     const {

@@ -1,0 +1,31 @@
+{
+    "compilerOptions": {
+        "plugins": [
+            {
+                "name": "typescript-plugin-css-modules",
+                "options": {
+                    "customMatcher": "\\.css$",
+                    "classnameTransform": "camelCase"
+                }
+            }
+        ],
+        "allowJs": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "jsx": "react",
+        "module": "CommonJS",
+        "noImplicitAny": false, /* required for untyped imports */
+        "outDir": "dist",
+        "resolveJsonModule": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "target": "ES2016",
+        "tsBuildInfoFile": "./dist/.tsbuildinfo",
+    },
+    "include": ["src"],
+    "exclude": [
+        "node_modules",
+        "build",
+        "dist"
+    ]
+}
