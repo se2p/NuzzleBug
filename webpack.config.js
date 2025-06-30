@@ -66,7 +66,10 @@ const base = {
         {
             test: /\.tsx?$/,
             use: [
-                'babel-loader',
+                {
+                    loader: 'babel-loader',
+                    options: {}
+                },
                 {
                     loader: 'ts-loader',
                     options: {
