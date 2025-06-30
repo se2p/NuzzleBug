@@ -37,11 +37,11 @@ const base = {
     },
     resolve: {
         symlinks: false,
-        extensions: ['.ts', '.tsx', '.js'] // including typescript is necessary as whisker includes some
+        extensions: ['.ts', '.tsx', '.js']
     },
     module: {
         rules: [{
-            test: /\.[jt]sx?$/,
+            test: /\.jsx?$/,
             loader: 'babel-loader',
             include: [
                 path.resolve(__dirname, 'src'),
@@ -66,6 +66,7 @@ const base = {
         {
             test: /\.tsx?$/,
             use: [
+                'babel-loader',
                 {
                     loader: 'ts-loader',
                     options: {
@@ -229,10 +230,6 @@ module.exports = [
                 libraryTarget: 'umd',
                 path: path.resolve('dist'),
                 publicPath: `${STATIC_PATH}/`
-            },
-            externals: {
-                'react': 'React',
-                'react-dom': 'ReactDOM'
             },
             module: {
                 rules: base.module.rules.concat([

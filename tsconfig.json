@@ -1,10 +1,19 @@
 {
     "compilerOptions": {
-        "rootDir": "src",
-        "outDir": "build",
+        "allowJs": true,
         "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
         "jsx": "react",
+        "module": "CommonJS",
+        "outDir": "dist",
+        "strict": true,
         "target": "ES2016",
-        "strict": true
-    }
+        "tsBuildInfoFile": "./dist/.tsbuildinfo",
+    },
+    "include": ["src/**/*.tsx", "src/**/*.ts"],
+    "exclude": [
+        "node_modules",
+        "build",
+        "dist"
+    ]
 }
