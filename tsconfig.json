@@ -4,6 +4,7 @@
         "outDir": "build",
         "esModuleInterop": true,
         "jsx": "react",
-        "target": "ES5"
-    },
+        "target": "ES2016",
+        "strict": true
+    }
 }

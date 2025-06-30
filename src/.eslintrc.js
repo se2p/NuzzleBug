@@ -17,7 +17,7 @@ module.exports = {
         'no-confusing-arrow': ['error', {
             'allowParens': true
         }],
-        'react/jsx-filename-extension': [1, {extensions: ['.jsx', '.tsx']}]
+        'react/jsx-filename-extension': ['error', {extensions: ['.jsx', '.tsx']}]
     },
     settings: {
         react: {
@@ -28,5 +28,22 @@ module.exports = {
                 config: path.resolve(__dirname, '../webpack.config.js')
             }
         }
-    }
+    },
+    overrides: [
+        {
+            files: ['*.ts', '*.tsx'],
+            extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
+            parser: '@typescript-eslint/parser',
+            plugins: [
+                '@typescript-eslint',
+                'eslint-plugin-tsdoc'
+            ],
+            rules: {
+                'tsdoc/syntax': 'warn',
+                'valid-jsdoc': 'off',
+                'no-use-before-define': 'off', // doesn't work correctly with TS parser
+                '@typescript-eslint/no-use-before-define': 'error', // replacement for plain 'no-use-before-define'
+            }
+        }
+    ]
 };
