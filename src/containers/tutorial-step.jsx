@@ -11,6 +11,7 @@ import {
 import {lock, unlock} from '../reducers/vm-status';
 import {runTest} from 'tutorial-tests';
 import * as tutorials from 'tutorial-tests/src/tutorials';
+import {getTutorialFeedback} from './litterbox-web-api';
 
 import successImageEN from '../components/tutorial/images/greatDoneEN.png';
 import successImageDE from '../components/tutorial/images/greatDoneDE.png';
@@ -58,43 +59,22 @@ class TutorialStep extends React.Component {
     }
 
     requestHints () {
-        const program = this.props.toJson();
-        const url = `${process.env.LITTERBOX_BASE_URL}/tutorial-system/generate-feedback`;
+        const program = this.props.vm.toJSON();
         let detectors = 'default';
         if (this.props.detectors) {
             detectors = this.props.detectors;
         }
         const language = this.props.locale === 'de' ? 'de' : 'en';
-        const jsonBody = JSON.stringify({
-            language: language, detectors: detectors, program: program
-        });
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: jsonBody,
-            referrerPolicy: 'origin-when-cross-origin'
-        })
-            .then(response => response.json())
-            .then(problems => {
-                const result = problems.map(hint => ({
-                    title: hint.name,
-                    description: hint.hint,
-                    sprite: hint.sprite,
-                    costume: hint.costume,
-                    type: hint.type,
-                    codeSnippet: hint.scratchBlocksCode
+
+        getTutorialFeedback(program, detectors, language)
+            .then(hints => {
+                this.setState(prev => ({
+                    ...prev,
+                    hints
                 }));
-                this.setState({
-                    hints: result,
-                    details: this.state.details,
-                    isAutoSaving: this.state.isAutoSaving
-                });
             })
-            // ignore errors to avoid crashing the tutorial tab
             // eslint-disable-next-line no-unused-vars
-            .catch(ignored => {});
+            .catch(_ => {});
     }
 
     processSteps () {
