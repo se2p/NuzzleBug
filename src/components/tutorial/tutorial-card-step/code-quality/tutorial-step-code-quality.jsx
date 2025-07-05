@@ -17,27 +17,15 @@ const CodeQualityHints = props => {
     const [selectedType, setSelectedType] = useState('PERFUME');
     const [index, setIndex] = useState(0);
     const [hasHints, setHasHints] = useState({
-        hasBugs: hints
-            .filter(hint => selectedType === null || hint.type === 'BUG')
-            .length > 0,
-        hasSmells: hints
-            .filter(hint => selectedType === null || hint.type === 'SMELL')
-            .length > 0,
-        hasPerfumes: hints
-            .filter(hint => selectedType === null || hint.type === 'PERFUME')
-            .length > 0
+        hasBugs: hints.filter(hint => hint.type === 'BUG').length > 0,
+        hasSmells: hints.filter(hint => hint.type === 'SMELL').length > 0,
+        hasPerfumes: hints.filter(hint => hint.type === 'PERFUME').length > 0
     });
 
     const newHints = () => {
-        const hasBugs = hints
-            .filter(hint => selectedType === null || hint.type === 'BUG')
-            .length > 0;
-        const hasSmells = hints
-            .filter(hint => selectedType === null || hint.type === 'SMELL')
-            .length > 0;
-        const hasPerfumes = hints
-            .filter(hint => selectedType === null || hint.type === 'PERFUME')
-            .length > 0;
+        const hasBugs = hints.filter(hint => hint.type === 'BUG').length > 0;
+        const hasSmells = hints.filter(hint => hint.type === 'SMELL').length > 0;
+        const hasPerfumes = hints.filter(hint => hint.type === 'PERFUME').length > 0;
         setHasHints({
             hasBugs: hasBugs,
             hasSmells: hasSmells,
@@ -46,7 +34,7 @@ const CodeQualityHints = props => {
     };
 
     const nextHint = i => {
-        const filteredHints = hints.filter(hint => selectedType === null || hint.type === selectedType);
+        const filteredHints = hints.filter(hint => hint.type === selectedType);
         if (i + 1 < filteredHints.length) {
             setIndex(i + 1);
         } else {
@@ -55,7 +43,7 @@ const CodeQualityHints = props => {
     };
 
     const prevHint = i => {
-        const filteredHints = hints.filter(hint => selectedType === null || hint.type === selectedType);
+        const filteredHints = hints.filter(hint => hint.type === selectedType);
         if (i - 1 < 0) {
             setIndex(filteredHints.length - 1);
         } else {
@@ -166,7 +154,7 @@ const CodeQualityHints = props => {
                                 (selectedType === 'PERFUME' && !hasHints.hasPerfumes)
                             }
                             style={{
-                                visibility: (hints.filter(hint => selectedType === null || hint.type === selectedType).length > 1) ? 'visible' : 'hidden'
+                                visibility: (hints.filter(hint => hint.type === selectedType).length > 1) ? 'visible' : 'hidden'
                             }}
                         >
                             <img
@@ -186,27 +174,11 @@ const CodeQualityHints = props => {
                         (selectedType === 'SMELL' && hasHints.hasSmells) ||
                         (selectedType === 'PERFUME' && hasHints.hasPerfumes) ?
                             <LitterBoxHint
-                                title={
-                                    hints.filter(hint =>
-                                        selectedType === null || hint.type === selectedType
-                                    )[index].title
-                                }
-                                sprite={
-                                    hints.filter(hint =>
-                                        selectedType === null || hint.type === selectedType
-                                    )[index].sprite
-                                }
+                                title={hints.filter(hint => hint.type === selectedType)[index].title}
+                                sprite={hints.filter(hint => hint.type === selectedType)[index].sprite}
                                 issueType={selectedType}
-                                hintDescription={
-                                    hints.filter(hint =>
-                                        selectedType === null || hint.type === selectedType
-                                    )[index].description
-                                }
-                                scratchBlocksCode={
-                                    hints.filter(hint =>
-                                        selectedType === null || hint.type === selectedType
-                                    )[index].codeSnippet
-                                }
+                                hintDescription={hints.filter(hint => hint.type === selectedType)[index].description}
+                                scratchBlocksCode={hints.filter(hint => hint.type === selectedType)[index].codeSnippet}
                                 locale={props.locale}
                             /> :
                             <span>{props.locale === 'de' ? 'Keine Hinweise verfügbar' : 'No hints available'}</span>
@@ -231,7 +203,9 @@ const CodeQualityHints = props => {
                                 (selectedType === 'PERFUME' && !hasHints.hasPerfumes)
                             }
                             style={{
-                                visibility: (hints.filter(hint => selectedType === null || hint.type === selectedType).length > 1) ? 'visible' : 'hidden'
+                                visibility: (
+                                    hints.filter(hint => hint.type === selectedType).length > 1
+                                ) ? 'visible' : 'hidden'
                             }}
                         >
                             <img
