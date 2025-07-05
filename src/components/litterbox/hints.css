@@ -1,0 +1,13 @@
+.sprite {
+    border: 1px solid black;
+    border-radius: 10px;
+    flex: 1;
+    margin-bottom: 9px;
+    padding-top: 14px;
+    color: dodgerblue;
+}
+
+.hint-highlight-text {
+    color:#f09438;
+    font-family: Courier New,Courier,Lucida Sans Typewriter,Lucida Typewriter,monospace;
+}

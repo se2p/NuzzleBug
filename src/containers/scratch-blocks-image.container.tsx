@@ -10,7 +10,7 @@ interface ScratchBlocksImageContainerProps {
     locale: string;
 }
 
-class ScratchBlocksImageContainer extends React.Component<ScratchBlocksImageContainerProps, []> {
+class ScratchBlocksImageContainer extends React.Component<ScratchBlocksImageContainerProps, never> {
 
     private translate (scratchBlocksText: string, locale: string): string {
         const block = scratchblocks.parse(scratchBlocksText, {
