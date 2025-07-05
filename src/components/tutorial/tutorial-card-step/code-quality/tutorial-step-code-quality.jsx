@@ -6,7 +6,7 @@ import arrow from '../../images/icon--arrow-top.svg';
 import scratchblocks from 'scratchblocks';
 
 import logging from 'scratch-vm/src/util/logging.js';
-import ScratchBlocksImage from './scratch-blocks-image';
+import ScratchBlocksImageContainer from '../../../../containers/scratch-blocks-image.container';
 
 
 const CodeQualityHints = props => {
@@ -289,7 +289,7 @@ const CodeQualityHints = props => {
                                                 overflowX: 'scroll'
                                             }}
                                         >
-                                            <ScratchBlocksImage
+                                            <ScratchBlocksImageContainer
                                                 scratchBlocksText={hints.filter(hint => selectedType === null || hint.type === selectedType)[index].codeSnippet}
                                                 locale={props.locale}
                                             />
