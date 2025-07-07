@@ -92,11 +92,13 @@ export const getTutorialFeedback = async (
 };
 
 interface LitterBoxHint {
+    id: number,
     blockId: string;
     issueType: string;
     finderName: string;
     translatedFinderName: string;
     issueHint: string;
+    sprite: string,
     hatBlockId: string;
 }
 
@@ -112,5 +114,22 @@ export const getLitterBoxAnalysis = (
     program: ScratchProjectJson, detectors?: string, locale?: string
 ): Promise<LitterBoxHint[]> => {
     const urlParams = {locale: locale, detectors: detectors};
-    return postJsonWithJsonResponse(`linter/analyze`, program, urlParams);
+    return postJsonWithJsonResponse('linter/analyze', program, urlParams);
+};
+
+interface IssueExplainRequest {
+    program: string;
+    hint: LitterBoxHint;
+}
+
+/**
+ * Asks for a more detailed explanation for the issue.
+ *
+ * @param program - The current program.
+ * @param hint - The LitterBox warning.
+ * @returns The same issue, but with an updated `issueHint`.
+ */
+export const explainIssue = (program: ScratchProjectJson, hint: LitterBoxHint): Promise<LitterBoxHint> => {
+    const body: IssueExplainRequest = {program: program, hint: hint};
+    return postJsonWithJsonResponse('llm/issue/explain', body);
 };
