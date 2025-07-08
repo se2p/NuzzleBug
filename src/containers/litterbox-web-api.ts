@@ -84,17 +84,17 @@ export const runLitterBoxAnalysis = (
 
 interface IssueExplainRequest {
     program: string;
-    hint: LitterBoxHint;
+    issue: LitterBoxHint;
 }
 
 /**
  * Asks for a more detailed explanation for the issue.
  *
  * @param program - The current program.
- * @param hint - The LitterBox warning.
+ * @param issue - The LitterBox warning.
  * @returns The same issue, but with an updated `issueHint`.
  */
-export const explainIssue = (program: ScratchProjectJson, hint: LitterBoxHint): Promise<LitterBoxHint> => {
-    const body: IssueExplainRequest = {program: program, hint: hint};
+export const explainIssue = (program: ScratchProjectJson, issue: LitterBoxHint): Promise<LitterBoxHint> => {
+    const body: IssueExplainRequest = {program: program, issue: issue};
     return postJsonWithJsonResponse('llm/issue/explain', body);
 };
