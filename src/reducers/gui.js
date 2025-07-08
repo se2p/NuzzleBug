@@ -3,7 +3,7 @@ import {applyMiddleware, compose, combineReducers} from 'redux';
 import alertsReducer, {alertsInitialState} from './alerts';
 import assetDragReducer, {assetDragInitialState} from './asset-drag';
 import blockBasedTestingReducer, {blockBasedTestingInitialState} from './block-based-testing';
-import litterBoxReducer, {litterBoxInitialState} from './litterbox';
+import litterBoxReducer, {litterBoxInitialState} from './litterbox.ts';
 import hiddenDebuggingReducer, {hiddenDebuggingInitialState} from './hidden-debugging';
 import cardsReducer, {cardsInitialState} from './cards';
 import tutorialCardsReducer, {tutorialCardsInitialState} from './tutorial-cards';

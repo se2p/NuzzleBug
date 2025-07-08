@@ -52,7 +52,7 @@ import codeIcon from './icon--code.svg';
 import costumesIcon from './icon--costumes.svg';
 import soundsIcon from './icon--sounds.svg';
 import testsIcon from '../block-based-testing/icons/rules-icon.svg';
-import LitterBoxInterface from '../../containers/litterbox-interface';
+import LitterBoxInterface from '../../containers/litterbox-interface.tsx';
 
 const messages = defineMessages({
     addExtension: {

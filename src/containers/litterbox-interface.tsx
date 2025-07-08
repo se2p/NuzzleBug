@@ -4,8 +4,8 @@ import {connect} from 'react-redux';
 import {compose} from 'redux';
 
 import Box from '../components/box/box.jsx';
-import LitterBoxPane from '../components/litterbox/litterbox-pane';
-import {hideInterface, showInterface} from '../reducers/litterbox';
+import LitterBoxPane from '../components/litterbox/litterbox-pane.tsx';
+import {hideInterface, showInterface} from '../reducers/litterbox.ts';
 
 interface LitterBoxInterfaceProps {
     interfaceVisible: boolean;

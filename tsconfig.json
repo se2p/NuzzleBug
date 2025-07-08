@@ -10,6 +10,7 @@
             }
         ],
         "allowJs": true,
+        "allowImportingTsExtensions": true,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "jsx": "react",
@@ -19,7 +20,7 @@
         "resolveJsonModule": true,
         "skipLibCheck": true,
         "strict": true,
-        "target": "ES2021",
+        "target": "ES2016",
         "tsBuildInfoFile": "./dist/.tsbuildinfo",
     },
     "include": ["src"],

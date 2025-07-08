@@ -4,7 +4,7 @@
     "description": "Scratch-UI extended with Debugger, Tutorial System and Block-Based Testing",
     "main": "./dist/scratch-gui.js",
     "scripts": {
-        "build": "npm run clean && tsc --incremental && webpack --colors --bail",
+        "build": "npm run clean && npm run test:types && webpack --colors --bail",
         "ci:prepare-downstream-build": "node .prepare-downstream-build.js",
         "clean": "rimraf ./build && mkdirp build && rimraf ./dist && mkdirp dist",
         "i18n:push": "tx-push-src scratch-editor interface translations/en.json",

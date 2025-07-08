@@ -15,7 +15,7 @@ import TurboMode from '../turbo-mode/turbo-mode.jsx';
 import IRQuestions from '../interrogative-debugging/version-1/ir-questions/ir-question-button.jsx';
 import ToggleTracing, {TracingState} from '../toggle-tracing/toggle-tracing.jsx';
 import Tutorial from '../tutorial-button/tutorial-button.jsx';
-import LitterBoxButton from '../litterbox/litterbox-button';
+import LitterBoxButton from '../litterbox/litterbox-button.tsx';
 
 import styles from './controls.css';
 

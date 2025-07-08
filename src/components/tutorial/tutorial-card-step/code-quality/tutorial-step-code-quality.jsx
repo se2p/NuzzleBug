@@ -4,7 +4,7 @@ import styles from '../../styles/tutorial-cards.css';
 import arrow from '../../images/icon--arrow-top.svg';
 
 import logging from 'scratch-vm/src/util/logging.js';
-import LitterBoxHint from '../../../litterbox/litterbox-hint';
+import LitterBoxHint from '../../../litterbox/litterbox-hint.tsx';
 
 
 const CodeQualityHints = props => {

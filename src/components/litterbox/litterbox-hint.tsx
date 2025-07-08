@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './hints.css';
-import ScratchBlocksImageContainer from '../../containers/scratch-blocks-image.container';
+import ScratchBlocksImageContainer from '../../containers/scratch-blocks-image.container.tsx';
 
 import scratchblocks from 'scratchblocks';
 
@@ -67,15 +67,15 @@ class LitterBoxHint extends React.Component<LitterBoxHintProps, LitterBoxHintSta
     }
 
     private litterBoxHintToHtml (hintText: string): string {
-        let text = hintText.replaceAll('[b]', '<strong>');
-        text = text.replaceAll('[/b]', '</strong>');
-        text = text.replaceAll('[newLine]', '<br />');
-        text = text.replaceAll('[sbi]', '<code class="b">');
-        text = text.replaceAll('[/sbi]', '</code>');
-        text = text.replaceAll('[var]', '<code class="b">(Variable "');
-        text = text.replaceAll('[/var]', '")</code>');
-        text = text.replaceAll('[bc]', '<span className={styles.hintHighlightText}><b>');
-        text = text.replaceAll('[/bc]', '</b></span>');
+        let text = hintText.replace(/\[b]/g, '<strong>');
+        text = text.replace(/\[\/b]/g, '</strong>');
+        text = text.replace(/\[newLine]/g, '<br />');
+        text = text.replace(/\[sbi]/g, '<code class="b">');
+        text = text.replace(/\[\/sbi]/g, '</code>');
+        text = text.replace(/\[var]/g, '<code class="b">(Variable "');
+        text = text.replace(/\[\/var]/g, '")</code>');
+        text = text.replace(/\[bc]/g, '<span className={styles.hintHighlightText}><b>');
+        text = text.replace(/\[\/bc]/g, '</b></span>');
         return text;
     }
 

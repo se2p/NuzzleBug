@@ -1,7 +1,7 @@
 import React from 'react';
 import scratchblocks from 'scratchblocks';
 import de from 'scratchblocks/locales/de.json';
-import ScratchBlocksImage from '../components/tutorial/tutorial-card-step/code-quality/scratch-blocks-image';
+import ScratchBlocksImage from '../components/tutorial/tutorial-card-step/code-quality/scratch-blocks-image.tsx';
 
 scratchblocks.loadLanguages({de});
 

@@ -11,7 +11,7 @@ import {
 import {lock, unlock} from '../reducers/vm-status';
 import {runTest} from 'tutorial-tests';
 import * as tutorials from 'tutorial-tests/src/tutorials';
-import {runLitterBoxAnalysis} from './litterbox-web-api';
+import {runLitterBoxAnalysis} from './litterbox-web-api.ts';
 
 import successImageEN from '../components/tutorial/images/greatDoneEN.png';
 import successImageDE from '../components/tutorial/images/greatDoneDE.png';
