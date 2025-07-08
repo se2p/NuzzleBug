@@ -15,6 +15,7 @@ import TurboMode from '../turbo-mode/turbo-mode.jsx';
 import IRQuestions from '../interrogative-debugging/version-1/ir-questions/ir-question-button.jsx';
 import ToggleTracing, {TracingState} from '../toggle-tracing/toggle-tracing.jsx';
 import Tutorial from '../tutorial-button/tutorial-button.jsx';
+import LitterBoxButton from '../litterbox/litterbox-button';
 
 import styles from './controls.css';
 
@@ -104,6 +105,7 @@ const Controls = function (props) {
         vm,
         paused,
         onTutorialClick,
+        onLitterBoxClick,
         turbo,
         interrogationSupported,
         interrogationEnabled,
@@ -183,6 +185,9 @@ const Controls = function (props) {
                 onClick={onTutorialClick}
                 title={'Tutorial'}
             />
+            <LitterBoxButton
+                onClick={onLitterBoxClick}
+            />
         </div>
     );
 };
@@ -209,6 +214,7 @@ Controls.propTypes = {
     tracingState: PropTypes.oneOf(Object.values(TracingState)).isRequired,
     tracingActive: PropTypes.bool,
     onTutorialClick: PropTypes.func.isRequired,
+    onLitterBoxClick: PropTypes.func.isRequired,
     tutorialCardsVisible: PropTypes.bool,
     locale: PropTypes.string.isRequired
 };

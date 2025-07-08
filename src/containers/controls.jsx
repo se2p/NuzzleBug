@@ -218,6 +218,7 @@ class Controls extends React.Component {
             projectPaused,
             irDisabled,
             handleTutorialClick,
+            handleLitterBoxClick,
             turbo,
             interrogationSupported,
             interrogationEnabled,
@@ -247,6 +248,7 @@ class Controls extends React.Component {
                 onIRQuestionsClick={handleIRQuestionsClick}
                 onToggleTracingClick={this.handleToggleTracingClick}
                 onTutorialClick={handleTutorialClick}
+                onLitterBoxClick={handleLitterBoxClick}
             />
         );
     }
@@ -296,7 +298,9 @@ const mapDispatchToProps = dispatch => ({
     handleIRQuestionsClick: () => dispatch(viewCards()),
     onActionExecuted: () => dispatch(actionExecuted()),
     doRepositionHelpMenuWindow: (x, y) => dispatch(repositionHelpMenuWindow(x, y)),
-    handleTutorialClick: () => dispatch(viewTutorial())
+    handleTutorialClick: () => dispatch(viewTutorial()),
+    // todo(fein): open modal similar to viewTutorial() above
+    handleLitterBoxClick: () => dispatch(() => {})
 });
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Controls));
