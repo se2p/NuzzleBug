@@ -1,21 +1,16 @@
 type ScratchBlocksCode = string;
 type ScratchProjectJson = string;
 
-interface TutorialHint {
-    title: string;
-    description: string;
-    sprite: string;
-    costume: string;
+interface LitterBoxHint {
+    id: number;
     type: string;
-    codeSnippet: ScratchBlocksCode;
-}
-
-interface RawLitterBoxTutorialHint {
     name: string;
+    translatedFinderName: string;
     hint: string;
     sprite: string;
-    costume: string;
-    type: string;
+    hatBlockId: string | undefined;
+    blockId: string | undefined;
+    costume: string | undefined;
     scratchBlocksCode: ScratchBlocksCode;
 }
 
@@ -67,6 +62,12 @@ const postJsonWithJsonResponse = async <T, R>(endpoint: string, body: T, urlPara
     return await response.json() as unknown as R;
 };
 
+interface LitterBoxAnalysisRequest {
+    program: ScratchProjectJson;
+    language: string | undefined;
+    detectors: string | undefined;
+}
+
 /**
  * Runs the LitterBox analysis for a program.
  * @param program - A Scratch program.
@@ -74,47 +75,11 @@ const postJsonWithJsonResponse = async <T, R>(endpoint: string, body: T, urlPara
  * @param language - The language of the hint text in the response.
  * @returns A list of LitterBox-generated warnings.
  */
-export const getTutorialFeedback = async (
-    program: ScratchProjectJson, detectors: string, language: string
-): Promise<TutorialHint[]> => {
-    const body = {language: language, detectors: detectors, program: program};
-    const problems: RawLitterBoxTutorialHint[] =
-        await postJsonWithJsonResponse('tutorial-system/generate-feedback', body);
-
-    return problems.map(hint => ({
-        title: hint.name,
-        description: hint.hint,
-        sprite: hint.sprite,
-        costume: hint.costume,
-        type: hint.type,
-        codeSnippet: hint.scratchBlocksCode
-    }));
-};
-
-interface LitterBoxHint {
-    id: number,
-    blockId: string;
-    issueType: string;
-    finderName: string;
-    translatedFinderName: string;
-    issueHint: string;
-    sprite: string,
-    hatBlockId: string;
-}
-
-/**
- * Runs the LitterBox analysis.
- *
- * @param program - A Scratch program.
- * @param detectors - The linters to run in the LitterBox analysis.
- * @param locale - The language for the hint text (`en` or `de`).
- * @returns A list of LitterBox findings.
- */
-export const getLitterBoxAnalysis = (
-    program: ScratchProjectJson, detectors?: string, locale?: string
+export const runLitterBoxAnalysis = (
+    program: ScratchProjectJson, detectors?: string, language?: string
 ): Promise<LitterBoxHint[]> => {
-    const urlParams = {locale: locale, detectors: detectors};
-    return postJsonWithJsonResponse('linter/analyze', program, urlParams);
+    const body: LitterBoxAnalysisRequest = {language: language, detectors: detectors, program: program};
+    return postJsonWithJsonResponse('linter/analyze', body);
 };
 
 interface IssueExplainRequest {
