@@ -12,6 +12,7 @@ import {viewCards} from '../reducers/interrogative-debugging/version-1/ir-cards.
 
 import {actionExecuted, openHelpMenu, repositionHelpMenuWindow} from '../reducers/help-menu';
 import {viewTutorial} from '../reducers/tutorial-cards.js';
+import {toggleInterface} from '../reducers/litterbox.ts';
 
 class Controls extends React.Component {
     constructor (props) {
@@ -299,8 +300,7 @@ const mapDispatchToProps = dispatch => ({
     onActionExecuted: () => dispatch(actionExecuted()),
     doRepositionHelpMenuWindow: (x, y) => dispatch(repositionHelpMenuWindow(x, y)),
     handleTutorialClick: () => dispatch(viewTutorial()),
-    // todo(fein): open modal similar to viewTutorial() above
-    handleLitterBoxClick: () => dispatch(() => {})
+    handleLitterBoxClick: () => dispatch(toggleInterface())
 });
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Controls));
