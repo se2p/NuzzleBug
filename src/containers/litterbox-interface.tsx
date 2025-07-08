@@ -21,7 +21,7 @@ class LitterBoxInterface extends React.Component<LitterBoxInterfaceProps, never>
 
         return (
             <Box>
-                <LitterBoxPane />
+                <LitterBoxPane vm={this.props.vm} />
             </Box>
         );
     }

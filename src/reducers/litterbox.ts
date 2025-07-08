@@ -13,7 +13,8 @@ export interface LitterBoxState {
 }
 
 const initialState: LitterBoxState = {
-    interfaceVisible: false
+    // todo(fein): only for development, switch to false afterwards
+    interfaceVisible: true
 };
 
 const reducer = function (state: LitterBoxState | undefined, action: LitterBoxInterfaceAction): LitterBoxState {
@@ -39,7 +40,7 @@ const reducer = function (state: LitterBoxState | undefined, action: LitterBoxIn
 
 const toggleInterface = function (): LitterBoxInterfaceAction {
     return {type: LitterBoxInterfaceActionType.TOGGLE_INTERFACE};
-}
+};
 
 const showInterface = function (): LitterBoxInterfaceAction {
     return {type: LitterBoxInterfaceActionType.SHOW_INTERFACE};

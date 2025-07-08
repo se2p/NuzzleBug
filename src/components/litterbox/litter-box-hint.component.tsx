@@ -3,8 +3,7 @@ import styles from './hints.css';
 import ScratchBlocksImageContainer from '../../containers/scratch-blocks-image.container.tsx';
 
 import scratchblocks from 'scratchblocks';
-
-type IssueType = 'BUG' | 'SMELL' | 'PERFUME';
+import {IssueType} from '../../containers/litterbox-web-api.ts';
 
 interface LitterBoxHintProps {
     title: string;
@@ -19,7 +18,7 @@ interface LitterBoxHintState {
     hintDescriptionHtml: string;
 }
 
-class LitterBoxHint extends React.Component<LitterBoxHintProps, LitterBoxHintState> {
+class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterBoxHintState> {
     state: LitterBoxHintState = {
         hintDescriptionHtml: ''
     };
@@ -47,6 +46,7 @@ class LitterBoxHint extends React.Component<LitterBoxHintProps, LitterBoxHintSta
         case 'BUG': return 'red';
         case 'SMELL': return 'orange';
         case 'PERFUME': return 'green';
+        default: return 'black';
         }
     }
 
@@ -145,4 +145,4 @@ class LitterBoxHint extends React.Component<LitterBoxHintProps, LitterBoxHintSta
     }
 }
 
-export default LitterBoxHint;
+export default LitterBoxHintComponent;

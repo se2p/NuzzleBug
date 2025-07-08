@@ -1,9 +1,9 @@
 type ScratchBlocksCode = string;
 type ScratchProjectJson = string;
 
-interface LitterBoxHint {
+export interface LitterBoxHint {
     id: number;
-    type: string;
+    type: IssueType;
     name: string;
     translatedFinderName: string;
     hint: string;
@@ -13,6 +13,8 @@ interface LitterBoxHint {
     costume: string | undefined;
     scratchBlocksCode: ScratchBlocksCode;
 }
+
+export type IssueType = 'BUG' | 'SMELL' | 'PERFUME' | 'QUESTION';
 
 const baseUrl = process.env.LITTERBOX_BASE_URL;
 
@@ -48,18 +50,22 @@ const cleanURLSearchParams = (params: UrlParams): URLSearchParams => {
  * @param urlParams - Optional request parameters to be added to the URL.
  * @returns The decoded JSON response.
  */
-const postJsonWithJsonResponse = async <T, R>(endpoint: string, body: T, urlParams?: UrlParams): Promise<R> => {
+const postJsonWithJsonResponse = <T, R>(endpoint: string, body: T, urlParams?: UrlParams): Promise<R> => {
     const queryParams = urlParams ? `?${cleanURLSearchParams(urlParams).toString()}` : '';
-    const response = await fetch(`${baseUrl}/${endpoint}${queryParams}`, {
+    return fetch(`${baseUrl}/${endpoint}${queryParams}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(body),
         referrerPolicy: 'origin-when-cross-origin'
-    });
+    }).then(res => {
+        if (res.ok) {
+            return res.json() as unknown as R;
+        }
 
-    return await response.json() as unknown as R;
+        throw res;
+    });
 };
 
 interface LitterBoxAnalysisRequest {

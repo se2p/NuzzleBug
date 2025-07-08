@@ -4,8 +4,7 @@ import styles from '../../styles/tutorial-cards.css';
 import arrow from '../../images/icon--arrow-top.svg';
 
 import logging from 'scratch-vm/src/util/logging.js';
-import LitterBoxHint from '../../../litterbox/litterbox-hint.tsx';
-
+import LitterBoxHintComponent from '../../../litterbox/litter-box-hint.component.tsx';
 
 const CodeQualityHints = props => {
     const {
@@ -173,7 +172,7 @@ const CodeQualityHints = props => {
                         {(selectedType === 'BUG' && hasHints.hasBugs) ||
                         (selectedType === 'SMELL' && hasHints.hasSmells) ||
                         (selectedType === 'PERFUME' && hasHints.hasPerfumes) ?
-                            <LitterBoxHint
+                            <LitterBoxHintComponent
                                 title={hints.filter(hint => hint.type === selectedType)[index].title}
                                 sprite={hints.filter(hint => hint.type === selectedType)[index].sprite}
                                 issueType={selectedType}
