@@ -81,66 +81,34 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
 
     render () {
         return (
-            <>
-                <div style={{display: 'flex'}}>
-                    <br />
-                    <div className={styles.sprite}>{this.props.sprite}</div>
+            <div className={styles.wrapperBox}>
+                <div style={{display: 'flex', gap: '1rem'}}>
+                    <div className={styles.sprite}>
+                        <span>{this.props.sprite}</span>
+                    </div>
                     <h3
+                        className={styles.hintTitle}
                         style={{
-                            flex: '4',
-                            width: '100%',
-                            alignContent: 'center',
                             color: this.titleColor()
                         }}
                     >
                         {this.props.title}
                     </h3>
                 </div>
-                <div
-                    style={{
-                        display: 'flex'
-                    }}
-                >
+                <div style={{display: 'flex'}}>
                     <div
                         // eslint-disable-next-line react/no-danger
                         dangerouslySetInnerHTML={{__html: this.state.hintDescriptionHtml}}
-                        style={{
-                            flex: 1,
-                            border: '2px',
-                            minHeight: '250px',
-                            maxHeight: '92%',
-                            borderStyle: 'dashed none dashed dashed',
-                            borderWidth: '2px',
-                            maxWidth: '281.96px',
-                            padding: '2%',
-                            textAlign: 'left'
-                        }}
+                        className={styles.hintDescriptionBox}
                     />
-                    <div
-                        style={{
-                            flex: 1,
-                            border: '2px',
-                            minHeight: '250px',
-                            maxHeight: '92%',
-                            borderStyle: 'dashed',
-                            borderWidth: '2px',
-                            maxWidth: '281.96px',
-                            padding: '2%'
-                        }}
-                    >
-                        <div
-                            style={{
-                                overflowX: 'scroll'
-                            }}
-                        >
-                            <ScratchBlocksImageContainer
-                                scratchBlocksText={this.props.scratchBlocksCode}
-                                locale={this.props.locale}
-                            />
-                        </div>
+                    <div className={styles.scratchBlocksBox}>
+                        <ScratchBlocksImageContainer
+                            scratchBlocksText={this.props.scratchBlocksCode}
+                            locale={this.props.locale}
+                        />
                     </div>
                 </div>
-            </>
+            </div>
         );
     }
 }
