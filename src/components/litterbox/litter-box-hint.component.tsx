@@ -31,16 +31,16 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
 
     componentDidUpdate (
         prevProps: Readonly<LitterBoxHintProps>,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        _prevState: Readonly<LitterBoxHintState>,
+        prevState: Readonly<LitterBoxHintState>,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         _snapshot?: never
     ) {
         if (prevProps.hintDescription !== this.props.hintDescription) {
             this.updateDescriptionHtml();
         }
-
-        this.triggerInlineScratchBlocksRender();
+        if (prevState.hintDescriptionHtml !== this.state.hintDescriptionHtml) {
+            this.triggerInlineScratchBlocksRender();
+        }
     }
 
     private titleColor (): string {
