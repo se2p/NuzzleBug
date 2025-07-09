@@ -30,7 +30,6 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
     ) {
         if (prevProps.issues !== this.props.issues) {
             this.resetSelection();
-            this.updateSelectedIssue();
         }
         if (prevState.index !== this.state.index || prevState.selectedType !== this.state.selectedType) {
             this.updateSelectedIssue();
@@ -38,15 +37,30 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
     }
 
     private readonly resetSelection = () => {
-        // select a category that contains issues
-        const issueCounts = this.issueCounts();
-        const issueTypes: IssueType[] = ['BUG', 'SMELL', 'PERFUME'];
-        const selectedIssueType = issueTypes.filter(t => issueCounts.get(t)).pop() ?? 'BUG';
+        if (this.state.selectedIssue) {
+            const issueType = this.state.selectedIssue.type;
+            const issuesForType = this.issuesForType(issueType);
+            const index = issuesForType.findIndex(issue => issue.id === this.state.selectedIssue?.id) ?? 0;
+            const issue = issuesForType.at(0);
 
-        this.setState(() => ({
-            index: 0,
-            selectedType: selectedIssueType
-        }));
+            this.setState(() => ({
+                index,
+                selectedType: issueType,
+                selectedIssue: issue
+            }));
+        } else {
+            // select a category that contains issues
+            const issueCounts = this.issueCounts();
+            const issueTypes: IssueType[] = ['BUG', 'SMELL', 'PERFUME'];
+            const selectedIssueType = issueTypes.filter(t => (issueCounts.get(t) ?? 0) > 0).pop() ?? 'BUG';
+            const selectedIssue = this.issuesForType(selectedIssueType).at(0);
+
+            this.setState(() => ({
+                index: 0,
+                selectedType: selectedIssueType,
+                selectedIssue: selectedIssue
+            }));
+        }
     };
 
     private readonly updateSelectedIssue = () => {
@@ -122,7 +136,7 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
                         >
                             {'<'}
                         </button>
-                        <div style={{width: '560px'}}>
+                        <div style={{width: '720px'}}>
                             <LitterBoxHintComponent
                                 key={this.state.selectedIssue.id}
                                 id={this.state.selectedIssue.id}
