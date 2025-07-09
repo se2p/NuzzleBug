@@ -6,6 +6,7 @@ import LitterBoxIssues from './litterbox-issues.tsx';
 import LitterBoxFeatureSelector, {LitterBoxFeature} from './litterbox-choice.tsx';
 import ScratchVM from 'scratch-vm';
 import {explainIssue, LitterBoxHint, runLitterBoxAnalysis} from '../../containers/litterbox-web-api.ts';
+import LitterBoxLlmQuestionComponent from './litterbox-llm-question.component.tsx';
 
 interface LitterBoxPaneProps {
     vm: ScratchVM
@@ -14,14 +15,15 @@ interface LitterBoxPaneProps {
 interface LitterBoxPaneState {
     selectedFeature: LitterBoxFeature;
     litterBoxIssues: LitterBoxHint[] | undefined;
+    llmResponse: string | undefined;
 }
 
 class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneState> {
 
     state: LitterBoxPaneState = {
         selectedFeature: LitterBoxFeature.ISSUES,
-        // eslint-disable-next-line no-undefined
-        litterBoxIssues: undefined
+        litterBoxIssues: undefined,
+        llmResponse: undefined
     };
 
     componentDidMount () {
@@ -108,6 +110,15 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
         });
     };
 
+    private readonly handleSubmitLlmQuestion = (question: string) => {
+        // todo(fein): actual implementation
+        //  - fetch current sprite name
+        //  - request to the API
+        this.setState({
+            llmResponse: `LLM response to question: ${question}`
+        });
+    };
+
     render () {
         return (
             <Box className={styles.main}>
@@ -123,6 +134,14 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
                             onCodeQualityRecheck={this.handleRecheckCodeQuality}
                             onExplainIssue={this.handleOnExplainIssue}
                             issues={this.state.litterBoxIssues ?? []}
+                        /> :
+                        null
+                }
+                {
+                    this.state.selectedFeature === LitterBoxFeature.LLM_QUESTION ?
+                        <LitterBoxLlmQuestionComponent
+                            onSubmitQuestion={this.handleSubmitLlmQuestion}
+                            llmResponse={this.state.llmResponse}
                         /> :
                         null
                 }
