@@ -3,6 +3,7 @@ import {IssueType} from '../../containers/litterbox-web-api.ts';
 import styles from './litterbox-pane.css';
 
 interface IssueTypeSelectorComponentProps {
+    selectedType: IssueType;
     issueCounts: Map<IssueType, number>;
     onSelect: (type: IssueType) => void;
 }
@@ -23,6 +24,11 @@ class IssueTypeSelectorComponent extends React.Component<IssueTypeSelectorCompon
 
     private readonly button = (prefix: string, issueType: IssueType, handler: () => void) => (
         <button
+            className={
+                this.props.selectedType === issueType ?
+                    styles.issueTypeSelectorActive :
+                    styles.issueTypeSelectorInactive
+            }
             onClick={handler}
             disabled={!this.props.issueCounts.get(issueType)}
         >

@@ -25,6 +25,10 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
         selectedIssue: undefined
     };
 
+    componentDidMount () {
+        this.resetSelection();
+    }
+
     componentDidUpdate (
         prevProps: Readonly<LitterBoxIssuesProps>, prevState: Readonly<LitterBoxIssuesState>, _snapshot?: never
     ) {
@@ -124,6 +128,7 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
                         {'Check Again!'}
                     </button>
                     <IssueTypeSelectorComponent
+                        selectedType={this.state.selectedType}
                         onSelect={this.handleIssueTypeSelect}
                         issueCounts={this.issueCounts()}
                     />
@@ -134,7 +139,7 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
                             className={styles.issueSwitchButton}
                             onClick={this.handleButtonLeftClick}
                         >
-                            {'<'}
+                            <span>{'<'}</span>
                         </button>
                         <div style={{width: '720px'}}>
                             <LitterBoxHintComponent
@@ -153,7 +158,7 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
                             className={styles.issueSwitchButton}
                             onClick={this.handleButtonRightClick}
                         >
-                            {'>'}
+                            <span>{'>'}</span>
                         </button>
                     </div> :
                     null
