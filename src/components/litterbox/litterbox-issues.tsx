@@ -66,11 +66,6 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
                 const index = Math.max(issuesForType.findIndex(issue => issue.id === prev.selectedIssue?.id), 0);
                 const issue = issuesForType.at(0);
 
-                console.log('Had issue before');
-                console.log(prev.selectedIssue);
-                console.log(this.props.issues);
-                console.log({index, issueType, issue});
-
                 return {
                     index,
                     selectedType: issueType,
