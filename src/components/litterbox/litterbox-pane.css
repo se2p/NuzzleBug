@@ -16,3 +16,21 @@
     gap: 0.25rem;
     margin-right: 0.5rem;
 }
+
+.ltr-flexbox {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.issue-switch-button {
+    height: 2rem;
+    width: 2rem;
+    padding: 0.25rem;
+    font-weight: bold;
+    font-size: 120%;
+    text-align: center;
+    vertical-align: middle;
+}

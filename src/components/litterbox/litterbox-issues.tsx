@@ -2,6 +2,7 @@ import React from 'react';
 
 import {LitterBoxHint, IssueType} from '../../containers/litterbox-web-api.ts';
 import LitterBoxHintComponent from './litter-box-hint.component.tsx';
+import styles from './litterbox-pane.css';
 
 interface LitterBoxIssuesProps {
     issues: LitterBoxHint[];
@@ -41,7 +42,7 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
 
     private readonly updateSelectedIssue = () => {
         this.setState(prev => {
-            const issuesForType = this.props.issues.filter(issue => issue.type === prev.selectedType);
+            const issuesForType = this.issuesForType(prev.selectedType);
 
             if (issuesForType.length === 0) {
                 return {
@@ -51,7 +52,7 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
                 };
             }
 
-            const index = prev.index % issuesForType.length;
+            const index = (prev.index + issuesForType.length) % issuesForType.length;
             const selectedIssue = issuesForType[index];
 
             return {
@@ -61,19 +62,50 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
         });
     };
 
+    private readonly issuesForType =
+        (type: IssueType): LitterBoxHint[] => this.props.issues.filter(issue => issue.type === type);
+
+    private readonly handleButtonLeftClick = () => {
+        this.setState(prev => ({
+            index: prev.index - 1
+        }));
+    };
+
+    private readonly handleButtonRightClick = () => {
+        this.setState(prev => ({
+            index: prev.index + 1
+        }));
+    };
+
     render () {
         return (
             <>
                 {this.state.selectedIssue ?
-                    <LitterBoxHintComponent
-                        key={this.state.selectedIssue.id}
-                        title={this.state.selectedIssue.translatedFinderName}
-                        sprite={this.state.selectedIssue.sprite}
-                        issueType={this.state.selectedIssue.type}
-                        hintDescription={this.state.selectedIssue.hint}
-                        scratchBlocksCode={this.state.selectedIssue.scratchBlocksCode}
-                        locale={'en'}
-                    /> :
+                    <div className={styles.ltrFlexbox}>
+                        <button
+                            className={styles.issueSwitchButton}
+                            onClick={this.handleButtonLeftClick}
+                        >
+                            {'<'}
+                        </button>
+                        <div style={{width: '560px'}}>
+                            <LitterBoxHintComponent
+                                key={this.state.selectedIssue.id}
+                                title={this.state.selectedIssue.translatedFinderName}
+                                sprite={this.state.selectedIssue.sprite}
+                                issueType={this.state.selectedIssue.type}
+                                hintDescription={this.state.selectedIssue.hint}
+                                scratchBlocksCode={this.state.selectedIssue.scratchBlocksCode}
+                                locale={'en'}
+                            />
+                        </div>
+                        <button
+                            className={styles.issueSwitchButton}
+                            onClick={this.handleButtonRightClick}
+                        >
+                            {'>'}
+                        </button>
+                    </div> :
                     null
                 }
             </>
