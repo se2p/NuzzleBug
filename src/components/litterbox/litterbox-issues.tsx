@@ -41,30 +41,45 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
     }
 
     private readonly resetSelection = () => {
-        if (this.state.selectedIssue) {
-            const issueType = this.state.selectedIssue.type;
-            const issuesForType = this.issuesForType(issueType);
-            const index = issuesForType.findIndex(issue => issue.id === this.state.selectedIssue?.id) ?? 0;
-            const issue = issuesForType.at(0);
+        this.setState(prev => {
+            const findNewIssue = () => {
+                // select a category that contains issues
+                const issueCounts = this.issueCounts();
+                const issueTypes: IssueType[] = ['BUG', 'SMELL', 'PERFUME'];
+                const selectedIssueType = issueTypes.filter(t => (issueCounts.get(t) ?? 0) > 0).pop() ?? 'BUG';
+                const selectedIssue = this.issuesForType(selectedIssueType).at(0);
 
-            this.setState(() => ({
-                index,
-                selectedType: issueType,
-                selectedIssue: issue
-            }));
-        } else {
-            // select a category that contains issues
-            const issueCounts = this.issueCounts();
-            const issueTypes: IssueType[] = ['BUG', 'SMELL', 'PERFUME'];
-            const selectedIssueType = issueTypes.filter(t => (issueCounts.get(t) ?? 0) > 0).pop() ?? 'BUG';
-            const selectedIssue = this.issuesForType(selectedIssueType).at(0);
+                return {
+                    index: 0,
+                    selectedType: selectedIssueType,
+                    selectedIssue: selectedIssue
+                };
+            };
 
-            this.setState(() => ({
-                index: 0,
-                selectedType: selectedIssueType,
-                selectedIssue: selectedIssue
-            }));
-        }
+            if (prev.selectedIssue) {
+                const issueType = prev.selectedIssue.type;
+                const issuesForType = this.issuesForType(issueType);
+                if (issuesForType.length === 0) {
+                    return findNewIssue();
+                }
+
+                const index = Math.max(issuesForType.findIndex(issue => issue.id === prev.selectedIssue?.id), 0);
+                const issue = issuesForType.at(0);
+
+                console.log('Had issue before');
+                console.log(prev.selectedIssue);
+                console.log(this.props.issues);
+                console.log({index, issueType, issue});
+
+                return {
+                    index,
+                    selectedType: issueType,
+                    selectedIssue: issue
+                };
+            }
+
+            return findNewIssue();
+        });
     };
 
     private readonly updateSelectedIssue = () => {
@@ -74,7 +89,6 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
             if (issuesForType.length === 0) {
                 return {
                     index: prev.index,
-                    // eslint-disable-next-line no-undefined
                     selectedIssue: undefined
                 };
             }

@@ -81,11 +81,14 @@ interface LitterBoxAnalysisRequest {
  * @param language - The language of the hint text in the response.
  * @returns A list of LitterBox-generated warnings.
  */
-export const runLitterBoxAnalysis = (
+export const runLitterBoxAnalysis = async (
     program: ScratchProjectJson, detectors?: string, language?: string
 ): Promise<LitterBoxHint[]> => {
     const body: LitterBoxAnalysisRequest = {language: language, detectors: detectors, program: program};
-    return postJsonWithJsonResponse('linter/analyze', body);
+    const hints = await postJsonWithJsonResponse<LitterBoxAnalysisRequest, LitterBoxHint[]>('linter/analyze', body);
+    hints.sort((a, b) => a.id - b.id);
+
+    return hints;
 };
 
 interface IssueExplainRequest {
