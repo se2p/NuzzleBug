@@ -12,6 +12,7 @@ export enum LitterBoxFeature {
 interface LitterBoxFeatureSelectorProps {
     selectedFeature: LitterBoxFeature;
     onSelect: (choice: LitterBoxFeature) => void;
+    onClose: () => void;
 }
 
 class LitterBoxFeatureSelector extends React.Component<LitterBoxFeatureSelectorProps, never> {
@@ -53,6 +54,12 @@ class LitterBoxFeatureSelector extends React.Component<LitterBoxFeatureSelectorP
                 </button>
                 {/* todo(obermuel,spielede): future extension for LitterBox questions */}
                 {/* <button onClick={this.handleSelectQuestions}>{'Question'}</button> */}
+                <button
+                    style={{marginTop: '1rem'}}
+                    onClick={this.props.onClose}
+                >
+                    {'Close'}
+                </button>
             </Box>
         );
     }

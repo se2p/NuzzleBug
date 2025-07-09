@@ -9,7 +9,8 @@ import {explainIssue, LitterBoxHint, runLitterBoxAnalysis} from '../../container
 import LitterBoxLlmQuestionComponent from './litterbox-llm-question.component.tsx';
 
 interface LitterBoxPaneProps {
-    vm: ScratchVM
+    vm: ScratchVM,
+    onClose: () => void;
 }
 
 interface LitterBoxPaneState {
@@ -126,6 +127,7 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
                     <LitterBoxFeatureSelector
                         selectedFeature={this.state.selectedFeature}
                         onSelect={this.handleOnSelectFeature}
+                        onClose={this.props.onClose}
                     />
                 </div>
                 {

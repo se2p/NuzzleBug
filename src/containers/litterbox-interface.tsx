@@ -10,6 +10,7 @@ import {hideInterface, showInterface} from '../reducers/litterbox.ts';
 interface LitterBoxInterfaceProps {
     interfaceVisible: boolean;
     vm: ScratchVM;
+    handleHideInterface: () => void;
 }
 
 class LitterBoxInterface extends React.Component<LitterBoxInterfaceProps, never> {
@@ -21,7 +22,10 @@ class LitterBoxInterface extends React.Component<LitterBoxInterfaceProps, never>
 
         return (
             <Box>
-                <LitterBoxPane vm={this.props.vm} />
+                <LitterBoxPane
+                    vm={this.props.vm}
+                    onClose={this.props.handleHideInterface}
+                />
             </Box>
         );
     }
