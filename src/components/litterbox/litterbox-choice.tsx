@@ -29,7 +29,7 @@ class LitterBoxFeatureSelector extends React.Component<LitterBoxFeatureSelectorP
 
     render () {
         return (
-            <Box className={styles.featureSelector}>
+            <Box className={styles.buttonStack}>
                 <button onClick={this.handleSelectIssues}>{'Code Quality'}</button>
                 <button onClick={this.handleSelectLlmQuestion}>{'Ask about Code'}</button>
                 {/* todo(obermuel,spielede): future extension for LitterBox questions */}

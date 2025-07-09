@@ -24,6 +24,10 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
         litterBoxIssues: undefined
     };
 
+    componentDidMount () {
+        this.fetchLitterBoxIssues();
+    }
+
     private readonly handleOnSelectFeature = (feature: LitterBoxFeature) => {
         this.setState(prev => ({
             ...prev,
@@ -64,13 +68,22 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
             });
     };
 
+    private readonly handleRecheckCodeQuality = () => {
+        this.fetchLitterBoxIssues();
+    };
+
     render () {
         return (
             <Box className={styles.main}>
-                <LitterBoxFeatureSelector onSelect={this.handleOnSelectFeature} />
+                <div style={{maxWidth: '100px', marginRight: '0.5rem'}}>
+                    <LitterBoxFeatureSelector onSelect={this.handleOnSelectFeature} />
+                </div>
                 {
                     this.state.selectedFeature === LitterBoxFeature.ISSUES ?
-                        <LitterBoxIssues issues={this.state.litterBoxIssues ?? []} /> :
+                        <LitterBoxIssues
+                            onCodeQualityRecheck={this.handleRecheckCodeQuality}
+                            issues={this.state.litterBoxIssues ?? []}
+                        /> :
                         null
                 }
             </Box>

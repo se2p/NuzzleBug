@@ -3,8 +3,10 @@ import React from 'react';
 import {LitterBoxHint, IssueType} from '../../containers/litterbox-web-api.ts';
 import LitterBoxHintComponent from './litter-box-hint.component.tsx';
 import styles from './litterbox-pane.css';
+import IssueTypeSelectorComponent from './issue-type-selector.component.tsx';
 
 interface LitterBoxIssuesProps {
+    onCodeQualityRecheck: () => void;
     issues: LitterBoxHint[];
 }
 
@@ -26,7 +28,7 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
         prevProps: Readonly<LitterBoxIssuesProps>, prevState: Readonly<LitterBoxIssuesState>, _snapshot?: never
     ) {
         if (prevProps.issues !== this.props.issues) {
-            this.resetIndex();
+            this.resetSelection();
             this.updateSelectedIssue();
         }
         if (prevState.index !== this.state.index || prevState.selectedType !== this.state.selectedType) {
@@ -34,9 +36,15 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
         }
     }
 
-    private readonly resetIndex = () => {
+    private readonly resetSelection = () => {
+        // select a category that contains issues
+        const issueCounts = this.issueCounts();
+        const issueTypes: IssueType[] = ['BUG', 'SMELL', 'PERFUME'];
+        const selectedIssueType = issueTypes.filter(t => issueCounts.get(t)).pop() ?? 'BUG';
+
         this.setState(() => ({
-            index: 0
+            index: 0,
+            selectedType: selectedIssueType
         }));
     };
 
@@ -77,9 +85,34 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
         }));
     };
 
+    private readonly handleIssueTypeSelect = (type: IssueType) => {
+        this.setState(() => ({
+            selectedType: type
+        }));
+    };
+
+    private readonly issueCounts = (): Map<IssueType, number> => {
+        const result = new Map();
+
+        result.set('BUG', this.issuesForType('BUG').length);
+        result.set('SMELL', this.issuesForType('SMELL').length);
+        result.set('PERFUME', this.issuesForType('PERFUME').length);
+
+        return result;
+    };
+
     render () {
         return (
             <>
+                <div className={styles.tdFlexbox}>
+                    <button onClick={this.props.onCodeQualityRecheck}>
+                        {'Check Again!'}
+                    </button>
+                    <IssueTypeSelectorComponent
+                        onSelect={this.handleIssueTypeSelect}
+                        issueCounts={this.issueCounts()}
+                    />
+                </div>
                 {this.state.selectedIssue ?
                     <div className={styles.ltrFlexbox}>
                         <button
