@@ -141,7 +141,7 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
                         >
                             <span>{'<'}</span>
                         </button>
-                        <div style={{width: '720px'}}>
+                        <div style={{width: '720px', marginTop: 0, marginBottom: 'auto'}}>
                             <LitterBoxHintComponent
                                 key={this.state.selectedIssue.id}
                                 id={this.state.selectedIssue.id}

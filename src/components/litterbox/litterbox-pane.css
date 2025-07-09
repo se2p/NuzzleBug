@@ -1,13 +1,14 @@
 .main {
     width: 100%;
-    overflow: auto;
+    height: 400px;
+    overflow: scroll;
     display: flex;
     flex-flow: row;
     background-color: #fafafa;
     border: 1px solid #C3CCD9;
     border-radius: 0.5rem;
     margin-top: 0.5rem;
-    padding: 0.25rem;
+    padding: 0.5rem;
 }
 
 .button-stack {

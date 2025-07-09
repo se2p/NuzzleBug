@@ -22,6 +22,8 @@ const reducer = function (state: LitterBoxState | undefined, action: LitterBoxIn
     switch (action.type) {
     case LitterBoxInterfaceActionType.TOGGLE_INTERFACE:
         state = {...state, interfaceVisible: !state.interfaceVisible};
+        // trigger editor area resize
+        setTimeout(() => window.dispatchEvent(new Event('resize')), 10);
         break;
     case LitterBoxInterfaceActionType.SHOW_INTERFACE:
         state = {...state, interfaceVisible: true};
