@@ -5,7 +5,7 @@ import styles from './litterbox-pane.css';
 import LitterBoxIssues from './litterbox-issues.tsx';
 import LitterBoxFeatureSelector, {LitterBoxFeature} from './litterbox-choice.tsx';
 import ScratchVM from 'scratch-vm';
-import {LitterBoxHint, runLitterBoxAnalysis} from '../../containers/litterbox-web-api.ts';
+import {explainIssue, LitterBoxHint, runLitterBoxAnalysis} from '../../containers/litterbox-web-api.ts';
 
 interface LitterBoxPaneProps {
     vm: ScratchVM
@@ -72,6 +72,42 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
         this.fetchLitterBoxIssues();
     };
 
+    private readonly handleOnExplainIssue = (id: number) => {
+        const relevantIssue = this.state.litterBoxIssues?.find(issue => issue.id === id);
+        // eslint-disable-next-line no-undefined
+        if (relevantIssue === undefined) {
+            return;
+        }
+
+        explainIssue(this.props.vm.toJSON(), relevantIssue)
+            .then(updatedIssue => {
+                this.insertUpdatedIssue(updatedIssue);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    };
+
+    private readonly insertUpdatedIssue = (updatedIssue: LitterBoxHint) => {
+        if (!this.state.litterBoxIssues) {
+            return;
+        }
+
+        this.setState(prev => {
+            const newIssues = prev.litterBoxIssues?.map(issue => {
+                if (issue.id === updatedIssue.id) {
+                    return updatedIssue;
+                }
+
+                return issue;
+            });
+
+            return ({
+                litterBoxIssues: newIssues
+            });
+        });
+    };
+
     render () {
         return (
             <Box className={styles.main}>
@@ -82,6 +118,7 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
                     this.state.selectedFeature === LitterBoxFeature.ISSUES ?
                         <LitterBoxIssues
                             onCodeQualityRecheck={this.handleRecheckCodeQuality}
+                            onExplainIssue={this.handleOnExplainIssue}
                             issues={this.state.litterBoxIssues ?? []}
                         /> :
                         null

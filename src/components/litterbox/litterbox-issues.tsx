@@ -7,6 +7,7 @@ import IssueTypeSelectorComponent from './issue-type-selector.component.tsx';
 
 interface LitterBoxIssuesProps {
     onCodeQualityRecheck: () => void;
+    onExplainIssue: (id: number) => void;
     issues: LitterBoxHint[];
 }
 
@@ -124,12 +125,14 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
                         <div style={{width: '560px'}}>
                             <LitterBoxHintComponent
                                 key={this.state.selectedIssue.id}
+                                id={this.state.selectedIssue.id}
                                 title={this.state.selectedIssue.translatedFinderName}
                                 sprite={this.state.selectedIssue.sprite}
                                 issueType={this.state.selectedIssue.type}
                                 hintDescription={this.state.selectedIssue.hint}
                                 scratchBlocksCode={this.state.selectedIssue.scratchBlocksCode}
                                 locale={'en'}
+                                onExplainIssue={this.props.onExplainIssue}
                             />
                         </div>
                         <button

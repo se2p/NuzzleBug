@@ -173,6 +173,7 @@ const CodeQualityHints = props => {
                         (selectedType === 'SMELL' && hasHints.hasSmells) ||
                         (selectedType === 'PERFUME' && hasHints.hasPerfumes) ?
                             <LitterBoxHintComponent
+                                id={hints.filter(hint => hint.type === selectedType)[index].id}
                                 title={hints.filter(hint => hint.type === selectedType)[index].title}
                                 sprite={hints.filter(hint => hint.type === selectedType)[index].sprite}
                                 issueType={selectedType}

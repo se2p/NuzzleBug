@@ -6,12 +6,14 @@ import scratchblocks from 'scratchblocks';
 import {IssueType} from '../../containers/litterbox-web-api.ts';
 
 interface LitterBoxHintProps {
+    id: number;
     title: string;
     sprite: string;
     issueType: IssueType;
     hintDescription: string;
     scratchBlocksCode: string;
     locale: string;
+    onExplainIssue?: ((issueId: number) => void);
 }
 
 interface LitterBoxHintState {
@@ -79,6 +81,12 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
         return text;
     }
 
+    private readonly handleExplainIssue = () => {
+        if (this.props.onExplainIssue) {
+            this.props.onExplainIssue(this.props.id);
+        }
+    };
+
     render () {
         return (
             <div className={styles.wrapperBox}>
@@ -94,6 +102,12 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
                     >
                         {this.props.title}
                     </h3>
+                    {this.props.onExplainIssue ?
+                        <div>
+                            <button onClick={this.handleExplainIssue}>{'?'}</button>
+                        </div> :
+                        null
+                    }
                 </div>
                 <div style={{display: 'flex'}}>
                     <div
