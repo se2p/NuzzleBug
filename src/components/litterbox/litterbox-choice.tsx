@@ -10,6 +10,7 @@ export enum LitterBoxFeature {
 }
 
 interface LitterBoxFeatureSelectorProps {
+    selectedFeature: LitterBoxFeature;
     onSelect: (choice: LitterBoxFeature) => void;
 }
 
@@ -30,8 +31,26 @@ class LitterBoxFeatureSelector extends React.Component<LitterBoxFeatureSelectorP
     render () {
         return (
             <Box className={styles.buttonStack}>
-                <button onClick={this.handleSelectIssues}>{'Code Quality'}</button>
-                <button onClick={this.handleSelectLlmQuestion}>{'Ask about Code'}</button>
+                <button
+                    className={
+                        this.props.selectedFeature === LitterBoxFeature.ISSUES ?
+                            styles.issueTypeSelectorActive :
+                            undefined
+                    }
+                    onClick={this.handleSelectIssues}
+                >
+                    {'Code Quality'}
+                </button>
+                <button
+                    className={
+                        this.props.selectedFeature === LitterBoxFeature.LLM_QUESTION ?
+                            styles.issueTypeSelectorActive :
+                            undefined
+                    }
+                    onClick={this.handleSelectLlmQuestion}
+                >
+                    {'Ask about Code'}
+                </button>
                 {/* todo(obermuel,spielede): future extension for LitterBox questions */}
                 {/* <button onClick={this.handleSelectQuestions}>{'Question'}</button> */}
             </Box>

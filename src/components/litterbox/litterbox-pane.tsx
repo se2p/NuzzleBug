@@ -112,7 +112,10 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
         return (
             <Box className={styles.main}>
                 <div style={{maxWidth: '100px', marginRight: '0.5rem'}}>
-                    <LitterBoxFeatureSelector onSelect={this.handleOnSelectFeature} />
+                    <LitterBoxFeatureSelector
+                        selectedFeature={this.state.selectedFeature}
+                        onSelect={this.handleOnSelectFeature}
+                    />
                 </div>
                 {
                     this.state.selectedFeature === LitterBoxFeature.ISSUES ?
