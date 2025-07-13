@@ -1,9 +1,10 @@
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
 
 import styles from './litterbox-pane.css';
 
 interface LitterBoxLlmQuestionProps {
-    onSubmitQuestion: (question: string) => void;
+    onSubmitQuestion: (question: string, spriteOnly: boolean) => void;
     llmResponse?: string;
 }
 
@@ -17,11 +18,19 @@ class LitterBoxLlmQuestionComponent extends React.Component<LitterBoxLlmQuestion
         question: undefined
     };
 
-    private readonly handleSubmitQuestion = (event: React.SyntheticEvent) => {
+    private readonly handleQuestion = (event: React.SyntheticEvent, spriteOnly: boolean) => {
         if (this.state.question) {
-            this.props.onSubmitQuestion(this.state.question);
+            this.props.onSubmitQuestion(this.state.question, spriteOnly);
         }
         event.preventDefault();
+    };
+
+    private readonly handleSubmitQuestion = (event: React.SyntheticEvent) => {
+        this.handleQuestion(event, false);
+    };
+
+    private readonly handleSubmitSpriteQuestion = (event: React.SyntheticEvent) => {
+        this.handleQuestion(event, true);
     };
 
     private readonly handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -33,7 +42,7 @@ class LitterBoxLlmQuestionComponent extends React.Component<LitterBoxLlmQuestion
     render () {
         return (
             <div>
-                <form onSubmit={this.handleSubmitQuestion}>
+                <form>
                     <div className={styles.ltrFlexbox}>
                         <textarea
                             name="question"
@@ -41,11 +50,21 @@ class LitterBoxLlmQuestionComponent extends React.Component<LitterBoxLlmQuestion
                             value={this.state.question}
                             onChange={this.handleInputChange}
                         />
-                        <button type="submit">{'Send'}</button>
+                        <div className={styles.tdFlexbox}>
+                            <button onClick={this.handleSubmitQuestion}>
+                                {'Ask question about whole program'}
+                            </button>
+                            <button onClick={this.handleSubmitSpriteQuestion}>
+                                {'Ask question about only the current sprite'}
+                            </button>
+                        </div>
                     </div>
                 </form>
                 <div>
-                    {this.props.llmResponse}
+                    {this.props.llmResponse ?
+                        <ReactMarkdown>{this.props.llmResponse}</ReactMarkdown> :
+                        null
+                    }
                 </div>
             </div>
         );

@@ -42,15 +42,7 @@ const cleanURLSearchParams = (params: UrlParams): URLSearchParams => {
     return new URLSearchParams(filtered);
 };
 
-/**
- * Sends a POST request to LitterBox with a JSON body and a JSON response.
- *
- * @param endpoint - The REST endpoint of LitterBox-Web.
- * @param body - The body sent to LitterBox-Web.
- * @param urlParams - Optional request parameters to be added to the URL.
- * @returns The decoded JSON response.
- */
-const postJsonWithJsonResponse = <T, R>(endpoint: string, body: T, urlParams?: UrlParams): Promise<R> => {
+const postJson = <T>(endpoint: string, body: T, urlParams?: UrlParams): Promise<Response> => {
     const queryParams = urlParams ? `?${cleanURLSearchParams(urlParams).toString()}` : '';
     return fetch(`${baseUrl}/${endpoint}${queryParams}`, {
         method: 'POST',
@@ -59,13 +51,41 @@ const postJsonWithJsonResponse = <T, R>(endpoint: string, body: T, urlParams?: U
         },
         body: JSON.stringify(body),
         referrerPolicy: 'origin-when-cross-origin'
-    }).then(res => {
-        if (res.ok) {
-            return res.json() as unknown as R;
-        }
-
-        throw res;
     });
+};
+
+/**
+ * Sends a POST request to LitterBox with a JSON body and a JSON response.
+ *
+ * @param endpoint - The REST endpoint of LitterBox-Web.
+ * @param body - The body sent to LitterBox-Web.
+ * @param urlParams - Optional request parameters to be added to the URL.
+ * @returns The decoded JSON response.
+ */
+const postJsonWithJsonResponse = async <T, R>(endpoint: string, body: T, urlParams?: UrlParams): Promise<R> => {
+    const response = await postJson(endpoint, body, urlParams);
+    if (response.ok) {
+        return await response.json() as unknown as R;
+    }
+
+    throw response;
+};
+
+/**
+ * Sends a POST request to LitterBox with a JSON body and a JSON response.
+ *
+ * @param endpoint - The REST endpoint of LitterBox-Web.
+ * @param body - The body sent to LitterBox-Web.
+ * @param urlParams - Optional request parameters to be added to the URL.
+ * @returns The decoded JSON response.
+ */
+const postJsonWithStringResponse = async <T>(endpoint: string, body: T, urlParams?: UrlParams): Promise<string> => {
+    const response = await postJson(endpoint, body, urlParams);
+    if (response.ok) {
+        return response.text();
+    }
+
+    throw response;
 };
 
 interface LitterBoxAnalysisRequest {
@@ -92,7 +112,7 @@ export const runLitterBoxAnalysis = async (
 };
 
 interface IssueExplainRequest {
-    program: string;
+    program: ScratchProjectJson;
     issue: LitterBoxHint;
 }
 
@@ -106,4 +126,23 @@ interface IssueExplainRequest {
 export const explainIssue = (program: ScratchProjectJson, issue: LitterBoxHint): Promise<LitterBoxHint> => {
     const body: IssueExplainRequest = {program: program, issue: issue};
     return postJsonWithJsonResponse('llm/issue/explain', body);
+};
+
+interface QuestionRequest {
+    program: ScratchProjectJson;
+    sprite: string | undefined;
+    question: string;
+}
+
+/**
+ * Ask a custom question to the LLM about the program or the sprite.
+ *
+ * @param program - The current program.
+ * @param question - The question by the user.
+ * @param sprite - The sprite the question is about.
+ * @returns The response from the LLM.
+ */
+export const askQuestion = (program: ScratchProjectJson, question: string, sprite?: string): Promise<string> => {
+    const body: QuestionRequest = {program, sprite, question};
+    return postJsonWithStringResponse('llm/question', body);
 };

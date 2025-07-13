@@ -5,7 +5,7 @@ import styles from './litterbox-pane.css';
 import LitterBoxIssues from './litterbox-issues.tsx';
 import LitterBoxFeatureSelector, {LitterBoxFeature} from './litterbox-choice.tsx';
 import ScratchVM from 'scratch-vm';
-import {explainIssue, LitterBoxHint, runLitterBoxAnalysis} from '../../containers/litterbox-web-api.ts';
+import {askQuestion, explainIssue, LitterBoxHint, runLitterBoxAnalysis} from '../../containers/litterbox-web-api.ts';
 import LitterBoxLlmQuestionComponent from './litterbox-llm-question.component.tsx';
 
 interface LitterBoxPaneProps {
@@ -111,13 +111,16 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
         });
     };
 
-    private readonly handleSubmitLlmQuestion = (question: string) => {
-        // todo(fein): actual implementation
-        //  - fetch current sprite name
-        //  - request to the API
-        this.setState({
-            llmResponse: `LLM response to question: ${question}`
-        });
+    private readonly handleSubmitLlmQuestion = (question: string, spriteOnly: boolean) => {
+        const spriteName = spriteOnly ? this.props.vm.editingTarget.getName() : undefined;
+
+        askQuestion(this.props.vm.toJSON(), question, spriteName)
+            .then(response => {
+                this.setState({
+                    llmResponse: response
+                });
+            })
+            .catch(err => console.log(err));
     };
 
     render () {
