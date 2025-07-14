@@ -23,6 +23,7 @@ class LitterBoxInterface extends React.Component<LitterBoxInterfaceProps, never>
         return (
             <Box>
                 <LitterBoxPane
+                    llmEnabled
                     vm={this.props.vm}
                     onClose={this.props.handleHideInterface}
                 />

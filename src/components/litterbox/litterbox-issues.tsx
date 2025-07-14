@@ -7,8 +7,10 @@ import IssueTypeSelectorComponent from './issue-type-selector.component.tsx';
 
 interface LitterBoxIssuesProps {
     onCodeQualityRecheck: () => void;
-    onExplainIssue: (id: number) => void;
-    onFixIssue: (id: number) => void;
+    onExplainIssue?: (id: number) => void;
+    onFixIssue?: (id: number) => void;
+    onRevertFix?: () => void;
+    analysisIsForCurrentProject: boolean;
     issues: LitterBoxHint[];
 }
 
@@ -22,7 +24,6 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
     state: LitterBoxIssuesState = {
         index: 0,
         selectedType: 'SMELL',
-        // eslint-disable-next-line no-undefined
         selectedIssue: undefined
     };
 
@@ -161,8 +162,10 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
                                 hintDescription={this.state.selectedIssue.hint}
                                 scratchBlocksCode={this.state.selectedIssue.scratchBlocksCode}
                                 locale={'en'}
+                                analysisIsForCurrentProject={this.props.analysisIsForCurrentProject}
                                 onExplainIssue={this.props.onExplainIssue}
                                 onFixIssue={this.props.onFixIssue}
+                                onRevertFix={this.props.onRevertFix}
                             />
                         </div>
                         <button

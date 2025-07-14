@@ -13,8 +13,10 @@ interface LitterBoxHintProps {
     hintDescription: string;
     scratchBlocksCode: string;
     locale: string;
-    onExplainIssue?: ((issueId: number) => void);
-    onFixIssue?: ((issueId: number) => void);
+    onExplainIssue?: (issueId: number) => void;
+    analysisIsForCurrentProject: boolean;
+    onFixIssue?: (issueId: number) => void;
+    onRevertFix?: () => void;
 }
 
 interface LitterBoxHintState {
@@ -94,7 +96,6 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
         }
     };
 
-
     render () {
         return (
             <div className={styles.wrapperBox}>
@@ -118,7 +119,23 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
                     }
                     {this.props.onFixIssue ?
                         <div>
-                            <button onClick={this.handleFixIssue}>{'Fix!'}</button>
+                            {/* todo(fein): needs a tooltip to explain why it is disabled */}
+                            <button
+                                onClick={this.handleFixIssue}
+                                disabled={!this.props.analysisIsForCurrentProject}
+                            >
+                                {'Fix!'}
+                            </button>
+                        </div> :
+                        null
+                    }
+                    {this.props.onRevertFix ?
+                        <div>
+                            <button
+                                onClick={this.props.onRevertFix}
+                            >
+                                {'Revert Fix'}
+                            </button>
                         </div> :
                         null
                     }

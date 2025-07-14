@@ -15,6 +15,7 @@ import {
 import LitterBoxLlmQuestionComponent from './litterbox-llm-question.component.tsx';
 
 interface LitterBoxPaneProps {
+    llmEnabled: boolean,
     vm: ScratchVM,
     onClose: () => void;
 }
@@ -23,6 +24,7 @@ interface LitterBoxPaneState {
     selectedFeature: LitterBoxFeature;
     litterBoxIssues: LitterBoxHint[] | undefined;
     llmResponse: string | undefined;
+    analysisIsForCurrentProject: boolean;
     previousProject: string | undefined;
 }
 
@@ -32,6 +34,7 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
         selectedFeature: LitterBoxFeature.ISSUES,
         litterBoxIssues: undefined,
         llmResponse: undefined,
+        analysisIsForCurrentProject: true,
         previousProject: undefined
     };
 
@@ -65,17 +68,17 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
     private readonly fetchLitterBoxIssues = () => {
         runLitterBoxAnalysis(this.props.vm.toJSON())
             .then(litterBoxIssues => {
-                this.setState(prev => ({
-                    ...prev,
-                    litterBoxIssues
-                }));
+                this.setState({
+                    litterBoxIssues,
+                    analysisIsForCurrentProject: true
+                });
             })
             .catch(err => {
                 console.log(err);
-                this.setState(prev => ({
-                    ...prev,
-                    litterBoxIssues: []
-                }));
+                this.setState({
+                    litterBoxIssues: [],
+                    analysisIsForCurrentProject: true
+                });
             });
     };
 
@@ -108,12 +111,26 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
             .then(response => {
                 const previousProject = this.props.vm.toJSON();
                 this.setState({
-                    previousProject: previousProject
+                    previousProject: previousProject,
+                    analysisIsForCurrentProject: false
                 });
                 return this.props.vm.loadProject(response.fixedProgram);
             })
             .catch(err => {
                 console.log(err);
+            });
+    };
+
+    private readonly handleOnRevertFix = () => {
+        if (this.state.previousProject === undefined) {
+            return;
+        }
+
+        this.props.vm.loadProject(this.state.previousProject)
+            .then(() => {
+                this.setState({
+                    previousProject: undefined
+                });
             });
     };
 
@@ -166,14 +183,20 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
                     this.state.selectedFeature === LitterBoxFeature.ISSUES ?
                         <LitterBoxIssues
                             onCodeQualityRecheck={this.handleRecheckCodeQuality}
-                            onExplainIssue={this.handleOnExplainIssue}
-                            onFixIssue={this.handleOnFixIssue}
+                            onExplainIssue={this.props.llmEnabled ? this.handleOnExplainIssue : undefined}
+                            onFixIssue={this.props.llmEnabled ? this.handleOnFixIssue : undefined}
+                            onRevertFix={
+                                this.state.previousProject && !this.state.analysisIsForCurrentProject ?
+                                    this.handleOnRevertFix :
+                                    undefined
+                            }
+                            analysisIsForCurrentProject={this.state.analysisIsForCurrentProject}
                             issues={this.state.litterBoxIssues ?? []}
                         /> :
                         null
                 }
                 {
-                    this.state.selectedFeature === LitterBoxFeature.LLM_QUESTION ?
+                    this.state.selectedFeature === LitterBoxFeature.LLM_QUESTION && this.props.llmEnabled ?
                         <LitterBoxLlmQuestionComponent
                             onSubmitQuestion={this.handleSubmitLlmQuestion}
                             llmResponse={this.state.llmResponse}
