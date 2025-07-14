@@ -14,6 +14,7 @@ interface LitterBoxHintProps {
     scratchBlocksCode: string;
     locale: string;
     onExplainIssue?: ((issueId: number) => void);
+    onFixIssue?: ((issueId: number) => void);
 }
 
 interface LitterBoxHintState {
@@ -87,6 +88,13 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
         }
     };
 
+    private readonly handleFixIssue = () => {
+        if (this.props.onFixIssue) {
+            this.props.onFixIssue(this.props.id);
+        }
+    };
+
+
     render () {
         return (
             <div className={styles.wrapperBox}>
@@ -105,6 +113,12 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
                     {this.props.onExplainIssue ?
                         <div>
                             <button onClick={this.handleExplainIssue}>{'?'}</button>
+                        </div> :
+                        null
+                    }
+                    {this.props.onFixIssue ?
+                        <div>
+                            <button onClick={this.handleFixIssue}>{'Fix!'}</button>
                         </div> :
                         null
                     }

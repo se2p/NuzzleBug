@@ -5,7 +5,13 @@ import styles from './litterbox-pane.css';
 import LitterBoxIssues from './litterbox-issues.tsx';
 import LitterBoxFeatureSelector, {LitterBoxFeature} from './litterbox-choice.tsx';
 import ScratchVM from 'scratch-vm';
-import {askQuestion, explainIssue, LitterBoxHint, runLitterBoxAnalysis} from '../../containers/litterbox-web-api.ts';
+import {
+    askQuestion,
+    explainIssue,
+    fixIssue,
+    LitterBoxHint,
+    runLitterBoxAnalysis
+} from '../../containers/litterbox-web-api.ts';
 import LitterBoxLlmQuestionComponent from './litterbox-llm-question.component.tsx';
 
 interface LitterBoxPaneProps {
@@ -17,6 +23,7 @@ interface LitterBoxPaneState {
     selectedFeature: LitterBoxFeature;
     litterBoxIssues: LitterBoxHint[] | undefined;
     llmResponse: string | undefined;
+    previousProject: string | undefined;
 }
 
 class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneState> {
@@ -24,7 +31,8 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
     state: LitterBoxPaneState = {
         selectedFeature: LitterBoxFeature.ISSUES,
         litterBoxIssues: undefined,
-        llmResponse: undefined
+        llmResponse: undefined,
+        previousProject: undefined
     };
 
     componentDidMount () {
@@ -76,8 +84,7 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
     };
 
     private readonly handleOnExplainIssue = (id: number) => {
-        const relevantIssue = this.state.litterBoxIssues?.find(issue => issue.id === id);
-        // eslint-disable-next-line no-undefined
+        const relevantIssue = this.findIssue(id);
         if (relevantIssue === undefined) {
             return;
         }
@@ -90,6 +97,28 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
                 console.log(err);
             });
     };
+
+    private readonly handleOnFixIssue = (id: number) => {
+        const relevantIssue = this.findIssue(id);
+        if (relevantIssue === undefined) {
+            return;
+        }
+
+        fixIssue(this.props.vm.toJSON(), relevantIssue)
+            .then(response => {
+                const previousProject = this.props.vm.toJSON();
+                this.setState({
+                    previousProject: previousProject
+                });
+                return this.props.vm.loadProject(response.fixedProgram);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    };
+
+    private readonly findIssue = (id: number): LitterBoxHint | undefined =>
+        this.state.litterBoxIssues?.find(issue => issue.id === id);
 
     private readonly insertUpdatedIssue = (updatedIssue: LitterBoxHint) => {
         if (!this.state.litterBoxIssues) {
@@ -138,6 +167,7 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
                         <LitterBoxIssues
                             onCodeQualityRecheck={this.handleRecheckCodeQuality}
                             onExplainIssue={this.handleOnExplainIssue}
+                            onFixIssue={this.handleOnFixIssue}
                             issues={this.state.litterBoxIssues ?? []}
                         /> :
                         null

@@ -128,6 +128,22 @@ export const explainIssue = (program: ScratchProjectJson, issue: LitterBoxHint):
     return postJsonWithJsonResponse('llm/issue/explain', body);
 };
 
+interface IssueFixResponse {
+    fixedProgram: ScratchProjectJson;
+}
+
+/**
+ * Asks for a fix for the issue.
+ *
+ * @param program - The current program.
+ * @param issue - A LitterBox warning.
+ * @returns An updated program with the LLM’s attempt to fix the issue.
+ */
+export const fixIssue = (program: ScratchProjectJson, issue: LitterBoxHint): Promise<IssueFixResponse> => {
+    const body: IssueExplainRequest = {program, issue};
+    return postJsonWithJsonResponse('llm/issue/fix', body);
+};
+
 interface QuestionRequest {
     program: ScratchProjectJson;
     sprite: string | undefined;

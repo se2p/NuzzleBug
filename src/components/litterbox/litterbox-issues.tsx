@@ -8,6 +8,7 @@ import IssueTypeSelectorComponent from './issue-type-selector.component.tsx';
 interface LitterBoxIssuesProps {
     onCodeQualityRecheck: () => void;
     onExplainIssue: (id: number) => void;
+    onFixIssue: (id: number) => void;
     issues: LitterBoxHint[];
 }
 
@@ -161,6 +162,7 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
                                 scratchBlocksCode={this.state.selectedIssue.scratchBlocksCode}
                                 locale={'en'}
                                 onExplainIssue={this.props.onExplainIssue}
+                                onFixIssue={this.props.onFixIssue}
                             />
                         </div>
                         <button
