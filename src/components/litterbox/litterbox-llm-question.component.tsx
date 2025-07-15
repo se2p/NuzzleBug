@@ -2,6 +2,7 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 
 import styles from './litterbox-pane.css';
+import LlmWarningComponent from './llm-warning.component.tsx';
 
 interface LitterBoxLlmQuestionProps {
     onSubmitQuestion: (question: string, spriteOnly: boolean) => void;
@@ -58,6 +59,7 @@ class LitterBoxLlmQuestionComponent extends React.Component<LitterBoxLlmQuestion
                                 {'Ask question about only the current sprite'}
                             </button>
                         </div>
+                        <LlmWarningComponent />
                     </div>
                 </form>
                 <div>

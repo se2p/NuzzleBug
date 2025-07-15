@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './hints.css';
 import ScratchBlocksImageContainer from '../../containers/scratch-blocks-image.container.tsx';
+import LlmWarningComponent from "./llm-warning.component.tsx";
 
 import scratchblocks from 'scratchblocks';
 import {IssueType} from '../../containers/litterbox-web-api.ts';
@@ -81,6 +82,7 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
         text = text.replace(/\[\/var]/g, '")</code>');
         text = text.replace(/\[bc]/g, '<span className={styles.hintHighlightText}><b>');
         text = text.replace(/\[\/bc]/g, '</b></span>');
+        text = text.replace(/LLM/g, 'GPT');
         return text;
     }
 
@@ -99,7 +101,7 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
     render () {
         return (
             <div className={styles.wrapperBox}>
-                <div style={{display: 'flex', gap: '1rem'}}>
+                <div style={{display: 'flex', gap: '1rem', alignItems: 'center'}}>
                     <div className={styles.sprite}>
                         <span>{this.props.sprite}</span>
                     </div>
@@ -113,7 +115,7 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
                     </h3>
                     {this.props.onExplainIssue ?
                         <div>
-                            <button onClick={this.handleExplainIssue}>{'?'}</button>
+                            <button onClick={this.handleExplainIssue}>{'GPT: Explain!'}</button>
                         </div> :
                         null
                     }
@@ -124,7 +126,7 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
                                 onClick={this.handleFixIssue}
                                 disabled={!this.props.analysisIsForCurrentProject}
                             >
-                                {'Fix!'}
+                                {'GPT: Fix!'}
                             </button>
                         </div> :
                         null
@@ -139,6 +141,7 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
                         </div> :
                         null
                     }
+                    {this.props.onExplainIssue ? <LlmWarningComponent /> : null}
                 </div>
                 <div style={{display: 'flex'}}>
                     <div
