@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './hints.css';
+import sharedStyles from './shared.css';
 import ScratchBlocksImageContainer from '../../containers/scratch-blocks-image.container.tsx';
 import LlmWarningComponent from './llm-warning.component.tsx';
 
@@ -115,13 +116,19 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
                     </h3>
                     {this.props.onExplainIssue ?
                         <div>
-                            <button onClick={this.handleExplainIssue}>{'GPT: Explain!'}</button>
+                            <button
+                                className={sharedStyles.genericButton}
+                                onClick={this.handleExplainIssue}
+                            >
+                                {'GPT: Explain!'}
+                            </button>
                         </div> :
                         null
                     }
                     {this.props.onFixIssue ?
                         <div>
                             <button
+                                className={sharedStyles.genericButton}
                                 onClick={this.handleFixIssue}
                                 disabled={!this.props.analysisIsForCurrentProject}
                                 data-tip-disable={this.props.analysisIsForCurrentProject}
@@ -135,6 +142,7 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
                     {this.props.onRevertFix ?
                         <div>
                             <button
+                                className={sharedStyles.genericButton}
                                 onClick={this.props.onRevertFix}
                             >
                                 {'Revert Fix'}

@@ -1,6 +1,7 @@
 import React from 'react';
 import {IssueType} from '../../containers/litterbox-web-api.ts';
 import styles from './litterbox-pane.css';
+import sharedStyles from './shared.css';
 
 interface IssueTypeSelectorComponentProps {
     selectedType: IssueType;
@@ -22,13 +23,16 @@ class IssueTypeSelectorComponent extends React.Component<IssueTypeSelectorCompon
         this.props.onSelect('PERFUME');
     };
 
+    private readonly buttonStyles = (issueType: IssueType): string => {
+        const res = this.props.selectedType === issueType ?
+            styles.issueTypeSelectorActive :
+            styles.issueTypeSelectorInactive;
+        return `${res} ${sharedStyles.genericButton}`;
+    };
+
     private readonly button = (prefix: string, issueType: IssueType, handler: () => void) => (
         <button
-            className={
-                this.props.selectedType === issueType ?
-                    styles.issueTypeSelectorActive :
-                    styles.issueTypeSelectorInactive
-            }
+            className={this.buttonStyles(issueType)}
             onClick={handler}
             disabled={!this.props.issueCounts.get(issueType)}
         >

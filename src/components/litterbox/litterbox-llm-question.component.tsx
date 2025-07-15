@@ -2,6 +2,7 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 
 import styles from './litterbox-pane.css';
+import sharedStyles from './shared.css';
 import LlmWarningComponent from './llm-warning.component.tsx';
 
 interface LitterBoxLlmQuestionProps {
@@ -52,10 +53,16 @@ class LitterBoxLlmQuestionComponent extends React.Component<LitterBoxLlmQuestion
                             onChange={this.handleInputChange}
                         />
                         <div className={styles.tdFlexbox}>
-                            <button onClick={this.handleSubmitQuestion}>
+                            <button
+                                className={sharedStyles.genericButton}
+                                onClick={this.handleSubmitQuestion}
+                            >
                                 {'Ask question about whole program'}
                             </button>
-                            <button onClick={this.handleSubmitSpriteQuestion}>
+                            <button
+                                className={sharedStyles.genericButton}
+                                onClick={this.handleSubmitSpriteQuestion}
+                            >
                                 {'Ask question about only the current sprite'}
                             </button>
                         </div>

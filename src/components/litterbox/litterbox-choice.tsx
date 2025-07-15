@@ -2,6 +2,7 @@ import React from 'react';
 
 import Box from '../box/box.jsx';
 import styles from './litterbox-pane.css';
+import sharedStyles from './shared.css';
 
 export enum LitterBoxFeature {
     ISSUES,
@@ -29,25 +30,22 @@ class LitterBoxFeatureSelector extends React.Component<LitterBoxFeatureSelectorP
         this.props.onSelect(LitterBoxFeature.QUESTIONS);
     };
 
+    private readonly buttonStyle = (feature: LitterBoxFeature): string => {
+        const base = this.props.selectedFeature === feature ? styles.issueTypeSelectorActive : '';
+        return `${base} ${sharedStyles.genericButton}`;
+    };
+
     render () {
         return (
             <Box className={styles.buttonStack}>
                 <button
-                    className={
-                        this.props.selectedFeature === LitterBoxFeature.ISSUES ?
-                            styles.issueTypeSelectorActive :
-                            undefined
-                    }
+                    className={this.buttonStyle(LitterBoxFeature.ISSUES)}
                     onClick={this.handleSelectIssues}
                 >
                     {'Code Quality'}
                 </button>
                 <button
-                    className={
-                        this.props.selectedFeature === LitterBoxFeature.LLM_QUESTION ?
-                            styles.issueTypeSelectorActive :
-                            undefined
-                    }
+                    className={this.buttonStyle(LitterBoxFeature.LLM_QUESTION)}
                     onClick={this.handleSelectLlmQuestion}
                 >
                     {'Ask about Code'}
@@ -55,6 +53,7 @@ class LitterBoxFeatureSelector extends React.Component<LitterBoxFeatureSelectorP
                 {/* todo(obermuel,spielede): future extension for LitterBox questions */}
                 {/* <button onClick={this.handleSelectQuestions}>{'Question'}</button> */}
                 <button
+                    className={sharedStyles.genericButton}
                     style={{marginTop: '1rem'}}
                     onClick={this.props.onClose}
                 >

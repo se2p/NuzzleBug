@@ -3,6 +3,7 @@ import React from 'react';
 import {LitterBoxHint, IssueType} from '../../containers/litterbox-web-api.ts';
 import LitterBoxHintComponent from './litter-box-hint.component.tsx';
 import styles from './litterbox-pane.css';
+import sharedStyles from './shared.css';
 import IssueTypeSelectorComponent from './issue-type-selector.component.tsx';
 
 interface LitterBoxIssuesProps {
@@ -135,7 +136,10 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
         return (
             <>
                 <div className={styles.tdFlexbox}>
-                    <button onClick={this.props.onCodeQualityRecheck}>
+                    <button
+                        className={sharedStyles.genericButton}
+                        onClick={this.props.onCodeQualityRecheck}
+                    >
                         {'Check Again!'}
                     </button>
                     <IssueTypeSelectorComponent
@@ -147,7 +151,7 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
                 {this.state.selectedIssue ?
                     <div className={styles.ltrFlexbox}>
                         <button
-                            className={styles.issueSwitchButton}
+                            className={`${sharedStyles.genericButton} ${styles.issueSwitchButton}`}
                             onClick={this.handleButtonLeftClick}
                         >
                             <span>{'<'}</span>
@@ -169,7 +173,7 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
                             />
                         </div>
                         <button
-                            className={styles.issueSwitchButton}
+                            className={`${sharedStyles.genericButton} ${styles.issueSwitchButton}`}
                             onClick={this.handleButtonRightClick}
                         >
                             <span>{'>'}</span>
