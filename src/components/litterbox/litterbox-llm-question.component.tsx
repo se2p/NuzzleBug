@@ -51,6 +51,9 @@ class LitterBoxLlmQuestionComponent extends React.Component<LitterBoxLlmQuestion
                             placeholder={'Your question to GPT about the program'}
                             value={this.state.question}
                             onChange={this.handleInputChange}
+                            style={{resize: 'vertical'}}
+                            cols={60}
+                            rows={6}
                         />
                         <div className={styles.tdFlexbox}>
                             <button
