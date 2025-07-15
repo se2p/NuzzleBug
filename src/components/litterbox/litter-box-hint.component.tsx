@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './hints.css';
 import ScratchBlocksImageContainer from '../../containers/scratch-blocks-image.container.tsx';
-import LlmWarningComponent from "./llm-warning.component.tsx";
+import LlmWarningComponent from './llm-warning.component.tsx';
 
 import scratchblocks from 'scratchblocks';
 import {IssueType} from '../../containers/litterbox-web-api.ts';
@@ -121,10 +121,11 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
                     }
                     {this.props.onFixIssue ?
                         <div>
-                            {/* todo(fein): needs a tooltip to explain why it is disabled */}
                             <button
                                 onClick={this.handleFixIssue}
                                 disabled={!this.props.analysisIsForCurrentProject}
+                                data-tip-disable={this.props.analysisIsForCurrentProject}
+                                data-tip={'Check the program again first.'}
                             >
                                 {'GPT: Fix!'}
                             </button>
