@@ -99,6 +99,12 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
         }
     };
 
+    private readonly showExplainButton =
+        () => this.props.onExplainIssue !== undefined && this.props.issueType !== 'PERFUME';
+
+    private readonly showFixButton =
+        () => this.props.onFixIssue !== undefined && this.props.issueType !== 'PERFUME';
+
     render () {
         return (
             <div className={styles.wrapperBox}>
@@ -114,7 +120,7 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
                     >
                         {this.props.title}
                     </h3>
-                    {this.props.onExplainIssue ?
+                    {this.showExplainButton() ?
                         <div>
                             <button
                                 className={sharedStyles.genericButton}
@@ -125,7 +131,7 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
                         </div> :
                         null
                     }
-                    {this.props.onFixIssue ?
+                    {this.showFixButton() ?
                         <div>
                             <button
                                 className={sharedStyles.genericButton}
@@ -150,7 +156,7 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
                         </div> :
                         null
                     }
-                    {this.props.onExplainIssue ? <LlmWarningComponent /> : null}
+                    {this.showExplainButton() || this.showFixButton() ? <LlmWarningComponent /> : null}
                 </div>
                 <div style={{display: 'flex'}}>
                     <div
