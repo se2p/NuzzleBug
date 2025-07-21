@@ -204,11 +204,7 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
                             onCodeQualityRecheck={this.handleRecheckCodeQuality}
                             onExplainIssue={this.props.llmEnabled ? this.handleOnExplainIssue : undefined}
                             onFixIssue={this.props.llmEnabled ? this.handleOnFixIssue : undefined}
-                            onRevertFix={
-                                this.state.previousProject && !this.state.analysisIsForCurrentProject ?
-                                    this.handleOnRevertFix :
-                                    undefined
-                            }
+                            onRevertFix={this.state.previousProject ? this.handleOnRevertFix : undefined}
                             analysisIsForCurrentProject={this.state.analysisIsForCurrentProject}
                             issues={this.state.litterBoxIssues ?? []}
                         /> :
