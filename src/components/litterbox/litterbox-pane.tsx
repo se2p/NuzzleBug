@@ -20,12 +20,23 @@ interface LitterBoxPaneProps {
     onClose: () => void;
 }
 
+interface PreviousProject {
+    /**
+     * Project JSON
+     */
+    project: string;
+    /**
+     * Editing target ID
+     */
+    selectedSprite: string;
+}
+
 interface LitterBoxPaneState {
     selectedFeature: LitterBoxFeature;
     litterBoxIssues: LitterBoxHint[] | undefined;
     llmResponse: string | undefined;
     analysisIsForCurrentProject: boolean;
-    previousProject: string | undefined;
+    previousProject: PreviousProject | undefined;
 }
 
 class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneState> {
@@ -108,13 +119,17 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
         }
 
         fixIssue(this.props.vm.toJSON(), relevantIssue)
-            .then(response => {
-                const previousProject = this.props.vm.toJSON();
+            .then(async response => {
+                const previousProject = {
+                    project: this.props.vm.toJSON(),
+                    selectedSprite: this.props.vm.editingTarget.id
+                };
                 this.setState({
                     previousProject: previousProject,
                     analysisIsForCurrentProject: false
                 });
-                return this.props.vm.loadProject(response.fixedProgram);
+                await this.props.vm.loadProject(response.fixedProgram);
+                return this.props.vm.setEditingTarget(previousProject.selectedSprite);
             })
             .catch(err => {
                 console.log(err);
@@ -126,8 +141,12 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
             return;
         }
 
-        this.props.vm.loadProject(this.state.previousProject)
+        const prevProject = this.state.previousProject;
+
+        this.props.vm.loadProject(prevProject.project)
             .then(() => {
+                this.props.vm.setEditingTarget(prevProject.selectedSprite);
+
                 this.setState({
                     previousProject: undefined
                 });
