@@ -41,6 +41,7 @@ module.exports = {
             rules: {
                 'tsdoc/syntax': 'warn',
                 'valid-jsdoc': 'off',
+                'no-undefined': 'off',
                 'no-use-before-define': 'off', // doesn't work correctly with TS parser
                 '@typescript-eslint/no-use-before-define': 'error', // replacement for plain 'no-use-before-define'
             }

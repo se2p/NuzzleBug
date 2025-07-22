@@ -1,0 +1,49 @@
+.wrapper-box {
+    display: flex;
+    flex-flow: column;
+    gap: 0.25rem;
+}
+
+.sprite {
+    display: flex;
+    padding: 0.25rem;
+    border: 1px solid black;
+    border-radius: 10px;
+    flex: 1;
+    color: dodgerblue;
+    align-items: center;
+}
+
+.hint-title {
+    flex: 4;
+    width: 100%;
+    align-content: center;
+}
+
+.hint-highlight-text {
+    color:#f09438;
+    font-family: Courier New,Courier,Lucida Sans Typewriter,Lucida Typewriter,monospace;
+}
+
+.hint-description-box {
+    flex: 1;
+    border: 2px;
+    width: 50%;
+    min-width: 200px;
+    min-height: 250px;
+    max-height: 92%;
+    border-style: dashed none dashed dashed;
+    padding: 2%;
+    text-align: left;
+    overflow-x: scroll;
+}
+
+.scratch-blocks-box {
+    flex: 1;
+    min-height: 250px;
+    max-height: 92%;
+    border: 2px dashed;
+    width: 50%;
+    padding: 2%;
+    overflow-x: scroll;
+}

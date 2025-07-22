@@ -74,7 +74,11 @@ const base = {
                     loader: 'ts-loader',
                     options: {
                         allowTsInNodeModules: true,
-                        transpileOnly: true // This seems to fix problems with linking whisker locally
+                        // options below required for Whisker
+                        transpileOnly: true,
+                        compilerOptions: {
+                            allowImportingTsExtensions: false
+                        }
                     }
                 }
             ]

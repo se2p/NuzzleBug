@@ -12,6 +12,7 @@ import {viewCards} from '../reducers/interrogative-debugging/version-1/ir-cards.
 
 import {actionExecuted, openHelpMenu, repositionHelpMenuWindow} from '../reducers/help-menu';
 import {viewTutorial} from '../reducers/tutorial-cards.js';
+import {toggleInterface} from '../reducers/litterbox.ts';
 
 class Controls extends React.Component {
     constructor (props) {
@@ -218,6 +219,7 @@ class Controls extends React.Component {
             projectPaused,
             irDisabled,
             handleTutorialClick,
+            handleLitterBoxClick,
             turbo,
             interrogationSupported,
             interrogationEnabled,
@@ -247,6 +249,7 @@ class Controls extends React.Component {
                 onIRQuestionsClick={handleIRQuestionsClick}
                 onToggleTracingClick={this.handleToggleTracingClick}
                 onTutorialClick={handleTutorialClick}
+                onLitterBoxClick={handleLitterBoxClick}
             />
         );
     }
@@ -296,7 +299,8 @@ const mapDispatchToProps = dispatch => ({
     handleIRQuestionsClick: () => dispatch(viewCards()),
     onActionExecuted: () => dispatch(actionExecuted()),
     doRepositionHelpMenuWindow: (x, y) => dispatch(repositionHelpMenuWindow(x, y)),
-    handleTutorialClick: () => dispatch(viewTutorial())
+    handleTutorialClick: () => dispatch(viewTutorial()),
+    handleLitterBoxClick: () => dispatch(toggleInterface())
 });
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Controls));

@@ -4,7 +4,7 @@
     "description": "Scratch-UI extended with Debugger, Tutorial System and Block-Based Testing",
     "main": "./dist/scratch-gui.js",
     "scripts": {
-        "build": "npm run clean && tsc --incremental && webpack --colors --bail",
+        "build": "npm run clean && npm run test:types && webpack --colors --bail",
         "ci:prepare-downstream-build": "node .prepare-downstream-build.js",
         "clean": "rimraf ./build && mkdirp build && rimraf ./dist && mkdirp dist",
         "i18n:push": "tx-push-src scratch-editor interface translations/en.json",
@@ -76,6 +76,7 @@
         "react-draggable": "3.0.5",
         "react-dropzone": "^14.2.3",
         "react-intl": "2.9.0",
+        "react-markdown": "^8.0.7",
         "react-modal": "3.9.1",
         "react-popover": "0.5.10",
         "react-redux": "5.0.7",

@@ -11,7 +11,7 @@ import {
 import {lock, unlock} from '../reducers/vm-status';
 import {runTest} from 'tutorial-tests';
 import * as tutorials from 'tutorial-tests/src/tutorials';
-import {getTutorialFeedback} from './litterbox-web-api';
+import {runLitterBoxAnalysis} from './litterbox-web-api.ts';
 
 import successImageEN from '../components/tutorial/images/greatDoneEN.png';
 import successImageDE from '../components/tutorial/images/greatDoneDE.png';
@@ -66,7 +66,18 @@ class TutorialStep extends React.Component {
         }
         const language = this.props.locale === 'de' ? 'de' : 'en';
 
-        getTutorialFeedback(program, detectors, language)
+        runLitterBoxAnalysis(program, detectors, language)
+            .then(hints => hints
+                .filter(hint => hint.type !== 'QUESTION')
+                .map(hint => ({
+                    title: hint.translatedFinderName,
+                    description: hint.hint,
+                    sprite: hint.sprite,
+                    costume: hint.costume,
+                    type: hint.type,
+                    codeSnippet: hint.scratchBlocksCode
+                }))
+            )
             .then(hints => {
                 this.setState(prev => ({
                     ...prev,
