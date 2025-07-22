@@ -5,7 +5,12 @@ This repository is a fork of the [scratch-gui](https://github.com/scratchfoundat
 It contains:
 + NuzzleBug, adding debugging support
 + Interactive tutorial system with LitterBox integration
++ Extensions to support student progress tracking via [ScratchLog](https://github.com/se2p/scratchlog)
 + Block-Based Testing
++ The UI extensions required for the LitterBox⁺ framework (submission to the ASE 2025 Tool Demonstration Track).
+    + LitterBox: https://github.com/se2p/LitterBox/pull/10
+    + LitterBox HTTP API: https://github.com/se2p/LitterBox-Web/pull/1
+
 
 ## Description
 
@@ -22,9 +27,12 @@ The Block-Based Testing extension is also contained in this repository.
 - Node package manager. `npm` comes bundled with the node installation from https://nodejs.org/en.
 - Yarn. You can install yarn using the node package manager via `npm install --global yarn`.
 
+
 ## Running NuzzleBug
 
-Before starting, ensure the ScratchLog and the LitterBox base URLs are configured correctly in the .env file.
+- Optional, depending on the used extensions:
+    - Before starting, ensure the [ScratchLog](https://github.com/se2p/scratchlog) and
+    - the [LitterBox](https://github.com/se2p/LitterBox-Web) base URLs are configured correctly in the `.env` file.
 
 You can start the Scratch GUI by running `yarn install && yarn start`.
 
@@ -57,6 +65,7 @@ NuzzleBug is supported by the project FR 2955/3-1 funded by the
 
 ## References
 
+### NuzzleBug: Debugging Block-Based Programs in Scratch
 ```
 @inproceedings{nuzzlebug24,
   author = {Deiner, Adina and Fraser, Gordon},
@@ -75,6 +84,8 @@ NuzzleBug is supported by the project FR 2955/3-1 funded by the
   series = {ICSE '24}
 }
 ```
+
+### Effects of Automated Feedback in Scratch Programming Tutorials
 ```
 @inproceedings{obermueller2023tutorials,
   author = {Oberm\"{u}ller, Florian and Greifenstein, Luisa and Fraser, Gordon},
@@ -85,6 +96,31 @@ NuzzleBug is supported by the project FR 2955/3-1 funded by the
   booktitle = {Proceedings of the 2023 Conference on Innovation and Technology in Computer Science Education V. 1}
 }
 ```
+
+### ScratchLog: Live Learning Analytics for Scratch
+
+See also https://github.com/se2p/scratchlog.
+
+```
+@inproceedings{10.1145/3587102.3588836,
+  author = {Caspari, Laura and Greifenstein, Luisa and Heuer, Ute and Fraser, Gordon},
+  title = {ScratchLog: Live Learning Analytics for Scratch},
+  year = {2023},
+  isbn = {9798400701382},
+  publisher = {Association for Computing Machinery},
+  address = {New York, NY, USA},
+  url = {https://doi.org/10.1145/3587102.3588836},
+  doi = {10.1145/3587102.3588836},
+  booktitle = {Proceedings of the 2023 Conference on Innovation and Technology in Computer Science Education V. 1},
+  pages = {403–409},
+  numpages = {7},
+  keywords = {block-based programming, learning analytics, scratch},
+  location = {Turku, Finland},
+  series = {ITiCSE 2023}
+}
+```
+
+### A Block-Based Testing Framework for Scratch
 ```
 @inproceedings{10.1145/3699538.3699547,
   author = {Feldmeier, Patric and Fraser, Gordon and Heuer, Ute and Oberm\"{u}ller, Florian and Steckenbiller, Siegfried},
