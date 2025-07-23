@@ -6,6 +6,7 @@ import LlmWarningComponent from './llm-warning.component.tsx';
 
 import scratchblocks from 'scratchblocks';
 import {IssueType} from '../../containers/litterbox-web-api.ts';
+import ReactMarkdown from 'react-markdown';
 
 interface LitterBoxHintProps {
     id: number;
@@ -23,11 +24,13 @@ interface LitterBoxHintProps {
 
 interface LitterBoxHintState {
     hintDescriptionHtml: string;
+    llmDescription: string;
 }
 
 class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterBoxHintState> {
     state: LitterBoxHintState = {
-        hintDescriptionHtml: ''
+        hintDescriptionHtml: '',
+        llmDescription: ''
     };
 
     componentDidMount () {
@@ -58,10 +61,13 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
     }
 
     private updateDescriptionHtml (): void {
-        this.setState(prev => ({
-            ...prev,
-            hintDescriptionHtml: this.litterBoxHintToHtml(this.props.hintDescription)
-        }));
+        this.setState(() => {
+            const [description, llmDescription] = this.litterBoxHintToHtml(this.props.hintDescription);
+            return {
+                hintDescriptionHtml: description,
+                llmDescription: llmDescription
+            };
+        });
     }
 
     private triggerInlineScratchBlocksRender (): void {
@@ -73,8 +79,10 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
         });
     }
 
-    private litterBoxHintToHtml (hintText: string): string {
-        let text = hintText.replace(/\[b]/g, '<strong>');
+    private litterBoxHintToHtml (hintText: string): [string, string] {
+        const parts = hintText.split('[b]LLM Feedback:[/b]', 2);
+
+        let text = parts[0].replace(/\[b]/g, '<strong>');
         text = text.replace(/\[\/b]/g, '</strong>');
         text = text.replace(/\[newLine]/g, '<br />');
         text = text.replace(/\[sbi]/g, '<code class="b">');
@@ -84,7 +92,13 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
         text = text.replace(/\[bc]/g, '<span className={styles.hintHighlightText}><b>');
         text = text.replace(/\[\/bc]/g, '</b></span>');
         text = text.replace(/LLM/g, 'GPT');
-        return text;
+
+        let llmResponse = '';
+        if (parts.length > 1) {
+            llmResponse = `**GPT Feedback:** ${parts[1]}`.replace(/\[newLine]/g, '\n');
+        }
+
+        return [text, llmResponse];
     }
 
     private readonly handleExplainIssue = () => {
@@ -159,11 +173,16 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
                     {this.showExplainButton() || this.showFixButton() ? <LlmWarningComponent /> : null}
                 </div>
                 <div style={{display: 'flex'}}>
-                    <div
-                        // eslint-disable-next-line react/no-danger
-                        dangerouslySetInnerHTML={{__html: this.state.hintDescriptionHtml}}
-                        className={styles.hintDescriptionBox}
-                    />
+                    <div className={styles.hintDescriptionBox}>
+                        <div
+                            // eslint-disable-next-line react/no-danger
+                            dangerouslySetInnerHTML={{__html: this.state.hintDescriptionHtml}}
+                        />
+                        {this.state.llmDescription.length > 0 ?
+                            <ReactMarkdown>{this.state.llmDescription}</ReactMarkdown> :
+                            null
+                        }
+                    </div>
                     <div className={styles.scratchBlocksBox}>
                         <ScratchBlocksImageContainer
                             scratchBlocksText={this.props.scratchBlocksCode}
