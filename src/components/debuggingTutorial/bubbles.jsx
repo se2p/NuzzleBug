@@ -126,28 +126,35 @@ function TypewriterText({
                             isFinished = false,
                             onComplete = () => {}
                         }) {
-    if (isFinished) return <span style={{whiteSpace: 'pre-wrap' }}>{text}</span>
-
+    if (isFinished) return <span style={{ whiteSpace: 'pre-wrap' }}>{text}</span>;
 
     const [displayed, setDisplayed] = useState('');
     const hasStartedRef = useRef(false);
+    const isMountedRef = useRef(true);
 
     useEffect(() => {
+        isMountedRef.current = true;
+
         if (hasStartedRef.current) return;
         hasStartedRef.current = true;
 
         let idx = 0;
         const timer = setInterval(() => {
+            if (!isMountedRef.current) return;
+
             idx += 1;
             setDisplayed(text.substring(0, idx));
 
             if (idx >= text.length) {
                 clearInterval(timer);
-                onComplete();
+                if (isMountedRef.current) onComplete();
             }
         }, speed);
 
-        return () => clearInterval(timer);
+        return () => {
+            isMountedRef.current = false;
+            clearInterval(timer);
+        };
     }, []);
 
     return (
@@ -156,6 +163,5 @@ function TypewriterText({
         </span>
     );
 }
-
 
 export { UserBubble, EuliBubble };

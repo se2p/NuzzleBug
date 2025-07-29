@@ -29,10 +29,10 @@ function renderCommonResponse(responseType, {
             return (
                 <div className={css.responseContainer}>
                     <div className={css.responseTextArea}>
-                        <p> Wie kann ich dir helfen? </p>
+                        <p> Viel Erfolg beim Lösen des Tutorials! </p>
                         <p style={{marginTop: "15px"}}>
-                            Wenn du deinen Code von mir überprüfen lassen willst, klicke auf
-                            <span style={{color: "#C276FFFF", fontWeight:"bold"}}> Testergebnisse</span>
+                            Wenn du denkst, dass du den Fehler gefunden hast, klicke auf
+                            <span style={{color: "#0fbd8cff", fontWeight:"bold"}}> Lösung testen</span>
                         </p>
                     </div>
                 </div>
@@ -206,7 +206,7 @@ export function renderResponseDebugging(responseType, {
                             . Ich überprüfe dann, ob der Code korrekt funktioniert.</p>
                         <div className={css.responseButtonContainer}>
                             <button className={css.responseButtonNext}
-                                    onClick={() => setResponseType(RESPONSE_EXPLANATION2)}>Weiter
+                                    onClick={() => setResponseType(RESPONSE_EXPLANATION3)}>Weiter
                             </button>
                         </div>
                     </div>
@@ -216,7 +216,7 @@ export function renderResponseDebugging(responseType, {
             return (
                 <div className={css.responseContainer}>
                     <div className={css.responseTextArea}>
-                        <p> Wenn du mal nicht weiterkommst oder Hilfe brauchst, kannst du mich jederzeit über <span style={{color: "#62a4ffff", fontWeight: "bold"}}>Frag Euli </span>
+                        <p> Wenn du mal nicht weiterkommst oder Hilfe brauchst, kannst du mich jederzeit über <span style={{color: "#62a4ffff", fontWeight: "bold"}}>Frage Euli </span>
                             um Unterstützung bitten. Gemeinsam finden wir die Fehler bestimmt!</p>
 
                         <div className={css.responseButtonContainer}>

@@ -3,15 +3,13 @@ import React, {useEffect, useRef, useState} from 'react';
 
 import owl from "./images/OwlBranchRight.png"
 import owlDown from "./images/owlDown.png"
-import upButton from "./images/upButton.png"
 import bubbleIndicatorGray from "./images/bubbleDecalGrey.png"
+import bubbleIndicatorGreenDark from "./images/bubbleDecalGreenDark.png";
+import bubbleIndicatorGreenLight from "./images/bubbleDecalGreenLight.png";
 
 import testSuccess from "./images/icon--testSuccess.png"
 import testFailed from "./images/icon--testFailed.png"
 import testRunning from "./images/icon--testRunning.png"
-import hintGeneration from "./hint-generation";
-import RequestHintButton2 from "./hint-generation";
-import projectData from "../../lib/default-project/project-data";
 
 // Hauptkomponente
 const TestResults = ({
@@ -36,6 +34,12 @@ const TestResults = ({
 
     return (
         <div className={css.container}>
+            <img src={bubbleIndicatorGreenDark} style={{display: "none"}} alt={"preload"}/>
+            <img src={bubbleIndicatorGreenLight} style={{display: "none"}} alt={"preload"}/>
+            <img src={testRunning} style={{display: "none"}} alt={"preload"}/>
+            <img src={testFailed} style={{display: "none"}} alt={"preload"}/>
+            <img src={testSuccess} style={{display: "none"}} alt={"preload"}/>
+
             <div className={css.whiteBoxTop}>
                 <div className={css.bubbleContainer}>
                     <div className={css.columnFlex}>
@@ -96,6 +100,12 @@ const getTestText = ({ projectLoadingState, testResults, curTestDetails, hasCode
  * The answer-bubbles, the user can select to answer eulis questions. (e.g. next step)
  */
 const renderResponse = ({hasCodeUpdated, projectLoadingState, curTestDetails, nextStep, testResults, handleTestStart, guiMessages}) => {
+    if (!testResults && (projectLoadingState !== "TEST")) {
+        handleTestStart();
+    }
+
+
+
     const msg = guiMessages.test_results;
 
     if (testResults?.passed) {
@@ -121,7 +131,7 @@ const renderResponse = ({hasCodeUpdated, projectLoadingState, curTestDetails, ne
  * Returns Euli's feedback-details containing all test results.
  */
 const parseTestResults = ({testResults, testPageIndex, curTestDetails, projectLoadingState, step, setCurTestDetails, guiMessages, openHelpPage, project}) => {
-    //if (testResults.passed) return null;
+    if (!testResults) return null;
 
     // 1) Sortieren (absteigend nach Test-ID)
     const sortedDetails = [...testResults.details]
@@ -136,8 +146,9 @@ const parseTestResults = ({testResults, testPageIndex, curTestDetails, projectLo
     // 2) Default-Filter anwenden (Nur Tests aus aktuellem Schritt + fehlgeschlagene aus letzten Schritten)
     const filteredDetails = sortedDetails.filter(e => {
         const isCurrentStep    = e.testId.charAt(4) === (step + 1).toString();
-        const passed           = e.result === "pass";
-        return isCurrentStep || !passed;
+        const passed           = e.result === "pass" || e.result === "running";
+        //return isCurrentStep || !passed; //TODO REACTIVATE ON Classic-Tutorials!!!
+        return true;
     }).slice(start, start + itemsPerPage);
 
     // 3) Im Details-Modus: Slice um das ausgewählte Element, sonst ganzes Filter-Array
@@ -195,13 +206,13 @@ const parseTestResults = ({testResults, testPageIndex, curTestDetails, projectLo
 const createTestElement = (passed, e, testElementNumber, isCurrentStep, projectLoadingState, curTestDetails, setCurTestDetails, guiMessages, openHelpPage, project) => {
     const msg = guiMessages.test_results;
 
-    const headerBgColor = (projectLoadingState === "TEST")
+    const headerBgColor = (projectLoadingState === "TEST" && e.result === "running")
         ? "#afd8fd"
         : passed
             ? "#89ddaf"
             : "#d16857";
 
-    const iconSrc = (projectLoadingState === "TEST")
+    const iconSrc = (projectLoadingState === "TEST" && e.result === "running")
         ? testRunning
         : passed
             ? testSuccess
@@ -209,7 +220,7 @@ const createTestElement = (passed, e, testElementNumber, isCurrentStep, projectL
 
     const headerText = passed ? msg.passed : msg.failed;
 
-    const buttonStyle = (projectLoadingState === "TEST")
+    const buttonStyle = (projectLoadingState === "TEST" && e.result === "running")
         ? css.testElementButton
         : passed
             ? css.testElementButtonPassed
@@ -222,7 +233,7 @@ const createTestElement = (passed, e, testElementNumber, isCurrentStep, projectL
                 <div className={css.testElementHeader} style={{backgroundColor: headerBgColor, height:"60px"}}>
                     <div className={css.testElementTitleExtended}>
                         <img src={iconSrc} style={{width: "43px", marginRight: "10px"}} className={css.testElementIcon} alt={"ResultIcon"} draggable={false}/>
-                        {(projectLoadingState === "TEST") ? <TypewriterText text={msg.loading}/> : <span>{headerText}</span>}
+                        {(projectLoadingState === "TEST" && e.result === "running") ? <TypewriterText text={msg.loading}/> : <span>{headerText}</span>}
                     </div>
                 </div>
                 <span className={css.testElementTitle}>{e.test}</span>
@@ -236,15 +247,15 @@ const createTestElement = (passed, e, testElementNumber, isCurrentStep, projectL
                     :
                     <div className={css.buttonContainer}>
                         <div className={css.buttonWrapper} style={{paddingRight:"5px"}}>
-                            <div className={buttonStyle} style={{borderBottomRightRadius:"0px", borderTopRightRadius:"0px"}} onClick={() => setCurTestDetails("")}>
+                            <div className={buttonStyle} onClick={() => setCurTestDetails("")} style={{borderTopRightRadius: "0", borderBottomRightRadius: "0px"}}>
                                 {msg.close_button}
                             </div>
                         </div>
-                        <div className={css.buttonWrapper} style={{paddingLeft:"5px"}}>
+                        {/*<div className={css.buttonWrapper} style={{paddingLeft:"5px"}}>
                             <div className={css.testElementButtonHelp} onClick={() => {openHelpPage("step1_Costume1");}}>
                                 {msg.help_button}
                             </div>
-                        </div>
+                        </div>*/}
                     </div>
                 }
             </div>);
@@ -254,7 +265,7 @@ const createTestElement = (passed, e, testElementNumber, isCurrentStep, projectL
         <div key={e.testId} className={css.testElementContainer}>
             <div className={css.testElementHeader} style={{backgroundColor: headerBgColor}}>
                 <img src={iconSrc} className={css.testElementIcon} alt={"ResultIcon"} draggable={false}/>
-                {(projectLoadingState === "TEST") ? <TypewriterText text={msg.loading}/> : <span>{headerText}</span>}
+                {(projectLoadingState === "TEST" && e.result === "running") ? <TypewriterText text={msg.loading}/> : <span>{headerText}</span>}
             </div>
             <span className={css.testElementTitle}>{e.test}</span>
             <div className={css.buttonWrapper}>
@@ -273,11 +284,11 @@ const createTestElement = (passed, e, testElementNumber, isCurrentStep, projectL
 
 // Hilfsfunktion: Berechnet, ob die pagination-Pfeile sichtbar sein sollen
 const getPaginationInfo = (testResults, step, testPageIndex) => {
-    if (!testResults.details) return { showLeftArrow: false, showRightArrow: false };
+    if (!testResults || !testResults.details) return { showLeftArrow: false, showRightArrow: false };
 
     const visibleResults = testResults.details.filter(e => {
         const isCurrentStep = e.testId.charAt(4) === (step + 1).toString();
-        const passed = e.result === "pass";
+        const passed = e.result === "pass" || e.result === "running";
         return isCurrentStep || !passed;
     });
 
@@ -308,27 +319,42 @@ function TypewriterText({
                         }) {
     const [displayed, setDisplayed] = useState('');
     const idxRef = useRef(0);
-    const timerRef = useRef(null);
+    const timerRef = useRef(null);       // Für setInterval
+    const timeoutRef = useRef(null);     // Für setTimeout
+    const isMounted = useRef(true);      // Damit setState nach Unmount verhindert wird
 
     useEffect(() => {
+        isMounted.current = true;
+
         function startTyping() {
+            if (!isMounted.current) return;
+
             setDisplayed('\u00A0');
             idxRef.current = 0;
 
             timerRef.current = setInterval(() => {
+                if (!isMounted.current) return;
+
                 idxRef.current += 1;
                 setDisplayed(text.substring(0, idxRef.current));
 
                 if (idxRef.current >= text.length) {
                     clearInterval(timerRef.current);
-                    setTimeout(startTyping, pauseAfterComplete);
+
+                    timeoutRef.current = setTimeout(() => {
+                        if (isMounted.current) startTyping();
+                    }, pauseAfterComplete);
                 }
             }, speed);
         }
 
         startTyping();
 
-        return () => clearInterval(timerRef.current);
+        return () => {
+            isMounted.current = false;
+            clearInterval(timerRef.current);
+            clearTimeout(timeoutRef.current);
+        };
     }, [text, speed, pauseAfterComplete]);
 
     return (

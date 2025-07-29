@@ -11,6 +11,7 @@ import Message from "./content-types/message.jsx";
 import Mark from "./content-types/mark.jsx";
 import MarkChoice from "./content-types/markChoice.jsx";
 import Explanation from "./questionExplanations.jsx";
+import leftArrow from "../../cards/icon--prev.svg";
 
 const RESPONSE_START = 'scratch-gui/debugging-tutorial-help/START';
 const RESPONSE_DEFAULT = 'scratch-gui/debugging-tutorial-help/DEFAULT';
@@ -56,6 +57,7 @@ const DebuggingTutorialHelp = props => {
         showExplanation,
         responseType,//New
         setResponseType,
+        onHomeMenu,
         ...posProps
     } = props;
 
@@ -130,10 +132,10 @@ const DebuggingTutorialHelp = props => {
         const { endQuestion: endText } = tutorial[step];
 
         return (
-            <div style={{ width: '80%' }}>
+            <div style={{ width: '90%', marginLeft:"10px" }}>
                 <div className={css.textAnswerContainer}>
                     <span className={css.textAnswerLine} style={{ marginRight: '10px' }}>{gapStart1}</span>
-                    <div className={isGapTextSolved ? css.dropdownDisabled : css.dropdown}>
+                    <div className={isGapTextSolved ? css.dropdownDisabled : css.dropdown} style={{width:"150px"}}>
                         <input
                             className={css.dropdownBody}
                             readOnly={isGapTextSolved}
@@ -167,7 +169,7 @@ const DebuggingTutorialHelp = props => {
                 </div>
                 <div className={css.textAnswerContainer}>
                     <span className={css.textAnswerLine} style={{ marginRight: '10px' }}>{gapStart2}</span>
-                    <div className={isGapTextSolved ? css.dropdownDisabled : css.dropdown}>
+                    <div className={isGapTextSolved ? css.dropdownDisabled : css.dropdown} style={{width:"150px"}}>
                         <input
                             className={css.dropdownBody}
                             readOnly={isGapTextSolved}
@@ -257,7 +259,7 @@ const DebuggingTutorialHelp = props => {
             .map((key) => tutorial[step][key]);
 
         return (
-            <div className={css.textAnswerContainer}>
+            <div className={css.textAnswerContainer} style={{marginLeft:"10px"}}>
                 <span className={css.textAnswerLine} style={{marginRight: "10px"}}>{questionStart}</span>
                 <div className={css.dropdown}>
                     <input className={css.dropdownBody} readOnly={true} placeholder={"Wähle aus"} type="text" value={answers[0]} />
@@ -299,7 +301,11 @@ const DebuggingTutorialHelp = props => {
     const renderHelpPage = () => {
         return (
             <div className={css.pageContainer}>
-                <div className={css.whiteBox}>
+                <div className={css.leftButton} onClick={onHomeMenu}>
+                    <img src={leftArrow} alt="Next" draggable={false}/>
+                </div>
+
+                <div className={css.whiteBox} style={{paddingBottom:"0", paddingTop:"0", marginBottom:"10px"}}>
                     <div className={css.bubbleContainer}>
                         <div className={css.bubbleBoxContainer}>
                             <div className={css.bubble}>
@@ -309,7 +315,9 @@ const DebuggingTutorialHelp = props => {
                         </div>
                         <img src={euliLeft} alt={"Picture of Euli"} className={css.owlImage} draggable={false}/>
                     </div>
+                </div>
 
+                <div className={css.whiteBox}>
                     <div className={css.questionSection}
                          style={{filter:
                                  responseType === RESPONSE_EXPLANATION ||
@@ -334,19 +342,19 @@ const DebuggingTutorialHelp = props => {
                             className={css.footerButton}
                             onClick={() => setResponseType(RESPONSE_HELP)}
                         >
-                            Ich brauche weitere Hilfe
+                            Ich brauche einen Hinweis
                         </button>
-                        <button
+                        {/*<button
                             className={css.footerButton}
                             onClick={() => setResponseType(RESPONSE_EXPLANATION)}
                         >
                             Was soll ich tun?
-                        </button>
+                        </button>*/}
                     </div>
 
                     <div style={{display:"flex", zIndex:"100"}}>
-                        <div className={css.footerBackButton} onClick={() => onStepBack()}/>
-                        <div className={css.footerNextButton} onClick={() => onCheckAnswer(tutorial)}/>
+                        <div className={css.footerBackButton} onClick={() => {onStepBack(); setResponseType(RESPONSE_DEFAULT)}}/>
+                        <div className={css.footerNextButton} onClick={() => {onCheckAnswer(tutorial); setResponseType(RESPONSE_DEFAULT)}}/>
 
                         <div className={css.preloadFooterBackButton}/>
                         <div className={css.preloadFooterNextButton}/>
@@ -369,18 +377,17 @@ const DebuggingTutorialHelp = props => {
                 }
 
                 // Sicherstellen, dass wir eine Frage aus dem aktuellen Tutorial-Schritt haben.
-                const { question } = tutorial[step] || {};
-
+                const { text } = tutorial[step] || {};
                 return (
                     <div className={css.responseContainer}>
                         <p style={{ fontSize: "1rem", marginBottom: "10px" }}>
-                            <strong><u>Frage:</u>&nbsp;{question}</strong>
+                            <strong><u>Frage:</u>&nbsp;{text}</strong>
                         </p>
 
                         {/_1$/.test(step) && !questionMessage?.startsWith("[REVISITING]") && <p style={{ fontSize: "0.7rem" }}>
                             Wenn du dir nicht sicher bist, drücke unten auf&nbsp;&nbsp;
                             <span style={{ color: "#c7b4b0ff", fontWeight: "bold" }}>
-                                    Was soll ich tun?
+                                    Ich brauche weitere Hilfe
                                 </span>
                         </p>}
 
@@ -425,10 +432,10 @@ const DebuggingTutorialHelp = props => {
                             <div className={css.responseButton}>
                                 <button
                                     className={css.responseButtonNext}
-                                    onClick={() => setResponseType(RESPONSE_EXPLANATION1)}
+                                    onClick={() => setResponseType(RESPONSE_DEFAULT)}
                                     style={{backgroundColor:"#d3325bff", color:"white"}}
                                 >
-                                    Wie funktioniert Debugging?
+                                    Zurück
                                 </button>
                             </div>
                         </div>
@@ -498,7 +505,9 @@ const DebuggingTutorialHelp = props => {
                     <div className={css.responseContainer}>
                         <p style={{marginBottom:"5px"}}>
                             <strong style={{fontSize:"1.2rem"}}>Hilfestellung: </strong>
-                            {tutorial[step]["help"]}
+                            {tutorial[step]["help"] === null
+                                ? "Zu diesem Schritt kann ich dir im Moment nicht mehr verraten."
+                                : tutorial[step]["help"]}
                         </p>
                         <div className={css.responseButtonContainer}>
                             <button className={css.responseButtonNext}

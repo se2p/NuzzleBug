@@ -16,7 +16,7 @@ const TutorialSelection = ({tutorials, onSelectTutorial, guiMessages}) => {
         setShowingHelp(nextState);
     };
 
-    const [showDebuggingTutorials, setShowDebuggingTutorials] = useState(false);
+    const [showDebuggingTutorials, setShowDebuggingTutorials] = useState(true);
 
     const showDebuggingTutorial = (val) => {
         setShowDebuggingTutorials(val);
@@ -32,7 +32,7 @@ const TutorialSelection = ({tutorials, onSelectTutorial, guiMessages}) => {
         </h1>
 
         <div className={css.tabContainer}>
-            {showingHelp === "" && <button className={css.tabButton}
+            {/*showingHelp === "" && <button className={css.tabButton}
                                            id="classicTab"
                                            style={{backgroundColor:showDebuggingTutorials ? "#575e75" : "#4c97ff"}}
                                            onClick={() => showDebuggingTutorial(false)}>
@@ -40,8 +40,8 @@ const TutorialSelection = ({tutorials, onSelectTutorial, guiMessages}) => {
                     <img className={css.icon} src={iconDescription} alt={"errorIcon"}/>
                     {guiMessages.selection.coding}
                 </div>
-            </button>}
-            {/*showingHelp === "" && <button className={css.tabButton}
+            </button>*/}
+            {showingHelp === "" && <button className={css.tabButton}
                                            id="debuggingTab"
                                            style={{backgroundColor:showDebuggingTutorials ? "#70a45b" : "#575E75FF"}}
                                            onClick={() => showDebuggingTutorial(true)}>
@@ -49,7 +49,7 @@ const TutorialSelection = ({tutorials, onSelectTutorial, guiMessages}) => {
                     <img className={css.icon} src={iconDebugging} alt={"errorIcon"}/>
                     {guiMessages.selection.debugging}
                 </div>
-            </button>*/} {//TODO
+            </button>} {
                 }
         </div>
 

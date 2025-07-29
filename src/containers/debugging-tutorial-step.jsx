@@ -31,12 +31,13 @@ import {runTest2} from "tutorial-tests/src/test-runner/test-runner";
 
 
 import logging from 'scratch-vm/src/util/logging.js';
-const experimentId = new URL(window.location.href).searchParams.get('expid');
+/*const experimentId = new URL(window.location.href).searchParams.get('expid');
 const userId = new URL(window.location.href).searchParams.get('uid');
 const secret = new URL(window.location.href).searchParams.get('secret');
 logging._experimentId = experimentId;
 logging._userId = userId;
-logging._secret = secret;
+logging._secret = secret;*/
+
 
 
 
@@ -60,11 +61,18 @@ class DebuggingTutorialStep extends React.Component {
     }
 
     onTest() {
+        if (logging.isActive()) {
+            logging.logClickEvent('ICON', new Date(), 'START_TESTS', null);
+        }
+        //this.props.setMouseEnabled(false);
+
+
+        logging.pauseLogging(true);
         this.props.setLoadingProject("TEST");
         this.props.lockVM();
 
-        console.log("is Logging: " + logging.isActive()?.toString());
-        logging.logClickEvent('BUTTON', new Date(), 'CHECK_CODE_QUALITY2', null);
+        //logging.logClickEvent('BUTTON', new Date(), 'CHECK_CODE_QUALITY2', null);
+
 
 
 
@@ -84,7 +92,15 @@ class DebuggingTutorialStep extends React.Component {
             }
             this.props.setHasCodeUpdated(true);
             this.delayTestPause();
+            this.props.vm.start();
+            this.restartProject();
+            //this.props.setMouseEnabled(true);
+            //logging.pauseLogging(false);
         });
+
+
+
+
 /*
         const summary = runTest(this.props.vm, this.props.tutorialIndexData.testId, this.props.step)
             .catch(error => {console.log(`Test execution crashed: ${error}`);
@@ -105,15 +121,28 @@ class DebuggingTutorialStep extends React.Component {
         });*/
     }
 
+    async restartProject() {
+        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+        await sleep(200);
+        this.props.vm.greenFlag();
+        await sleep(500);
+        this.props.vm.stopAll();
+    }
 
     async delayTestPause() {
         const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-        await sleep(1000);
+        await sleep(2000);
         await this.props.setLoadingProject(null);
+        await logging.pauseLogging(false);
     }
 
     onNextStep() {
+        if (logging.isActive()) {
+            logging.logClickEvent('ICON', new Date(), 'NEXT_STEP', null);
+        }
+
         this.props.setLoadingProject("NEXT");
         this.props.resetStep();
 
@@ -160,6 +189,7 @@ class DebuggingTutorialStep extends React.Component {
                     this.props.vm.start();
 
                     this.setSavepoint();
+                    this.delayTestPause(); // Resumes logging
                 });
             }
 
@@ -236,7 +266,6 @@ class DebuggingTutorialStep extends React.Component {
                 this.props.resetStep();
             }
         }
-
        /* this.interval = setInterval(() => {
             this.checkForCodeUpdate();
         }, 1000);
@@ -245,7 +274,6 @@ class DebuggingTutorialStep extends React.Component {
 
     componentWillUnmount() {
         clearInterval(this.interval); // Wichtig, sonst bleibt das Intervall aktiv!
-        console.log("Stopped updating!");
     }
 
     checkForCodeUpdate() {
@@ -351,6 +379,7 @@ DebuggingTutorialStep.propTypes = {
     setSelectedSprite: PropTypes.func,
     selectedSprite: PropTypes.string,
     projectLoadingState: PropTypes.string,
+    setMouseEnabled: PropTypes.func,
 };
 
 const mapStateToProps = state => ({

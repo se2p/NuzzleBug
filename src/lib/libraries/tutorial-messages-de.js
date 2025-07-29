@@ -64,12 +64,12 @@ export default {
 
     test_results: {
         response: {
-            loading: "Klar doch! Warte bitte kurz, bis ich deinen Code überprüft habe",
+            loading: "Klar doch! Bitte ändere nichts an deinem Projekt (Neue Blöcke hinzufügen, Grüne Flagge klicken, etc.), bis ich dir hier sage, dass ich mit den Tests fertig bin.",
             passed_all: "Super! Du hast alle Tests erfolgreich geschafft.\nDu kannst nun zum nächsten Schritt gehen.",
             test_passed: "Dieser Test sieht schon mal richtig gut aus.\nSuper gemacht!",
             test_failed: "In diesem Test hat sich noch ein Fehler eingeschlichen.",
             code_changed: "Soll ich deinen Code noch einmal überprüfen?",
-            default: "Hier habe ich deine einzelnen Testergebnisse aufgelistet. Im Moment hast du noch nicht alle bestanden."
+            default: "Überprüfung abgeschlossen!"
         },
         details_button: "Details",
         help_button: "Hilfe",
@@ -86,7 +86,7 @@ export default {
         error: "Fehler",
         controls: "Steuerung",
         next: "Weiter",
-        startTutorial: "Ich habe die Aufgabenstellung gelesen",
+        startTutorial: "Ich habe die Aufgabenstellung bearbeitet",
         testButton: "Lösung Testen",
         resultButton: "Testergebnisse",
         euliButton: "Frage Euli",

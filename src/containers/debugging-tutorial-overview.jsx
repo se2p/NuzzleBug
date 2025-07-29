@@ -6,9 +6,7 @@ import VirtualMachine from "scratch-vm";
 import {setLastTutorial, setLoading, setAutoSave, setContentType, reset, lastStartedTutorial} from "../reducers/debugging-tutorial-overview"
 import JSZip from "jszip";
 import {CONTENT_START_TUTORIAL, CONTENT_DESCRIPTION} from "../components/debuggingTutorial/tutorial-constants.jsx";
-
-import bootImage from "../components/debuggingTutorial/images/owlTransparent.png";
-import {spriteUpload} from "../lib/file-uploader"; // Bild importieren
+import logging from 'scratch-vm/src/util/logging.js';
 
 class DebuggingTutorialOverview extends React.Component {
     constructor(props) {
@@ -68,6 +66,7 @@ class DebuggingTutorialOverview extends React.Component {
      * Loads the new tutorial. This includes the required sprites, code, etc.
      */
     loadProject() {
+        logging.pauseLogging(true);
         this.props.setLoading(true);
         this.props.vm.start();
 
@@ -76,10 +75,21 @@ class DebuggingTutorialOverview extends React.Component {
                 .then(() => {
                     this.props.onStartTutorial();})
                 .catch((e) => console.log("Error loading new Project: " + e.toString()))
-                .finally(() => {this.props.setLoading(false);});
+                .finally(() => {
+                    this.props.setLoading(false);
+                    this.delayResumeLogging();
+                });
         } else {
             this.props.onStartTutorial();
         }
+    }
+
+    async delayResumeLogging() {
+        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+        await sleep(2000);
+        await logging.pauseLogging(false);
+        console.log("LOGING: FALSE!!!!!!!!!!!!!")
     }
 
     openAutoSaveSelection() {

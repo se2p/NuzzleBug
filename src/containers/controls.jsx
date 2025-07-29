@@ -84,7 +84,7 @@ class Controls extends React.Component {
             this.forceUpdate();
         }
         if (logging.isActive()) {
-            logging.logClickEvent('ICON', new Date(), 'GREENFLAG', null);
+            //logging.logClickEvent('ICON', new Date(), 'GREENFLAG', null); TODO this.props.vm.greenFlag() already calls this function
         }
     }
     handleStepBack (e) {
@@ -162,7 +162,7 @@ class Controls extends React.Component {
 
         this.props.vm.stopAll();
         if (logging.isActive()) {
-            logging.logClickEvent('ICON', new Date(), 'STOPALL', null);
+            //logging.logClickEvent('ICON', new Date(), 'STOPALL', null); TODO this.props.vm.stopAll() already calls this function
         }
     }
     resetPauseResume () {

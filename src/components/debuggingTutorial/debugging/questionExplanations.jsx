@@ -17,22 +17,22 @@ const explanationContent= {
             indem du auf die kleinen Knöpfe unter den Bildern klickst.
         </p>
     ),
-    gapText: (
+    GAP_TEXT: (
         <p>
             Erklärung für <strong>Gap-Text</strong> Fragen.
         </p>
     ),
-    mark: (
+    MARK: (
         <p>
             Erklärung für <strong>Mark</strong>-Fragen.
         </p>
     ),
-    markChoice: (
+    MARK_CHOICE: (
         <p>
             Erklärung für <strong>Mark</strong>-Fragen.
         </p>
     ),
-    dropdown: (
+    DROPDOWN: (
         <p>
             Diese Frage ist ein <strong>Dropdown</strong>. Klicke auf den kleinen Pfeil am rechten Rand des grauen
             Elements und wähle eine der möglichen Optionen aus.

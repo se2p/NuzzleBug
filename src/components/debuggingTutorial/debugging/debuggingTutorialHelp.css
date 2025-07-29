@@ -5,9 +5,13 @@
     min-width: 468px;
     resize: both;
     width: 100%;
+    min-height: 100%;
+    height: fit-content;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
+    background-color: #ffffff;
+    background-image: url("./../images/skulls.png");
 }
 
 /* Sprechblase */
@@ -16,7 +20,7 @@
     align-items: flex-start;
     gap: 20px;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     justify-content: flex-end;
 }
 
@@ -37,7 +41,7 @@
     height: auto;
     right: 0; /* Direkt am rechten Rand */
     top: 50%; /* Mittig der Höhe */
-    transform: translateX(65%) translateY(-40%); /* Exakte Zentrierung */
+    transform: translateX(75%) translateY(-40%); /* Exakte Zentrierung */
 }
 
 .bubble p {
@@ -71,11 +75,11 @@
 
 
 .white-box {
+    margin-top: 10px;
     margin-left: auto;
     margin-right: auto;
     background-color: white;
     width: 96%;
-    min-height: 450px;
     border-radius: 8px;
     display: inline-flex;
     justify-content: flex-start;
@@ -87,7 +91,7 @@
     box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
     -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
     -moz-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
-    margin-bottom: 80px;
+    margin-bottom: 70px;
 }
 
 
@@ -105,6 +109,7 @@
     color: white;
     padding: 10px 10px;
     border-radius: 5px;
+    z-index: 9999;
 }
 
 .footer-button {
@@ -526,7 +531,7 @@ input:checked + .slider:after
 .dropdown{
     display: flex;
     justify-content: flex-start;
-    width: 160px;
+    width: 180px;
     border-radius: 10px;
     background-color: hsl(226, 15%, 40%);
     border: none;
@@ -761,4 +766,43 @@ input:checked + .slider:after
     display: flex;
     justify-content: space-around;
     width: 100%;
+}
+
+
+
+
+
+/*Back to Overview Button*/
+.left-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 200;
+    user-select: none;
+    cursor: pointer;
+    background: #575E75FF; /* z.B. motion-primary als Hex */
+    box-shadow: 0 0 0 4px rgba(87, 94, 117, 0.45); /* motion-transparent */
+    height: 44px;
+    width: 30px;
+    border-bottom-right-radius: 50px;
+    border-top-right-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.25s ease;
+    left: 0;
+}
+
+.left-button:hover {
+    box-shadow: 0 0 0 6px rgba(87, 94, 117, 0.71); /* motion-transparent */
+    width: 60px;
+}
+
+.left-button img {
+    width: 1.75rem;
+    transition: all 0.1s linear;
+}
+
+.left-button:active img {
+    transform: scale(0.75);
 }

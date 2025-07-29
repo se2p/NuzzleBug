@@ -844,12 +844,12 @@
     color: #575E75FF;
     background-color: white;
     cursor: pointer;
-    margin-left: 15px;
+    margin-left: 0px;
+    transition: all 0.2s;
 }
 
 .response-button-next:hover {
     background-color: rgba(255, 255, 255, 0.8);
-    transform: scale(95%);
 }
 
 .response-button-Test-Results {
@@ -872,7 +872,7 @@
 .response-button-container {
     display: flex;
     align-items: flex-start;
-    justify-content: flex-start;
+    justify-content: center;
     margin-top: 10px;
 }
 

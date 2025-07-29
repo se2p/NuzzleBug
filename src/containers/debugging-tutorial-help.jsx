@@ -24,6 +24,7 @@ import {
 } from "../reducers/debugging-tutorial-help";
 import DebuggingTutorialStepComponent from '../components/debuggingTutorial/debugging/debuggingTutorialHelp.jsx';
 import PropTypes from "prop-types";
+import logging from 'scratch-vm/src/util/logging.js';
 
 class DebuggingTutorialHelp extends React.Component {
 
@@ -34,6 +35,10 @@ class DebuggingTutorialHelp extends React.Component {
         this.onGapTextButton = this.onGapTextButton.bind(this);
         this.solveStep = this.solveStep.bind(this);
         this.onEnterMultiAnswer = this.onEnterMultiAnswer.bind(this);
+        this.logStep = this.logStep.bind(this);
+        this.state = {
+            helpLog: []
+        };
     }
 
     /**
@@ -44,6 +49,7 @@ class DebuggingTutorialHelp extends React.Component {
             case "SINGLE_CHOICE":
             case "MARK_CHOICE":
                 if (this.props.answers[0] === "") {
+                    this.props.setQuestionMessage("Du musst mindestens eine Option auswählen!");
                     break;
                 }
 
@@ -52,25 +58,34 @@ class DebuggingTutorialHelp extends React.Component {
                         ? tutorial.correctionText : tutorial[this.props.answers[0]].correctionText;
                     this.props.setQuestionMessage(correctionText);
                     this.props.addSolvedStep(step, this.props.answers[0]);
+                    this.logStep(step, tutorial, tutorial[this.props.answers[0]], false);
                     break;
                 }
-
+                this.logStep(step, tutorial, tutorial[this.props.answers[0]], true);
                 this.props.addSolvedStep(step, this.props.answers[0]);
                 this.props.setStep(tutorial[this.props.answers[0]]["next"].slice(6)); //step1_12 -> 12
                 this.props.reset();
                 break;
             case "MULTIPLE_CHOICE":
-                if (JSON.stringify(this.props.selectedAnswers) === JSON.stringify(tutorial["solution"])) {
+                const allFalse = this.props.selectedAnswers.every(value => value === false);
+                if (allFalse) {
+                    this.props.setQuestionMessage("Du musst mindestens eine Option auswählen!");
+                    return;
+                }
 
+                if (JSON.stringify(this.props.selectedAnswers) === JSON.stringify(tutorial["solution"])) {
+                    this.logStep(step, tutorial, this.props.selectedAnswers, true);
                     this.props.setStep(tutorial["next"].slice(6));
                     this.props.reset();
                 } else {
+                    this.logStep(step, tutorial, this.props.selectedAnswers, false);
                     this.props.setQuestionMessage(tutorial.correctionText);
                 }
                 break;
             case "MESSAGE":
                 this.props.setStep(tutorial["next"].slice(6));
                 this.props.reset();
+                this.logStep(step, tutorial, null, null);
                 break;
             case "DROPDOWN":
                 if (this.props.answers[0] !== "") {
@@ -80,11 +95,14 @@ class DebuggingTutorialHelp extends React.Component {
                         this.props.addSolvedStep(step, this.props.answers[0]);
                         this.props.setStep(tutorial[findOption()]["next"].slice(6));
                         this.props.reset();
+                        this.logStep(step, tutorial, findOption(), false);
                     } else {
                         this.props.setQuestionMessage(tutorial.correctionText);
                         this.props.addSolvedStep(step, this.props.answers[0]);
+                        this.logStep(step, tutorial, findOption(), true);
                     }
                 }
+                this.props.setQuestionMessage("Du musst mindestens eine Option auswählen!");
                 break;
             case "GAP_TEXT":
                 if (this.props.answers[2] !== "") {
@@ -95,7 +113,9 @@ class DebuggingTutorialHelp extends React.Component {
                         this.props.addSolvedStep(step, this.props.answers[2]);
                         this.props.setStep(nextStep.slice(6));
                         this.props.reset();
+                        this.logStep(step, tutorial, this.props.answers[2] !== "false", false);
                     } else {
+                        this.logStep(step, tutorial, this.props.answers[2] !== "false", true);
                         this.props.addSolvedStep(step, this.props.answers[2]);
                         this.props.setQuestionMessage(tutorial.correctionText);
                     }
@@ -120,13 +140,38 @@ class DebuggingTutorialHelp extends React.Component {
                 if (correctSelection) {
                     this.props.setStep(tutorial["next"].slice(6));
                     this.props.reset();
+                    this.logStep(step, tutorial, JSON.stringify(this.props.selectedBlocks), true);
+
                 } else {
                     this.props.setQuestionMessage(tutorial.correctionText);
+                    this.logStep(step, tutorial, JSON.stringify(this.props.selectedBlocks), false);
+
                 }
                 break;
             default:
                 console.log("Unknown QuestionType encountered: " + tutorial["questionType"])
         }
+    }
+
+    /**
+     * Logs the current step as a JSON.
+     */
+    logStep(step, tutorial, selectedAnswer, isAnswerCorrect) {
+        //if (!logging.isActive) return;
+
+        const newEntry = {
+            questionStep: step,
+            questionText: tutorial["text"],
+            questionType: tutorial["questionType"],
+            selectedAnswer: selectedAnswer,
+            isAnswerCorrect: isAnswerCorrect,
+            timestamp: new Date().toISOString()
+        };
+        this.setState(prev => ({
+            helpLog: [...prev.helpLog, newEntry]
+        }), () => {
+            console.log("Aktuelle Ergebnisse:", this.state.helpLog);
+        });
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -138,6 +183,16 @@ class DebuggingTutorialHelp extends React.Component {
         }
     }
 
+    componentWillUnmount() {
+        if (logging.isActive) {
+            const curStep = (this.props.stepNumber + 1).toString() + "_" + this.props.level;
+            const text = JSON.stringify(this.state.helpLog, null, 2);
+            const blob = new Blob([text], { type: "application/json" });
+            const file = new File([blob], `${this.props.tutorial.id + curStep}.json`, { type: "application/json" });
+
+            logging.logFile(file.name, "json", file, new Date());
+        }
+    }
     /**
      * opulates the most recent user inputs for a specific question if the question has been answered before.
      */
@@ -176,6 +231,22 @@ class DebuggingTutorialHelp extends React.Component {
     onEnterMultiAnswer(step, answers) {
         this.props.enterMultiAnswer(answers);
         this.props.addSolvedStep(step, "solved :)");
+    }
+
+    componentDidMount() {
+        const curStep = "step" + (this.props.stepNumber + 1).toString() + "_" + this.props.level;
+
+        const index = {
+            timestamp: new Date().toISOString(),
+            startStep: curStep,
+            tutorialTitle: this.props.tutorial.title
+        }
+
+        this.setState(prev => ({
+            helpLog: [index]
+        }), () => {
+            console.log("HelpLog zurückgesetzt", this.state.helpLog);
+        });
     }
 
     render () {
@@ -246,7 +317,8 @@ DebuggingTutorialHelp.propTypes = {
     selectedBlocks: PropTypes.any,
     showExplanation: PropTypes.bool,
     responseType: PropTypes.any,
-    setResponseType: PropTypes.func
+    setResponseType: PropTypes.func,
+    onHomeMenu: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
