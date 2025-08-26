@@ -258,15 +258,19 @@ class MenuBar extends React.Component {
         const userId = new URL(window.location.href).searchParams.get('uid');
         const secret = new URL(window.location.href).searchParams.get('secret');
         if (experimentId && userId) {
-            this.props.saveProjectSb3().then(content => {
-                if (this.props.onSaveFinished) {
-                    this.props.onSaveFinished();
-                }
-                this.props.saveProjectBeforeFinish(content);
-            });
-            const url = `${process.env.SCRATCHLOG_BASE_URL}/participant/stop`;
-            const queryParams = `?user=${userId}&experiment=${experimentId}&secret=${secret}`;
-            window.location.href = url + queryParams;
+            this.props.saveProjectSb3()
+                .then(content => {
+                    if (this.props.onSaveFinished) {
+                        this.props.onSaveFinished();
+                    }
+                    this.props.saveProjectBeforeFinish(userId, experimentId, secret, content);
+                })
+                // Ensure the redirect happens after the promise resolves or rejects by putting it inside `finally`.
+                .finally(() => {
+                    const url = `${process.env.SCRATCHLOG_BASE_URL}/participant/stop`;
+                    const queryParams = `?user=${userId}&experiment=${experimentId}&secret=${secret}`;
+                    window.location.href = url + queryParams;
+                });
         }
     }
     handleRestoreOption (restoreFun) {
