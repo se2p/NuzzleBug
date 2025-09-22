@@ -157,11 +157,11 @@ const Controls = function (props) {
                 title={intl.formatMessage(messages.stopTitle)}
                 onClick={onStopAllClick}
             />
-            <RequestHintButton />
+            {/*<RequestHintButton />*/}
             {turbo ? (
                 <TurboMode />
             ) : null}
-            {interrogationSupported && showQuestionButton ? <IRQuestions
+            {/*{interrogationSupported && showQuestionButton ? <IRQuestions
                 active={!irDisabled && (!active || paused)}
                 onClick={onIRQuestionsClick}
                 title={intl.formatMessage(messages.irQuestionTitle)}
@@ -179,7 +179,7 @@ const Controls = function (props) {
                 interrogationSupported ? (<HelpMenuButton
                     title={intl.formatMessage(messages.helpMenuButtonTitle)}
                     onClick={onHelpMenuButtonClick}
-                />) : null}
+                />) : null}*/}
             <Tutorial
                 active={!tutorialCardsVisible}
                 onClick={onTutorialClick}
