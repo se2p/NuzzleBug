@@ -7,9 +7,9 @@ It contains:
 + Interactive tutorial system with LitterBox integration
 + Extensions to support student progress tracking via [ScratchLog](https://github.com/se2p/scratchlog)
 + Block-Based Testing
-+ The UI extensions required for the LitterBox⁺ framework (submission to the ASE 2025 Tool Demonstration Track).
-    + LitterBox: https://github.com/se2p/LitterBox/pull/10
-    + LitterBox HTTP API: https://github.com/se2p/LitterBox-Web/pull/1
++ The UI extensions required for the LitterBox+ LLM integration framework
+    + LitterBox HTTP API: https://github.com/se2p/LitterBox-Web/
+    + LitterBox: https://github.com/se2p/LitterBox
 
 
 ## Description
@@ -138,3 +138,9 @@ See also https://github.com/se2p/scratchlog.
   series = {Koli Calling '24}
 }
 ```
+
+### LitterBox+: An Extensible Framework for LLM-enhanced Scratch Static Code Analysis
+
+B. Fein, F. Obermüller and G. Fraser, "LitterBox+: An Extensible Framework for LLM-enhanced Scratch Static Code Analysis",
+in Proceedings of the 40th IEEE/ACM International Conference on Automated Software Engineering (ASE ’25), Tool Demonstration Track. IEEE,
+2025. https://doi.org/TBD ([arXiv:2509.12021](https://arxiv.org/abs/2509.12021))
