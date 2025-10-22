@@ -7,7 +7,7 @@
     color: #575E75FF;
     padding-top: 10px;
     background-color: #ffffff;
-    background-image: url("./images/skulls.png");
+    background-image: url("../images/skulls.png");
 }
 
 /*Top box*/
@@ -94,7 +94,7 @@
 }
 
 .nextBubble:hover .nextBubbleIndicator {
-    background-image: url('./images/bubbleDecalGreenDark.png');
+    background-image: url('../images/bubbleDecalGreenDark.png');
 }
 
 .nextBubbleIndicator {
@@ -107,7 +107,7 @@
     transform: translateX(-102%) translateY(-40%);
     background-size: contain;
     background-repeat: no-repeat;
-    background-image: url('./images/bubbleDecalGreenLight.png');
+    background-image: url('../images/bubbleDecalGreenLight.png');
 }
 
 .owlImage {
@@ -196,18 +196,18 @@
     width: 15px;
     height: 40px;
 
-    background-image: url("./images/nextTestArrowGrey.png");
+    background-image: url("../images/nextTestArrowGrey.png");
     background-size: cover;   /* skaliert, damit das gesamte Div gefüllt wird */
     background-position: center center; /* Bild zentrieren */
     background-repeat: no-repeat;
 }
 
 .testLeftArrow:hover .nextTestIcon{
-    background-image: url("./images/nextTestArrowWhite.png");
+    background-image: url("../images/nextTestArrowWhite.png");
 }
 
 .testRightArrow:hover .nextTestIcon{
-    background-image: url("./images/nextTestArrowWhite.png");
+    background-image: url("../images/nextTestArrowWhite.png");
 }
 
 .testRightArrow:active {
@@ -451,7 +451,7 @@
 }
 
 .helpBubble:hover .selectionBubbleIndicator {
-    background-image: url('./images/selectionBubbleDecalGrey.png');
+    background-image: url('../images/selectionBubbleDecalGrey.png');
 }
 
 .helpBubble.selected {
@@ -461,7 +461,7 @@
 }
 
 .helpBubble.selected .selectionBubbleIndicator {
-    background-image: url('./images/selectionBubbleDecalDark.png');
+    background-image: url('../images/selectionBubbleDecalDark.png');
 }
 
 .helpBubble:not(.selected):hover {
@@ -481,7 +481,7 @@
     transform: translateX(-102%) translateY(-40%);
     background-size: contain;
     background-repeat: no-repeat;
-    background-image: url('./images/selectionBubbleDecalLight.png');
+    background-image: url('../images/selectionBubbleDecalLight.png');
 }
 
 
@@ -521,4 +521,89 @@
     position: relative;
     z-index: 2;
     transition: transform 0.1s ease-in-out;
+}
+
+
+
+/* LOADING ANIMATION */
+.loader {
+    margin-top: 10px;
+    width: 100%;
+    height: 5px;
+    display: inline-block;
+    position: relative;
+    background: rgba(87, 94, 117, 0.44);
+    overflow: hidden;
+    border-radius: 10px;
+}
+.loader::after {
+    content: '';
+    width: 192px;
+    height: 5px;
+    background: #575E75FF;
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    animation: animloader 2s linear infinite;
+}
+
+@keyframes animloader {
+    0% {
+        left: 0;
+        transform: translateX(-100%);
+    }
+    100% {
+        left: 100%;
+        transform: translateX(0%);
+    }
+}
+
+
+
+/*Response that gets shown while tests run*/
+.loading-header {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+.step-label {
+    background-color: #575E75FF; /* dunkles Grau-Blau */
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.step-number {
+    background-color: #aeb0bb; /* neutrales Grau */
+    color: white;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 13px;
+    transition: background-color 0.3s;
+}
+
+.blink {
+    background: linear-gradient(
+        120deg,
+        #aeb0bb 0%,
+        #aeb0bb 30%,
+        #575E75FF 50%,
+        #aeb0bb 70%,
+        #aeb0bb 100%
+    );
+    background-size: 200% 100%;
+    animation: shine 2s linear infinite;
+}
+
+@keyframes shine {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
 }

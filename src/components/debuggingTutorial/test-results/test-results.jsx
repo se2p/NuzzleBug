@@ -1,36 +1,25 @@
 import css from "./test-results.css"
 import React, {useEffect, useRef, useState} from 'react';
 
-import owl from "./images/OwlBranchRight.png"
-import owlDown from "./images/owlDown.png"
-import bubbleIndicatorGray from "./images/bubbleDecalGrey.png"
-import bubbleIndicatorGreenDark from "./images/bubbleDecalGreenDark.png";
-import bubbleIndicatorGreenLight from "./images/bubbleDecalGreenLight.png";
+import owl from "../images/OwlBranchRight.png"
+import owlDown from "../images/owlDown.png"
+import bubbleIndicatorGray from "../images/bubbleDecalGrey.png"
+import bubbleIndicatorGreenDark from "../images/bubbleDecalGreenDark.png";
+import bubbleIndicatorGreenLight from "../images/bubbleDecalGreenLight.png";
 
-import testSuccess from "./images/icon--testSuccess.png"
-import testFailed from "./images/icon--testFailed.png"
-import testRunning from "./images/icon--testRunning.png"
+import testSuccess from "../images/icon--testSuccess.png"
+import testFailed from "../images/icon--testFailed.png"
+import testRunning from "../images/icon--testRunning.png"
+import {SHOW_LLM_HINTS} from "../config.ts";
+import {getPaginationInfo, getRunningStep, getStepColor, getTestText, TypewriterText} from "./test-utils.jsx";
 
-// Hauptkomponente
-const TestResults = ({
-                         testResults,
-                         step,
-                         testPageIndex,
-                         setCurPage,
-                         hasCodeUpdated,
-                         nextStep,
-                         onDecreaseTestPageIndex,
-                         onIncreaseTestPageIndex,
-                         projectLoadingState,
-                         curTestDetails,
-                         guiMessages,
-                         setCurTestDetails,
-                         handleTestStart,
-                         openHelpPage,
-                         project,
-                     }) => {
-    const { showLeftArrow, showRightArrow } = getPaginationInfo(testResults, step, testPageIndex);
-
+const TestResults = (props) => {
+    const { testResults, step, testPageIndex, curTestDetails} = props;
+    const context = {
+        ...props,
+        pagination: getPaginationInfo(props.testResults, props.step, props.testPageIndex),
+    };
+    const { showLeftArrow, showRightArrow } = context.pagination;
 
     return (
         <div className={css.container}>
@@ -44,10 +33,10 @@ const TestResults = ({
                 <div className={css.bubbleContainer}>
                     <div className={css.columnFlex}>
                         <div className={css.euliBubble}>
-                            <img className={css.bubbleIndicator} alt="Bubble-Decal" src={bubbleIndicatorGray}/>
-                            {getTestText({ projectLoadingState, testResults, curTestDetails, hasCodeUpdated, guiMessages })}
+                            <img className={css.bubbleIndicator} alt="Bubble-Decal" src={bubbleIndicatorGray} draggable={false}/>
+                            {getTestText(context)}
                         </div>
-                        {renderResponse({hasCodeUpdated, projectLoadingState, curTestDetails, nextStep, testResults, handleTestStart, guiMessages})}
+                        {renderResponse(context)}
                     </div>
                     <img src={curTestDetails === "" ? owl : owlDown} alt="Picture of Euli" className={css.owlImage} draggable={false}/>
                 </div>
@@ -60,7 +49,7 @@ const TestResults = ({
 
                 <div className={css.WhiteBoxBottom}>
                     <div className={css.testResultContainer}>
-                        {parseTestResults({testResults, testPageIndex, curTestDetails, projectLoadingState, step, setCurTestDetails, guiMessages, openHelpPage, project})}
+                        {parseTestResults(context)}
                     </div>
                 </div>
 
@@ -72,47 +61,45 @@ const TestResults = ({
     );
 };
 
-// Gibt Eulis Text (obere Sprechblase) zurück
-const getTestText = ({ projectLoadingState, testResults, curTestDetails, hasCodeUpdated, guiMessages }) => {
-    const msg = guiMessages.test_results.response;
 
-    if (projectLoadingState === "TEST") {
-        return <span>{msg.loading}</span>;
-    }
-
-    if (testResults?.passed) {
-        return <span>{msg.passed_all}</span>;
-    }
-
-    if (curTestDetails) {
-        const result = testResults.details.find(e => e.testId === curTestDetails)?.result;
-        return <span>{result === "pass" ? msg.test_passed : msg.test_failed}</span>;
-    }
-
-    if (hasCodeUpdated && projectLoadingState !== "TEST_PAUSE") {
-        return <span>{msg.code_changed}</span>;
-    }
-
-    return <span>{msg.default}</span>;
-};
 
 /**
  * The answer-bubbles, the user can select to answer eulis questions. (e.g. next step)
  */
-const renderResponse = ({hasCodeUpdated, projectLoadingState, curTestDetails, nextStep, testResults, handleTestStart, guiMessages}) => {
-    if (!testResults && (projectLoadingState !== "TEST")) {
-        handleTestStart();
-    }
-
-
-
+const renderResponse = ({hasCodeUpdated, projectLoadingState, curTestDetails, nextStep, testResults, handleTestStart, guiMessages, step}) => {
     const msg = guiMessages.test_results;
 
-    if (testResults?.passed) {
+    if (testResults?.passed && projectLoadingState !== "TEST_PAUSE") {
         return (
             <div className={css.nextBubble} onClick={nextStep}>
                 <div className={css.nextBubbleIndicator} />
                 {msg.next_step}
+            </div>
+        );
+    }
+
+    if (projectLoadingState === "TEST" || projectLoadingState === "TEST_PAUSE") {
+        return (
+            <div style={{width:"100%"}}>
+                <div className={css.loadingHeader}>
+                    <span className={css.stepLabel}>Schritt:</span>
+
+                    {[...Array(step +1)].map((_, i) => {
+                        const stepNum = step + 1 - i;
+                        return (
+                            <span
+                                key={stepNum}
+                                className={`${css.stepNumber} ${
+                                    getRunningStep(testResults) === stepNum ? css.blink : ""
+                                }`}
+                                style={{ backgroundColor: getStepColor(testResults, stepNum) }}
+                            >
+                                {stepNum}
+                            </span>
+                        );
+                    })}
+                </div>
+                {projectLoadingState !== "TEST_PAUSE" && <span className={css.loader}></span>}
             </div>
         );
     }
@@ -130,7 +117,7 @@ const renderResponse = ({hasCodeUpdated, projectLoadingState, curTestDetails, ne
 /**
  * Returns Euli's feedback-details containing all test results.
  */
-const parseTestResults = ({testResults, testPageIndex, curTestDetails, projectLoadingState, step, setCurTestDetails, guiMessages, openHelpPage, project}) => {
+const parseTestResults = ({testResults, testPageIndex, curTestDetails, projectLoadingState, step, setCurTestDetails, guiMessages, openHelpPage}) => {
     if (!testResults) return null;
 
     // 1) Sortieren (absteigend nach Test-ID)
@@ -147,8 +134,8 @@ const parseTestResults = ({testResults, testPageIndex, curTestDetails, projectLo
     const filteredDetails = sortedDetails.filter(e => {
         const isCurrentStep    = e.testId.charAt(4) === (step + 1).toString();
         const passed           = e.result === "pass" || e.result === "running";
-        //return isCurrentStep || !passed; //TODO REACTIVATE ON Classic-Tutorials!!!
-        return true;
+        return isCurrentStep || !passed; //TODO REACTIVATE ON Classic-Tutorials!!!
+        //return true;
     }).slice(start, start + itemsPerPage);
 
     // 3) Im Details-Modus: Slice um das ausgewählte Element, sonst ganzes Filter-Array
@@ -197,14 +184,15 @@ const parseTestResults = ({testResults, testPageIndex, curTestDetails, projectLo
             setCurTestDetails,
             guiMessages,
             openHelpPage,
-            project,
         );
     });
 };
 
 
-const createTestElement = (passed, e, testElementNumber, isCurrentStep, projectLoadingState, curTestDetails, setCurTestDetails, guiMessages, openHelpPage, project) => {
+const createTestElement = (passed, e, testElementNumber, isCurrentStep, projectLoadingState, curTestDetails, setCurTestDetails, guiMessages, openHelpPage) => {
     const msg = guiMessages.test_results;
+
+    //console.log(e.testId + ": " + JSON.stringify(e.result));
 
     const headerBgColor = (projectLoadingState === "TEST" && e.result === "running")
         ? "#afd8fd"
@@ -239,23 +227,25 @@ const createTestElement = (passed, e, testElementNumber, isCurrentStep, projectL
                 <span className={css.testElementTitle}>{e.test}</span>
                 <p className={css.testElementText} key={e.testId}>{e.testDescription}</p>
                 {passed ?
-                    <div className={css.buttonWrapper}>
-                        <div className={buttonStyle} onClick={() => setCurTestDetails("")}>
+                    <div className={css.buttonWrapper} onClick={() => setCurTestDetails("")}>
+                        <div className={buttonStyle}>
                             {msg.close_button}
                         </div>
                     </div>
                     :
                     <div className={css.buttonContainer}>
-                        <div className={css.buttonWrapper} style={{paddingRight:"5px"}}>
-                            <div className={buttonStyle} onClick={() => setCurTestDetails("")} style={{borderTopRightRadius: "0", borderBottomRightRadius: "0px"}}>
+                        <div className={css.buttonWrapper} style={{paddingRight:"5px"}} onClick={() => setCurTestDetails("")}>
+                            <div className={buttonStyle}
+                                 style={SHOW_LLM_HINTS ? { borderBottomRightRadius: 0, borderTopRightRadius: 0 } : {}}
+                            >
                                 {msg.close_button}
                             </div>
                         </div>
-                        {/*<div className={css.buttonWrapper} style={{paddingLeft:"5px"}}>
-                            <div className={css.testElementButtonHelp} onClick={() => {openHelpPage("step1_Costume1");}}>
+                        {SHOW_LLM_HINTS && <div className={css.buttonWrapper} style={{paddingLeft:"5px"}} onClick={() => openHelpPage("step1_Costume1")}>
+                            <div className={css.testElementButtonHelp}>
                                 {msg.help_button}
                             </div>
-                        </div>*/}
+                        </div>}
                     </div>
                 }
             </div>);
@@ -268,8 +258,8 @@ const createTestElement = (passed, e, testElementNumber, isCurrentStep, projectL
                 {(projectLoadingState === "TEST" && e.result === "running") ? <TypewriterText text={msg.loading}/> : <span>{headerText}</span>}
             </div>
             <span className={css.testElementTitle}>{e.test}</span>
-            <div className={css.buttonWrapper}>
-                <div className={buttonStyle} onClick={() => setCurTestDetails(e.testId)}>
+            <div className={css.buttonWrapper} onClick={() => setCurTestDetails(e.testId)}>
+                <div className={buttonStyle}>
                     {msg.details_button}
                 </div>
             </div>
@@ -277,90 +267,8 @@ const createTestElement = (passed, e, testElementNumber, isCurrentStep, projectL
     );
 }
 
-
-
-
-
-
-// Hilfsfunktion: Berechnet, ob die pagination-Pfeile sichtbar sein sollen
-const getPaginationInfo = (testResults, step, testPageIndex) => {
-    if (!testResults || !testResults.details) return { showLeftArrow: false, showRightArrow: false };
-
-    const visibleResults = testResults.details.filter(e => {
-        const isCurrentStep = e.testId.charAt(4) === (step + 1).toString();
-        const passed = e.result === "pass" || e.result === "running";
-        return isCurrentStep || !passed;
-    });
-
-    const showLeftArrow = visibleResults.length >= 5 && testPageIndex > 0;
-    const showRightArrow = visibleResults.length >= 5 && testPageIndex < Math.ceil(visibleResults.length / 4) - 1;
-
-    return { showLeftArrow, showRightArrow };
-};
-
-
-
-
-
-
 export default TestResults;
 
 
 
-
-/**
- * Animiert den Text, indem er ähnlich zu einer Schreibmaschine Buchstabe für Buchstabe des Textes ergänzt.
- */
-function TypewriterText({
-                            text,
-                            speed = 40,
-                            pauseAfterComplete = 40,
-                            className = '',
-                        }) {
-    const [displayed, setDisplayed] = useState('');
-    const idxRef = useRef(0);
-    const timerRef = useRef(null);       // Für setInterval
-    const timeoutRef = useRef(null);     // Für setTimeout
-    const isMounted = useRef(true);      // Damit setState nach Unmount verhindert wird
-
-    useEffect(() => {
-        isMounted.current = true;
-
-        function startTyping() {
-            if (!isMounted.current) return;
-
-            setDisplayed('\u00A0');
-            idxRef.current = 0;
-
-            timerRef.current = setInterval(() => {
-                if (!isMounted.current) return;
-
-                idxRef.current += 1;
-                setDisplayed(text.substring(0, idxRef.current));
-
-                if (idxRef.current >= text.length) {
-                    clearInterval(timerRef.current);
-
-                    timeoutRef.current = setTimeout(() => {
-                        if (isMounted.current) startTyping();
-                    }, pauseAfterComplete);
-                }
-            }, speed);
-        }
-
-        startTyping();
-
-        return () => {
-            isMounted.current = false;
-            clearInterval(timerRef.current);
-            clearTimeout(timeoutRef.current);
-        };
-    }, [text, speed, pauseAfterComplete]);
-
-    return (
-        <span className={className} style={{ whiteSpace: 'pre-wrap' }}>
-            {displayed}
-        </span>
-    );
-}
 

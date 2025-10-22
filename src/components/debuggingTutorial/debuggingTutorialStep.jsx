@@ -5,7 +5,6 @@ import owl from "./images/OwlBranchRight.png"
 import iconErrors from "./images/icon--Errors.png"
 import iconDescription from "./images/icon--Description.png"
 import iconControls from "./images/icon--Controls.png"
-import buttonHelp from "./images/buttonHelp.png"
 import buttonOwly from "./images/buttonOwly.png"
 import buttonReset from "./images/buttonReset.png"
 import buttonResult from "./images/buttonResults.png"
@@ -15,7 +14,6 @@ import bubbleIndicatorGray from "./images/bubbleDecalGrey.png"
 import bubbleIndicatorBlue from "./images/bubbleIDecalBlue2.png";
 import owl2 from "./images/owlTransparent.png"
 import {renderResponseClassic, renderResponseDebugging} from "./tutorial-step-response-renderer.jsx";
-import { TransitionGroup } from 'react-transition-group'
 import {
     RESPONSE_START,
     RESPONSE_DEFAULT,
@@ -25,7 +23,7 @@ import {
     RESPONSE_ASK_TEST_START
 } from './tutorial-constants.jsx';
 import {EuliBubble, UserBubble} from "./bubbles.jsx";
-import TestResults from "./test-results.jsx";
+import TestResults from "./test-results/test-results.jsx";
 import rightArrow from "../cards/icon--next.svg";
 import leftArrow from "../cards/icon--prev.svg";
 import ScratchBlocks from "scratchblocks-react";
@@ -93,7 +91,8 @@ const DebuggingTutorialStep = props => {
         progressBarRef.current.style.transition = 'width 1s linear';
 
         timeoutIdRef.current = setTimeout(() => {
-            setCurPage("RESPONSE");
+            setCurPage("TEST_RESULTS");
+            onStartTests();
             showQuickHandle();
             if (progressBarRef.current !== null) {
                 progressBarRef.current.style.transition = 'none';
@@ -128,7 +127,7 @@ const DebuggingTutorialStep = props => {
                         <img src={owl2} alt={"Picture of Euli"} className={css.owlImage} draggable={false}/>
                     </div>
                 </div>
-                <div className={css.backToMenuButton} onClick={() => onBackToTutorialSelection()}>Weiter</div>
+                <div className={css.backToMenuButton} onClick={() => {onBackToTutorialSelection();logging.logClickEvent('BUTTON', new Date(), 'CLOSE_DEBUGGER', null);}}>Weiter</div>
             </div>
         );
     }
@@ -206,14 +205,12 @@ const DebuggingTutorialStep = props => {
                                 filter: responseType === RESPONSE_START
                                 || responseType === RESPONSE_DEFAULT ? "none" : "grayscale(100%) brightness(1.6)",
                             }}
-                            onClick={() => {if (!testResults?.passed) {
-                                if (isDebuggingTutorial) {
-                                    if (logging.isActive()) {
-                                        logging.logClickEvent('BUTTON', new Date(), 'OPEN_HELP_PAGE', null);
-                                    }
-
-                                    onOpenHelp();
+                            onClick={() => {if (isDebuggingTutorial) {
+                                if (logging.isActive()) {
+                                    logging.logClickEvent('BUTTON', new Date(), 'OPEN_HELP_PAGE', null);
                                 }
+
+                                onOpenHelp();
                             }}}
                         />
                         <span className={css.cpButtonDescription}>{guiMessages.step.euliButton}</span>
@@ -304,7 +301,7 @@ const DebuggingTutorialStep = props => {
                     {isShowingQuickHandle ?
                         <div
                             className={css.overviewNextButton}
-                            onClick={() => setCurPage("RESPONSE")}
+                            onClick={() => setCurPage("TEST_RESULTS")} //TODO onClick={() => setCurPage("RESPONSE")}
                         >
                             <span>{guiMessages.step.next}</span>
                             <img
@@ -345,7 +342,6 @@ const DebuggingTutorialStep = props => {
             setCurTestDetails={setCurTestDetails}
             handleTestStart={handleTestStart}
             openHelpPage={openHelp}
-            project={vm.toJSON()} //TODO only vm for better performance?
         />
     }
 
@@ -365,14 +361,16 @@ const DebuggingTutorialStep = props => {
                 setResponseType,
                 handleProjectReset,
                 handleTestStart,
-                getResultText
+                getResultText,
+                guiMessages
             });
         } else {
             return renderResponseClassic(responseType, {
                 setResponseType,
                 handleProjectReset,
                 handleTestStart,
-                getResultText
+                getResultText,
+                guiMessages
             });
         }
     }
@@ -407,10 +405,9 @@ const DebuggingTutorialStep = props => {
 
                                     {isErrorInfoVisible ?
                                         <p>
-                                            <strong>Gerne!</strong> <br/><br/> {tutorialMessages[overviewStep]["errorDescription"]}
+                                            <strong>{guiMessages.step.ofCourse}</strong> <br/><br/> {tutorialMessages[overviewStep]["errorDescription"]}
                                         </p> : <p>
-                                            In dem Programm wurde <strong>{tutorialMessages[overviewStep]["errorAmount"]} Fehler</strong> eingebaut.
-                                            Kannst du ihn finden?
+                                            {guiMessages.step.errMessage1} <strong>{tutorialMessages[overviewStep]["errorAmount"]} {guiMessages.step.errMessage2}</strong> {guiMessages.step.errMessage3}
                                         </p>
                                     }
                                 </div>
@@ -418,8 +415,8 @@ const DebuggingTutorialStep = props => {
 
                             {!isErrorInfoVisible &&
                                 <div style={{display:"flex", justifyContent:"flex-start"}}>
-                                    <span className={css.p}>Falls nicht, kannst du ihn jederzeit</span>
-                                    <button onClick={showErrorInfo} className={css.errorButton}>aufdecken</button>
+                                    <span className={css.p}>{guiMessages.step.showError1}</span>
+                                    <button onClick={showErrorInfo} className={css.errorButton}>{guiMessages.step.showError2}</button>
                                 </div>
                             }
 
@@ -677,8 +674,8 @@ const DebuggingTutorialStep = props => {
                                 </div>}
                             </EuliBubble>
                             {help?.finishedHelpFlag ?
-                                (<UserBubble text={"Dann gehe ich zurück"} isVisible={helpIndex >= 43} key={"goBackToHelp"} onClick={() => {setCurPage("TEST_RESULTS"); handleTestStart(); setCurTestDetails("");}} isSelected={helpIndex >= 44}/>
-                                ):(<UserBubble text={"Ich brauche einen neuen Hinweis"} isVisible={helpIndex >= 43} key={"asd23ad2"} onClick={() => {if (helpIndex <= 43) generateNewHint()}} isSelected={helpIndex >= 44}/>
+                                (<UserBubble text={"I return to the test results"} isVisible={helpIndex >= 43} key={"goBackToHelp"} onClick={() => {setCurPage("TEST_RESULTS"); handleTestStart(); setCurTestDetails("");}} isSelected={helpIndex >= 44}/>
+                                ):(<UserBubble text={"Gib mir einen neuen Hinweis"} isVisible={helpIndex >= 43} key={"asd23ad2"} onClick={() => {if (helpIndex <= 43) generateNewHint()}} isSelected={helpIndex >= 44}/>
                                 )}
 
                         </>
@@ -724,7 +721,7 @@ const DebuggingTutorialStep = props => {
         {curPage === "RESPONSE" && <div className={css.leftButton} onClick={() => setCurPage("OVERVIEW")}>
             <img src={leftArrow} alt="Next" draggable={false} />
         </div>}
-        {curPage === "TEST_RESULTS" && <div className={css.leftButton} onClick={() => {setCurPage("RESPONSE"); if (testResults?.passed) {setResponseType(RESPONSE_TESTING_FINISHED)} else {setResponseType(RESPONSE_DEFAULT)}}}>
+        {curPage === "TEST_RESULTS" && <div className={css.leftButton} onClick={() => {setCurPage("OVERVIEW"); if (testResults?.passed) {setResponseType(RESPONSE_TESTING_FINISHED)} else {setResponseType(RESPONSE_DEFAULT)}}}>
             <img src={leftArrow} alt="Next" draggable={false} />
         </div>}
         {curPage === "HELP" && !help?.finishedHelpFlag && <div className={css.leftButton} onClick={() => {returnToTestResults ? setCurPage("TEST_RESULTS") : setCurPage("RESPONSE")}}>
