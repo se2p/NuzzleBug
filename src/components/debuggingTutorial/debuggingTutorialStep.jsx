@@ -20,7 +20,7 @@ import {
     RESPONSE_RELOAD,
     RESPONSE_TESTING,
     RESPONSE_TESTING_FINISHED,
-    RESPONSE_ASK_TEST_START
+    RESPONSE_ASK_TEST_START, PAGE_OVERVIEW, PAGE_RESPONSE, PAGE_TEST_RESULTS, PAGE_HELP
 } from './tutorial-constants.jsx';
 import {EuliBubble, UserBubble} from "./bubbles.jsx";
 import TestResults from "./test-results/test-results.jsx";
@@ -91,7 +91,7 @@ const DebuggingTutorialStep = props => {
         progressBarRef.current.style.transition = 'width 1s linear';
 
         timeoutIdRef.current = setTimeout(() => {
-            setCurPage("TEST_RESULTS");
+            setCurPage(PAGE_TEST_RESULTS);
             onStartTests();
             showQuickHandle();
             if (progressBarRef.current !== null) {
@@ -156,9 +156,9 @@ const DebuggingTutorialStep = props => {
                             onClick={() => {
                                 if (testResults === null || testResults === undefined) {
                                     //setResponseType(RESPONSE_ASK_TEST_START);
-                                    setCurPage("TEST_RESULTS");
+                                    setCurPage(PAGE_TEST_RESULTS);
                                 } else {
-                                    setCurPage("TEST_RESULTS");
+                                    setCurPage(PAGE_TEST_RESULTS);
                                     if (!testResults?.passed) setResponseType(RESPONSE_DEFAULT);
                                 }
                                 //if (!testResults?.passed) handleTestStart()
@@ -188,7 +188,7 @@ const DebuggingTutorialStep = props => {
                                 if (testResults === null || testResults === undefined) {
                                     setResponseType(RESPONSE_ASK_TEST_START);
                                 } else {
-                                    setCurPage("TEST_RESULTS");
+                                    setCurPage(PAGE_TEST_RESULTS);
                                     if (!testResults?.passed) setResponseType(RESPONSE_DEFAULT);
                                 }
                             }}
@@ -301,7 +301,7 @@ const DebuggingTutorialStep = props => {
                     {isShowingQuickHandle ?
                         <div
                             className={css.overviewNextButton}
-                            onClick={() => setCurPage("TEST_RESULTS")} //TODO onClick={() => setCurPage("RESPONSE")}
+                            onClick={() => setCurPage(PAGE_TEST_RESULTS)} //TODO onClick={() => setCurPage("RESPONSE")}
                         >
                             <span>{guiMessages.step.next}</span>
                             <img
@@ -490,7 +490,7 @@ const DebuggingTutorialStep = props => {
                     <p style={{marginTop: "15px", gap:"10px"}}>
                         <button
                             className={css.responseButtonTestResults}
-                            onClick={() => {setCurPage("TEST_RESULTS"); setResponseType(RESPONSE_DEFAULT);}}
+                            onClick={() => {setCurPage(PAGE_TEST_RESULTS); setResponseType(RESPONSE_DEFAULT);}}
                         >Testergebnisse</button>
                         <button
                             className={css.responseButtonNext}
@@ -511,7 +511,7 @@ const DebuggingTutorialStep = props => {
                         >Schließen</button>
                         <button
                             className={css.responseButtonTestResults}
-                            onClick={() => {setCurPage("TEST_RESULTS"); setResponseType(RESPONSE_DEFAULT)}}
+                            onClick={() => {setCurPage(PAGE_TEST_RESULTS); setResponseType(RESPONSE_DEFAULT)}}
                         >Testergebnisse</button>
                     </div>
                 </div>);
@@ -555,7 +555,7 @@ const DebuggingTutorialStep = props => {
             logging.logClickEvent('BUTTON', new Date(), 'OPEN_HELP_PAGE', null);
         }
 
-        setCurPage("HELP");
+        setCurPage(PAGE_HELP);
         setReturnToTestResults(true);
         setHintCount(hintCount + 1);
         RequestHintButton2.generateHint(vm.toJSON(), result, passedDescriptions, vm.getLocale())
@@ -674,7 +674,7 @@ const DebuggingTutorialStep = props => {
                                 </div>}
                             </EuliBubble>
                             {help?.finishedHelpFlag ?
-                                (<UserBubble text={"I return to the test results"} isVisible={helpIndex >= 43} key={"goBackToHelp"} onClick={() => {setCurPage("TEST_RESULTS"); handleTestStart(); setCurTestDetails("");}} isSelected={helpIndex >= 44}/>
+                                (<UserBubble text={"I return to the test results"} isVisible={helpIndex >= 43} key={"goBackToHelp"} onClick={() => {setCurPage(PAGE_TEST_RESULTS); handleTestStart(); setCurTestDetails("");}} isSelected={helpIndex >= 44}/>
                                 ):(<UserBubble text={"Gib mir einen neuen Hinweis"} isVisible={helpIndex >= 43} key={"asd23ad2"} onClick={() => {if (helpIndex <= 43) generateNewHint()}} isSelected={helpIndex >= 44}/>
                                 )}
 
@@ -703,13 +703,13 @@ const DebuggingTutorialStep = props => {
         if (reachedLastStep) return renderFinalStep();
 
         switch (curPage) {
-            case "OVERVIEW":
+            case PAGE_OVERVIEW:
                 return renderOverview();
-            case "RESPONSE":
+            case PAGE_RESPONSE:
                 return renderResponse();
-            case "TEST_RESULTS":
+            case PAGE_TEST_RESULTS:
                 return renderTestResults();
-            case "HELP":
+            case PAGE_HELP:
                 return renderHelp();
         }
     }
@@ -718,13 +718,13 @@ const DebuggingTutorialStep = props => {
         <img src={bubbleIndicatorGray} style={{display: "none"}} alt={"preload"}/>
         <img src={bubbleIndicator} style={{display: "none"}} alt={"preload"}/>
 
-        {curPage === "RESPONSE" && <div className={css.leftButton} onClick={() => setCurPage("OVERVIEW")}>
+        {curPage === PAGE_RESPONSE && <div className={css.leftButton} onClick={() => setCurPage(PAGE_OVERVIEW)}>
             <img src={leftArrow} alt="Next" draggable={false} />
         </div>}
-        {curPage === "TEST_RESULTS" && <div className={css.leftButton} onClick={() => {setCurPage("OVERVIEW"); if (testResults?.passed) {setResponseType(RESPONSE_TESTING_FINISHED)} else {setResponseType(RESPONSE_DEFAULT)}}}>
+        {curPage === PAGE_TEST_RESULTS && <div className={css.leftButton} onClick={() => {setCurPage(PAGE_OVERVIEW); if (testResults?.passed) {setResponseType(RESPONSE_TESTING_FINISHED)} else {setResponseType(RESPONSE_DEFAULT)}}}>
             <img src={leftArrow} alt="Next" draggable={false} />
         </div>}
-        {curPage === "HELP" && !help?.finishedHelpFlag && <div className={css.leftButton} onClick={() => {returnToTestResults ? setCurPage("TEST_RESULTS") : setCurPage("RESPONSE")}}>
+        {curPage === PAGE_HELP && !help?.finishedHelpFlag && <div className={css.leftButton} onClick={() => {returnToTestResults ? setCurPage(PAGE_TEST_RESULTS) : setCurPage(PAGE_RESPONSE)}}>
             <img src={leftArrow} alt="Next" draggable={false} />
         </div>}
         {renderPage()}
