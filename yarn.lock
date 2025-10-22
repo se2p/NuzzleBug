@@ -10069,9 +10069,9 @@ parse-color@1.0.0:
     color-convert "~0.5.0"
 
 parse-headers@^2.0.0:
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/parse-headers/-/parse-headers-2.0.5.tgz#069793f9356a54008571eb7f9761153e6c770da9"
-  integrity sha512-ft3iAoLOB/MlwbNXgzy43SWGP6sQki2jQvAyBg/zDFAgr9bfNWZIUj42Kw2eJIl8kEi4PbgE6U1Zau/HwI75HA==
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/parse-headers/-/parse-headers-2.0.6.tgz#7940f0abe5fe65df2dd25d4ce8800cb35b49d01c"
+  integrity sha512-Tz11t3uKztEW5FEVZnj1ox8GKblWn+PvHY9TmJV5Mll2uHEwRdR/5Li1OlXoECjLYkApdhWy44ocONwXLiKO5A==
 
 parse-json@^4.0.0:
   version "4.0.0"
@@ -11690,7 +11690,7 @@ scratch-translate-extension-languages@0.0.20191118205314:
 
 "scratch-vm@git+https://gitlab+deploy-token-3:i8XTz2vnGPewCoYALnoy@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-vm.git#develop":
   version "1.5.76"
-  resolved "git+https://gitlab+deploy-token-3:i8XTz2vnGPewCoYALnoy@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-vm.git#75c17556ed35b47e8c395036dd19916a918c002c"
+  resolved "git+https://gitlab+deploy-token-3:i8XTz2vnGPewCoYALnoy@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-vm.git#0b0893c75068714828ee3b5bd71f437db487781a"
   dependencies:
     "@vernier/godirect" "1.5.0"
     arraybuffer-loader "^1.0.6"
@@ -11711,7 +11711,7 @@ scratch-translate-extension-languages@0.0.20191118205314:
     seed-random "^2.2.0"
     set-immediate-shim "^2.0.0"
     text-encoding "0.7.0"
-    twgl.js latest
+    twgl.js "5.5.4"
 
 scratchblocks-react@^1.0.1:
   version "1.0.1"
@@ -13016,15 +13016,15 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
   integrity sha512-KXXFFdAbFXY4geFIwoyNK+f5Z1b7swfXABfL7HXCmoIWMKU3dmS26672A4EeQtDzLKy7SXmfBu51JolvEKwtGA==
 
+twgl.js@5.5.4:
+  version "5.5.4"
+  resolved "https://registry.yarnpkg.com/twgl.js/-/twgl.js-5.5.4.tgz#ce79dd59ee5f4dffc9acdbb402431123ec84277a"
+  integrity sha512-6kFOmijOpmblTN9CCwOTCxK4lPg7rCyQjLuub6EMOlEp89Ex6yUcsMjsmH7andNPL2NE3XmHdqHeP5gVKKPhxw==
+
 twgl.js@^4.4.0:
   version "4.24.0"
   resolved "https://registry.yarnpkg.com/twgl.js/-/twgl.js-4.24.0.tgz#71b21ad56e1300cb10f12b1b72cae5bb31d81604"
   integrity sha512-JGVTxuV9dqaBmajXyvuZIlhCHrTbIaoNjQvtdoLHyK74OtbmNwZUj6rfdp+pz9htitI/tVxiVQ2nuw+KmD29vg==
-
-twgl.js@latest:
-  version "5.5.4"
-  resolved "https://registry.yarnpkg.com/twgl.js/-/twgl.js-5.5.4.tgz#ce79dd59ee5f4dffc9acdbb402431123ec84277a"
-  integrity sha512-6kFOmijOpmblTN9CCwOTCxK4lPg7rCyQjLuub6EMOlEp89Ex6yUcsMjsmH7andNPL2NE3XmHdqHeP5gVKKPhxw==
 
 type-check@^0.4.0, type-check@~0.4.0:
   version "0.4.0"
