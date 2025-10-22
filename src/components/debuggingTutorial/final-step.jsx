@@ -1,6 +1,6 @@
 import css from "./tutorial-step/debuggingTutorialStep.css"
-import owl2 from "../images/owlTransparent.png"
-import bubbleIndicatorBlue from "../images/bubbleIDecalBlue2.png"
+import owl2 from "./images/owlTransparent.png"
+import bubbleIndicatorBlue from "./images/bubbleIDecalBlue2.png"
 
 /**
  * Renders the final message, after finishing a tutorial.
