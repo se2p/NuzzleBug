@@ -11,7 +11,8 @@ import buttonResult from "../images/buttonResults.png"
 import buttonTest from "../images/buttonTest.png"
 import bubbleIndicator from "../images/SpeachBubbleRed.png"
 import bubbleIndicatorGray from "../images/bubbleDecalGrey.png"
-import bubbleIndicatorBlue from "../images/bubbleIDecalBlue2.png";
+import bubbleIndicatorBlue from "../images/bubbleIDecalBlue2.png"
+import buttonHelp from "../images/buttonHelp.png"
 import owl2 from "../images/owlTransparent.png"
 import {renderResponseClassic, renderResponseDebugging} from "../tutorial-step-response-renderer.jsx";
 import {
@@ -20,7 +21,13 @@ import {
     RESPONSE_RELOAD,
     RESPONSE_TESTING,
     RESPONSE_TESTING_FINISHED,
-    RESPONSE_ASK_TEST_START, PAGE_OVERVIEW, PAGE_RESPONSE, PAGE_TEST_RESULTS, PAGE_HELP
+    RESPONSE_ASK_TEST_START,
+    PAGE_OVERVIEW,
+    PAGE_RESPONSE,
+    PAGE_TEST_RESULTS,
+    PAGE_HELP,
+    RESPONSE_EXPLANATION1,
+    RESPONSE_EXPLANATION2, RESPONSE_EXPLANATION3, RESPONSE_EXPLANATION4
 } from '../tutorial-constants.jsx';
 import {EuliBubble, UserBubble} from "../bubbles.jsx";
 import TestResults from "../test-results/test-results.jsx";
@@ -37,6 +44,7 @@ import {
     handleHoldButton, logResponse,
     resetHoldButton
 } from "./tutorial-step-util.jsx";
+import {ENABLE_RESET_BUTTON, ENABLE_TODO_BUTTON} from "../config.ts";
 const DebuggingTutorialStep = props => {
     const {
         onOpenHelp,
@@ -199,7 +207,7 @@ const DebuggingTutorialStep = props => {
                         />
                         <span className={css.cpButtonDescription}>{guiMessages.step.euliButton}</span>
                     </div>
-                    {/*<div className={css.controlPanelButtonParent}>
+                    {ENABLE_TODO_BUTTON && <div className={css.controlPanelButtonParent}>
                         <img
                             className={css.cpButton}
                             src={buttonHelp}
@@ -216,8 +224,8 @@ const DebuggingTutorialStep = props => {
                             }}
                         />
                         <span className={css.cpButtonDescription}>{guiMessages.step.todoButton}</span>
-                    </div>*/}
-                    <div className={css.controlPanelButtonParent}>
+                    </div>}
+                    {ENABLE_RESET_BUTTON && <div className={css.controlPanelButtonParent}>
                         <img
                             className={css.cpButton}
                             src={buttonReset}
@@ -231,7 +239,7 @@ const DebuggingTutorialStep = props => {
                             draggable={false}
                         />
                         <span className={css.cpButtonDescription}>{guiMessages.step.resetButton}</span>
-                    </div>
+                    </div>}
                 </div>
             </div>
         );
