@@ -1,19 +1,19 @@
 import PropTypes from "prop-types";
 import React, {useRef, useState} from "react";
 import css from "./debuggingTutorialStep.css"
-import owl from "./images/OwlBranchRight.png"
-import iconErrors from "./images/icon--Errors.png"
-import iconDescription from "./images/icon--Description.png"
-import iconControls from "./images/icon--Controls.png"
-import buttonOwly from "./images/buttonOwly.png"
-import buttonReset from "./images/buttonReset.png"
-import buttonResult from "./images/buttonResults.png"
-import buttonTest from "./images/buttonTest.png"
-import bubbleIndicator from "./images/SpeachBubbleRed.png"
-import bubbleIndicatorGray from "./images/bubbleDecalGrey.png"
-import bubbleIndicatorBlue from "./images/bubbleIDecalBlue2.png";
-import owl2 from "./images/owlTransparent.png"
-import {renderResponseClassic, renderResponseDebugging} from "./tutorial-step-response-renderer.jsx";
+import owl from "../images/OwlBranchRight.png"
+import iconErrors from "../images/icon--Errors.png"
+import iconDescription from "../images/icon--Description.png"
+import iconControls from "../images/icon--Controls.png"
+import buttonOwly from "../images/buttonOwly.png"
+import buttonReset from "../images/buttonReset.png"
+import buttonResult from "../images/buttonResults.png"
+import buttonTest from "../images/buttonTest.png"
+import bubbleIndicator from "../images/SpeachBubbleRed.png"
+import bubbleIndicatorGray from "../images/bubbleDecalGrey.png"
+import bubbleIndicatorBlue from "../images/bubbleIDecalBlue2.png";
+import owl2 from "../images/owlTransparent.png"
+import {renderResponseClassic, renderResponseDebugging} from "../tutorial-step-response-renderer.jsx";
 import {
     RESPONSE_START,
     RESPONSE_DEFAULT,
@@ -21,15 +21,22 @@ import {
     RESPONSE_TESTING,
     RESPONSE_TESTING_FINISHED,
     RESPONSE_ASK_TEST_START, PAGE_OVERVIEW, PAGE_RESPONSE, PAGE_TEST_RESULTS, PAGE_HELP
-} from './tutorial-constants.jsx';
-import {EuliBubble, UserBubble} from "./bubbles.jsx";
-import TestResults from "./test-results/test-results.jsx";
-import rightArrow from "../cards/icon--next.svg";
-import leftArrow from "../cards/icon--prev.svg";
+} from '../tutorial-constants.jsx';
+import {EuliBubble, UserBubble} from "../bubbles.jsx";
+import TestResults from "../test-results/test-results.jsx";
+import rightArrow from "../../cards/icon--next.svg";
+import leftArrow from "../../cards/icon--prev.svg";
 import ScratchBlocks from "scratchblocks-react";
-import RequestHintButton2 from "./hint-generation";
+import RequestHintButton2 from "../hint-generation";
 import scratchblocks from "scratchblocks";
 import logging from 'scratch-vm/src/util/logging.js';
+import {
+    checkUserMadeErrors,
+    generateControlImages,
+    getBorderColor,
+    handleHoldButton, logResponse,
+    resetHoldButton
+} from "./tutorial-step-util.jsx";
 const DebuggingTutorialStep = props => {
     const {
         onOpenHelp,
@@ -80,37 +87,14 @@ const DebuggingTutorialStep = props => {
     const progressBarRef = useRef(null);
     const timeoutIdRef = useRef(null);
 
-    /**
-     * Helper-function for the delayed reset button.
-     */
     const handleMouseDown = () => {
-        if (progressBarRef.current === null) return;
-
-        setLoading(true);
-        progressBarRef.current.style.width = '90%';
-        progressBarRef.current.style.transition = 'width 1s linear';
-
-        timeoutIdRef.current = setTimeout(() => {
+        timeoutIdRef.current = handleHoldButton(progressBarRef, () => {
             setCurPage(PAGE_TEST_RESULTS);
             onStartTests();
             showQuickHandle();
-            if (progressBarRef.current !== null) {
-                progressBarRef.current.style.transition = 'none';
-                progressBarRef.current.style.width = '0';
-            }
-        }, 1100);
+        }, setLoading);
     };
-
-    /**
-     * Helper-function for the delayed reset button.
-     */
-    const handleMouseUp = () => {
-        setLoading(false);
-        clearTimeout(timeoutIdRef.current);
-        progressBarRef.current.style.transition = 'none';
-        progressBarRef.current.style.width = '0';
-    };
-
+    const handleMouseUp = () => resetHoldButton(progressBarRef, setLoading, timeoutIdRef);
     /**
      * Renders the final message, after finishing a tutorial.
      */
@@ -290,7 +274,7 @@ const DebuggingTutorialStep = props => {
                             </button>}
                         </div>
                         {/* Content */}
-                        <div className={css.container} style={{borderColor: getBorderColor()}}>
+                        <div className={css.container} style={{borderColor: getBorderColor(contentType)}}>
                             {getContent()}
                         </div>
                     </div>
@@ -428,7 +412,7 @@ const DebuggingTutorialStep = props => {
                 return (
                     <div style={{width:"100%", display:"flex", flexDirection:"column", marginRight:"15px", alignItems:"center"}}>
                         <div className={css.controlContainer}>
-                            {generateControlImages()}
+                            {generateControlImages(tutorialMessages, overviewStep)}
                         </div>
                         <p className={css.p} style={{textAlign:"center"}}>{tutorialMessages[overviewStep]["controlInfo"]}</p>
                     </div>
@@ -436,38 +420,6 @@ const DebuggingTutorialStep = props => {
             default:
                 console.warn(contentType + " is unknown!");
         }
-    }
-
-    const generateControlImages = () => {
-        return Object.keys(tutorialMessages[overviewStep])
-            .filter(key => key.startsWith("controlImage"))
-            .map(key => {
-                return (
-                    <img
-                        src={tutorialIndexData[tutorialMessages[overviewStep][key]]}
-                        draggable={false}
-                        className={css.controlImage}
-                        alt={"ControlImage"}
-                    />);
-            });
-    }
-
-    const getBorderColor = () => {
-        let col = "#000000";
-        switch (contentType) {
-            case "DETAILS":
-                col = "#4D97FFFF"
-                break;
-            case "CONTROLS":
-                col = "#ffab19ff"
-                break;
-            case "ERRORS":
-                col = "#cf3b28FF"
-                break;
-            default:
-                console.log("unknown contentType: " + contentType)
-        }
-        return col;
     }
 
     /**
@@ -482,7 +434,7 @@ const DebuggingTutorialStep = props => {
                 </div>);
         }
 
-        if (checkUserMadeErrors()) {
+        if (checkUserMadeErrors(testResults)) {
             return (
                 <div className={css.responseTextArea}>
                     <p>Hoppla, anscheinend haben sich noch weitere Fehler eingeschlichen!</p>
@@ -516,21 +468,6 @@ const DebuggingTutorialStep = props => {
                     </div>
                 </div>);
         }
-    }
-
-
-    /**
-     * Returns true, if the user has created more errors, which lead to at least one additional testcase to fail.
-     */ //TODO DELETE?
-    const checkUserMadeErrors = function () {
-        let userMadeError = false;
-        if (testResults === null || testResults.details === undefined) return false;
-        testResults.details.map(e => {
-            if (e.result !== "passed" && e.testDescription !== "DEBUGGING_ERROR") {
-                userMadeError = true;
-            }
-        });
-        return userMadeError;
     }
 
     //TODO move to reducer
@@ -590,24 +527,6 @@ const DebuggingTutorialStep = props => {
             })
             .catch(err => console.error(err));
     }
-
-    const logResponse = (hint, testId, testDescription) => {
-        if (!logging.isActive()) return;
-
-        const logMsg = {
-            question: {
-                testId: testId,
-                prompt: testDescription
-            },
-            response: hint
-        };
-
-        const text = JSON.stringify(logMsg, null, 2); // optional: schön formatiertes JSON
-        const blob = new Blob([text], { type: "application/json" });
-        const file = new File([blob], `response${hintCount}.json`, { type: "application/json" });
-
-        logging.logFile(file.name, "json", file, new Date());
-    };
 
     const renderHelp = () => {
         const selectedSpriteName = selectedSprite

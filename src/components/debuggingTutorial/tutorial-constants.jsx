@@ -12,3 +12,9 @@ export const RESPONSE_ASK_TEST_START = 'scratch-gui/debugging-tutorial-cards/RES
 // Overview
 export const CONTENT_DESCRIPTION = 'scratch-gui/debugging-tutorial-overview/DESCRIPTION';
 export const CONTENT_START_TUTORIAL = 'scratch-gui/debugging-tutorial-overview/START_TUTORIAL';
+
+// Step
+export const PAGE_RESPONSE = 'scratch-gui/debugging-tutorial-step/PAGE_RESPONSE';
+export const PAGE_TEST_RESULTS = 'scratch-gui/debugging-tutorial-step/PAGE_TEST_RESULTS';
+export const PAGE_HELP = 'scratch-gui/debugging-tutorial-step/PAGE_HELP';
+export const PAGE_OVERVIEW = 'scratch-gui/debugging-tutorial-step/PAGE_OVERVIEW';
