@@ -13,7 +13,6 @@ import bubbleIndicator from "../images/SpeachBubbleRed.png"
 import bubbleIndicatorGray from "../images/bubbleDecalGrey.png"
 import bubbleIndicatorBlue from "../images/bubbleIDecalBlue2.png"
 import buttonHelp from "../images/buttonHelp.png"
-import owl2 from "../images/owlTransparent.png"
 import {renderResponseClassic, renderResponseDebugging} from "../tutorial-step-response-renderer.jsx";
 import {
     RESPONSE_START,
@@ -45,6 +44,7 @@ import {
     resetHoldButton
 } from "./tutorial-step-util.jsx";
 import {ENABLE_RESET_BUTTON, ENABLE_TODO_BUTTON} from "../config.ts";
+import {renderFinalStep} from "../final-step.jsx";
 const DebuggingTutorialStep = props => {
     const {
         onOpenHelp,
@@ -103,26 +103,7 @@ const DebuggingTutorialStep = props => {
         }, setLoading);
     };
     const handleMouseUp = () => resetHoldButton(progressBarRef, setLoading, timeoutIdRef);
-    /**
-     * Renders the final message, after finishing a tutorial.
-     */
-    const renderFinalStep = () => {
-        return (
-            <div className={css.cpContainer}>
-                <span className={css.finalTitle}>Glückwunsch!</span>
-                <div className={css.whiteBox}>
-                    <div className={css.bubbleContainer}>
-                        <div className={css.testStartBubble} style={{borderColor:"#4D97FFFF"}}>
-                            <img className={css.finalBubbleIndicator} alt={"Bubble-Decal"} src={bubbleIndicatorBlue}/>
-                            {tutorialMessages.successMsg}
-                        </div>
-                        <img src={owl2} alt={"Picture of Euli"} className={css.owlImage} draggable={false}/>
-                    </div>
-                </div>
-                <div className={css.backToMenuButton} onClick={() => {onBackToTutorialSelection();logging.logClickEvent('BUTTON', new Date(), 'CLOSE_DEBUGGER', null);}}>Weiter</div>
-            </div>
-        );
-    }
+
 
     const renderResponse = () => {
         return (
@@ -627,7 +608,7 @@ const DebuggingTutorialStep = props => {
     };
 
     const renderPage = () => {
-        if (reachedLastStep) return renderFinalStep();
+        if (reachedLastStep) return renderFinalStep(tutorialMessages);
 
         switch (curPage) {
             case PAGE_OVERVIEW:
@@ -640,6 +621,7 @@ const DebuggingTutorialStep = props => {
                 return renderHelp();
         }
     }
+
     return <>
         <img src={bubbleIndicatorBlue} style={{display: "none"}} alt={"preload"}/>
         <img src={bubbleIndicatorGray} style={{display: "none"}} alt={"preload"}/>
@@ -655,9 +637,6 @@ const DebuggingTutorialStep = props => {
             <img src={leftArrow} alt="Next" draggable={false} />
         </div>}
         {renderPage()}
-        {false && <div className={css.rightButton} onClick={null}>
-            <img src={rightArrow} alt="Next" draggable={false} />
-        </div>}
     </>
 }
 
