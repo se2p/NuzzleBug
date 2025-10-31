@@ -6,7 +6,7 @@ import LlmWarningComponent from './llm-warning.component.tsx';
 
 import scratchblocks from 'scratchblocks';
 import {IssueType} from '../../containers/litterbox-web-api.ts';
-import ReactMarkdown from 'react-markdown';
+import MarkdownViewComponent from '../markdown/MarkdownView.tsx';
 
 interface LitterBoxHintProps {
     id: number;
@@ -179,7 +179,10 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
                             dangerouslySetInnerHTML={{__html: this.state.hintDescriptionHtml}}
                         />
                         {this.state.llmDescription.length > 0 ?
-                            <ReactMarkdown>{this.state.llmDescription}</ReactMarkdown> :
+                            <MarkdownViewComponent
+                                markdown={this.state.llmDescription}
+                                locale={this.props.locale}
+                            /> :
                             null
                         }
                     </div>

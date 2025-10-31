@@ -1,9 +1,9 @@
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
 
 import styles from './litterbox-pane.css';
 import sharedStyles from './shared.css';
 import LlmWarningComponent from './llm-warning.component.tsx';
+import MarkdownViewComponent from '../markdown/MarkdownView.tsx';
 
 interface LitterBoxLlmQuestionProps {
     onSubmitQuestion: (question: string, spriteOnly: boolean) => void;
@@ -72,11 +72,14 @@ class LitterBoxLlmQuestionComponent extends React.Component<LitterBoxLlmQuestion
                         <LlmWarningComponent />
                     </div>
                 </form>
+                <div>{this.props.llmResponse}</div>
                 <div>
                     {this.props.llmResponse ?
-                        <ReactMarkdown>{this.props.llmResponse}</ReactMarkdown> :
-                        null
-                    }
+                        <MarkdownViewComponent
+                            markdown={this.props.llmResponse}
+                            locale={'en'}
+                        /> :
+                        null}
                 </div>
             </div>
         );
