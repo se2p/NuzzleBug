@@ -1,7 +1,19 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-
-  "extends": [
-    "github>LLK/scratch-renovate-config:conservative"
-  ]
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "config:recommended",
+        "group:allNonMajor"
+    ],
+    "rebaseWhen": "conflicted",
+    "prConcurrentLimit": 0,
+    "semanticCommits": "enabled",
+    "packageRules": [
+        {
+            "matchUpdateTypes": ["major"],
+            "dependencyDashboardApproval": true,
+        },
+    ],
+    "labels": [
+        "type::maintenance"
+    ]
 }

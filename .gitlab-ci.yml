@@ -1,15 +1,13 @@
+include:
+    - template: Workflows/MergeRequest-Pipelines.gitlab-ci.yml
+    - template: Jobs/Dependency-Scanning.gitlab-ci.yml
+    - template: Jobs/Secret-Detection.gitlab-ci.yml
+
 image: node:20
 
 stages:
     - build
-
-before_script:
-    # Test scratch-gui against a specific commit of the scratch-vm.
-    # Can be used either by pipelines in other projects to trigger a downstream
-    # build while using a specific commit, or when manually triggering a CI
-    # pipeline via the GitLab UI.
-    - yarn ci:prepare-downstream-build
-    - yarn install --cache-folder .yarn
+    - test
 
 cache:
     paths:
@@ -19,6 +17,13 @@ cache:
 
 build:
     stage: build
+    before_script:
+        # Test scratch-gui against a specific commit of the scratch-vm.
+        # Can be used either by pipelines in other projects to trigger a downstream
+        # build while using a specific commit, or when manually triggering a CI
+        # pipeline via the GitLab UI.
+        - yarn ci:prepare-downstream-build
+        - yarn install --cache-folder .yarn
     script:
         - yarn install
         - yarn run build
@@ -26,3 +31,18 @@ build:
         paths:
             - build/
         expire_in: 1 hour
+
+gemnasium-dependency_scanning:
+    stage: test
+    needs: []
+    rules:
+        # Exclude job for Draft merge requests
+        - if: "$CI_MERGE_REQUEST_TITLE !~ /^Draft:/"
+
+secret_detection:
+    stage: test
+    needs: []
+    cache: []
+    rules:
+        # Overwrite rules so job is executed even if $SAST_DISABLED is set
+        - when: always
