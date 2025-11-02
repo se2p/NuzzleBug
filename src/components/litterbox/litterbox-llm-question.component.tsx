@@ -72,7 +72,6 @@ class LitterBoxLlmQuestionComponent extends React.Component<LitterBoxLlmQuestion
                         <LlmWarningComponent />
                     </div>
                 </form>
-                <div>{this.props.llmResponse}</div>
                 <div>
                     {this.props.llmResponse ?
                         <MarkdownViewComponent
