@@ -50,7 +50,7 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
                 const issueCounts = this.issueCounts();
                 const issueTypes: IssueType[] = ['BUG', 'SMELL', 'PERFUME'];
                 const selectedIssueType = issueTypes.filter(t => (issueCounts.get(t) ?? 0) > 0).pop() ?? 'BUG';
-                const selectedIssue = this.issuesForType(selectedIssueType).at(0);
+                const selectedIssue = this.issuesForType(selectedIssueType)[0];
 
                 return {
                     index: 0,
@@ -67,7 +67,7 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
                 }
 
                 const index = Math.max(issuesForType.findIndex(issue => issue.id === prev.selectedIssue?.id), 0);
-                const issue = issuesForType.at(0);
+                const issue = issuesForType[0];
 
                 return {
                     index,
