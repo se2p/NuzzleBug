@@ -34,11 +34,12 @@ class MarkdownViewComponent extends React.Component<MarkdownViewProps, MarkdownV
                             return (
                                 <span
                                     style={{
-                                        height: '20px',
-                                        width: '25px',
+                                        height: '1.2rem',
+                                        width: '1.5rem',
                                         backgroundColor: scratchBlocksCode,
                                         borderRadius: '40%',
-                                        display: 'inline-block'
+                                        display: 'inline-block',
+                                        marginBottom: '-0.3rem'
                                     }}
                                 />
                             );
