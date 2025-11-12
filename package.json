@@ -117,7 +117,7 @@
     "devDependencies": {
         "@babel/cli": "7.27.2",
         "@babel/core": "7.27.7",
-        "@babel/eslint-parser": "7.27.5",
+        "@babel/eslint-parser": "7.11.0",
         "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression": "7.27.1",
         "@babel/plugin-proposal-object-rest-spread": "7.20.7",
         "@babel/plugin-syntax-dynamic-import": "7.8.3",
@@ -128,7 +128,6 @@
         "@typescript-eslint/eslint-plugin": "^8.35.0",
         "@typescript-eslint/parser": "^8.35.0",
         "babel-core": "7.0.0-bridge.0",
-        "@babel/eslint-parser": "7.11.0",
         "babel-loader": "8.2.2",
         "chromedriver": "99.0.0",
         "enzyme": "3.10.0",
