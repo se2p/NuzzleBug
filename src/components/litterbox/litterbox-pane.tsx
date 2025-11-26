@@ -17,6 +17,7 @@ import LitterBoxLlmQuestionComponent from './litterbox-llm-question.component.ts
 interface LitterBoxPaneProps {
     llmEnabled: boolean,
     vm: ScratchVM,
+    locale: string,
     onClose: () => void;
 }
 
@@ -77,7 +78,7 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
     };
 
     private readonly fetchLitterBoxIssues = () => {
-        runLitterBoxAnalysis(this.props.vm.toJSON())
+        runLitterBoxAnalysis(this.props.vm.toJSON(), undefined, this.props.locale)
             .then(litterBoxIssues => {
                 this.setState({
                     litterBoxIssues,
