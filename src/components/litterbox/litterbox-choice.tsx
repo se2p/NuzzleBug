@@ -43,13 +43,19 @@ class LitterBoxFeatureSelector extends React.Component<LitterBoxFeatureSelectorP
                     className={this.buttonStyle(LitterBoxFeature.ISSUES)}
                     onClick={this.handleSelectIssues}
                 >
-                    <FormattedMessage id={'gui.litterBox.codeQuality'} />
+                    <FormattedMessage
+                        id={'gui.litterBox.codeQuality'}
+                        defaultMessage={'Code Quality'}
+                    />
                 </button>
                 <button
                     className={this.buttonStyle(LitterBoxFeature.LLM_QUESTION)}
                     onClick={this.handleSelectLlmQuestion}
                 >
-                    <FormattedMessage id={'gui.litterBox.askAboutCode'} />
+                    <FormattedMessage
+                        id={'gui.litterBox.askAboutCode'}
+                        defaultMessage={'Ask about Code'}
+                    />
                 </button>
                 {/* todo(obermuel,spielede): future extension for LitterBox questions */}
                 {/* <button onClick={this.handleSelectQuestions}>{'Question'}</button> */}
@@ -58,7 +64,10 @@ class LitterBoxFeatureSelector extends React.Component<LitterBoxFeatureSelectorP
                     style={{marginTop: '1rem'}}
                     onClick={this.props.onClose}
                 >
-                    <FormattedMessage id={'gui.cards.close'} />
+                    <FormattedMessage
+                        id={'gui.cards.close'}
+                        defaultMessage={'Close'}
+                    />
                 </button>
             </Box>
         );

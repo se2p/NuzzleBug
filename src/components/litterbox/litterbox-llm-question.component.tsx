@@ -51,7 +51,10 @@ class LitterBoxLlmQuestionComponent extends React.Component<LitterBoxLlmQuestion
                         <textarea
                             name="question"
                             placeholder={
-                                this.props.intl.formatMessage({id: 'gui.litterBox.askAboutCodeBoxPlaceholder'})
+                                this.props.intl.formatMessage({
+                                    id: 'gui.litterBox.askAboutCodeBoxPlaceholder',
+                                    defaultMessage: 'Your question about the whole program'
+                                })
                             }
                             value={this.state.question}
                             onChange={this.handleInputChange}
@@ -64,13 +67,19 @@ class LitterBoxLlmQuestionComponent extends React.Component<LitterBoxLlmQuestion
                                 className={sharedStyles.genericButton}
                                 onClick={this.handleSubmitQuestion}
                             >
-                                <FormattedMessage id={'gui.litterBox.askQuestionWholeProgram'} />
+                                <FormattedMessage
+                                    id={'gui.litterBox.askQuestionWholeProgram'}
+                                    defaultMessage={'Ask question about the whole program'}
+                                />
                             </button>
                             <button
                                 className={sharedStyles.genericButton}
                                 onClick={this.handleSubmitSpriteQuestion}
                             >
-                                <FormattedMessage id={'gui.litterBox.askQuestionCurrentSprite'} />
+                                <FormattedMessage
+                                    id={'gui.litterBox.askQuestionCurrentSprite'}
+                                    defaultMessage={'Ask question about only the current sprite'}
+                                />
                             </button>
                         </div>
                         <LlmWarningComponent />

@@ -7,5 +7,5 @@ declare module '*.svg' {
 
 // Workaround for old 'react-intl' version. Newer versions include proper types.
 interface IntlShape {
-    formatMessage: ({id: string}) => string;
+    formatMessage: ({id: string, defaultMessage: string}) => string;
 }

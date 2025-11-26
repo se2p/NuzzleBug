@@ -39,7 +39,10 @@ class IssueTypeSelectorComponent extends React.Component<IssueTypeSelectorCompon
             disabled={!this.props.issueCounts.get(issueType)}
         >
             <span>
-                <FormattedMessage id={`gui.litterBox.${prefix}`} />
+                <FormattedMessage
+                    id={`gui.litterBox.${prefix}`}
+                    defaultMessage={prefix}
+                />
                 {` (${this.props.issueCounts.get(issueType)})`}
             </span>
         </button>

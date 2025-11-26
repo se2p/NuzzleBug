@@ -141,7 +141,10 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
                         className={sharedStyles.genericButton}
                         onClick={this.props.onCodeQualityRecheck}
                     >
-                        <FormattedMessage id={'gui.litterBox.checkAgain'} />
+                        <FormattedMessage
+                            id={'gui.litterBox.checkAgain'}
+                            defaultMessage={'Check Again!'}
+                        />
                     </button>
                     <IssueTypeSelectorComponent
                         selectedType={this.state.selectedType}
