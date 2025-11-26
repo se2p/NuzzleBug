@@ -78,7 +78,7 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
     };
 
     private readonly fetchLitterBoxIssues = () => {
-        runLitterBoxAnalysis(this.props.vm.toJSON(), undefined, this.props.locale)
+        runLitterBoxAnalysis(this.props.vm.toJSON(), 'bugs,smells,perfumes', this.props.locale)
             .then(litterBoxIssues => {
                 this.setState({
                     litterBoxIssues,
