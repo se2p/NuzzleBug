@@ -78,7 +78,7 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
     };
 
     private readonly fetchLitterBoxIssues = () => {
-        runLitterBoxAnalysis(this.props.vm.toJSON(), 'bugs,smells,perfumes', this.props.locale)
+        runLitterBoxAnalysis(this.props.vm.toJSON(), this.props.locale, 'bugs,smells,perfumes')
             .then(litterBoxIssues => {
                 this.setState({
                     litterBoxIssues,
@@ -104,7 +104,7 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
             return;
         }
 
-        explainIssue(this.props.vm.toJSON(), relevantIssue)
+        explainIssue(this.props.vm.toJSON(), relevantIssue, this.props.locale)
             .then(updatedIssue => {
                 this.insertUpdatedIssue(updatedIssue);
             })
@@ -119,7 +119,7 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
             return;
         }
 
-        fixIssue(this.props.vm.toJSON(), relevantIssue)
+        fixIssue(this.props.vm.toJSON(), relevantIssue, this.props.locale)
             .then(async response => {
                 const previousProject = {
                     project: this.props.vm.toJSON(),
@@ -180,7 +180,7 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
     private readonly handleSubmitLlmQuestion = (question: string, spriteOnly: boolean) => {
         const spriteName = spriteOnly ? this.props.vm.editingTarget.getName() : undefined;
 
-        askQuestion(this.props.vm.toJSON(), question, spriteName)
+        askQuestion(this.props.vm.toJSON(), question, this.props.locale, spriteName)
             .then(response => {
                 this.setState({
                     llmResponse: response

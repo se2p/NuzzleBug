@@ -90,21 +90,21 @@ const postJsonWithStringResponse = async <T>(endpoint: string, body: T, urlParam
 
 interface LitterBoxAnalysisRequest {
     program: ScratchProjectJson;
-    language: string | undefined;
+    language: string;
     detectors: string | undefined;
 }
 
 /**
  * Runs the LitterBox analysis for a program.
  * @param program - A Scratch program.
- * @param detectors - The kinds of LitterBox analyses to run.
  * @param language - The language of the hint text in the response.
+ * @param detectors - The kinds of LitterBox analyses to run.
  * @returns A list of LitterBox-generated warnings.
  */
 export const runLitterBoxAnalysis = async (
-    program: ScratchProjectJson, detectors?: string, language?: string
+    program: ScratchProjectJson, language: string, detectors?: string
 ): Promise<LitterBoxHint[]> => {
-    const body: LitterBoxAnalysisRequest = {language: language, detectors: detectors, program: program};
+    const body: LitterBoxAnalysisRequest = {language, detectors, program};
     const hints = await postJsonWithJsonResponse<LitterBoxAnalysisRequest, LitterBoxHint[]>('linter/analyze', body);
     hints.sort((a, b) => a.id - b.id);
 
@@ -114,6 +114,7 @@ export const runLitterBoxAnalysis = async (
 interface IssueExplainRequest {
     program: ScratchProjectJson;
     issue: LitterBoxHint;
+    locale: string;
 }
 
 /**
@@ -121,10 +122,15 @@ interface IssueExplainRequest {
  *
  * @param program - The current program.
  * @param issue - The LitterBox warning.
+ * @param locale - The locale of the language the LLM should respond in.
  * @returns The same issue, but with an updated `issueHint`.
  */
-export const explainIssue = (program: ScratchProjectJson, issue: LitterBoxHint): Promise<LitterBoxHint> => {
-    const body: IssueExplainRequest = {program: program, issue: issue};
+export const explainIssue = (
+    program: ScratchProjectJson,
+    issue: LitterBoxHint,
+    locale: string
+): Promise<LitterBoxHint> => {
+    const body: IssueExplainRequest = {program, issue, locale};
     return postJsonWithJsonResponse('llm/issue/explain', body);
 };
 
@@ -137,10 +143,15 @@ interface IssueFixResponse {
  *
  * @param program - The current program.
  * @param issue - A LitterBox warning.
+ * @param locale - The locale of the language the LLM should respond in.
  * @returns An updated program with the LLM’s attempt to fix the issue.
  */
-export const fixIssue = (program: ScratchProjectJson, issue: LitterBoxHint): Promise<IssueFixResponse> => {
-    const body: IssueExplainRequest = {program, issue};
+export const fixIssue = (
+    program: ScratchProjectJson,
+    issue: LitterBoxHint,
+    locale: string
+): Promise<IssueFixResponse> => {
+    const body: IssueExplainRequest = {program, issue, locale};
     return postJsonWithJsonResponse('llm/issue/fix', body);
 };
 
@@ -148,6 +159,7 @@ interface QuestionRequest {
     program: ScratchProjectJson;
     sprite: string | undefined;
     question: string;
+    locale: string;
 }
 
 /**
@@ -155,10 +167,16 @@ interface QuestionRequest {
  *
  * @param program - The current program.
  * @param question - The question by the user.
+ * @param locale - The locale of the language the LLM should respond in.
  * @param sprite - The sprite the question is about.
  * @returns The response from the LLM.
  */
-export const askQuestion = (program: ScratchProjectJson, question: string, sprite?: string): Promise<string> => {
-    const body: QuestionRequest = {program, sprite, question};
+export const askQuestion = (
+    program: ScratchProjectJson,
+    question: string,
+    locale: string,
+    sprite?: string
+): Promise<string> => {
+    const body: QuestionRequest = {program, sprite, question, locale};
     return postJsonWithStringResponse('llm/question', body);
 };
