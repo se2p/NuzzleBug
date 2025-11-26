@@ -1,4 +1,5 @@
 import React from 'react';
+import {FormattedMessage, injectIntl} from 'react-intl';
 
 import styles from './litterbox-pane.css';
 import sharedStyles from './shared.css';
@@ -8,6 +9,7 @@ import MarkdownViewComponent from '../markdown/MarkdownView.tsx';
 interface LitterBoxLlmQuestionProps {
     onSubmitQuestion: (question: string, spriteOnly: boolean) => void;
     llmResponse?: string;
+    intl: IntlShape;
 }
 
 interface LitterBoxLlmQuestionState {
@@ -48,7 +50,9 @@ class LitterBoxLlmQuestionComponent extends React.Component<LitterBoxLlmQuestion
                     <div className={styles.ltrFlexbox}>
                         <textarea
                             name="question"
-                            placeholder={'Your question to GPT about the program'}
+                            placeholder={
+                                this.props.intl.formatMessage({id: 'gui.litterBox.askAboutCodeBoxPlaceholder'})
+                            }
                             value={this.state.question}
                             onChange={this.handleInputChange}
                             style={{resize: 'vertical'}}
@@ -60,13 +64,13 @@ class LitterBoxLlmQuestionComponent extends React.Component<LitterBoxLlmQuestion
                                 className={sharedStyles.genericButton}
                                 onClick={this.handleSubmitQuestion}
                             >
-                                {'Ask question about whole program'}
+                                <FormattedMessage id={'gui.litterBox.askQuestionWholeProgram'} />
                             </button>
                             <button
                                 className={sharedStyles.genericButton}
                                 onClick={this.handleSubmitSpriteQuestion}
                             >
-                                {'Ask question about only the current sprite'}
+                                <FormattedMessage id={'gui.litterBox.askQuestionCurrentSprite'} />
                             </button>
                         </div>
                         <LlmWarningComponent />
@@ -85,4 +89,4 @@ class LitterBoxLlmQuestionComponent extends React.Component<LitterBoxLlmQuestion
     }
 }
 
-export default LitterBoxLlmQuestionComponent;
+export default injectIntl(LitterBoxLlmQuestionComponent);

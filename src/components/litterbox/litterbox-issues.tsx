@@ -1,4 +1,5 @@
 import React from 'react';
+import {FormattedMessage} from 'react-intl';
 
 import {LitterBoxHint, IssueType} from '../../containers/litterbox-web-api.ts';
 import LitterBoxHintComponent from './litter-box-hint.component.tsx';
@@ -140,7 +141,7 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
                         className={sharedStyles.genericButton}
                         onClick={this.props.onCodeQualityRecheck}
                     >
-                        {'Check Again!'}
+                        <FormattedMessage id={'gui.litterBox.checkAgain'} />
                     </button>
                     <IssueTypeSelectorComponent
                         selectedType={this.state.selectedType}

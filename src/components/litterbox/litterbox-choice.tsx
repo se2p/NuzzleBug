@@ -1,4 +1,5 @@
 import React from 'react';
+import {FormattedMessage} from 'react-intl';
 
 import Box from '../box/box.jsx';
 import styles from './litterbox-pane.css';
@@ -42,13 +43,13 @@ class LitterBoxFeatureSelector extends React.Component<LitterBoxFeatureSelectorP
                     className={this.buttonStyle(LitterBoxFeature.ISSUES)}
                     onClick={this.handleSelectIssues}
                 >
-                    {'Code Quality'}
+                    <FormattedMessage id={'gui.litterBox.codeQuality'} />
                 </button>
                 <button
                     className={this.buttonStyle(LitterBoxFeature.LLM_QUESTION)}
                     onClick={this.handleSelectLlmQuestion}
                 >
-                    {'Ask about Code'}
+                    <FormattedMessage id={'gui.litterBox.askAboutCode'} />
                 </button>
                 {/* todo(obermuel,spielede): future extension for LitterBox questions */}
                 {/* <button onClick={this.handleSelectQuestions}>{'Question'}</button> */}
@@ -57,7 +58,7 @@ class LitterBoxFeatureSelector extends React.Component<LitterBoxFeatureSelectorP
                     style={{marginTop: '1rem'}}
                     onClick={this.props.onClose}
                 >
-                    {'Close'}
+                    <FormattedMessage id={'gui.cards.close'} />
                 </button>
             </Box>
         );
