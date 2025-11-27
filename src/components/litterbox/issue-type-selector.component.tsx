@@ -1,4 +1,6 @@
 import React from 'react';
+import {FormattedMessage} from 'react-intl';
+
 import {IssueType} from '../../containers/litterbox-web-api.ts';
 import styles from './litterbox-pane.css';
 import sharedStyles from './shared.css';
@@ -36,16 +38,22 @@ class IssueTypeSelectorComponent extends React.Component<IssueTypeSelectorCompon
             onClick={handler}
             disabled={!this.props.issueCounts.get(issueType)}
         >
-            {`${prefix} (${this.props.issueCounts.get(issueType)})`}
+            <span>
+                <FormattedMessage
+                    id={`gui.litterBox.${prefix}`}
+                    defaultMessage={prefix}
+                />
+                {` (${this.props.issueCounts.get(issueType)})`}
+            </span>
         </button>
     );
 
     render () {
         return (
             <div className={styles.buttonStack}>
-                {this.button('Bugs', 'BUG', this.handleOnClickBugs)}
-                {this.button('Smells', 'SMELL', this.handleOnClickSmells)}
-                {this.button('Perfumes', 'PERFUME', this.handleOnClickPerfumes)}
+                {this.button('bugs', 'BUG', this.handleOnClickBugs)}
+                {this.button('smells', 'SMELL', this.handleOnClickSmells)}
+                {this.button('perfumes', 'PERFUME', this.handleOnClickPerfumes)}
             </div>
         );
     }

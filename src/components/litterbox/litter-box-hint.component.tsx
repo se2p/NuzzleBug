@@ -1,4 +1,6 @@
 import React from 'react';
+import {FormattedMessage} from 'react-intl';
+
 import styles from './hints.css';
 import sharedStyles from './shared.css';
 import ScratchBlocksImageContainer from '../../containers/scratch-blocks-image.container.tsx';
@@ -140,7 +142,10 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
                                 className={sharedStyles.genericButton}
                                 onClick={this.handleExplainIssue}
                             >
-                                {'GPT: Explain!'}
+                                <FormattedMessage
+                                    id={'gui.litterBox.gptExplainButtonLabel'}
+                                    defaultMessage={'GPT: Explain the issue!'}
+                                />
                             </button>
                         </div> :
                         null
@@ -154,7 +159,10 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
                                 data-tip-disable={this.props.analysisIsForCurrentProject}
                                 data-tip={'Check the program again first.'}
                             >
-                                {'GPT: Fix!'}
+                                <FormattedMessage
+                                    id={'gui.litterBox.gptFixButtonLabel'}
+                                    defaultMessage={'GPT: Fix the issue!'}
+                                />
                             </button>
                         </div> :
                         null
@@ -165,7 +173,10 @@ class LitterBoxHintComponent extends React.Component<LitterBoxHintProps, LitterB
                                 className={sharedStyles.genericButton}
                                 onClick={this.props.onRevertFix}
                             >
-                                {'Revert Fix'}
+                                <FormattedMessage
+                                    id={'gui.litterBox.gptRevertFixButtonLabel'}
+                                    defaultMessage={'Revert Fix'}
+                                />
                             </button>
                         </div> :
                         null

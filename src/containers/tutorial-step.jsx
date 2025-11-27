@@ -66,7 +66,7 @@ class TutorialStep extends React.Component {
         }
         const language = this.props.locale === 'de' ? 'de' : 'en';
 
-        runLitterBoxAnalysis(program, detectors, language)
+        runLitterBoxAnalysis(program, language, detectors)
             .then(hints => hints
                 .filter(hint => hint.type !== 'QUESTION')
                 .map(hint => ({
