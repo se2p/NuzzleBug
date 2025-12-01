@@ -1,5 +1,5 @@
 import css from "./test-results.css"
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useState} from 'react';
 
 import owl from "../images/OwlBranchRight.png"
 import owlDown from "../images/owlDown.png"
@@ -14,9 +14,16 @@ import {SHOW_LLM_HINTS} from "../config.ts";
 import {getPaginationInfo, getRunningStep, getStepColor, getTestText, TypewriterText} from "./test-utils.jsx";
 
 const TestResults = (props) => {
-    const { testResults, step, testPageIndex, curTestDetails} = props;
+    const { testResults, step, testPageIndex, curTestDetails,onDecreaseTestPageIndex,
+        onIncreaseTestPageIndex} = props;
+
+    const [help, setHelp] = useState(false);
+
     const context = {
         ...props,
+        onComplete: () => setHelp(true),
+        onStart: () => setHelp(false),
+        help: help,
         pagination: getPaginationInfo(props.testResults, props.step, props.testPageIndex),
     };
     const { showLeftArrow, showRightArrow } = context.pagination;
@@ -66,7 +73,7 @@ const TestResults = (props) => {
 /**
  * The answer-bubbles, the user can select to answer eulis questions. (e.g. next step)
  */
-const renderResponse = ({hasCodeUpdated, projectLoadingState, curTestDetails, nextStep, testResults, handleTestStart, guiMessages, step}) => {
+const renderResponse = ({hasCodeUpdated, projectLoadingState, curTestDetails, nextStep, testResults, handleTestStart, guiMessages, step, help}) => {
     const msg = guiMessages.test_results;
 
     if (testResults?.passed && projectLoadingState !== "TEST_PAUSE") {
@@ -104,7 +111,7 @@ const renderResponse = ({hasCodeUpdated, projectLoadingState, curTestDetails, ne
         );
     }
 
-    if ((hasCodeUpdated || (projectLoadingState === "TEST")) && projectLoadingState !== "TEST_PAUSE") {
+    if ((hasCodeUpdated || (projectLoadingState === "TEST")) && projectLoadingState !== "TEST_PAUSE" && help) {
         return (
             <div className={`${css.helpBubble} ${(projectLoadingState !== "TEST") ? '' : css.selected}`} onClick={() => { if (projectLoadingState !== "TEST") handleTestStart()}} style={{marginBottom: "0px"}}>
                 <div className={css.selectionBubbleIndicator} />
@@ -218,10 +225,10 @@ const createTestElement = (passed, e, testElementNumber, isCurrentStep, projectL
     if (curTestDetails === e.testId) {
         return (
             <div key={e.testId} className={css.testElementContainer} style={{width:"450px"}}>
-                <div className={css.testElementHeader} style={{backgroundColor: headerBgColor, height:"60px"}}>
+                <div className={(projectLoadingState === "TEST" && e.result === "running") ? css.testElementHeaderAnimation : css.testElementHeader} style={{backgroundColor: headerBgColor, height:"60px"}}>
                     <div className={css.testElementTitleExtended}>
                         <img src={iconSrc} style={{width: "43px", marginRight: "10px"}} className={css.testElementIcon} alt={"ResultIcon"} draggable={false}/>
-                        {(projectLoadingState === "TEST" && e.result === "running") ? <TypewriterText text={msg.loading}/> : <span>{headerText}</span>}
+                        {(projectLoadingState === "TEST" && e.result === "running") ? <span>{msg.loading}</span> : <span>{headerText}</span>}
                     </div>
                 </div>
                 <span className={css.testElementTitle}>{e.test}</span>
@@ -253,9 +260,9 @@ const createTestElement = (passed, e, testElementNumber, isCurrentStep, projectL
 
     return (
         <div key={e.testId} className={css.testElementContainer}>
-            <div className={css.testElementHeader} style={{backgroundColor: headerBgColor}}>
+            <div className={(projectLoadingState === "TEST" && e.result === "running") ? css.testElementHeaderAnimation : css.testElementHeader} style={{backgroundColor: headerBgColor}}>
                 <img src={iconSrc} className={css.testElementIcon} alt={"ResultIcon"} draggable={false}/>
-                {(projectLoadingState === "TEST" && e.result === "running") ? <TypewriterText text={msg.loading}/> : <span>{headerText}</span>}
+                {(projectLoadingState === "TEST" && e.result === "running") ? <span>{msg.loading}</span> : <span>{headerText}</span>}
             </div>
             <span className={css.testElementTitle}>{e.test}</span>
             <div className={css.buttonWrapper} onClick={() => setCurTestDetails(e.testId)}>

@@ -3,7 +3,7 @@ import owl2 from "./images/owlTransparent.png"
 import bubbleIndicatorBlue from "./images/bubbleIDecalBlue2.png"
 
 /**
- * Renders the final message, after finishing a tutorial.
+ * Renders the final congratulation message after finishing a tutorial.
  */
 export const renderFinalStep = (tutorialMessages) => {
     return (

@@ -17,6 +17,8 @@ const SET_HAS_CODE_UPDATED = 'scratch-gui/debugging-tutorial-cards/SET_HAS_CODE_
 const SET_TEST_PAGE_INDEX = 'scratch-gui/debugging-tutorial-cards/SET_TEST_PAGE_INDEX';
 const SET_SELECTED_SPRITE = 'scratch-gui/debugging-tutorial-cards/SET_SELECTED_SPRITE';
 
+import {PAGE_OVERVIEW} from '../components/debuggingTutorial/tutorial-constants.jsx';
+
 
 const RESPONSE_START_VALUE = 'scratch-gui/debugging-tutorial-cards/RESPONSE_START';
 
@@ -30,7 +32,7 @@ const initialState = {
     lastTutorial: null,
     contentType: "DETAILS",
     responseType: RESPONSE_START_VALUE,
-    page: "OVERVIEW",
+    page: PAGE_OVERVIEW,
     isShowingQuickHandle: false,
     curTestDetails: "",
     helpType: "",
@@ -105,7 +107,7 @@ const reducer = function (state, action) {
             baseState.projectLoadingState = null;
             baseState.isLoading = false;
             baseState.curTestDetails = "";
-            baseState.page = "OVERVIEW";
+            baseState.page = PAGE_OVERVIEW;
             baseState.responseType = RESPONSE_START_VALUE;
             baseState.contentType = "DETAILS";
             baseState.isShowingQuickHandle = false;

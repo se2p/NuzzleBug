@@ -149,7 +149,7 @@
 }
 
 .testLeftArrow {
-    height: 150px;
+    height: 110px;
     width: 30px;
     background-color: white;
     border-top-left-radius: 40px;
@@ -175,7 +175,7 @@
 }
 
 .testRightArrow {
-    height: 150px;
+    height: 110px;
     width: 30px;
     background-color: white;
     border-top-right-radius: 40px;
@@ -606,4 +606,29 @@
     100% {
         background-position: -200% 0;
     }
+}
+
+.testElementHeaderAnimation {
+    width: 100%;
+    height: 90px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    font-weight: bold;
+    padding: 12px 20px;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+
+    background: linear-gradient(
+        120deg,
+        #afd8fd 0%,
+        #afd8fd 30%,
+        #426fc9ff 50%,
+        #afd8fd 70%,
+        #afd8fd 100%
+    );
+    background-size: 200% 100%;
+    animation: shine 2s linear infinite;
 }

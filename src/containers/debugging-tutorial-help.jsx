@@ -95,14 +95,15 @@ class DebuggingTutorialHelp extends React.Component {
                         this.props.addSolvedStep(step, this.props.answers[0]);
                         this.props.setStep(tutorial[findOption()]["next"].slice(6));
                         this.props.reset();
-                        this.logStep(step, tutorial, findOption(), false);
+                        this.logStep(step, tutorial, findOption(), true);
                     } else {
                         this.props.setQuestionMessage(tutorial.correctionText);
                         this.props.addSolvedStep(step, this.props.answers[0]);
-                        this.logStep(step, tutorial, findOption(), true);
+                        this.logStep(step, tutorial, findOption(), false);
                     }
+                } else {
+                    this.props.setQuestionMessage("Du musst mindestens eine Option auswählen!");
                 }
-                this.props.setQuestionMessage("Du musst mindestens eine Option auswählen!");
                 break;
             case "GAP_TEXT":
                 if (this.props.answers[2] !== "") {
@@ -113,9 +114,9 @@ class DebuggingTutorialHelp extends React.Component {
                         this.props.addSolvedStep(step, this.props.answers[2]);
                         this.props.setStep(nextStep.slice(6));
                         this.props.reset();
-                        this.logStep(step, tutorial, this.props.answers[2] !== "false", false);
-                    } else {
                         this.logStep(step, tutorial, this.props.answers[2] !== "false", true);
+                    } else {
+                        this.logStep(step, tutorial, this.props.answers[2] !== "false", false);
                         this.props.addSolvedStep(step, this.props.answers[2]);
                         this.props.setQuestionMessage(tutorial.correctionText);
                     }
@@ -218,7 +219,7 @@ class DebuggingTutorialHelp extends React.Component {
     setAnswer(index, value, step) {
         this.props.onSetAnswer(index, value);
         if (this.props.solvedSteps.hasOwnProperty(step) && this.props.solvedSteps[step].includes(value)) {
-            this.props.setQuestionMessage("[REVISITING]Bereits untersucht");
+            this.props.setQuestionMessage("[REVISITING]Du hast diese Option schon einmal untersucht!");
         } else {
             this.props.setQuestionMessage(null);
         }
@@ -319,6 +320,7 @@ DebuggingTutorialHelp.propTypes = {
     responseType: PropTypes.any,
     setResponseType: PropTypes.func,
     onHomeMenu: PropTypes.func,
+    guiMessages: PropTypes.any,
 };
 
 const mapStateToProps = state => ({

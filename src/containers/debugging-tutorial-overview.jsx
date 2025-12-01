@@ -116,7 +116,7 @@ class DebuggingTutorialOverview extends React.Component {
     render () {
 
         const isNewTutorialSelected = this.props.tutorialMessages?.title !== this.props.lastTutorial;
-        console.log("last: " + this.props.lastTutorial);
+
         if (this.props.lastTutorial === null || this.props.lastTutorial === undefined) {
             this.props.setLastTutorial(this.props.tutorialMessages.title);
         } else if (isNewTutorialSelected) {
