@@ -58,6 +58,7 @@ const DebuggingTutorialHelp = props => {
         responseType,//New
         setResponseType,
         onHomeMenu,
+        guiMessages,
         ...posProps
     } = props;
 
@@ -139,7 +140,7 @@ const DebuggingTutorialHelp = props => {
                         <input
                             className={css.dropdownBody}
                             readOnly={isGapTextSolved}
-                            placeholder={'Anzahl eingeben'}
+                            placeholder={'...'}
                             type="text"
                             value={answers[0]}
                             onChange={e => setAnswer(0, e.target.value)}
@@ -173,7 +174,7 @@ const DebuggingTutorialHelp = props => {
                         <input
                             className={css.dropdownBody}
                             readOnly={isGapTextSolved}
-                            placeholder={'Anzahl eingeben'}
+                            placeholder={'...'}
                             type="text"
                             value={answers[1]}
                             onChange={e => setAnswer(1, e.target.value)}
@@ -235,9 +236,9 @@ const DebuggingTutorialHelp = props => {
     const gapButtonState = () => {
         const answer = answers[2];
         const states = {
-            "": ["wähle aus", "", "#4D97FFFF"],
-            "true": ["ja", tutorial[step].endQuestionTrue, "#70a45f"],
-            "false": ["nein", tutorial[step].endQuestionFalse, "#ff8b4d"],
+            "": [guiMessages.help.select, "", "#4D97FFFF"],
+            "true": [guiMessages.help.true, tutorial[step].endQuestionTrue, "#70a45f"],
+            "false": [guiMessages.help.false, tutorial[step].endQuestionFalse, "#ff8b4d"],
         };
         return states[answer] || states[""];
     }
@@ -262,7 +263,7 @@ const DebuggingTutorialHelp = props => {
             <div className={css.textAnswerContainer} style={{marginLeft:"10px"}}>
                 <span className={css.textAnswerLine} style={{marginRight: "10px"}}>{questionStart}</span>
                 <div className={css.dropdown}>
-                    <input className={css.dropdownBody} readOnly={true} placeholder={"Wähle aus"} type="text" value={answers[0]} />
+                    <input className={css.dropdownBody} readOnly={true} placeholder={"..."} type="text" value={answers[0]} />
                     <div className={css.dropdownTest} onMouseEnter={() => resetDropdownTimer("1")} onMouseLeave={() => startDropdownTimer()}>
                         <img className={css.dropdownIcon} src={dropdownIcon} alt={"selectorIcon"} />
                         {showDropdown !== null && (
@@ -301,9 +302,9 @@ const DebuggingTutorialHelp = props => {
     const renderHelpPage = () => {
         return (
             <div className={css.pageContainer}>
-                <div className={css.leftButton} onClick={onHomeMenu}>
+                {/*<div className={css.leftButton} onClick={onHomeMenu}>
                     <img src={leftArrow} alt="Next" draggable={false}/>
-                </div>
+                </div>*/}
 
                 <div className={css.whiteBox} style={{paddingBottom:"0", paddingTop:"0", marginBottom:"10px"}}>
                     <div className={css.bubbleContainer}>
@@ -342,7 +343,7 @@ const DebuggingTutorialHelp = props => {
                             className={css.footerButton}
                             onClick={() => setResponseType(RESPONSE_HELP)}
                         >
-                            Ich brauche einen Hinweis
+                            {guiMessages.help.helpButton}
                         </button>
                         {/*<button
                             className={css.footerButton}
@@ -371,9 +372,11 @@ const DebuggingTutorialHelp = props => {
                 if (questionMessage != null && !questionMessage.startsWith("[REVISITING]")) {
                     return (
                         <div className={css.responseContainer}>
-                            <p>{questionMessage}</p>
+                            <p style={{ fontSize: "1rem", marginBottom: "10px" }}>
+                                <strong><u style={{color:"#ff735a"}}>{guiMessages.help.warning}</u>&nbsp;{questionMessage}</strong>
+                            </p>
                         </div>
-                    );
+                    )
                 }
 
                 // Sicherstellen, dass wir eine Frage aus dem aktuellen Tutorial-Schritt haben.
@@ -381,22 +384,22 @@ const DebuggingTutorialHelp = props => {
                 return (
                     <div className={css.responseContainer}>
                         <p style={{ fontSize: "1rem", marginBottom: "10px" }}>
-                            <strong><u>Frage:</u>&nbsp;{text}</strong>
+                            <strong><u style={{color:"#d2a99e"}}>Euli:</u>&nbsp;{text}</strong>
                         </p>
 
-                        {/_1$/.test(step) && !questionMessage?.startsWith("[REVISITING]") && <p style={{ fontSize: "0.7rem" }}>
+                        {/*/_1$/.test(step) && !questionMessage?.startsWith("[REVISITING]") && <p style={{ fontSize: "0.7rem" }}>
                             Wenn du dir nicht sicher bist, drücke unten auf&nbsp;&nbsp;
                             <span style={{ color: "#c7b4b0ff", fontWeight: "bold" }}>
                                     Ich brauche weitere Hilfe
                                 </span>
-                        </p>}
+                        </p>*/}
 
                         {questionMessage?.startsWith("[REVISITING]") && (
-                            <p style={{ fontSize: "0.7rem" }}>
+                            <p style={{ fontSize: "0.8rem" }}>
                                 <span style={{ color: "#ff735a", fontWeight: "bold" }}>
                                         Hinweis:&nbsp;
                                 </span>
-                                {questionMessage?.slice(12)}!
+                                {questionMessage?.slice(12)}
                             </p>
                         )}
                     </div>
@@ -503,15 +506,16 @@ const DebuggingTutorialHelp = props => {
             case RESPONSE_HELP:
                 return(
                     <div className={css.responseContainer}>
-                        <p style={{marginBottom:"5px"}}>
-                            <strong style={{fontSize:"1.2rem"}}>Hilfestellung: </strong>
+                        <p style={{marginBottom:"10px", fontSize: "1rem"}}>
+                            <strong><u style={{color:"#a3cbff"}}>Hilfestellung:</u>&nbsp;
                             {tutorial[step]["help"] === null
                                 ? "Zu diesem Schritt kann ich dir im Moment nicht mehr verraten."
-                                : tutorial[step]["help"]}
+                                : tutorial[step]["help"]}</strong>
                         </p>
                         <div className={css.responseButtonContainer}>
                             <button className={css.responseButtonNext}
-                                    onClick={() => setResponseType(RESPONSE_DEFAULT)}>Alles klar!
+                                    onClick={() => setResponseType(RESPONSE_DEFAULT)}
+                                    style={{backgroundColor:"#A3CBFFFF"}}>Alles klar!
                             </button>
                         </div>
                     </div>

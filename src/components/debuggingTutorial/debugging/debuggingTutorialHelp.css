@@ -41,7 +41,7 @@
     height: auto;
     right: 0; /* Direkt am rechten Rand */
     top: 50%; /* Mittig der Höhe */
-    transform: translateX(75%) translateY(-40%); /* Exakte Zentrierung */
+    transform: translateX(67%) translateY(-40%); /* Exakte Zentrierung */
 }
 
 .bubble p {
