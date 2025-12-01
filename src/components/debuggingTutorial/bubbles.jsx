@@ -164,4 +164,4 @@ function TypewriterText({
     );
 }
 
-export { UserBubble, EuliBubble };
+export { UserBubble, EuliBubble, TypewriterText };
