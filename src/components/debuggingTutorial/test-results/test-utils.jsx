@@ -9,11 +9,13 @@ export const getTestText = ({
                                 curTestDetails,
                                 hasCodeUpdated,
                                 guiMessages,
+                                onComplete,
+                                onStart
                             }) => {
     const msg = guiMessages?.test_results?.response ?? {};
     if (projectLoadingState === "TEST") return <span>{msg.loading}</span>;
 
-    if (testResults?.passed && projectLoadingState !== "TEST_PAUSE") return <span>{msg.passed_all}</span>;
+    if (testResults?.passed && projectLoadingState !== "TEST_PAUSE") return <TypewriterText text={msg.passed_all} speed={15} onComplete={onComplete} onStart={onStart}/>;
 
     if (curTestDetails) {
         const result = testResults?.details?.find(e => e.testId === curTestDetails)?.result;
@@ -21,7 +23,7 @@ export const getTestText = ({
     }
 
     if (hasCodeUpdated && projectLoadingState !== "TEST_PAUSE") { //TODO CONSTANT!!!
-        return <span>{msg.code_changed}</span>;
+        return <TypewriterText text={msg.code_changed} speed={15} onComplete={onComplete} onStart={onStart}/>;
     }
 
     return <span>{msg.default}</span>;
@@ -120,6 +122,8 @@ export function TypewriterText({
                             speed = 40,
                             pauseAfterComplete = 40,
                             className = '',
+                            onComplete = null,
+                            onStart = null,
                         }) {
     const [displayed, setDisplayed] = useState('');
     const idxRef = useRef(0);
@@ -127,12 +131,14 @@ export function TypewriterText({
     const timeoutRef = useRef(null);     // Für setTimeout
     const isMounted = useRef(true);      // Damit setState nach Unmount verhindert wird
 
+    const safeText = typeof text === "string" ? text : "";
+
     useEffect(() => {
         isMounted.current = true;
 
         function startTyping() {
             if (!isMounted.current) return;
-
+            if (typeof onStart === 'function') onStart();
             setDisplayed('\u00A0');
             idxRef.current = 0;
 
@@ -140,13 +146,15 @@ export function TypewriterText({
                 if (!isMounted.current) return;
 
                 idxRef.current += 1;
-                setDisplayed(text.substring(0, idxRef.current));
+                setDisplayed(safeText.substring(0, idxRef.current));
 
-                if (idxRef.current >= text.length) {
+                if (idxRef.current >= safeText.length) {
                     clearInterval(timerRef.current);
-
+                    if (typeof onComplete === "function") {
+                        onComplete();
+                    }
                     timeoutRef.current = setTimeout(() => {
-                        if (isMounted.current) startTyping();
+                        //if (isMounted.current) startTyping();
                     }, pauseAfterComplete);
                 }
             }, speed);
@@ -159,7 +167,7 @@ export function TypewriterText({
             clearInterval(timerRef.current);
             clearTimeout(timeoutRef.current);
         };
-    }, [text, speed, pauseAfterComplete]);
+    }, [safeText, speed, pauseAfterComplete]);
 
     return (
         <span className={className} style={{ whiteSpace: 'pre-wrap' }}>
