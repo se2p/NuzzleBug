@@ -63,7 +63,7 @@ export default {
             loading: "Sure! Please wait a moment while I check your code.",
             passed_all: "Great job! You passed all the tests.\nYou can now move on to the next level.",
             test_passed: "This test looks really good.\nWell done!",
-            test_failed: "There’s still a small mistake in this test.",
+            test_failed: "There's still a small mistake in your code.",
             code_changed: "Looks like you’ve changed your code since the last test. Want me to check it again?",
             default: "Here’s a list of your individual test results. Currently not all have been passed."
         },
@@ -90,11 +90,39 @@ export default {
         error: "Error",
         controls: "Control",
         next: "Next",
-        startTutorial: "I have read the task",
+        startTutorial: "I have worked on the task",
         testButton: "Test solution",
         resultButton: "Results",
-        euliButton: "Ask Euli",
+        euliButton: "Ask Owly",
         todoButton: "What should I do?",
         resetButton: "Restart step",
+        ofCourse: "Sure!",
+        errMessage1: "This program has ",
+        errMessage2: "error",
+        errMessage3: " built in. Can you find it?",
+        showError1: "If not, you can always",
+        showError2: "reveal it",
     },
+
+    help: {
+        helpButton: "please give me a hint",
+        warning: "Warning:",
+        true: "Yes",
+        false: "No",
+        select: "Select",
+    },
+
+    response: {
+        RESPONSE_START1: "Good luck with the tutorial!",
+        RESPONSE_START2: "If you think you've found the bug, click",
+        RESPONSE_START3: " Test solution",
+        RESPONSE_DEFAULT1: "Great!",
+        RESPONSE_DEFAULT2: "If there's anything else I can help with, just let me know :)",
+    },
+
+    help_page: {
+        newHint: "Give me a new hint",
+        returnToResults: "Back to the test results",
+        thinking: "Thinking ",
+    }
 };

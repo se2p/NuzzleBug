@@ -33,7 +33,7 @@ import TestResults from "../test-results/test-results.jsx";
 import rightArrow from "../../cards/icon--next.svg";
 import leftArrow from "../../cards/icon--prev.svg";
 import ScratchBlocks from "scratchblocks-react";
-import RequestHintButton2 from "../hint-generation";
+import RequestHintButton2 from "../GPT-prompts/hint-generation";
 import scratchblocks from "scratchblocks";
 import logging from 'scratch-vm/src/util/logging.js';
 import {
@@ -45,6 +45,8 @@ import {
 } from "./tutorial-step-util.jsx";
 import {ENABLE_RESET_BUTTON, ENABLE_TODO_BUTTON} from "../config.ts";
 import {renderFinalStep} from "../final-step.jsx";
+import TutorialHelpPage from "./tutorial-help-page.jsx";
+import HintGenerator from "../GPT-prompts/hint-generation.js";
 const DebuggingTutorialStep = props => {
     const {
         onOpenHelp,
@@ -299,25 +301,6 @@ const DebuggingTutorialStep = props => {
         );
     }
 
-    const renderTestResults = () => {
-        return <TestResults
-            testResults={testResults}
-            step={step}
-            testPageIndex={testPageIndex}
-            setCurPage={setCurPage}
-            hasCodeUpdated={hasCodeUpdated}
-            nextStep={nextStep}
-            onDecreaseTestPageIndex={onDecreaseTestPageIndex}
-            onIncreaseTestPageIndex={onIncreaseTestPageIndex}
-            projectLoadingState={projectLoadingState}
-            curTestDetails={curTestDetails}
-            guiMessages={guiMessages}
-            setCurTestDetails={setCurTestDetails}
-            handleTestStart={handleTestStart}
-            openHelpPage={openHelp}
-        />
-    }
-
     const handleTestStart = () => {
         setResponseType(RESPONSE_TESTING);
         onStartTests();
@@ -460,152 +443,31 @@ const DebuggingTutorialStep = props => {
     }
 
     //TODO move to reducer
-    const [helpIndex, setHelpIndex] = useState(0);
-    const [hintCount, setHintCount] = useState(0);
-    const [returnToTestResults, setReturnToTestResults] = useState(false);
+
     const [help, setHelp] = useState(null);
-    const [showInitialText, setShowInitialText] = useState(false);
-    const [isGeneratingHint, setIsGeneratingHint] = useState(false);
-    const openHelp = (spriteKey) => {
+    const [isGeneratingHint, setIsGeneratingHint] = useState(true);
+    const [finishedAnswer, setFinishedAnswer] = useState(false);
+
+    const requestHint = (fastMode) => {
+        setCurPage(PAGE_HELP);
+        setIsGeneratingHint(true);
+        setFinishedAnswer(false);
+
         const result = testResults.details.find(e => e.testId === curTestDetails)?.prompt;
         const passedDescriptions = testResults.details
             .filter(e => e.result === "pass")
             .map(e => e.prompt)
             .join('; ');
-        setShowInitialText(true);
-        setIsGeneratingHint(true);
-        setSelectedSprite(spriteKey);
-        setHelpIndex(40);
 
-        if (logging.isActive()) {
-            logging.logClickEvent('BUTTON', new Date(), 'OPEN_HELP_PAGE', null);
-        }
+        if (logging.isActive()) { logging.logClickEvent('BUTTON', new Date(), 'OPEN_HELP_PAGE', null); }
 
-        setCurPage(PAGE_HELP);
-        setReturnToTestResults(true);
-        setHintCount(hintCount + 1);
-        RequestHintButton2.generateHint(vm.toJSON(), result, passedDescriptions, vm.getLocale())
-            .then(hint => {setHelp(hint); setIsGeneratingHint(false);
-                logResponse(hint, curTestDetails, result);})
-            .catch(err => console.error(err));
-    }
-
-    const generateNewHint = () => {
-        setShowInitialText(false);
-        setIsGeneratingHint(true);
-        setHelpIndex(44);
-        setHintCount(hintCount + 1);
-        const currentTestDescription = testResults.details.find(e => e.testId === curTestDetails)?.prompt;
-        const passedDescriptions = testResults.details
-            .filter(e => e.passed === true)
-            .map(e => e.prompt)
-            .join('; ');
-
-        if (logging.isActive()) {
-            logging.logClickEvent('BUTTON', new Date(), 'GENERATE_NEW_HINT', null);
-        }
-
-        RequestHintButton2.generateHint(vm.toJSON(), currentTestDescription, passedDescriptions, vm.getLocale())
+        HintGenerator.generateHint(vm.toJSON(), result, passedDescriptions, vm.getLocale(), fastMode)
             .then(hint => {
                 setHelp(hint);
                 setIsGeneratingHint(false);
-                setHelpIndex(40);
-
-
-                logResponse(hint, curTestDetails, currentTestDescription);
-            })
+                logResponse(hint, curTestDetails, result);})
             .catch(err => console.error(err));
     }
-
-    const renderHelp = () => {
-        const selectedSpriteName = selectedSprite
-            ? tutorialMessages?.[selectedSprite.split("_")[0]]?.[selectedSprite.split("_")[1]?.toLowerCase()]?.["name"]
-            : "";
-
-        const selectedTestTitle = testResults.details.find(e => e.testId === curTestDetails)?.test;
-
-        return (
-            <div className={css.testContainer}>
-                {/*<div className={css.spriteSelection}>
-                    {sprites.map(key =>
-                        <div className={selectedSprite === key ? css.spriteElementSelected : css.spriteElement} onClick={() => {setSelectedSprite(key); setHelpIndex(30)}} style={{opacity: helpIndex >= 2 ? 1 : 0}}>
-                            <img src={tutorialIndexData[key]} className={css.spriteElementIcon} alt={"SpriteImage"} draggable={false} style={{visibility: "hidden"}}/>
-                        </div>
-                    )}
-                </div>*/}
-
-
-                <div className={css.helpWhiteBox}>
-                    <div className={css.helpContainer}>
-                        <>
-                            {/*<EuliBubble text={"Programmieren ist oft ganz schön schwer. Soll ich dir helfen?\nWähle zuerst eine Figur aus, bei der ich dir helfen kann:"} isVisible={helpIndex >= 0 && helpIndex < 10} key={"aaa"} onTypewriterComplete={() => setHelpIndex(1)} isTypewriterFinished={helpIndex >= 1}/>
-                            <UserBubble text={"Mich interessiert die Figur: " + selectedSpriteName} isVisible={helpIndex >= 1 && helpIndex < 10} key={"asdad"} isSelected={helpIndex >= 2}>
-                                {helpIndex < 2 && <div className={css.spriteSelection} style={{marginTop:"5px"}}>
-                                    {sprites.map(key =>
-                                        <div key={key} className={selectedSprite === key ? css.spriteElementSelected : css.spriteElement} onClick={() => {setSelectedSprite(key); setHelpIndex(2)}}>
-                                            <img src={tutorialIndexData[key]} className={css.spriteElementIcon} alt={"SpriteImage"} draggable={false}/>
-                                        </div>
-                                    )}
-                                </div>}
-                            </UserBubble>
-                            <EuliBubble text={"Die Katze ist wie eine echte Katze.\nSie liegt nur rum ohne irgendetwas zu machen, außer manchmal zu miauen."} isVisible={helpIndex >= 2 && helpIndex < 10} key={"aa23as"} onTypewriterComplete={() => setHelpIndex(3)} isTypewriterFinished={helpIndex >= 3}/>
-                            <UserBubble text={"Gib mir einen weiteren Hinweis!"} isVisible={helpIndex >= 3 && helpIndex < 20} key={"asdad2"} onClick={() => setHelpIndex(10)} isSelected={helpIndex >= 10}/>
-                            <EuliBubble text={"Selbstverständlich! Nutze folgenden Block:"} isVisible={helpIndex >= 10 && helpIndex < 20} key={"aaas3"} onTypewriterComplete={() => setHelpIndex(11)} isTypewriterFinished={helpIndex >= 11}>
-                                <div style={{transform: "scale(0.8)"}}>
-                                    <ScratchBlocks
-                                        blockStyle="scratch3"
-                                        languages={['en', 'de']}
-                                    >
-                                        {"Sage [Miau]"}
-                                    </ScratchBlocks>
-                                </div>
-                            </EuliBubble>
-
-                            <UserBubble text={"Bitte noch einen weiteren Hinweis!"} isVisible={helpIndex >= 11 && helpIndex < 20} key={"asdad24"}/>
-                            */}
-
-
-
-
-                            <EuliBubble text={"Möchtest du einen Hinweis zu dem Test: " + selectedTestTitle + "?"} isVisible={helpIndex >= 30 && showInitialText && helpIndex < 40} key={"openingQuestion"} onTypewriterComplete={() => setHelpIndex(31)} isTypewriterFinished={helpIndex >= 31}/>
-                            <UserBubble text={"Ja, bitte!"} isVisible={helpIndex >= 31999999999 && showInitialText} key={"openingAnswer"} onClick={() => setHelpIndex(40)} isSelected={helpIndex >= 40}/>
-                            <EuliBubble text={isGeneratingHint ? "Überlege..." : help?.Text} isVisible={helpIndex >= 40 && helpIndex < 50} key={"aaa9"} onTypewriterComplete={() => setHelpIndex(43)} isTypewriterFinished={helpIndex >= 43 || isGeneratingHint} showChild={helpIndex >= 43}>
-                                {!isGeneratingHint &&<div style={{display:"flex", justifyContent:"center"}}>
-                                    <div style={{transform:"Scale(0.8)"}}>
-                                        {(help?.Code) && <ScratchBlocks
-                                            blockStyle="scratch3"
-                                            languages={['en', 'de']}
-                                        >
-                                            {translate(help.Code, props.locale)}
-                                        </ScratchBlocks>}
-                                    </div>
-                                </div>}
-                            </EuliBubble>
-                            {help?.finishedHelpFlag ?
-                                (<UserBubble text={"I return to the test results"} isVisible={helpIndex >= 43} key={"goBackToHelp"} onClick={() => {setCurPage(PAGE_TEST_RESULTS); handleTestStart(); setCurTestDetails("");}} isSelected={helpIndex >= 44}/>
-                                ):(<UserBubble text={"Gib mir einen neuen Hinweis"} isVisible={helpIndex >= 43} key={"asd23ad2"} onClick={() => {if (helpIndex <= 43) generateNewHint()}} isSelected={helpIndex >= 44}/>
-                                )}
-
-                        </>
-                    </div>
-
-                    <div className={css.imageContainer}>
-                        <img src={owl} alt={"Picture of Euli"} className={css.owlImage} draggable={false}/>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    const translate = (scratchBlocksText, locale) => {
-        const block = scratchblocks.parse(scratchBlocksText, {
-            languages: ['en', 'de']
-        });
-        if (locale === 'de') {
-            block.translate(scratchblocks.allLanguages.de);
-        }
-        return block.stringify();
-    };
 
     const renderPage = () => {
         if (reachedLastStep) return renderFinalStep(tutorialMessages);
@@ -616,9 +478,34 @@ const DebuggingTutorialStep = props => {
             case PAGE_RESPONSE:
                 return renderResponse();
             case PAGE_TEST_RESULTS:
-                return renderTestResults();
+                return <TestResults
+                    testResults={testResults}
+                    step={step}
+                    testPageIndex={testPageIndex}
+                    setCurPage={setCurPage}
+                    hasCodeUpdated={hasCodeUpdated}
+                    nextStep={nextStep}
+                    onDecreaseTestPageIndex={onDecreaseTestPageIndex}
+                    onIncreaseTestPageIndex={onIncreaseTestPageIndex}
+                    projectLoadingState={projectLoadingState}
+                    curTestDetails={curTestDetails}
+                    guiMessages={guiMessages}
+                    setCurTestDetails={setCurTestDetails}
+                    handleTestStart={handleTestStart}
+                    openHelpPage={() => requestHint(true)}
+                />
             case PAGE_HELP:
-                return renderHelp();
+                return (
+                    <TutorialHelpPage
+                        help={help}
+                        isGeneratingHint={isGeneratingHint}
+                        generateNewHint={() => requestHint(false)}
+                        onFinishedAnswer={() => setFinishedAnswer(true)}
+                        finishedAnswer={finishedAnswer}
+                        returnToTestResults={() => {setCurPage(PAGE_TEST_RESULTS); setCurTestDetails("");}}
+                        locale={props.locale}
+                        guiMessages={guiMessages}
+                    />);
         }
     }
 
@@ -633,7 +520,7 @@ const DebuggingTutorialStep = props => {
         {curPage === PAGE_TEST_RESULTS && <div className={css.leftButton} onClick={() => {setCurPage(PAGE_OVERVIEW); if (testResults?.passed) {setResponseType(RESPONSE_TESTING_FINISHED)} else {setResponseType(RESPONSE_DEFAULT)}}}>
             <img src={leftArrow} alt="Next" draggable={false} />
         </div>}
-        {curPage === PAGE_HELP && !help?.finishedHelpFlag && <div className={css.leftButton} onClick={() => {returnToTestResults ? setCurPage(PAGE_TEST_RESULTS) : setCurPage(PAGE_RESPONSE)}}>
+        {curPage === PAGE_HELP && !help?.finishedHelpFlag && <div className={css.leftButton} onClick={() => {setCurPage(PAGE_TEST_RESULTS)}}>
             <img src={leftArrow} alt="Next" draggable={false} />
         </div>}
         {renderPage()}

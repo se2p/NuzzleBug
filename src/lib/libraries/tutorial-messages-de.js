@@ -1,4 +1,3 @@
-import React from "react";
 
 export default {
 
@@ -92,5 +91,33 @@ export default {
         euliButton: "Frage Euli",
         todoButton: "Was soll ich tun?",
         resetButton: "Schritt neu starten",
+        ofCourse: "Gerne!",
+        errMessage1: "In dem Programm wurde",
+        errMessage2: "Fehler",
+        errMessage3: "eingebaut. Kannst du ihn finden?",
+        showError1: "Falls nicht, kannst du ihn jederzeit",
+        showError2: "aufdecken",
     },
+
+    help: {
+        helpButton: "Ich brauche einen Hinweis",
+        warning: "Achtung:",
+        true: "ja",
+        false: "Nein",
+        select: "Wähle aus",
+    },
+
+    response: {
+        RESPONSE_START1: "Viel Erfolg beim Lösen des Tutorials!",
+        RESPONSE_START2: "Wenn du denkst, dass du den Fehler gefunden hast, klicke auf",
+        RESPONSE_START3: " Lösung testen",
+        RESPONSE_DEFAULT1: "Alles klar!",
+        RESPONSE_DEFAULT2: "Wenn ich noch irgendetwas für dich tun kann, lass es mich wissen :)",
+    },
+
+    help_page: {
+        newHint: "Gib mir einen neuen Hinweis",
+        returnToResults: "Zurück zu den Testergebnissen",
+        thinking: "Überlege ",
+    }
 };
