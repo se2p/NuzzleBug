@@ -1,11 +1,8 @@
-import css from "./bubbles.css"
-import bubbleIndicatorBlue from "./images/bubbleIDecalBlue2.png"
 import React, {useEffect, useRef, useState} from "react";
-import {CSSTransition} from "react-transition-group";
 /**
  * Komponente für Nutzer-Bubbles
  */
-const UserBubble = ({
+/*const UserBubble = ({
                         text,
                         isVisible,
                         onClick,
@@ -47,7 +44,7 @@ const UserBubble = ({
 /**
  * Komponente für Euli-Bubbles
  */
-const EuliBubble = ({
+/*const EuliBubble = ({
                         text,
                         isVisible,
                         onEntered,
@@ -164,4 +161,4 @@ function TypewriterText({
     );
 }
 
-export { UserBubble, EuliBubble, TypewriterText };
+export { TypewriterText };
