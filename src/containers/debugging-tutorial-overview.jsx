@@ -89,7 +89,6 @@ class DebuggingTutorialOverview extends React.Component {
 
         await sleep(2000);
         await logging.pauseLogging(false);
-        console.log("LOGING: FALSE!!!!!!!!!!!!!")
     }
 
     openAutoSaveSelection() {

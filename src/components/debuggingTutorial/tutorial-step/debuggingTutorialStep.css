@@ -410,7 +410,7 @@
     margin: 0 auto;
     background-color: #FFFFFF;
     position: relative;
-    z-index: 2; /* Content liegt über dem Button */
+    z-index: 2;
 }
 .details-container {
     padding-top: 10px;
