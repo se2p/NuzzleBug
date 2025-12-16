@@ -1,0 +1,404 @@
+/* CP - Control Panel */
+.cpContainer {
+    height: 100vh;
+    padding-top: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffffff;
+    background-image: url("./images/skulls.png");
+}
+
+.white-box {
+    padding-top: 30px;
+    background-color: white;
+    width: 90%;
+    min-height: 200px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: flex-start;
+    padding-bottom: 10px;
+    box-sizing: border-box;
+    box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.56);
+    -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.56);
+    -moz-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.56);
+    margin-bottom: 40px;
+}
+
+.finalTitle {
+    font-size: 3rem;
+    color: #575E75FF;
+    margin-top: 40px;
+    margin-bottom: 50px;
+    font-weight: bold;
+}
+
+.bubbleContainer {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding-left: 1rem;
+}
+
+.testStartBubble {
+    color: #575E75FF;
+    margin-right: 30px;
+    display: inline-block;
+    position: relative;
+    border-radius: 15px;
+    border: solid 3px #4D97FFFF;
+    width: 100%;
+    z-index: 100;
+    text-align: left;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    min-height: calc(2 * 0.9rem + 20px + 1.2rem); /*2 Zeilen + Padding oben und unten + Zeilenabstand*/
+}
+
+.finalBubbleIndicator {
+    position: absolute;
+    width: 35px;
+    height: auto;
+    right: 0;
+    top: 50%;
+    transform: translateX(102%) translateY(-40%);
+    z-index: -1;
+}
+
+.owl-image {
+    width: 120px;
+    height: auto;
+}
+
+
+
+
+
+
+
+/*Next Button*/
+.right-card {
+    height: 90%;
+    position: absolute;
+    top: 5%;
+    background: white;
+    border: 1px solid lightgray;
+    width: 0.75rem;
+    z-index: 10;
+    opacity: 0.9;
+    overflow: hidden;
+    right: -0.75rem;
+    border-left: 0;
+    border-top-right-radius: 0.75rem;
+    border-bottom-right-radius: 0.75rem;
+}
+
+
+
+.right-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #575E75FF;
+    box-shadow: 0 0 0 4px rgba(87, 94, 117, 0.26);
+    height: 44px;
+    width: 44px;
+    border-radius: 50px;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.25s ease;
+    position: relative;
+}
+
+.right-button:hover {
+    box-shadow: 0 0 0 4px rgba(87, 94, 117, 0.25);
+    width: 140px;
+}
+
+.right-button:active {
+    transform: scale(0.8);
+}
+
+.right-button span {
+    position: absolute;
+    color: white;
+    font-weight: bold;
+    font-size: 0;
+    transition: all 0.25s ease;
+}
+
+.right-button:hover span {
+    font-size: 1rem;
+}
+
+.right-button img {
+    width: 1.75rem;
+    transition: all 0.25s ease;
+    opacity: 1;
+}
+
+.right-button:hover img {
+    opacity: 0;
+    transform: translateX(40px);
+}
+
+
+/*QUESTION SECTION*/
+.tab-container {
+    display: flex;
+    width: 90%;
+    margin: 0 auto 0;
+    position: relative;
+    z-index: 1;
+}
+
+.tab-button {
+    padding-bottom: 33px;
+    padding-right: 10px;
+    padding-left: 10px;
+    border: none;
+    border-radius: 15px 15px 0 0;
+    background-color: #4D97FFFF;
+    color: white;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-align: center;
+    min-width: 150px;
+    position: relative;
+    z-index: 1;
+    height: 68px;
+    top: 30px; /* Button ragt nach oben */
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: top 0.1s ease; /* Smooth animation */
+}
+
+.icon {
+    top: -5px;
+    width: auto;
+    height: 15px;
+    margin-right: 5px;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 4px solid #4D97FFFF;
+    border-radius: 20px;
+    width: 90%;
+    margin: 0 auto;
+    background-color: #FFFFFF;
+    position: relative;
+    z-index: 2;
+}
+
+
+
+
+:root{
+    --bg: #ffffff;
+    --text: #1f2937;
+    --muted: #6b7280;
+
+    --card-border: #e5e7eb;
+    --option-border: #a9c7ff;
+    --option-bg: #f8fafcff;
+
+    --shadow: 0 10px 30px rgba(0,0,0,.08);
+    --radius: 16px;
+    --gap: 18px;
+}
+
+.qa-card{
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: var(--gap);
+    background: var(--bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 18px;
+    box-shadow: var(--shadow);
+    max-width: 860px;
+}
+
+.qa-left{
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 14px;
+}
+
+.qa-question{
+    display: grid;
+    gap: 6px;
+}
+
+.qa-question-label{
+    font-weight: 700;
+    color: var(--text);
+}
+
+.qa-question-text{
+    color: var(--text);
+    line-height: 1.25;
+    font-size: 16px;
+}
+
+/* Optionen: bis zu 5 Kacheln */
+.qa-options{
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-content: start;
+}
+
+/* Wenn du 5 Elemente hast, macht die letzte Kachel eine "2-Spalten"-Breite */
+.qa-options > :nth-child(5){
+    grid-column: 1 / -1;
+}
+
+.qa-option{
+    appearance: none;
+    border: 3px solid var(--option-bg);
+    background: var(--option-bg);
+    border-radius: 14px;
+    padding: 16px;
+    cursor: pointer;
+
+    -webkit-box-shadow: 0px 0px 9px 0px rgba(66, 68, 90, 1);
+    -moz-box-shadow: 0px 0px 9px 0px rgba(66, 68, 90, 1);
+    box-shadow: 0px 0px 9px 0px rgba(66, 68, 90, 1);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: transform .08s ease, box-shadow .08s ease, background .08s ease;
+}
+
+.qa-option:hover{
+    transform: scale(1.03);
+}
+
+.qa-option:active{
+    transform: translateY(0);
+}
+
+.qaOptionSelected {
+    background: #575E75FF;
+    border-color: #575E75FF;;
+}
+
+.qaOptionSelected .pill {
+    border-color: white;
+    color: white;
+    background-color: #575E75FF;
+}
+
+.qaOptionRight {
+    border-color: #2e7d32;
+}
+
+.qaOptionWrong {
+    border-color: #c62828;
+}
+
+.pill{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #ffffff;
+    border: 1px solid #575E75FF;
+
+    font-weight: 700;
+    color: var(--text);
+}
+
+.pill-number{
+    min-width: 54px;
+}
+
+/* Preview rechts */
+.qa-preview{
+    border-radius: 14px;
+    border: 1px solid var(--card-border);
+    background: #f8fafc;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 10px;
+}
+
+.qa-preview-img{
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+/* Wenn kein Preview vorhanden: rechte Spalte weg */
+.qa-card[data-has-preview="false"]{
+    grid-template-columns: 1fr;
+}
+
+.qa-card[data-has-preview="false"] .qa-preview{
+    display: none;
+}
+
+/* Responsive: Preview unter die Frage, falls wenig Platz */
+@media (max-width: 720px){
+    .qa-card{
+        grid-template-columns: 1fr;
+    }
+    .qa-preview{
+        order: 2;
+    }
+    .qa-left{
+        order: 1;
+    }
+}
+
+
+/*NUMBER_INPUT*/
+.qaInputRow{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.qaNumberInput{
+    flex: 1;
+    height: 56px;
+    border-radius: 16px;
+    border: 3px solid #fff;
+    padding: 0 16px;
+    font-size: 18px;
+    outline: none;
+    background: #fff;
+
+    -webkit-box-shadow: 0px 0px 9px 0px rgba(66, 68, 90, 1);
+    -moz-box-shadow: 0px 0px 9px 0px rgba(66, 68, 90, 1);
+    box-shadow: 0px 0px 9px 0px rgba(66, 68, 90, 1);
+}
+.qaEvaluateButton:disabled{
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.qaInputRight{
+    border-color: #2e7d32;
+}
+
+.qaInputWrong{
+    border-color: #c62828;
+}

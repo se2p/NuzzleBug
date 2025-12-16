@@ -28,13 +28,9 @@ import {
     RESPONSE_EXPLANATION1,
     RESPONSE_EXPLANATION2, RESPONSE_EXPLANATION3, RESPONSE_EXPLANATION4
 } from '../tutorial-constants.jsx';
-import {EuliBubble, UserBubble} from "../bubbles.jsx";
 import TestResults from "../test-results/test-results.jsx";
 import rightArrow from "../../cards/icon--next.svg";
 import leftArrow from "../../cards/icon--prev.svg";
-import ScratchBlocks from "scratchblocks-react";
-import RequestHintButton2 from "../GPT-prompts/hint-generation";
-import scratchblocks from "scratchblocks";
 import logging from 'scratch-vm/src/util/logging.js';
 import {
     checkUserMadeErrors,
@@ -44,7 +40,7 @@ import {
     resetHoldButton
 } from "./tutorial-step-util.jsx";
 import {ENABLE_RESET_BUTTON, ENABLE_TODO_BUTTON} from "../config.ts";
-import {renderFinalStep} from "../final-step.jsx";
+import {FinalStep, renderFinalStep} from "../final-step.jsx";
 import TutorialHelpPage from "./tutorial-help-page.jsx";
 import HintGenerator from "../GPT-prompts/hint-generation.js";
 const DebuggingTutorialStep = props => {
@@ -470,7 +466,7 @@ const DebuggingTutorialStep = props => {
     }
 
     const renderPage = () => {
-        if (reachedLastStep) return renderFinalStep(tutorialMessages);
+        if (reachedLastStep) return <FinalStep tutorialMessages={tutorialMessages} guiMessages={guiMessages} onBackToTutorialSelection={() => onBackToTutorialSelection()}/>; //TODO remove true
 
         switch (curPage) {
             case PAGE_OVERVIEW:
