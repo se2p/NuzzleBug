@@ -1,0 +1,280 @@
+
+.testContainer { /*DELETE*/
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    color: #575E75FF;
+    padding-top: 10px;
+    background-color: #ffffff;
+    background-image: url("../images/skulls.png");
+}
+
+.image-container {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+
+.owl-image {
+    width: 120px;
+    height: auto;
+}
+
+.helpWhiteBox {
+    background-color: white;
+    width: 90%;
+    min-height: 200px;
+    border-radius: 8px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    -moz-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    padding: 10px 0 10px 10px;
+    height: fit-content;
+}
+
+.helpContainer {
+    display: flex;
+    align-items: flex-start;
+    width: calc(100% - 35px);
+    justify-content: flex-start;
+    flex-direction: column;
+    margin-left: 35px;
+    padding-top: 10px;
+}
+
+.helpContainer > * {
+    transition: transform 300ms, opacity 300ms;
+}
+
+.clickIcon {
+    width: auto;
+    transform: scaleX(-1);
+    height: 1.2rem;
+}
+
+
+/*BUBBLE BLUE*/
+.EuliBubbleContainer {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 30px;
+}
+
+.helpBubbleEuli {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border-radius: 15px;
+    border: solid 3px #4D97FFFF;
+    background-color: #e4f0ff;
+    width: 100%;
+    z-index: 100;
+    text-align: left;
+    padding: 10px;
+    min-height: calc(2 * 0.9rem + 20px + 1.2rem);
+    height: fit-content;
+    margin-top: 10px;
+}
+
+.helpBubbleEuliIndicator {
+    position: absolute;
+    width: 35px;
+    height: auto;
+    right: 0;
+    top: 50%;
+    transform: translateX(102%) translateY(-40%);
+    z-index: -1;
+}
+
+
+/*HELP PAGE LOADER ANIMATION*/
+.helpPageLoader,
+.helpPageLoader:before,
+.helpPageLoader:after {
+    border-radius: 50%;
+    width: 2.5em;
+    height: 2.5em;
+    animation-fill-mode: both;
+    animation: bblFadInOut 2s infinite ease-in-out;
+}
+
+.helpPageLoader {
+    color: #5a6077ff;
+    font-size: 2px;
+    position: relative;
+    text-indent: -9999em;
+    transform: translateZ(0);
+    animation-delay: -0.16s;
+    display: inline-block;
+    margin-left: 4px;
+    margin-bottom: 4px;
+}
+
+.helpPageLoaderContainer {
+    animation: showLoader 0s 0.5s forwards;
+    opacity: 0;
+}
+
+@keyframes showLoader {
+    to { opacity: 1; }
+}
+
+.helpPageLoader:before,
+.helpPageLoader:after {
+    content: '';
+    position: absolute;
+    top: 0;
+}
+
+.helpPageLoader:before {
+    left: -3em;
+    animation-delay: -0.32s;
+}
+
+.helpPageLoader:after {
+    left: 3em;
+}
+
+@keyframes bblFadInOut {
+    0%, 80%, 100% { box-shadow: 0 2.5em 0 -1.3em }
+    40% { box-shadow: 0 2.5em 0 0 }
+}
+
+
+
+/*HELP PAGE BUBBLE CODE FADE IN*/
+.fadeIn {
+    width: calc(100% - 20px);
+    margin-right: 20px;
+    opacity: 0;
+    animation: fadeInAnim 0.5s ease forwards;
+}
+
+@keyframes fadeInAnim {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/*GREY BUBBLE STATIC*/
+.greyBubble {
+    display: inline-block;
+    position: relative;
+    border-radius: 15px;
+    background-color: #ededed;
+    border: solid 3px #ededed;
+    width: 100%;
+    z-index: 100;
+    text-align: left;
+    padding: 10px;
+    margin-bottom: 20px;
+    margin-right: 35px;
+}
+
+/*GREY BUBBLE FOR USER_INTERACTION*/
+
+.helpBubble {
+    display: inline-block;
+    position: relative;
+    border-radius: 15px;
+    background-color: #ededed;
+    border: solid 3px #ededed;
+    width: 100%;
+    z-index: 100;
+    text-align: left;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    margin-right: 35px;
+}
+
+.helpBubble:hover .selectionBubbleIndicator {
+    background-image: url('../images/selectionBubbleDecalGrey.png');
+}
+
+.helpBubble.selected {
+    background-color: #5a6077ff;
+    border: solid 3px #5a6077ff;
+    color: white;
+}
+
+.helpBubble.selected .selectionBubbleIndicator {
+    background-image: url('../images/selectionBubbleDecalDark.png');
+}
+
+.helpBubble:not(.selected):hover {
+    cursor: pointer;
+    background-color: #cecece;
+    border-color: #CECECEFF;
+    z-index: 100;
+}
+
+.selectionBubbleIndicator {
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    top: 50%;
+    left: 0;
+    z-index: -1;
+    transform: translateX(-102%) translateY(-40%);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url('../images/selectionBubbleDecalLight.png');
+}
+
+/*CODE SELECTION*/
+.codeSelection {
+     display: grid;
+     grid-template-columns: repeat(3, 1fr);
+     gap: 10px;
+     align-items: start;
+ }
+
+
+.code {
+    appearance: none;
+    border: 3px solid var(--option-bg);
+    background: var(--option-bg);
+    border-radius: 14px;
+    padding: 8px;
+    cursor: pointer;
+
+    -webkit-box-shadow: 0px 0px 9px 0px rgba(66, 68, 90, 1);
+    -moz-box-shadow: 0px 0px 9px 0px rgba(66, 68, 90, 1);
+    box-shadow: 0px 0px 9px 0px rgba(66, 68, 90, 1);
+
+    align-items: center;
+    justify-content: center;
+
+    display: block;
+    min-width: 0;
+
+}
+
+.code :global(*) {
+    pointer-events: none;
+}
+
+.code:hover{
+    transform: scale(1.03);
+}
+
+.codeSelected {
+    border-color: #575E75FF;
+    background: #575E75FF;
+}
