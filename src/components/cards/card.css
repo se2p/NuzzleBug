@@ -121,6 +121,22 @@
     flex-direction: row;
 }
 
+.headerScorePill {
+    border-radius: 7px;
+    width: 25px;
+    padding: 2px 0;
+    font-weight: bold;
+    color: #4c97ffff;
+    font-size: 0.8rem;
+    text-align: center;
+    background-color: white;
+    margin-bottom: 2px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .header-buttons img {
     margin-bottom: 2px;
 }
