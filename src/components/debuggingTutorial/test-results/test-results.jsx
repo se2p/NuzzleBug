@@ -111,7 +111,7 @@ const renderResponse = ({hasCodeUpdated, projectLoadingState, curTestDetails, ne
         );
     }
 
-    if ((hasCodeUpdated || (projectLoadingState === "TEST")) && projectLoadingState !== "TEST_PAUSE" && help) {
+    if (hasCodeUpdated && projectLoadingState !== "TEST_PAUSE") {
         return (
             <div className={`${css.helpBubble} ${(projectLoadingState !== "TEST") ? '' : css.selected}`} onClick={() => { if (projectLoadingState !== "TEST") handleTestStart()}} style={{marginBottom: "0px"}}>
                 <div className={css.selectionBubbleIndicator} />
