@@ -7,7 +7,6 @@ import bubbleIndicatorBlue from "../images/bubbleIDecalBlue2.png";
 import {TypewriterText} from "../test-results/test-utils.jsx";
 import clickIcon from "../images/clickIcon.png"
 import {FitToWidth} from "../typewriter.jsx";
-
 const TutorialHelpPage = ({
                               help,
                               isGeneratingHint,
@@ -19,14 +18,21 @@ const TutorialHelpPage = ({
                               locale,
                               optionSelected,
                               setOptionSelected,
+                              removeTutorialPoint,
+                              shuffledOptionIndexes,
                   }) => {
 
     const msg = guiMessages.help_page;
-    const [selectedOption, setSelectedOption] = useState(0);
+    const [selectedOption, setSelectedOption] = useState(-1);
+
+    const optA = shuffledOptionIndexes[0];
+    const optB = shuffledOptionIndexes[1];
+    const optC = shuffledOptionIndexes[2];
+
     /**
      * Translates the given scratchBlocksText. Currently only en and de are supported.
      */
-    const translate = (scratchBlocksText) => {
+    const translate3 = (scratchBlocksText) => {
         if (!scratchBlocksText) return "";
 
         const block = scratchblocks.parse(scratchBlocksText, {
@@ -38,12 +44,41 @@ const TutorialHelpPage = ({
         return block.stringify();
     };
 
+    const translate = (scratchBlocksText) => {
+        if (typeof scratchBlocksText !== "string" || scratchBlocksText.trim() === "") return "";
+
+        try {
+            const langs = [scratchblocks.allLanguages.en, scratchblocks.allLanguages.de];
+
+            const parsed = scratchblocks.parse(scratchBlocksText, { lang: "en" });
+
+            if (locale === "de") {
+                // parse() kann je nach Input eine Liste zurückgeben
+                if (Array.isArray(parsed)) {
+                    parsed.forEach(b => b?.translate?.(scratchblocks.allLanguages.de));
+                } else {
+                    parsed?.translate?.(scratchblocks.allLanguages.de);
+                }
+            }
+
+            // stringify ebenfalls je nach Typ
+            if (Array.isArray(parsed)) {
+                return parsed.map(b => b.stringify()).join("\n\n");
+            }
+            return parsed.stringify();
+        } catch (e) {
+            console.log("ERROR: " + e + ": " + scratchBlocksText)
+            // Fallback: im Worst Case den Originaltext anzeigen statt UI zu crashen
+            return scratchBlocksText;
+        }
+    };
+
     return (
         <div className={css.testContainer}>
             <div className={css.helpWhiteBox}>
                 <div className={css.helpContainer}>
                     <>
-                        {!optionSelected && <div className={css.EuliBubbleContainer}>
+                        {selectedOption === -1 && <div className={css.EuliBubbleContainer}>
                             <div className={css.helpBubbleEuli}>
                                 <img
                                     className={css.helpBubbleEuliIndicator}
@@ -81,33 +116,33 @@ const TutorialHelpPage = ({
                                     <div className={css.selectionBubbleIndicator} />
 
                                     <div className={css.codeSelection}>
-                                        <div className={`${css.code} ${selectedOption === 1 ? css.codeSelected : ''}`} onClickCapture={() => setSelectedOption(1)}>
+                                        <div className={`${css.code} ${selectedOption === optA ? css.codeSelected : ''}`} onClickCapture={() => {setSelectedOption(optA); if (!help.solutionOptions[optA].isCorrect) removeTutorialPoint()}}>
                                             <FitToWidth>
                                                 <ScratchBlocks
                                                     blockStyle="scratch3"
                                                     languages={['en', 'de']}
                                                 >
-                                                    {translate(help.solutionOptions[0].code)}
+                                                    {translate(help?.solutionOptions[optA].code)}
                                                 </ScratchBlocks>
                                             </FitToWidth>
                                         </div>
-                                        <div className={`${css.code} ${selectedOption === 2 ? css.codeSelected : ''}`} onClickCapture={() => setSelectedOption(2)}>
+                                        <div className={`${css.code} ${selectedOption === optB ? css.codeSelected : ''}`} onClickCapture={() => {setSelectedOption(optB); if (!help.solutionOptions[optB].isCorrect) removeTutorialPoint()}}>
                                             <FitToWidth>
                                                 <ScratchBlocks
                                                     blockStyle="scratch3"
                                                     languages={['en', 'de']}
                                                 >
-                                                    {translate(help.solutionOptions[1].code)}
+                                                    {translate(help?.solutionOptions[optB].code)}
                                                 </ScratchBlocks>
                                             </FitToWidth>
                                         </div>
-                                        <div className={`${css.code} ${selectedOption === 3 ? css.codeSelected : ''}`} onClickCapture={() => setSelectedOption(3)}>
+                                        <div className={`${css.code} ${selectedOption === optC ? css.codeSelected : ''}`} onClickCapture={() => {setSelectedOption(optC); if (!help.solutionOptions[optC].isCorrect) removeTutorialPoint()}}>
                                             <FitToWidth>
                                                 <ScratchBlocks
                                                     blockStyle="scratch3"
                                                     languages={['en', 'de']}
                                                 >
-                                                    {translate(help.solutionOptions[2].code)}
+                                                    {translate(help?.solutionOptions[optC].code)}
                                                 </ScratchBlocks>
                                             </FitToWidth>
                                         </div>
@@ -117,27 +152,27 @@ const TutorialHelpPage = ({
                             </div>
                         }
 
-                        {selectedOption !== 0 && !optionSelected && <div className={css.fadeIn}>
+                        {/*selectedOption !== 0 && !optionSelected && <div className={css.fadeIn}>
                             <div
                                 className={css.helpBubble} onClick={setOptionSelected}
                             >
                                 <div className={css.selectionBubbleIndicator} />
                                 <span>Überprüfe meine Auswahl <img src={clickIcon} draggable={false} className={css.clickIcon}/></span>
                             </div>
-                        </div>}
+                        </div>*/}
 
 
 
 
 
-                        {optionSelected && <div className={css.EuliBubbleContainer}>
+                        {selectedOption !== -1 && <div className={css.EuliBubbleContainer}>
                             <div className={css.helpBubbleEuli}>
                                 <img
                                     className={css.helpBubbleEuliIndicator}
                                     alt="Bubble-Decal"
                                     src={bubbleIndicatorBlue}
                                 />
-                                <TypewriterText text={help.solutionOptions[selectedOption - 1].explanation + (help.solutionOptions[selectedOption - 1].isCorrect ? "\n\n Sehr gut!" : "")} speed={15}/>
+                                <TypewriterText text={help.solutionOptions[selectedOption].explanation + (help.solutionOptions[selectedOption].isCorrect ? "\n\n Sehr gut!" : "")} speed={15}/>
                             </div>
 
                             <div className={css.imageContainer}>
