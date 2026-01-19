@@ -25,6 +25,7 @@ class DebuggingTutorialOverview extends React.Component {
         const isNewTutorialSelected = this.props.tutorialMessages?.title !== this.props.lastStartedTutorial;
 
         if (isNewTutorialSelected) {
+            this.props.setTutorialPoints(0);
             this.props.setLastStartedTutorial(this.props.tutorialMessages?.title);
             if (this.props.autoSave === "YES") {
                 this.props.setLoading(true);
@@ -155,6 +156,7 @@ DebuggingTutorialOverview.propTypes = {
     isProjectEmpty: PropTypes.bool,
     isNewTutorialSelected: PropTypes.bool,
     guiMessages: PropTypes.any,
+    setTutorialPoints: PropTypes.func,
 };
 
 const mapStateToProps = state => ({

@@ -16,6 +16,7 @@ import difficulty3 from "./images/difficultyIconHard.png"
 
 import {CONTENT_START_TUTORIAL, CONTENT_DESCRIPTION} from "./tutorial-constants.jsx";
 import rightArrow from "../cards/icon--next.svg";
+import {parseColoredText} from "./typewriter.jsx";
 
 const difficultyImages = {
     1: difficulty1,
@@ -160,65 +161,6 @@ const DebuggingTutorialOverview = props => {
             );
         }
     }
-
-    const  parseColoredText = (input) => {
-        const result = [];
-        const lines = input.split("\n");
-
-        lines.forEach((line, lineIndex) => {
-            const parts = [];
-            const regex = /<color=(#[0-9a-fA-F]{6})>(.*?)<\/color>|<img\s+([^>]+)>/g;
-
-            let lastIndex = 0;
-            let match;
-
-            while ((match = regex.exec(line)) !== null) {
-                const [fullMatch, color, colorText, imgSrc] = match;
-                const start = match.index;
-
-                // Text vor dem Match
-                if (start > lastIndex) {
-                    parts.push(line.substring(lastIndex, start));
-                }
-
-                if (color && colorText) {
-                    // Gefärbter & fetter Text
-                    parts.push(
-                        React.createElement(
-                            "span",
-                            {
-                                key: `color-${lineIndex}-${start}`,
-                                style: { color, fontWeight: "bold" },
-                            },
-                            colorText
-                        )
-                    );
-                } else if (imgSrc) {
-                    // Bild einfügen
-                    parts.push(
-                        <img src={tutorialIndexData[imgSrc.trim()]} draggable={false} className={css.textImage} alt={""}/>
-                    );
-                }
-
-                lastIndex = start + fullMatch.length;
-            }
-
-            // Restlicher Text nach dem letzten Match
-            if (lastIndex < line.length) {
-                parts.push(line.substring(lastIndex));
-            }
-
-            result.push(...parts);
-
-            // Zeilenumbruch
-            if (lineIndex < lines.length - 1) {
-                result.push(React.createElement("br", { key: `br-${lineIndex}` }));
-            }
-        });
-
-        return result;
-    }
-
 
     /**
      * Get Eulis response based on the selected autoSafe method.

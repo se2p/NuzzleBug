@@ -76,7 +76,7 @@ export default {
         failed: "Gescheitert",
         passed: "Bestanden",
         loading: "Lade...",
-        test_again: "Ja, teste erneut!",
+        test_again: "Teste erneut!",
         next_step: "Zum nächsten Schritt",
     },
 
