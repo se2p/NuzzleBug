@@ -1,3 +1,17 @@
+:root{
+    --bg: #ffffff;
+    --text: #1f2937;
+    --muted: #6b7280;
+
+    --card-border: #e5e7eb;
+    --option-border: #a9c7ff;
+    --option-bg: #f8fafcff;
+
+    --shadow: 0 10px 30px rgba(0,0,0,.08);
+    --radius: 16px;
+    --gap: 18px;
+}
+
 /* CP - Control Panel */
 .cpContainer {
     height: 100vh;
@@ -196,23 +210,6 @@
     background-color: #FFFFFF;
     position: relative;
     z-index: 2;
-}
-
-
-
-
-:root{
-    --bg: #ffffff;
-    --text: #1f2937;
-    --muted: #6b7280;
-
-    --card-border: #e5e7eb;
-    --option-border: #a9c7ff;
-    --option-bg: #f8fafcff;
-
-    --shadow: 0 10px 30px rgba(0,0,0,.08);
-    --radius: 16px;
-    --gap: 18px;
 }
 
 .qa-card{
