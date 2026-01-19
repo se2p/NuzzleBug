@@ -647,3 +647,38 @@ code {
 .tutorial-debugging:hover {
     background-color: #bed3bf;
 }
+
+.flash {
+    animation: scorePopGlow 600ms cubic-bezier(.2, .9, .2, .5);
+    transform-origin: center;
+    will-change: transform;
+}
+
+.flash span {
+    animation: scoreTextFlash 600ms cubic-bezier(.2, .9, .2, .5);
+    will-change: color;
+}
+
+/* Pop + Glow der Pill */
+@keyframes scorePopGlow {
+    0%   { transform: scale(1);}
+    20%  { transform: scale(1.18);}
+    45%  { transform: scale(0.95);}
+    100% { transform: scale(1);}
+}
+
+@keyframes scoreTextFlash {
+    0%   { color: #4D97FFFF; }
+    20%  { color: #575E75FF; }
+    45%  { color: #4D97FFFF; }
+    100% { color: #4D97FFFF; }
+}
+
+.score-button {
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0.75rem;
+}

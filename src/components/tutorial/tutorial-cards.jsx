@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import PropTypes, {func} from 'prop-types';
-import React, {Fragment, useEffect} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import Draggable from 'react-draggable';
 import {injectIntl, FormattedMessage} from 'react-intl';
 
@@ -21,13 +21,13 @@ import VirtualMachine from 'scratch-vm';
 import DebuggingTutorialHelp from "../../containers/debugging-tutorial-help.jsx";
 import DebuggingTutorialOverview from "../../containers/debugging-tutorial-overview.jsx";
 import DebuggingTutorialStep from "../../containers/debugging-tutorial-step.jsx";
-import TutorialItem from "../debuggingTutorial/tutorial-item.jsx";
-import TutorialSelection from "../debuggingTutorial/tutorial-selection.jsx";
+import TutorialItem from "../debuggingTutorial/tutorial-selection/tutorial-item.jsx";
+import TutorialSelection from "../debuggingTutorial/tutorial-selection/tutorial-selection.jsx";
 
 
 
 const NextPrevButtons = ({isMenuVisible, onNextStep, onPrevStep, expanded}) => (
-    isMenuVisible ? null :
+    !isMenuVisible ? null :
         (<Fragment>
             {onNextStep ? (
                 <div>
@@ -86,6 +86,7 @@ const TutorialHeader = props => {
         step,
         expanded,
         contentType,
+        tutorialPoints
     } = props;
 
     const isBackButtonEnabled = contentType === "DEBUGGING_STEP" || contentType === "DEBUGGING_HELP";
@@ -93,7 +94,7 @@ const TutorialHeader = props => {
     if (contentType === "DEBUGGING_STEP") {
         homeButtonText = backButtonTitle;
     } else if (contentType === "DEBUGGING_HELP") {
-        homeButtonText = "Aktueller Schritt";
+        homeButtonText = "Back";
     } else {homeButtonText = homeButtonTitle;}
 
     return (
@@ -101,17 +102,25 @@ const TutorialHeader = props => {
             className={expanded ? classNames(styles.headerButtons, tutorialStyles.headerButtons) :
                 classNames(styles.headerButtons, tutorialStyles.headerButtons, styles.headerButtonsHidden)}
         >
-            {totalSteps > 1 && !isMenuVisible ? (
-                <div className={styles.stepsList} style={{marginLeft: '18px'}}>
-                    {Array(totalSteps).fill(0)
-                        .map((_, i) => (
-                            <div
-                                className={i === step ? styles.activeStepPip : styles.inactiveStepPip}
-                                key={`pip-step-${i}`}
-                            />
-                        ))}
-                </div>
-            ) : null}
+            <div style={{display: "flex"}}>
+                {totalSteps > 1 && !isMenuVisible ? (
+                    <div className={styles.stepsList} style={{marginLeft: '18px'}}>
+                        {Array(totalSteps).fill(0)
+                            .map((_, i) => (
+                                <div
+                                    className={i === step ? styles.activeStepPip : styles.inactiveStepPip}
+                                    key={`pip-step-${i}`}
+                                />
+                            ))}
+                    </div>
+                ) : null}
+
+                {isBackButtonEnabled && <div className={tutorialStyles.scoreButton}>
+                    <FlashingSpan text={tutorialPoints}/>
+                    Punkte
+                </div>}
+            </div>
+
             <div className={tutorialStyles.cardTitleHeader}>
                 <span> {title} </span>
             </div>
@@ -181,8 +190,29 @@ TutorialHeader.propTypes = {
     onShrinkExpandCards: PropTypes.func.isRequired,
     onHomeMenu: PropTypes.func.isRequired,
     step: PropTypes.number,
-    totalSteps: PropTypes.number
+    totalSteps: PropTypes.number,
+    tutorialPoints: PropTypes.number
 };
+
+
+export function FlashingSpan({ text }) {
+    const [flash, setFlash] = useState(false);
+
+    useEffect(() => {
+        setFlash(true);
+        const t = setTimeout(() => setFlash(false), 600);
+        return () => clearTimeout(t);
+    }, [text]);
+
+    return (
+        <div
+            className={`${styles.headerScorePill} ${flash ? tutorialStyles.flash : ""}`}
+        >
+            <span>{text}</span>
+        </div>
+    );
+}
+
 
 const TutorialCards = props => {
     const {
@@ -218,6 +248,9 @@ const TutorialCards = props => {
         tutorialIndexData,
         onScrollBottom,
         onBackToTutorialSelection,
+        setMouseEnabled,
+        tutorialPoints,
+        setTutorialPoints,
         ...posProps
     } = props;
     let {x, y} = posProps;
@@ -246,15 +279,6 @@ const TutorialCards = props => {
 
         switch (contentType) {
             case "TUTORIAL_SELECTED":
-                /*return <TutorialStep
-                guiMessages={guiMessages}
-                tutorialMessages={tutorialMessages}
-                detectors={detectors}
-                step={step}
-                nextStep={onNextStep}
-                vm={vm}
-                tutorialIndexData={tutorialIndexData}
-            />;*/
                 return <DebuggingTutorialOverview
                     tutorialMessages={tutorialMessages}
                     tutorialPicture={tut[0].img}
@@ -263,47 +287,8 @@ const TutorialCards = props => {
                     stepCount={totalSteps}
                     tutorialIndexData={tutorialIndexData}
                     guiMessages={guiMessages}
+                    setTutorialPoints={setTutorialPoints}
                 />
-
-                /*return <TutorialStep
-                    guiMessages={guiMessages}
-                    tutorialMessages={tutorialMessages}
-                    detectors={detectors}
-                    step={step}
-                    nextStep={onNextStep}
-                    vm={vm}
-                    tutorialIndexData={tutorialIndexData}
-                />;*/
-
-                /*if (isDebuggingTutorialSelected) { //TODO vereinheitlichen
-                    return <DebuggingTutorialOverview
-                        tutorialMessages={tutorialMessages}
-                        tutorialPicture={tut[0].img}
-                        onStartTutorial={onStartTutorial}
-                        vm={vm}
-                        stepCount={totalSteps}
-                        tutorialIndexData={tutorialIndexData}
-                    />;
-                } else {
-                    return <DebuggingTutorialOverview
-                        tutorialMessages={tutorialMessages}
-                        vm={vm}
-                        tutorialIndexData={tutorialIndexData}
-
-                        onStartTutorial={onStartTutorial}
-                        tutorialPicture={tut[0].img}
-                        stepCount={totalSteps}
-                    />
-                    /*return <TutorialStep
-                        guiMessages={guiMessages}
-                        tutorialMessages={tutorialMessages}
-                        detectors={detectors}
-                        step={step}
-                        nextStep={onNextStep}
-                        vm={vm}
-                        tutorialIndexData={tutorialIndexData}
-                    />;*/
-
             case "DEBUGGING_STEP":
                 return <DebuggingTutorialStep
                     onOpenHelp={onOpenHelp}
@@ -317,6 +302,10 @@ const TutorialCards = props => {
                     isDebuggingTutorial={isDebuggingTutorialSelected}
                     detectors={detectors}
                     onBackToTutorialSelection={onBackToTutorialSelection}
+                    guiMessages={guiMessages}
+                    setMouseEnabled={setMouseEnabled}
+                    setTutorialPoints={setTutorialPoints}
+                    tutorialPoints={tutorialPoints}
                 />;
             case "DEBUGGING_HELP":
                 return <DebuggingTutorialHelp
@@ -324,6 +313,8 @@ const TutorialCards = props => {
                     tutorialIndexData={tutorialIndexData}
                     stepNumber={step}
                     onScrollBottom={onScrollBottom}
+                    onHomeMenu={onHomeMenu}
+                    guiMessages={guiMessages}
                 />
             default: //Show tutorial selection
                 return <TutorialSelection
@@ -331,24 +322,6 @@ const TutorialCards = props => {
                     tutorials={tutorials}
                     guiMessages={guiMessages}
                 />
-
-
-                /*return Array(tutorials.length).fill(0)
-                    .map((_, i) => (
-                        <Tutorial
-                            isDebuggingTutorial={tutorials[i].isDebuggingTutorial}
-                            key={tutorials[i].id}
-                            content={tutorials[i]}
-                            onSelect={onSelectTutorial}
-                        />
-
-                        <TutorialItem
-                            isDebuggingTutorial={tutorials[i].isDebuggingTutorial}
-                            key={tutorials[i].id}
-                            content={tutorials[i]}
-                            onSelect={onSelectTutorial}
-                        />
-                    ));*/
         }
     }
 
@@ -384,6 +357,7 @@ const TutorialCards = props => {
                             onShrinkExpandCards={onShrinkExpandCards}
                             onHomeMenu={onHomeMenu}
                             contentType={contentType}
+                            tutorialPoints={tutorialPoints}
                         />
                         <div
                             className={expanded ? classNames(styles.stepBody, tutorialStyles.stepBody) : styles.hidden}
@@ -391,7 +365,7 @@ const TutorialCards = props => {
                         >
                             {parseContent()}
                         </div>
-                        {/*!isDebuggingTutorialSelected && <NextPrevButtons
+                        {/*<NextPrevButtons
                             isMenuVisible={isMenuVisible}
                             expanded={expanded}
                             onNextStep={step < totalSteps - 1 && step < currentTutorialStep ?
@@ -401,7 +375,7 @@ const TutorialCards = props => {
                         }
                         {expanded ?
                             <div className={tutorialStyles.footer}>
-                                <p className={tutorialStyles.footerText}>Du schaffst das!</p>
+                                <p className={tutorialStyles.footerText}>&nbsp;</p>
 
                             </div> : null}
                     </div>
@@ -453,6 +427,8 @@ TutorialCards.propTypes = {
     onOpenHelp: PropTypes.func,
     onStartTutorial: PropTypes.func.isRequired,
     onScrollBottom: PropTypes.func,
+    setMouseEnabled: PropTypes.func,
+    setTutorialPoints: PropTypes.func,
 };
 
 export default injectIntl(TutorialCards);

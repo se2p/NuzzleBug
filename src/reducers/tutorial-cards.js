@@ -14,6 +14,7 @@ const HOME_MENU = 'scratch-gui/tutorial-cards/HOME_MENU';
 const SET_CONTENT = 'scratch-gui/tutorial-cards/SET_CONTENT';
 const START_TUTORIAL = 'scratch-gui/tutorial-cards/START_TUTORIAL';
 const OPEN_HELP = 'scratch-gui/tutorial-cards/OPEN_HELP';
+const SET_TUTORIAL_POINTS = 'scratch-gui/tutorial-cards/SET_TUTORIAL_POINTS';
 
 const initialState = {
     visible: false,
@@ -26,6 +27,7 @@ const initialState = {
     expanded: true,
     dragging: false,
     contentType: "OVERVIEW",
+    tutorialPoints: 0,
 };
 
 const reducer = function (state, action) {
@@ -98,6 +100,10 @@ const reducer = function (state, action) {
         return Object.assign({}, state, {
             contentType: 'DEBUGGING_HELP'
         });
+    case SET_TUTORIAL_POINTS:
+        return Object.assign({}, state, {
+            tutorialPoints: action.points
+        });
     default:
         return state;
     }
@@ -155,6 +161,10 @@ const onOpenHelp = function () {
     return {type: OPEN_HELP}
 }
 
+const setTutorialPoints = function (points) {
+    return {type: SET_TUTORIAL_POINTS, points};
+}
+
 export {
     reducer as default,
     initialState as tutorialCardsInitialState,
@@ -170,5 +180,6 @@ export {
     homeMenu,
     setContentType,
     onStartTutorial,
-    onOpenHelp
+    onOpenHelp,
+    setTutorialPoints
 };

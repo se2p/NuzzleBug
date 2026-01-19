@@ -16,6 +16,7 @@ import {
     setContentType,
     onStartTutorial,
     onOpenHelp,
+    setTutorialPoints,
 } from '../reducers/tutorial-cards';
 import {reset} from '../reducers/tutorial-step';
 
@@ -41,7 +42,6 @@ class TutorialCards extends React.Component {
         const values = Object.values(tutorials);
         for (let i = 0; i < values.length; i++) {
             const tutorial = values[i];
-
             let messages = tutorial[`messages${this.props.locale.toUpperCase()}`];
             if (typeof messages === 'undefined') {
                 messages = tutorial.messagesDE;
@@ -150,6 +150,7 @@ class TutorialCards extends React.Component {
                 onStartTutorial={this.handleStartTutorial}
                 onScrollBottom={this.scrollToBottom}
                 onBackToTutorialSelection={this.onBackToTutorialSelection}
+                setTutorialPoints={setTutorialPoints}
                 {...this.props}
             />
         );
@@ -172,7 +173,10 @@ TutorialCards.propTypes = {
     contentType: PropTypes.string,
     vm: PropTypes.instanceOf(VirtualMachine).isRequired,
     startTutorial: PropTypes.func,
-    onBackToTutorialSelection: PropTypes.func
+    onBackToTutorialSelection: PropTypes.func,
+    setMouseEnabled: PropTypes.func,
+    tutorialPoints: PropTypes.number,
+    setTutorialPoints: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -189,6 +193,7 @@ const mapStateToProps = state => ({
     isRtl: state.locales.isRtl,
     dragging: state.scratchGui.tutorialCards.dragging,
     contentType: state.scratchGui.tutorialCards.contentType,
+    tutorialPoints: state.scratchGui.tutorialCards.tutorialPoints,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -205,6 +210,7 @@ const mapDispatchToProps = dispatch => ({
     onSetContentType: (contentType) => dispatch(setContentType(contentType)),
     startTutorial: () => dispatch(onStartTutorial()),
     onOpenHelp: () => dispatch(onOpenHelp()),
+    setTutorialPoints: (points) => dispatch(setTutorialPoints(points)),
 });
 
 export default connect(
