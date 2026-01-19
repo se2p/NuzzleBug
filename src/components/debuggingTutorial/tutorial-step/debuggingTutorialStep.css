@@ -962,7 +962,7 @@
 
 
 
-.testContainer { /*DELETE*/
+.testContainer {
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -1184,39 +1184,6 @@
 
 
 
-
-/*HelpSection*/
-.helpWhiteBox {
-    background-color: white;
-    width: 90%;
-    min-height: 200px;
-    border-radius: 8px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: flex-start;
-    box-sizing: border-box;
-    box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
-    -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
-    -moz-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
-    padding: 10px 0 10px 10px;
-    height: fit-content;
-}
-
-.helpContainer {
-    display: flex;
-    align-items: flex-start;
-    width: 100%;
-    justify-content: flex-start;
-    flex-direction: column;
-    margin-right: 35px; /*Berücksichtigt die Breite der Bubble-Indikatoren*/
-    margin-left: 35px; /*Berücksichtigt die Breite der Bubble-Indikatoren*/
-    padding-top: 10px;
-}
-
-.helpContainer > * {
-    transition: transform 300ms, opacity 300ms;
-}
 
 
 
@@ -1951,58 +1918,6 @@
 
 
 
-/*HELP PAGE LOADER ANIMKATION*/
-.helpPageLoader,
-.helpPageLoader:before,
-.helpPageLoader:after {
-    border-radius: 50%;
-    width: 2.5em;
-    height: 2.5em;
-    animation-fill-mode: both;
-    animation: bblFadInOut 2s infinite ease-in-out;
-}
-
-.helpPageLoader {
-    color: #5a6077ff;
-    font-size: 2px;
-    position: relative;
-    text-indent: -9999em;
-    transform: translateZ(0);
-    animation-delay: -0.16s;
-    display: inline-block;
-    margin-left: 4px;
-    margin-bottom: 4px;
-}
-
-.helpPageLoaderContainer {
-    animation: showLoader 0s 0.5s forwards;
-    opacity: 0;
-}
-
-@keyframes showLoader {
-    to { opacity: 1; }
-}
-
-.helpPageLoader:before,
-.helpPageLoader:after {
-    content: '';
-    position: absolute;
-    top: 0;
-}
-
-.helpPageLoader:before {
-    left: -3em;
-    animation-delay: -0.32s;
-}
-
-.helpPageLoader:after {
-    left: 3em;
-}
-
-@keyframes bblFadInOut {
-    0%, 80%, 100% { box-shadow: 0 2.5em 0 -1.3em }
-    40% { box-shadow: 0 2.5em 0 0 }
-}
 
 /*HELP PAGE BUBBLE CODE FADE IN*/
 .fadeIn {
