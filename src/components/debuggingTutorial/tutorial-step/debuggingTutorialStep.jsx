@@ -43,6 +43,7 @@ import {ENABLE_RESET_BUTTON, ENABLE_TODO_BUTTON} from "../config.ts";
 import {FinalStep, renderFinalStep} from "../final-step.jsx";
 import TutorialHelpPage from "./tutorial-help-page.jsx";
 import HintGenerator from "../GPT-prompts/hint-generation.js";
+import {parseColoredText} from "../typewriter.jsx";
 const DebuggingTutorialStep = props => {
     const {
         onOpenHelp,
@@ -86,6 +87,8 @@ const DebuggingTutorialStep = props => {
         setSelectedSprite,
         selectedSprite,
         vm,
+        removeTutorialPoint,
+        tutorialPoints,
         ...posProps
     } = props;
 
@@ -235,7 +238,7 @@ const DebuggingTutorialStep = props => {
                                     style={{backgroundColor: contentType === "DETAILS" ? "#4D97FFFF" : ""}} id="beschreibungTab"
                                     onClick={() => setContentType("DETAILS")}>
                                 <div style={{display: "flex", alignItems: "center"}}>
-                                    <img className={css.icon} src={iconDescription} alt={"errorIcon"}/>
+                                    <img className={css.icon} src={iconDescription} alt={"errorIcon"} draggable={false}/>
                                     {guiMessages.step.description}
                                 </div>
                             </button>
@@ -245,7 +248,7 @@ const DebuggingTutorialStep = props => {
                                         style={{backgroundColor: contentType === "ERRORS" ? "#cf3b28FF" : ""}} id="fehlerTab"
                                         onClick={() => setContentType("ERRORS")}>
                                     <div style={{display: "flex", alignItems: "center"}}>
-                                        <img className={css.icon} src={iconErrors} alt={"errorIcon"}/>
+                                        <img className={css.icon} src={iconErrors} alt={"errorIcon"} draggable={false}/>
                                         {guiMessages.step.error}
                                     </div>
                                 </button>
@@ -255,7 +258,7 @@ const DebuggingTutorialStep = props => {
                                     style={{backgroundColor: contentType === "CONTROLS" ? "#ffab19ff" : ""}} id="steuerungTab"
                                     onClick={() => setContentType("CONTROLS")}>
                                 <div style={{display: "flex", alignItems: "center"}}>
-                                    <img className={css.icon} src={iconControls} alt={"errorIcon"}/>
+                                    <img className={css.icon} src={iconControls} alt={"errorIcon"} draggable={false}/>
                                     {guiMessages.step.controls}
                                 </div>
                             </button>}
@@ -335,7 +338,7 @@ const DebuggingTutorialStep = props => {
                         <div className={css.textArea}>
                             <h1>{tutorialMessages[overviewStep]["title"]}</h1>
                             <p>
-                                {tutorialMessages[overviewStep]["description"]}
+                                {parseColoredText(tutorialMessages[overviewStep]["description"])}
                             </p>
                         </div>
                         <div className={css.verticalLineContainer}>
@@ -382,7 +385,7 @@ const DebuggingTutorialStep = props => {
                         <div className={css.controlContainer}>
                             {generateControlImages(tutorialMessages, overviewStep)}
                         </div>
-                        <p className={css.p} style={{textAlign:"center"}}>{tutorialMessages[overviewStep]["controlInfo"]}</p>
+                        <p className={css.p} style={{textAlign:"center"}}>{parseColoredText(tutorialMessages[overviewStep]["controlInfo"])}</p>
                     </div>
                 );
             default:
@@ -443,12 +446,24 @@ const DebuggingTutorialStep = props => {
     const [help, setHelp] = useState(null);
     const [isGeneratingHint, setIsGeneratingHint] = useState(true);
     const [finishedAnswer, setFinishedAnswer] = useState(false);
+    const [optionSelected, setOptionSelected] = useState(false);
+    const [shuffledOptionIndexes, setShuffledOptionIndexes] = useState(generateRandom123());
+
+    const [hint, setHint] = useState({
+        problemText: "",
+        solutionOptions: [
+            { id:"A", code:"", isCorrect:true,  explanation:"" },
+            { id:"B", code:"", isCorrect:false, explanation:"" },
+            { id:"C", code:"", isCorrect:false, explanation:"" }
+        ]
+    });
 
     const requestHint = (fastMode) => {
+        setShuffledOptionIndexes(generateRandom123()); //Irgendwie komisch!
         setCurPage(PAGE_HELP);
         setIsGeneratingHint(true);
         setFinishedAnswer(false);
-
+        setShuffledOptionIndexes(generateRandom123());
         const result = testResults.details.find(e => e.testId === curTestDetails)?.prompt;
         const passedDescriptions = testResults.details
             .filter(e => e.result === "pass")
@@ -457,16 +472,29 @@ const DebuggingTutorialStep = props => {
 
         if (logging.isActive()) { logging.logClickEvent('BUTTON', new Date(), 'OPEN_HELP_PAGE', null); }
 
-        HintGenerator.generateHint(vm.toJSON(), result, passedDescriptions, vm.getLocale(), fastMode)
-            .then(hint => {
-                setHelp(hint);
+        HintGenerator.generateHint(vm.toJSON(), result, passedDescriptions, vm.getLocale(), fastMode, (h) => {setHint(h); setIsGeneratingHint(false);})
+            .then(hint1 => {
+
+                setHelp(hint1);
                 setIsGeneratingHint(false);
-                logResponse(hint, curTestDetails, result);})
+                logResponse(hint1, curTestDetails, result);})
             .catch(err => console.error(err));
     }
 
+
+    function generateRandom123() {
+        const arr = [0, 1, 2];
+
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+
     const renderPage = () => {
-        if (reachedLastStep) return <FinalStep tutorialMessages={tutorialMessages} guiMessages={guiMessages} onBackToTutorialSelection={() => onBackToTutorialSelection()}/>; //TODO remove true
+        if (reachedLastStep) return <FinalStep tutorialMessages={tutorialMessages} guiMessages={guiMessages} onBackToTutorialSelection={() => onBackToTutorialSelection()} tutorialPoints={tutorialPoints}/>; //TODO remove true
 
         switch (curPage) {
             case PAGE_OVERVIEW:
@@ -491,9 +519,39 @@ const DebuggingTutorialStep = props => {
                     openHelpPage={() => requestHint(true)}
                 />
             case PAGE_HELP:
+                const HELP_SWITCH_COSTUME_ON_START = {
+                    "problemText": "Problem: Wenn das Spiel startet, sieht das Boot nicht so aus, wie es am Anfang aussehen sollte.",
+                    "solutionOptions": [
+                        {
+                            "id": "A",
+                            "code": "when flag clicked\nswitch costume to (normal)",
+                            "isCorrect": true,
+                            "explanation": "Beim Start des Spiels wird das Boot sofort in das gewünschte Aussehen versetzt, sodass es gleich richtig aussieht."
+                        },
+                        {
+                            "id": "B",
+                            "code": "when flag clicked\n" +
+                                "forever\n" +
+                                "if <touching [mouse-pointer v] ?> then\n" +
+                                "say (Hallo!)\n" +
+                                "end\n" +
+                                "end",
+                            "isCorrect": false,
+                            "explanation": "Das Boot ändert sein Aussehen erst sehr spät oder vielleicht gar nicht, weil es auf etwas wartet, das nicht unbedingt passiert."
+                        },
+                        {
+                            "id": "C",
+                            "code": "when flag clicked\nsay ()",
+                            "isCorrect": false,
+                            "explanation": "Das Boot macht zwar etwas Sichtbares, aber sein Aussehen bleibt gleich und ändert sich beim Start nicht."
+                        }
+                    ]
+                };
+
+
                 return (
                     <TutorialHelpPage
-                        help={help}
+                        help={hint}
                         isGeneratingHint={isGeneratingHint}
                         generateNewHint={() => requestHint(false)}
                         onFinishedAnswer={() => setFinishedAnswer(true)}
@@ -501,7 +559,12 @@ const DebuggingTutorialStep = props => {
                         returnToTestResults={() => {setCurPage(PAGE_TEST_RESULTS); setCurTestDetails("");}}
                         locale={props.locale}
                         guiMessages={guiMessages}
-                    />);
+                        setOptionSelected={() => setOptionSelected(true)}
+                        optionSelected={optionSelected}
+                        removeTutorialPoint={removeTutorialPoint}
+                        shuffledOptionIndexes={shuffledOptionIndexes}
+                    />
+                );
         }
     }
 
