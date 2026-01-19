@@ -1,4 +1,3 @@
-
 import css from "./debuggingTutorialStep.css";
 import React from "react";
 import logging from 'scratch-vm/src/util/logging.js';
@@ -88,7 +87,23 @@ export const logResponse = (hint, testId, testDescription) => {
 
     const text = JSON.stringify(logMsg, null, 2); // optional: schön formatiertes JSON
     const blob = new Blob([text], { type: "application/json" });
-    const file = new File([blob], `response${hintCount}.json`, { type: "application/json" });
+    const file = new File([blob], `LLM_${testId}.json`, { type: "application/json" });
+
+    logging.logFile(file.name, "json", file, new Date());
+};
+
+export const logTutorialScore = (score, tutorialTitle) => {
+
+    if (!logging.isActive()) return;
+
+    const logMsg = {
+        tutorialTitle: tutorialTitle,
+        score: score
+    };
+
+    const text = JSON.stringify(logMsg, null, 2); // optional: schön formatiertes JSON
+    const blob = new Blob([text], { type: "application/json" });
+    const file = new File([blob], `SCORE_${tutorialTitle}.json`, { type: "application/json" });
 
     logging.logFile(file.name, "json", file, new Date());
 };

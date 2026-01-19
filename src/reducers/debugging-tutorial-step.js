@@ -16,6 +16,7 @@ const SET_LAST_TESTED_PROJECT = 'scratch-gui/debugging-tutorial-cards/SET_LAST_T
 const SET_HAS_CODE_UPDATED = 'scratch-gui/debugging-tutorial-cards/SET_HAS_CODE_UPDATED';
 const SET_TEST_PAGE_INDEX = 'scratch-gui/debugging-tutorial-cards/SET_TEST_PAGE_INDEX';
 const SET_SELECTED_SPRITE = 'scratch-gui/debugging-tutorial-cards/SET_SELECTED_SPRITE';
+const SET_CUR_TEST_RUN = 'scratch-gui/debugging-tutorial-cards/SET_CUR_TEST_RUN';
 
 import {PAGE_OVERVIEW} from '../components/debuggingTutorial/tutorial-constants.jsx';
 
@@ -41,6 +42,7 @@ const initialState = {
     hasUpdated: false,
     testPageIndex: 0,
     selectedSprite: null,
+    curTestRuns: 0,
 };
 
 const reducer = function (state, action) {
@@ -100,6 +102,9 @@ const reducer = function (state, action) {
         case SET_SELECTED_SPRITE:
             baseState.selectedSprite = action.key;
             break;
+        case SET_CUR_TEST_RUN:
+            baseState.curTestRuns = action.runs;
+            break;
         case RESET_STEP:
             baseState.isErrorInfoVisible = false;
             baseState.showTestDetail = false;
@@ -117,6 +122,7 @@ const reducer = function (state, action) {
             baseState.hasUpdated = false;
             baseState.testPageIndex = 0;
             baseState.selectedSprite = null;
+            baseState.curTestRuns = 0;
             break;
     }
     return baseState;
@@ -194,6 +200,11 @@ const setSelectedSprite = function (key) {
     return {type: SET_SELECTED_SPRITE, key};
 }
 
+const setCurTestRuns = function (runs) {
+    return {type: SET_CUR_TEST_RUN, runs};
+}
+
+
 export {
     reducer as default,
     initialState as debuggingTutorialStepInitialState,
@@ -215,4 +226,5 @@ export {
     setHasCodeUpdated,
     setTestPageIndex,
     setSelectedSprite,
+    setCurTestRuns,
 };

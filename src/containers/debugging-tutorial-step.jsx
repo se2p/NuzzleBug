@@ -20,8 +20,9 @@ import {
     setHasCodeUpdated,
     setTestPageIndex,
     setSelectedSprite,
+    setCurTestRuns,
 } from "../reducers/debugging-tutorial-step";
-import DebuggingTutorialStepComponent from '../components/debuggingTutorial/debuggingTutorialStep.jsx';
+import DebuggingTutorialStepComponent from '../components/debuggingTutorial/tutorial-step/debuggingTutorialStep.jsx';
 import PropTypes from "prop-types";
 import VirtualMachine from "scratch-vm";
 
@@ -29,17 +30,8 @@ import {lock, unlock} from '../reducers/vm-status';
 import {spriteUpload} from "../lib/file-uploader";
 import {runTest2} from "tutorial-tests/src/test-runner/test-runner";
 
-
 import logging from 'scratch-vm/src/util/logging.js';
-/*const experimentId = new URL(window.location.href).searchParams.get('expid');
-const userId = new URL(window.location.href).searchParams.get('uid');
-const secret = new URL(window.location.href).searchParams.get('secret');
-logging._experimentId = experimentId;
-logging._userId = userId;
-logging._secret = secret;*/
-
-
-
+import {logTutorialScore} from "../components/debuggingTutorial/tutorial-step/tutorial-step-util.jsx";
 
 
 
@@ -55,7 +47,8 @@ class DebuggingTutorialStep extends React.Component {
         this.checkForCodeUpdate = this.checkForCodeUpdate.bind(this);
         this.onIncreaseTestPageIndex = this.onIncreaseTestPageIndex.bind(this);
         this.getSprites = this.getSprites.bind(this);
-        this.litterboxWebURL = 'https://scratch.fim.uni-passau.de/litterbox-api'; // localhost default: http://localhost:8080
+        this.requestHints = this.requestHints.bind(this)
+        this.litterboxWebURL = 'https://scratch.fim.uni-passau.de/'; // localhost default: http://localhost:8080
 
         this.interval = null;
     }
@@ -63,13 +56,17 @@ class DebuggingTutorialStep extends React.Component {
     onTest() {
         if (logging.isActive()) {
             logging.logClickEvent('ICON', new Date(), 'START_TESTS', null);
+            logging.pauseLogging(true);
         }
         //this.props.setMouseEnabled(false);
-
-
-        logging.pauseLogging(true);
+        //this.requestHints();
         this.props.setLoadingProject("TEST");
         this.props.lockVM();
+
+        if (this.props.curTestRuns === 3) {
+            this.props.setTutorialPoints(this.props.tutorialPoints - 1);
+        }
+        this.props.setCurTestRuns(this.props.curTestRuns + 1);
 
         //logging.logClickEvent('BUTTON', new Date(), 'CHECK_CODE_QUALITY2', null);
 
@@ -87,7 +84,7 @@ class DebuggingTutorialStep extends React.Component {
             this.props.setLoadingProject("TEST_PAUSE"); //TODO REMOVE!
             if (this.props.curPage !== "TEST_RESULTS") { //Wenn bereits in TestResults, dann braucht man keine Antwort von Euli in der Übersicht
                 this.props.setResponseType(RESPONSE_TESTING_FINISHED);
-            } else if (this.props.testResults.passed) {
+            } else if (this.props.testResults?.passed) {
                 this.props.setResponseType(RESPONSE_TESTING_FINISHED);
             }
             this.props.setHasCodeUpdated(true);
@@ -141,8 +138,10 @@ class DebuggingTutorialStep extends React.Component {
     onNextStep() {
         if (logging.isActive()) {
             logging.logClickEvent('ICON', new Date(), 'NEXT_STEP', null);
+            logging.pauseLogging(true);
         }
 
+        this.props.setTutorialPoints(this.props.tutorialPoints + 3); //Add 3 points
         this.props.setLoadingProject("NEXT");
         this.props.resetStep();
 
@@ -194,6 +193,7 @@ class DebuggingTutorialStep extends React.Component {
             }
 
         }
+        logTutorialScore(this.props.tutorialPoints + 3, this.props.tutorialMessages?.title + "_" + (this.props.step + 1))
         this.props.onIncreaseStep();
     }
 
@@ -266,11 +266,54 @@ class DebuggingTutorialStep extends React.Component {
                 this.props.resetStep();
             }
         }
-       /* this.interval = setInterval(() => {
-            this.checkForCodeUpdate();
-        }, 1000);
-        console.log("Started updating!");*/
+        /* this.interval = setInterval(() => {
+             this.checkForCodeUpdate();
+         }, 1000);
+         console.log("Started updating!");*/
     }
+
+
+
+
+
+
+    requestHints() {
+        const program = this.props.vm.toJSON();
+        const url = `${this.litterboxWebURL}/litterbox/analyse.php`; // /tutorial-system/generate-feedback
+        let detectors = 'default';
+        if (this.props.detectors) {
+            detectors = this.props.detectors;
+        }
+        const language = this.props.locale === 'de' ? 'de' : 'en';
+        const jsonBody = JSON.stringify({
+            language: language, detectors: detectors, program: program
+        });
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: jsonBody,
+            referrerPolicy: 'origin-when-cross-origin'
+        })
+            .then(response => response.json())
+            .then(problems => {
+                const result = problems.map(hint => ({
+                    title: hint.name,
+                    description: hint.hint,
+                    sprite: hint.sprite,
+                    costume: hint.costume,
+                    type: hint.type,
+                    codeSnippet: hint.scratchBlocksCode
+                }));
+                console.log(result);
+            })
+            // ignore errors to avoid crashing the tutorial tab
+            // eslint-disable-next-line no-unused-vars
+            .catch(ignored => {console.log("Cached! " + ignored.toString())});
+    }
+
+
 
     componentWillUnmount() {
         clearInterval(this.interval); // Wichtig, sonst bleibt das Intervall aktiv!
@@ -278,7 +321,7 @@ class DebuggingTutorialStep extends React.Component {
 
     checkForCodeUpdate() {
         if (this.props.curPage === "TEST_RESULTS" && this.props.projectLoadingState !== "TEST") { //Only check while the user sees their test-results
-            this.props.setHasCodeUpdated((this.props.vm.toJSON() !== this.props.lastTestedProject));
+            //this.props.setHasCodeUpdated((this.props.vm.toJSON() !== this.props.lastTestedProject)); TODO Removed for performance reasons
         }
     }
 
@@ -317,7 +360,8 @@ class DebuggingTutorialStep extends React.Component {
                 overviewStep={overviewStep}
                 onIncreaseTestPageIndex={() => this.onIncreaseTestPageIndex(1)}
                 onDecreaseTestPageIndex={() => this.onIncreaseTestPageIndex(-1)}
-                sprites={this.getSprites()}
+                sprites={() => this.getSprites()}
+                removeTutorialPoint={() => this.props.setTutorialPoints(this.props.tutorialPoints - 1)}
                 {...this.props}
             />
         );
@@ -380,6 +424,11 @@ DebuggingTutorialStep.propTypes = {
     selectedSprite: PropTypes.string,
     projectLoadingState: PropTypes.string,
     setMouseEnabled: PropTypes.func,
+    setTutorialPoints: PropTypes.func,
+    tutorialPoints: PropTypes.number,
+    removeTutorialPoint: PropTypes.func,
+    setCurTestRuns: PropTypes.func,
+    curTestRuns: PropTypes.number,
 };
 
 const mapStateToProps = state => ({
@@ -403,6 +452,7 @@ const mapStateToProps = state => ({
     hasCodeUpdated: state.scratchGui.debuggingTutorialStep.hasUpdated,
     testPageIndex: state.scratchGui.debuggingTutorialStep.testPageIndex,
     selectedSprite: state.scratchGui.debuggingTutorialStep.selectedSprite,
+    curTestRuns: state.scratchGui.debuggingTutorialStep.curTestRuns,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -426,6 +476,7 @@ const mapDispatchToProps = dispatch => ({
     setHasCodeUpdated: (value) => dispatch(setHasCodeUpdated(value)),
     setTestPageIndex: (index) => dispatch(setTestPageIndex(index)),
     setSelectedSprite: (key) => dispatch(setSelectedSprite(key)),
+    setCurTestRuns: (runs) => dispatch(setCurTestRuns(runs)),
 });
 
 export default connect(
