@@ -24,17 +24,16 @@ class HintGenerator {
     }
 
     // fastMode = true: Uses a smaller model for the hint generation.
-    static generateHint(projectJson, failedTest, passedTests, locale, fastMode) {
-        return this.getGPTHints(projectJson, failedTest, passedTests, locale, fastMode)
+    static generateHint(projectJson, failedTest, passedTests, locale, fastMode, setHint) {
+        return this.getGPTHints(projectJson, failedTest, passedTests, locale, fastMode, setHint)
             .then(hints => {
-                console.log("AAAAAAAA: " + hints.testsSuccessfulMessage);
-                const cleanedJson = hints.testsSuccessfulMessage
-                    .replace(/^```json\s*|\s*```$/g, '');
-                return JSON.parse(cleanedJson);
+                //const cleanedJson = hints.testsSuccessfulMessage
+                    //.replace(/^```json\s*|\s*```$/g, '');
+                return hints;//JSON.parse(h);
             });
     }
 
-    static sendScratchblocksToChatGPT (scratchblocks, failedTest, passedTests, locale, fastMode) {
+    static sendScratchblocksToChatGPT4 (scratchblocks, failedTest, passedTests, locale, fastMode) {
         const apiUrl = 'https://api.openai.com/v1/responses';
         // Configuration Variables
         const apiKey = apiKeyFlo; // Replace with your actual API key
@@ -302,6 +301,239 @@ LANGUAGE:
             });
     }
 
+
+    static async sendScratchblocksToChatGPT (scratchblocks, failedTest, passedTests, locale, fastMode, onPartialUpdate) {
+
+        const apiUrl = 'https://api.openai.com/v1/responses';
+        const apiKey = apiKeyFlo; // Replace with your actual API key :)
+
+        const systemRole =
+            `You are an assistant supporting a Scratch debugging learning system for students around 12 years old.
+
+            STRICT RULES:
+            - Output ONLY the JSON object described below
+            - Do NOT add any text outside the JSON
+
+            TASK:
+            Given student Scratch code, a failed behaviour, and behaviours that already work:
+            (1) Describe the problem
+            - Start with "Problem:"
+            - Describe only what is visibly wrong in the game
+            - No solution hints, no block names, no tests
+
+            (2) Generate EXACTLY three solution candidates
+            - Based on the student's existing code
+            - Only minimal changes (add/move/adjust single blocks)
+            - Do NOT rewrite the program or add sprites
+            - EXACTLY ONE fixes the behaviour
+            - TWO are plausible beginner mistakes
+
+            (3) Explain each candidate
+            - Explain the visible effect in the game
+            - Explain why it is sufficient or not
+            - No technical terms, for 12-year-olds
+            - Do NOT mention tests or correctness labels
+
+            OUTPUT FORMAT:
+            You output ONLY NDJSON (newline-delimited JSON). No prose, no code fences, no markdown.
+
+            Exactly 5 lines in this order:
+            1) {"type":"problemText","value":<string>}
+            2) {"type":"solutionOption","id":"A","code":<string>,"isCorrect":true,"explanation":<string>}
+            3) {"type":"solutionOption","id":"B","code":<string>,"isCorrect":false,"explanation":<string>}
+            4) {"type":"solutionOption","id":"C","code":<string>,"isCorrect":false,"explanation":<string>}
+            5) {"type":"done"}
+
+            Output format rules:
+            - Each line must be valid JSON (double quotes, proper escaping).
+            - Do not include any other keys.
+            - Strings must not contain unescaped newlines; use \\\\n.
+
+            CODE FIELD RULES (IMPORTANT):
+            - The "code" value must contain ONLY Scratchblocks plain text.
+            - Do NOT include any comments or metadata lines (no lines starting with "//", and no "Sprite:"/"Script:" markers).
+            - If multiple scripts are needed, separate them with exactly one blank line encoded as "\\\\n\\\\n".
+            - Use only escaped newlines "\\\\n" inside the JSON string.
+            - No markdown, no code fences.
+
+            SCRATCH BLOCK SYNTAX (CANONICAL):
+            go to [RANDOM_POSITION v]
+            set [VARIABLE_NAME v] to ()
+            change [VARIABLE_NAME v] by ()
+            stop [ALL v]
+            touching [FIGUR v] ?
+            point in direction ()
+            turn cw () degrees
+            turn ccw () degrees
+            move () steps
+            point towards (TARGET_FIGURE v)
+            switch costume to (COSTUME_NAME v)
+            touching color [#RRGGBB] ?
+            when flag clicked
+            go to x: () y: ()
+            change x by ()
+            change y by ()
+            set x to ()
+            set y to ()
+            say ()
+            wait until <>
+            repeat ()
+              ...
+            end
+            forever
+              ...
+            end
+            if <> then
+              ...
+            end
+
+            RULES:
+            - Scripts MUST start with a hat block (e.g. "when flag clicked")
+            - Strings MUST be in double quotes (e.g. say ("Hallo"))
+            - Variables and numbers MUST NOT be in quotes
+            - Dropdown parameters MUST include "v" and MUST NOT be quoted
+            - Colors MUST be exactly [#RRGGBB]
+            - No placeholder tokens may remain
+
+            LANGUAGE:
+            - Code in English
+            - For german:
+            - Use "Wiederholungen" (not "Schleifen")
+            - Use "Falls-Bedingung" (not "Wenn-Bedingung")
+            `;
+
+
+        const fullPrompt =
+            `LOCALE: ${locale}
+            STUDENT CODE: ${scratchblocks}
+            FAILED BEHAVIOUR: ${failedTest}
+            PASSED BEHAVIOURS (do not break): ${passedTests && passedTests.trim().length > 0 ? passedTests : "none"}`;
+
+
+        const res = await fetch(apiUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${apiKey}`,
+                "Accept": "text/event-stream"
+            },
+            body: JSON.stringify(this.getRequestBody(fastMode, systemRole, fullPrompt))
+        });
+
+        if (!res.ok || !res.body) {
+            throw new Error(`Error: ${res.status} ${res.statusText}`);
+        }
+
+        // Live-State (wird inkrementell befüllt)
+        const state = {
+            problemText: "",
+            solutionOptions: [
+                { id: "A", code: "", isCorrect: true,  explanation: "" },
+                { id: "B", code: "", isCorrect: false, explanation: "" },
+                { id: "C", code: "", isCorrect: false, explanation: "" }
+            ]
+        };
+
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder("utf-8");
+
+        let sseBuffer = "";   // Buffer für SSE-Rahmen
+        let textBuffer = "";  // Buffer für zusammengebauten NDJSON-Text
+
+        const applyNdjsonLine = (lineObj) => {
+            if (lineObj.type === "problemText") {
+                state.problemText = String(lineObj.value ?? "");
+                onPartialUpdate(structuredClone(state));
+                return;
+            }
+
+            if (lineObj.type === "solutionOption") {
+                const idx = ["A", "B", "C"].indexOf(lineObj.id);
+                if (idx >= 0) {
+                    state.solutionOptions[idx] = {
+                        id: lineObj.id,
+                        code: String(lineObj.code ?? ""),
+                        isCorrect: Boolean(lineObj.isCorrect),
+                        explanation: String(lineObj.explanation ?? "")
+                    };
+                    onPartialUpdate(structuredClone(state));
+                }
+                return;
+            }
+
+            if (lineObj.type === "done") {
+                // optional: final callback
+                onPartialUpdate(structuredClone(state));
+            }
+        };
+
+        const handleDelta = (delta) => {
+            textBuffer += delta;
+
+            // NDJSON: jede Zeile endet mit \n
+            let newlineIndex;
+            while ((newlineIndex = textBuffer.indexOf("\n")) >= 0) {
+                const line = textBuffer.slice(0, newlineIndex).trim();
+                textBuffer = textBuffer.slice(newlineIndex + 1);
+
+                if (!line) continue;
+
+                try {
+                    const obj = JSON.parse(line);
+                    applyNdjsonLine(obj);
+                } catch (e) {
+                    // Wenn die Zeile noch nicht vollständig war, wieder zurück in Buffer:
+                    // (sollte bei korrektem NDJSON selten vorkommen)
+                    textBuffer = line + "\n" + textBuffer;
+                    break;
+                }
+            }
+        };
+
+        // SSE lesen: Events sind durch \n\n getrennt, payload steht in data:
+        while (true) {
+            const { value, done } = await reader.read();
+            if (done) break;
+
+            sseBuffer += decoder.decode(value, { stream: true });
+
+            let eventBoundary;
+            while ((eventBoundary = sseBuffer.indexOf("\n\n")) !== -1) {
+                const rawEvent = sseBuffer.slice(0, eventBoundary);
+                sseBuffer = sseBuffer.slice(eventBoundary + 2);
+
+                const lines = rawEvent.split("\n");
+                for (const l of lines) {
+                    if (!l.startsWith("data:")) continue;
+
+                    const dataStr = l.slice(5).trim();
+                    if (!dataStr || dataStr === "[DONE]") continue;
+
+                    let evt;
+                    try { evt = JSON.parse(dataStr); } catch { continue; }
+
+                    if (evt.type === "response.output_text.delta" && typeof evt.delta === "string") {
+                        handleDelta(evt.delta);
+                    }
+                }
+            }
+        }
+
+        return state;
+    }
+
+    static extractTextDelta(evt) {
+        return (
+            evt?.delta?.text ||
+            evt?.output_text?.delta ||
+            evt?.text?.delta ||
+            evt?.data?.delta?.text ||
+            ""
+        );
+    }
+
+
+
     static getRequestBody (fastMode, systemRole, fullPrompt) {
         if (fastMode) {
             return {
@@ -312,6 +544,10 @@ LANGUAGE:
                     { role: "user", content: fullPrompt }
                 ],
                 max_output_tokens: 1200,
+
+
+
+                stream: true
             };
         } else {
             return {
@@ -375,10 +611,10 @@ LANGUAGE:
             });
     }
 
-    static getGPTHints (projectJson, failedTest, passedTests, locale, fastMode) {
+    static getGPTHints (projectJson, failedTest, passedTests, locale, fastMode, setHint) {
         return this.convertScratchJsonToScratchblocks(JSON.parse(projectJson))
             .then(scratchblocks =>
-                this.sendScratchblocksToChatGPT(scratchblocks, failedTest, passedTests, locale, fastMode)
+                this.sendScratchblocksToChatGPT(scratchblocks, failedTest, passedTests, locale, fastMode, (partial) => setHint(partial))
                     .then(chatGptResponse => ({
                         testsSuccessFul: 'success',
                         testsSuccessfulMessage: chatGptResponse
