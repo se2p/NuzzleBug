@@ -11,7 +11,7 @@ import iconDescription from "./images/icon--Description.png";
 /**
  * Renders the final congratulation message after finishing a tutorial.
  */
-export const FinalStep = ({ tutorialMessages, guiMessages, onBackToTutorialSelection }) => {
+export const FinalStep = ({ tutorialMessages, guiMessages, onBackToTutorialSelection, tutorialPoints }) => {
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [wrongOptions, setWrongOptions] = useState([]);
     const [showSolution, setShowSolution] = useState(false);
@@ -202,7 +202,8 @@ export const FinalStep = ({ tutorialMessages, guiMessages, onBackToTutorialSelec
 
     const evaluate = (onBackToTutorialSelection) => {
         if (pageState === PAGE.BEFORE) {
-            setPageState(PAGE.QUESTION);
+            onBackToTutorialSelection();
+            //setPageState(PAGE.QUESTION);
             return;
         }
 
@@ -253,15 +254,14 @@ export const FinalStep = ({ tutorialMessages, guiMessages, onBackToTutorialSelec
                         <div className={css.testStartBubble}>
                             <img className={css.finalBubbleIndicator} alt={"Bubble-Decal"} src={bubbleIndicatorBlue}/>
                             <span>
-                              Klasse Arbeit! Du hast das Tutorial gemeistert und dein Spiel fertig erstellt.
-                              <br/>Jetzt wartet eine kleine Herausforderung auf dich:
-                              ein paar Fragen zu deinem Code.  <br/> <br/>Traust du dich?
+                              {tutorialMessages.successMsg}
+                                <br/><br/><strong>Du hast in diesem Tutorial <strong style={{color: "#4D97FFFF"}}>{tutorialPoints}</strong> Punkte gesammelt!</strong>
                             </span>
                         </div>
                         <img src={owl2} alt={"Picture of Euli"} className={css.owlImage} draggable={false}/>
                     </div>
                 </div>
-                {renderNextButton(guiMessages, "Los!")}
+                {renderNextButton(guiMessages, "Home", onBackToTutorialSelection)}
                 {/*<div className={css.backToMenuButton} onClick={() => {onBackToTutorialSelection();}}>Weiter</div>*/}
             </div>
         );
