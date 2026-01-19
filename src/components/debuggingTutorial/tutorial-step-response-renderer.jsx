@@ -1,5 +1,5 @@
 import React from "react";
-import css from "./debuggingTutorialStep.css"
+import css from "./tutorial-step/debuggingTutorialStep.css"
 
 import {
     RESPONSE_START,
@@ -22,17 +22,18 @@ import {
 function renderCommonResponse(responseType, {
     setResponseType,
     handleTestStart,
-    getResultText
+    getResultText,
+    guiMessages
 })  {
     switch (responseType) {
         case RESPONSE_START:
             return (
                 <div className={css.responseContainer}>
                     <div className={css.responseTextArea}>
-                        <p> Viel Erfolg beim Lösen des Tutorials! </p>
+                        <p>{guiMessages.response.RESPONSE_START1}</p>
                         <p style={{marginTop: "15px"}}>
-                            Wenn du denkst, dass du den Fehler gefunden hast, klicke auf
-                            <span style={{color: "#0fbd8cff", fontWeight:"bold"}}> Lösung testen</span>
+                            {guiMessages.response.RESPONSE_START2}
+                            <span style={{color: "#0fbd8cff", fontWeight:"bold"}}>{guiMessages.response.RESPONSE_START3}</span>
                         </p>
                     </div>
                 </div>
@@ -41,9 +42,9 @@ function renderCommonResponse(responseType, {
             return (
                 <div className={css.responseContainer}>
                     <div className={css.responseTextArea}>
-                        <p> Alles klar! </p>
+                        <p>{guiMessages.response.RESPONSE_DEFAULT1}</p>
                         <p style={{marginTop: "15px"}}>
-                            Wenn ich noch irgendetwas für dich tun kann, lass es mich wissen :)
+                            {guiMessages.response.RESPONSE_DEFAULT2}
                         </p>
                     </div>
                 </div>
@@ -104,6 +105,7 @@ export function renderResponseClassic(responseType, {
     handleProjectReset,
     handleTestStart,
     getResultText,
+    guiMessages
 }) {
     switch (responseType) {
 
@@ -169,7 +171,8 @@ export function renderResponseClassic(responseType, {
         default: return renderCommonResponse(responseType, {
             setResponseType,
             handleTestStart,
-            getResultText
+            getResultText,
+            guiMessages
         });
     }
 }
@@ -180,6 +183,7 @@ export function renderResponseDebugging(responseType, {
     handleProjectReset,
     handleTestStart,
     getResultText,
+    guiMessages
 }) {
     switch (responseType) {
 
@@ -245,7 +249,8 @@ export function renderResponseDebugging(responseType, {
         default: return renderCommonResponse(responseType, {
             setResponseType,
             handleTestStart,
-            getResultText
+            getResultText,
+            guiMessages
         });
     }
 }
