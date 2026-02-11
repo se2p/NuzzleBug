@@ -41,8 +41,12 @@ export default {
         difficulty:   "Difficulty",
         steps:        "Steps",
         interesting:  "Interesting",
-        bubble_text1: "I'm here to help you become even better at programming!\nTo do that, I've prepared some tutorials for you here.",
-        bubble_text2: "",
+        explanation_intro: "I'm here to help you become even better at programming!\nTo do that, I've prepared some tutorials for you here.",
+        explanation_1: "Would you like to create your own game step by step? Then choose a ",
+        explanation_2: "Or would you prefer to find and fix bugs to practice debugging? Then click on a ",
+        explanation_greenTutorial: "green tutorial",
+        explanation_blueTutorial: "blue tutorial",
+        start: "Let’s get started!",
     },
 
     overview: {

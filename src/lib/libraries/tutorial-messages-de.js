@@ -44,8 +44,12 @@ export default {
         difficulty: "Schwierigkeit",
         steps: "Schritte",
         interesting: "Interessant",
-        bubble_text1: "Hier unterstütze ich dich dabei, noch besser im Programmieren zu werden!\nDafür habe ich dir hier einige Tutorials vorbereitet.",
-        bubble_text2: "",
+        explanation_intro: "Hier unterstütze ich dich dabei, noch besser im Programmieren zu werden!\nDafür habe ich dir hier einige Tutorials vorbereitet.",
+        explanation_1: "Möchtest du Schritt für Schritt ein eigenes Spiel erstellen? Dann wähle ein ",
+        explanation_2: "Oder willst du lieber herausfinden und üben, wie man Fehler findet und behebt? Dann klicke auf ein ",
+        explanation_greenTutorial: "grünes Tutorial",
+        explanation_blueTutorial: "blaues Tutorial",
+        start: "Los gehts!",
     },
 
     overview: {
@@ -63,8 +67,8 @@ export default {
 
     test_results: {
         response: {
-            loading: "Klar doch! Bitte ändere nichts an deinem Projekt (Neue Blöcke hinzufügen, Grüne Flagge klicken, etc.), bis ich dir hier sage, dass ich mit den Tests fertig bin.",
-            passed_all: "Super! Du hast alle Tests erfolgreich geschafft.\nDu kannst nun zum nächsten Schritt gehen.",
+            loading: "Klar doch! Bitte ändere nichts an deinem Projekt (Neue Blöcke hinzufügen, Grüne Flagge klicken, etc.)",
+            passed_all: "   \nKlicke unten auf 'nächster Schritt'.",
             test_passed: "Dieser Test sieht schon mal richtig gut aus.\nSuper gemacht!",
             test_failed: "In diesem Test hat sich noch ein Fehler eingeschlichen.",
             code_changed: "Soll ich deinen Code noch einmal überprüfen?",
