@@ -1,5 +1,12 @@
-// Toggles, if the LLM hints are generated, if a test fails
-export const SHOW_LLM_HINTS = true;
-export const ENABLE_RESET_BUTTON = true;
-export const ENABLE_TODO_BUTTON = true;
-export const ENABLE_TUTORIAL_SELECTION_HELP = false;
+export const tutorialConfig = {
+    selection: {
+        enableTutorialSelectionHelp: false, //Ob in der Tutorial-Auswahl (sowohl klassische als auch debug-tutorials) eine kurze Erklärung zu den beiden Tutorial Arten angezeigt wird.
+    },
+    classic: {
+        llmHintsEnabled: true, //Ob bei nicht bestandenen Tests die Hilfestellung genutzt werden kann, um LLM-Hinweise zu generieren.
+    },
+    debugging: {
+        enableResetButton: true, //Ob die Möglichkeit besteht, dass der Nutzer im debug-tutorial seinen Code auf Schrittanfang zurücksetzen kann.
+        enableTodoButton: true, //Ob im debug-tutorial eine Erklärung angezeigt wird, wie das Tutorial-System aufgebaut ist und bedient wird.
+    },
+};
