@@ -72,9 +72,6 @@ const TestResults = (props) => {
 
 
 
-/**
- * The answer-bubbles, the user can select to answer eulis questions. (e.g. next step)
- */
 const renderResponse = ({projectLoadingState, nextStep, testResults, handleTestStart, guiMessages, step, showTestAgainBubble, hideTestAgainBubble}) => {
     // Nächster Schritt
     if (testResults?.passed ) {
@@ -131,55 +128,22 @@ const renderResponse = ({projectLoadingState, nextStep, testResults, handleTestS
 const parseTestResults = ({testResults, testPageIndex, curTestDetails, projectLoadingState, step, setCurTestDetails, guiMessages, openHelpPage, tutorialMessages}) => {
     if (!testResults) return null;
 
-    // 1) Sortieren (absteigend nach Test-ID)
     const sortedDetails = [...testResults.details]
         .sort((a, b) => b.testId.localeCompare(a.testId));
-
-    // Anzahl Items pro Seite
     const itemsPerPage = 4;
-
-    // Berechne den Offset für pageIndex (0 → 0–3, 1 → 4–7, …)
     const start = testPageIndex * itemsPerPage;
 
-    // 2) Default-Filter anwenden (Nur Tests aus aktuellem Schritt + fehlgeschlagene aus letzten Schritten)
     const filteredDetails = sortedDetails.filter(e => {
         const isCurrentStep    = e.testId.charAt(4) === (step + 1).toString();
         const passed           = e.result === "pass" || e.result === "running";
-        return isCurrentStep || !passed; //TODO REACTIVATE ON Classic-Tutorials!!!
-        //return true;
+        return isCurrentStep || !passed;
+        //return true; besser für Debug-Tutorials?
     }).slice(start, start + itemsPerPage);
 
-    // 3) Im Details-Modus: Slice um das ausgewählte Element, sonst ganzes Filter-Array
-    let visibleDetails;
-
-    if (curTestDetails) {
-        // a) Index im gefilterten Array finden
-        const targetIndex = filteredDetails.findIndex(t => t.testId === curTestDetails);
-        const len         = filteredDetails.length;
-
-        if (targetIndex !== -1 && len > 0) {
-            // b) Start/End für 3-Zone berechnen
-            let start = targetIndex - 1;
-            let end   = targetIndex + 1;
-
-            if (start < 0)        { start = 0; end = Math.min(2, len - 1); }
-            if (end   > len - 1)  { end   = len - 1; start = Math.max(len - 3, 0); }
-
-            // c) slice aus dem gefilterten Array
-            visibleDetails = filteredDetails.slice(start, end + 1);
-
-        } else {
-            // Fallback: wenn curTestDetails nicht gefunden, zeige das ganze filteredDetails
-            visibleDetails = filteredDetails;
-        }
-
-    } else {
-        // kein Element ausgewählt → ganz normal alle gefilterten
-        visibleDetails = filteredDetails;
-    }
+    const visibleDetails = sliceElements(filteredDetails, curTestDetails);
 
     return visibleDetails.map((e, idx) => {
-        // Nummer für das UI: Original-Index in sortedDetails + 1
+        // Nummer für das UI = Index in sortedDetails + 1, da sortedDetails mit 0 beginnt
         const originalIdx = sortedDetails.findIndex(t => t === e);
 
         const isCurrentStep = e.testId.charAt(4) === (step + 1).toString();
@@ -200,11 +164,23 @@ const parseTestResults = ({testResults, testPageIndex, curTestDetails, projectLo
     });
 };
 
+const SLICE_START_BY_IDX = [0, 0, 1, 1];
+
+function sliceElements(arr, selectedId) {
+    if (!selectedId) return arr;
+
+    const idx = arr.findIndex(x => x.testId === selectedId);
+    if (idx === -1) return arr;
+
+    if (arr.length <= 3) return arr;
+
+    const start = SLICE_START_BY_IDX[idx] ?? 0;
+    return arr.slice(start, start + 3);
+}
+
 
 const createTestElement = (passed, e, testElementNumber, isCurrentStep, projectLoadingState, curTestDetails, setCurTestDetails, guiMessages, openHelpPage, tutorialMessages) => {
     const msg = guiMessages.test_results;
-
-    //console.log(e.testId + ": " + JSON.stringify(e.result));
 
     const headerBgColor = (projectLoadingState === "TEST" && e.result === "running")
         ? "#afd8fd"
