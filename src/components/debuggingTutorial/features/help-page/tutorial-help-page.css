@@ -8,7 +8,7 @@
     color: #575E75FF;
     padding-top: 10px;
     background-color: #ffffff;
-    background-image: url("../images/skulls.png");
+    background-image: url("../../images/skulls.png");
 }
 
 .image-container {
@@ -158,7 +158,7 @@
     width: calc(100% - 20px);
     margin-right: 20px;
     opacity: 0;
-    animation: fadeInAnim 0.5s ease forwards;
+    animation: fadeInAnim 0.7s ease forwards;
 }
 
 @keyframes fadeInAnim {
@@ -204,7 +204,7 @@
 }
 
 .helpBubble:hover .selectionBubbleIndicator {
-    background-image: url('../images/selectionBubbleDecalGrey.png');
+    background-image: url('../../images/selectionBubbleDecalGrey.png');
 }
 
 .helpBubble.selected {
@@ -214,7 +214,7 @@
 }
 
 .helpBubble.selected .selectionBubbleIndicator {
-    background-image: url('../images/selectionBubbleDecalDark.png');
+    background-image: url('../../images/selectionBubbleDecalDark.png');
 }
 
 .helpBubble:not(.selected):hover {
@@ -234,7 +234,7 @@
     transform: translateX(-102%) translateY(-40%);
     background-size: contain;
     background-repeat: no-repeat;
-    background-image: url('../images/selectionBubbleDecalLight.png');
+    background-image: url('../../images/selectionBubbleDecalLight.png');
 }
 
 /*CODE SELECTION*/
