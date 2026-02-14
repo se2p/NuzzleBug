@@ -1,11 +1,11 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import DebuggingTutorialOverviewComponent from '../components/debuggingTutorial/debuggingTutorialOverview.jsx';
+import DebuggingTutorialOverviewComponent from '../components/debuggingTutorial/pages/tutorial-overview/debuggingTutorialOverview.jsx';
 import PropTypes from "prop-types";
 import VirtualMachine from "scratch-vm";
 import {setLastTutorial, setLoading, setAutoSave, setContentType, reset, lastStartedTutorial} from "../reducers/debugging-tutorial-overview"
 import JSZip from "jszip";
-import {CONTENT_START_TUTORIAL, CONTENT_DESCRIPTION} from "../components/debuggingTutorial/tutorial-constants.jsx";
+import {CONTENT_START_TUTORIAL, CONTENT_DESCRIPTION} from "../components/debuggingTutorial/shared/tutorial-constants.jsx";
 import logging from 'scratch-vm/src/util/logging.js';
 
 class DebuggingTutorialOverview extends React.Component {
@@ -25,7 +25,7 @@ class DebuggingTutorialOverview extends React.Component {
         const isNewTutorialSelected = this.props.tutorialMessages?.title !== this.props.lastStartedTutorial;
 
         if (isNewTutorialSelected) {
-            this.props.setTutorialPoints(0);
+            this.props.setTutorialPoints(3);
             this.props.setLastStartedTutorial(this.props.tutorialMessages?.title);
             if (this.props.autoSave === "YES") {
                 this.props.setLoading(true);
@@ -71,8 +71,10 @@ class DebuggingTutorialOverview extends React.Component {
         this.props.setLoading(true);
         this.props.vm.start();
 
-        if ("project1" in this.props.tutorialIndexData && this.props.tutorialIndexData["project1"] != null) { //Lädt nur, wenn projectData angegeben wurde
-            this.props.vm.loadProject(this.props.tutorialIndexData["project1"])
+        const projectId = "project_" + this.props.vm.getLocale();
+
+        if (projectId in this.props.tutorialIndexData && this.props.tutorialIndexData[projectId] != null) { //Lädt nur, wenn projectData angegeben wurde
+            this.props.vm.loadProject(this.props.tutorialIndexData[projectId])
                 .then(() => {
                     this.props.onStartTutorial();})
                 .catch((e) => console.log("Error loading new Project: " + e.toString()))
