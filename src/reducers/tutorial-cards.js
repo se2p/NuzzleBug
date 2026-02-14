@@ -27,7 +27,7 @@ const initialState = {
     expanded: true,
     dragging: false,
     contentType: "OVERVIEW",
-    tutorialPoints: 0,
+    tutorialPoints: 3,
 };
 
 const reducer = function (state, action) {
