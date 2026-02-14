@@ -34,8 +34,12 @@ export default {
     solutionHeader: 'Lösung',
 
     backButtonTitle: 'Übersicht',
-
-
+    finalStep: {
+        home: "Übersicht",
+        title: "Sehr gut!",
+        scoreBefore: "Du hast in diesem Tutorial ",
+        scoreAfter: " Punkte gesammelt!"
+    },
 
     selection: {
         explanation: "Erklärung",

@@ -34,6 +34,14 @@ export default {
 
     backButtonTitle: 'Overview',
 
+
+    finalStep: {
+        home: "Home",
+        title: "Great!",
+        scoreBefore: "You have earned ",
+        scoreAfter: " points in this tutorial!"
+    },
+
     selection: {
         explanation:  "Explanation",
         coding:       "Programming",
