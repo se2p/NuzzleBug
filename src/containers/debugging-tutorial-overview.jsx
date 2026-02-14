@@ -16,11 +16,7 @@ class DebuggingTutorialOverview extends React.Component {
         this.isEmptyProject = this.isEmptyProject.bind(this);
     }
 
-    /**
-     * Handles the click on 'Start'. If a new tutorial is selected, the tutorial gets loaded
-     * and, if the option was selected, a backup of the current project downloaded. After this,
-     * the user gets directed to the step-Overview of the current tutorial.
-     */
+
     handleStart() {
         const isNewTutorialSelected = this.props.tutorialMessages?.title !== this.props.lastStartedTutorial;
 
@@ -59,13 +55,11 @@ class DebuggingTutorialOverview extends React.Component {
             }
         } else {
             this.props.onStartTutorial();
+            console.log("OLD");
         }
-        this.props.setContentType1(CONTENT_DESCRIPTION);
+        this.props.setContentType(CONTENT_DESCRIPTION);
     }
 
-    /**
-     * Loads the new tutorial. This includes the required sprites, code, etc.
-     */
     loadProject() {
         logging.pauseLogging(true);
         this.props.setLoading(true);
@@ -87,6 +81,7 @@ class DebuggingTutorialOverview extends React.Component {
         }
     }
 
+    // Gib der vm Zeit, das Projekt zu laden. Aktiviere danach das logging, um nur Nutzerinteraktionen zu loggen.
     async delayResumeLogging() {
         const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -96,7 +91,7 @@ class DebuggingTutorialOverview extends React.Component {
 
     openAutoSaveSelection() {
         this.props.setLastTutorial(this.props.tutorialMessages.title);
-        this.props.setContentType1(CONTENT_START_TUTORIAL);
+        this.props.setContentType(CONTENT_START_TUTORIAL);
     }
 
     /**
@@ -148,8 +143,8 @@ DebuggingTutorialOverview.propTypes = {
     isLoading: PropTypes.bool,
     tutorialIndexData: PropTypes.any,
     autoSave: PropTypes.string,
-    setContentType1: PropTypes.func,
-    contentType1: PropTypes.any,
+    setContentType: PropTypes.func,
+    contentType: PropTypes.any,
     setAutoSave: PropTypes.func,
     reset: PropTypes.func,
     openAutoSaveSelection: PropTypes.func,
@@ -165,14 +160,14 @@ const mapStateToProps = state => ({
     lastTutorial: state.scratchGui.debuggingTutorialOverview.lastTutorial,
     isLoading: state.scratchGui.debuggingTutorialOverview.isLoading,
     autoSave: state.scratchGui.debuggingTutorialOverview.autoSave,
-    contentType1: state.scratchGui.debuggingTutorialOverview.contentType,
+    contentType: state.scratchGui.debuggingTutorialOverview.contentType,
     lastStartedTutorial: state.scratchGui.debuggingTutorialOverview.lastStartedTutorial,
 });
 const mapDispatchToProps = dispatch => ({
     setLastTutorial: (tutorial) => dispatch(setLastTutorial(tutorial)),
     setLoading: (isLoading) => dispatch(setLoading(isLoading)),
     setAutoSave: (type) => dispatch(setAutoSave(type)),
-    setContentType1: (contentType) => dispatch(setContentType(contentType)),
+    setContentType: (contentType) => dispatch(setContentType(contentType)),
     reset: () => dispatch(reset()),
     setLastStartedTutorial: (tutorial) => dispatch(lastStartedTutorial(tutorial)),
 });
