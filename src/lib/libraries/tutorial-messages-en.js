@@ -122,6 +122,7 @@ export default {
         true: "Yes",
         false: "No",
         select: "Select",
+        great: "Great job!",
     },
 
     response: {
