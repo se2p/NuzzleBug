@@ -13,7 +13,7 @@
     background-repeat: repeat;
     background-size: auto;
     background-color: #ffffff;
-    background-image: url("../debuggingTutorial/images/skulls.png");
+    background-image: url("../../images/skulls.png");
 }
 
 .heading {
@@ -167,11 +167,11 @@
     transform: translateX(-102%) translateY(-40%);
     background-size: contain;
     background-repeat: no-repeat;
-    background-image: url('./images/selectionBubbleDecalLight.png');
+    background-image: url('../../images/selectionBubbleDecalLight.png');
 }
 
 .selectionBubble:hover .selectionBubbleIndicator {
-    background-image: url('./images/selectionBubbleDecalGrey.png');
+    background-image: url('../../images/selectionBubbleDecalGrey.png');
 }
 
 .selectionIcon {
@@ -252,9 +252,9 @@
     font-family: 'Roboto', sans-serif; /* Schriftart */
     font-size: 0.9rem;
     font-weight: bold;
-    min-width: 105px;
+    min-width: 170px;
     padding: 10px;
-    border-radius: 10px; /* Beispielwert für border-radius */
+    border-radius: 20px; /* Beispielwert für border-radius */
     overflow: hidden;
     background-color: #4D97FFFF;
     height: calc(0.9rem + 20px);
@@ -637,7 +637,7 @@
 }
 
 .selectionBubble.selected .selectionBubbleIndicator {
-    background-image: url('./images/selectionBubbleDecalDark.png');
+    background-image: url('../../images/selectionBubbleDecalDark.png');
 }
 
 .selectionBubble:not(.selected):hover {

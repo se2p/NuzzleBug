@@ -18,7 +18,7 @@ const SET_TEST_PAGE_INDEX = 'scratch-gui/debugging-tutorial-cards/SET_TEST_PAGE_
 const SET_SELECTED_SPRITE = 'scratch-gui/debugging-tutorial-cards/SET_SELECTED_SPRITE';
 const SET_CUR_TEST_RUN = 'scratch-gui/debugging-tutorial-cards/SET_CUR_TEST_RUN';
 
-import {PAGE_OVERVIEW} from '../components/debuggingTutorial/tutorial-constants.jsx';
+import {PAGE_OVERVIEW} from '../components/debuggingTutorial/shared/tutorial-constants.jsx';
 
 
 const RESPONSE_START_VALUE = 'scratch-gui/debugging-tutorial-cards/RESPONSE_START';

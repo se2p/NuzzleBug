@@ -1,5 +1,5 @@
 import React, {useEffect, useLayoutEffect, useRef, useState} from "react";
-import css from "./debuggingTutorialOverview.css";
+import css from "./pages/tutorial-overview/debuggingTutorialOverview.css";
 
 /**
  * Animiert den Text, indem er ähnlich zu einer Schreibmaschine Buchstabe für Buchstabe des Textes ergänzt.

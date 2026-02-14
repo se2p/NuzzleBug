@@ -7,7 +7,7 @@ import euliLeft from "../../images/OwlBranchRight.png";
 import arrow from "../../images/arrow-next.png"
 import iconDescription from "../../images/icon--Description.png";
 import iconDebugging from "../../images/debuggingIcon.png";
-import { tutorialConfig } from "../../config.ts";
+import { tutorialConfig } from "../../config.js";
 
 const TutorialSelection = ({tutorials, onSelectTutorial, guiMessages}) => {
     const [explanationState, setExplanationState] = useState(EXPLANATION_STATE.NONE);

@@ -1,5 +1,5 @@
 import React from "react";
-import css from "./tutorial-step/debuggingTutorialStep.css"
+import css from "./features/tutorial-flow/tutorial-flow.jsx"
 
 import {
     RESPONSE_START,
@@ -12,7 +12,7 @@ import {
     RESPONSE_EXPLANATION3,
     RESPONSE_EXPLANATION4,
     RESPONSE_ASK_TEST_START
-} from './tutorial-constants.jsx';
+} from './shared/tutorial-constants.jsx';
 
 
 /**

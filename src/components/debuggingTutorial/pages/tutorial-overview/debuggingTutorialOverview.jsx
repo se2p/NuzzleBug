@@ -1,22 +1,22 @@
 import css from "./debuggingTutorialOverview.css";
 import PropTypes from "prop-types";
 import React from "react";
-import bubbleIndicatorGray from "./images/bubbleDecalGrey2.png";
-import bubbleIndicatorBlue from "./images/bubbleIDecalBlue2.png";
-import owl from "./images/OwlBranchRight.png";
-import arrowNext from "./images/icon_arrowNext.png"
-import backButton from "./images/nextButton3.png"
-import saveTrueIcon from "./images/saveTrueIcon.png"
-import saveTrueIconWhite from "./images/autoSaveOnWhite.png"
-import saveFalseIconWhite from "./images/autoSaveOffWhite.png"
-import saveFalseIcon from "./images/saveFalseIcon.png"
-import difficulty1 from "./images/difficultyIconEasy.png"
-import difficulty2 from "./images/difficultyIconMedium.png"
-import difficulty3 from "./images/difficultyIconHard.png"
+import bubbleIndicatorGray from "../../images/bubbleDecalGrey2.png";
+import bubbleIndicatorBlue from "../../images/bubbleIDecalBlue2.png";
+import owl from "../../images/OwlBranchRight.png";
+import arrowNext from "../../images/icon_arrowNext.png"
+import backButton from "../../images/nextButton3.png"
+import saveTrueIcon from "../../images/saveTrueIcon.png"
+import saveTrueIconWhite from "../../images/autoSaveOnWhite.png"
+import saveFalseIconWhite from "../../images/autoSaveOffWhite.png"
+import saveFalseIcon from "../../images/saveFalseIcon.png"
+import difficulty1 from "../../images/difficultyIconEasy.png"
+import difficulty2 from "../../images/difficultyIconMedium.png"
+import difficulty3 from "../../images/difficultyIconHard.png"
 
-import {CONTENT_START_TUTORIAL, CONTENT_DESCRIPTION} from "./tutorial-constants.jsx";
-import rightArrow from "../cards/icon--next.svg";
-import {parseColoredText} from "./typewriter.jsx";
+import {CONTENT_START_TUTORIAL, CONTENT_DESCRIPTION} from "../../shared/tutorial-constants.jsx";
+import rightArrow from "../../../cards/icon--next.svg";
+import {parseColoredText} from "../../typewriter.jsx";
 
 const difficultyImages = {
     1: difficulty1,
@@ -192,7 +192,7 @@ const DebuggingTutorialOverview = props => {
     );
 }
 
-DebuggingTutorialOverview.props = {
+DebuggingTutorialOverview.propTypes = {
     onStartTutorial: PropTypes.func.isRequired,
 }
 
