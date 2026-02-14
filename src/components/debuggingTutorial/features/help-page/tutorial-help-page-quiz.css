@@ -1,0 +1,114 @@
+.helpPageQuiz {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+.qaOptions {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-content: start;
+}
+
+.qaOption {
+    appearance: none;
+    border: 3px solid var(--option-bg);
+    background: var(--option-bg);
+    border-radius: 14px;
+    padding: 16px;
+    cursor: pointer;
+
+    -webkit-box-shadow: 0px 0px 9px 0px rgba(66, 68, 90, 1);
+    -moz-box-shadow: 0px 0px 9px 0px rgba(66, 68, 90, 1);
+    box-shadow: 0px 0px 9px 0px rgba(66, 68, 90, 1);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: transform .08s ease, box-shadow .08s ease, background .08s ease;
+}
+
+.qaOption:hover {
+    transform: scale(1.03);
+}
+
+.qaOption:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #ffffff;
+    border: 1px solid #575E75FF;
+
+    font-weight: 700;
+    color: var(--text);
+}
+
+.centerRow {
+    display: flex;
+    justify-content: center;
+}
+
+.gridOptions {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-content: start;
+    width: min(560px, 100%);
+}
+
+.blockTypeOption {
+    appearance: none;
+    border: 3px solid var(--option-bg);
+    background: var(--option-bg);
+    border-radius: 14px;
+    padding: 14px 16px;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-start;
+
+    -webkit-box-shadow: 0px 0px 9px 0px rgba(66, 68, 90, 1);
+    -moz-box-shadow: 0px 0px 9px 0px rgba(66, 68, 90, 1);
+    box-shadow: 0px 0px 9px 0px rgba(66, 68, 90, 1);
+}
+
+.blockTypeOption:hover {
+    transform: scale(1.02);
+}
+
+.circle {
+    width: 14px;
+    height: 14px;
+    border-radius: 999px;
+    flex: 0 0 auto;
+}
+
+.verticalOptions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.qaOptionTall {
+    height: 60px;
+}
+
+.verticalText {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+}
