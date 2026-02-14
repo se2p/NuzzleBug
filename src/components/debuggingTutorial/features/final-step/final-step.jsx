@@ -1,7 +1,7 @@
 import css from "./final-step.css"
 import owl2 from "../../images/owlTransparent.png"
 import bubbleIndicatorBlue from "../../images/bubbleIDecalBlue2.png"
-import React, {useState} from "react";
+import React from "react";
 import rightArrow from "../../../cards/icon--next.svg";
 
 
