@@ -36,8 +36,8 @@ const DebuggingTutorialOverview = props => {
         isLoading,
         setAutoSave,
         autoSave,
-        setContentType1,
-        contentType1,
+        setContentType,
+        contentType,
         tutorialIndexData,
         openAutoSaveSelection,
         isProjectEmpty,
@@ -49,7 +49,7 @@ const DebuggingTutorialOverview = props => {
     const renderDescription = () => {
         return (
             <div className={css.bubbleContainer}>
-                <div className={css.bubble} style={{borderColor:contentType1 === CONTENT_START_TUTORIAL ? "#4D97FFFF" : "#575E75FF"}}>
+                <div className={css.bubble} style={{borderColor:contentType === CONTENT_START_TUTORIAL ? "#4D97FFFF" : "#575E75FF"}}>
                     <img className={css.bubbleIndicator}
                          alt={"Bubble-Decal"}
                          src={bubbleIndicatorGray}
@@ -114,7 +114,7 @@ const DebuggingTutorialOverview = props => {
     }
 
     const renderButtonBar = () => {
-        if (contentType1 === CONTENT_DESCRIPTION) {
+        if (contentType === CONTENT_DESCRIPTION) {
             return (
                 <div className={css.buttonContainer}>
                     <div className={css.rightCard}></div>
@@ -140,7 +140,7 @@ const DebuggingTutorialOverview = props => {
                         <div className={css.backButtonContainer}>
                             <div className={css.arrowFill}/>
                             <img className={css.backButton}
-                                 onClick={() => setContentType1(CONTENT_DESCRIPTION)}
+                                 onClick={() => setContentType(CONTENT_DESCRIPTION)}
                                  src={backButton}
                                  alt={"Back"}
                             />
@@ -180,12 +180,12 @@ const DebuggingTutorialOverview = props => {
         <div className={css.container}>
 
             <h1 className={css.heading}
-                style={{color:contentType1 === CONTENT_START_TUTORIAL ? "#575E75FF" : "#4D97FFFF"}}
+                style={{color:contentType === CONTENT_START_TUTORIAL ? "#575E75FF" : "#4D97FFFF"}}
             >
                 {tutorialMessages.title}
             </h1>
             <div className={css.whiteBox}>
-                {contentType1 === CONTENT_DESCRIPTION ? renderDescription() : renderAutosaveSelection()}
+                {contentType === CONTENT_DESCRIPTION ? renderDescription() : renderAutosaveSelection()}
             </div>
             {renderButtonBar()}
         </div>
