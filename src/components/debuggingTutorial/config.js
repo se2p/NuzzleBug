@@ -1,6 +1,6 @@
 export const tutorialConfig = {
     selection: {
-        enableTutorialSelectionHelp: false, //Ob in der Tutorial-Auswahl (sowohl klassische als auch debug-tutorials) eine kurze Erklärung zu den beiden Tutorial Arten angezeigt wird.
+        enableTutorialSelectionHelp: true, //Ob in der Tutorial-Auswahl (sowohl klassische als auch debug-tutorials) eine kurze Erklärung zu den beiden Tutorial Arten angezeigt wird.
     },
     classic: {
         llmHintsEnabled: true, //Ob bei nicht bestandenen Tests die Hilfestellung genutzt werden kann, um LLM-Hinweise zu generieren.
