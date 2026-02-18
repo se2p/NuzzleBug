@@ -17,7 +17,6 @@ import ToggleTracing, {TracingState} from '../toggle-tracing/toggle-tracing.jsx'
 import Tutorial from '../tutorial-button/tutorial-button.jsx';
 
 import styles from './controls.css';
-import RequestHintButton from '../hint-gen/request-button.jsx';
 
 const messages = defineMessages({
     goTitle: {
@@ -105,7 +104,6 @@ const Controls = function (props) {
         vm,
         paused,
         onTutorialClick,
-        onDebugTutorialClick, //TODO
         turbo,
         interrogationSupported,
         interrogationEnabled,
@@ -157,11 +155,11 @@ const Controls = function (props) {
                 title={intl.formatMessage(messages.stopTitle)}
                 onClick={onStopAllClick}
             />
-            {/*<RequestHintButton />*/}
+
             {turbo ? (
                 <TurboMode />
             ) : null}
-            {/*{interrogationSupported && showQuestionButton ? <IRQuestions
+            {interrogationSupported && showQuestionButton ? <IRQuestions
                 active={!irDisabled && (!active || paused)}
                 onClick={onIRQuestionsClick}
                 title={intl.formatMessage(messages.irQuestionTitle)}
@@ -179,7 +177,7 @@ const Controls = function (props) {
                 interrogationSupported ? (<HelpMenuButton
                     title={intl.formatMessage(messages.helpMenuButtonTitle)}
                     onClick={onHelpMenuButtonClick}
-                />) : null}*/}
+                />) : null}
             <Tutorial
                 active={!tutorialCardsVisible}
                 onClick={onTutorialClick}
@@ -212,8 +210,7 @@ Controls.propTypes = {
     tracingActive: PropTypes.bool,
     onTutorialClick: PropTypes.func.isRequired,
     tutorialCardsVisible: PropTypes.bool,
-    locale: PropTypes.string.isRequired,
-    debuggingTutorialVisible: PropTypes.bool
+    locale: PropTypes.string.isRequired
 };
 
 Controls.defaultProps = {
