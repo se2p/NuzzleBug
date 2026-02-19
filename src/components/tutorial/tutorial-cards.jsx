@@ -21,8 +21,8 @@ import VirtualMachine from 'scratch-vm';
 import DebuggingTutorialHelp from "../../containers/debugging-tutorial-help.jsx";
 import DebuggingTutorialOverview from "../../containers/debugging-tutorial-overview.jsx";
 import DebuggingTutorialStep from "../../containers/debugging-tutorial-step.jsx";
-import TutorialItem from "../debuggingTutorial/tutorial-selection/tutorial-item.jsx";
-import TutorialSelection from "../debuggingTutorial/tutorial-selection/tutorial-selection.jsx";
+import TutorialItem from "../debuggingTutorial/pages/tutorial-selection/tutorial-item.jsx";
+import TutorialSelection from "../debuggingTutorial/pages/tutorial-selection/tutorial-selection.jsx";
 
 
 
@@ -86,7 +86,8 @@ const TutorialHeader = props => {
         step,
         expanded,
         contentType,
-        tutorialPoints
+        tutorialPoints,
+        guiMessages
     } = props;
 
     const isBackButtonEnabled = contentType === "DEBUGGING_STEP" || contentType === "DEBUGGING_HELP";
@@ -117,7 +118,7 @@ const TutorialHeader = props => {
 
                 {isBackButtonEnabled && <div className={tutorialStyles.scoreButton}>
                     <FlashingSpan text={tutorialPoints}/>
-                    Punkte
+                    {guiMessages.points}
                 </div>}
             </div>
 
@@ -284,7 +285,6 @@ const TutorialCards = props => {
                     tutorialPicture={tut[0].img}
                     onStartTutorial={onStartTutorial}
                     vm={vm}
-                    stepCount={totalSteps}
                     tutorialIndexData={tutorialIndexData}
                     guiMessages={guiMessages}
                     setTutorialPoints={setTutorialPoints}
@@ -358,6 +358,7 @@ const TutorialCards = props => {
                             onHomeMenu={onHomeMenu}
                             contentType={contentType}
                             tutorialPoints={tutorialPoints}
+                            guiMessages={guiMessages}
                         />
                         <div
                             className={expanded ? classNames(styles.stepBody, tutorialStyles.stepBody) : styles.hidden}

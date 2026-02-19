@@ -1,8 +1,8 @@
 import css from "./tutorial-help-page-quiz.css";
 import React, { useEffect, useRef, useState } from "react";
-import {FitToWidth} from "../../typewriter.jsx";
+import {FitToWidth} from "../../../../shared/utils.jsx";
 
-const TutorialHelpPageQuiz = ({ vm }) => {
+const TutorialHelpPageQuiz = ({ vm, quizMessages }) => {
     const [spriteUrls, setSpriteUrls] = useState([]);
     const prevBlobUrlsRef = useRef([]); // merkt sich die zuletzt erzeugten blob: URLs
 
@@ -58,30 +58,35 @@ const TutorialHelpPageQuiz = ({ vm }) => {
     }, [vm]);
 
     const [questionIndex, setQuestionIndex] = useState(0);
-    const kognitionOptions = ["Sehr sicher", "einigermaßen sicher", "überhaupt nicht sicher"];
+    const kognitionOptions = [
+        quizMessages.verySure,
+        quizMessages.somewhatSure,
+        quizMessages.notSureAtAll
+    ];
 
     const increaseQuestionIndex = () => {setQuestionIndex(questionIndex + 1)}
     const blockTypes = [
-        ["Bewegung", "#4c97ffff"],
-        ["Aussehen", "#9966ffff"],
-        ["Klang", "#d65cd6ff"],
-        ["Ereignisse", "#ffd500ff"],
-        ["Steuerung", "#ffab19ff"],
-        ["Fühlen", "#4cbfe6ff"],
-        ["Operatoren", "#40bf4aff"],
-        ["Variablen", "#ff8c1aff"]];
+        [quizMessages.movement, "#4c97ffff"],
+        [quizMessages.looks, "#9966ffff"],
+        [quizMessages.sound, "#d65cd6ff"],
+        [quizMessages.events, "#ffd500ff"],
+        [quizMessages.control, "#ffab19ff"],
+        [quizMessages.sensing, "#4cbfe6ff"],
+        [quizMessages.operators, "#40bf4aff"],
+        [quizMessages.variables, "#ff8c1aff"]];
+
     const getQuestionText = () => {
         switch (questionIndex) {
-            case 0: return <strong>In welcher Figur liegt der Fehler?</strong>
-            case 1: return <strong>Mit welchem Blocktypen hängt der Fehler zusammen?</strong>
-            case 2: return <strong>Wie sicher bist du dir?</strong>
+            case 0: return <strong>{quizMessages.questionFigure}</strong>
+            case 1: return <strong>{quizMessages.questionBlockType}</strong>
+            case 2: return <strong>{quizMessages.questionConfidence}</strong>
             case 4: return <strong> </strong>
         }
     }
 
     return (
         <div className={css.helpPageQuiz}>
-            {questionIndex === 0 && <span>Beginnen wir beim ersten Schritt:<br/></span>}
+            {questionIndex === 0 && <span>{quizMessages.intro}<br/></span>}
             {getQuestionText()}
 
             {questionIndex === 0 && <div className={css.qaOptions} role="group" aria-label="Antwortoptionen">
@@ -99,7 +104,7 @@ const TutorialHelpPageQuiz = ({ vm }) => {
                             </button>
                         ))}
                         <button className={css.qaOption} type="button" onClick={() => {increaseQuestionIndex()}}>
-                            <span className={css.pill}>Sonstige</span>
+                            <span className={css.pill}>{quizMessages.other}</span>
                         </button>
                     </>
                 )}
@@ -125,17 +130,12 @@ const TutorialHelpPageQuiz = ({ vm }) => {
             </div>}
 
             {questionIndex === 3 && <div className={css.verticalText}>
-                <strong>Fertig!</strong>
+                <strong>{quizMessages.finished}</strong>
             </div>}
         </div>
     );
 
 
-
-
-
-
-    // -------- helpers --------
 
     function revokeBlobUrls(urls) {
         if (!Array.isArray(urls)) return;
@@ -182,7 +182,6 @@ const TutorialHelpPageQuiz = ({ vm }) => {
         const fmt = (costume.dataFormat || "").toLowerCase();
         const isSvg = fmt === "svg";
 
-        // 1) Erst: eingebettetes Asset nutzen (kein CDN)
         const existingAsset = costume.asset;
         if (existingAsset) {
             if (isSvg) {
@@ -197,7 +196,6 @@ const TutorialHelpPageQuiz = ({ vm }) => {
                 );
             }
 
-            // Raster: oft direkt als data: URI möglich (kein revoke nötig)
             if (typeof existingAsset.encodeDataURI === "function") {
                 return existingAsset.encodeDataURI();
             }
@@ -210,7 +208,6 @@ const TutorialHelpPageQuiz = ({ vm }) => {
             return URL.createObjectURL(new Blob([existingAsset.data], { type: mime }));
         }
 
-        // 2) Fallback: laden (kann 503)
         const assetType = isSvg ? storage.AssetType.ImageVector : storage.AssetType.ImageBitmap;
         const asset = await storage.load(assetType, costume.assetId, costume.dataFormat);
 

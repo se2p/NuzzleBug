@@ -1,39 +1,8 @@
 export default {
-
-    /**
-     * Tutorial header default title.
-     */
     headerTitle: 'Tutorial',
-
-    /**
-     * Footer.
-     */
-    codeClub: 'These and further tutorials you can find in the Raspberry Pi ',
-
-    /**
-     * Home button title.
-     */
     homeButtonTitle: 'Home',
-
-    /**
-     * Download button title
-     */
-    downloadButtonTitle: 'Download',
-
-    /**
-     * Tutorial steps
-     */
-    testButtonTitle: 'Test',
-    continueButtonTitle: 'Continue',
-
-    successMessage: 'Congratulations, your solution is correct.',
-    failMessage: 'Your solution is not yet correct. Please try it again.',
-    loadingMessage: 'Tests running.',
-
-    solutionHeader: 'Solution',
-
-    backButtonTitle: 'Overview',
-
+    points: "Points",
+    backButtonTitle: 'Back',
 
     finalStep: {
         home: "Home",
@@ -87,6 +56,7 @@ export default {
         loading: "Loading...",
         test_again: "Test again",
         next_step: "Go to next step",
+        step: "Step"
     },
 
     step_overview: {
@@ -123,6 +93,26 @@ export default {
         false: "No",
         select: "Select",
         great: "Great job!",
+    },
+
+    quiz: {
+        movement: "Motion",
+        looks: "Looks",
+        sound: "Sound",
+        events: "Events",
+        control: "Control",
+        sensing: "Sensing",
+        operators: "Operators",
+        variables: "Variables",
+        verySure: "Very sure",
+        somewhatSure: "Somewhat sure",
+        notSureAtAll: "Not sure at all",
+        questionFigure: "In which sprite is the bug located?",
+        questionBlockType: "Which block category is related to the bug?",
+        questionConfidence: "How confident are you?",
+        intro: "Lets start with the first step",
+        other: "Other",
+        finished: "Finished!"
     },
 
     response: {

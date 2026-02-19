@@ -1,39 +1,10 @@
 
 export default {
-
-    /**
-     * Tutorial header default title.
-     */
     headerTitle: 'Tutorien',
-
-    /**
-     * Footer.
-     */
-    codeClub: 'Diese und weitere Tutorien findest du im Raspberry Pi ',
-
-    /**
-     * Home button title.
-     */
     homeButtonTitle: 'Hauptmenü',
-
-    /**
-     * Download button title
-     */
-    downloadButtonTitle: 'Herunterladen',
-
-    /**
-     * Tutorial steps
-     */
-    testButtonTitle: 'Test',
-    continueButtonTitle: 'Weiter',
-
-    successMessage: 'Herzlichen Glückwunsch, deine Lösung ist korrekt.',
-    failMessage: 'Deine Lösung stimmt noch nicht. Versuche es nochmal.',
-    loadingMessage: 'Deine Lösung wird getestet.',
-
-    solutionHeader: 'Lösung',
-
+    points: "Punkte",
     backButtonTitle: 'Übersicht',
+
     finalStep: {
         home: "Übersicht",
         title: "Sehr gut!",
@@ -86,6 +57,7 @@ export default {
         loading: "Lade...",
         test_again: "Teste erneut!",
         next_step: "Zum nächsten Schritt",
+        step: "Schritt"
     },
 
     step: {
@@ -114,6 +86,26 @@ export default {
         false: "Nein",
         select: "Wähle aus",
         great: "Sehr gut!",
+    },
+
+    quiz: {
+        movement: "Bewegung",
+        looks: "Aussehen",
+        sound: "Klang",
+        events: "Ereignisse",
+        control: "Steuerung",
+        sensing: "Fühlen",
+        operators: "Operatoren",
+        variables: "Variablen",
+        verySure: "Sehr sicher",
+        somewhatSure: "einigermaßen sicher",
+        notSureAtAll: "überhaupt nicht sicher",
+        questionFigure: "In welcher Figur liegt der Fehler?",
+        questionBlockType: "Mit welchem Blocktypen hängt der Fehler zusammen?",
+        questionConfidence: "Wie sicher bist du dir?",
+        intro: "Beginnen wir beim ersten Schritt:",
+        other: "Sonstige",
+        finished: "Fertig!"
     },
 
     response: {
