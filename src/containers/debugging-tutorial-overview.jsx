@@ -55,7 +55,6 @@ class DebuggingTutorialOverview extends React.Component {
             }
         } else {
             this.props.onStartTutorial();
-            console.log("OLD");
         }
         this.props.setContentType(CONTENT_DESCRIPTION);
     }
@@ -65,7 +64,7 @@ class DebuggingTutorialOverview extends React.Component {
         this.props.setLoading(true);
         this.props.vm.start();
 
-        const projectId = "project_" + this.props.vm.getLocale();
+        const projectId = "project_1_" + this.props.vm.getLocale();
 
         if (projectId in this.props.tutorialIndexData && this.props.tutorialIndexData[projectId] != null) { //Lädt nur, wenn projectData angegeben wurde
             this.props.vm.loadProject(this.props.tutorialIndexData[projectId])

@@ -16,7 +16,7 @@ import difficulty3 from "../../images/difficultyIconHard.png"
 
 import {CONTENT_START_TUTORIAL, CONTENT_DESCRIPTION} from "../../shared/tutorial-constants.jsx";
 import rightArrow from "../../../cards/icon--next.svg";
-import {parseColoredText} from "../../typewriter.jsx";
+import {parseColoredText} from "../../shared/utils.jsx";
 
 const difficultyImages = {
     1: difficulty1,
@@ -24,16 +24,11 @@ const difficultyImages = {
     3: difficulty3
 };
 
-
-
-
 const DebuggingTutorialOverview = props => {
     const {
         tutorialPicture,
         onStart,
         tutorialMessages,
-        stepCount,
-        isLoading,
         setAutoSave,
         autoSave,
         setContentType,
@@ -42,8 +37,7 @@ const DebuggingTutorialOverview = props => {
         openAutoSaveSelection,
         isProjectEmpty,
         isNewTutorialSelected,
-        guiMessages,
-        ...posProps
+        guiMessages
     } = props;
 
     const renderDescription = () => {
@@ -120,7 +114,8 @@ const DebuggingTutorialOverview = props => {
                     <div className={css.rightCard}></div>
                     <div
                         className={css.rightButton}
-                        onClick={() => { if (isNewTutorialSelected && !isProjectEmpty) {openAutoSaveSelection()} else {onStart()}}} //TODO || !isNewTutorialSelected
+                        onClick={() => {
+                            if (isNewTutorialSelected && !isProjectEmpty) {openAutoSaveSelection()} else {onStart()}}}
                     >
                         <span>{guiMessages.overview.next}</span>
                         <img

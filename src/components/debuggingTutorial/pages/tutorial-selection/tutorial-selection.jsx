@@ -18,6 +18,45 @@ const TutorialSelection = ({tutorials, onSelectTutorial, guiMessages}) => {
 
     const [showClassicTutorials, setShowClassicTutorials] = useState(showClassicTab);
 
+    const renderContent = () => {
+        if (explanationState !== EXPLANATION_STATE.NONE) {
+            // Es wird aktuell die Erklärung angezeigt. Rendere also diese.
+            return (
+                <div className={css.bubbleContainer}>
+                    <div className={css.bubbleBoxContainer}>
+                        <div className={css.bubble}>
+                            <img className={css.bubbleIndicator} draggable={false} alt={"Bubble-Decal"} src={bubbleIndicator}/>
+                            {getExplanationContent()}
+                        </div>
+                    </div>
+                    <img src={euliLeft} alt={"Picture of Euli"} className={css.owlImage} draggable={false}/>
+                </div>
+            );
+        } else {
+            // Ansonsten zeige die passenden (Debug vs. Classic) Tutorials an.
+            const filteredTutorials = tutorials
+                .filter(tutorial =>
+                    showClassicTutorials
+                        ? tutorial.isDebuggingTutorial !== true
+                        : tutorial.isDebuggingTutorial === true
+                );
+
+            return (
+                filteredTutorials.map((tutorial, index) => {
+                    return (
+                        <TutorialItem
+                            key={tutorial.id + index}
+                            isDebuggingTutorial={tutorial.isDebuggingTutorial}
+                            content={tutorial}
+                            onSelect={onSelectTutorial}
+                            guiMessages={guiMessages}
+                        />
+                    );
+                })
+            );
+        }
+    }
+
     const getExplanationContent = () => {
         if (explanationState === EXPLANATION_STATE.INTRO) {
             return (
@@ -48,42 +87,6 @@ const TutorialSelection = ({tutorials, onSelectTutorial, guiMessages}) => {
         return null;
     }
 
-    const renderContent = () => {
-        if (explanationState !== EXPLANATION_STATE.NONE) {
-            return (
-                <div className={css.bubbleContainer}>
-                    <div className={css.bubbleBoxContainer}>
-                        <div className={css.bubble}>
-                            <img className={css.bubbleIndicator} draggable={false} alt={"Bubble-Decal"} src={bubbleIndicator}/>
-                            {getExplanationContent()}
-                        </div>
-                    </div>
-                    <img src={euliLeft} alt={"Picture of Euli"} className={css.owlImage} draggable={false}/>
-                </div>
-            );
-        } else {
-            const filteredTutorials = tutorials
-                .filter(tutorial =>
-                    showClassicTutorials
-                        ? tutorial.isDebuggingTutorial !== true
-                        : tutorial.isDebuggingTutorial === true
-                );
-
-            return (
-                filteredTutorials.map((tutorial, index) => {
-                    return (
-                        <TutorialItem
-                            key={tutorial.id + index}
-                            isDebuggingTutorial={tutorial.isDebuggingTutorial}
-                            content={tutorial}
-                            onSelect={onSelectTutorial}
-                            guiMessages={guiMessages}
-                        />
-                    );
-                })
-            );
-        }
-    }
 
 
 

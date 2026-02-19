@@ -2,13 +2,11 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import {
-    onTestDetails,
     resetStep,
     setCodeResetPoint,
     setContentType,
     setCurPage,
     setCurTestDetails,
-    setHelpType,
     setLastTutorial,
     setLoading,
     setLoadingProject,
@@ -19,10 +17,9 @@ import {
     setLastTestedProject,
     setHasCodeUpdated,
     setTestPageIndex,
-    setSelectedSprite,
     setCurTestRuns,
 } from "../reducers/debugging-tutorial-step";
-import DebuggingTutorialStepComponent from '../components/debuggingTutorial/tutorial-step/debuggingTutorialStep.jsx';
+import DebuggingTutorialStepComponent from '../components/debuggingTutorial/pages/tutorial-step/tutorial-flow/tutorial-flow.jsx';
 import PropTypes from "prop-types";
 import VirtualMachine from "scratch-vm";
 
@@ -31,11 +28,8 @@ import {spriteUpload} from "../lib/file-uploader";
 import {runTest2} from "tutorial-tests/src/test-runner/test-runner";
 
 import logging from 'scratch-vm/src/util/logging.js';
-import {logTutorialScore} from "../components/debuggingTutorial/tutorial-step/tutorial-step-util.jsx";
-
-
-
-const RESPONSE_TESTING_FINISHED = 'scratch-gui/debugging-tutorial-cards/RESPONSE_TESTING_FINISHED'; //TODO REMOVE
+import {logTutorialScore} from "../components/debuggingTutorial/pages/tutorial-step/tutorial-step-util.jsx";
+import {RESPONSE_TESTING_FINISHED} from "../components/debuggingTutorial/shared/tutorial-constants.jsx";
 
 class DebuggingTutorialStep extends React.Component {
     constructor(props) {
@@ -44,9 +38,7 @@ class DebuggingTutorialStep extends React.Component {
         this.onNextStep = this.onNextStep.bind(this);
         this.addSprite = this.addSprite.bind(this);
         this.convertToBuffer = this.convertToBuffer.bind(this);
-        this.checkForCodeUpdate = this.checkForCodeUpdate.bind(this);
         this.onIncreaseTestPageIndex = this.onIncreaseTestPageIndex.bind(this);
-        this.getSprites = this.getSprites.bind(this);
         this.requestHints = this.requestHints.bind(this)
         this.litterboxWebURL = 'https://scratch.fim.uni-passau.de/'; // localhost default: http://localhost:8080
 
@@ -58,22 +50,14 @@ class DebuggingTutorialStep extends React.Component {
             logging.logClickEvent('ICON', new Date(), 'START_TESTS', null);
             logging.pauseLogging(true);
         }
-        //this.props.setMouseEnabled(false);
-        //this.requestHints();
         this.props.setLoadingProject("TEST");
         this.props.lockVM();
+        this.props.setTestPageIndex(0);
 
         if (this.props.curTestRuns === 3) {
             this.props.setTutorialPoints(this.props.tutorialPoints - 1);
         }
         this.props.setCurTestRuns(this.props.curTestRuns + 1);
-
-        //logging.logClickEvent('BUTTON', new Date(), 'CHECK_CODE_QUALITY2', null);
-
-
-
-
-       // this.props.setLastTestedProject(this.props.vm.toJSON());
 
         runTest2(this.props.vm, this.props.tutorialIndexData.testId, this.props.step, (update) => {
             this.props.updateTestResults(update);
@@ -81,7 +65,7 @@ class DebuggingTutorialStep extends React.Component {
             this.props.updateTestResults(finalResult);
         }).finally(() => {
             this.props.unlockVM();
-            this.props.setLoadingProject("TEST_PAUSE"); //TODO REMOVE!
+            this.props.setLoadingProject("TEST_PAUSE");
             if (this.props.curPage !== "TEST_RESULTS") { //Wenn bereits in TestResults, dann braucht man keine Antwort von Euli in der Übersicht
                 this.props.setResponseType(RESPONSE_TESTING_FINISHED);
             } else if (this.props.testResults?.passed) {
@@ -91,31 +75,7 @@ class DebuggingTutorialStep extends React.Component {
             this.delayTestPause();
             this.props.vm.start();
             this.restartProject();
-            //this.props.setMouseEnabled(true);
-            //logging.pauseLogging(false);
         });
-
-
-
-
-/*
-        const summary = runTest(this.props.vm, this.props.tutorialIndexData.testId, this.props.step)
-            .catch(error => {console.log(`Test execution crashed: ${error}`);
-        });
-        summary.then(result => {
-            this.props.updateTestResults(result);
-            this.props.unlockVM();
-        }).finally(() => {
-            this.props.unlockVM();
-            this.props.setLoadingProject("TEST_PAUSE"); //TODO REMOVE!
-            if (this.props.curPage !== "TEST_RESULTS") { //Wenn bereits in TestResults, dann braucht man keine Antwort von Euli in der Übersicht
-                this.props.setResponseType(RESPONSE_TESTING_FINISHED);
-            } else if (this.props.testResults.passed) {
-                this.props.setResponseType(RESPONSE_TESTING_FINISHED);
-            }
-            this.props.setHasCodeUpdated(false);
-            this.delayTestPause();
-        });*/
     }
 
     async restartProject() {
@@ -137,7 +97,9 @@ class DebuggingTutorialStep extends React.Component {
 
     onNextStep() {
         if (logging.isActive()) {
+            logging.pauseLogging(false);
             logging.logClickEvent('ICON', new Date(), 'NEXT_STEP', null);
+            logTutorialScore(this.props.tutorialPoints + 3, this.props.tutorialMessages?.title + "_" + (this.props.step + 1))
             logging.pauseLogging(true);
         }
 
@@ -148,7 +110,7 @@ class DebuggingTutorialStep extends React.Component {
         if (this.props.step + 1 !== this.props.tutorialIndexData.totalSteps) {
 
             if (this.props.isDebuggingTutorial) {
-                const projectDataExists = this.props.tutorialIndexData["project" + (this.props.step + 2).toString()];
+                const projectDataExists = this.props.tutorialIndexData["project_" + (this.props.step + 2).toString() + "_" + this.props.locale];
 
                 if (projectDataExists) {
                     this.props.vm.start();
@@ -184,19 +146,16 @@ class DebuggingTutorialStep extends React.Component {
 
                 // Warte auf alle .addSprite() Aufrufe
                 Promise.all(promises).then(() => {
-                    console.log("added all sprites!");
                     this.props.vm.start();
 
                     this.setSavepoint();
-                    this.delayTestPause(); // Resumes logging
+                    this.delayTestPause();
                 });
             }
 
         }
-        logTutorialScore(this.props.tutorialPoints + 3, this.props.tutorialMessages?.title + "_" + (this.props.step + 1))
         this.props.onIncreaseStep();
     }
-
 
     async setSavepoint() {
         const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -205,11 +164,6 @@ class DebuggingTutorialStep extends React.Component {
         await this.props.setCodeResetPoint(this.props.vm.toJSON());
     }
 
-
-
-
-
-// Handle Sprite Upload ohne Benutzerinteraktion
     addSprite(sprite, title, size) {
         const storage = this.props.vm.runtime.storage;
         const fileType = 'image/png';
@@ -266,16 +220,7 @@ class DebuggingTutorialStep extends React.Component {
                 this.props.resetStep();
             }
         }
-        /* this.interval = setInterval(() => {
-             this.checkForCodeUpdate();
-         }, 1000);
-         console.log("Started updating!");*/
     }
-
-
-
-
-
 
     requestHints() {
         const program = this.props.vm.toJSON();
@@ -308,42 +253,16 @@ class DebuggingTutorialStep extends React.Component {
                 }));
                 console.log(result);
             })
-            // ignore errors to avoid crashing the tutorial tab
-            // eslint-disable-next-line no-unused-vars
             .catch(ignored => {console.log("Cached! " + ignored.toString())});
     }
-
-
 
     componentWillUnmount() {
         clearInterval(this.interval); // Wichtig, sonst bleibt das Intervall aktiv!
     }
 
-    checkForCodeUpdate() {
-        if (this.props.curPage === "TEST_RESULTS" && this.props.projectLoadingState !== "TEST") { //Only check while the user sees their test-results
-            //this.props.setHasCodeUpdated((this.props.vm.toJSON() !== this.props.lastTestedProject)); TODO Removed for performance reasons
-        }
-    }
-
     onIncreaseTestPageIndex(amount) {
         const newIndex = this.props.testPageIndex + amount;
         this.props.setTestPageIndex(Math.max(newIndex, 0));
-    }
-
-    /**
-     * Returns the keys of all current Sprites (up until this step)
-     */
-    getSprites() {
-        const maxStep = this.props.step + 1;
-
-        return Object.keys(this.props.tutorialIndexData).filter((key) => {
-            const match = key.match(/^step(\d+)_Costume/);
-            if (match) {
-                const stepNumber = parseInt(match[1], 10);
-                return stepNumber >= 1 && stepNumber <= maxStep;
-            }
-            return false;
-        });
     }
 
     render () {
@@ -360,7 +279,6 @@ class DebuggingTutorialStep extends React.Component {
                 overviewStep={overviewStep}
                 onIncreaseTestPageIndex={() => this.onIncreaseTestPageIndex(1)}
                 onDecreaseTestPageIndex={() => this.onIncreaseTestPageIndex(-1)}
-                sprites={() => this.getSprites()}
                 removeTutorialPoint={() => this.props.setTutorialPoints(this.props.tutorialPoints - 1)}
                 {...this.props}
             />
@@ -407,8 +325,6 @@ DebuggingTutorialStep.propTypes = {
     toJson: PropTypes.func,
     locale: PropTypes.string.isRequired,
     detectors: PropTypes.string,
-    setHelpType: PropTypes.func,
-    helpType: PropTypes.string,
     onBackToTutorialSelection: PropTypes.func,
     setCodeResetPoint: PropTypes.func,
     codeResetPoint: PropTypes.any,
@@ -419,9 +335,6 @@ DebuggingTutorialStep.propTypes = {
     setTestPageIndex: PropTypes.func,
     testPageIndex: PropTypes.number,
     guiMessages: PropTypes.any,
-    sprites: PropTypes.any,
-    setSelectedSprite: PropTypes.func,
-    selectedSprite: PropTypes.string,
     projectLoadingState: PropTypes.string,
     setMouseEnabled: PropTypes.func,
     setTutorialPoints: PropTypes.func,
@@ -434,7 +347,6 @@ DebuggingTutorialStep.propTypes = {
 const mapStateToProps = state => ({
     isErrorInfoVisible: state.scratchGui.debuggingTutorialStep.isErrorInfoVisible,
     testResults: state.scratchGui.debuggingTutorialStep.testResults,
-    showTestDetail: state.scratchGui.debuggingTutorialStep.showTestDetail,
     showReset: state.scratchGui.debuggingTutorialStep.showReset,
     isLoading: state.scratchGui.debuggingTutorialStep.isLoading,
     projectLoadingState: state.scratchGui.debuggingTutorialStep.projectLoadingState,
@@ -446,12 +358,10 @@ const mapStateToProps = state => ({
     curTestDetails: state.scratchGui.debuggingTutorialStep.curTestDetails,
     toJson: state.scratchGui.vm.toJSON.bind(state.scratchGui.vm),
     locale: state.locales.locale,
-    helpType: state.scratchGui.debuggingTutorialStep.helpType,
     codeResetPoint: state.scratchGui.debuggingTutorialStep.codeResetPoint,
     lastTestedProject: state.scratchGui.debuggingTutorialStep.lastTestedProject,
     hasCodeUpdated: state.scratchGui.debuggingTutorialStep.hasUpdated,
     testPageIndex: state.scratchGui.debuggingTutorialStep.testPageIndex,
-    selectedSprite: state.scratchGui.debuggingTutorialStep.selectedSprite,
     curTestRuns: state.scratchGui.debuggingTutorialStep.curTestRuns,
 });
 
@@ -459,7 +369,6 @@ const mapDispatchToProps = dispatch => ({
     showErrorInfo: () => dispatch(showErrorInfo()),
     resetStep: () => dispatch(resetStep()),
     updateTestResults: (results) => dispatch(updateTestResults(results)),
-    onTestDetails: () => dispatch(onTestDetails()),
     lockVM: () => dispatch(lock()),
     unlockVM: () => dispatch(unlock()),
     setLoading: (isLoading) => dispatch(setLoading(isLoading)),
@@ -470,12 +379,10 @@ const mapDispatchToProps = dispatch => ({
     setCurPage: (page) => dispatch(setCurPage(page)),
     showQuickHandle: () => dispatch(showQuickHandle()),
     setCurTestDetails: (testId) => dispatch(setCurTestDetails(testId)),
-    setHelpType: (type) => dispatch(setHelpType(type)),
     setCodeResetPoint: (project) => dispatch(setCodeResetPoint(project)),
     setLastTestedProject: (newCode) => dispatch(setLastTestedProject(newCode)),
     setHasCodeUpdated: (value) => dispatch(setHasCodeUpdated(value)),
     setTestPageIndex: (index) => dispatch(setTestPageIndex(index)),
-    setSelectedSprite: (key) => dispatch(setSelectedSprite(key)),
     setCurTestRuns: (runs) => dispatch(setCurTestRuns(runs)),
 });
 

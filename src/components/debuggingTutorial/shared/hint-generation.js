@@ -193,10 +193,6 @@ class HintGenerator {
                         "";
 
                     if (typeof delta === "string" && delta) handleDelta(delta);
-
-                    /*if (evt.type === "response.output_text.delta" && typeof evt.delta === "string") {
-                        handleDelta(evt.delta);
-                    }*/
                 }
             }
         }
