@@ -1,12 +1,13 @@
 import React, {useState} from "react";
 import css from "./tutorial-help-page.css";
 import ScratchBlocks from "scratchblocks-react";
-import owl from "../../images/OwlBranchRight.png";
-import bubbleIndicatorBlue from "../../images/bubbleIDecalBlue2.png";
+import owl from "../../../../images/OwlBranchRight.png";
+import bubbleIndicatorBlue from "../../../../images/bubbleIDecalBlue2.png";
 import {TypewriterText} from "../test-results/test-utils.jsx";
-import {FitToWidth} from "../../typewriter.jsx";
-import {translate} from "../tutorial-flow/tutorial-step-util.jsx";
+import {FitToWidth} from "../../../../shared/utils.jsx";
+import {translate} from "../../tutorial-step-util.jsx";
 import TutorialHelpPageQuiz from "./tutorial-help-page-quiz.jsx";
+import { tutorialConfig } from "../../../../config.js";
 
 const EuliBubble = ({ children }) => (
     <div className={css.EuliBubbleContainer}>
@@ -73,14 +74,14 @@ const TutorialHelpPage = ({
                     <>
                         {selectedOption === -1 && <EuliBubble>
                             {isGeneratingHint && <div style={{display: "flex", flexDirection: "column"}}>
-                                <div style={{display: "flex"}}>
+                                {tutorialConfig.classic.llmHintsEnabled && <div style={{display: "flex"}}>
                                     <strong><TypewriterText text={guiMessages.help_page.thinking} speed={30}/></strong>
                                     <div className={css.helpPageLoaderContainer}>
                                         <span className={css.helpPageLoader}></span>
                                     </div>
-                                </div>
+                                </div>}
 
-                                <TutorialHelpPageQuiz vm={vm}/>
+                                <TutorialHelpPageQuiz vm={vm} quizMessages={guiMessages.quiz}/>
                             </div>}
 
                             {!isGeneratingHint && <TypewriterText text={help?.problemText + "\n\nWelcher Code-Vorschlag könnte das Problem lösen?"} speed={15} onComplete={onFinishedAnswer}/>}

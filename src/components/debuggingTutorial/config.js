@@ -3,7 +3,8 @@ export const tutorialConfig = {
         enableTutorialSelectionHelp: true, //Ob in der Tutorial-Auswahl (sowohl klassische als auch debug-tutorials) eine kurze Erklärung zu den beiden Tutorial Arten angezeigt wird.
     },
     classic: {
-        llmHintsEnabled: true, //Ob bei nicht bestandenen Tests die Hilfestellung genutzt werden kann, um LLM-Hinweise zu generieren.
+        hintSystemEnabled: true, //Ob bei nicht bestandenen Tests die Hilfestellung geöffnet werden kann.
+        llmHintsEnabled: true, //Ob in der Hilfestellung LLM-Hints angezeigt werden.
     },
     debugging: {
         enableResetButton: true, //Ob die Möglichkeit besteht, dass der Nutzer im debug-tutorial seinen Code auf Schrittanfang zurücksetzen kann.
