@@ -1,38 +1,27 @@
 import React, { useEffect, useRef, useState } from "react";
-/**
- * Owly's text in the top speech bubble based on the current state of the test result page.
- * @returns {JSX.Element} A <span> containing Owly's response.
- */
+
 export const getTestText = ({
                                 projectLoadingState,
                                 testResults,
-                                curTestDetails,
                                 hasCodeUpdated,
                                 guiMessages,
-                                onComplete,
-                                onStart
+                                onComplete
                             }) => {
     const msg = guiMessages?.test_results?.response ?? {};
     if (projectLoadingState === "TEST") return <span>{msg.loading}</span>;
 
-    if (testResults?.passed && projectLoadingState !== "TEST_PAUSE") return <TypewriterText text={msg.passed_all} speed={15} onComplete={onComplete} onStart={onStart}/>;
-
-    if (curTestDetails) {
-        const result = testResults?.details?.find(e => e.testId === curTestDetails)?.result;
-        return <span>{result === "pass" ? msg.test_passed : msg.test_failed}</span>;
-    }
+    if (testResults?.passed) return (<>
+        <span>Super!</span>
+        <TypewriterText text={msg.passed_all} speed={20}/>
+    </>);
 
     if (hasCodeUpdated && projectLoadingState !== "TEST_PAUSE") { //TODO CONSTANT!!!
-        return <TypewriterText text={msg.code_changed} speed={15} onComplete={onComplete} onStart={onStart}/>;
+        return <TypewriterText text={msg.code_changed} speed={15} onComplete={onComplete}/>;
     }
 
     return <span>{msg.default}</span>;
 };
 
-
-/**
- * Utility function that determines the visibility of pagination arrows based on the currently shown tests and max. number of test results.
- */
 export const getPaginationInfo = (testResults, step, testPageIndex) => {
     if (!testResults || !testResults.details) return { showLeftArrow: false, showRightArrow: false };
 
