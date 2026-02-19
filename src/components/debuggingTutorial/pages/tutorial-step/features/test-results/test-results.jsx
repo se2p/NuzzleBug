@@ -1,17 +1,17 @@
 import css from "./test-results.css"
 import React, {useState} from 'react';
 
-import owl from "../../images/OwlBranchRight.png"
-import owlDown from "../../images/owlDown.png"
-import bubbleIndicatorGray from "../../images/bubbleDecalGrey.png"
-import bubbleIndicatorGreenDark from "../../images/bubbleDecalGreenDark.png";
-import bubbleIndicatorGreenLight from "../../images/bubbleDecalGreenLight.png";
+import owl from "../../../../images/OwlBranchRight.png"
+import owlDown from "../../../../images/owlDown.png"
+import bubbleIndicatorGray from "../../../../images/bubbleDecalGrey.png"
+import bubbleIndicatorGreenDark from "../../../../images/bubbleDecalGreenDark.png";
+import bubbleIndicatorGreenLight from "../../../../images/bubbleDecalGreenLight.png";
 
-import testSuccess from "../../images/icon--testSuccess.png"
-import testFailed from "../../images/icon--testFailed.png"
-import testRunning from "../../images/icon--testRunning.png"
-import { tutorialConfig } from "../../config.js";
-import {getPaginationInfo, getRunningStep, getStepColor, getTestText, TypewriterText} from "./test-utils.jsx";
+import testSuccess from "../../../../images/icon--testSuccess.png"
+import testFailed from "../../../../images/icon--testFailed.png"
+import testRunning from "../../../../images/icon--testRunning.png"
+import { tutorialConfig } from "../../../../config.js";
+import {getPaginationInfo, getRunningStep, getStepColor, getTestText} from "./test-utils.jsx";
 
 const TestResults = (props) => {
     const {curTestDetails,onDecreaseTestPageIndex,onIncreaseTestPageIndex} = props;
@@ -89,7 +89,7 @@ const renderResponse = ({projectLoadingState, nextStep, testResults, handleTestS
         return (
             <div style={{width:"100%"}}>
                 <div className={css.loadingHeader}>
-                    <span className={css.stepLabel}>Schritt:</span>
+                    <span className={css.stepLabel}>{guiMessages.test_results.step}</span>
 
                     {[...Array(step +1)].map((_, i) => {
                         const stepNum = step + 1 - i;
@@ -142,7 +142,7 @@ const parseTestResults = ({testResults, testPageIndex, curTestDetails, projectLo
 
     const visibleDetails = sliceElements(filteredDetails, curTestDetails);
 
-    return visibleDetails.map((e, idx) => {
+    return visibleDetails.map((e) => {
         // Nummer für das UI = Index in sortedDetails + 1, da sortedDetails mit 0 beginnt
         const originalIdx = sortedDetails.findIndex(t => t === e);
 
@@ -213,8 +213,8 @@ const createTestElement = (passed, e, testElementNumber, isCurrentStep, projectL
                         {(projectLoadingState === "TEST" && e.result === "running") ? <span>{msg.loading}</span> : <span>{headerText}</span>}
                     </div>
                 </div>
-                <span className={css.testElementTitle}>{tutorialMessages[e.testId].name}</span>
-                <p className={css.testElementText} key={e.testId}>{tutorialMessages[e.testId].description}</p>
+                <span className={css.testElementTitle}>{tutorialMessages["test" + e.testId].name}</span>
+                <p className={css.testElementText} key={e.testId}>{tutorialMessages["test" + e.testId].description}</p>
                 {passed ?
                     <div className={css.buttonWrapper} onClick={() => setCurTestDetails("")}>
                         <div className={buttonStyle}>
@@ -225,12 +225,16 @@ const createTestElement = (passed, e, testElementNumber, isCurrentStep, projectL
                     <div className={css.buttonContainer}>
                         <div className={css.buttonWrapper} style={{paddingRight:"5px"}} onClick={() => setCurTestDetails("")}>
                             <div className={buttonStyle}
-                                 style={tutorialConfig.classic.llmHintsEnabled ? { borderBottomRightRadius: 0, borderTopRightRadius: 0 } : {}}
+                                 style={tutorialConfig.classic.hintSystemEnabled ? { borderBottomRightRadius: 0, borderTopRightRadius: 0 } : {}}
                             >
                                 {msg.close_button}
                             </div>
                         </div>
-                        {tutorialConfig.classic.llmHintsEnabled && <div className={css.buttonWrapper} style={{paddingLeft:"5px"}} onClick={() => {if (projectLoadingState !== "TEST" && projectLoadingState !== "TEST_PAUSE") openHelpPage("step1_Costume1")}}> {/*TODO openHelpPAge parameter?!*/}
+                        {tutorialConfig.classic.hintSystemEnabled &&
+                            <div className={css.buttonWrapper}
+                                 style={{paddingLeft:"5px"}}
+                                 onClick={() => {if (projectLoadingState !== "TEST" && projectLoadingState !== "TEST_PAUSE") openHelpPage()}}
+                            >
                             <div className={helpButtonStyle}>
                                 {msg.help_button}
                             </div>
@@ -246,7 +250,7 @@ const createTestElement = (passed, e, testElementNumber, isCurrentStep, projectL
                 <img src={iconSrc} className={css.testElementIcon} alt={"ResultIcon"} draggable={false}/>
                 {(projectLoadingState === "TEST" && e.result === "running") ? <span>{msg.loading}</span> : <span>{headerText}</span>}
             </div>
-            <span className={css.testElementTitle}>{tutorialMessages[e.testId].name}</span>
+            <span className={css.testElementTitle}>{tutorialMessages["test" + e.testId].name}</span>
             <div className={css.buttonWrapper} onClick={() => setCurTestDetails(e.testId)}>
                 <div className={buttonStyle}>
                     {msg.details_button}

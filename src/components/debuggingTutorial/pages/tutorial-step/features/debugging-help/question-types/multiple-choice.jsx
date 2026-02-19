@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import css from "../debuggingTutorialHelp.css";
+import css from "../debugging-help.css";
 
 const MultipleChoice = ({
                             tutorial,
@@ -9,7 +9,6 @@ const MultipleChoice = ({
                             selectedAnswers,
                             onEnterMultiAnswer,
                         }) => {
-    // Rendert alle Optionen, die mit "option" beginnen
     const renderOptions = () => {
         return Object.keys(tutorial[step])
             .filter(key => key.startsWith('option'))

@@ -22,7 +22,7 @@ import {
     onDiagrammExplanation,
     setResponseType,
 } from "../reducers/debugging-tutorial-help";
-import DebuggingTutorialStepComponent from '../components/debuggingTutorial/debugging/debuggingTutorialHelp.jsx';
+import DebuggingTutorialStepComponent from '../components/debuggingTutorial/pages/tutorial-step/features/debugging-help/debugging-help.jsx';
 import PropTypes from "prop-types";
 import logging from 'scratch-vm/src/util/logging.js';
 

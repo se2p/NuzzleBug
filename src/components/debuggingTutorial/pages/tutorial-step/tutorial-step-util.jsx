@@ -1,4 +1,4 @@
-import css from "./tutorial-flow.css";
+import css from "./tutorial-flow/tutorial-flow.css";
 import React from "react";
 import logging from 'scratch-vm/src/util/logging.js';
 import scratchblocks from "scratchblocks";
@@ -30,7 +30,7 @@ export const resetHoldButton = (progressBarRef, setLoading, timeoutIdRef) => {
     }
 };
 
-export const generateControlImages = (tutorialMessages, overviewStep) => {
+export const generateControlImages = (tutorialMessages, overviewStep, tutorialIndexData) => {
     return Object.keys(tutorialMessages[overviewStep])
         .filter(key => key.startsWith("controlImage"))
         .map(key => {

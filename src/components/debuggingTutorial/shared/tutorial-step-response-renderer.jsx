@@ -1,6 +1,5 @@
 import React from "react";
-import css from "./features/tutorial-flow/tutorial-flow.jsx"
-
+import css from "../pages/tutorial-step/tutorial-flow/tutorial-flow.css"
 import {
     RESPONSE_START,
     RESPONSE_DEFAULT,
@@ -12,7 +11,7 @@ import {
     RESPONSE_EXPLANATION3,
     RESPONSE_EXPLANATION4,
     RESPONSE_ASK_TEST_START
-} from './shared/tutorial-constants.jsx';
+} from './tutorial-constants.jsx';
 
 
 /**

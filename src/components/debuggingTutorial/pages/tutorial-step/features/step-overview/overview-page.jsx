@@ -1,9 +1,9 @@
 import React, { useRef } from "react";
 import PropTypes from "prop-types";
-import css from "../features/tutorial-flow/tutorial-flow.css";
-import rightArrow from "../../cards/icon--next.svg";
+import css from "../../tutorial-flow/tutorial-flow.css";
+import rightArrow from "../../../../../cards/icon--next.svg";
 import OverviewTabs from "./overview-tabs.jsx";
-import { handleHoldButton, resetHoldButton } from "../features/tutorial-flow/tutorial-step-util.jsx";
+import { handleHoldButton, resetHoldButton } from "../../tutorial-step-util.jsx";
 import OverviewContent from "./overview-content.jsx";
 
 /**
@@ -65,7 +65,8 @@ const OverviewPage = ({
                                  isErrorInfoVisible={isErrorInfoVisible}
                                  showErrorInfo={showErrorInfo}
                                  guiMessages={guiMessages}
-                               />}
+                               />
+                        }
                     </div>
                 </div>
             </div>
@@ -96,19 +97,12 @@ OverviewPage.propTypes = {
     contentType: PropTypes.string.isRequired,
     isLoading: PropTypes.bool.isRequired,
     isShowingQuickHandle: PropTypes.bool.isRequired,
-
     isDebuggingTutorial: PropTypes.bool.isRequired,
     showControlOverview: PropTypes.bool.isRequired,
-
     setContentType: PropTypes.func.isRequired,
-    setCurPage: PropTypes.func.isRequired,
     setLoading: PropTypes.func.isRequired,
     onStartAfterHold: PropTypes.func.isRequired,
-
-    getContent: PropTypes.func.isRequired,
     getBorderColor: PropTypes.func.isRequired,
-
-    PAGE_RESPONSE: PropTypes.string.isRequired,
     guiMessages: PropTypes.object.isRequired,
 };
 

@@ -7,7 +7,7 @@
     color: #575E75FF;
     padding-top: 10px;
     background-color: #ffffff;
-    background-image: url("../../images/skulls.png");
+    background-image: url("../../../../images/skulls.png");
 }
 
 /*Top box*/
@@ -94,7 +94,7 @@
 }
 
 .nextBubble:hover .nextBubbleIndicator {
-    background-image: url('../../images/bubbleDecalGreenDark.png');
+    background-image: url('../../../../images/bubbleDecalGreenDark.png');
 }
 
 .nextBubbleIndicator {
@@ -107,7 +107,7 @@
     transform: translateX(-102%) translateY(-40%);
     background-size: contain;
     background-repeat: no-repeat;
-    background-image: url('../../images/bubbleDecalGreenLight.png');
+    background-image: url('../../../../images/bubbleDecalGreenLight.png');
 }
 
 .owlImage {
@@ -196,18 +196,18 @@
     width: 15px;
     height: 40px;
 
-    background-image: url("../../images/nextTestArrowGrey.png");
+    background-image: url("../../../../images/nextTestArrowGrey.png");
     background-size: cover;   /* skaliert, damit das gesamte Div gefüllt wird */
     background-position: center center; /* Bild zentrieren */
     background-repeat: no-repeat;
 }
 
 .testLeftArrow:hover .nextTestIcon{
-    background-image: url("../../images/nextTestArrowWhite.png");
+    background-image: url("../../../../images/nextTestArrowWhite.png");
 }
 
 .testRightArrow:hover .nextTestIcon{
-    background-image: url("../../images/nextTestArrowWhite.png");
+    background-image: url("../../../../images/nextTestArrowWhite.png");
 }
 
 .testRightArrow:active {
@@ -461,7 +461,7 @@
 }
 
 .helpBubble:hover .selectionBubbleIndicator {
-    background-image: url('../../images/selectionBubbleDecalGrey.png');
+    background-image: url('../../../../images/selectionBubbleDecalGrey.png');
 }
 
 .helpBubble.selected {
@@ -471,7 +471,7 @@
 }
 
 .helpBubble.selected .selectionBubbleIndicator {
-    background-image: url('../../images/selectionBubbleDecalDark.png');
+    background-image: url('../../../../images/selectionBubbleDecalDark.png');
 }
 
 .helpBubble:not(.selected):hover {
@@ -491,7 +491,7 @@
     transform: translateX(-102%) translateY(-40%);
     background-size: contain;
     background-repeat: no-repeat;
-    background-image: url('../../images/selectionBubbleDecalLight.png');
+    background-image: url('../../../../images/selectionBubbleDecalLight.png');
 }
 
 

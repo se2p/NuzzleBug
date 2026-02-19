@@ -1,19 +1,17 @@
-import css from "./debuggingTutorialHelp.css";
+import css from "./debugging-help.css";
 import PropTypes from "prop-types";
 import React, {useRef} from "react";
-import dropdownIcon from "../images/icon--dropdown-selector.png";
-import bubbleIndicator from "../images/bubbleDecalGreyHelp.png";
-import euliLeft from "../images/OwlBranchRight.png";
-import bubbleIndicatorBlue from "../images/bubbleDecalBlue.png";
-import MultipleChoice from "./content-types/multipleChoice.jsx";
-import SingleChoice from "./content-types/singleChoice.jsx";
-import Message from "./content-types/message.jsx";
-import Mark from "./content-types/mark.jsx";
-import MarkChoice from "./content-types/markChoice.jsx";
-import Explanation from "./questionExplanations.jsx";
-import leftArrow from "../../cards/icon--prev.svg";
+import dropdownIcon from "../../../../images/icon--dropdown-selector.png";
+import bubbleIndicator from "../../../../images/bubbleDecalGreyHelp.png";
+import euliLeft from "../../../../images/OwlBranchRight.png";
+import bubbleIndicatorBlue from "../../../../images/bubbleDecalBlue.png";
+import MultipleChoice from "./question-types/multiple-choice.jsx";
+import SingleChoice from "./question-types/single-choice.jsx";
+import Message from "./question-types/message.jsx";
+import Mark from "./question-types/mark.jsx";
+import MarkChoice from "./question-types/mark-choice.jsx";
+import Explanation from "./question-explanations.jsx";
 
-const RESPONSE_START = 'scratch-gui/debugging-tutorial-help/START';
 const RESPONSE_DEFAULT = 'scratch-gui/debugging-tutorial-help/DEFAULT';
 const RESPONSE_EXPLANATION = 'scratch-gui/debugging-tutorial-help/EXPLANATION';
 const RESPONSE_EXPLANATION1 = 'scratch-gui/debugging-tutorial-help/EXPLANATION1';
@@ -24,7 +22,7 @@ const RESPONSE_HELP = 'scratch-gui/debugging-tutorial-help/RESPONSE_HELP';
 const RESPONSE_CONTROL = 'scratch-gui/debugging-tutorial-help/RESPONSE_CONTROL';
 
 
-const DebuggingTutorialHelp = props => {
+const DebuggingHelp = props => {
     const {
         onDrag,
         onStartDrag,
@@ -243,15 +241,6 @@ const DebuggingTutorialHelp = props => {
         return states[answer] || states[""];
     }
 
-    const renderToggle = () => { //TODO IMPLEMENT
-        return (
-            <label className={css.switch}>
-                <input type="checkbox" id="togBtn"/>
-                <div className={css.slider}></div>
-            </label>
-        );
-    }
-
     const renderDropdown = () => {
         const questionStart = tutorial[step]["questionText1_0"];
         const questionEnd = tutorial[step]["questionText1_1"];
@@ -302,10 +291,6 @@ const DebuggingTutorialHelp = props => {
     const renderHelpPage = () => {
         return (
             <div className={css.pageContainer}>
-                {/*<div className={css.leftButton} onClick={onHomeMenu}>
-                    <img src={leftArrow} alt="Next" draggable={false}/>
-                </div>*/}
-
                 <div className={css.whiteBox} style={{paddingBottom:"0", paddingTop:"0", marginBottom:"10px"}}>
                     <div className={css.bubbleContainer}>
                         <div className={css.bubbleBoxContainer}>
@@ -345,12 +330,6 @@ const DebuggingTutorialHelp = props => {
                         >
                             {guiMessages.help.helpButton}
                         </button>
-                        {/*<button
-                            className={css.footerButton}
-                            onClick={() => setResponseType(RESPONSE_EXPLANATION)}
-                        >
-                            Was soll ich tun?
-                        </button>*/}
                     </div>
 
                     <div style={{display:"flex", zIndex:"100"}}>
@@ -386,14 +365,6 @@ const DebuggingTutorialHelp = props => {
                         <p style={{ fontSize: "1rem", marginBottom: "10px" }}>
                             <strong><u style={{color:"#d2a99e"}}>Euli:</u>&nbsp;{text}</strong>
                         </p>
-
-                        {/*/_1$/.test(step) && !questionMessage?.startsWith("[REVISITING]") && <p style={{ fontSize: "0.7rem" }}>
-                            Wenn du dir nicht sicher bist, drücke unten auf&nbsp;&nbsp;
-                            <span style={{ color: "#c7b4b0ff", fontWeight: "bold" }}>
-                                    Ich brauche weitere Hilfe
-                                </span>
-                        </p>*/}
-
                         {questionMessage?.startsWith("[REVISITING]") && (
                             <p style={{ fontSize: "0.8rem" }}>
                                 <span style={{ color: "#ff735a", fontWeight: "bold" }}>
@@ -539,7 +510,7 @@ const DebuggingTutorialHelp = props => {
     return renderHelpPage();
 };
 
-DebuggingTutorialHelp.props = {
+DebuggingHelp.props = {
     onHelp: PropTypes.func,
     tutorial: PropTypes.object.isRequired,
     step: PropTypes.string,
@@ -547,290 +518,4 @@ DebuggingTutorialHelp.props = {
     isHelpVisible: PropTypes.bool,
 }
 
-export default DebuggingTutorialHelp;
-
-
-
-
-
-
-/*
-return (
-            <div className={css.cardContainer}>
-                <div className={css.header} style={{backgroundColor: showDiagramm ? "transparent" : "#4D97FF6B",
-                    borderColor: showDiagramm ? "#4D97FFFF" : "transparent"}}>
-                    <div className={css.diagrammButtonContainer}>
-                        {showDiagramm ? <img className={css.diagrammButton}
-                                             onClick={onDiagrammExplanation}
-                                             src={diagrammExplanation}
-                                             draggable={false} alt={"explanationButton"}/> : null}
-                        <img className={css.diagrammButton}
-                             onClick={onToggleDiagramm}
-                             src={showDiagramm ? expandIcon : shrinkIcon}
-                             draggable={false} alt={"expandButton"}/>
-                    </div>
-                    {showDiagramm && <img
-                        draggable={false}
-                        src={showExplanation ? explanationPage : tutorialIndexData["diagramm" + tutorial[step]["diagrammStep"]]}
-                        alt="Diagramm of the debugging process." className={css.headerImage}
-                    />}
-                </div>
-
-                <div className={css.questionSection}>
-                    <div className={css.questionHeader}>
-                        <span style={{marginTop:"5px", marginBottom:"5px"}}>{tutorial[step]["text"]}</span>
-                        {tutorial[step]["help"] !== null && <div className={isHelpVisible ? css.infoButtonBackground : css.infoButtonBackgroundInvisible} onClick={props.onHelp}>
-                            <img className={css.helpButton} src={infoIcon} alt={"infoButton"}/>
-                        </div>}
-                    </div>
-
-                    {isHelpVisible && <div className={css.helpSection}>
-                        <span>{tutorial[step]["help"]}</span>
-                    </div>}
-
-                    <div className={css.options}>
-                        {parseQuestion()}
-                    </div>
-                </div>
-
-                <div className={css.footer}>
-                    {renderMsg()}
-                    {!stepRegex.test(step) && <button className={css.footerButton} onClick={onStepBack}>Zurück</button>}
-                    <button className={css.footerButton} onClick={() => onCheckAnswer(tutorial)}>
-                        Weiter
-                        {renderMessageBorder()}
-                    </button>
-                </div>
-            </div>
-        );
-
-
-
-
-
-
-
-            const renderSingleChoice = () => {
-        if (!tutorial || !tutorial[step]) {
-            console.error("Missing tutorial or tutorial[step]");
-            return null;
-        }
-
-        return Object.keys(tutorial[step])
-            .filter(key => key.startsWith("option"))
-            .map(key => {
-                const option = tutorial[step][key];
-                const isSelected = answers[0] === key;
-
-                if (!option) {
-                    console.error(`Missing option for key: ${key}`);
-                    return null;
-                }
-
-                return (
-                    <div key={key} className={css.option}>
-                        <img
-                            alt="option picture"
-                            className={css.smallImage}
-                            style={{width: option["width"]}}
-                            src={tutorialIndexData[option["img"]] || undefined}
-                        />
-
-                        <div className={css.checkboxTrigger} onClick={() => setAnswer(0, key)}>
-                            <button
-                                className={isSelected ? css.checkboxActive : css.checkbox}
-                                key={key}
-                                onClick={e => {
-                                    e.stopPropagation();
-                                    setAnswer(0, key);
-                                }}
-                                style={{borderRadius: "100px"}}
-                            />
-                        </div>
-                    </div>
-                );
-            });
-    }
-
-    const renderMultipleChoice = () => {
-        return Object.keys(tutorial[step])
-            .filter(key => key.startsWith("option"))
-            .map(key => {
-                const option = tutorial[step][key];
-                const isSelected = selectedAnswers[key.charAt(6) - 1];
-
-                return (
-                    <div key={key} className={css.option}>
-                        <img
-                            alt="option picture"
-                            className={css.smallImage}
-                            style={{height: option["width"]} || "auto"}
-                            src={tutorialIndexData[option["img"]] || undefined}
-                        />
-                        <div className={css.checkboxTrigger} onClick={() => onEnterMultiAnswer(key)}>
-                            <button
-                                className={isSelected ? css.checkboxActive : css.checkbox}
-                                onClick={e => {
-                                    e.stopPropagation();
-                                    onEnterMultiAnswer(key);
-                                }}
-                            />
-                        </div>
-                    </div>
-                );
-            });
-    }
-
-    const renderMessage = () => {
-        const message = tutorial[step]["message"];
-        const img = tutorial[step].img;
-        const imgSrc = tutorialIndexData[img];
-        const width = tutorial[step].width;
-
-        return (
-            <div className={css.messageTextContainer}>
-                {message && <span className={css.messageText}>{message}</span>}
-                {img &&
-                <img src={imgSrc} style={{height:"auto", width}}
-                     draggable={false} alt={"messageContent"}/>}
-            </div>
-        );
-    }
-
-
-
-
-
-
-
-    const renderMark = () => {
-        if (answers[0] === null || answers[0] === undefined || answers[0] === "") {
-            setAnswer(0, "option1");
-            return;
-        }
-        const curOption = answers[0];
-        const optionKeys = Object.keys(tutorial[step]).filter(key => key.startsWith('option'))
-
-        return (
-            <div style={{ display: "flex", alignItems: "center", width:"100%", marginLeft: "40px", marginRight: "auto", marginBottom: "20px", marginTop: "20px"}}>
-                <div style={{display: "flex", alignItems: "end", width: "100%"}}>
-                    <div style={{display: "flex", flexDirection: "column", height: tutorial[step][curOption]["height"]}}>
-                    {tutorial[step][curOption]["selectorData"].map((e, index) => (
-                        <button
-                            key={index}
-                            className={selectedBlocks.hasOwnProperty(curOption) && selectedBlocks[curOption].includes(index) ? css.checkboxActive : css.checkbox}
-                            onClick={() => {
-                                if (selectedBlocks.hasOwnProperty(curOption) && selectedBlocks[curOption].includes(index)) {
-                                    removeSelectedBlock(curOption, index);
-                                } else {
-                                    addSelectedBlock(curOption, index);
-                                }
-                            }}
-                            style={{marginTop: e.height}}
-                        />
-                    ))}
-                </div>
-
-                <img src={tutorialIndexData[tutorial[step][curOption]["img"]]}
-                     style={{height: tutorial[step][curOption]["height"], marginLeft: "5px"}}
-                     draggable={false}
-                     alt={"codeSnippets"}/>
-            </div>
-
-                <div style={{marginTop: "20px", marginBottom: "auto", display: "flex", flexDirection:"column", marginRight: "40px", marginLeft: "auto", borderRadius:"10px", border: "2px solid #575E75FF", padding: "10px"}}>
-                    {optionKeys.map((e) => (
-                        <div style={{display: "flex", alignItems: "start", height: "50px"}}>
-                            <div style={{display: "flex", height: "100%", alignItems: "center",justifyContent: "center"}}>
-                                <button
-                                    className={answers[0] === e ? css.checkboxActive : css.checkbox}
-                                    onClick={() => {
-                                        setAnswer(0, e);
-                                    }}
-                                    style={{borderRadius: "100px", marginRight: "10px", marginBottom: "10px"}}
-                                />
-                            </div>
-                            <img className={css.spriteImage} src={tutorialIndexData[tutorial[step][e]["sprite"]]} draggable={false} alt={"codeSnippetSprite"}/>
-                        </div>
-                        ))}
-                </div>
-            </div>
-        );
-    }
-
-    const renderMarkChoice = () => {
-        const selection = [];
-        for (const [option, values] of Object.entries(selectedBlocks)) {
-            values.forEach(value => {
-                selection.push(`${option}_${value}`);
-            });
-        }
-
-        return selection.map(key => {
-            const option = tutorial[step][key];
-                    const isSelected = answers[0] === key;
-            return (
-                <div key={key} className={css.option}>
-                    <img
-                        alt="option picture"
-                        className={css.smallImage}
-                        style={{width: option["width"]}}
-                        src={tutorialIndexData[option["img"]]}
-                    />
-
-                    <div className={css.checkboxTrigger} onClick={() => setAnswer(0, key)}>
-                        <button
-                            className={isSelected ? css.checkboxActive : css.checkbox}
-                            key={key}
-                            onClick={e => {
-                                e.stopPropagation();
-                                setAnswer(0, key);
-                            }}
-                            style={{borderRadius: "100px"}}
-                        />
-                    </div>
-                </div>
-            );
-        });
-    }
-
-
-
-
-
-    const renderMsg = () => {
-        if (!questionMessage) {
-            return null;
-        }
-
-        const pageRevisit = questionMessage.includes("[REVISITING]");
-        const primaryColor = pageRevisit ? "#575e75" : "#ff8b4d";
-        const secondaryColor = pageRevisit ? "rgb(121,128,161)" : "#fdb17b";
-        const trimmedMessage = pageRevisit ? questionMessage.slice(12) : questionMessage;
-
-        return (
-            <div className={css.helpBox} style={{ backgroundColor: secondaryColor }}>
-                <div className={css.helpBoxHeader} style={{ backgroundColor: primaryColor }}>
-                    {pageRevisit? "Hinweis" : "Achtung"}
-                </div>
-                <span className={css.helpText}>{trimmedMessage}</span>
-                <div className={css.helpBoxClose} style={{ backgroundColor: primaryColor }} onClick={onCloseQuestionMessage}>
-                    X
-                </div>
-            </div>
-        );
-    }
-
-    const renderMessageBorder = () => {
-        if (!questionMessage) return null;
-
-        const isCorrection = questionMessage.includes('[REVISITING]');
-        const primaryColor = isCorrection ? '#575e75' : '#ff8b4d';
-
-        return (
-            <>
-                <div className={css.footerBorder} style={{ borderColor: primaryColor }} />
-                <hr className={css.footerLine} style={{ borderColor: primaryColor }} />
-            </>
-        );
-    }
- */
+export default DebuggingHelp;

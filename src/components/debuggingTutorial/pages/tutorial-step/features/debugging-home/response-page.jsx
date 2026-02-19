@@ -1,9 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import css from "../features/tutorial-flow/tutorial-flow.css";
-import owl from "../images/OwlBranchRight.png";
-import bubbleIndicatorGray from "../images/bubbleDecalGrey.png";
+import css from "../../tutorial-flow/tutorial-flow.css";
+import owl from "../../../../images/OwlBranchRight.png";
+import bubbleIndicatorGray from "../../../../images/bubbleDecalGrey.png";
 import ControlPanelButtons from "./control-panel-buttons.jsx";
+import { tutorialConfig } from "../../../../config.js";
 
 const ResponsePage = ({
                           guiMessages,
@@ -15,7 +16,7 @@ const ResponsePage = ({
                           onOpenHelp,
                           PAGE_TEST_RESULTS,
                           getResponse,
-                          tutorialConfig,
+                          onClickTest
                       }) => {
     return (
         <div className={css.cpContainer}>
@@ -43,6 +44,7 @@ const ResponsePage = ({
                 onOpenHelp={onOpenHelp}
                 PAGE_TEST_RESULTS={PAGE_TEST_RESULTS}
                 tutorialConfig={tutorialConfig}
+                onClickTest={onClickTest}
             />
         </div>
     );

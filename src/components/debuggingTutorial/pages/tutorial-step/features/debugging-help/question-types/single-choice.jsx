@@ -1,15 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import css from "../debuggingTutorialHelp.css";
+import css from "../debugging-help.css";
 
 const SingleChoice = ({ tutorial, step, tutorialIndexData, answers, setAnswer }) => {
-    // Überprüfe, ob die notwendigen Daten vorhanden sind
     if (!tutorial || !tutorial[step]) {
         console.error("Missing tutorial or tutorial[step]");
         return null;
     }
 
-    // Erstelle die Option-Elemente, die mit "option" beginnen
+
     const options = Object.keys(tutorial[step])
         .filter(key => key.startsWith("option"))
         .map(key => {

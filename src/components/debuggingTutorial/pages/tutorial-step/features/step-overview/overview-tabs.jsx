@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import css from "../features/tutorial-flow/tutorial-flow.css";
-import iconErrors from "../images/icon--Errors.png";
-import iconDescription from "../images/icon--Description.png";
-import iconControls from "../images/icon--Controls.png";
+import css from "../../tutorial-flow/tutorial-flow.css";
+import iconErrors from "../../../../images/icon--Errors.png";
+import iconDescription from "../../../../images/icon--Description.png";
+import iconControls from "../../../../images/icon--Controls.png";
 
 const OverviewTabs = ({
                           contentType,

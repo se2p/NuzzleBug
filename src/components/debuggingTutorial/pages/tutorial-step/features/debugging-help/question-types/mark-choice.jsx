@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import css from "../debuggingTutorialHelp.css";
+import css from "../debugging-help.css";
 
 const MarkChoice = ({
                         selectedBlocks,

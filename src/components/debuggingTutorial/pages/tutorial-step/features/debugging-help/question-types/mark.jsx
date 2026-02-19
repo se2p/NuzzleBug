@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import css from "../debuggingTutorialHelp.css";
+import css from "../debugging-help.css";
 
 const Mark = ({
                   tutorial,
@@ -12,14 +12,13 @@ const Mark = ({
                   addSelectedBlock,
                   removeSelectedBlock
               }) => {
-    // Falls noch keine Antwort gesetzt ist, setze den Standardwert in einem Effekt
+    // Falls noch keine Antwort gesetzt ist, setze den Standardwert auf option1
     useEffect(() => {
         if (!answers[0]) {
             setAnswer(0, "option1");
         }
     }, [answers, setAnswer]);
 
-    // Solange answers[0] nicht gesetzt ist, rendere nichts
     if (!answers[0]) {
         return null;
     }

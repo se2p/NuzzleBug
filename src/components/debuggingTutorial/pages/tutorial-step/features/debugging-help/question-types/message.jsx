@@ -1,15 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import css from "../debuggingTutorialHelp.css";
+import css from "../debugging-help.css";
 
 const Message = ({ tutorial, step, tutorialIndexData }) => {
-    // Sicherstellen, dass die notwendigen Daten vorhanden sind
     if (!tutorial || !tutorial[step]) {
         console.error("Missing tutorial or tutorial[step]");
         return null;
     }
 
-    // Destrukturieren der Werte aus dem aktuellen Schritt
     const { message, img, width } = tutorial[step];
     const imgSrc = img ? tutorialIndexData[img] : null;
 

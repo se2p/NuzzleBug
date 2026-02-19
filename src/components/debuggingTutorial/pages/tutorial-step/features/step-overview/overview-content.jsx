@@ -1,13 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import css from "../features/tutorial-flow/tutorial-flow.css";
+import css from "../../tutorial-flow/tutorial-flow.css";
 
-import owl from "../images/OwlBranchRight.png";
-import bubbleIndicator from "../images/SpeachBubbleRed.png";
+import owl from "../../../../images/OwlBranchRight.png";
+import bubbleIndicator from "../../../../images/SpeachBubbleRed.png";
 
-import { generateControlImages } from "../features/tutorial-flow/tutorial-step-util.jsx";
-import { parseColoredText } from "../typewriter.jsx";
+import { generateControlImages } from "../../tutorial-step-util.jsx";
+import { parseColoredText } from "../../../../shared/utils.jsx";
 
 const OverviewContent = ({
                              contentType,
@@ -18,6 +18,7 @@ const OverviewContent = ({
                              showErrorInfo,
                              guiMessages,
                          }) => {
+    // Rendere den aktuellen Content der TutorialÜbersicht, je nachdem, welchen Reiter der Nutzer zuvor angeklickt hat.
     switch (contentType) {
         case "DETAILS": {
             const stepMsg = tutorialMessages?.[overviewStep] ?? {};
@@ -107,7 +108,7 @@ const OverviewContent = ({
                         alignItems: "center",
                     }}
                 >
-                    <div className={css.controlContainer}>{generateControlImages(tutorialMessages, overviewStep)}</div>
+                    <div className={css.controlContainer}>{generateControlImages(tutorialMessages, overviewStep, tutorialIndexData)}</div>
                     <p className={css.p} style={{ textAlign: "center" }}>
                         {parseColoredText(stepMsg.controlInfo)}
                     </p>
