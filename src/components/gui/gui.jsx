@@ -28,6 +28,7 @@ import BBTTestInterface from '../../containers/block-based-testing.jsx';
 import BBTExamplesWindow from '../../containers/block-based-testing-examples-window.jsx';
 import BBTBatchEvaluationWindow from '../../containers/block-based-testing-batch-evaluation-window.jsx';
 import BBTCoordinatesTooltip from '../block-based-testing/bbt-coordinates-tooltip.jsx';
+import HiddenDebuggingWindow from '../../containers/hidden-debugging-window.jsx';
 
 import Backpack from '../../containers/backpack.jsx';
 import WebGlModal from '../../containers/webgl-modal.jsx';
@@ -51,6 +52,7 @@ import codeIcon from './icon--code.svg';
 import costumesIcon from './icon--costumes.svg';
 import soundsIcon from './icon--sounds.svg';
 import testsIcon from '../block-based-testing/icons/rules-icon.svg';
+import LitterBoxInterface from '../../containers/litterbox-interface.tsx';
 
 import HintsExplanationCard from '../hint-gen/hints-explanation-card.jsx';
 
@@ -81,6 +83,7 @@ const GUIComponent = props => {
         blockBasedTestingInterfaceVisible,
         bbtExamplesWindowVisible,
         bbtBatchEvaluationWindowVisible,
+        hiddenDebuggingWindowVisible,
         bbtCoordinatesTooltipVisible,
         blocksTabVisible,
         cardsVisible,
@@ -111,6 +114,7 @@ const GUIComponent = props => {
         isRtl,
         isShared,
         isTelemetryEnabled,
+        isLoggingActive,
         loading,
         logo,
         renderLogin,
@@ -231,6 +235,9 @@ const GUIComponent = props => {
                         vm={vm}
                     />
                 ) : null}
+                {hiddenDebuggingWindowVisible ? (
+                    <HiddenDebuggingWindow />
+                ) : null}
                 {bbtCoordinatesTooltipVisible ? (
                     <BBTCoordinatesTooltip />
                 ) : null}
@@ -285,6 +292,7 @@ const GUIComponent = props => {
                     className={styles.menuBarPosition}
                     enableCommunity={enableCommunity}
                     isShared={isShared}
+                    isFinishExperimentButtonVisible={isLoggingActive}
                     logo={logo}
                     renderLogin={renderLogin}
                     showComingSoon={showComingSoon}
@@ -415,6 +423,9 @@ const GUIComponent = props => {
                                     {soundsTabVisible ? <SoundTab vm={vm}/> : null}
                                 </TabPanel>
                             </Tabs>
+                            <LitterBoxInterface
+                                vm={vm}
+                            />
                             {backpackVisible ? (
                                 <Backpack host={backpackHost}/>
                             ) : null}
@@ -460,6 +471,7 @@ GUIComponent.propTypes = {
     blockBasedTestingInterfaceVisible: PropTypes.bool,
     bbtExamplesWindowVisible: PropTypes.bool,
     bbtBatchEvaluationWindowVisible: PropTypes.bool,
+    hiddenDebuggingWindowVisible: PropTypes.bool,
     bbtCoordinatesTooltipVisible: PropTypes.bool,
     blocksTabVisible: PropTypes.bool,
     canChangeLanguage: PropTypes.bool,
@@ -486,6 +498,7 @@ GUIComponent.propTypes = {
     isPlayerOnly: PropTypes.bool,
     isRtl: PropTypes.bool,
     isShared: PropTypes.bool,
+    isLoggingActive: PropTypes.bool,
     loading: PropTypes.bool,
     logo: PropTypes.string,
     onActivateCostumesTab: PropTypes.func,
@@ -538,6 +551,7 @@ GUIComponent.defaultProps = {
     enableCommunity: false,
     isCreating: false,
     isShared: false,
+    isLoggingActive: false,
     loading: false,
     showComingSoon: false,
     stageSizeMode: STAGE_SIZE_MODES.large

@@ -8,8 +8,9 @@ import bindAll from 'lodash.bindall';
 import VirtualMachine from 'scratch-vm';
 import logging from 'scratch-vm/src/util/logging.js';
 import ScratchBlocks from 'scratch-blocks';
-import {AnswerV2 as Answer, QuestionV2 as Question, targetForBlockId, QuestionCategoryType} from 'scratch-ir';
+import {AnswerV2 as Answer, QuestionV2 as Question, QuestionCategoryType} from 'scratch-ir';
 import {getContentMessageKey} from 'scratch-ir/src/version-2/questions/question';
+import {getHostingTarget} from 'scratch-analysis';
 
 import scratchblocks from 'scratchblocks';
 
@@ -48,7 +49,7 @@ class IRAnswer extends React.Component {
             'handleNeutralFeedback',
             'handleNegativeFeedback'
         ]);
-    
+
         this.graphDiv = React.createRef();
         this.targetsDiv = React.createRef();
         this.stage = React.createRef();
@@ -197,7 +198,7 @@ class IRAnswer extends React.Component {
         this.graphDiv.current.innerHTML = this._createGraphSvg(graph);
         const svgGraphNode = this.graphDiv.current.children[0].children[0];
         const svgGraphChildren = Array.from(svgGraphNode.children);
-        
+
         const svgGraphEdges = this._adaptGraphEdges(svgGraphChildren);
         const svgGraphNodes = this._adaptGraphNodes(svgGraphChildren, graphNodes);
         svgGraphNode.innerHTML = '';
@@ -207,13 +208,13 @@ class IRAnswer extends React.Component {
         for (const node of svgGraphNodes) {
             svgGraphNode.appendChild(node);
         }
-        
+
         if (this.graphSize) {
             this._updateGraphSize(this.graphDiv.current.children[0]);
         } else {
             this._initGraphSize();
         }
-        
+
         this.forceUpdate();
     }
 
@@ -280,7 +281,7 @@ class IRAnswer extends React.Component {
             }
 
             this._addRelevantValueBeforeAndAfterExecution(graphNode, svgGraphNode, block, scaleFactor);
-            
+
             const svgGraphNodeChildren = Array.from(svgGraphNode.children);
             if (block.isStackBlock) {
                 const svgBlock = svgGraphNodeChildren.find(n => n.nodeName === 'svg');
@@ -316,7 +317,7 @@ class IRAnswer extends React.Component {
         const blockId = graphNode.block.id;
         const block = this._getScratchBlock(blockId);
         const executionInfo = this._getNodeExecutionInfo(graphNode);
-        let targetForBlock = targetForBlockId(this.targets, blockId);
+        let targetForBlock = getHostingTarget(this.targets, blockId);
         if (!targetForBlock) {
             targetForBlock = this.target;
         }
@@ -387,7 +388,7 @@ class IRAnswer extends React.Component {
     _getNodeExecutionInfo (graphNode) {
         return this.props.answer.graph.executionInfo.blocks[graphNode.id];
     }
-    
+
     _addEdgeForActualConditionValue (svgGraphNode, value, block, scaleFactor) {
         const arrowPosition = {x: block.width + 10, y: block.height / 2};
         const arrowLength = 40;
@@ -501,11 +502,11 @@ class IRAnswer extends React.Component {
             h ${width}
             a 4,4 0 0,1 4,4
             v ${height}
-            a 4,4 0 0,1 -4,4 
+            a 4,4 0 0,1 -4,4
             h ${-width}
-            a 4,4 0 0,1 -4,-4 
+            a 4,4 0 0,1 -4,-4
             v ${-height}
-            a 4,4 0 0,1 4,-4 
+            a 4,4 0 0,1 4,-4
             Z`);
         svgGraphNode.innerHTML += path.outerHTML;
     }
@@ -540,14 +541,14 @@ class IRAnswer extends React.Component {
         const edgeFilter = node => node.getAttribute('class') === 'edge';
         const svgGraphEdges = svgGraphChildren.filter(edgeFilter);
         for (const svgGraphEdge of svgGraphEdges) {
-            
+
             const {pathNode, polygonNode, titleNode} = this._getEdgeChildren(svgGraphEdge);
             svgGraphEdge.removeChild(titleNode);
-            
+
             const executionInfo = this._getEdgeExecutionInfo(titleNode);
-            
+
             this._updateEdgeColor(pathNode, polygonNode, executionInfo);
-            
+
             const edge = this._extractEdgeAttributes(pathNode, polygonNode);
             if (executionInfo.condition) {
                 const fromNodeId = titleNode.innerHTML.split('-&gt;')[0];
@@ -615,11 +616,11 @@ class IRAnswer extends React.Component {
         const pathEndValues = path.split(' ')[path.split(' ').length - 1].split(',');
         const pathEnd = {x: Number(pathEndValues[0]), y: Number(pathEndValues[1])};
         const line = {start: pathStart, end: pathEnd};
-        
+
         const polygonPoints = polygonNode.getAttribute('points');
         const arrowTipValues = polygonPoints.split(' ')[1].split(',');
         const arrowTip = {x: Number(arrowTipValues[0]), y: Number(arrowTipValues[1])};
-        
+
         const start = pathStart;
         const end = arrowTip;
         const center = {
@@ -674,7 +675,7 @@ class IRAnswer extends React.Component {
                 x="${position.x}"
                 y="${position.y}"
                 font-family=""Helvetica Neue", Helvetica, sans-serif;"
-                font-size="${size}" 
+                font-size="${size}"
                 fill="${color}"
                 ${className ? `class="${className}"` : ''}
                 lengthAdjust="spacingAndGlyphs"
@@ -763,7 +764,7 @@ class IRAnswer extends React.Component {
                     />
                 </g>`;
     }
-    
+
     _createPauseIcon (position, scale) {
         return `<g transform="translate(${position.x},${position.y}) scale(${scale})">
                     <path
@@ -780,7 +781,7 @@ class IRAnswer extends React.Component {
 
     _createEyeIcon (position, scale) {
         return `<g transform="translate(${position.x},${position.y}) scale(${scale})">
-                    <path 
+                    <path
                         fill="red"
                         stroke="#cc0000"
                         d="M500,163.1c-183.8,0-398.1,122.5-490,367.5c91.9,183.8,275.6,306.3,490,306.3
@@ -812,14 +813,14 @@ class IRAnswer extends React.Component {
                 transform="translate(${position.x},${position.y}) scale(${scale})"
                 fill-opacity="${fillOpacity}">
                 <path fill="#4C97FF"
-                    d="M16.8786199,10.6231329 L14.6209769,14.1433441 C14.3320842,14.6034325 13.6687009,14.6034325 
-                    13.3691085,14.1433441 L11.1221651,10.6231329 C10.8011732,10.1309454 11.1542643,9.47826182 
-                    11.7427495,9.47826182 L13.0267171,9.47826182 C12.7806233,7.4453131 11.0579667,5.87245277 
-                    8.9704494,5.87245277 C6.71387632,5.87245277 4.87245277,7.71280635 4.87245277,9.9704494 
-                    C4.87245277,12.2280925 6.71387632,14.068446 8.9704494,14.068446 C9.48510642,14.068446 
-                    9.90132592,14.4846655 9.90132592,14.9993226 C9.90132592,15.5236093 9.48510642,15.9408988 
-                    8.9704494,15.9408988 C5.67493253,15.9408988 3,13.2659663 3,9.9704494 C3,6.68563226 
-                    5.67493253,4 8.9704494,4 C12.0947706,4 14.6637758,6.41813901 14.9098696,9.47826182 
+                    d="M16.8786199,10.6231329 L14.6209769,14.1433441 C14.3320842,14.6034325 13.6687009,14.6034325
+                    13.3691085,14.1433441 L11.1221651,10.6231329 C10.8011732,10.1309454 11.1542643,9.47826182
+                    11.7427495,9.47826182 L13.0267171,9.47826182 C12.7806233,7.4453131 11.0579667,5.87245277
+                    8.9704494,5.87245277 C6.71387632,5.87245277 4.87245277,7.71280635 4.87245277,9.9704494
+                    C4.87245277,12.2280925 6.71387632,14.068446 8.9704494,14.068446 C9.48510642,14.068446
+                    9.90132592,14.4846655 9.90132592,14.9993226 C9.90132592,15.5236093 9.48510642,15.9408988
+                    8.9704494,15.9408988 C5.67493253,15.9408988 3,13.2659663 3,9.9704494 C3,6.68563226
+                    5.67493253,4 8.9704494,4 C12.0947706,4 14.6637758,6.41813901 14.9098696,9.47826182
                     L16.2580356,9.47826182 C16.8465207,9.47826182 17.1996118,10.1309454 16.8786199,10.6231329"
                 />
             </g>`;
@@ -833,7 +834,7 @@ class IRAnswer extends React.Component {
                 <g transform="translate(2.000000, 4.000000)">
                     <path
                         fill="#4D97FF"
-                        transform="translate(2.332533, 6.010929) scale(-1, 1) translate(-2.332533, -6.010929)" 
+                        transform="translate(2.332533, 6.010929) scale(-1, 1) translate(-2.332533, -6.010929)"
                         d="M4.66453333,2.41690667 L4.66453333,9.60624 C4.66453333,10.08224 4.08853333,10.3209067
                             3.7512,9.98357333 L0.156533333,6.38890667 C-0.0514666667,6.17957333 -0.0514666667,5.84090667
                             0.156533333,5.63290667 L3.7512,2.03824 C4.08853333,1.70090667 4.66453333,1.93957333
@@ -843,39 +844,39 @@ class IRAnswer extends React.Component {
                         fill-opacity="0.25"
                         fill="#575E75"
                         d="M7.87546667,11.7567733 C7.70213333,11.7567733 7.54213333,11.6901067 7.4088,11.5581067
-                            C7.35546667,11.5047733 7.30213333,11.42344 7.26213333,11.34344 C7.2368,11.2647733 
-                            7.2088,11.183447.2088,11.0901067 C7.2088,11.0101067 7.2368,10.9167733 7.26213333,10.8381067 
-                            C7.30213333,10.7567733 7.35546667,10.6767733 7.4088,10.62344 C7.59546667,10.4381067 
-                            7.89013333,10.3701067 8.14213333,10.4767733 C8.22346667,10.5167733 8.29013333,10.5581067 
-                            8.35546667,10.62344 C8.4088,10.6767733 8.46213333,10.7567733 8.50346667,10.8381067 
-                            C8.5288,10.9167733 8.5568,11.0101067 8.5568,11.0901067 C8.5568,11.18344 8.5288,11.2647733 
-                            8.50346667,11.34344 C8.46213333,11.42344 8.42213333,11.5047733 8.35546667,11.5581067 
-                            C8.2368,11.6901067 8.06346667,11.7567733 7.87546667,11.7567733 Z M7.22306667,3.27757333 
-                            C7.22306667,2.90424 7.5164,2.61090667 7.88973333,2.61090667 C8.24973333,2.61090667 
-                            8.5564,2.90424 8.5564,3.27757333 C8.5564,3.63757333 8.24973333,3.94424 7.88973333,3.94424 
-                            C7.5164,3.94424 7.22306667,3.63757333 7.22306667,3.27757333 Z M7.22306667,5.87757333 
-                            C7.22306667,5.50424 7.5164,5.21090667 7.88973333,5.21090667 C8.24973333,5.21090667 
-                            8.5564,5.50424 8.5564,5.87757333 C8.5564,6.24957333 8.24973333,6.54424 7.88973333,6.54424 
-                            C7.5164,6.54424 7.22306667,6.24957333 7.22306667,5.87757333 Z M7.22306667,8.49090667 
-                            C7.22306667,8.11757333 7.5164,7.82424 7.88973333,7.82424 C8.24973333,7.82424 
-                            8.5564,8.11757333 8.5564,8.49090667 C8.5564,8.85090667 8.24973333,9.15757333 
-                            7.88973333,9.15757333 C7.5164,9.15757333 7.22306667,8.85090667 7.22306667,8.49090667 
-                            Z M7.87546667,1.33104 C7.79546667,1.33104 7.70213333,1.31770667 7.62346667,1.29104 
-                            C7.54213333,1.24970667 7.47546667,1.19637333 7.4088,1.14304 C7.35546667,1.07770667 
-                            7.30213333,0.997706667 7.26213333,0.916373333 C7.2368,0.837706667 7.2088,0.756373333 
-                            7.2088,0.664373333 C7.2088,0.58304 7.2368,0.49104 7.26213333,0.41104 C7.30213333,0.33104 
+                            C7.35546667,11.5047733 7.30213333,11.42344 7.26213333,11.34344 C7.2368,11.2647733
+                            7.2088,11.183447.2088,11.0901067 C7.2088,11.0101067 7.2368,10.9167733 7.26213333,10.8381067
+                            C7.30213333,10.7567733 7.35546667,10.6767733 7.4088,10.62344 C7.59546667,10.4381067
+                            7.89013333,10.3701067 8.14213333,10.4767733 C8.22346667,10.5167733 8.29013333,10.5581067
+                            8.35546667,10.62344 C8.4088,10.6767733 8.46213333,10.7567733 8.50346667,10.8381067
+                            C8.5288,10.9167733 8.5568,11.0101067 8.5568,11.0901067 C8.5568,11.18344 8.5288,11.2647733
+                            8.50346667,11.34344 C8.46213333,11.42344 8.42213333,11.5047733 8.35546667,11.5581067
+                            C8.2368,11.6901067 8.06346667,11.7567733 7.87546667,11.7567733 Z M7.22306667,3.27757333
+                            C7.22306667,2.90424 7.5164,2.61090667 7.88973333,2.61090667 C8.24973333,2.61090667
+                            8.5564,2.90424 8.5564,3.27757333 C8.5564,3.63757333 8.24973333,3.94424 7.88973333,3.94424
+                            C7.5164,3.94424 7.22306667,3.63757333 7.22306667,3.27757333 Z M7.22306667,5.87757333
+                            C7.22306667,5.50424 7.5164,5.21090667 7.88973333,5.21090667 C8.24973333,5.21090667
+                            8.5564,5.50424 8.5564,5.87757333 C8.5564,6.24957333 8.24973333,6.54424 7.88973333,6.54424
+                            C7.5164,6.54424 7.22306667,6.24957333 7.22306667,5.87757333 Z M7.22306667,8.49090667
+                            C7.22306667,8.11757333 7.5164,7.82424 7.88973333,7.82424 C8.24973333,7.82424
+                            8.5564,8.11757333 8.5564,8.49090667 C8.5564,8.85090667 8.24973333,9.15757333
+                            7.88973333,9.15757333 C7.5164,9.15757333 7.22306667,8.85090667 7.22306667,8.49090667
+                            Z M7.87546667,1.33104 C7.79546667,1.33104 7.70213333,1.31770667 7.62346667,1.29104
+                            C7.54213333,1.24970667 7.47546667,1.19637333 7.4088,1.14304 C7.35546667,1.07770667
+                            7.30213333,0.997706667 7.26213333,0.916373333 C7.2368,0.837706667 7.2088,0.756373333
+                            7.2088,0.664373333 C7.2088,0.58304 7.2368,0.49104 7.26213333,0.41104 C7.30213333,0.33104
                             7.35546667,0.249706667 7.4088,0.196373333 C7.59546667,0.01104 7.89013333,-0.0556266667
                             8.14213333,0.05104 C8.22346667,0.0897066667 8.29013333,0.13104 8.35546667,0.196373333
-                            C8.47546667,0.317706667 8.5568,0.49104 8.5568,0.664373333 C8.5568,0.756373333 
-                            8.5288,0.837706667 8.50346667,0.916373333 C8.46213333,0.997706667 8.42213333,1.07770667 
-                            8.35546667,1.14304 C8.22346667,1.26437333 8.06346667,1.33104 7.87546667,1.33104 Z" 
+                            C8.47546667,0.317706667 8.5568,0.49104 8.5568,0.664373333 C8.5568,0.756373333
+                            8.5288,0.837706667 8.50346667,0.916373333 C8.46213333,0.997706667 8.42213333,1.07770667
+                            8.35546667,1.14304 C8.22346667,1.26437333 8.06346667,1.33104 7.87546667,1.33104 Z"
                     />
                     <path
                         fill="#4D97FF"
                         transform="translate(13.434500, 6.010396) scale(-1, 1) translate(-13.434500, -6.010396) "
                             d="M11.102,9.60570667 L11.102,2.41637333 C11.102,1.93904 11.6793333,1.70037333
-                            12.0166667,2.03770667 L15.61,5.63370667 C15.8193333,5.84170667 15.8193333,6.18037333 
-                            15.61,6.38970667 L12.0166667,9.98304 C11.6793333,10.3203733 11.102,10.0817067 
+                            12.0166667,2.03770667 L15.61,5.63370667 C15.8193333,5.84170667 15.8193333,6.18037333
+                            15.61,6.38970667 L12.0166667,9.98304 C11.6793333,10.3203733 11.102,10.0817067
                             11.102,9.60570667"
                     />
                 </g>
@@ -884,28 +885,28 @@ class IRAnswer extends React.Component {
 
     _createDontRotateIcon (position, scale, fillOpacity) {
         return `
-            <g id="dont-rotate-active" 
+            <g id="dont-rotate-active"
                 transform="translate(${position.x},${position.y}) scale(${scale})"
                 fill-opacity="${fillOpacity}">
                 <path fill="#4D97FF"
-                    d="M12.5888771,8.06902644 L13.86349,6.56266574 C14.4487406,7.40331746 14.8232375,8.40101099 
-                        14.9098696,9.47826182 L16.2580356,9.47826182 C16.8465207,9.47826182 17.1996118,10.1309454 
-                        16.8786199,10.6231329 L14.6209769,14.1433441 C14.3320842,14.6034325 13.6687009,14.6034325 
-                        13.3691085,14.1433441 L11.1221651,10.6231329 C10.8011732,10.1309454 11.1542643,9.47826182 
-                        11.7427495,9.47826182 L13.0267171,9.47826182 C12.9657526,8.97464215 12.8141722,8.49925787 
-                        12.5888771,8.06902644 Z M14.9322936,3.75140819 L4.41830686,16.1770289 C4.39906741,16.1997664 
-                        4.38220902,16.2237219 4.3677064,16.2485918 L3.88169314,16.8229711 C3.70332112,17.0337744 
-                        3.38783218,17.0600652 3.17702888,16.8816931 C2.96622558,16.7033211 2.93993483,16.3878322 
-                        3.11830686,16.1770289 L4.77600701,14.2179287 C3.67971789,13.1352279 3,11.6316859 3,9.9704494 
+                    d="M12.5888771,8.06902644 L13.86349,6.56266574 C14.4487406,7.40331746 14.8232375,8.40101099
+                        14.9098696,9.47826182 L16.2580356,9.47826182 C16.8465207,9.47826182 17.1996118,10.1309454
+                        16.8786199,10.6231329 L14.6209769,14.1433441 C14.3320842,14.6034325 13.6687009,14.6034325
+                        13.3691085,14.1433441 L11.1221651,10.6231329 C10.8011732,10.1309454 11.1542643,9.47826182
+                        11.7427495,9.47826182 L13.0267171,9.47826182 C12.9657526,8.97464215 12.8141722,8.49925787
+                        12.5888771,8.06902644 Z M14.9322936,3.75140819 L4.41830686,16.1770289 C4.39906741,16.1997664
+                        4.38220902,16.2237219 4.3677064,16.2485918 L3.88169314,16.8229711 C3.70332112,17.0337744
+                        3.38783218,17.0600652 3.17702888,16.8816931 C2.96622558,16.7033211 2.93993483,16.3878322
+                        3.11830686,16.1770289 L4.77600701,14.2179287 C3.67971789,13.1352279 3,11.6316859 3,9.9704494
                         C3,6.68563226 5.67493253,4 8.9704494,4 C10.2739544,4 11.4807977,4.42091588
                         12.4626123,5.13375885 L14.1183069,3.17702888 C14.2966789,2.96622558 14.6121678,2.93993483
-                        14.8229711,3.11830686 C15.0110369,3.27743943 15.052247,3.54570491 14.9322936,3.75140819 
-                        Z M6.41391759,15.3667059 L7.68705488,13.8620891 C8.09106584,13.9959518 8.52258095,14.068446 
-                        8.9704494,14.068446 C9.48510642,14.068446 9.90132592,14.4846655 9.90132592,14.9993226 
-                        C9.90132592,15.5236093 9.48510642,15.9408988 8.9704494,15.9408988 C8.05583315,15.9408988 
-                        7.1890173,15.7348626 6.41391759,15.3667059 Z M11.2481962,6.56897787 C10.5973184,6.12907251 
-                        9.81364832,5.87245277 8.9704494,5.87245277 C6.71387632,5.87245277 4.87245277,7.71280635 
-                        4.87245277,9.9704494 C4.87245277,11.0565658 5.29863553,12.0461039 5.99219528,12.7806153 
+                        14.8229711,3.11830686 C15.0110369,3.27743943 15.052247,3.54570491 14.9322936,3.75140819
+                        Z M6.41391759,15.3667059 L7.68705488,13.8620891 C8.09106584,13.9959518 8.52258095,14.068446
+                        8.9704494,14.068446 C9.48510642,14.068446 9.90132592,14.4846655 9.90132592,14.9993226
+                        C9.90132592,15.5236093 9.48510642,15.9408988 8.9704494,15.9408988 C8.05583315,15.9408988
+                        7.1890173,15.7348626 6.41391759,15.3667059 Z M11.2481962,6.56897787 C10.5973184,6.12907251
+                        9.81364832,5.87245277 8.9704494,5.87245277 C6.71387632,5.87245277 4.87245277,7.71280635
+                        4.87245277,9.9704494 C4.87245277,11.0565658 5.29863553,12.0461039 5.99219528,12.7806153
                         L11.2481962,6.56897787 Z"
                 />
             </g>`;
@@ -960,9 +961,9 @@ class IRAnswer extends React.Component {
         const imageDiv = document.createElement('div');
         const targetName = target.isStage ? this._translate('target.stage') : target.getName();
         imageDiv.setAttribute('title', targetName);
-        imageDiv.setAttribute('style', `height: ${sideLength}px; width: ${sideLength}px; 
-            padding: ${padding}px; margin-bottom: 5px; 
-            border-radius: 4px; border: ${border}px solid ${color}; 
+        imageDiv.setAttribute('style', `height: ${sideLength}px; width: ${sideLength}px;
+            padding: ${padding}px; margin-bottom: 5px;
+            border-radius: 4px; border: ${border}px solid ${color};
             background-color: ${this._hexToRgb(color, 0.5)};`
         );
         imageDiv.appendChild(image);
@@ -1040,7 +1041,7 @@ class IRAnswer extends React.Component {
         const percentage = ((slider.value.index - slider.min) * 100) / (slider.max - slider.min);
         this.sliderValueLabel.current.style.left = `calc(${percentage}% + (${9.5 - (percentage * 0.2)}px))`;
     }
-   
+
     handleFeedback (value) {
         if (this.props.selectedQuestion.feedback === value) {
             this.props.selectedQuestion.feedback = null;

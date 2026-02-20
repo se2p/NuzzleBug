@@ -43,6 +43,17 @@ import GUIComponent from '../components/gui/gui.jsx';
 import {setIsScratchDesktop} from '../lib/isScratchDesktop.js';
 
 class GUI extends React.Component {
+
+    constructor (props) {
+        super(props);
+
+        const urlParams = new URL(window.location.href).searchParams;
+        const urlParamsObj = Object.fromEntries(urlParams);
+
+        this.isLoggingActive = ['uid', 'expid', 'secret'].every(
+            key => urlParamsObj.hasOwnProperty(key) && urlParamsObj[key] !== null);
+    }
+
     componentDidMount () {
         setIsScratchDesktop(this.props.isScratchDesktop);
         this.props.onStorageInit(storage);
@@ -87,6 +98,7 @@ class GUI extends React.Component {
         return (
             <GUIComponent
                 loading={fetchingProject || isLoading || loadingStateVisible}
+                isLoggingActive={this.isLoggingActive}
                 {...componentProps}
             >
                 {children}
@@ -135,6 +147,7 @@ const mapStateToProps = state => {
         blockBasedTestingInterfaceVisible: state.scratchGui.blockBasedTesting.interfaceVisible,
         bbtExamplesWindowVisible: state.scratchGui.blockBasedTesting.examplesWindowVisible,
         bbtBatchEvaluationWindowVisible: state.scratchGui.blockBasedTesting.batchEvaluationWindowVisible,
+        hiddenDebuggingWindowVisible: state.scratchGui.hiddenDebugging.windowVisible,
         bbtCoordinatesTooltipVisible: state.scratchGui.blockBasedTesting.coordinatesTooltipVisible,
         blocksTabVisible: state.scratchGui.editorTab.activeTabIndex === BLOCKS_TAB_INDEX,
         cardsVisible: state.scratchGui.cards.visible,

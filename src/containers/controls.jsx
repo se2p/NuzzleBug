@@ -12,6 +12,7 @@ import {viewCards} from '../reducers/interrogative-debugging/version-1/ir-cards.
 
 import {actionExecuted, openHelpMenu, repositionHelpMenuWindow} from '../reducers/help-menu';
 import {viewTutorial} from '../reducers/tutorial-cards.js';
+import {toggleInterface} from '../reducers/litterbox.ts';
 
 class Controls extends React.Component {
     constructor (props) {
@@ -28,10 +29,12 @@ class Controls extends React.Component {
             'handleToggleTracingClick'
         ]);
 
-        props.vm.runtime.branchDistTracingActive = false;
-
         this.tracingState = props.tracingActive ?
             TracingState.ACTIVE : TracingState.INACTIVE;
+
+        if (this.tracingState === TracingState.ACTIVE){
+            this.tracerID = props.vm.registerDebugTracer();
+        }
     }
     componentDidMount () {
         document.addEventListener('keydown', this.handleKeyDown);
@@ -183,8 +186,8 @@ class Controls extends React.Component {
         }
     }
     activateTracing () {
-        this.props.vm.activateTracing();
-        if (this.props.vm.runtime.tracingActive) {
+        this.tracerID = this.props.vm.registerDebugTracer();
+        if (this.tracerID) {
             this.setTracingState(TracingState.ACTIVATED);
             setTimeout(() => this.setTracingState(TracingState.ACTIVE), 200);
         } else {
@@ -193,7 +196,7 @@ class Controls extends React.Component {
         }
     }
     deactivateTracing () {
-        this.props.vm.deactivateTracing();
+        this.props.vm.unregisterTracer(this.tracerID);
         this.setTracingState(TracingState.DEACTIVATED);
         setTimeout(() => this.setTracingState(TracingState.INACTIVE), 200);
     }
@@ -218,6 +221,7 @@ class Controls extends React.Component {
             irDisabled,
             handleTutorialClick,
             handleDebugTutorialClick,//TODO
+            handleLitterBoxClick,
             turbo,
             interrogationSupported,
             interrogationEnabled,
@@ -248,6 +252,7 @@ class Controls extends React.Component {
                 onToggleTracingClick={this.handleToggleTracingClick}
                 onTutorialClick={handleTutorialClick} //handleTutorialClick UNNÖTIG? WIRD NUR AM ANFANG AUFGERUFEN
                 onDebugTutorialClick={handleDebugTutorialClick}//TODO
+                onLitterBoxClick={handleLitterBoxClick}
             />
         );
     }
@@ -299,7 +304,8 @@ const mapDispatchToProps = dispatch => ({
     onActionExecuted: () => dispatch(actionExecuted()),
     doRepositionHelpMenuWindow: (x, y) => dispatch(repositionHelpMenuWindow(x, y)),
     handleTutorialClick: () => dispatch(viewTutorial()), //dispatch(viewTutorial())
-    handleDebugTutorialClick: () => dispatch(viewDebuggingTutorial()) //TODO Zeigt tutorial an
+    handleDebugTutorialClick: () => dispatch(viewDebuggingTutorial()), //TODO Zeigt tutorial an
+    handleLitterBoxClick: () => dispatch(toggleInterface())
 });
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Controls));

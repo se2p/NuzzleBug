@@ -3,8 +3,7 @@ import randomizeSpritePosition from './randomize-sprite-position.js';
 import bmpConverter from './bmp-converter';
 import gifDecoder from './gif-decoder';
 
-// Only works with npm link settings
-import logging from '../../node_modules/scratch-vm/src/util/logging.js';
+import logging from 'scratch-vm/src/util/logging.js';
 
 /**
  * Extract the file name given a string of the form fileName + ext

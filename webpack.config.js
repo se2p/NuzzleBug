@@ -1,18 +1,26 @@
 const defaultsDeep = require('lodash.defaultsdeep');
-var path = require('path');
-var webpack = require('webpack');
+const path = require('path');
+const webpack = require('webpack');
 
 // Plugins
-var CopyWebpackPlugin = require('copy-webpack-plugin');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 // PostCss
-var autoprefixer = require('autoprefixer');
-var postcssVars = require('postcss-simple-vars');
-var postcssImport = require('postcss-import');
+const autoprefixer = require('autoprefixer');
+const postcssVars = require('postcss-simple-vars');
+const postcssImport = require('postcss-import');
 
 const STATIC_PATH = process.env.STATIC_PATH || '/static';
+
+// dotenv for environment variables in .env
+const dotenv = require('dotenv');
+const env = dotenv.config().parsed;
+const envKeys = Object.keys(env).reduce((obj, key) => {
+    obj[`process.env.${key}`] = JSON.stringify(env[key]);
+    return obj;
+}, {});
 
 const base = {
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
@@ -29,7 +37,7 @@ const base = {
     },
     resolve: {
         symlinks: false,
-        extensions: ['.ts', '.tsx', '.js'] // including typescript is necessary as whisker includes some
+        extensions: ['.ts', '.tsx', '.js']
     },
     module: {
         rules: [{
@@ -52,17 +60,25 @@ const base = {
                     ['react-intl', {
                         messagesDir: './translations/messages/'
                     }]],
-                presets: ['@babel/preset-env', '@babel/preset-react']
+                presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript']
             }
         },
         {
             test: /\.tsx?$/,
             use: [
                 {
+                    loader: 'babel-loader',
+                    options: {}
+                },
+                {
                     loader: 'ts-loader',
                     options: {
                         allowTsInNodeModules: true,
-                        transpileOnly: true // This seems to fix problems with linking whisker locally
+                        // options below required for Whisker
+                        transpileOnly: true,
+                        compilerOptions: {
+                            allowImportingTsExtensions: false
+                        }
                     }
                 }
             ]
@@ -145,8 +161,10 @@ module.exports = [
         plugins: base.plugins.concat([
             new webpack.DefinePlugin({
                 'process.env.NODE_ENV': '"' + process.env.NODE_ENV + '"',
-                'process.env.DEBUG': Boolean(process.env.DEBUG)
+                'process.env.DEBUG': Boolean(process.env.DEBUG),
+                'process.env.ALL_ENV_FILE_VARIABLES': envKeys
             }),
+            new webpack.DefinePlugin(envKeys),
             new HtmlWebpackPlugin({
                 chunks: ['lib.min', 'gui'],
                 template: 'src/playground/index.ejs',
@@ -219,10 +237,6 @@ module.exports = [
                 libraryTarget: 'umd',
                 path: path.resolve('dist'),
                 publicPath: `${STATIC_PATH}/`
-            },
-            externals: {
-                'react': 'react',
-                'react-dom': 'react-dom'
             },
             module: {
                 rules: base.module.rules.concat([

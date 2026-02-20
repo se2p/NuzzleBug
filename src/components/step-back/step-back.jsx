@@ -20,13 +20,14 @@ const StepBackComponent = function (props) {
 
     let enabled = false;
     if (vm.runtime && interrogationEnabled) {
-        const traces = vm.runtime.traceInfo.tracer.traces;
+        const traces = vm.getTraces().debugTrace;
+        const traceLength = traces ? traces.length : 0;
         if (active && paused) {
             const newLastTrace = vm.runtime.newLastTrace;
-            const newLastTraceIndex = traces.indexOf(newLastTrace);
-            enabled = traces.length > 1 && (!newLastTrace || newLastTraceIndex > 0);
+            const newLastTraceIndex = traces ? traces.indexOf(newLastTrace) : -1;
+            enabled = traceLength > 1 && (!newLastTrace || newLastTraceIndex > 0);
         } else if (!active) {
-            enabled = traces.length > 1;
+            enabled = traceLength > 1;
         }
     }
 

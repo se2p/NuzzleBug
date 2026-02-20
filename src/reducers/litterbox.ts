@@ -1,0 +1,66 @@
+enum LitterBoxInterfaceActionType {
+    SHOW_INTERFACE = 'scratch-gui/litterbox/SHOW_INTERFACE',
+    HIDE_INTERFACE = 'scratch-gui/litterbox/HIDE_INTERFACE',
+    TOGGLE_INTERFACE = 'scratch-gui/litterbox/TOGGLE_INTERFACE'
+}
+
+interface LitterBoxInterfaceAction {
+    type: LitterBoxInterfaceActionType;
+}
+
+export interface LitterBoxState {
+    interfaceVisible: boolean;
+}
+
+const initialState: LitterBoxState = {
+    interfaceVisible: false
+};
+
+const reducer = function (state: LitterBoxState | undefined, action: LitterBoxInterfaceAction): LitterBoxState {
+    state ??= {...initialState};
+
+    const triggerEditorResize = () => {
+        setTimeout(() => window.dispatchEvent(new Event('resize')), 10);
+    };
+
+    switch (action.type) {
+    case LitterBoxInterfaceActionType.TOGGLE_INTERFACE:
+        state = {...state, interfaceVisible: !state.interfaceVisible};
+        triggerEditorResize();
+        break;
+    case LitterBoxInterfaceActionType.SHOW_INTERFACE:
+        state = {...state, interfaceVisible: true};
+        triggerEditorResize();
+        break;
+    case LitterBoxInterfaceActionType.HIDE_INTERFACE:
+        state = {...state, interfaceVisible: false};
+        triggerEditorResize();
+        break;
+    default:
+        // do nothing
+        break;
+    }
+
+    return state;
+};
+
+const toggleInterface = function (): LitterBoxInterfaceAction {
+    return {type: LitterBoxInterfaceActionType.TOGGLE_INTERFACE};
+};
+
+const showInterface = function (): LitterBoxInterfaceAction {
+    return {type: LitterBoxInterfaceActionType.SHOW_INTERFACE};
+};
+
+const hideInterface = function (): LitterBoxInterfaceAction {
+    return {type: LitterBoxInterfaceActionType.HIDE_INTERFACE};
+};
+
+export {
+    reducer as default,
+    initialState as litterBoxInitialState,
+
+    toggleInterface,
+    showInterface,
+    hideInterface
+};

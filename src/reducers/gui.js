@@ -3,6 +3,8 @@ import {applyMiddleware, combineReducers, compose} from 'redux';
 import alertsReducer, {alertsInitialState} from './alerts';
 import assetDragReducer, {assetDragInitialState} from './asset-drag';
 import blockBasedTestingReducer, {blockBasedTestingInitialState} from './block-based-testing';
+import litterBoxReducer, {litterBoxInitialState} from './litterbox.ts';
+import hiddenDebuggingReducer, {hiddenDebuggingInitialState} from './hidden-debugging';
 import cardsReducer, {cardsInitialState} from './cards';
 import tutorialCardsReducer, {tutorialCardsInitialState} from './tutorial-cards';
 import tutorialStepReducer, {tutorialStepInitialState} from './tutorial-step';
@@ -49,6 +51,8 @@ const guiInitialState = {
     alerts: alertsInitialState,
     assetDrag: assetDragInitialState,
     blockBasedTesting: blockBasedTestingInitialState,
+    litterBox: litterBoxInitialState,
+    hiddenDebugging: hiddenDebuggingInitialState,
     blockDrag: blockDragInitialState,
     cards: cardsInitialState,
     hintsExplanationCard: hintsExplanationCardInitialState,
@@ -181,6 +185,8 @@ const guiReducer = combineReducers({
     alerts: alertsReducer,
     assetDrag: assetDragReducer,
     blockBasedTesting: blockBasedTestingReducer,
+    litterBox: litterBoxReducer,
+    hiddenDebugging: hiddenDebuggingReducer,
     blockDrag: blockDragReducer,
     cards: cardsReducer,
     hintsExplanationCard: hintsExplanationCardReducer,

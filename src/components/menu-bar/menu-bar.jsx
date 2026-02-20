@@ -12,6 +12,8 @@ import VM from 'scratch-vm';
 import Box from '../box/box.jsx';
 import Button from '../button/button.jsx';
 import CommunityButton from './community-button.jsx';
+import HiddenDebuggingButton from '../hidden-debugging-window/hidden-debugging-button.jsx';
+import {toggleHiddenDebuggingWindowVisibility} from '../../reducers/hidden-debugging';
 import ShareButton from './share-button.jsx';
 import Scratch1984Button from './scratch1984-button.jsx';
 import {ComingSoonTooltip} from '../coming-soon/coming-soon.jsx';
@@ -257,14 +259,19 @@ class MenuBar extends React.Component {
         const userId = new URL(window.location.href).searchParams.get('uid');
         const secret = new URL(window.location.href).searchParams.get('secret');
         if (experimentId && userId) {
-            this.props.saveProjectSb3().then(content => {
-                if (this.props.onSaveFinished) {
-                    this.props.onSaveFinished();
-                }
-                this.props.saveProjectBeforeFinish(content);
-            });
-            //TODO baseurl scratchlog setzen
-            window.location.href = `${this.scratchlogURL}/participant/stop?user=${userId}&experiment=${experimentId}&secret=${secret}`;
+            this.props.saveProjectSb3()
+                .then(content => {
+                    if (this.props.onSaveFinished) {
+                        this.props.onSaveFinished();
+                    }
+                    this.props.saveProjectBeforeFinish(userId, experimentId, secret, content);
+                })
+                // Ensure the redirect happens after the promise resolves or rejects by putting it inside `finally`.
+                .finally(() => {
+                    const url = `${process.env.SCRATCHLOG_BASE_URL}/participant/stop`;
+                    const queryParams = `?user=${userId}&experiment=${experimentId}&secret=${secret}`;
+                    window.location.href = url + queryParams;
+                });
         }
     }
     handleRestoreOption (restoreFun) {
@@ -669,6 +676,10 @@ class MenuBar extends React.Component {
                             </MenuBarItemTooltip>
                         ) : [])}
                     </div>
+                    {process.env.SHOW_HIDDEN_DEBUGGING_BUTTON === 'true' ? (
+                        <HiddenDebuggingButton onClick={this.props.onClickHiddenDebugging} />
+                    ) : null
+                    }
                 </div>
 
                 {/* show the proper UI in the account menu, given whether the user is
@@ -679,15 +690,18 @@ class MenuBar extends React.Component {
                             <SaveStatus />
                         )}
                     </div>
-                    {/* scratch1984 */}
-                    <div>
-                        <Scratch1984Button
-                            className={styles.menuBarButton}
-                            onClick={() => {
-                                this.handleFinishExperiment();
-                            }} // check if called correctly
-                        />
-                    </div>
+
+                    {/* scratch1984/ScratchLog */}
+                    {this.props.isFinishExperimentButtonVisible ? (
+                        <div>
+                            <Scratch1984Button
+                                className={styles.menuBarButton}
+                                onClick={this.handleFinishExperiment}
+                            />
+                        </div>
+                    ) : null
+                    }
+
                     {this.props.sessionExists ? (
                         this.props.username ? (
                             // ************ user is logged in ************
@@ -841,6 +855,7 @@ MenuBar.propTypes = {
     isShared: PropTypes.bool,
     isShowingProject: PropTypes.bool,
     isUpdating: PropTypes.bool,
+    isFinishExperimentButtonVisible: PropTypes.bool,
     languageMenuOpen: PropTypes.bool,
     locale: PropTypes.string.isRequired,
     loginMenuOpen: PropTypes.bool,
@@ -875,7 +890,6 @@ MenuBar.propTypes = {
     onRequestCloseFile: PropTypes.func,
     onRequestCloseLanguage: PropTypes.func,
     onRequestCloseLogin: PropTypes.func,
-    saveProjectBeforeFinish: PropTypes.func,
     onSaveFinished: PropTypes.func,
     onResetProjectState: PropTypes.func,
     onRestartingProject: PropTypes.func,
@@ -894,7 +908,7 @@ MenuBar.propTypes = {
     vm: PropTypes.instanceOf(VM).isRequired,
     saveProjectBeforeFinish: PropTypes.func,
     saveProjectSb3: PropTypes.func,
-    onSaveFinished: PropTypes.func
+    onClickHiddenDebugging: PropTypes.func
 };
 
 MenuBar.defaultProps = {
@@ -946,7 +960,8 @@ const mapDispatchToProps = dispatch => ({
     onClickRemix: () => dispatch(remixProject()),
     onClickSave: () => dispatch(manualUpdateProject()),
     onClickSaveAsCopy: () => dispatch(saveProjectAsCopy()),
-    onSeeCommunity: () => dispatch(setPlayer(true))
+    onSeeCommunity: () => dispatch(setPlayer(true)),
+    onClickHiddenDebugging: () => dispatch(toggleHiddenDebuggingWindowVisibility())
 });
 
 export default compose(

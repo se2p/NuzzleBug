@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {compose} from 'redux';
 import classNames from 'classnames';
+import log from '../lib/log';
 import {
     clearAllBatchEvalTestStatus,
     clearAllTestStatus,
@@ -56,17 +57,18 @@ const BBTBatchEvaluationWindow = props => {
             testInfos: []
         };
 
+        // global variables are actually just the (regular/local) variables of the stage!
         newTestStore.globalVariables = props.vm.runtime.getTargetForStage().variables;
 
         const originalTargets = props.vm.runtime.targets.filter(target => target.isOriginal);
 
         for (const target of originalTargets) {
             let targetContainsTests = false;
-            const spriteName = target.sprite.name;
+            const spriteName = target.isStage ? '_stage_' : target.sprite.name;
 
             for (const script of target.blocks.getScripts()) {
-                const topBlock = target.blocks.getBlock(script);
 
+                const topBlock = target.blocks.getBlock(script);
                 if (!topBlock || topBlock.opcode !== 'bbt_testHat') {
                     continue;
                 }
@@ -92,18 +94,21 @@ const BBTBatchEvaluationWindow = props => {
 
             if (targetContainsTests) {
 
-                newTestStore.targetsWithTests[spriteName].localVariables =
-                    Object.assign({}, props.vm.runtime.getSpriteTargetByName(spriteName).variables);
+                // local variables of the stage == global variables, stored already
+                if (!target.isStage) {
+                    newTestStore.targetsWithTests[spriteName].localVariables =
+                        Object.assign({}, target.variables);
+                }
 
                 newTestStore.targetsWithTests[spriteName].comments =
-                    Object.assign({}, props.vm.runtime.getSpriteTargetByName(spriteName).comments);
+                    Object.assign({}, target.comments);
             }
         }
 
         props.handleSetTestStore(newTestStore);
     };
 
-    const removeAllBbtTestsFromCurrentProject = () => {
+    const removeAllBbtTestsFromCurrentProject = shouldRefreshWorkspaceAndBBTInterface => {
         for (const target of props.vm.runtime.targets) {
 
             // creating a shallow copy since scripts will be deleted during loop
@@ -115,28 +120,32 @@ const BBTBatchEvaluationWindow = props => {
                     target.blocks.deleteBlock(script);
                 }
             }
-            if (target === props.vm.editingTarget) {
-                props.vm.refreshWorkspace();
-            }
         }
 
-        props.onBBTSync();
+        if (shouldRefreshWorkspaceAndBBTInterface) {
+            props.vm.refreshWorkspace();
+            props.onBBTSync();
+        }
     };
 
     const handleInjectTestsFromTestStore = () => {
 
-        removeAllBbtTestsFromCurrentProject();
+        removeAllBbtTestsFromCurrentProject(false);
 
         const stage = props.vm.runtime.getTargetForStage();
 
         for (const gv of Object.values(props.testStore.globalVariables)) {
             stage.createVariable(gv.id, gv.name, gv.type, gv.isCloud);
-            stage.blocks.emitProjectChanged();
         }
 
         for (const spriteName of Object.keys(props.testStore.targetsWithTests)) {
 
-            const currTarget = props.vm.runtime.getSpriteTargetByName(spriteName);
+            const currTarget = spriteName === '_stage_' ? stage : props.vm.runtime.getSpriteTargetByName(spriteName);
+
+            if (!currTarget) {
+                log.error(`Target ${spriteName} not found, can not inject tests!`);
+                continue;
+            }
 
             for (const comment of Object.values(props.testStore.targetsWithTests[spriteName].comments)) {
                 currTarget.createComment(comment.id, comment.blockId, comment.text,
@@ -148,7 +157,7 @@ const BBTBatchEvaluationWindow = props => {
             }
 
             for (const testScript of props.testStore.targetsWithTests[spriteName].testScripts) {
-                props.vm.createBlocksFromDomString(spriteName, testScript);
+                props.vm.createBlocksFromDomString(currTarget, testScript, false);
             }
         }
 
@@ -160,7 +169,6 @@ const BBTBatchEvaluationWindow = props => {
     const handleLoadProject = async function (fileId) {
         const projectFile = props.batchEvalProjectFiles.find(file => file.id === fileId);
         props.requestProjectUpload(props.loadingState);
-        props.handleClearBBTTests();
         props.clearBlockTempColorsAndScriptGlows();
         props.handleResetInfoPanelStatus();
 
@@ -168,7 +176,6 @@ const BBTBatchEvaluationWindow = props => {
             const fileReader = new FileReader();
 
             fileReader.onload = () => {
-                props.handleClearBBTTests();
                 const loadPromise = props.vm.loadProject(fileReader.result)
                     .then(() => {
                         props.setActiveBatchEvaluationFileId(fileId);
@@ -294,7 +301,7 @@ const BBTBatchEvaluationWindow = props => {
             .reduce((previous, current) => {
                 const target = props.vm.runtime.getTargetById(current.containingSpriteId);
                 if (target) {
-                    const spriteName = target.sprite.name;
+                    const spriteName = target.isStage ? '_stage_' : target.sprite.name;
                     if (!previous.hasOwnProperty(spriteName)) {
                         previous[spriteName] = 0;
                     }

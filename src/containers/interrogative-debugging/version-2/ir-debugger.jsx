@@ -6,6 +6,7 @@ import {intlShape} from 'react-intl';
 import ScratchBlocks from 'scratch-blocks';
 import VirtualMachine from 'scratch-vm';
 import logging from 'scratch-vm/src/util/logging.js';
+import log from '../../../lib/log.js';
 
 import {
     QuestionHierarchyProvider,
@@ -108,6 +109,8 @@ class IRDebugger extends React.Component {
             this.cdg = generateCDG(this.cfg);
         } catch (e) {
             this.crashed = true;
+            log.error('Error during IR graph generation!');
+            log.error(e);
             return;
         }
 
@@ -223,8 +226,10 @@ class IRDebugger extends React.Component {
                 this.translate
             );
             this.questionHierarchy = questionHierarchyProvider.generateQuestionHierarchy();
-        } catch {
+        } catch (e) {
             this.crashed = true;
+            log.error('Error during IR question hierarchy generation!');
+            log.error(e);
         }
     }
 
@@ -242,8 +247,10 @@ class IRDebugger extends React.Component {
                 this.translate
             );
             this.abstractCategories = questionHierarchyProvider.generateAbstractQuestionCategories();
-        } catch {
+        } catch (e) {
             this.crashed = true;
+            log.error('Error during IR abstract question categories generation!');
+            log.error(e);
         }
     }
 
@@ -267,7 +274,7 @@ class IRDebugger extends React.Component {
 
     calculateAllTraces () {
         const vm = this.props.vm;
-        let traces = vm.runtime.traceInfo.tracer.traces;
+        let traces = vm.getTraces().debugTrace;
         const newLastTrace = vm.runtime.newLastTrace;
         if (newLastTrace) {
             const newLastTraceIndex = traces.indexOf(newLastTrace);
@@ -611,7 +618,7 @@ class IRDebugger extends React.Component {
                 (this.selectedQuestion.category === QuestionCategoryType.SENSING ||
                     this.selectedQuestion.content === QuestionContent.BLOCK_EXECUTION_TIME) ?
                 this.selectedBlockExecution.lastTrace : this.props.vm.storedLastTrace;
-            const traces = this.props.vm.runtime.traceInfo.tracer.traces;
+            const traces = this.props.vm.getTraces().debugTrace;
             const lastTrace = this.props.vm.runtime.newLastTrace ?
                 this.props.vm.runtime.newLastTrace : traces[traces.length - 1];
             if (newLastTrace.uniqueId !== lastTrace.uniqueId ||
@@ -621,8 +628,10 @@ class IRDebugger extends React.Component {
                 this.initAnswerProvider();
             }
             this.answer = this.answerProvider.generateAnswer(this.selectedQuestion);
-        } catch {
+        } catch (e) {
             this.crashed = true;
+            log.error('Error during IR answer generation!');
+            log.error(e);
         }
         this.answerLoading = false;
         this.forceUpdateIfMounted();
