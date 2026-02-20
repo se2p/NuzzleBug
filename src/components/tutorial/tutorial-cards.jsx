@@ -402,7 +402,7 @@ TutorialCards.propTypes = {
     isRtl: PropTypes.bool.isRequired,
     title: PropTypes.string,
     homeButtonTitle: PropTypes.string,
-    guiMessages: PropTypes.objectOf(PropTypes.string),
+    guiMessages: PropTypes.any,
     tutorialMessages: PropTypes.shape({
         failureMessage: PropTypes.string,
         description: PropTypes.string

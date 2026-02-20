@@ -277,6 +277,7 @@ class DebuggingTutorialStep extends React.Component {
                 reachedLastStep={reachedLastStep}
                 showControlOverview={showControlOverview}
                 overviewStep={overviewStep}
+                step={String(this.props.step)}
                 onIncreaseTestPageIndex={() => this.onIncreaseTestPageIndex(1)}
                 onDecreaseTestPageIndex={() => this.onIncreaseTestPageIndex(-1)}
                 removeTutorialPoint={() => this.props.setTutorialPoints(this.props.tutorialPoints - 1)}

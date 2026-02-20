@@ -88,7 +88,6 @@ const GUIComponent = props => {
         blocksTabVisible,
         cardsVisible,
         hintsExplanationCardVisible,
-        debuggingTutorialVisible, //TODO Added the show debuggingProp
         irCardsVisible,
         irDebuggerVisible,
         helpMenuVisible,

@@ -15,7 +15,7 @@ export const getTestText = ({
         <TypewriterText text={msg.passed_all} speed={20}/>
     </>);
 
-    if (hasCodeUpdated && projectLoadingState !== "TEST_PAUSE") { //TODO CONSTANT!!!
+    if (hasCodeUpdated && projectLoadingState !== "TEST_PAUSE") { //TODO Convert to constant
         return <TypewriterText text={msg.code_changed} speed={15} onComplete={onComplete}/>;
     }
 

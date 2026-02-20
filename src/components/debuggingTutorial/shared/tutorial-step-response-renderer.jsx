@@ -141,7 +141,7 @@ export function renderResponseClassic(responseType, {
             return (
                 <div className={css.responseContainer}>
                     <div className={css.responseTextArea}>
-                        <p> TODO Hier kannst du die Qualität prüfen!Wenn du mal nicht weiterkommst oder Hilfe brauchst, kannst du mich jederzeit über <span style={{color: "#62a4ffff", fontWeight: "bold"}}>Frag Euli </span>
+                        <p> Hier kannst du die Qualität prüfen!Wenn du mal nicht weiterkommst oder Hilfe brauchst, kannst du mich jederzeit über <span style={{color: "#62a4ffff", fontWeight: "bold"}}>Frag Euli </span>
                             um Unterstützung bitten. Gemeinsam finden wir die Fehler bestimmt!</p>
 
                         <div className={css.responseButtonContainer}>

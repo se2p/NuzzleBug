@@ -22,7 +22,7 @@ const SET_RESPONSE_TYPE = 'scratch-gui/debugging-tutorial-cards/SET_RESPONSE_TYP
 const RESPONSE_START = 'scratch-gui/debugging-tutorial-help/DEFAULT';
 
 
-const initialState = { //TODO Remove logic from reducer!
+const initialState = {
     step: "1",
     tutorial: null,
     isHelpVisible: false,

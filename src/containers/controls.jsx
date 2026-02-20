@@ -86,9 +86,6 @@ class Controls extends React.Component {
             this.props.onActionExecuted();
             this.forceUpdate();
         }
-        if (logging.isActive()) {
-            //logging.logClickEvent('ICON', new Date(), 'GREENFLAG', null); TODO this.props.vm.greenFlag() already calls this function
-        }
     }
     handleStepBack (e) {
         e.preventDefault();
@@ -164,9 +161,6 @@ class Controls extends React.Component {
         }
 
         this.props.vm.stopAll();
-        if (logging.isActive()) {
-            //logging.logClickEvent('ICON', new Date(), 'STOPALL', null); TODO this.props.vm.stopAll() already calls this function
-        }
     }
     resetPauseResume () {
         this.props.vm.resumeExecutionForDebugger();
@@ -220,7 +214,6 @@ class Controls extends React.Component {
             projectPaused,
             irDisabled,
             handleTutorialClick,
-            handleDebugTutorialClick,//TODO
             handleLitterBoxClick,
             turbo,
             interrogationSupported,
@@ -250,8 +243,7 @@ class Controls extends React.Component {
                 onStopAllClick={this.handleStopAllClick}
                 onIRQuestionsClick={handleIRQuestionsClick}
                 onToggleTracingClick={this.handleToggleTracingClick}
-                onTutorialClick={handleTutorialClick} //handleTutorialClick UNNÖTIG? WIRD NUR AM ANFANG AUFGERUFEN
-                onDebugTutorialClick={handleDebugTutorialClick}//TODO
+                onTutorialClick={handleTutorialClick}
                 onLitterBoxClick={handleLitterBoxClick}
             />
         );
@@ -266,7 +258,6 @@ Controls.propTypes = {
     irDisabled: PropTypes.bool.isRequired,
     projectRunning: PropTypes.bool.isRequired,
     handleTutorialClick: PropTypes.func.isRequired,
-    handleDebugTutorialClick: PropTypes.func, //TODO isRequired
     turbo: PropTypes.bool.isRequired,
     onHelpMenuButtonClick: PropTypes.func.isRequired,
     onActionExecuted: PropTypes.func.isRequired,
@@ -304,7 +295,6 @@ const mapDispatchToProps = dispatch => ({
     onActionExecuted: () => dispatch(actionExecuted()),
     doRepositionHelpMenuWindow: (x, y) => dispatch(repositionHelpMenuWindow(x, y)),
     handleTutorialClick: () => dispatch(viewTutorial()), //dispatch(viewTutorial())
-    handleDebugTutorialClick: () => dispatch(viewDebuggingTutorial()), //TODO Zeigt tutorial an
     handleLitterBoxClick: () => dispatch(toggleInterface())
 });
 

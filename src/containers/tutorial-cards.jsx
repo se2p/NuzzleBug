@@ -64,8 +64,6 @@ class TutorialCards extends React.Component {
     }
 
     handleHome () {
-        // Go to the tutorialOverview (Home) if the button was clocked in the DebuggingOverview or
-        // the tutorialStep, otherwise go to the DebuggingOverview. TODO remove
         if (this.props.contentType === "DEBUGGING_STEP") {
             this.props.onSetContentType("TUTORIAL_SELECTED");
         } else if (this.props.contentType === "DEBUGGING_HELP") {

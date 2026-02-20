@@ -88,7 +88,7 @@ const reducer = function (state, action) {
             step: 0,
             contentType: 'OVERVIEW'
         });
-    case SET_CONTENT: //TODO LÖSCHEN?
+    case SET_CONTENT:
         return Object.assign({}, state, {
             contentType: action.contentType
         });
