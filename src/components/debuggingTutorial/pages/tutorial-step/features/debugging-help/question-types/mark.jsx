@@ -1,21 +1,21 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
-import css from "../debugging-help.css";
+import css from '../debugging-help.css';
 
 const Mark = ({
-                  tutorial,
-                  step,
-                  answers,
-                  setAnswer,
-                  tutorialIndexData,
-                  selectedBlocks,
-                  addSelectedBlock,
-                  removeSelectedBlock
-              }) => {
+    tutorial,
+    step,
+    answers,
+    setAnswer,
+    tutorialIndexData,
+    selectedBlocks,
+    addSelectedBlock,
+    removeSelectedBlock
+}) => {
     // Falls noch keine Antwort gesetzt ist, setze den Standardwert auf option1
     useEffect(() => {
         if (!answers[0]) {
-            setAnswer(0, "option1");
+            setAnswer(0, 'option1');
         }
     }, [answers, setAnswer]);
 
@@ -30,20 +30,20 @@ const Mark = ({
     return (
         <div
             style={{
-                display: "flex",
-                alignItems: "center",
-                width: "100%",
-                marginLeft: "40px",
-                marginRight: "auto",
-                marginBottom: "20px",
-                marginTop: "20px"
+                display: 'flex',
+                alignItems: 'center',
+                width: '100%',
+                marginLeft: '40px',
+                marginRight: 'auto',
+                marginBottom: '20px',
+                marginTop: '20px'
             }}
         >
-            <div style={{ display: "flex", alignItems: "end", width: "100%" }}>
+            <div style={{display: 'flex', alignItems: 'end', width: '100%'}}>
                 <div
                     style={{
-                        display: "flex",
-                        flexDirection: "column",
+                        display: 'flex',
+                        flexDirection: 'column',
                         height: currentData.height
                     }}
                 >
@@ -51,9 +51,9 @@ const Mark = ({
                         <button
                             key={index}
                             className={
-                                selectedBlocks[curOption] && selectedBlocks[curOption].includes(index)
-                                    ? css.checkboxActive
-                                    : css.checkbox
+                                selectedBlocks[curOption] && selectedBlocks[curOption].includes(index) ?
+                                    css.checkboxActive :
+                                    css.checkbox
                             }
                             onClick={() => {
                                 if (selectedBlocks[curOption] && selectedBlocks[curOption].includes(index)) {
@@ -62,14 +62,14 @@ const Mark = ({
                                     addSelectedBlock(curOption, index);
                                 }
                             }}
-                            style={{ marginTop: e.height }}
+                            style={{marginTop: e.height}}
                         />
                     ))}
                 </div>
 
                 <img
                     src={tutorialIndexData[currentData.img]}
-                    style={{ height: currentData.height, marginLeft: "5px" }}
+                    style={{height: currentData.height, marginLeft: '5px'}}
                     draggable={false}
                     alt="codeSnippets"
                 />
@@ -77,37 +77,37 @@ const Mark = ({
 
             <div
                 style={{
-                    marginTop: "20px",
-                    marginBottom: "auto",
-                    display: "flex",
-                    flexDirection: "column",
-                    marginRight: "40px",
-                    marginLeft: "auto",
-                    borderRadius: "10px",
-                    border: "2px solid #575E75FF",
-                    padding: "10px"
+                    marginTop: '20px',
+                    marginBottom: 'auto',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    marginRight: '40px',
+                    marginLeft: 'auto',
+                    borderRadius: '10px',
+                    border: '2px solid #575E75FF',
+                    padding: '10px'
                 }}
             >
                 {optionKeys.map(e => (
                     <div
                         key={e}
-                        style={{ display: "flex", alignItems: "start", height: "50px" }}
+                        style={{display: 'flex', alignItems: 'start', height: '50px'}}
                     >
                         <div
                             style={{
-                                display: "flex",
-                                height: "100%",
-                                alignItems: "center",
-                                justifyContent: "center"
+                                display: 'flex',
+                                height: '100%',
+                                alignItems: 'center',
+                                justifyContent: 'center'
                             }}
                         >
                             <button
                                 className={answers[0] === e ? css.checkboxActive : css.checkbox}
                                 onClick={() => setAnswer(0, e)}
                                 style={{
-                                    borderRadius: "100px",
-                                    marginRight: "10px",
-                                    marginBottom: "10px"
+                                    borderRadius: '100px',
+                                    marginRight: '10px',
+                                    marginBottom: '10px'
                                 }}
                             />
                         </div>
@@ -132,7 +132,7 @@ Mark.propTypes = {
     tutorialIndexData: PropTypes.object.isRequired,
     selectedBlocks: PropTypes.object.isRequired,
     addSelectedBlock: PropTypes.func.isRequired,
-    removeSelectedBlock: PropTypes.func.isRequired,
+    removeSelectedBlock: PropTypes.func.isRequired
 };
 
 export default Mark;

@@ -1,7 +1,7 @@
-import css from "./tutorial-flow/tutorial-flow.css";
-import React from "react";
+import css from './tutorial-flow/tutorial-flow.css';
+import React from 'react';
 import logging from 'scratch-vm/src/util/logging.js';
-import scratchblocks from "scratchblocks";
+import scratchblocks from 'scratchblocks';
 
 /**
  * Helper-function for the delayed reset button.
@@ -30,48 +30,44 @@ export const resetHoldButton = (progressBarRef, setLoading, timeoutIdRef) => {
     }
 };
 
-export const generateControlImages = (tutorialMessages, overviewStep, tutorialIndexData) => {
-    return Object.keys(tutorialMessages[overviewStep])
-        .filter(key => key.startsWith("controlImage"))
-        .map(key => {
-            return (
-                <img
-                    src={tutorialIndexData[tutorialMessages[overviewStep][key]]}
-                    draggable={false}
-                    className={css.controlImage}
-                    alt={"ControlImage"}
-                />);
-        });
-}
+export const generateControlImages = (tutorialMessages, overviewStep, tutorialIndexData) => Object.keys(tutorialMessages[overviewStep])
+    .filter(key => key.startsWith('controlImage'))
+    .map(key => (
+        <img
+            src={tutorialIndexData[tutorialMessages[overviewStep][key]]}
+            draggable={false}
+            className={css.controlImage}
+            alt={'ControlImage'}
+        />));
 
-export const getBorderColor = (contentType) => {
-    let col = "#000000";
+export const getBorderColor = contentType => {
+    let col = '#000000';
     switch (contentType) {
-        case "DETAILS":
-            col = "#4D97FFFF"
-            break;
-        case "CONTROLS":
-            col = "#ffab19ff"
-            break;
-        case "ERRORS":
-            col = "#cf3b28FF"
-            break;
-        default:
-            console.log("unknown contentType: " + contentType)
+    case 'DETAILS':
+        col = '#4D97FFFF';
+        break;
+    case 'CONTROLS':
+        col = '#ffab19ff';
+        break;
+    case 'ERRORS':
+        col = '#cf3b28FF';
+        break;
+    default:
+        console.log(`unknown contentType: ${contentType}`);
     }
     return col;
-}
+};
 
 export const checkUserMadeErrors = function (testResults) {
     let userMadeError = false;
     if (testResults === null || testResults.details === undefined) return false;
     testResults.details.map(e => {
-        if (e.result !== "passed" && e.testDescription !== "DEBUGGING_ERROR") {
+        if (e.result !== 'passed' && e.testDescription !== 'DEBUGGING_ERROR') {
             userMadeError = true;
         }
     });
     return userMadeError;
-}
+};
 
 /**
  * Translates the given scratchBlocksText into the given locale.
@@ -81,12 +77,12 @@ export const checkUserMadeErrors = function (testResults) {
  * @returns {*|string} The translated text or "", if scratchBlocksText does not contain valid code.
  */
 export const translate = (scratchBlocksText, locale) => {
-    if (typeof scratchBlocksText !== "string" || scratchBlocksText.trim() === "") return "";
+    if (typeof scratchBlocksText !== 'string' || scratchBlocksText.trim() === '') return '';
 
     try {
-        const parsed = scratchblocks.parse(localizeScratchCode(scratchBlocksText, locale), { lang: "en" });
+        const parsed = scratchblocks.parse(localizeScratchCode(scratchBlocksText, locale), {lang: 'en'});
 
-        if (locale === "de") {
+        if (locale === 'de') {
             if (Array.isArray(parsed)) {
                 parsed.forEach(b => b?.translate?.(scratchblocks.allLanguages.de));
             } else {
@@ -95,26 +91,26 @@ export const translate = (scratchBlocksText, locale) => {
         }
 
         if (Array.isArray(parsed)) {
-            return parsed.map(b => b.stringify()).join("\n\n");
+            return parsed.map(b => b.stringify()).join('\n\n');
         }
         return parsed.stringify();
     } catch (e) {
-        console.log("Given scratchCode can not be translated: " + scratchBlocksText + e);
+        console.log(`Given scratchCode can not be translated: ${scratchBlocksText}${e}`);
         logLLMError(scratchBlocksText);
-        return "No functioning code :(";
+        return 'No functioning code :(';
     }
 };
 
 const DROPDOWN_MAP_DE = {
-    "mouse-pointer": "Mauszeiger",
-    "random position": "Zufallsposition",
-    "edge": "Rand"
+    'mouse-pointer': 'Mauszeiger',
+    'random position': 'Zufallsposition',
+    'edge': 'Rand'
 };
 
 // Das LLM hat teils Probleme damit, Parameter korrekt zu übersetzen -> Manueller Fallback.
 // TODO Erweitern! Z.B. Pfeiltasten umbenennen!
-function localizeScratchCode(code, locale) {
-    if (locale !== "de") return code;
+function localizeScratchCode (code, locale) {
+    if (locale !== 'de') return code;
 
     return code.replace(
         /\(([^)]+) v\)/g,
@@ -143,8 +139,8 @@ export const logResponse = (hintObj, testId, optionsSelectHistory, durationMs) =
         ...hintObj,
         solutionOptions: solutionOptions.map((opt, i) => ({
             ...opt,
-            selectionSequence: optionsSelectHistory[i] ?? null,
-        })),
+            selectionSequence: optionsSelectHistory[i] ?? null
+        }))
     };
 
     const logMsg = {
@@ -154,10 +150,10 @@ export const logResponse = (hintObj, testId, optionsSelectHistory, durationMs) =
     };
 
     const text = JSON.stringify(logMsg, null, 2);
-    const blob = new Blob([text], { type: "application/json" });
-    const file = new File([blob], `LLM_${testId}.json`, { type: "application/json" });
+    const blob = new Blob([text], {type: 'application/json'});
+    const file = new File([blob], `LLM_${testId}.json`, {type: 'application/json'});
 
-    logging.logFile(file.name, "json", file, new Date());
+    logging.logFile(file.name, 'json', file, new Date());
 };
 
 /**
@@ -174,13 +170,13 @@ export const logTutorialScore = (score, tutorialTitle) => {
     };
 
     const text = JSON.stringify(logMsg, null, 2); // optional: schön formatiertes JSON
-    const blob = new Blob([text], { type: "application/json" });
-    const file = new File([blob], `SCORE_${tutorialTitle}.json`, { type: "application/json" });
+    const blob = new Blob([text], {type: 'application/json'});
+    const file = new File([blob], `SCORE_${tutorialTitle}.json`, {type: 'application/json'});
 
-    logging.logFile(file.name, "json", file, new Date());
+    logging.logFile(file.name, 'json', file, new Date());
 };
 
-export const logLLMError = (scratchBlocks) => {
+export const logLLMError = scratchBlocks => {
     if (!logging.isActive()) return;
 
     const logMsg = {
@@ -188,8 +184,8 @@ export const logLLMError = (scratchBlocks) => {
     };
 
     const text = JSON.stringify(logMsg, null, 2); // optional: schön formatiertes JSON
-    const blob = new Blob([text], { type: "application/json" });
-    const file = new File([blob], `ERROR_${tutorialTitle}.json`, { type: "application/json" });
+    const blob = new Blob([text], {type: 'application/json'});
+    const file = new File([blob], `ERROR_${tutorialTitle}.json`, {type: 'application/json'});
 
-    logging.logFile(file.name, "json", file, new Date());
-}
+    logging.logFile(file.name, 'json', file, new Date());
+};

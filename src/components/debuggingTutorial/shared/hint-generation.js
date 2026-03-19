@@ -12,16 +12,16 @@ class HintGenerator {
     static generateHint (projectJson, failedBehaviour, passedBehaviours, locale, fastMode, onPartialUpdate) {
         return this.convertScratchJsonToScratchblocks(JSON.parse(projectJson))
             .then(scratchBlocks =>
-                this.sendScratchblocksToChatGPT(scratchBlocks, failedBehaviour, passedBehaviours, locale, fastMode, (partial) => onPartialUpdate(partial))
+                this.sendScratchblocksToChatGPT(scratchBlocks, failedBehaviour, passedBehaviours, locale, fastMode, partial => onPartialUpdate(partial))
             )
             .catch(error => {
                 console.error('Failed to get GPT hints:', error);
                 return {
-                    problemText: "Achtung: Ich konnte gerade keinen Hinweis erzeugen.",
+                    problemText: 'Achtung: Ich konnte gerade keinen Hinweis erzeugen.',
                     solutionOptions: [
-                        { id: "A", code: "", isCorrect: true,  explanation: "" },
-                        { id: "B", code: "", isCorrect: false, explanation: "" },
-                        { id: "C", code: "", isCorrect: false, explanation: "" }
+                        {id: 'A', code: '', isCorrect: true, explanation: ''},
+                        {id: 'B', code: '', isCorrect: false, explanation: ''},
+                        {id: 'C', code: '', isCorrect: false, explanation: ''}
                     ]
                 };
             });
@@ -30,7 +30,7 @@ class HintGenerator {
     static async sendScratchblocksToChatGPT (scratchBlocks, failedBehaviour, passedBehaviours, locale, fastMode, onPartialUpdate) {
 
         // Mein CloudFlair-Worker, welcher die Request an die OpenAI-Server weiterleitet und das Ergebnis zurück streamt.
-        const apiUrl = "https://twilight-silence-adef.spieleder1.workers.dev";
+        const apiUrl = 'https://twilight-silence-adef.spieleder1.workers.dev';
 
         const systemRole = `You are an assistant for a Scratch debugging learning system (students ~12).
             STRICT OUTPUT:
@@ -80,15 +80,15 @@ class HintGenerator {
             `LOCALE: ${locale}
             STUDENT CODE: ${scratchBlocks}
             FAILED BEHAVIOUR: ${failedBehaviour}
-            PASSED BEHAVIOURS (do not break): ${(passedBehaviours && passedBehaviours.trim().length > 0) ? passedBehaviours : "none"}`;
+            PASSED BEHAVIOURS (do not break): ${(passedBehaviours && passedBehaviours.trim().length > 0) ? passedBehaviours : 'none'}`;
 
 
         const res = await fetch(apiUrl, {
-            method: "POST",
-            credentials: "omit",
+            method: 'POST',
+            credentials: 'omit',
             headers: {
-                "Content-Type": "application/json",
-                "Accept": "text/event-stream"
+                'Content-Type': 'application/json',
+                'Accept': 'text/event-stream'
             },
             body: JSON.stringify(this.getRequestBody(fastMode, systemRole, fullPrompt))
         });
@@ -99,53 +99,53 @@ class HintGenerator {
 
         // Live-State (wird inkrementell befüllt)
         const state = {
-            problemText: "",
+            problemText: '',
             solutionOptions: [
-                { id: "A", code: "", isCorrect: true,  explanation: "" },
-                { id: "B", code: "", isCorrect: false, explanation: "" },
-                { id: "C", code: "", isCorrect: false, explanation: "" }
+                {id: 'A', code: '', isCorrect: true, explanation: ''},
+                {id: 'B', code: '', isCorrect: false, explanation: ''},
+                {id: 'C', code: '', isCorrect: false, explanation: ''}
             ]
         };
 
         const reader = res.body.getReader();
-        const decoder = new TextDecoder("utf-8");
+        const decoder = new TextDecoder('utf-8');
 
-        let sseBuffer = "";   // Buffer für SSE-Rahmen
-        let textBuffer = "";  // Buffer für zusammengebauten NDJSON-Text
+        let sseBuffer = ''; // Buffer für SSE-Rahmen
+        let textBuffer = ''; // Buffer für zusammengebauten NDJSON-Text
 
-        const applyNdjsonLine = (lineObj) => {
-            if (lineObj.type === "problemText") {
-                state.problemText = String(lineObj.value ?? "");
+        const applyNdjsonLine = lineObj => {
+            if (lineObj.type === 'problemText') {
+                state.problemText = String(lineObj.value ?? '');
                 onPartialUpdate(structuredClone(state));
                 return;
             }
 
-            if (lineObj.type === "solutionOption") {
-                const idx = ["A", "B", "C"].indexOf(lineObj.id);
+            if (lineObj.type === 'solutionOption') {
+                const idx = ['A', 'B', 'C'].indexOf(lineObj.id);
                 if (idx >= 0) {
                     state.solutionOptions[idx] = {
                         id: lineObj.id,
-                        code: String(lineObj.code ?? ""),
+                        code: String(lineObj.code ?? ''),
                         isCorrect: Boolean(lineObj.isCorrect),
-                        explanation: String(lineObj.explanation ?? "")
+                        explanation: String(lineObj.explanation ?? '')
                     };
                     onPartialUpdate(structuredClone(state));
                 }
                 return;
             }
 
-            if (lineObj.type === "done") {
+            if (lineObj.type === 'done') {
                 // optional: final callback
                 onPartialUpdate(structuredClone(state));
             }
         };
 
-        const handleDelta = (delta) => {
+        const handleDelta = delta => {
             textBuffer += delta;
 
             // NDJSON: jede Zeile endet mit \n
             let newlineIndex;
-            while ((newlineIndex = textBuffer.indexOf("\n")) >= 0) {
+            while ((newlineIndex = textBuffer.indexOf('\n')) >= 0) {
                 const line = textBuffer.slice(0, newlineIndex).trim();
                 textBuffer = textBuffer.slice(newlineIndex + 1);
 
@@ -157,7 +157,7 @@ class HintGenerator {
                 } catch (e) {
                     // Wenn die Zeile noch nicht vollständig war, wieder zurück in Buffer:
                     // (sollte bei korrektem NDJSON selten vorkommen)
-                    textBuffer = line + "\n" + textBuffer;
+                    textBuffer = `${line}\n${textBuffer}`;
                     break;
                 }
             }
@@ -165,34 +165,38 @@ class HintGenerator {
 
         // SSE lesen: Events sind durch \n\n getrennt, payload steht in data:
         while (true) {
-            const { value, done } = await reader.read();
+            const {value, done} = await reader.read();
             if (done) break;
 
-            sseBuffer += decoder.decode(value, { stream: true });
+            sseBuffer += decoder.decode(value, {stream: true});
 
             let eventBoundary;
-            while ((eventBoundary = sseBuffer.indexOf("\n\n")) !== -1) {
+            while ((eventBoundary = sseBuffer.indexOf('\n\n')) !== -1) {
                 const rawEvent = sseBuffer.slice(0, eventBoundary);
                 sseBuffer = sseBuffer.slice(eventBoundary + 2);
 
-                const lines = rawEvent.split("\n");
+                const lines = rawEvent.split('\n');
                 for (const l of lines) {
-                    if (!l.startsWith("data:")) continue;
+                    if (!l.startsWith('data:')) continue;
 
                     const dataStr = l.slice(5).trim();
-                    if (!dataStr || dataStr === "[DONE]") continue;
+                    if (!dataStr || dataStr === '[DONE]') continue;
 
                     let evt;
-                    try { evt = JSON.parse(dataStr); } catch { continue; }
+                    try {
+                        evt = JSON.parse(dataStr);
+                    } catch {
+                        continue;
+                    }
 
                     const delta =
-                        (typeof evt?.delta === "string" && evt.delta) ||
+                        (typeof evt?.delta === 'string' && evt.delta) ||
                         evt?.delta?.text ||
                         evt?.output_text?.delta ||
                         evt?.data?.delta?.text ||
-                        "";
+                        '';
 
-                    if (typeof delta === "string" && delta) handleDelta(delta);
+                    if (typeof delta === 'string' && delta) handleDelta(delta);
                 }
             }
         }
@@ -201,30 +205,30 @@ class HintGenerator {
     }
 
     static getRequestBody (fastMode, systemRole, fullPrompt) {
-        //Für die ASG-Studie haben wir jeweils das gleiche Modell genommen
+        // Für die ASG-Studie haben wir jeweils das gleiche Modell genommen
         if (fastMode) {
             return {
-                model: "gpt-5.1",
-                reasoning: { effort: "low" },
+                model: 'gpt-5.1',
+                reasoning: {effort: 'low'},
                 input: [
-                    { role: "system", content: systemRole },
-                    { role: "user", content: fullPrompt }
-                ],
-                max_output_tokens: 2000,
-                stream: true
-            };
-        } else {
-            return {
-                model: "gpt-5.1",
-                reasoning: { effort: "low" },
-                input: [
-                    { role: "system", content: systemRole },
-                    { role: "user", content: fullPrompt }
+                    {role: 'system', content: systemRole},
+                    {role: 'user', content: fullPrompt}
                 ],
                 max_output_tokens: 2000,
                 stream: true
             };
         }
+        return {
+            model: 'gpt-5.1',
+            reasoning: {effort: 'low'},
+            input: [
+                {role: 'system', content: systemRole},
+                {role: 'user', content: fullPrompt}
+            ],
+            max_output_tokens: 2000,
+            stream: true
+        };
+
 
         /* HIER DER CODE FÜR ÄLTERE MODELLE
 
