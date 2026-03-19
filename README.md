@@ -53,8 +53,10 @@ Patric Feldmeier\
 Gordon Fraser\
 Stephan Gramüller\
 Fabian Häuslein\
+Ute Heuer\
 Florian Obermüller\
 Sebastian Schweikl\
+Florian Spieleder\
 Siegfried Steckenbiller\
 Phil Werli
 
