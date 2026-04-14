@@ -1,15 +1,15 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import DebuggingTutorialOverviewComponent from '../components/debuggingTutorial/pages/tutorial-overview/debuggingTutorialOverview.jsx';
-import PropTypes from "prop-types";
-import VirtualMachine from "scratch-vm";
-import {setLastTutorial, setLoading, setAutoSave, setContentType, reset, lastStartedTutorial} from "../reducers/debugging-tutorial-overview"
-import JSZip from "jszip";
-import {CONTENT_START_TUTORIAL, CONTENT_DESCRIPTION} from "../components/debuggingTutorial/shared/tutorial-constants.jsx";
+import PropTypes from 'prop-types';
+import VirtualMachine from 'scratch-vm';
+import {setLastTutorial, setLoading, setAutoSave, setContentType, reset, lastStartedTutorial} from '../reducers/debugging-tutorial-overview';
+import JSZip from 'jszip';
+import {CONTENT_START_TUTORIAL, CONTENT_DESCRIPTION} from '../components/debuggingTutorial/shared/tutorial-constants.jsx';
 import logging from 'scratch-vm/src/util/logging.js';
 
 class DebuggingTutorialOverview extends React.Component {
-    constructor(props) {
+    constructor (props) {
         super(props);
         this.loadProject = this.loadProject.bind(this);
         this.openAutoSaveSelection = this.openAutoSaveSelection.bind(this);
@@ -17,13 +17,13 @@ class DebuggingTutorialOverview extends React.Component {
     }
 
 
-    handleStart() {
+    handleStart () {
         const isNewTutorialSelected = this.props.tutorialMessages?.title !== this.props.lastStartedTutorial;
 
         if (isNewTutorialSelected) {
             this.props.setTutorialPoints(3);
             this.props.setLastStartedTutorial(this.props.tutorialMessages?.title);
-            if (this.props.autoSave === "YES") {
+            if (this.props.autoSave === 'YES') {
                 this.props.setLoading(true);
                 const zip = new JSZip();
                 zip.file('project.json', this.props.vm.toJSON());
@@ -59,18 +59,19 @@ class DebuggingTutorialOverview extends React.Component {
         this.props.setContentType(CONTENT_DESCRIPTION);
     }
 
-    loadProject() {
+    loadProject () {
         logging.pauseLogging(true);
         this.props.setLoading(true);
         this.props.vm.start();
 
-        const projectId = "project_1_" + this.props.vm.getLocale();
+        const projectId = `project_1_${this.props.vm.getLocale()}`;
 
-        if (projectId in this.props.tutorialIndexData && this.props.tutorialIndexData[projectId] != null) { //Lädt nur, wenn projectData angegeben wurde
+        if (projectId in this.props.tutorialIndexData && this.props.tutorialIndexData[projectId] != null) { // Lädt nur, wenn projectData angegeben wurde
             this.props.vm.loadProject(this.props.tutorialIndexData[projectId])
                 .then(() => {
-                    this.props.onStartTutorial();})
-                .catch((e) => console.log("Error loading new Project: " + e.toString()))
+                    this.props.onStartTutorial();
+                })
+                .catch(e => console.log(`Error loading new Project: ${e.toString()}`))
                 .finally(() => {
                     this.props.setLoading(false);
                     this.delayResumeLogging();
@@ -81,14 +82,14 @@ class DebuggingTutorialOverview extends React.Component {
     }
 
     // Gib der vm Zeit, das Projekt zu laden. Aktiviere danach das logging, um nur Nutzerinteraktionen zu loggen.
-    async delayResumeLogging() {
-        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+    async delayResumeLogging () {
+        const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
         await sleep(2000);
         await logging.pauseLogging(false);
     }
 
-    openAutoSaveSelection() {
+    openAutoSaveSelection () {
         this.props.setLastTutorial(this.props.tutorialMessages.title);
         this.props.setContentType(CONTENT_START_TUTORIAL);
     }
@@ -96,7 +97,7 @@ class DebuggingTutorialOverview extends React.Component {
     /**
      * Checks, if the current project includes at least one codeblocks.
      */
-    isEmptyProject() {
+    isEmptyProject () {
         const jsonString = this.props.vm.toJSON();
         const project = JSON.parse(jsonString);
         let blockCount = 0;
@@ -152,7 +153,7 @@ DebuggingTutorialOverview.propTypes = {
     isProjectEmpty: PropTypes.bool,
     isNewTutorialSelected: PropTypes.bool,
     guiMessages: PropTypes.any,
-    setTutorialPoints: PropTypes.func,
+    setTutorialPoints: PropTypes.func
 };
 
 const mapStateToProps = state => ({
@@ -160,15 +161,15 @@ const mapStateToProps = state => ({
     isLoading: state.scratchGui.debuggingTutorialOverview.isLoading,
     autoSave: state.scratchGui.debuggingTutorialOverview.autoSave,
     contentType: state.scratchGui.debuggingTutorialOverview.contentType,
-    lastStartedTutorial: state.scratchGui.debuggingTutorialOverview.lastStartedTutorial,
+    lastStartedTutorial: state.scratchGui.debuggingTutorialOverview.lastStartedTutorial
 });
 const mapDispatchToProps = dispatch => ({
-    setLastTutorial: (tutorial) => dispatch(setLastTutorial(tutorial)),
-    setLoading: (isLoading) => dispatch(setLoading(isLoading)),
-    setAutoSave: (type) => dispatch(setAutoSave(type)),
-    setContentType: (contentType) => dispatch(setContentType(contentType)),
+    setLastTutorial: tutorial => dispatch(setLastTutorial(tutorial)),
+    setLoading: isLoading => dispatch(setLoading(isLoading)),
+    setAutoSave: type => dispatch(setAutoSave(type)),
+    setContentType: contentType => dispatch(setContentType(contentType)),
     reset: () => dispatch(reset()),
-    setLastStartedTutorial: (tutorial) => dispatch(lastStartedTutorial(tutorial)),
+    setLastStartedTutorial: tutorial => dispatch(lastStartedTutorial(tutorial))
 });
 
 export default connect(

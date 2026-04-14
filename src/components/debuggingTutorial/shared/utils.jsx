@@ -1,11 +1,11 @@
-import React, {useLayoutEffect, useRef, useState} from "react";
-import css from "../pages/tutorial-overview/debuggingTutorialOverview.css";
+import React, {useLayoutEffect, useRef, useState} from 'react';
+import css from '../pages/tutorial-overview/debuggingTutorialOverview.css';
 
-export { FitToWidth, parseColoredText };
+export {FitToWidth, parseColoredText};
 
-function parseColoredText(input) {
+function parseColoredText (input) {
     const result = [];
-    const lines = input.split("\n");
+    const lines = input.split('\n');
 
     lines.forEach((line, lineIndex) => {
         const parts = [];
@@ -35,20 +35,18 @@ function parseColoredText(input) {
                 parts.push(
                     <span
                         key={`color-${lineIndex}-${start}`}
-                        style={{ color, fontWeight: "bold" }}
+                        style={{color, fontWeight: 'bold'}}
                     >
                         {colorText}
                     </span>
                 );
-            }
-            else if (strongText) {
+            } else if (strongText) {
                 parts.push(
                     <strong key={`strong-${lineIndex}-${start}`}>
                         {strongText}
                     </strong>
                 );
-            }
-            else if (imgSrc) {
+            } else if (imgSrc) {
                 parts.push(
                     <img
                         key={`img-${lineIndex}-${start}`}
@@ -79,7 +77,7 @@ function parseColoredText(input) {
 }
 
 
-function FitToWidth({ children, className }) {
+function FitToWidth ({children, className}) {
     const outerRef = useRef(null);
     const innerRef = useRef(null);
 
@@ -113,7 +111,7 @@ function FitToWidth({ children, className }) {
         if (innerRef.current) ro.observe(innerRef.current);
 
         const mo = new MutationObserver(() => measure());
-        if (innerRef.current) mo.observe(innerRef.current, { childList: true, subtree: true });
+        if (innerRef.current) mo.observe(innerRef.current, {childList: true, subtree: true});
 
         return () => {
             cancelAnimationFrame(raf1);
@@ -127,16 +125,16 @@ function FitToWidth({ children, className }) {
             ref={outerRef}
             className={className}
             style={{
-                height: scaledHeight != null ? `${scaledHeight}px` : "auto",
-                overflow: "hidden",
+                height: scaledHeight != null ? `${scaledHeight}px` : 'auto',
+                overflow: 'hidden'
             }}
         >
             <div
                 ref={innerRef}
                 style={{
                     transform: `scale(${scale})`,
-                    transformOrigin: "top left",
-                    display: "inline-block",
+                    transformOrigin: 'top left',
+                    display: 'inline-block'
                 }}
             >
                 {children}
@@ -144,4 +142,3 @@ function FitToWidth({ children, className }) {
         </div>
     );
 }
-

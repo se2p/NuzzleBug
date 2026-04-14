@@ -1,40 +1,49 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {useEffect, useRef, useState} from 'react';
 
 export const getTestText = ({
-                                projectLoadingState,
-                                testResults,
-                                hasCodeUpdated,
-                                guiMessages,
-                                onComplete
-                            }) => {
+    projectLoadingState,
+    testResults,
+    hasCodeUpdated,
+    guiMessages,
+    onComplete
+}) => {
     const msg = guiMessages?.test_results?.response ?? {};
-    if (projectLoadingState === "TEST") return <span>{msg.loading}</span>;
+    if (projectLoadingState === 'TEST') return <span>{msg.loading}</span>;
 
-    if (testResults?.passed) return (<>
-        <span>Super!</span>
-        <TypewriterText text={msg.passed_all} speed={20}/>
-    </>);
+    if (testResults?.passed) {
+        return (<>
+            <span>Super!</span>
+            <TypewriterText
+                text={msg.passed_all}
+                speed={20}
+            />
+        </>);
+    }
 
-    if (hasCodeUpdated && projectLoadingState !== "TEST_PAUSE") { //TODO Convert to constant
-        return <TypewriterText text={msg.code_changed} speed={15} onComplete={onComplete}/>;
+    if (hasCodeUpdated && projectLoadingState !== 'TEST_PAUSE') { // TODO Convert to constant
+        return (<TypewriterText
+            text={msg.code_changed}
+            speed={15}
+            onComplete={onComplete}
+        />);
     }
 
     return <span>{msg.default}</span>;
 };
 
 export const getPaginationInfo = (testResults, step, testPageIndex) => {
-    if (!testResults || !testResults.details) return { showLeftArrow: false, showRightArrow: false };
+    if (!testResults || !testResults.details) return {showLeftArrow: false, showRightArrow: false};
 
     const visibleResults = testResults.details.filter(e => {
         const isCurrentStep = e.testId.charAt(4) === (step + 1).toString();
-        const passed = e.result === "pass" || e.result === "running";
+        const passed = e.result === 'pass' || e.result === 'running';
         return isCurrentStep || !passed;
     });
 
     const showLeftArrow = visibleResults.length >= 5 && testPageIndex > 0;
     const showRightArrow = visibleResults.length >= 5 && testPageIndex < Math.ceil(visibleResults.length / 4) - 1;
 
-    return { showLeftArrow, showRightArrow };
+    return {showLeftArrow, showRightArrow};
 };
 
 
@@ -45,8 +54,8 @@ export const getPaginationInfo = (testResults, step, testPageIndex) => {
  * @param {number} stepNumber - Die Schrittzahl (z.B. 1, 2, 3, ...)
  * @returns {"grün" | "rot" | "grau"} - Farbe für den Schrittstatus
  */
-export function getStepColor(testResults, stepNumber) {
-    if (!testResults?.details) return "#aeb0bb";
+export function getStepColor (testResults, stepNumber) {
+    if (!testResults?.details) return '#aeb0bb';
 
     // Alle Tests des gegebenen Schritts herausfiltern
     const stepTests = testResults.details.filter(t =>
@@ -54,24 +63,23 @@ export function getStepColor(testResults, stepNumber) {
     );
 
     // Wenn der Schritt keine Tests enthält, gib neutral "grau" zurück
-    if (stepTests.length === 0) return "#aeb0bb";
+    if (stepTests.length === 0) return '#aeb0bb';
 
     // Falls noch ein Test läuft → neutral bleiben
-    const isRunning = stepTests.some(t => t.result === "running");
-    if (isRunning) return "#aeb0bb";
+    const isRunning = stepTests.some(t => t.result === 'running');
+    if (isRunning) return '#aeb0bb';
 
     // Falls ALLE Tests "pass" sind → grün
-    const allPassed = stepTests.every(t => t.result === "pass");
-    if (allPassed) return "#89ddaf";
+    const allPassed = stepTests.every(t => t.result === 'pass');
+    if (allPassed) return '#89ddaf';
 
     // Wenn mindestens ein Test fail ist (und keiner läuft) → rot
-    const hasFail = stepTests.some(t => t.result === "fail");
-    if (hasFail) return "#d16857ff";
+    const hasFail = stepTests.some(t => t.result === 'fail');
+    if (hasFail) return '#d16857ff';
 
     // Fallback (z. B. wenn unbekannte Zustände existieren)
-    return "#aeb0bb";
+    return '#aeb0bb';
 }
-
 
 
 /**
@@ -81,11 +89,11 @@ export function getStepColor(testResults, stepNumber) {
  * @param {object} testResults - Das gesamte Testergebnisobjekt mit .details
  * @returns {number | null} - Die höchste laufende Schrittzahl oder null, wenn keiner läuft
  */
-export function getRunningStep(testResults) {
+export function getRunningStep (testResults) {
     if (!testResults?.details) return null;
 
     // Alle Tests mit Status "running"
-    const runningTests = testResults.details.filter(t => t.result === "running");
+    const runningTests = testResults.details.filter(t => t.result === 'running');
     if (runningTests.length === 0) return null;
 
     // Extrahiere alle Stepnummern (z. B. 1, 2, 3 …)
@@ -106,26 +114,26 @@ export function getRunningStep(testResults) {
 /**
  * Animiert den Text, indem er ähnlich zu einer Schreibmaschine Buchstabe für Buchstabe des Textes ergänzt.
  */
-export function TypewriterText({
-                            text,
-                            speed = 40,
-                            pauseAfterComplete = 40,
-                            className = '',
-                            onComplete = null,
-                            onStart = null,
-                        }) {
+export function TypewriterText ({
+    text,
+    speed = 40,
+    pauseAfterComplete = 40,
+    className = '',
+    onComplete = null,
+    onStart = null
+}) {
     const [displayed, setDisplayed] = useState('');
     const idxRef = useRef(0);
-    const timerRef = useRef(null);       // Für setInterval
-    const timeoutRef = useRef(null);     // Für setTimeout
-    const isMounted = useRef(true);      // Damit setState nach Unmount verhindert wird
+    const timerRef = useRef(null); // Für setInterval
+    const timeoutRef = useRef(null); // Für setTimeout
+    const isMounted = useRef(true); // Damit setState nach Unmount verhindert wird
 
-    const safeText = typeof text === "string" ? text : "";
+    const safeText = typeof text === 'string' ? text : '';
 
     useEffect(() => {
         isMounted.current = true;
 
-        function startTyping() {
+        function startTyping () {
             if (!isMounted.current) return;
             if (typeof onStart === 'function') onStart();
             setDisplayed('\u00A0');
@@ -139,11 +147,11 @@ export function TypewriterText({
 
                 if (idxRef.current >= safeText.length) {
                     clearInterval(timerRef.current);
-                    if (typeof onComplete === "function") {
+                    if (typeof onComplete === 'function') {
                         onComplete();
                     }
                     timeoutRef.current = setTimeout(() => {
-                        //if (isMounted.current) startTyping();
+                        // if (isMounted.current) startTyping();
                     }, pauseAfterComplete);
                 }
             }, speed);
@@ -159,9 +167,11 @@ export function TypewriterText({
     }, [safeText, speed, pauseAfterComplete]);
 
     return (
-        <span className={className} style={{ whiteSpace: 'pre-wrap' }}>
+        <span
+            className={className}
+            style={{whiteSpace: 'pre-wrap'}}
+        >
             {displayed}
         </span>
     );
 }
-

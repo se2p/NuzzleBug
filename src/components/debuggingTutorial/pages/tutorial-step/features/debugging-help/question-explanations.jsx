@@ -1,10 +1,8 @@
 import React from 'react';
 
-const Explanation = ({ questionType }) => {
-    return (explanationContent[questionType]);
-};
+const Explanation = ({questionType}) => (explanationContent[questionType]);
 
-const explanationContent= {
+const explanationContent = {
     SINGLE_CHOICE: (
         <p>
             Die aktuelle Frage ist <strong>Single-Choice</strong>. Das heißt, du kannst genau eine Antwort auswählen,
@@ -43,7 +41,7 @@ const explanationContent= {
             Hierbei handelt es sich um eine <strong>Message</strong>, ohne jegliche Interaktionsmöglichkeit. Wenn du bereit bist,
             klicke einfach unten rechts auf den "weiter"-Pfeil.
         </p>
-    ),
+    )
 };
 
 export default Explanation;

@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import css from "../debugging-help.css";
+import css from '../debugging-help.css';
 
 const MarkChoice = ({
-                        selectedBlocks,
-                        tutorial,
-                        step,
-                        answers,
-                        setAnswer,
-                        tutorialIndexData
-                    }) => {
+    selectedBlocks,
+    tutorial,
+    step,
+    answers,
+    setAnswer,
+    tutorialIndexData
+}) => {
     // Erstelle das Array "selection" anhand der Keys in selectedBlocks
     const selection = [];
     for (const [option, values] of Object.entries(selectedBlocks)) {
@@ -29,11 +29,14 @@ const MarkChoice = ({
                 const isSelected = answers[0] === key;
 
                 return (
-                    <div key={key} className={css.option}>
+                    <div
+                        key={key}
+                        className={css.option}
+                    >
                         <img
                             alt="option picture"
                             className={css.smallImage}
-                            style={{ width: optionData.width }}
+                            style={{width: optionData.width}}
                             draggable={false}
                             src={tutorialIndexData[optionData.img]}
                         />
@@ -47,7 +50,7 @@ const MarkChoice = ({
                                     e.stopPropagation();
                                     setAnswer(0, key);
                                 }}
-                                style={{ borderRadius: "100px" }}
+                                style={{borderRadius: '100px'}}
                             />
                         </div>
                     </div>
@@ -63,7 +66,7 @@ MarkChoice.propTypes = {
     step: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     answers: PropTypes.array.isRequired,
     setAnswer: PropTypes.func.isRequired,
-    tutorialIndexData: PropTypes.object.isRequired,
+    tutorialIndexData: PropTypes.object.isRequired
 };
 
 export default MarkChoice;
