@@ -13,15 +13,12 @@ import expandIcon from '../cards/icon--expand.svg';
 import closeIcon from '../cards/icon--close.svg';
 import leftArrow from '../cards/icon--prev.svg';
 import rightArrow from '../cards/icon--next.svg';
-import backIcon from './images/icon--back.png'
+import backIcon from './images/icon--back.png';
 
-import Tutorial from './tutorial-menu-item.jsx';
-import TutorialStep from '../../containers/tutorial-step.jsx';
 import VirtualMachine from 'scratch-vm';
 import DebuggingTutorialHelp from "../../containers/debugging-tutorial-help.jsx";
 import DebuggingTutorialOverview from "../../containers/debugging-tutorial-overview.jsx";
 import DebuggingTutorialStep from "../../containers/debugging-tutorial-step.jsx";
-import TutorialItem from "../debuggingTutorial/pages/tutorial-selection/tutorial-item.jsx";
 import TutorialSelection from "../debuggingTutorial/pages/tutorial-selection/tutorial-selection.jsx";
 
 
