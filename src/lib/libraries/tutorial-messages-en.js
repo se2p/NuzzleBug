@@ -45,7 +45,7 @@ export default {
             passed_all: "Great job! You passed all the tests.\nYou can now move on to the next level.",
             test_passed: "This test looks really good.\nWell done!",
             test_failed: "There's still a small mistake in your code.",
-            code_changed: "Looks like you’ve changed your code since the last test. Want me to check it again?",
+            code_changed: "Want me to check your code again?",
             default: "Here’s a list of your individual test results. Currently not all have been passed."
         },
         details_button: "Details",
