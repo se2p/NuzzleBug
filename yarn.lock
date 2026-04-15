@@ -13231,7 +13231,7 @@ tunnel-agent@^0.6.0:
 
 "tutorial-tests@git+https://gitlab+deploy-token-15:qc77PRV6uAkzGH-71sXW@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-tutorial/tutorials.git#master":
   version "0.1.0"
-  resolved "git+https://gitlab+deploy-token-15:qc77PRV6uAkzGH-71sXW@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-tutorial/tutorials.git#971f1d9f5cbe28be765b1e8d5a44f3f9d50fce44"
+  resolved "git+https://gitlab+deploy-token-15:qc77PRV6uAkzGH-71sXW@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-tutorial/tutorials.git#08c3f43f38458e009d969316b867d97486b9493e"
   dependencies:
     whisker "git+https://gitlab+deploy-token-13:NRiPPX3fbpKk4b2rs5t2@gitlab.infosun.fim.uni-passau.de/se2/scratch/whisker/whisker-main.git#master"
 
