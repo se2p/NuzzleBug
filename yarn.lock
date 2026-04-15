@@ -13231,7 +13231,7 @@ tunnel-agent@^0.6.0:
 
 "tutorial-tests@git+https://gitlab+deploy-token-15:qc77PRV6uAkzGH-71sXW@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-tutorial/tutorials.git#master":
   version "0.1.0"
-  resolved "git+https://gitlab+deploy-token-15:qc77PRV6uAkzGH-71sXW@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-tutorial/tutorials.git#08c3f43f38458e009d969316b867d97486b9493e"
+  resolved "git+https://gitlab+deploy-token-15:qc77PRV6uAkzGH-71sXW@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-tutorial/tutorials.git#e5a054ecd72c7d4dacb7fc0dd74a42418444f2d1"
   dependencies:
     whisker "git+https://gitlab+deploy-token-13:NRiPPX3fbpKk4b2rs5t2@gitlab.infosun.fim.uni-passau.de/se2/scratch/whisker/whisker-main.git#master"
 
@@ -14069,7 +14069,7 @@ which@^2.0.1:
 
 "whisker@git+https://gitlab+deploy-token-13:NRiPPX3fbpKk4b2rs5t2@gitlab.infosun.fim.uni-passau.de/se2/scratch/whisker/whisker-main.git#master":
   version "0.8.0"
-  resolved "git+https://gitlab+deploy-token-13:NRiPPX3fbpKk4b2rs5t2@gitlab.infosun.fim.uni-passau.de/se2/scratch/whisker/whisker-main.git#700bc55b8e3c0ceb88b540dda6619c611a84acb9"
+  resolved "git+https://gitlab+deploy-token-13:NRiPPX3fbpKk4b2rs5t2@gitlab.infosun.fim.uni-passau.de/se2/scratch/whisker/whisker-main.git#483f6437d017ee039ec3af47af487420518ae65a"
   dependencies:
     "@tensorflow/tfjs" "^4.22.0"
     assert "^2.0.0"
