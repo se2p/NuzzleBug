@@ -117,7 +117,7 @@ class DebuggingTutorialStep extends React.Component {
                     this.props.vm.start();
                     this.props.vm.clear();
                     this.props.lockVM();
-                    this.props.vm.loadProject(this.props.tutorialIndexData[`project${(this.props.step + 2).toString()}`])
+                    this.props.vm.loadProject(projectDataExists)
                         .catch(e => console.log(`Error while loading project: ${e.toString()}`))
                         .finally(() => {
                             this.props.unlockVM();
