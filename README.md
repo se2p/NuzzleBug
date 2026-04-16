@@ -4,7 +4,7 @@ This repository is a fork of the [scratch-gui](https://github.com/scratchfoundat
 
 It contains:
 + NuzzleBug, adding debugging support
-+ Interactive tutorial system with LitterBox integration
++ Interactive tutorial system for classic and debug tutorials
 + Extensions to support student progress tracking via [ScratchLog](https://github.com/se2p/scratchlog)
 + Block-Based Testing
 + The UI extensions required for the LitterBox+ LLM integration framework
@@ -55,6 +55,7 @@ Stephan Gramüller\
 Fabian Häuslein\
 Florian Obermüller\
 Sebastian Schweikl\
+Florian Spieleder\
 Siegfried Steckenbiller\
 Phil Werli
 
