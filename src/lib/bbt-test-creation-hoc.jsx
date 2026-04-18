@@ -5,6 +5,7 @@ import bindAll from 'lodash.bindall';
 import {addWhiskerTest, replaceBBTTests} from '../reducers/block-based-testing';
 import {TestRunner} from 'whisker/whisker-main';
 import VM from 'scratch-vm';
+import logging from 'scratch-vm/src/util/logging.js';
 
 /**
  * Higher Order Component providing both BBT and Whisker test creation functionality.
@@ -126,6 +127,7 @@ const bbtTestCreationHOC = function (WrappedComponent) {
          * @param {object} event the 'change' event from a file input
          */
         handleClickWhiskerTestsUpload (event) {
+            logging.logClickEvent('ICON', new Date(), 'BBT_UPLOAD_WHISKER_TESTS', null);
             const reader = new FileReader();
 
             reader.onload = e => {

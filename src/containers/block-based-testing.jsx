@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {compose} from 'redux';
 import PropTypes from 'prop-types';
 import bindAll from 'lodash.bindall';
+import logging from 'scratch-vm/src/util/logging.js';
 import {
     addError,
     clearAllTestStatus,
@@ -47,6 +48,8 @@ class BBTTestInterface extends React.Component {
             'handleRunBBTTest',
             'handleRunWhiskerTest',
             'handleClearAllTestStatus',
+            'handleClearAllTestStatusAndLog',
+            'handleToggleBatchEvaluationWindowVisibility',
             'onBBTAssertionSuccess',
             'onBBTErrorOccurred',
             'onBBTBlockIsRunning',
@@ -107,6 +110,8 @@ class BBTTestInterface extends React.Component {
             return;
         }
 
+        logging.logClickEvent('ICON', new Date(), 'BBT_RUN_ALL', null);
+
         this.handleClearAllTestStatus();
 
         this.props.handleSetTotalTestsForInfoPanel(
@@ -114,6 +119,11 @@ class BBTTestInterface extends React.Component {
         this.props.handleShowInfoPanel();
 
         this.props.runAllTests();
+    }
+
+    handleClearAllTestStatusAndLog () {
+        logging.logClickEvent('ICON', new Date(), 'BBT_CLEAR_RESULTS', null);
+        this.handleClearAllTestStatus();
     }
 
     handleClearAllTestStatus () {
@@ -271,11 +281,18 @@ class BBTTestInterface extends React.Component {
     }
 
     handleRunBBTTest (testId) {
+        logging.logClickEvent('ICON', new Date(), 'BBT_RUN_INDIVIDUAL', testId);
         this.props.runBBTTest(testId);
     }
 
     handleRunWhiskerTest (testId) {
+        logging.logClickEvent('ICON', new Date(), 'BBT_RUN_INDIVIDUAL', testId);
         this.props.runWhiskerTest(testId);
+    }
+
+    handleToggleBatchEvaluationWindowVisibility () {
+        logging.logClickEvent('ICON', new Date(), 'BBT_TOGGLE_BATCH_WINDOW', null);
+        this.props.handleToggleBatchEvaluationWindowVisibility();
     }
 
     render () {
@@ -336,10 +353,10 @@ class BBTTestInterface extends React.Component {
                 isBBTBatchEvalWindowVisible={this.props.isBatchEvalWindowVisible}
                 isBBTCoordinatesTooltipVisible={this.props.isCoordinatesTooltipVisible}
                 onToggleBBTExamplesWindow={this.props.handleToggleBBTExamplesWindowVisibility}
-                onToggleBatchEvaluationWindow={this.props.handleToggleBatchEvaluationWindowVisibility}
+                onToggleBatchEvaluationWindow={this.handleToggleBatchEvaluationWindowVisibility}
                 onToggleBBTCoordinatesTooltip={this.props.handleToggleBBTCoordinatesTooltipVisibility}
                 isClearAllTestResultsButtonEnabled={this.props.runAllTestsEnabled}
-                onClearAllTestStatus={this.handleClearAllTestStatus}
+                onClearAllTestStatus={this.handleClearAllTestStatusAndLog}
                 onCloseBBTInterface={this.props.handleHideInterface}
                 testCollapsiblesBBT={testCollapsiblesBBT}
                 testCollapsiblesWhisker={testCollapsiblesWhisker}
