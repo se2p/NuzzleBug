@@ -110,15 +110,18 @@ class DebuggingTutorialOverview extends React.Component {
         return blockCount === 0;
     }
 
-    render () {
-
+    componentDidUpdate(_prevProps, _prevState, _snapshot) {
         const isNewTutorialSelected = this.props.tutorialMessages?.title !== this.props.lastTutorial;
 
-        if (this.props.lastTutorial === null || this.props.lastTutorial === undefined) {
+        if (!this.props.lastTutorial) {
             this.props.setLastTutorial(this.props.tutorialMessages.title);
         } else if (isNewTutorialSelected) {
             this.props.reset();
         }
+    }
+
+    render () {
+        const isNewTutorialSelected = this.props.tutorialMessages?.title !== this.props.lastTutorial;
 
         return (
             <DebuggingTutorialOverviewComponent

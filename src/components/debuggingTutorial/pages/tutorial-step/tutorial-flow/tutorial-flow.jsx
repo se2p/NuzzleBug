@@ -369,7 +369,7 @@ const DebuggingTutorialStep = props => {
 
 DebuggingTutorialStep.propTypes = {
     onOpenHelp: PropTypes.func.isRequired,
-    step: PropTypes.string,
+    step: PropTypes.number,
     onStartTests: PropTypes.func,
     onReset: PropTypes.func
 };

@@ -1,9 +1,7 @@
 import React, {useLayoutEffect, useRef, useState} from 'react';
 import css from '../pages/tutorial-overview/debuggingTutorialOverview.css';
 
-export {FitToWidth, parseColoredText};
-
-function parseColoredText (input) {
+function parseColoredText (input, tutorialIndexData) {
     const result = [];
     const lines = input.split('\n');
 
@@ -142,3 +140,5 @@ function FitToWidth ({children, className}) {
         </div>
     );
 }
+
+export {FitToWidth, parseColoredText};

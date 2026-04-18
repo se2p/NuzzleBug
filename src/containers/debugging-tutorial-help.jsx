@@ -195,7 +195,7 @@ class DebuggingTutorialHelp extends React.Component {
         }
     }
     /**
-     * opulates the most recent user inputs for a specific question if the question has been answered before.
+     * Populates the most recent user inputs for a specific question if the question has been answered before.
      */
     solveStep (step, tutorial) {
         if (!this.props.solvedSteps.hasOwnProperty(step)) return;
@@ -257,16 +257,16 @@ class DebuggingTutorialHelp extends React.Component {
             return null;
         }
 
-        let curStep;
-
-        if (this.props.tutorial === null) return null;
+        if (this.props.tutorial === null) {
+            return null;
+        }
 
         if (this.props.lastTutorial === null || JSON.stringify(this.props.tutorial) !== JSON.stringify(this.props.lastTutorial)) {
             this.props.resetComponent();
             this.props.setLastTutorial(this.props.tutorial);
             return null;
         }
-        curStep = `step${(this.props.stepNumber + 1).toString()}_${this.props.level}`;
+        const curStep = `step${(this.props.stepNumber + 1).toString()}_${this.props.level}`;
 
         const tutorialStep = this.props.tutorial[curStep];
 

@@ -616,7 +616,7 @@ const DebuggingHelp = props => {
 DebuggingHelp.props = {
     onHelp: PropTypes.func,
     tutorial: PropTypes.object.isRequired,
-    step: PropTypes.string,
+    step: PropTypes.number,
     onEnterAnswer: PropTypes.func,
     isHelpVisible: PropTypes.bool
 };

@@ -82,7 +82,7 @@ const DebuggingTutorialOverview = props => {
                     </div>
                     <div className={css.textArea}>
                         <div>
-                            {parseColoredText(tutorialMessages.description)}
+                            {parseColoredText(tutorialMessages.description, tutorialIndexData)}
                         </div>
                     </div>
                 </div>

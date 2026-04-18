@@ -100,7 +100,7 @@ const OverviewContent = ({
 
                 <img
                     src={owl}
-                    alt="Picture of Euli"
+                    alt="Euli"
                     className={css.image}
                     draggable={false}
                 />
@@ -125,7 +125,7 @@ const OverviewContent = ({
                     className={css.p}
                     style={{textAlign: 'center'}}
                 >
-                    {parseColoredText(stepMsg.controlInfo)}
+                    {parseColoredText(stepMsg.controlInfo, tutorialIndexData)}
                 </p>
             </div>
         );

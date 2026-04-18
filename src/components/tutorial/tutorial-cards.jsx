@@ -16,11 +16,10 @@ import rightArrow from '../cards/icon--next.svg';
 import backIcon from './images/icon--back.png';
 
 import VirtualMachine from 'scratch-vm';
-import DebuggingTutorialHelp from "../../containers/debugging-tutorial-help.jsx";
-import DebuggingTutorialOverview from "../../containers/debugging-tutorial-overview.jsx";
-import DebuggingTutorialStep from "../../containers/debugging-tutorial-step.jsx";
-import TutorialSelection from "../debuggingTutorial/pages/tutorial-selection/tutorial-selection.jsx";
-
+import DebuggingTutorialHelp from '../../containers/debugging-tutorial-help.jsx';
+import DebuggingTutorialOverview from '../../containers/debugging-tutorial-overview.jsx';
+import DebuggingTutorialStep from '../../containers/debugging-tutorial-step.jsx';
+import TutorialSelection from '../debuggingTutorial/pages/tutorial-selection/tutorial-selection.jsx';
 
 
 const NextPrevButtons = ({isMenuVisible, onNextStep, onPrevStep, expanded}) => (
@@ -87,22 +86,27 @@ const TutorialHeader = props => {
         guiMessages
     } = props;
 
-    const isBackButtonEnabled = contentType === "DEBUGGING_STEP" || contentType === "DEBUGGING_HELP";
-    let homeButtonText = "";
-    if (contentType === "DEBUGGING_STEP") {
+    const isBackButtonEnabled = contentType === 'DEBUGGING_STEP' || contentType === 'DEBUGGING_HELP';
+    let homeButtonText = '';
+    if (contentType === 'DEBUGGING_STEP') {
         homeButtonText = backButtonTitle;
-    } else if (contentType === "DEBUGGING_HELP") {
-        homeButtonText = "Back";
-    } else {homeButtonText = homeButtonTitle;}
+    } else if (contentType === 'DEBUGGING_HELP') {
+        homeButtonText = 'Back';
+    } else {
+        homeButtonText = homeButtonTitle;
+    }
 
     return (
         <div
             className={expanded ? classNames(styles.headerButtons, tutorialStyles.headerButtons) :
                 classNames(styles.headerButtons, tutorialStyles.headerButtons, styles.headerButtonsHidden)}
         >
-            <div style={{display: "flex"}}>
+            <div style={{display: 'flex'}}>
                 {totalSteps > 1 && !isMenuVisible ? (
-                    <div className={styles.stepsList} style={{marginLeft: '18px'}}>
+                    <div
+                        className={styles.stepsList}
+                        style={{marginLeft: '18px'}}
+                    >
                         {Array(totalSteps).fill(0)
                             .map((_, i) => (
                                 <div
@@ -114,7 +118,7 @@ const TutorialHeader = props => {
                 ) : null}
 
                 {isBackButtonEnabled && <div className={tutorialStyles.scoreButton}>
-                    <FlashingSpan text={tutorialPoints}/>
+                    <FlashingSpan text={tutorialPoints} />
                     {guiMessages.points}
                 </div>}
             </div>
@@ -193,7 +197,7 @@ TutorialHeader.propTypes = {
 };
 
 
-export function FlashingSpan({ text }) {
+export function FlashingSpan ({text}) {
     const [flash, setFlash] = useState(false);
 
     useEffect(() => {
@@ -204,7 +208,7 @@ export function FlashingSpan({ text }) {
 
     return (
         <div
-            className={`${styles.headerScorePill} ${flash ? tutorialStyles.flash : ""}`}
+            className={`${styles.headerScorePill} ${flash ? tutorialStyles.flash : ''}`}
         >
             <span>{text}</span>
         </div>
@@ -276,51 +280,51 @@ const TutorialCards = props => {
     const parseContent = function () {
 
         switch (contentType) {
-            case "TUTORIAL_SELECTED":
-                return <DebuggingTutorialOverview
-                    tutorialMessages={tutorialMessages}
-                    tutorialPicture={tut[0].img}
-                    onStartTutorial={onStartTutorial}
-                    vm={vm}
-                    tutorialIndexData={tutorialIndexData}
-                    guiMessages={guiMessages}
-                    setTutorialPoints={setTutorialPoints}
-                />
-            case "DEBUGGING_STEP":
-                return <DebuggingTutorialStep
-                    onOpenHelp={onOpenHelp}
-                    tutorialMessages={tutorialMessages}
-                    projectFiles={"projectFiles"}
-                    vm={vm}
-                    step={step}
-                    stepCount={totalSteps}
-                    onIncreaseStep={onNextStep}
-                    tutorialIndexData={tutorialIndexData}
-                    isDebuggingTutorial={isDebuggingTutorialSelected}
-                    detectors={detectors}
-                    onBackToTutorialSelection={onBackToTutorialSelection}
-                    guiMessages={guiMessages}
-                    setMouseEnabled={setMouseEnabled}
-                    setTutorialPoints={setTutorialPoints}
-                    tutorialPoints={tutorialPoints}
-                />;
-            case "DEBUGGING_HELP":
-                return <DebuggingTutorialHelp
-                    tutorial={tutorialMessages}
-                    tutorialIndexData={tutorialIndexData}
-                    stepNumber={step}
-                    onScrollBottom={onScrollBottom}
-                    onHomeMenu={onHomeMenu}
-                    guiMessages={guiMessages}
-                />
-            default: //Show tutorial selection
-                return <TutorialSelection
-                    onSelectTutorial={onSelectTutorial}
-                    tutorials={tutorials}
-                    guiMessages={guiMessages}
-                />
+        case 'TUTORIAL_SELECTED':
+            return (<DebuggingTutorialOverview
+                tutorialMessages={tutorialMessages}
+                tutorialPicture={tut[0].img}
+                onStartTutorial={onStartTutorial}
+                vm={vm}
+                tutorialIndexData={tutorialIndexData}
+                guiMessages={guiMessages}
+                setTutorialPoints={setTutorialPoints}
+            />);
+        case 'DEBUGGING_STEP':
+            return (<DebuggingTutorialStep
+                onOpenHelp={onOpenHelp}
+                tutorialMessages={tutorialMessages}
+                projectFiles={'projectFiles'}
+                vm={vm}
+                step={step}
+                stepCount={totalSteps}
+                onIncreaseStep={onNextStep}
+                tutorialIndexData={tutorialIndexData}
+                isDebuggingTutorial={isDebuggingTutorialSelected}
+                detectors={detectors}
+                onBackToTutorialSelection={onBackToTutorialSelection}
+                guiMessages={guiMessages}
+                setMouseEnabled={setMouseEnabled}
+                setTutorialPoints={setTutorialPoints}
+                tutorialPoints={tutorialPoints}
+            />);
+        case 'DEBUGGING_HELP':
+            return (<DebuggingTutorialHelp
+                tutorial={tutorialMessages}
+                tutorialIndexData={tutorialIndexData}
+                stepNumber={step}
+                onScrollBottom={onScrollBottom}
+                onHomeMenu={onHomeMenu}
+                guiMessages={guiMessages}
+            />);
+        default: // Show tutorial selection
+            return (<TutorialSelection
+                onSelectTutorial={onSelectTutorial}
+                tutorials={tutorials}
+                guiMessages={guiMessages}
+            />);
         }
-    }
+    };
 
     return (
         // Custom overlay to act as the bounding parent for the draggable, using values from above
@@ -363,13 +367,13 @@ const TutorialCards = props => {
                         >
                             {parseContent()}
                         </div>
-                        {/*<NextPrevButtons
+                        {/* <NextPrevButtons
                             isMenuVisible={isMenuVisible}
                             expanded={expanded}
                             onNextStep={step < totalSteps - 1 && step < currentTutorialStep ?
                                 onNextStep : null}
                             onPrevStep={step > 0 ? onPrevStep : null}
-                        />*/ //TODO In my opinion unnecessary and distracting for users
+                        />*/ // TODO In my opinion unnecessary and distracting for users
                         }
                         {expanded ?
                             <div className={tutorialStyles.footer}>
@@ -426,7 +430,7 @@ TutorialCards.propTypes = {
     onStartTutorial: PropTypes.func.isRequired,
     onScrollBottom: PropTypes.func,
     setMouseEnabled: PropTypes.func,
-    setTutorialPoints: PropTypes.func,
+    setTutorialPoints: PropTypes.func
 };
 
 export default injectIntl(TutorialCards);

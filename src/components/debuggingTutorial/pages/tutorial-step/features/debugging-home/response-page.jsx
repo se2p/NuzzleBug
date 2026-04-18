@@ -67,7 +67,6 @@ ResponsePage.propTypes = {
     onOpenHelp: PropTypes.func.isRequired,
     PAGE_TEST_RESULTS: PropTypes.string.isRequired,
     getResponse: PropTypes.func.isRequired,
-    tutorialConfig: PropTypes.object.isRequired
 };
 
 export default ResponsePage;

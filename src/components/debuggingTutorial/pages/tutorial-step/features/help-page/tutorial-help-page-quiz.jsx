@@ -166,8 +166,9 @@ const TutorialHelpPageQuiz = ({vm, quizMessages}) => {
                 role="group"
                 aria-label="Antwortoptionen"
             >
-                {kognitionOptions.map(text => (
+                {kognitionOptions.map((text, i) => (
                     <button
+                        key={text ?? i}
                         className={`${css.qaOption} ${css.qaOptionTall}`}
                         type="button"
                         onClick={() => {
