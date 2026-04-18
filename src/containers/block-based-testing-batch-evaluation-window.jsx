@@ -200,7 +200,6 @@ const BBTBatchEvaluationWindow = props => {
     };
 
     const handleRunAllTestsOnFile = async function (fileId) {
-
         if (BBTTestManager.batchEvaluationFileID !== fileId) {
             await handleLoadProject(fileId);
         }
@@ -219,6 +218,11 @@ const BBTBatchEvaluationWindow = props => {
         });
     };
 
+    const handleRunAllTestsOnFileAndLog = async (fileId) => {
+        logging.logClickEvent('ICON', new Date(), 'BBT_RUN_BATCH_ON_FILE', fileId);
+        await handleRunAllTestsOnFile(fileId);
+    }
+
     const handleClearAllTestStatusOfFile = fileId => {
         props.dispatchClearBatchEvalTestStatus(fileId);
     };
@@ -228,6 +232,8 @@ const BBTBatchEvaluationWindow = props => {
     };
 
     const handleRunTestSuiteOnAllProjects = async () => {
+        logging.logClickEvent('ICON', new Date(), 'BBT_RUN_BATCH_ON_SUITE');
+
         if (BBTTestManager.batchEvaluationRunning) {
             return;
         }
@@ -344,7 +350,7 @@ const BBTBatchEvaluationWindow = props => {
                 fileName={file.path}
                 iconsDisabled={!props.runAllTestsEnabled}
                 isCurrentlyLoadedProject={file.id === props.activeBatchEvaluationFileId}
-                onRunAllTestsOnFile={handleRunAllTestsOnFile}
+                onRunAllTestsOnFile={handleRunAllTestsOnFileAndLog}
                 onLoadProject={handleLoadProject}
                 onRemoveFile={handleRemoveFile}
                 onClearAllTestStatus={handleClearAllTestStatusOfFile}
