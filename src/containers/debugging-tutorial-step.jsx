@@ -198,11 +198,10 @@ class DebuggingTutorialStep extends React.Component {
         this.props.lockVM();
 
         let data;
-
         if (this.props.codeResetPoint !== null) {
             data = this.props.codeResetPoint;
         } else {
-            data = this.props.tutorialIndexData[`project${(this.props.step + 1).toString()}`];
+            data = this.props.tutorialIndexData[`project_${(this.props.step + 1).toString()}_${this.props.locale}`];
         }
 
         this.props.vm.loadProject(data)
