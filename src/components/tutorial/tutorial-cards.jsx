@@ -1,6 +1,6 @@
 import classNames from 'classnames';
-import PropTypes from 'prop-types';
-import React, {Fragment} from 'react';
+import PropTypes, {func} from 'prop-types';
+import React, {Fragment, useEffect, useState} from 'react';
 import Draggable from 'react-draggable';
 import {injectIntl, FormattedMessage} from 'react-intl';
 
@@ -13,13 +13,17 @@ import expandIcon from '../cards/icon--expand.svg';
 import closeIcon from '../cards/icon--close.svg';
 import leftArrow from '../cards/icon--prev.svg';
 import rightArrow from '../cards/icon--next.svg';
+import backIcon from './images/icon--back.png';
 
-import Tutorial from './tutorial-menu-item.jsx';
-import TutorialStep from '../../containers/tutorial-step.jsx';
 import VirtualMachine from 'scratch-vm';
+import DebuggingTutorialHelp from '../../containers/debugging-tutorial-help.jsx';
+import DebuggingTutorialOverview from '../../containers/debugging-tutorial-overview.jsx';
+import DebuggingTutorialStep from '../../containers/debugging-tutorial-step.jsx';
+import TutorialSelection from '../debuggingTutorial/pages/tutorial-selection/tutorial-selection.jsx';
+
 
 const NextPrevButtons = ({isMenuVisible, onNextStep, onPrevStep, expanded}) => (
-    isMenuVisible ? null :
+    !isMenuVisible ? null :
         (<Fragment>
             {onNextStep ? (
                 <div>
@@ -70,30 +74,55 @@ const TutorialHeader = props => {
         isMenuVisible,
         title,
         homeButtonTitle,
+        backButtonTitle,
         onCloseCards,
         onShrinkExpandCards,
         onHomeMenu,
         totalSteps,
         step,
-        expanded
+        expanded,
+        contentType,
+        tutorialPoints,
+        guiMessages
     } = props;
+
+    const isBackButtonEnabled = contentType === 'DEBUGGING_STEP' || contentType === 'DEBUGGING_HELP';
+    let homeButtonText = '';
+    if (contentType === 'DEBUGGING_STEP') {
+        homeButtonText = backButtonTitle;
+    } else if (contentType === 'DEBUGGING_HELP') {
+        homeButtonText = 'Back';
+    } else {
+        homeButtonText = homeButtonTitle;
+    }
 
     return (
         <div
             className={expanded ? classNames(styles.headerButtons, tutorialStyles.headerButtons) :
                 classNames(styles.headerButtons, tutorialStyles.headerButtons, styles.headerButtonsHidden)}
         >
-            {totalSteps > 1 && !isMenuVisible ? (
-                <div className={styles.stepsList} style={{marginLeft: '18px'}}>
-                    {Array(totalSteps).fill(0)
-                        .map((_, i) => (
-                            <div
-                                className={i === step ? styles.activeStepPip : styles.inactiveStepPip}
-                                key={`pip-step-${i}`}
-                            />
-                        ))}
-                </div>
-            ) : null}
+            <div style={{display: 'flex'}}>
+                {totalSteps > 1 && !isMenuVisible ? (
+                    <div
+                        className={styles.stepsList}
+                        style={{marginLeft: '18px'}}
+                    >
+                        {Array(totalSteps).fill(0)
+                            .map((_, i) => (
+                                <div
+                                    className={i === step ? styles.activeStepPip : styles.inactiveStepPip}
+                                    key={`pip-step-${i}`}
+                                />
+                            ))}
+                    </div>
+                ) : null}
+
+                {isBackButtonEnabled && <div className={tutorialStyles.scoreButton}>
+                    <FlashingSpan text={tutorialPoints} />
+                    {guiMessages.points}
+                </div>}
+            </div>
+
             <div className={tutorialStyles.cardTitleHeader}>
                 <span> {title} </span>
             </div>
@@ -108,10 +137,10 @@ const TutorialHeader = props => {
                         <img
                             className={tutorialStyles.homeButtonIcon}
                             draggable={false}
-                            src={homeIcon}
+                            src={isBackButtonEnabled ? backIcon : homeIcon}
                             alt={'House'}
                         />
-                        {homeButtonTitle}
+                        {homeButtonText}
                     </div> : null}
                 <div
                     className={styles.shrinkExpandButton}
@@ -163,8 +192,29 @@ TutorialHeader.propTypes = {
     onShrinkExpandCards: PropTypes.func.isRequired,
     onHomeMenu: PropTypes.func.isRequired,
     step: PropTypes.number,
-    totalSteps: PropTypes.number
+    totalSteps: PropTypes.number,
+    tutorialPoints: PropTypes.number
 };
+
+
+export function FlashingSpan ({text}) {
+    const [flash, setFlash] = useState(false);
+
+    useEffect(() => {
+        setFlash(true);
+        const t = setTimeout(() => setFlash(false), 600);
+        return () => clearTimeout(t);
+    }, [text]);
+
+    return (
+        <div
+            className={`${styles.headerScorePill} ${flash ? tutorialStyles.flash : ''}`}
+        >
+            <span>{text}</span>
+        </div>
+    );
+}
+
 
 const TutorialCards = props => {
     const {
@@ -176,6 +226,7 @@ const TutorialCards = props => {
         currentTutorialStep,
         title,
         homeButtonTitle,
+        backButtonTitle,
         guiMessages,
         tutorialMessages,
         onCloseCards,
@@ -191,6 +242,17 @@ const TutorialCards = props => {
         step,
         expanded,
         vm,
+        contentType,
+        onSetContentType,
+        onStartTutorial,
+        projectFiles,
+        onOpenHelp,
+        tutorialIndexData,
+        onScrollBottom,
+        onBackToTutorialSelection,
+        setMouseEnabled,
+        tutorialPoints,
+        setTutorialPoints,
         ...posProps
     } = props;
     let {x, y} = posProps;
@@ -207,11 +269,62 @@ const TutorialCards = props => {
     }
 
     let detectors;
+    let isDebuggingTutorialSelected = false;
     const tut = tutorials.filter(tutorial => tutorial.id === selectedTutorial);
-    if (tut.length > 0 && tut[0] !== undefined && tut[0].detectors) {
-        detectors = tut[0].detectors;
+    if (tut.length > 0 && tut[0] !== undefined) {
+        isDebuggingTutorialSelected = tut[0].isDebuggingTutorial;
+        if (tut[0].detectors) detectors = tut[0].detectors;
     }
 
+
+    const parseContent = function () {
+
+        switch (contentType) {
+        case 'TUTORIAL_SELECTED':
+            return (<DebuggingTutorialOverview
+                tutorialMessages={tutorialMessages}
+                tutorialPicture={tut[0].img}
+                onStartTutorial={onStartTutorial}
+                vm={vm}
+                tutorialIndexData={tutorialIndexData}
+                guiMessages={guiMessages}
+                setTutorialPoints={setTutorialPoints}
+            />);
+        case 'DEBUGGING_STEP':
+            return (<DebuggingTutorialStep
+                onOpenHelp={onOpenHelp}
+                tutorialMessages={tutorialMessages}
+                projectFiles={'projectFiles'}
+                vm={vm}
+                step={step}
+                stepCount={totalSteps}
+                onIncreaseStep={onNextStep}
+                tutorialIndexData={tutorialIndexData}
+                isDebuggingTutorial={isDebuggingTutorialSelected}
+                detectors={detectors}
+                onBackToTutorialSelection={onBackToTutorialSelection}
+                guiMessages={guiMessages}
+                setMouseEnabled={setMouseEnabled}
+                setTutorialPoints={setTutorialPoints}
+                tutorialPoints={tutorialPoints}
+            />);
+        case 'DEBUGGING_HELP':
+            return (<DebuggingTutorialHelp
+                tutorial={tutorialMessages}
+                tutorialIndexData={tutorialIndexData}
+                stepNumber={step}
+                onScrollBottom={onScrollBottom}
+                onHomeMenu={onHomeMenu}
+                guiMessages={guiMessages}
+            />);
+        default: // Show tutorial selection
+            return (<TutorialSelection
+                onSelectTutorial={onSelectTutorial}
+                tutorials={tutorials}
+                guiMessages={guiMessages}
+            />);
+        }
+    };
 
     return (
         // Custom overlay to act as the bounding parent for the draggable, using values from above
@@ -237,53 +350,35 @@ const TutorialCards = props => {
                             isMenuVisible={isMenuVisible}
                             title={title}
                             homeButtonTitle={homeButtonTitle}
+                            backButtonTitle={backButtonTitle}
                             expanded={expanded}
                             step={step}
                             totalSteps={totalSteps}
                             onCloseCards={onCloseCards}
                             onShrinkExpandCards={onShrinkExpandCards}
                             onHomeMenu={onHomeMenu}
+                            contentType={contentType}
+                            tutorialPoints={tutorialPoints}
+                            guiMessages={guiMessages}
                         />
                         <div
                             className={expanded ? classNames(styles.stepBody, tutorialStyles.stepBody) : styles.hidden}
                             ref={cardRef}
                         >
-                            {isMenuVisible ?
-                                Array(tutorials.length).fill(0)
-                                    .map((_, i) => (
-                                        <Tutorial
-                                            key={tutorials[i].id}
-                                            content={tutorials[i]}
-                                            onSelect={onSelectTutorial}
-                                        />
-                                    )) :
-                                <TutorialStep
-                                    guiMessages={guiMessages}
-                                    tutorialMessages={tutorialMessages}
-                                    detectors={detectors}
-                                    step={step}
-                                    nextStep={onNextStep}
-                                    vm={vm}
-                                />
-                            }
+                            {parseContent()}
                         </div>
-                        <NextPrevButtons
+                        {/* <NextPrevButtons
                             isMenuVisible={isMenuVisible}
                             expanded={expanded}
                             onNextStep={step < totalSteps - 1 && step < currentTutorialStep ?
                                 onNextStep : null}
                             onPrevStep={step > 0 ? onPrevStep : null}
-                        />
+                        />*/ // TODO In my opinion unnecessary and distracting for users
+                        }
                         {expanded ?
                             <div className={tutorialStyles.footer}>
-                                <p className={tutorialStyles.footerText}>{guiMessages.codeClub}</p>
-                                <div
-                                    /* eslint-disable-next-line react/jsx-no-bind */
-                                    onClick={() =>
-                                        window.open('https://projects.raspberrypi.org/en/codeclub', '_blank')}
-                                    className={tutorialStyles.footerLink}
-                                    /* eslint-disable-next-line react/jsx-no-literals */
-                                >Code Club</div>
+                                <p className={tutorialStyles.footerText}>&nbsp;</p>
+
                             </div> : null}
                     </div>
                 </div>
@@ -299,7 +394,7 @@ TutorialCards.propTypes = {
             id: PropTypes.string.isRequired,
             title: PropTypes.string.isRequired,
             img: PropTypes.node.isRequired,
-            difficulty: PropTypes.string.isRequired,
+            difficulty: PropTypes.number.isRequired,
             totalSteps: PropTypes.number.isRequired,
             detectors: PropTypes.string
         })),
@@ -308,7 +403,7 @@ TutorialCards.propTypes = {
     isRtl: PropTypes.bool.isRequired,
     title: PropTypes.string,
     homeButtonTitle: PropTypes.string,
-    guiMessages: PropTypes.objectOf(PropTypes.string),
+    guiMessages: PropTypes.any,
     tutorialMessages: PropTypes.shape({
         failureMessage: PropTypes.string,
         description: PropTypes.string
@@ -329,7 +424,13 @@ TutorialCards.propTypes = {
     currentTutorialStep: PropTypes.number.isRequired,
     x: PropTypes.number,
     y: PropTypes.number,
-    vm: PropTypes.instanceOf(VirtualMachine).isRequired
+    vm: PropTypes.instanceOf(VirtualMachine).isRequired,
+    onSetContentType: PropTypes.func,
+    onOpenHelp: PropTypes.func,
+    onStartTutorial: PropTypes.func.isRequired,
+    onScrollBottom: PropTypes.func,
+    setMouseEnabled: PropTypes.func,
+    setTutorialPoints: PropTypes.func
 };
 
 export default injectIntl(TutorialCards);

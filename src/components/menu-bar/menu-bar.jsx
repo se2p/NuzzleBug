@@ -178,6 +178,7 @@ class MenuBar extends React.Component {
             'restoreOptionMessage',
             'handleFinishExperiment'
         ]);
+        this.scratchlogURL = 'https://scratch.fim.uni-passau.de/kurs/'; // localhost default: http://localhost:8090
     }
     componentDidMount () {
         document.addEventListener('keydown', this.handleKeyPress);

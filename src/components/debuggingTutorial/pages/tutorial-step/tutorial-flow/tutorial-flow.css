@@ -1,0 +1,1936 @@
+
+
+
+.description {
+    text-align: justify;
+    margin: 20px 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.descriptionHeader {
+    text-align: left;
+    margin: 20px 0;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.error {
+    margin: 8px 0;
+    background-color: #e74c3c;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    justify-content: left;
+    display: flex;
+    text-align: left;
+    width: 90%;
+}
+
+.error-label {
+    margin-right: 5px;
+    text-align: left;
+}
+
+.error-bar {
+    display: flex;
+    align-items: center;
+    border: 2px solid #e74c3c;
+    border-radius: 10px;
+    padding: 5px 5px;
+    width: 90%;
+}
+
+.explanation-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid #4D97FFFF;
+    border-radius: 10px;
+    width: 90%;
+    margin-top: 5px;
+    padding: 10px 10px;
+}
+
+.explanation-text {
+    text-align: justify;
+    width: 100%;
+}
+
+.error-text {
+    flex-grow: 1;
+    font-size: 16px;
+    text-align: right;
+}
+
+.errorNumber {
+    flex-grow: 1;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: left;
+    margin-left: 5px;
+}
+
+.details-button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    position: relative;
+}
+
+.details-button:hover {
+    background-color: #c0392b;
+}
+
+.button-bar {
+    margin-top: 100px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.button-element {
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 15px 15px;
+    cursor: pointer;
+    background-color: hsla(215, 100%, 65%, 1);
+    min-width: 150px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button-element:hover {
+    background-color: #3d77c5;
+}
+
+.button-element-disabled {
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 15px 15px;
+    cursor: pointer;
+    background-color: #4D97FF6B;
+    min-width: 150px;
+    height: 45px;
+    position: relative;
+}
+
+.next-button {
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 15px 15px;
+    cursor: pointer;
+    background-color: hsl(10, 22%, 56%);
+    min-width: 120px;
+}
+
+.next-button:hover {
+    background-color: #795d55;
+}
+
+
+.details-button .tooltip-text {
+    visibility: hidden;
+    width: 210px;
+    background-color: #e74c3c;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 110%;
+
+    opacity: 0;
+    transition: opacity .7s;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.details-button:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+.details-button .tooltip-text::after {
+    content: " ";
+    position: absolute;
+    top: 50%;
+    left: 100%; /* To the right of the tooltip */
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent transparent #e74c3c;
+}
+
+.error-label {
+    margin-right: 5px;
+    text-align: left;
+}
+
+.test-bar {
+    display: flex;
+    align-items: center;
+    border: 2px solid hsla(215, 100%, 65%, 1);
+    border-radius: 10px;
+    padding: 5px 5px;
+    margin-top: 40px;
+}
+
+.test-text {
+    flex-grow: 1;
+    font-size: 16px;
+    text-align: right;
+}
+
+.test-number {
+    flex-grow: 1;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: left;
+    margin-left: 10px;
+}
+
+.test-details-button {
+    background-color: hsla(215, 100%, 65%, 1);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    position: relative;
+}
+
+.test-details-button:hover {
+    background-color: hsl(215, 59%, 53%);
+}
+
+.testBox {
+    width: 300px;
+    display: flex;
+    align-items: flex-start;
+    border: 2px solid hsla(215, 100%, 65%, 1);
+    border-radius: 10px;
+    flex-direction: column;
+    margin-right: 15px;
+    margin-bottom: 20px;
+    background-color: white;
+}
+
+.test-result-button {
+    background-color: hsla(215, 100%, 65%, 1);
+    color: white;
+    border: none;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 8px;
+    padding: 5px 15px;
+    cursor: pointer;
+    position: relative;
+}
+
+.test-result-button:hover {
+    background-color: hsl(215, 59%, 53%);
+}
+
+.test-res-container {
+    display: flex;
+    align-items: flex-start;
+    width: 298px;
+}
+
+.result-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 5px;
+    width: 297px;
+    justify-content: space-between;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.heading {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.descriptionFinish {
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    text-align: left;
+    width: 80%;
+}
+
+.descriptionFinish p {
+    margin: 0;
+}
+
+.title-image {
+    width: 200px;
+    height: auto;
+    border-radius: 5px;
+}
+
+.descriptionHeader {
+    text-align: left;
+    margin: 20px 0;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.details-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border: 2px solid #4381d7;
+    border-radius: 10px;
+    padding: 5px 5px;
+    width: 80%;
+}
+
+.details-bar-element {
+    display: flex;
+    align-items: flex-start;
+    padding: 5px 5px;
+    width: 80%;
+}
+
+.details-text {
+    flex-grow: 1;
+    font-size: 16px;
+    text-align: left;
+    margin-left: 5px;
+}
+
+.details-title {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: left;
+    margin-left: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.tab-container {
+    display: flex;
+    width: 90%;
+    margin: 0 auto 0;
+    position: relative;
+    z-index: 1; /* Unter dem Content */
+}
+
+.tab-button {
+    padding-bottom: 33px;
+    padding-right: 10px;
+    padding-left: 10px;
+    border: none;
+    border-radius: 15px 15px 0 0;
+    background-color: #575E75FF;
+    color: white;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-align: center;
+    min-width: 150px;
+    position: relative;
+    z-index: 1;
+    height: 68px;
+    top: 30px; /* Button ragt nach oben */
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: top 0.1s ease; /* Smooth animation */
+}
+
+.tab-button:hover {
+    text-decoration: underline;
+    top: 20px;
+}
+
+.icon {
+    top: -5px;
+    width: auto;
+    height: 15px;
+    margin-right: 5px;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 4px solid #4D97FFFF;
+    border-radius: 20px;
+    width: 90%;
+    height: 280px;
+    margin: 0 auto;
+    background-color: #FFFFFF;
+    position: relative;
+    z-index: 2;
+}
+.details-container {
+    padding-top: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    display: flex; /* Aktiviert Flexbox */
+    width: 100%; /* Gesamtbreite des Containers */
+    gap: 10px; /* Abstand zwischen den Boxen */
+    box-sizing: border-box; /* Beachtet Padding und Border in der Breite */
+    justify-content: flex-end;
+    height: 100%;
+}
+
+.control-container {
+    display: flex; /* Aktiviert Flexbox */
+    align-items: center;
+    width: 90%; /* Gesamtbreite des Containers */
+    gap: 10px; /* Abstand zwischen den Boxen */
+    box-sizing: border-box; /* Beachtet Padding und Border in der Breite */
+    justify-content: center; /* Zentriert horizontal */
+}
+
+.control-image {
+    height: 180px;
+    border-radius: 5px;
+    width: auto;
+}
+
+.text-area {
+    flex: 2;
+    text-align: justify;
+    max-height: 100%;
+    scrollbar-color: #575E75FF rgba(255, 255, 255, 0);
+    overflow-y: auto;
+}
+
+.text-area::-webkit-scrollbar-track {  /*TESTEN*/
+    background: rgba(255, 255, 255, 0);
+}
+
+.text-area::-webkit-scrollbar-thumb {  /*TESTEN*/
+    background-color: #575E75FF;
+    border-radius: 4px;
+}
+
+
+
+
+.text-area h1 {
+    font-size: 24px;
+    color: #575E75FF;
+}
+
+.text-area p {
+    font-size: 0.9rem;
+    line-height: 1.2;
+    color: #575E75FF;
+}
+
+.image-area {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.vertical-line-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 7px;
+    margin-left: 5px;
+}
+
+.vertical-line {
+    border-left: 3px solid #4D97FFFF;
+    height: 150px;
+}
+
+.image {
+    width: 150px;
+    height: auto;
+}
+
+.overview-image {
+    width: 250px;
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 0px 1px 9px 4px rgba(0,0,0,0.63);
+    -webkit-box-shadow: 0px 1px 9px 4px rgba(0,0,0,0.63);
+    -moz-box-shadow: 0px 1px 9px 4px rgba(0,0,0,0.63);
+}
+
+.button-container {
+    display: flex;
+    justify-content: center; /* Zentriert den Button horizontal */
+    align-items: center; /* Zentriert den Button vertikal */
+    padding: 20px;
+    margin-top: 10px;
+}
+
+.custom-button {
+    background-color: #575E75FF; /* Dunkelgraue Hintergrundfarbe */
+    color: white; /* Weiße Schriftfarbe */
+    border: none; /* Entfernt den Standardrahmen */
+    border-radius: 10px; /* Abgerundete Ecken */
+    padding: 10px 20px; /* Abstand innerhalb des Buttons */
+    font-size: 0.9rem; /* Schriftgröße */
+    cursor: pointer; /* Zeigt eine Hand beim Hover an */
+    text-align: center; /* Text zentrieren */
+}
+
+.custom-button:hover {
+    background-color: #3d3d3d; /* Etwas dunklerer Farbton beim Hover */
+}
+
+
+/* Container für Eule und Sprechblase */
+.error-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    width: 100%;
+    margin-bottom: 20px;
+    justify-content: flex-end;
+}
+
+
+.error-button {
+    margin-left: 6px;
+    background-color: #cf3b28FF;
+    color: white;
+    min-width: 70px;
+    border-radius: 5px;
+    padding: 3px 5px;
+    border-color: transparent;
+    transform: translateY(-17%);
+    font-weight: bold;
+}
+
+.error-button:hover {
+    background-color: #9a2719;
+}
+
+.p {
+    font-size: 0.9rem;
+    color: #575E75FF;
+    margin-left: 20px;
+}
+
+
+/* BUTTON ANIMATION BAR */
+.reset-button {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    background-color: #575E75FF;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    height: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 0.9rem;
+}
+
+.reset-button:hover {
+    background-color: #393d4f;
+}
+
+.reset-button-pressed {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    background-color: #393d4f;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    height: 38px;
+    font-size: 0.9rem;
+    padding-left: 18px;
+    padding-right: 18px;
+}
+
+.reset-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 150px;
+    height: 45px;
+}
+
+.progressBar {
+    position: absolute;
+    left: 5%;
+    bottom: 6px;
+    height: 3px;
+    width: 0;
+    border-radius: 3px;
+    background-color: white;
+    transition: width 1s linear;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* CP - Control Panel */
+.cpContainer {
+    height: 100vh;
+    padding-top: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffffff;
+    background-image: url("../../../images/skulls.png");
+}
+
+.white-box {
+    padding-top: 15px;
+    background-color: white;
+    width: 90%;
+    min-height: 200px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: flex-start;
+    padding-bottom: 10px;
+    box-sizing: border-box;
+    box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.56);
+    -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.56);
+    -moz-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.56);
+    margin-top: 40px;
+}
+
+
+
+
+
+
+
+
+
+.white-box-overview {
+    background-color: white;
+    width: 90%;
+    height: fit-content;
+    border-radius: 8px;
+    display: flex;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    -moz-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    margin-top: 50px;
+    padding-bottom: 30px;
+}
+
+.response-bubble {
+    background-color: #575E75FF;
+    border-radius: 15px;
+    min-height: 40px;
+    display: inline-block;
+    margin-top: 5px;
+    margin-bottom: auto;
+    padding: 10px;
+    position: relative;
+    margin-left: 60px;
+}
+
+.response-bubble-indicator {
+    width: 50px;
+    height: auto;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateX(-95%) translateY(-40%);
+}
+
+.controlPanelImageSmall {
+    width: 18%;
+    height: fit-content;
+    transform: rotateY(180deg);
+}
+
+.cpButton-row {
+    display: flex;
+    justify-content: center; /*space-between;*/
+    width: 80%;
+    margin-top: 60px;
+    gap: 120px;
+}
+
+.cpButton {
+    cursor: pointer;
+    flex-grow: 0;
+    width: 90px;
+    height: auto;
+    transition: all 0.1s ease-in-out;
+    will-change: transform;
+    overflow: hidden;
+    backface-visibility: hidden;
+    box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    -moz-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    border-radius: 22px;
+}
+
+.cpButton:hover:active {
+    box-shadow: 0px 1px 16px 8px rgba(0,0,0,0.64) inset;
+    -webkit-box-shadow: 0px 1px 16px 8px rgba(0,0,0,0.64) inset;
+    -moz-box-shadow: 0px 1px 16px 8px rgba(0,0,0,0.64) inset;
+}
+
+.cpButtonDescription {
+    margin-top: 15px;
+    font-size: 0.6rem;
+    color: #575E75FF;
+    text-align: center;
+}
+
+.cpButton:hover {
+    transform: scale(0.95) translateZ(0);
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    box-shadow: 0 3px 8px 1px rgba(0, 0, 0, 0.15);
+}
+
+.controlPanelButtonParent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cpBack-button {
+    margin-top: 15px;
+    cursor: pointer;
+    width: 35px;
+    height: auto;
+}
+
+.cpBack-button:hover {
+    scale: 1.1;
+    transition: all 0.1s ease;
+}
+
+.response-container {
+    flex-direction: column;
+    display: flex;
+    width: 340px;
+    min-height: 50px;
+}
+
+.response-text-area {
+    text-align: start;
+    font-size: 0.9rem;
+    color: #ffffff;
+    font-weight: normal;
+}
+
+.response-text-area p {
+    font-weight: normal;
+    margin-top: 0;
+    margin-bottom: 0;
+    text-align: start;
+    font-size: 0.9rem;
+    color: #ffffff;
+}
+
+.response-button-accept {
+    padding-right: 5px;
+    padding-left: 5px;
+    border-radius: 5px;
+    text-align: center;
+    border-color: transparent;
+    min-width: 40px;
+    color: white;
+    margin-left: 20px;
+    margin-right: 20px;
+    background-color: #0fbd8cff;
+    cursor: pointer;
+}
+
+.response-button-accept:hover {
+    background-color: #109a74;
+}
+
+.response-button-decline {
+    padding-right: 5px;
+    padding-left: 5px;
+    border-radius: 5px;
+    text-align: center;
+    border-color: transparent;
+    min-width: 40px;
+    color: white;
+    margin-left: 20px;
+    margin-right: 20px;
+    background-color: #e63c39ff;
+    cursor: pointer;
+}
+
+.response-button-decline:hover {
+    background-color: #b02e2c;
+}
+
+.response-button-next {
+    padding-right: 5px;
+    padding-left: 5px;
+    border-radius: 5px;
+    text-align: center;
+    border-color: transparent;
+    min-width: 40px;
+    color: #575E75FF;
+    background-color: white;
+    cursor: pointer;
+    margin-left: 0px;
+    transition: all 0.2s;
+}
+
+.response-button-next:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.response-button-Test-Results {
+    padding-right: 5px;
+    padding-left: 5px;
+    border-radius: 5px;
+    text-align: center;
+    border-color: transparent;
+    min-width: 40px;
+    color: #575E75FF;
+    background-color: #b482e3;
+    cursor: pointer;
+}
+
+.response-button-Test-Results:hover {
+    background-color: #ad70e3;
+    transform: scale(95%);
+}
+
+.response-button-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Sprechblase */
+.bubble {
+    display: inline-block;
+    position: relative;
+    border-radius: 10px;
+    background: #cf3b28ff;
+    min-height: 40px;
+    margin-bottom: auto;
+    margin-right: 20px;
+    width: 100%;
+}
+
+.bubble-indicator {
+    position: absolute;
+    width: 50px;
+    height: auto;
+    right: 0; /* Direkt am rechten Rand */
+    top: 50%; /* Mittig der Höhe */
+    transform: translateX(65%) translateY(-40%); /* Exakte Zentrierung */
+    z-index: 2;
+}
+
+.bubble p {
+    color: #FFFFFF;
+    z-index: 15;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    padding: 0px 25px 0px 15px;
+    text-align: justify;
+}
+
+
+
+
+
+
+/* LOADING ANIMATION */
+.loader {
+    margin-top: 10px;
+    width: 100%;
+    height: 5px;
+    display: inline-block;
+    position: relative;
+    background: #4D97FFFF;
+    overflow: hidden;
+}
+.loader::after {
+    content: '';
+    width: 192px;
+    height: 4.8px;
+    background: #ffffff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    animation: animloader 2s linear infinite;
+}
+
+@keyframes animloader {
+    0% {
+        left: 0;
+        transform: translateX(-100%);
+    }
+    100% {
+        left: 100%;
+        transform: translateX(0%);
+    }
+}
+
+
+
+
+
+.testContainer {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    color: #575E75FF;
+    padding-top: 10px;
+    background-color: #ffffff;
+    background-image: url("../../../images/skulls.png");
+}
+
+
+
+
+
+
+
+
+
+.testDetailsText {
+    color: #a2a3a7ff;
+}
+
+.bottom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cursor-icon {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-image: url("../../../images/clickIcon.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    vertical-align: center;
+}
+
+
+
+.testStartBubble {
+    color: #575E75FF;
+    margin-right: 30px;
+    display: inline-block;
+    position: relative;
+    border-radius: 15px;
+    border: solid 3px #575E75FF;
+    width: 100%;
+    z-index: 100;
+    text-align: left;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    min-height: calc(2 * 0.9rem + 20px + 1.2rem); /*2 Zeilen + Padding oben und unten + Zeilenabstand*/
+}
+
+
+
+.finalBubbleIndicator {
+    position: absolute;
+    width: 35px;
+    height: auto;
+    right: 0;
+    top: 50%;
+    transform: translateX(102%) translateY(-40%);
+    z-index: -1;
+}
+
+.owl-image {
+    width: 120px;
+    height: auto;
+}
+
+.bubbleContainer {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding-left: 1rem;
+}
+
+.testStartButton {
+    background-color: #575E75FF;
+    color: white;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    height: fit-content;
+}
+
+.testStartButton:hover {
+    background-color: #50566c;
+}
+
+
+
+
+
+
+
+.arrowButtonContainer {
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+    z-index: 10;
+}
+
+.arrowButtonContainer:hover .downArrowFill {
+    height: 25px;
+}
+
+.arrowButtonContainer:hover .upArrowFill {
+    height: 25px;
+}
+
+.arrowButtonContainer:hover .backButton {
+    transform: scale(0.9);
+}
+
+.backButton {
+    width: 40px;
+    height: auto;
+    margin-left: 30px;
+    object-fit: contain;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    transition: transform 0.1s ease-in-out;
+}
+
+.downArrowFill {
+    position: absolute;
+    top: 5px;
+    height: 0;
+    right:0;
+    transform: translateX(-35%);
+    width: 24px;
+    background-color: #ffdf46;
+    transition: height 0.2s ease-in-out;
+    z-index: 1;
+    border-radius: 5px;
+}
+
+.upArrowFill {
+    position: absolute;
+    bottom: 10px;
+    height: 0;
+    right:0;
+    transform: translateX(-35%);
+    width: 24px;
+    background-color: #ffdf46;
+    transition: height 0.2s ease-in-out;
+    z-index: 1;
+    border-radius: 5px;
+}
+
+.finalTitle {
+    font-size: 3rem;
+    color: #575E75FF;
+    margin-top: 40px;
+    margin-bottom: 60px;
+    font-weight: bold;
+}
+
+.helpImage {
+    width: 200px;
+    height: auto;
+    border-radius: 10px;
+}
+
+.helpButton {
+    padding: 2px 5px;
+    background-color: #0FBD8C;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 7px;
+    margin-top: 5px;
+}
+
+.helpButton:hover {
+    background-color: #0ba177;
+    transform: scale(0.9);
+}
+
+.backToMenuButton {
+    margin-top: 50px;
+    background-color: #575E75FF;
+    color: white;
+    border-radius: 7px;
+    padding: 2px 10px;
+    min-width: 100px;
+    min-height: 30px;
+    display: flex;
+    align-items: center;   /* vertikal zentriert */
+    justify-content: center; /* horizontal zentriert */
+    text-align: center;    /* optional, für mehrzeiligen Text */
+    cursor: pointer;
+}
+
+.backToMenuButton:hover {
+    background-color: #3f4454;
+    transform: scale(95%);
+}
+
+.image-container {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+
+
+
+
+
+
+
+
+/*SideButtons (next / prev)*/
+.right-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    user-select: none;
+    cursor: pointer;
+    background: #4D97FFFF; /* z.B. motion-primary als Hex */
+    box-shadow: 0 0 0 4px rgba(75, 148, 252, 0.38); /* motion-transparent */
+    height: 44px;
+    width: 40px;
+    border-bottom-left-radius: 50px;
+    border-top-left-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.25s ease;
+    right: 0;
+}
+
+.right-button:hover {
+    box-shadow: 0 0 0 6px rgba(75, 148, 252, 0.38); /* motion-transparent */
+    width: 60px;
+}
+
+.right-button img {
+    width: 1.75rem;
+    transition: all 0.1s linear;
+}
+
+.right-button:active img {
+    transform: scale(0.75);
+}
+
+
+.left-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    user-select: none;
+    cursor: pointer;
+    background: #4D97FFFF; /* z.B. motion-primary als Hex */
+    box-shadow: 0 0 0 4px rgba(75, 148, 252, 0.38); /* motion-transparent */
+    height: 44px;
+    width: 40px;
+    border-bottom-right-radius: 50px;
+    border-top-right-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.25s ease;
+    left: 0;
+}
+
+.left-button:hover {
+    box-shadow: 0 0 0 6px rgba(75, 148, 252, 0.38); /* motion-transparent */
+    width: 60px;
+}
+
+.left-button img {
+    width: 1.75rem;
+    transition: all 0.1s linear;
+}
+
+.left-button:active img {
+    transform: scale(0.75);
+}
+
+
+
+
+
+
+
+/*Overview: Next Button*/
+.overviewNextButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #4c97ff;
+    box-shadow: 0 0 0 4px rgba(76, 151, 255, 0.25);
+    height: 44px;
+    width: 44px;
+    border-radius: 50px;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.25s ease;
+    position: relative;
+}
+
+.overviewNextButton:hover {
+    box-shadow: 0 0 0 4px rgba(76, 151, 255, 0.25);
+    width: 140px;
+}
+
+.overviewNextButton:active {
+    transform: scale(0.8);
+}
+
+.overviewNextButton span {
+    position: absolute;
+    color: white;
+    font-weight: bold;
+    font-size: 0;
+    transition: all 0.25s ease;
+}
+
+.overviewNextButton:hover span {
+    font-size: 1rem;
+}
+
+.overviewNextButton img {
+    width: 1.75rem;
+    transition: all 0.25s ease;
+    opacity: 1;
+}
+
+.overviewNextButton:hover img {
+    opacity: 0;
+    transform: translateX(40px);
+}
+
+
+
+
+/*Help: Sprite Selection */
+.spriteSelection {
+    display: flex;
+    gap: 20px;
+    width: 90%;
+}
+
+.spriteElement {
+    border-radius: 100%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    -moz-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    cursor: pointer;
+}
+
+.spriteElementIcon {
+    width: auto;
+    height: auto;
+    max-width: 28px;
+    max-height: 28px;
+    border-radius: 7px;
+}
+
+.spriteElement:hover {
+    border: #88b8ff solid 3px;
+}
+
+.spriteElementSelected {
+    border-radius: 100%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    -moz-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+    cursor: pointer;
+    border: #4c97ff solid 3px;
+}
+
+
+
+
+
+
+
+
+
+    /*DELETE*/
+    .testWhiteBoxTop { /*Minimize*/
+        background-color: white;
+        width: 90%;
+        border-radius: 8px;
+        display: flex;
+        justify-content: flex-start;
+        box-sizing: border-box;
+        box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+        -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+        -moz-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+        margin-top: 5px;
+        height: fit-content;
+        flex-direction: column;
+    }
+    .columnFlex {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 15px;
+        padding-left: 30px;
+        padding-right: 20px;
+    }
+    .testBubbleIndicator {
+        position: absolute;
+        width: 35px;
+        height: auto;
+        right: 0;
+        top: 50%;
+        transform: translateX(102%) translateY(-40%) scaleX(-1);
+        z-index: -1;
+    }
+    .nextBubble {
+        display: inline-block;
+        position: relative;
+        border-radius: 15px;
+        background-color: #0fbd8cff;
+        border: solid 3px #0fbd8cff;
+        color: white;
+        width: 100%;
+        z-index: 100;
+        text-align: left;
+        padding-left: 10px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        cursor: pointer;
+    }
+    .nextBubble:hover {
+        background-color: #0da177ff;
+        border: solid 3px #0da177ff;
+    }
+    .nextBubble:hover .nextBubbleIndicator {
+        background-image: url('../../../images/bubbleDecalGreenDark.png');
+    }
+    .nextBubbleIndicator {
+        position: absolute;
+        width: 35px;
+        height: 35px;
+        top: 50%;
+        left: 0;
+        z-index: -1;
+        transform: translateX(-102%) translateY(-40%);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-image: url('../../../images/bubbleDecalGreenLight.png');
+    }
+    .testLeftArrow {
+        height: 150px;
+        width: 30px;
+        background-color: white;
+        border-top-left-radius: 40px;
+        border-bottom-left-radius: 40px;
+        margin-right: auto;
+        margin-left: auto;
+        box-shadow: -1px 7px 8px -1px rgba(0,0,0,0.75);
+        -webkit-box-shadow: -1px 7px 8px -1px rgba(0,0,0,0.75);
+        -moz-box-shadow: -1px 7px 8px -1px rgba(0,0,0,0.75);
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .testRightArrow:hover {
+        background-color: #575E75FF;
+    }
+    .testLeftArrow:hover {
+        background-color: #575E75FF;
+    }
+    .testRightArrow {
+        height: 150px;
+        width: 30px;
+        background-color: white;
+        border-top-right-radius: 40px;
+        border-bottom-right-radius: 40px;
+        margin-right: auto;
+        margin-left: auto;
+        box-shadow: 1px 7px 8px -1px rgba(0,0,0,0.75);
+        -webkit-box-shadow: 1px 7px 8px -1px rgba(0,0,0,0.75);
+        -moz-box-shadow: 1px 7px 8px -1px rgba(0,0,0,0.75);
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .testLeftArrow:hover .nextTestIcon{
+        background-image: url("../../../images/nextTestArrowWhite.png");
+    }
+    .testRightArrow:hover .nextTestIcon{
+        background-image: url("../../../images/nextTestArrowWhite.png");
+    }
+    .testRightArrow:active {
+        background-color: #6b728d;
+    }
+    .testLeftArrow:active {
+        background-color: #6b728d;
+    }
+    .testWhiteBox { /*Minimize*/
+        background-color: white;
+        width: 90%;
+        min-height: 200px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: flex-start;
+        box-sizing: border-box;
+        box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+        -webkit-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+        -moz-box-shadow: 2px 10px 19px -2px rgba(0,0,0,0.76);
+        padding: 10px;
+        height: fit-content;
+        margin-top: 50px;
+    }
+    .testResultContainer {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 10px;
+        overflow-x: auto;
+        padding-bottom: 20px;
+    }
+    .testElementButtonFailed {
+        border-radius: 30px;
+        border: 3px #D16857FF solid;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        color: #575E75FF;
+        margin: auto 10px 10px;
+    }
+    .testElementButtonFailed:hover {
+        color: white;
+        background-color: #D16857FF;
+    }
+    .testElementButtonPassed {
+        border-radius: 30px;
+        border: 3px #89DDAFFF solid;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        color: #575E75FF;
+        margin: auto 10px 10px;
+    }
+    .testElementButtonPassed:hover {
+        color: white;
+        background-color: #89DDAFFF;
+    }
+    .testElementButton {
+        border-radius: 30px;
+        border: 3px #AFD8FDFF solid;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        color: #575E75FF;
+        margin: auto 10px 10px;
+    }
+    .testElementButton:hover {
+        color: white;
+        background-color: #AFD8FDFF;
+    }
+    .testElementContainer {
+        width: 160px;
+        min-height: 240px;
+        height: fit-content;
+
+        border-radius: 10px;
+
+        box-shadow: 0px 8px 13px 0px rgba(0,0,0,0.63);
+        -webkit-box-shadow: 0px 8px 13px 0px rgba(0,0,0,0.63);
+        -moz-box-shadow: 0px 8px 13px 0px rgba(0,0,0,0.63);
+
+        background-color: #f5f5f5ff;
+        display: flex;
+        flex-direction: column;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    .testElementText {
+        color: #575E75FF;
+        font-size: 0.9rem;
+        margin-top: 10px;
+        font-weight: normal;
+    }
+    .testElementHeader {
+        width: 100%;
+        height: 90px;
+
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        background-color: #65d21b;
+        display: flex;
+        flex-direction: column;
+        color: white;
+        font-weight: bold;
+        padding: 12px 20px;
+        cursor: pointer;
+        justify-content: center;
+        align-items: center;
+    }
+    .testElementIcon {
+        width: 50px;
+        height: auto;
+    }
+    .testElementContainer {
+        width: 160px;
+        min-height: 240px;
+        height: fit-content;
+
+        border-radius: 10px;
+
+        box-shadow: 0px 8px 13px 0px rgba(0,0,0,0.63);
+        -webkit-box-shadow: 0px 8px 13px 0px rgba(0,0,0,0.63);
+        -moz-box-shadow: 0px 8px 13px 0px rgba(0,0,0,0.63);
+
+        background-color: #f5f5f5ff;
+        display: flex;
+        flex-direction: column;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    .testElementText {
+        color: #575E75FF;
+        font-size: 0.9rem;
+        margin-top: 10px;
+        font-weight: normal;
+    }
+
+    .testElementHeader {
+        width: 100%;
+        height: 90px;
+
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        background-color: #65d21b;
+        display: flex;
+        flex-direction: column;
+        color: white;
+        font-weight: bold;
+        padding: 12px 20px;
+        cursor: pointer;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .testElementIcon {
+        width: 50px;
+        height: auto;
+    }
+
+    .testElementIconRotating {
+        width: 50px;
+        height: auto;
+        border: 5px #4370caff solid;
+        border-radius: 100px;
+        animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+    .testElementTitle {
+        color: #575E75FF;
+        font-weight: bold;
+        font-size: 1.2rem;
+        padding: 10px;
+    }
+
+    .testElementTitleExtended {
+        margin-right: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .nextTestIcon {
+        width: 15px;
+        height: 40px;
+
+        background-image: url("../../../images/nextTestArrowGrey.png");
+        background-size: cover;   /* skaliert, damit das gesamte Div gefüllt wird */
+        background-position: center center; /* Bild zentrieren */
+        background-repeat: no-repeat;
+    }
+
+
+
+
+
+    .downloadContainer2 {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+        padding-top: 10px;
+        padding-left: 30px;
+        padding-right: 15px;
+        box-sizing: border-box;
+    }
+
+    .downloadContainer {
+        display: flex;
+        flex-direction: column;
+        width: 90%;
+        margin-top: 20px;
+        overflow-y: auto;
+        gap: 5px;
+        max-height: 125px;
+        padding-right: 10px;
+    }
+
+    .downloadBox {
+        display: flex;
+        border: 3px solid #575E75FF;
+        border-radius: 10px;
+        width: 100%;
+        height: 50px;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 3px 3px 3px 20px;
+    }
+
+    .downloadBoxFinished {
+        border: 3px solid #9ea3b4;
+    }
+
+    .downloadBoxFinished .downloadButton {
+        background-color: #ffffff;
+        color: #575E75FF;
+    }
+
+    .downloadBoxFinished .downloadButton:hover {
+        background-color: #ffffff;
+    }
+
+    .downloadHeader {
+
+    }
+
+    .downloadImage {
+        height: 30px;
+        width: auto;
+    }
+
+    .downloadButton {
+        background-color: #575E75FF;
+        margin-left: auto;
+        padding: 5px;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+    }
+
+    .downloadButton:hover {
+        background-color: #3d4252;
+    }
+
+
+
+
+
+
+
+    .qualityContainer {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        background-color: #9a2719;
+        height: fit-content;
+    }
+
+    .qualityHeader {
+        width: 90%;
+        background-color: #FFD33D;
+    }
+
+    .qualitySpriteTitle {
+
+    }
+
+    .qualityTitle {
+
+    }
+
+    .qualityContent {
+
+    }
+
+    .qualityDescription {
+
+    }
+
+    .qualityCodeImg {
+    }
+
+    .qualityButtonContainer {
+
+    }
+
+    .qualityButton {
+
+    }
+
+
+
+
+    /* Bubbles */
+.helpBubble {
+    display: inline-block;
+    position: relative;
+    border-radius: 15px;
+    background-color: #ededed;
+    border: solid 3px #ededed;
+    width: 100%;
+    z-index: 100;
+    text-align: left;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.helpBubble:hover .selectionBubbleIndicator {
+    background-image: url('../../../images/selectionBubbleDecalGrey.png');
+}
+
+.helpBubble.selected {
+    background-color: #5a6077ff;
+    border: solid 3px #5a6077ff;
+    color: white;
+}
+
+.helpBubble.selected .selectionBubbleIndicator {
+    background-image: url('../../../images/selectionBubbleDecalDark.png');
+}
+
+.helpBubble:not(.selected):hover {
+    cursor: pointer;
+    background-color: #cecece;
+    border-color: #CECECEFF;
+    z-index: 100;
+}
+
+.selectionBubbleIndicator {
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    top: 50%;
+    left: 0;
+    z-index: -1;
+    transform: translateX(-102%) translateY(-40%);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url('../../../images/selectionBubbleDecalLight.png');
+}
+
+.helpBubbleEuli {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border-radius: 15px;
+    border: solid 3px #4D97FFFF;
+    background-color: #e4f0ff;
+    width: 100%;
+    z-index: 100;
+    text-align: left;
+    padding: 10px;
+    min-height: calc(2 * 0.9rem + 20px + 1.2rem); /*2 Zeilen + Padding oben und unten + Zeilenabstand*/
+}
+
+.helpBubbleEuliIndicator {
+    position: absolute;
+    width: 35px;
+    height: auto;
+    right: 0;
+    top: 50%;
+    transform: translateX(102%) translateY(-40%);
+    z-index: -1;
+}
+
+
+/* Wenn ein Bubble reinkommt */
+.animatedBubble-enter {
+    opacity: 0;
+    margin-bottom: 0;
+    transform: translateY(20px) scale(0.5);
+}
+
+.animatedBubble-enter-active {
+    opacity: 1;
+    margin-bottom: 20px;
+    transform: translateY(0) scale(1);
+    transition: opacity 300ms ease-out, transform 300ms ease-out, margin-bottom 300ms ease-in-out;
+}
+
+/* Wenn ein Bubble rausgeht */
+.animatedBubble-exit {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    margin-bottom: 20px;
+}
+.animatedBubble-exit-active {
+    opacity: 0;
+    transform: translateY(0px) scale(0.8);
+    transition: opacity 300ms linear, transform 300ms ease-in-out, margin-bottom 300ms ease-in-out;
+    margin-bottom: 0;
+}
+
+
+
+
+
+
+/*HELP PAGE BUBBLE CODE FADE IN*/
+.fadeIn {
+    width: 100%;
+    opacity: 0;
+    animation: fadeInAnim 0.5s ease forwards;
+}
+
+@keyframes fadeInAnim {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

@@ -86,9 +86,6 @@ class Controls extends React.Component {
             this.props.onActionExecuted();
             this.forceUpdate();
         }
-        if (logging.isActive()) {
-            logging.logClickEvent('ICON', new Date(), 'GREENFLAG', null);
-        }
     }
     handleStepBack (e) {
         e.preventDefault();
@@ -164,9 +161,6 @@ class Controls extends React.Component {
         }
 
         this.props.vm.stopAll();
-        if (logging.isActive()) {
-            logging.logClickEvent('ICON', new Date(), 'STOPALL', null);
-        }
     }
     resetPauseResume () {
         this.props.vm.resumeExecutionForDebugger();
@@ -204,6 +198,7 @@ class Controls extends React.Component {
         this.tracingState = state;
         this.forceUpdate();
     }
+
     render () {
         const {
             vm, // eslint-disable-line no-unused-vars
@@ -299,7 +294,7 @@ const mapDispatchToProps = dispatch => ({
     handleIRQuestionsClick: () => dispatch(viewCards()),
     onActionExecuted: () => dispatch(actionExecuted()),
     doRepositionHelpMenuWindow: (x, y) => dispatch(repositionHelpMenuWindow(x, y)),
-    handleTutorialClick: () => dispatch(viewTutorial()),
+    handleTutorialClick: () => dispatch(viewTutorial()), //dispatch(viewTutorial())
     handleLitterBoxClick: () => dispatch(toggleInterface())
 });
 

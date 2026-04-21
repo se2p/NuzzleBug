@@ -12,7 +12,11 @@ import {
     shrinkExpandCards,
     startDrag,
     selectTutorial,
-    homeMenu
+    homeMenu,
+    setContentType,
+    onStartTutorial,
+    onOpenHelp,
+    setTutorialPoints,
 } from '../reducers/tutorial-cards';
 import {reset} from '../reducers/tutorial-step';
 
@@ -27,6 +31,9 @@ class TutorialCards extends React.Component {
         this.handleHome = this.handleHome.bind(this);
         this.handleNext = this.handleNext.bind(this);
         this.handlePrev = this.handlePrev.bind(this);
+        this.handleStartTutorial = this.handleStartTutorial.bind(this);
+        this.scrollToBottom = this.scrollToBottom.bind(this);
+        this.onBackToTutorialSelection = this.onBackToTutorialSelection.bind(this);
         this.myRef = null;
     }
 
@@ -35,11 +42,11 @@ class TutorialCards extends React.Component {
         const values = Object.values(tutorials);
         for (let i = 0; i < values.length; i++) {
             const tutorial = values[i];
-
             let messages = tutorial[`messages${this.props.locale.toUpperCase()}`];
             if (typeof messages === 'undefined') {
-                messages = tutorial.messagesEN;
+                messages = tutorial.messagesDE;
             }
+
             const tutorialMsg = messages.default;
             rows.push({
                 id: tutorial.id,
@@ -48,7 +55,8 @@ class TutorialCards extends React.Component {
                 difficulty: tutorial.difficulty,
                 difficultyMsg: tutorialMsg.difficulty,
                 totalSteps: tutorial.totalSteps,
-                detectors: tutorial.detectors
+                detectors: tutorial.detectors,
+                isDebuggingTutorial: tutorial.isDebuggingTutorial,
             }
             );
         }
@@ -56,6 +64,17 @@ class TutorialCards extends React.Component {
     }
 
     handleHome () {
+        if (this.props.contentType === "DEBUGGING_STEP") {
+            this.props.onSetContentType("TUTORIAL_SELECTED");
+        } else if (this.props.contentType === "DEBUGGING_HELP") {
+            this.props.onSetContentType("DEBUGGING_STEP");
+        } else {
+            this.props.onReset();
+            this.props.onHome();
+        }
+    }
+
+    onBackToTutorialSelection() {
         this.props.onReset();
         this.props.onHome();
     }
@@ -70,13 +89,26 @@ class TutorialCards extends React.Component {
         this.myRef.scrollTop = 0;
     }
 
+    handleStartTutorial() {
+        this.props.startTutorial();
+    }
+
+    scrollToBottom = () => {
+        requestAnimationFrame(() => {
+            if (this.myRef) {
+                this.myRef.scrollTop = this.myRef.scrollHeight;
+            }
+        });
+    }
+
     render () {
         const tutorialsData = this.processTutorials();
 
         let tutorialMessages;
+        let tutorial;
 
         if (this.props.selectedTutorial !== '') {
-            const tutorial = tutorials[`${this.props.selectedTutorial}`];
+            tutorial = tutorials[`${this.props.selectedTutorial}`];
             let messages = tutorial[`messages${this.props.locale.toUpperCase()}`];
             if (typeof messages === 'undefined') {
                 messages = tutorial.messagesEN;
@@ -96,6 +128,7 @@ class TutorialCards extends React.Component {
 
         const title = this.props.isMenuVisible ? guiMessages.headerTitle : tutorialMessages.title;
         const homeButtonTitle = guiMessages.homeButtonTitle;
+        const backButtonTitle = guiMessages.backButtonTitle;
 
         return (
             <TutorialCardsComponent
@@ -107,9 +140,15 @@ class TutorialCards extends React.Component {
                 tutorialMessages={tutorialMessages}
                 title={title}
                 homeButtonTitle={homeButtonTitle}
+                backButtonTitle={backButtonTitle}
                 onHomeMenu={this.handleHome}
                 onNextStep={this.handleNext}
                 onPrevStep={this.handlePrev}
+                tutorialIndexData={tutorial}
+                onStartTutorial={this.handleStartTutorial}
+                onScrollBottom={this.scrollToBottom}
+                onBackToTutorialSelection={this.onBackToTutorialSelection}
+                setTutorialPoints={setTutorialPoints}
                 {...this.props}
             />
         );
@@ -129,7 +168,13 @@ TutorialCards.propTypes = {
     locale: PropTypes.string.isRequired,
     isRtl: PropTypes.bool.isRequired,
     step: PropTypes.number.isRequired,
-    vm: PropTypes.instanceOf(VirtualMachine).isRequired
+    contentType: PropTypes.string,
+    vm: PropTypes.instanceOf(VirtualMachine).isRequired,
+    startTutorial: PropTypes.func,
+    onBackToTutorialSelection: PropTypes.func,
+    setMouseEnabled: PropTypes.func,
+    tutorialPoints: PropTypes.number,
+    setTutorialPoints: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -144,7 +189,9 @@ const mapStateToProps = state => ({
     y: state.scratchGui.tutorialCards.y,
     locale: state.locales.locale,
     isRtl: state.locales.isRtl,
-    dragging: state.scratchGui.tutorialCards.dragging
+    dragging: state.scratchGui.tutorialCards.dragging,
+    contentType: state.scratchGui.tutorialCards.contentType,
+    tutorialPoints: state.scratchGui.tutorialCards.tutorialPoints,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -157,7 +204,11 @@ const mapDispatchToProps = dispatch => ({
     onEndDrag: () => dispatch(endDrag()),
     onSelectTutorial: (tutorial, totalSteps) => dispatch(selectTutorial(tutorial, totalSteps)),
     onHome: () => dispatch(homeMenu()),
-    onReset: () => dispatch(reset())
+    onReset: () => dispatch(reset()),
+    onSetContentType: (contentType) => dispatch(setContentType(contentType)),
+    startTutorial: () => dispatch(onStartTutorial()),
+    onOpenHelp: () => dispatch(onOpenHelp()),
+    setTutorialPoints: (points) => dispatch(setTutorialPoints(points)),
 });
 
 export default connect(
