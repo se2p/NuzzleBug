@@ -63,25 +63,18 @@
 
 .show-bbt-interface-button {
     align-self: center;
-    display: block;
     border: 1px solid $ui-black-transparent;
     border-radius: $form-radius;
-    height: calc(2rem + 2px);
     background: $ui-white;
     padding: 0.375rem;
     user-select: none;
     cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: normal;
 }
 
 .show-bbt-interface-button-icon {
-    margin-right: 5px;
     height: 20px;
-    vertical-align: middle;
-}
-
-.show-bbt-interface-button-text {
-    font-size: 0.75rem;
-    font-weight: normal;
 }
 
 .tab-list {
