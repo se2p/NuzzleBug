@@ -366,20 +366,14 @@ const GUIComponent = props => {
                                     {blockBasedTestingInterfaceVisible ? null : (
                                         <Button
                                             className={styles.showBbtInterfaceButton}
+                                            iconSrc={testsIcon}
+                                            iconClassName={styles.showBbtInterfaceButtonIcon}
                                             onClick={onShowTestInterface}
                                         >
-                                            <img
-                                                className={styles.showBbtInterfaceButtonIcon}
-                                                draggable={false}
-                                                src={testsIcon}
-                                                alt={'Test Icon'}
+                                            <FormattedMessage
+                                                defaultMessage="Show Test Interface"
+                                                id="gui.blockBasedTesting.openInterfaceButton"
                                             />
-                                            <span className={styles.showBbtInterfaceButtonText}>
-                                                <FormattedMessage
-                                                    defaultMessage="Show Test Interface"
-                                                    id="gui.blockBasedTesting.openInterfaceButton"
-                                                />
-                                            </span>
                                         </Button>
                                     )}
 
