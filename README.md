@@ -34,9 +34,10 @@ The Block-Based Testing extension is also contained in this repository.
     - Before starting, ensure the [ScratchLog](https://github.com/se2p/scratchlog) and
     - the [LitterBox](https://github.com/se2p/LitterBox-Web) base URLs are configured correctly in the `.env` file.
 
-You can start the Scratch GUI by running `yarn install && yarn start`.
-
+For development, you can start the Scratch GUI by running `yarn install && yarn start`.
 Then, go to http://localhost:8601/ using your preferred browser to open the scratch-gui.
+
+For an actual deployment, run `yarn build` and copy the contents of the `build/` directory to a location served by a standard web server (e.g. Nginx, Apache 2).
 
 
 ## Contributors
