@@ -29,8 +29,8 @@ class HintGenerator {
 
     static async sendScratchblocksToChatGPT (scratchBlocks, failedBehaviour, passedBehaviours, locale, fastMode, onPartialUpdate) {
 
-        // Mein CloudFlair-Worker, welcher die Request an die OpenAI-Server weiterleitet und das Ergebnis zurück streamt.
-        const apiUrl = 'https://twilight-silence-adef.spieleder1.workers.dev';
+        // LitterBox-Web /llm/raw leitet den Request an die OpenAI-Server weiter und streamt das Ergebnis zurück.
+        const apiUrl = `${process.env.LITTERBOX_BASE_URL}/llm/raw`;
 
         const systemRole = `You are an assistant for a Scratch debugging learning system (students ~12).
             STRICT OUTPUT:
@@ -232,8 +232,8 @@ class HintGenerator {
 
         /* HIER DER CODE FÜR ÄLTERE MODELLE
 
-        Für GPT-4o:
-        apiUrl beim Server: 'https://api.openai.com/v1/chat/completions';
+        Für GPT-4o (nutzte die Chat-Completions-API statt der Responses-API):
+        apiUrl: `${process.env.LITTERBOX_BASE_URL}/llm/raw`;
 
         const requestBody = {
             model: 'gpt-4o',
