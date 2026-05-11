@@ -23,12 +23,14 @@ The Block-Based Testing extension is also contained in this repository.
 
 ## Requirements
 
-- Node version 20. You can check your node version via `node --version` or install node from https://nodejs.org/en
+- Node version >=20. You can check your node version via `node --version` or install node from https://nodejs.org/en
 - Node package manager. `npm` comes bundled with the node installation from https://nodejs.org/en.
 - Yarn. You can install yarn using the node package manager via `npm install --global yarn`.
 
 
 ## Running NuzzleBug
+
+### Without Docker/Containers
 
 - Optional, depending on the used extensions:
     - Before starting, ensure the [ScratchLog](https://github.com/se2p/scratchlog) and
@@ -38,6 +40,22 @@ For development, you can start the Scratch GUI by running `yarn install && yarn 
 Then, go to http://localhost:8601/ using your preferred browser to open the scratch-gui.
 
 For an actual deployment, run `yarn build` and copy the contents of the `build/` directory to a location served by a standard web server (e.g. Nginx, Apache 2).
+
+### With Docker/Containers
+
+Build and run the container:
+```bash
+docker build \
+    --build-arg SCRATCHLOG_BASE_URL="http://localhost:8089" \
+    --build-arg LITTERBOX_BASE_URL="http://localhost:8080" \
+    -t scratch-gui \
+    .
+
+# makes the GUI available outside of the container on port 8601
+docker run -p 8601:80 scratch-gui
+```
+The two `--build-arg`s can be omitted if the shown default values are used.
+They have to be defined at build time and cannot be changed later via runtime environment variables.
 
 
 ## Contributors
