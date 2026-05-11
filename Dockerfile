@@ -1,6 +1,6 @@
 FROM docker.io/library/node:24 AS builder
 
-ARG SCRATCHLOG_BASE_URL="http://localhost:8089"
+ARG SCRATCHLOG_BASE_URL="http://localhost:8090"
 ARG LITTERBOX_BASE_URL="http://localhost:8080"
 
 WORKDIR /app
