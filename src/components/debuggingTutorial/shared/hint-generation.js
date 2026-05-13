@@ -5,14 +5,14 @@ class HintGenerator {
      * @param failedBehaviour Die LLM-Beschreibung des nicht bestandenen, behaviour-driven Test, auf den sich der Hinweis bezieht.
      * @param passedBehaviours Die LLM-Beschreibungen aller bereits bestandenen behaviour-driven Test.
      * @param locale Das akutelle locale. Bisher nur de und en.
-     * @param fastMode Ob ein schnelleres LLM-Modell genutzt wird.
+     * @param fastMode Reserviert für zukünftige Backend-seitige Geschwindigkeitswahl (wird momentan ignoriert).
      * @param onPartialUpdate Diese Methode wird aufgerufen, um partielle Updates an die UI zu übertragen.
      * @returns {Promise<{problemText: string, solutionOptions: [{code: string, id: string, explanation: string, isCorrect: boolean},{code: string, id: string, explanation: string, isCorrect: boolean},{code: string, id: string, explanation: string, isCorrect: boolean}]}>}
      */
     static generateHint (projectJson, failedBehaviour, passedBehaviours, locale, fastMode, onPartialUpdate) {
         return this.convertScratchJsonToScratchblocks(JSON.parse(projectJson))
             .then(scratchBlocks =>
-                this.sendScratchblocksToChatGPT(scratchBlocks, failedBehaviour, passedBehaviours, locale, fastMode, partial => onPartialUpdate(partial))
+                this.sendScratchblocksToChatGPT(scratchBlocks, failedBehaviour, passedBehaviours, locale, partial => onPartialUpdate(partial))
             )
             .catch(error => {
                 console.error('Failed to get GPT hints:', error);
@@ -27,12 +27,14 @@ class HintGenerator {
             });
     }
 
-    static async sendScratchblocksToChatGPT (scratchBlocks, failedBehaviour, passedBehaviours, locale, fastMode, onPartialUpdate) {
+    static async sendScratchblocksToChatGPT (scratchBlocks, failedBehaviour, passedBehaviours, locale, onPartialUpdate) {
 
-        // LitterBox-Web /llm/raw leitet den Request an die OpenAI-Server weiter und streamt das Ergebnis zurück.
+        // LitterBox-Web leitet den Request an den serverseitig konfigurierten LLM-Anbieter weiter
+        // (z.B. OpenAI Responses API oder InnKube Chat Completions).
+        // Das Frontend sendet nur den Inhalt – welcher Anbieter genutzt wird, entscheidet der Server.
         const apiUrl = `${process.env.LITTERBOX_BASE_URL}/llm/raw`;
 
-        const systemRole = `You are an assistant for a Scratch debugging learning system (students ~12).
+        const systemPrompt = `You are an assistant for a Scratch debugging learning system (students ~12).
             STRICT OUTPUT:
             - Output ONLY NDJSON. Exactly 5 lines:
               1) {"type":"problemText","value":<string>}
@@ -76,7 +78,7 @@ class HintGenerator {
             - German wording: "Wiederholungen", "Falls-Bedingung".
             - Explanations: max 2 short sentences, only visible effect.`;
 
-        const fullPrompt =
+        const userPrompt =
             `LOCALE: ${locale}
             STUDENT CODE: ${scratchBlocks}
             FAILED BEHAVIOUR: ${failedBehaviour}
@@ -90,7 +92,7 @@ class HintGenerator {
                 'Content-Type': 'application/json',
                 'Accept': 'text/event-stream'
             },
-            body: JSON.stringify(this.getRequestBody(fastMode, systemRole, fullPrompt))
+            body: JSON.stringify({systemPrompt, userPrompt})
         });
 
         if (!res.ok || !res.body) {
@@ -189,7 +191,9 @@ class HintGenerator {
                         continue;
                     }
 
+                    // Unterstützt mehrere SSE-Formate: OpenAI Responses API und Chat Completions (InnKube)
                     const delta =
+                        evt?.choices?.[0]?.delta?.content ||  // Chat Completions
                         (typeof evt?.delta === 'string' && evt.delta) ||
                         evt?.delta?.text ||
                         evt?.output_text?.delta ||
@@ -204,67 +208,8 @@ class HintGenerator {
         return state;
     }
 
-    static getRequestBody (fastMode, systemRole, fullPrompt) {
-        // Für die ASG-Studie haben wir jeweils das gleiche Modell genommen
-        if (fastMode) {
-            return {
-                model: 'gpt-5.1',
-                reasoning: {effort: 'low'},
-                input: [
-                    {role: 'system', content: systemRole},
-                    {role: 'user', content: fullPrompt}
-                ],
-                max_output_tokens: 2000,
-                stream: true
-            };
-        }
-        return {
-            model: 'gpt-5.1',
-            reasoning: {effort: 'low'},
-            input: [
-                {role: 'system', content: systemRole},
-                {role: 'user', content: fullPrompt}
-            ],
-            max_output_tokens: 2000,
-            stream: true
-        };
-
-
-        /* HIER DER CODE FÜR ÄLTERE MODELLE
-
-        Für GPT-4o (nutzte die Chat-Completions-API statt der Responses-API):
-        apiUrl: `${process.env.LITTERBOX_BASE_URL}/llm/raw`;
-
-        const requestBody = {
-            model: 'gpt-4o',
-            messages: [
-                {role: 'system', content: systemRole},
-                {role: 'user', content: fullPrompt}
-            ],
-            max_tokens: 2000,
-            stream: true,
-            temperature: 0.7
-        };
-
-        .then(data => data.choices[0].message.content);
-
-
-        FÜR o3-mini und gpt-5-mini:
-        return {
-                    model: "o3-mini", (ODER "gpt-5-mini")
-                    reasoning: { effort: "medium" },
-                    input: [
-                        { role: "system", content: systemRole },
-                        { role: "user", content: fullPrompt }
-                    ],
-                    max_output_tokens: 2000,
-                    stream: true
-                }
-        */
-    }
-
     static convertScratchJsonToScratchblocks (projectJson) {
-        const url = 'https://scratch.fim.uni-passau.de/litterbox-api/converter/scratchblocks';
+        const url = `${process.env.LITTERBOX_BASE_URL}/litterbox-api/converter/scratchblocks`;
 
         return fetch(url, {
             method: 'POST',
