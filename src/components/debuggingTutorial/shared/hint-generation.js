@@ -12,7 +12,7 @@ class HintGenerator {
     static generateHint (projectJson, failedBehaviour, passedBehaviours, locale, fastMode, onPartialUpdate) {
         return this.convertScratchJsonToScratchblocks(JSON.parse(projectJson))
             .then(scratchBlocks =>
-                this.sendScratchblocksToChatGPT(scratchBlocks, failedBehaviour, passedBehaviours, locale, partial => onPartialUpdate(partial))
+                this.sendScratchblocksToLLM(scratchBlocks, failedBehaviour, passedBehaviours, locale, partial => onPartialUpdate(partial))
             )
             .catch(error => {
                 console.error('Failed to get GPT hints:', error);
@@ -27,7 +27,7 @@ class HintGenerator {
             });
     }
 
-    static async sendScratchblocksToChatGPT (scratchBlocks, failedBehaviour, passedBehaviours, locale, onPartialUpdate) {
+    static async sendScratchblocksToLLM (scratchBlocks, failedBehaviour, passedBehaviours, locale, onPartialUpdate) {
 
         // LitterBox-Web leitet den Request an den serverseitig konfigurierten LLM-Anbieter weiter
         // (z.B. OpenAI Responses API oder InnKube Chat Completions).
