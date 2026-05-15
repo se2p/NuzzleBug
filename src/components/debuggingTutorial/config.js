@@ -4,7 +4,7 @@ export const tutorialConfig = {
     },
     classic: {
         hintSystemEnabled: true, // Ob bei nicht bestandenen Tests die Hilfestellung geöffnet werden kann.
-        llmHintsEnabled: true // Ob in der Hilfestellung LLM-Hints angezeigt werden.
+        llmHintsEnabled: process.env.LLM_HINTS_ENABLED === 'true' // Ob in der Hilfestellung LLM-Hints angezeigt werden.
     },
     debugging: {
         enableResetButton: true, // Ob die Möglichkeit besteht, dass der Nutzer im debug-tutorial seinen Code auf Schrittanfang zurücksetzen kann.
