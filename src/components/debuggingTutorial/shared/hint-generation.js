@@ -10,10 +10,7 @@ class HintGenerator {
      * @returns {Promise<{problemText: string, solutionOptions: [{code: string, id: string, explanation: string, isCorrect: boolean},{code: string, id: string, explanation: string, isCorrect: boolean},{code: string, id: string, explanation: string, isCorrect: boolean}]}>}
      */
     static generateHint (projectJson, failedBehaviour, passedBehaviours, locale, fastMode, onPartialUpdate) {
-        return this.convertScratchJsonToScratchblocks(JSON.parse(projectJson))
-            .then(scratchBlocks =>
-                this.sendScratchblocksToLLM(scratchBlocks, failedBehaviour, passedBehaviours, locale, partial => onPartialUpdate(partial))
-            )
+        return this.requestTutorialHint(projectJson, failedBehaviour, passedBehaviours, locale, partial => onPartialUpdate(partial))
             .catch(error => {
                 console.error('Failed to get GPT hints:', error);
                 return {
@@ -27,63 +24,11 @@ class HintGenerator {
             });
     }
 
-    static async sendScratchblocksToLLM (scratchBlocks, failedBehaviour, passedBehaviours, locale, onPartialUpdate) {
+    static async requestTutorialHint (projectJson, failedBehaviour, passedBehaviours, locale, onPartialUpdate) {
 
-        // LitterBox-Web leitet den Request an den serverseitig konfigurierten LLM-Anbieter weiter
-        // (z.B. OpenAI Responses API oder InnKube Chat Completions).
-        // Das Frontend sendet nur den Inhalt – welcher Anbieter genutzt wird, entscheidet der Server.
-        const apiUrl = `${process.env.LITTERBOX_BASE_URL}/llm/raw`;
-
-        const systemPrompt = `You are an assistant for a Scratch debugging learning system (students ~12).
-            STRICT OUTPUT:
-            - Output ONLY NDJSON. Exactly 5 lines:
-              1) {"type":"problemText","value":<string>}
-              2) {"type":"solutionOption","id":"A","code":<string>,"isCorrect":true,"explanation":<string>}
-              3) {"type":"solutionOption","id":"B","code":<string>,"isCorrect":false,"explanation":<string>}
-              4) {"type":"solutionOption","id":"C","code":<string>,"isCorrect":false,"explanation":<string>}
-              5) {"type":"done"}
-            - Valid JSON per line. No unescaped newlines (use \\n).
-
-            TASK:
-            - problemText starts with "Problem:" and describes only the visible wrong behaviour (no hints, no tests, no block names).
-            - Generate 3 candidates: exactly ONE fixes the behaviour, TWO are plausible beginner mistakes.
-            - Do not break passed behaviours.
-
-            PATCH/SNIPPET MODE (MOST IMPORTANT):
-            - Output ONLY the minimal relevant block snippet (not a full script).
-            - Do NOT include setup/movement blocks unless they contain the bug or are needed for the fix to make sense.
-            - Do NOT add a hat block unless the change is at the very start of a script.
-            - Keep as close as possible to the student's code (same structure/names/values).
-            - Prefer the fix with the fewest edits.
-            - Max 6 lines per option. No comments or "Sprite:" markers.
-
-            CRITICAL SCRATCH SYNTAX (MUST FOLLOW):
-            - ALL dropdown values MUST be written as [value v]
-            - NEVER write dropdowns as plain text
-            - ALL strings MUST be in double quotes
-            - NEVER output unquoted text inside ()
-            - For touching color [#RRGGBB] ? never add v inside the color brackets, since colors are never dropdowns.
-            Examples:
-            say ("Hallo")
-            switch costume to [normal v]
-            stop [all v]
-
-            IMPORTANT FOR STUDENT TEXT:
-            - Do NOT mention hex codes, RGB values, or color numbers in explanations.
-            - Refer to colors only by simple, descriptive, student-friendly names.
-
-            LANGUAGE:
-            - Explanations in LOCALE language.
-            - Code in English Scratchblocks text.
-            - German wording: "Wiederholungen", "Falls-Bedingung".
-            - Explanations: max 2 short sentences, only visible effect.`;
-
-        const userPrompt =
-            `LOCALE: ${locale}
-            STUDENT CODE: ${scratchBlocks}
-            FAILED BEHAVIOUR: ${failedBehaviour}
-            PASSED BEHAVIOURS (do not break): ${(passedBehaviours && passedBehaviours.trim().length > 0) ? passedBehaviours : 'none'}`;
-
+        // LitterBox-Web übersetzt das Projekt intern in ScratchBlocks, baut den Prompt
+        // und leitet den Request an den serverseitig konfigurierten LLM-Anbieter weiter.
+        const apiUrl = `${process.env.LITTERBOX_BASE_URL}/llm/tutorial`;
 
         const res = await fetch(apiUrl, {
             method: 'POST',
@@ -92,7 +37,12 @@ class HintGenerator {
                 'Content-Type': 'application/json',
                 'Accept': 'text/event-stream'
             },
-            body: JSON.stringify({systemPrompt, userPrompt})
+            body: JSON.stringify({
+                program: projectJson,
+                failedBehaviour,
+                passedBehaviours,
+                locale
+            })
         });
 
         if (!res.ok || !res.body) {
@@ -206,24 +156,6 @@ class HintGenerator {
         }
 
         return state;
-    }
-
-    static convertScratchJsonToScratchblocks (projectJson) {
-        const url = `${process.env.LITTERBOX_BASE_URL}/converter/scratchblocks`;
-
-        return fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(projectJson)
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Litterbox was not able to transform the provided project');
-                }
-                return response.text();
-            });
     }
 }
 
