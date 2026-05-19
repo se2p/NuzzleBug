@@ -5,6 +5,7 @@ import styles from './litterbox-pane.css';
 import sharedStyles from './shared.css';
 import LlmWarningComponent from './llm-warning.component.tsx';
 import MarkdownViewComponent from '../markdown/MarkdownView.tsx';
+import logging from 'scratch-vm/src/util/logging.js';
 
 interface LitterBoxLlmQuestionProps {
     onSubmitQuestion: (question: string, spriteOnly: boolean) => void;
@@ -30,10 +31,13 @@ class LitterBoxLlmQuestionComponent extends React.Component<LitterBoxLlmQuestion
     };
 
     private readonly handleSubmitQuestion = (event: React.SyntheticEvent) => {
+        logging.logClickEvent('BUTTON', new Date(), 'LB_ASK_PROGRAM', null);
+
         this.handleQuestion(event, false);
     };
 
     private readonly handleSubmitSpriteQuestion = (event: React.SyntheticEvent) => {
+        logging.logClickEvent('BUTTON', new Date(), 'LB_ASK_SPRITE', null);
         this.handleQuestion(event, true);
     };
 

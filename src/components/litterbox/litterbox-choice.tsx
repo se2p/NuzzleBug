@@ -4,6 +4,7 @@ import {FormattedMessage} from 'react-intl';
 import Box from '../box/box.jsx';
 import styles from './litterbox-pane.css';
 import sharedStyles from './shared.css';
+import logging from 'scratch-vm/src/util/logging.js';
 
 export enum LitterBoxFeature {
     ISSUES,
@@ -20,10 +21,12 @@ interface LitterBoxFeatureSelectorProps {
 class LitterBoxFeatureSelector extends React.Component<LitterBoxFeatureSelectorProps, never> {
 
     private readonly handleSelectIssues = () => {
+        logging.logClickEvent('BUTTON', new Date(), 'LB_CODE_QUALITY', null);
         this.props.onSelect(LitterBoxFeature.ISSUES);
     };
 
     private readonly handleSelectLlmQuestion = () => {
+        logging.logClickEvent('BUTTON', new Date(), 'LB_ASK', null);
         this.props.onSelect(LitterBoxFeature.LLM_QUESTION);
     };
 

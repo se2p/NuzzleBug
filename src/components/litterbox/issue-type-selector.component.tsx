@@ -4,6 +4,7 @@ import {FormattedMessage} from 'react-intl';
 import {IssueType} from '../../containers/litterbox-web-api.ts';
 import styles from './litterbox-pane.css';
 import sharedStyles from './shared.css';
+import logging from 'scratch-vm/src/util/logging.js';
 
 interface IssueTypeSelectorComponentProps {
     selectedType: IssueType;
@@ -14,14 +15,17 @@ interface IssueTypeSelectorComponentProps {
 class IssueTypeSelectorComponent extends React.Component<IssueTypeSelectorComponentProps, never> {
 
     private readonly handleOnClickBugs = () => {
+        logging.logClickEvent('BUTTON', new Date(), 'LB_BUGS', null);
         this.props.onSelect('BUG');
     };
 
     private readonly handleOnClickSmells = () => {
+        logging.logClickEvent('BUTTON', new Date(), 'LB_SMELLS', null);
         this.props.onSelect('SMELL');
     };
 
     private readonly handleOnClickPerfumes = () => {
+        logging.logClickEvent('BUTTON', new Date(), 'LB_ELEGANT_CODE', null);
         this.props.onSelect('PERFUME');
     };
 
