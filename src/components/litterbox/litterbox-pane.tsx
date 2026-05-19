@@ -13,6 +13,7 @@ import {
     runLitterBoxAnalysis
 } from '../../containers/litterbox-web-api.ts';
 import LitterBoxLlmQuestionComponent from './litterbox-llm-question.component.tsx';
+import logging from 'scratch-vm/src/util/logging.js';
 
 interface LitterBoxPaneProps {
     llmEnabled: boolean,
@@ -50,9 +51,15 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
         previousProject: undefined
     };
 
-    componentDidMount () {
+    componentDidMount() {
+        logging.logClickEvent('ICON', new Date(), 'LB_OPEN', null);
         this.fetchLitterBoxIssues();
     }
+
+    componentWillUnmount() {
+        logging.logClickEvent('ICON', new Date(), 'LB_CLOSE', null);
+    }
+
 
     private readonly handleOnSelectFeature = (feature: LitterBoxFeature) => {
         this.setState(prev => ({
@@ -61,13 +68,13 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
         }));
 
         switch (feature) {
-        case LitterBoxFeature.ISSUES:
-            this.handleOnSelectIssues();
-            break;
-        case LitterBoxFeature.LLM_QUESTION:
-        case LitterBoxFeature.QUESTIONS:
-            // do nothing for now
-            break;
+            case LitterBoxFeature.ISSUES:
+                this.handleOnSelectIssues();
+                break;
+            case LitterBoxFeature.LLM_QUESTION:
+            case LitterBoxFeature.QUESTIONS:
+                // do nothing for now
+                break;
         }
     };
 
@@ -95,10 +102,12 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
     };
 
     private readonly handleRecheckCodeQuality = () => {
+        logging.logClickEvent('BUTTON', new Date(), 'LB_CHECK_AGAIN', null);
         this.fetchLitterBoxIssues();
     };
 
     private readonly handleOnExplainIssue = (id: number) => {
+        logging.logClickEvent('BUTTON', new Date(), 'LB_GPT_EXPLAIN', null);
         const relevantIssue = this.findIssue(id);
         if (relevantIssue === undefined) {
             return;
@@ -106,14 +115,34 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
 
         explainIssue(this.props.vm.toJSON(), relevantIssue, this.props.locale)
             .then(updatedIssue => {
+                const logMsg = {
+                    relevantIssue: relevantIssue,
+                    updatedIssue: updatedIssue
+                };
+                this.handleQuestionLog(logMsg, `Explain_${relevantIssue.name}`);
                 this.insertUpdatedIssue(updatedIssue);
             })
             .catch(err => {
+                const logMsg = {
+                    relevantIssue: relevantIssue,
+                    err: err
+
+                };
+                this.handleQuestionLog(logMsg, `Explain_Error_${relevantIssue.name}`);
                 console.log(err);
             });
     };
 
+    private handleQuestionLog (logMsg: any, purpose: string) {
+        const text = JSON.stringify(logMsg, null, 2);
+        const blob = new Blob([text], {type: 'application/json'});
+        const file = new File([blob], `LLM_${purpose}.json`, {type: 'application/json'});
+
+        logging.logFile(file.name, 'json', file, new Date());
+    }
+
     private readonly handleOnFixIssue = (id: number) => {
+        logging.logClickEvent('BUTTON', new Date(), 'LB_GPT_FIX', null);
         const relevantIssue = this.findIssue(id);
         if (relevantIssue === undefined) {
             return;
@@ -121,6 +150,12 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
 
         fixIssue(this.props.vm.toJSON(), relevantIssue, this.props.locale)
             .then(async response => {
+                const logMsg = {
+                    relevantIssue: relevantIssue,
+                    response: response
+                };
+                this.handleQuestionLog(logMsg, `Fix_${relevantIssue.name}`);
+
                 const previousProject = {
                     project: this.props.vm.toJSON(),
                     selectedSprite: this.props.vm.editingTarget.id
@@ -133,11 +168,18 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
                 return this.props.vm.setEditingTarget(previousProject.selectedSprite);
             })
             .catch(err => {
+                const logMsg = {
+                    relevantIssue: relevantIssue,
+                    err: err
+
+                };
+                this.handleQuestionLog(logMsg, `Fix_Error_${relevantIssue.name}`);
                 console.log(err);
             });
     };
 
     private readonly handleOnRevertFix = () => {
+        logging.logClickEvent('BUTTON', new Date(), 'LB_REVERT_FIX', null);
         if (this.state.previousProject === undefined) {
             return;
         }
@@ -182,14 +224,30 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
 
         askQuestion(this.props.vm.toJSON(), question, this.props.locale, spriteName)
             .then(response => {
+                const logMsg = {
+                    question: question,
+                    spriteOnly: spriteOnly,
+                    response: response
+
+                };
+                this.handleQuestionLog(logMsg, `Question`);
                 this.setState({
                     llmResponse: response
                 });
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                const logMsg = {
+                    question: question,
+                    spriteOnly: spriteOnly,
+                    err: err
+
+                };
+                this.handleQuestionLog(logMsg, `Question_Error`);
+                console.log(err);
+            });
     };
 
-    render () {
+    render() {
         return (
             <Box className={styles.main}>
                 <div style={{maxWidth: '100px', marginRight: '0.5rem'}}>
