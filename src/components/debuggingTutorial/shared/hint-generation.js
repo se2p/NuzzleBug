@@ -209,7 +209,7 @@ class HintGenerator {
     }
 
     static convertScratchJsonToScratchblocks (projectJson) {
-        const url = `${process.env.LITTERBOX_BASE_URL}/litterbox-api/converter/scratchblocks`;
+        const url = `${process.env.LITTERBOX_BASE_URL}/converter/scratchblocks`;
 
         return fetch(url, {
             method: 'POST',
