@@ -5,15 +5,12 @@ class HintGenerator {
      * @param failedBehaviour Die LLM-Beschreibung des nicht bestandenen, behaviour-driven Test, auf den sich der Hinweis bezieht.
      * @param passedBehaviours Die LLM-Beschreibungen aller bereits bestandenen behaviour-driven Test.
      * @param locale Das akutelle locale. Bisher nur de und en.
-     * @param fastMode Ob ein schnelleres LLM-Modell genutzt wird.
+     * @param fastMode Reserviert für zukünftige Backend-seitige Geschwindigkeitswahl (wird momentan ignoriert).
      * @param onPartialUpdate Diese Methode wird aufgerufen, um partielle Updates an die UI zu übertragen.
      * @returns {Promise<{problemText: string, solutionOptions: [{code: string, id: string, explanation: string, isCorrect: boolean},{code: string, id: string, explanation: string, isCorrect: boolean},{code: string, id: string, explanation: string, isCorrect: boolean}]}>}
      */
     static generateHint (projectJson, failedBehaviour, passedBehaviours, locale, fastMode, onPartialUpdate) {
-        return this.convertScratchJsonToScratchblocks(JSON.parse(projectJson))
-            .then(scratchBlocks =>
-                this.sendScratchblocksToChatGPT(scratchBlocks, failedBehaviour, passedBehaviours, locale, fastMode, partial => onPartialUpdate(partial))
-            )
+        return this.requestTutorialHint(projectJson, failedBehaviour, passedBehaviours, locale, partial => onPartialUpdate(partial))
             .catch(error => {
                 console.error('Failed to get GPT hints:', error);
                 return {
@@ -27,61 +24,11 @@ class HintGenerator {
             });
     }
 
-    static async sendScratchblocksToChatGPT (scratchBlocks, failedBehaviour, passedBehaviours, locale, fastMode, onPartialUpdate) {
+    static async requestTutorialHint (projectJson, failedBehaviour, passedBehaviours, locale, onPartialUpdate) {
 
-        // Mein CloudFlair-Worker, welcher die Request an die OpenAI-Server weiterleitet und das Ergebnis zurück streamt.
-        const apiUrl = 'https://twilight-silence-adef.spieleder1.workers.dev';
-
-        const systemRole = `You are an assistant for a Scratch debugging learning system (students ~12).
-            STRICT OUTPUT:
-            - Output ONLY NDJSON. Exactly 5 lines:
-              1) {"type":"problemText","value":<string>}
-              2) {"type":"solutionOption","id":"A","code":<string>,"isCorrect":true,"explanation":<string>}
-              3) {"type":"solutionOption","id":"B","code":<string>,"isCorrect":false,"explanation":<string>}
-              4) {"type":"solutionOption","id":"C","code":<string>,"isCorrect":false,"explanation":<string>}
-              5) {"type":"done"}
-            - Valid JSON per line. No unescaped newlines (use \\n).
-
-            TASK:
-            - problemText starts with "Problem:" and describes only the visible wrong behaviour (no hints, no tests, no block names).
-            - Generate 3 candidates: exactly ONE fixes the behaviour, TWO are plausible beginner mistakes.
-            - Do not break passed behaviours.
-
-            PATCH/SNIPPET MODE (MOST IMPORTANT):
-            - Output ONLY the minimal relevant block snippet (not a full script).
-            - Do NOT include setup/movement blocks unless they contain the bug or are needed for the fix to make sense.
-            - Do NOT add a hat block unless the change is at the very start of a script.
-            - Keep as close as possible to the student's code (same structure/names/values).
-            - Prefer the fix with the fewest edits.
-            - Max 6 lines per option. No comments or "Sprite:" markers.
-
-            CRITICAL SCRATCH SYNTAX (MUST FOLLOW):
-            - ALL dropdown values MUST be written as [value v]
-            - NEVER write dropdowns as plain text
-            - ALL strings MUST be in double quotes
-            - NEVER output unquoted text inside ()
-            - For touching color [#RRGGBB] ? never add v inside the color brackets, since colors are never dropdowns.
-            Examples:
-            say ("Hallo")
-            switch costume to [normal v]
-            stop [all v]
-
-            IMPORTANT FOR STUDENT TEXT:
-            - Do NOT mention hex codes, RGB values, or color numbers in explanations.
-            - Refer to colors only by simple, descriptive, student-friendly names.
-
-            LANGUAGE:
-            - Explanations in LOCALE language.
-            - Code in English Scratchblocks text.
-            - German wording: "Wiederholungen", "Falls-Bedingung".
-            - Explanations: max 2 short sentences, only visible effect.`;
-
-        const fullPrompt =
-            `LOCALE: ${locale}
-            STUDENT CODE: ${scratchBlocks}
-            FAILED BEHAVIOUR: ${failedBehaviour}
-            PASSED BEHAVIOURS (do not break): ${(passedBehaviours && passedBehaviours.trim().length > 0) ? passedBehaviours : 'none'}`;
-
+        // LitterBox-Web übersetzt das Projekt intern in ScratchBlocks, baut den Prompt
+        // und leitet den Request an den serverseitig konfigurierten LLM-Anbieter weiter.
+        const apiUrl = `${process.env.LITTERBOX_BASE_URL}/llm/tutorial`;
 
         const res = await fetch(apiUrl, {
             method: 'POST',
@@ -90,7 +37,12 @@ class HintGenerator {
                 'Content-Type': 'application/json',
                 'Accept': 'text/event-stream'
             },
-            body: JSON.stringify(this.getRequestBody(fastMode, systemRole, fullPrompt))
+            body: JSON.stringify({
+                program: projectJson,
+                failedBehaviour,
+                passedBehaviours,
+                locale
+            })
         });
 
         if (!res.ok || !res.body) {
@@ -189,7 +141,9 @@ class HintGenerator {
                         continue;
                     }
 
+                    // Unterstützt mehrere SSE-Formate: OpenAI Responses API und Chat Completions (InnKube)
                     const delta =
+                        evt?.choices?.[0]?.delta?.content ||  // Chat Completions
                         (typeof evt?.delta === 'string' && evt.delta) ||
                         evt?.delta?.text ||
                         evt?.output_text?.delta ||
@@ -202,83 +156,6 @@ class HintGenerator {
         }
 
         return state;
-    }
-
-    static getRequestBody (fastMode, systemRole, fullPrompt) {
-        // Für die ASG-Studie haben wir jeweils das gleiche Modell genommen
-        if (fastMode) {
-            return {
-                model: 'gpt-5.1',
-                reasoning: {effort: 'low'},
-                input: [
-                    {role: 'system', content: systemRole},
-                    {role: 'user', content: fullPrompt}
-                ],
-                max_output_tokens: 2000,
-                stream: true
-            };
-        }
-        return {
-            model: 'gpt-5.1',
-            reasoning: {effort: 'low'},
-            input: [
-                {role: 'system', content: systemRole},
-                {role: 'user', content: fullPrompt}
-            ],
-            max_output_tokens: 2000,
-            stream: true
-        };
-
-
-        /* HIER DER CODE FÜR ÄLTERE MODELLE
-
-        Für GPT-4o:
-        apiUrl beim Server: 'https://api.openai.com/v1/chat/completions';
-
-        const requestBody = {
-            model: 'gpt-4o',
-            messages: [
-                {role: 'system', content: systemRole},
-                {role: 'user', content: fullPrompt}
-            ],
-            max_tokens: 2000,
-            stream: true,
-            temperature: 0.7
-        };
-
-        .then(data => data.choices[0].message.content);
-
-
-        FÜR o3-mini und gpt-5-mini:
-        return {
-                    model: "o3-mini", (ODER "gpt-5-mini")
-                    reasoning: { effort: "medium" },
-                    input: [
-                        { role: "system", content: systemRole },
-                        { role: "user", content: fullPrompt }
-                    ],
-                    max_output_tokens: 2000,
-                    stream: true
-                }
-        */
-    }
-
-    static convertScratchJsonToScratchblocks (projectJson) {
-        const url = 'https://scratch.fim.uni-passau.de/litterbox-api/converter/scratchblocks';
-
-        return fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(projectJson)
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Litterbox was not able to transform the provided project');
-                }
-                return response.text();
-            });
     }
 }
 
