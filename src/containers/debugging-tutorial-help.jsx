@@ -187,11 +187,10 @@ class DebuggingTutorialHelp extends React.Component {
     componentWillUnmount () {
         if (logging.isActive) {
             const curStep = `${(this.props.stepNumber + 1).toString()}_${this.props.level}`;
-            const text = JSON.stringify(this.state.helpLog, null, 2);
-            const blob = new Blob([text], {type: 'application/json'});
-            const file = new File([blob], `${this.props.tutorial.id + curStep}.json`, {type: 'application/json'});
+            const logMsg = {helplpg: this.state.helpLog};
 
-            logging.logFile(file.name, 'json', file, new Date());
+            logging.logJsonEvent(`${this.props.tutorial.id + curStep}.json`,
+                'TUTORIAL', 'QUESTION', logMsg, new Date());
         }
     }
     /**
