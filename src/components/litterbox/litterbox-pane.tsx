@@ -134,9 +134,9 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
     };
 
     private handleQuestionLog (logMsg: any, purpose: string) {
-        const text = JSON.stringify(logMsg, null, 2);
+        //const text = JSON.stringify(logMsg, null, 2);
         console.log('logging');
-        logging.logJsonEvent(`LLM_${purpose}.json`, 'LITTERBOX', 'LLM', text, new Date());
+        logging.logJsonEvent(`LLM_${purpose}.json`, 'LITTERBOX', 'LLM', logMsg, new Date());
     }
 
     private readonly handleOnFixIssue = (id: number) => {
