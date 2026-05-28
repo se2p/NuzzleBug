@@ -134,11 +134,7 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
     };
 
     private handleQuestionLog (logMsg: any, purpose: string) {
-        const text = JSON.stringify(logMsg, null, 2);
-        const blob = new Blob([text], {type: 'application/json'});
-        const file = new File([blob], `LLM_${purpose}.json`, {type: 'application/json'});
-
-        logging.logFile(file.name, 'json', file, new Date());
+        logging.logJsonEvent(`LLM_${purpose}.json`, 'LITTERBOX', 'LLM', logMsg, new Date());
     }
 
     private readonly handleOnFixIssue = (id: number) => {
@@ -239,7 +235,7 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
                 const logMsg = {
                     question: question,
                     spriteOnly: spriteOnly,
-                    err: err
+                    err: err.message
 
                 };
                 this.handleQuestionLog(logMsg, `Question_Error`);

@@ -149,11 +149,7 @@ export const logResponse = (hintObj, testId, optionsSelectHistory, durationMs) =
         response_delay: durationMs
     };
 
-    const text = JSON.stringify(logMsg, null, 2);
-    const blob = new Blob([text], {type: 'application/json'});
-    const file = new File([blob], `LLM_${testId}.json`, {type: 'application/json'});
-
-    logging.logFile(file.name, 'json', file, new Date());
+    logging.logJsonEvent(`LLM_${testId}.json`, 'TUTORIAL', 'LLM', logMsg, new Date());
 };
 
 /**
@@ -169,11 +165,7 @@ export const logTutorialScore = (score, tutorialTitle) => {
         score: score
     };
 
-    const text = JSON.stringify(logMsg, null, 2); // optional: schön formatiertes JSON
-    const blob = new Blob([text], {type: 'application/json'});
-    const file = new File([blob], `SCORE_${tutorialTitle}.json`, {type: 'application/json'});
-
-    logging.logFile(file.name, 'json', file, new Date());
+    logging.logJsonEvent(`SCORE_${tutorialTitle}.json`, 'TUTORIAL', 'GENERIC', logMsg, new Date());
 };
 
 export const logLLMError = scratchBlocks => {
@@ -183,9 +175,5 @@ export const logLLMError = scratchBlocks => {
         scratchBlocks: scratchBlocks
     };
 
-    const text = JSON.stringify(logMsg, null, 2); // optional: schön formatiertes JSON
-    const blob = new Blob([text], {type: 'application/json'});
-    const file = new File([blob], `ERROR_${tutorialTitle}.json`, {type: 'application/json'});
-
-    logging.logFile(file.name, 'json', file, new Date());
+    logging.logJsonEvent(`ERROR.json`, 'TUTORIAL', 'GENERIC', logMsg, new Date());
 };
