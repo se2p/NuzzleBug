@@ -1,3 +1,5 @@
+import logging from 'scratch-vm/src/util/logging.js';
+
 class HintGenerator {
 
     /**
@@ -13,6 +15,10 @@ class HintGenerator {
         return this.requestTutorialHint(projectJson, failedBehaviour, passedBehaviours, locale, partial => onPartialUpdate(partial))
             .catch(error => {
                 console.error('Failed to get GPT hints:', error);
+                const logMsg = {
+                    error: err.message
+                };
+                logging.logJsonEvent(`LLM_Error.json`, 'TUTORIAL', 'LLM', logMsg, new Date());
                 return {
                     problemText: 'Achtung: Ich konnte gerade keinen Hinweis erzeugen.',
                     solutionOptions: [

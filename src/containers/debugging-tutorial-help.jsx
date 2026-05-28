@@ -36,9 +36,6 @@ class DebuggingTutorialHelp extends React.Component {
         this.solveStep = this.solveStep.bind(this);
         this.onEnterMultiAnswer = this.onEnterMultiAnswer.bind(this);
         this.logStep = this.logStep.bind(this);
-        this.state = {
-            helpLog: []
-        };
     }
 
     /**
@@ -158,21 +155,20 @@ class DebuggingTutorialHelp extends React.Component {
      * Logs the current step as a JSON.
      */
     logStep (step, tutorial, selectedAnswer, isAnswerCorrect) {
-        // if (!logging.isActive) return;
+        if (logging.isActive) {
+            const curStep = `step${(this.props.stepNumber + 1).toString()}_${this.props.level}`;
 
-        const newEntry = {
-            questionStep: step,
-            questionText: tutorial.text,
-            questionType: tutorial.questionType,
-            selectedAnswer: selectedAnswer,
-            isAnswerCorrect: isAnswerCorrect,
-            timestamp: new Date().toISOString()
-        };
-        this.setState(prev => ({
-            helpLog: [...prev.helpLog, newEntry]
-        }), () => {
-            console.log('Aktuelle Ergebnisse:', this.state.helpLog);
-        });
+            const logMsg = {
+                timestamp: new Date().toISOString(),
+                tutorialTitle: this.props.tutorial.title,
+                questionStep: step,
+                questionText: tutorial.text,
+                questionType: tutorial.questionType,
+                selectedAnswer: selectedAnswer,
+                isAnswerCorrect: isAnswerCorrect
+            };
+            logging.logJsonEvent(`${this.props.tutorial.id + curStep}.json`, 'TUTORIAL', 'QUESTION', logMsg, new Date());
+        }
     }
 
     componentDidUpdate (prevProps, prevState, snapshot) {
@@ -184,15 +180,6 @@ class DebuggingTutorialHelp extends React.Component {
         }
     }
 
-    componentWillUnmount () {
-        if (logging.isActive) {
-            const curStep = `${(this.props.stepNumber + 1).toString()}_${this.props.level}`;
-            const logMsg = {helplpg: this.state.helpLog};
-
-            logging.logJsonEvent(`${this.props.tutorial.id + curStep}.json`,
-                'TUTORIAL', 'QUESTION', logMsg, new Date());
-        }
-    }
     /**
      * Populates the most recent user inputs for a specific question if the question has been answered before.
      */
@@ -231,22 +218,6 @@ class DebuggingTutorialHelp extends React.Component {
     onEnterMultiAnswer (step, answers) {
         this.props.enterMultiAnswer(answers);
         this.props.addSolvedStep(step, 'solved :)');
-    }
-
-    componentDidMount () {
-        const curStep = `step${(this.props.stepNumber + 1).toString()}_${this.props.level}`;
-
-        const index = {
-            timestamp: new Date().toISOString(),
-            startStep: curStep,
-            tutorialTitle: this.props.tutorial.title
-        };
-
-        this.setState(prev => ({
-            helpLog: [index]
-        }), () => {
-            console.log('HelpLog zurückgesetzt', this.state.helpLog);
-        });
     }
 
     render () {
