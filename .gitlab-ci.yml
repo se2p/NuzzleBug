@@ -3,7 +3,7 @@ include:
     - template: Jobs/Dependency-Scanning.gitlab-ci.yml
     - template: Jobs/Secret-Detection.gitlab-ci.yml
 
-image: node:20
+image: docker.io/library/node:24
 
 stages:
     - build
