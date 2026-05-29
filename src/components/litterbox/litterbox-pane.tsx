@@ -9,10 +9,13 @@ import {
     askQuestion,
     explainIssue,
     fixIssue,
+    generateQuestions,
     LitterBoxHint,
+    LitterBoxQuestion,
     runLitterBoxAnalysis
 } from '../../containers/litterbox-web-api.ts';
 import LitterBoxLlmQuestionComponent from './litterbox-llm-question.component.tsx';
+import LitterBoxQuestionsComponent from './litterbox-questions.tsx';
 import logging from 'scratch-vm/src/util/logging.js';
 
 interface LitterBoxPaneProps {
@@ -36,6 +39,7 @@ interface PreviousProject {
 interface LitterBoxPaneState {
     selectedFeature: LitterBoxFeature;
     litterBoxIssues: LitterBoxHint[] | undefined;
+    litterBoxQuestions: LitterBoxQuestion[] | undefined;
     llmResponse: string | undefined;
     analysisIsForCurrentProject: boolean;
     previousProject: PreviousProject | undefined;
@@ -46,6 +50,7 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
     state: LitterBoxPaneState = {
         selectedFeature: LitterBoxFeature.ISSUES,
         litterBoxIssues: undefined,
+        litterBoxQuestions: undefined,
         llmResponse: undefined,
         analysisIsForCurrentProject: true,
         previousProject: undefined
@@ -72,8 +77,9 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
                 this.handleOnSelectIssues();
                 break;
             case LitterBoxFeature.LLM_QUESTION:
+                break;
             case LitterBoxFeature.QUESTIONS:
-                // do nothing for now
+                this.handleOnSelectQuestions();
                 break;
         }
     };
@@ -82,6 +88,23 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
         if (!this.state.litterBoxIssues) {
             this.fetchLitterBoxIssues();
         }
+    };
+
+    private readonly handleOnSelectQuestions = () => {
+        if (!this.state.litterBoxQuestions) {
+            this.fetchLitterBoxQuestions();
+        }
+    };
+
+    private readonly fetchLitterBoxQuestions = () => {
+        generateQuestions(this.props.vm.toJSON(), this.props.locale)
+            .then(litterBoxQuestions => {
+                this.setState({litterBoxQuestions});
+            })
+            .catch(err => {
+                console.log(err);
+                this.setState({litterBoxQuestions: []});
+            });
     };
 
     private readonly fetchLitterBoxIssues = () => {
@@ -270,6 +293,14 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
                         <LitterBoxLlmQuestionComponent
                             onSubmitQuestion={this.handleSubmitLlmQuestion}
                             llmResponse={this.state.llmResponse}
+                        /> :
+                        null
+                }
+                {
+                    this.state.selectedFeature === LitterBoxFeature.QUESTIONS ?
+                        <LitterBoxQuestionsComponent
+                            questions={this.state.litterBoxQuestions ?? []}
+                            onRecheck={this.fetchLitterBoxQuestions}
                         /> :
                         null
                 }
