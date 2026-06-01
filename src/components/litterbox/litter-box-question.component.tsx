@@ -11,7 +11,42 @@ interface LitterBoxQuestionProps {
     locale: string;
 }
 
-class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps, never> {
+interface LitterBoxQuestionState {
+    questionTextHtml: string;
+}
+
+class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps, LitterBoxQuestionState> {
+    state: LitterBoxQuestionState = {
+        questionTextHtml: ''
+    };
+
+    componentDidMount () {
+        this.updateQuestionTextHtml();
+    }
+
+    componentDidUpdate (prevProps: Readonly<LitterBoxQuestionProps>) {
+        if (prevProps.question !== this.props.question) {
+            this.updateQuestionTextHtml();
+        }
+    }
+
+    private updateQuestionTextHtml (): void {
+        this.setState({questionTextHtml: this.toHtml(this.props.question.questionText)});
+    }
+
+    private toHtml (text: string | undefined): string {
+        if (!text) return '';
+        let html = text.replace(/\[b]/g, '<strong>');
+        html = html.replace(/\[\/b]/g, '</strong>');
+        html = html.replace(/\[newLine]/g, '<br />');
+        html = html.replace(/\[sbi]/g, '<code class="b">');
+        html = html.replace(/\[\/sbi]/g, '</code>');
+        html = html.replace(/\[var]/g, '<code class="b">(Variable "');
+        html = html.replace(/\[\/var]/g, '")</code>');
+        html = html.replace(/\[bc]/g, '<span className={styles.hintHighlightText}><b>');
+        html = html.replace(/\[\/bc]/g, '</b></span>');
+        return html;
+    }
 
     private titleColor (): string {
         switch (this.props.question.type) {
@@ -44,7 +79,10 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
                 </div>
                 <div style={{display: 'flex'}}>
                     <div className={styles.hintDescriptionBox}>
-                        <p>{question.questionText}</p>
+                        <div
+                            // eslint-disable-next-line react/no-danger
+                            dangerouslySetInnerHTML={{__html: this.state.questionTextHtml}}
+                        />
                         {question.choices && question.choices.length > 0 &&
                             <ol>
                                 {question.choices.map((choice, i) => (
