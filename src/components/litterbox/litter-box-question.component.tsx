@@ -8,6 +8,7 @@ interface LitterBoxQuestionProps {
     question: LitterBoxQuestion;
     index: number;
     total: number;
+    locale: string;
 }
 
 class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps, never> {
