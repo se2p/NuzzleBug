@@ -8,6 +8,7 @@ import sharedStyles from './shared.css';
 
 interface LitterBoxQuestionsProps {
     questions: LitterBoxQuestion[];
+    locale: string;
     onRecheck: () => void;
 }
 
@@ -41,7 +42,7 @@ class LitterBoxQuestionsComponent extends React.Component<LitterBoxQuestionsProp
     };
 
     render () {
-        const {questions, onRecheck} = this.props;
+        const {questions, locale, onRecheck} = this.props;
         const index = this.currentIndex();
         const question = questions.length > 0 ? questions[index] : undefined;
 
@@ -72,6 +73,7 @@ class LitterBoxQuestionsComponent extends React.Component<LitterBoxQuestionsProp
                                 question={question}
                                 index={index}
                                 total={questions.length}
+                                locale={locale}
                             />
                         </div>
                         <button

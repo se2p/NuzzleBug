@@ -300,6 +300,7 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
                     this.state.selectedFeature === LitterBoxFeature.QUESTIONS ?
                         <LitterBoxQuestionsComponent
                             questions={this.state.litterBoxQuestions ?? []}
+                            locale={this.props.locale}
                             onRecheck={this.fetchLitterBoxQuestions}
                         /> :
                         null
