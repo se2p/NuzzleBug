@@ -14,6 +14,7 @@ interface LitterBoxIssuesProps {
     onRevertFix?: () => void;
     analysisIsForCurrentProject: boolean;
     issues: LitterBoxHint[];
+    locale: string;
 }
 
 interface LitterBoxIssuesState {
@@ -169,7 +170,7 @@ class LitterBoxIssues extends React.Component<LitterBoxIssuesProps, LitterBoxIss
                                 issueType={this.state.selectedIssue.type}
                                 hintDescription={this.state.selectedIssue.hint}
                                 scratchBlocksCode={this.state.selectedIssue.scratchBlocksCode}
-                                locale={'en'}
+                                locale={this.props.locale}
                                 analysisIsForCurrentProject={this.props.analysisIsForCurrentProject}
                                 onExplainIssue={this.props.onExplainIssue}
                                 onFixIssue={this.props.onFixIssue}
