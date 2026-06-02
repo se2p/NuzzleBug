@@ -262,6 +262,7 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
                             onRevertFix={this.state.previousProject ? this.handleOnRevertFix : undefined}
                             analysisIsForCurrentProject={this.state.analysisIsForCurrentProject}
                             issues={this.state.litterBoxIssues ?? []}
+                            locale={this.props.locale}
                         /> :
                         null
                 }
