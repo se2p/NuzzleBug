@@ -290,19 +290,19 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
                         null
                 }
                 {
-                    this.state.selectedFeature === LitterBoxFeature.LLM_QUESTION && this.props.llmEnabled ?
-                        <LitterBoxLlmQuestionComponent
-                            onSubmitQuestion={this.handleSubmitLlmQuestion}
-                            llmResponse={this.state.llmResponse}
-                        /> :
-                        null
-                }
-                {
                     this.state.selectedFeature === LitterBoxFeature.QUESTIONS ?
                         <LitterBoxQuestionsComponent
                             questions={this.state.litterBoxQuestions ?? []}
                             locale={this.props.locale}
                             onRecheck={this.fetchLitterBoxQuestions}
+                        /> :
+                        null
+                }
+                {
+                    this.state.selectedFeature === LitterBoxFeature.LLM_QUESTION && this.props.llmEnabled ?
+                        <LitterBoxLlmQuestionComponent
+                            onSubmitQuestion={this.handleSubmitLlmQuestion}
+                            llmResponse={this.state.llmResponse}
                         /> :
                         null
                 }

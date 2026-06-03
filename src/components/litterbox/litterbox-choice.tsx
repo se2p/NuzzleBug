@@ -8,8 +8,8 @@ import logging from 'scratch-vm/src/util/logging.js';
 
 export enum LitterBoxFeature {
     ISSUES,
-    LLM_QUESTION,
     QUESTIONS,
+    LLM_QUESTION,
 }
 
 interface LitterBoxFeatureSelectorProps {
@@ -53,21 +53,21 @@ class LitterBoxFeatureSelector extends React.Component<LitterBoxFeatureSelectorP
                     />
                 </button>
                 <button
-                    className={this.buttonStyle(LitterBoxFeature.LLM_QUESTION)}
-                    onClick={this.handleSelectLlmQuestion}
-                >
-                    <FormattedMessage
-                        id={'gui.litterBox.askAboutCode'}
-                        defaultMessage={'Ask about Code'}
-                    />
-                </button>
-                <button
                     className={this.buttonStyle(LitterBoxFeature.QUESTIONS)}
                     onClick={this.handleSelectQuestions}
                 >
                     <FormattedMessage
                         id={'gui.litterBox.question'}
                         defaultMessage={'Code understanding'}
+                    />
+                </button>
+                <button
+                    className={this.buttonStyle(LitterBoxFeature.LLM_QUESTION)}
+                    onClick={this.handleSelectLlmQuestion}
+                >
+                    <FormattedMessage
+                        id={'gui.litterBox.askAboutCode'}
+                        defaultMessage={'Ask about Code'}
                     />
                 </button>
                 <button
