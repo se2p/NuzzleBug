@@ -7,6 +7,7 @@ import questionStyles from './litter-box-question.css';
 import sharedStyles from './shared.css';
 import scratchblocks from 'scratchblocks';
 import {FormattedMessage} from "react-intl";
+import logging from 'scratch-vm/src/util/logging.js';
 
 interface LitterBoxQuestionProps {
     question: LitterBoxQuestion;
@@ -42,7 +43,9 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
             this.updateQuestionTextHtml();
             this.setState({selectedChoice: null, inputValue: '', feedback: null});
         }
-        this.triggerInlineScratchBlocksRender();
+        if (prevState.questionTextHtml !== this.state.questionTextHtml) {
+            this.triggerInlineScratchBlocksRender();
+        }
     }
 
     private updateQuestionTextHtml (): void {
@@ -105,6 +108,7 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
     };
 
     private readonly handleCheckAnswer = () => {
+        logging.logClickEvent('BUTTON', new Date(), 'LB_CHECK_ANSWER', null);
         const {question} = this.props;
         const {selectedChoice, inputValue} = this.state;
         const correctAnswers = question.correctAnswers || [];
@@ -132,6 +136,10 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
 
         this.setState({feedback: isCorrect ? 'correct' : 'incorrect'});
     };
+
+    private handleQuestionLog (logMsg: any, purpose: string) {
+        logging.logJsonEvent(`LitterBox_QLC_${purpose}.json`, 'LITTERBOX', 'QUESTION', logMsg, new Date());
+    }
 
     private renderChoiceOptions (): React.ReactNode {
         const {question} = this.props;

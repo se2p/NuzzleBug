@@ -129,6 +129,11 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
         this.fetchLitterBoxIssues();
     };
 
+    private readonly handleRecheckQuestions = () => {
+        logging.logClickEvent('BUTTON', new Date(), 'LB_CODE_UNDERSTANDING_CHECK_AGAIN', null);
+        this.fetchLitterBoxQuestions();
+    };
+
     private readonly handleOnExplainIssue = (id: number) => {
         logging.logClickEvent('BUTTON', new Date(), 'LB_GPT_EXPLAIN', null);
         const relevantIssue = this.findIssue(id);
@@ -294,7 +299,7 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
                         <LitterBoxQuestionsComponent
                             questions={this.state.litterBoxQuestions ?? []}
                             locale={this.props.locale}
-                            onRecheck={this.fetchLitterBoxQuestions}
+                            onRecheck={this.handleRecheckQuestions}
                         /> :
                         null
                 }

@@ -31,7 +31,7 @@ class LitterBoxFeatureSelector extends React.Component<LitterBoxFeatureSelectorP
     };
 
     private readonly handleSelectQuestions = () => {
-        logging.logClickEvent('BUTTON', new Date(), 'LB_QLC', null);
+        logging.logClickEvent('BUTTON', new Date(), 'LB_CODE_UNDERSTANDING', null);
         this.props.onSelect(LitterBoxFeature.QUESTIONS);
     };
 
