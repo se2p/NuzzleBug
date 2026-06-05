@@ -30,7 +30,7 @@ class LitterBoxQuestionsComponent extends React.Component<LitterBoxQuestionsProp
     private readonly currentIndex = (): number => {
         const {questions} = this.props;
         if (questions.length === 0) return 0;
-        return (this.state.index + questions.length) % questions.length;
+        return ((this.state.index % questions.length) + questions.length) % questions.length;
     };
 
     private readonly handlePrev = () => {

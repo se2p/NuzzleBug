@@ -42,9 +42,7 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
             this.updateQuestionTextHtml();
             this.setState({selectedChoice: null, inputValue: '', feedback: null});
         }
-        if (prevState.questionTextHtml !== this.state.questionTextHtml) {
-            this.triggerInlineScratchBlocksRender();
-        }
+        this.triggerInlineScratchBlocksRender();
     }
 
     private updateQuestionTextHtml (): void {
@@ -78,9 +76,11 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
         let html = text.replace(/\[b]/g, '<strong>');
         html = html.replace(/\[\/b]/g, '</strong>');
         html = html.replace(/\[newLine]/g, '<br />');
-        html = html.replace(/\[sbi]([\s\S]*?)\[\/sbi]/g, (_, blockCode) =>
-            `<code class="b">${this.translateBlockText(blockCode.trim())}</code>`
-        );
+        html = html.replace(/\[sbi]([\s\S]*?)\[\/sbi]/g, (_, blockCode) => {
+            const translated = this.translateBlockText(blockCode.trim());
+            const escaped = translated.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return `<code class="b">${escaped}</code>`;
+        });
         html = html.replace(/\[var]/g, '<code class="b">(Variable "');
         html = html.replace(/\[\/var]/g, '")</code>');
         html = html.replace(/\[bc]/g, '<span className={styles.hintHighlightText}><b>');
@@ -160,7 +160,8 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
                             onClick={() => this.handleSelectChoice(choice)}
                         >
                             <span className={questionStyles.optionLetter}>{letters[i]}</span>
-                            <span>{choice}</span>
+                            {/* eslint-disable-next-line react/no-danger */}
+                            <span dangerouslySetInnerHTML={{__html: this.toHtml(choice)}} />
                         </div>
                     );
                 })}
@@ -196,7 +197,8 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
                             onClick={() => this.handleSelectChoice(choice)}
                         >
                             <span className={questionStyles.optionLetter}>{['Y', 'N'][i]}</span>
-                            <span>{choice}</span>
+                            {/* eslint-disable-next-line react/no-danger */}
+                            <span dangerouslySetInnerHTML={{__html: this.toHtml(choice)}} />
                         </div>
                     );
                 })}
