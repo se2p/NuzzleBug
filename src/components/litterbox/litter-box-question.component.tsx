@@ -6,7 +6,7 @@ import styles from './hints.css';
 import questionStyles from './litter-box-question.css';
 import sharedStyles from './shared.css';
 import scratchblocks from 'scratchblocks';
-import {FormattedMessage} from "react-intl";
+import {FormattedMessage} from 'react-intl';
 import logging from 'scratch-vm/src/util/logging.js';
 
 interface LitterBoxQuestionProps {
@@ -195,9 +195,12 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
     private renderYesNoOptions(): React.ReactNode {
         const {question} = this.props;
         const {selectedChoice, feedback} = this.state;
-        const choices = (question.choices && question.choices.length > 0)
-            ? question.choices
-            : ['Yes', 'No'];
+        const hasCustomChoices = question.choices && question.choices.length > 0;
+        const choices = hasCustomChoices ? question.choices : ['Yes', 'No'];
+        const yesNoLabels = [
+            <FormattedMessage id="gui.litterBox.question.yes" defaultMessage="Yes" />,
+            <FormattedMessage id="gui.litterBox.question.no" defaultMessage="No" />
+        ];
 
         return (
             <div className={questionStyles.answerOptions}>
@@ -219,9 +222,11 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
                             className={className}
                             onClick={() => this.handleSelectChoice(choice)}
                         >
-                            <span className={questionStyles.optionLetter}>{['Y', 'N'][i]}</span>
-                            {/* eslint-disable-next-line react/no-danger */}
-                            <span dangerouslySetInnerHTML={{__html: this.toHtml(choice)}}/>
+                            {hasCustomChoices ?
+                                // eslint-disable-next-line react/no-danger
+                                <span dangerouslySetInnerHTML={{__html: this.toHtml(choice)}}/> :
+                                <span>{yesNoLabels[i]}</span>
+                            }
                         </div>
                     );
                 })}
