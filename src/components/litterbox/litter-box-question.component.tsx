@@ -75,6 +75,7 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
     }
 
     private toHtml(text: string | undefined): string {
+        console.log(text);
         if (!text) return '';
         let html = text.replace(/\[b]/g, '<strong>');
         html = html.replace(/\[\/b]/g, '</strong>');
@@ -195,8 +196,8 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
     private renderYesNoOptions(): React.ReactNode {
         const {question} = this.props;
         const {selectedChoice, feedback} = this.state;
-        const hasCustomChoices = question.choices && question.choices.length > 0;
-        const choices = hasCustomChoices ? question.choices : ['Yes', 'No'];
+        const hasCustomChoices = !!(question.choices?.length);
+        const choices: string[] = question.choices?.length ? question.choices : ['Yes', 'No'];
         const yesNoLabels = [
             <FormattedMessage id="gui.litterBox.question.yes" defaultMessage="Yes" />,
             <FormattedMessage id="gui.litterBox.question.no" defaultMessage="No" />
