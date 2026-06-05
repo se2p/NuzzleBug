@@ -4,6 +4,7 @@ const CLOSE_MODAL = 'scratch-gui/modals/CLOSE_MODAL';
 const MODAL_BACKDROP_LIBRARY = 'backdropLibrary';
 const MODAL_COSTUME_LIBRARY = 'costumeLibrary';
 const MODAL_EXTENSION_LIBRARY = 'extensionLibrary';
+const MODAL_TUTORIAL_CREATION = 'tutorialCreation';
 const MODAL_LOADING_PROJECT = 'loadingProject';
 const MODAL_TELEMETRY = 'telemetryModal';
 const MODAL_SOUND_LIBRARY = 'soundLibrary';
@@ -22,7 +23,8 @@ const initialState = {
     [MODAL_SPRITE_LIBRARY]: false,
     [MODAL_SOUND_RECORDER]: false,
     [MODAL_CONNECTION]: false,
-    [MODAL_TIPS_LIBRARY]: false
+    [MODAL_TIPS_LIBRARY]: false,
+    [MODAL_TUTORIAL_CREATION]: false
 };
 
 const reducer = function (state, action) {
@@ -60,6 +62,9 @@ const openCostumeLibrary = function () {
 };
 const openExtensionLibrary = function () {
     return openModal(MODAL_EXTENSION_LIBRARY);
+};
+const openTutorialCreation = function () {
+    return openModal(MODAL_TUTORIAL_CREATION);
 };
 const openLoadingProject = function () {
     return openModal(MODAL_LOADING_PROJECT);
@@ -109,6 +114,9 @@ const closeSoundRecorder = function () {
 const closeTipsLibrary = function () {
     return closeModal(MODAL_TIPS_LIBRARY);
 };
+const closeTutorialCreation = function () {
+    return closeModal(MODAL_TUTORIAL_CREATION);
+};
 const closeConnectionModal = function () {
     return closeModal(MODAL_CONNECTION);
 };
@@ -134,5 +142,7 @@ export {
     closeSoundRecorder,
     closeTelemetryModal,
     closeTipsLibrary,
-    closeConnectionModal
+    closeConnectionModal,
+    closeTutorialCreation,
+    openTutorialCreation
 };

@@ -212,6 +212,20 @@ const alerts = [
         ),
         iconSpinner: true,
         level: AlertLevels.SUCCESS
+    },
+    {
+        alertId: 'closeTutorialCreation',
+        alertType: AlertTypes.STANDARD,
+        clearList: [],
+        content: (
+            <FormattedMessage
+                defaultMessage="If you go back all progress is lost"
+                description="If you go back all progress is lost"
+                id="gui.alerts.closeTutorialCreation"
+            />
+        ),
+        iconSpinner: false,
+        level: AlertLevels.WARN
     }
 ];
 

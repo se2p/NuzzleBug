@@ -20,7 +20,8 @@ const BBTTestManager = {
     batchEvaluationRunning: false,
     batchEvaluationFileID: -1,
     expectingTestEnd: false,
-    callbackAfterAllTestsAreDone: null
+    callbackAfterAllTestsAreDone: null,
+    tests: null
 };
 
 /**
@@ -71,7 +72,7 @@ const bbtTestExecutionLogicHOC = function (WrappedComponent) {
             this.props._setBusyWithTestStuff(true);
             this.props._clearAllTestStatus();
             BBTTestManager.testChainRunning = true;
-            BBTTestManager.testChainBbtTests = Object.keys(this.props._bbtTests);
+            BBTTestManager.testChainBbtTests = BBTTestManager.tests === null ? Object.keys(this.props._bbtTests) : Object.keys(BBTTestManager.tests);
 
             // start the chain
             this.runNextTest();
@@ -91,14 +92,16 @@ const bbtTestExecutionLogicHOC = function (WrappedComponent) {
                 this.props._setBusyWithTestStuff(false);
 
                 if (BBTTestManager.callbackAfterAllTestsAreDone) {
-                    BBTTestManager.callbackAfterAllTestsAreDone();
+                    BBTTestManager.callbackAfterAllTestsAreDone(this.props._bbtTests);
                     BBTTestManager.callbackAfterAllTestsAreDone = null;
                 }
 
                 return;
             }
 
-            if (!this.props._bbtTests.hasOwnProperty(nextTestId)) {
+            if (BBTTestManager.tests === null ?
+                !this.props._bbtTests.hasOwnProperty(nextTestId) :
+                !BBTTestManager.tests.hasOwnProperty(nextTestId)) {
                 this.runNextTest();
                 return;
             }
@@ -111,7 +114,8 @@ const bbtTestExecutionLogicHOC = function (WrappedComponent) {
                 return;
             }
 
-            const test = this.props._bbtTests[testId];
+            const test = BBTTestManager.tests === null ? this.props._bbtTests[testId] :
+                BBTTestManager.tests[testId];
 
             if (!test) {
                 return;
@@ -190,7 +194,7 @@ const bbtTestExecutionLogicHOC = function (WrappedComponent) {
             BBTTestManager.batchEvaluationRunning = false;
 
             if (BBTTestManager.callbackAfterAllTestsAreDone) {
-                BBTTestManager.callbackAfterAllTestsAreDone();
+                BBTTestManager.callbackAfterAllTestsAreDone(this.props._bbtTests);
             }
 
             BBTTestManager.callbackAfterAllTestsAreDone = null;

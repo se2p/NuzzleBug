@@ -132,7 +132,6 @@
 
 .tutorial-image {
     height: 70px;
-    width: 103px;
     margin: 4px 10px;
     box-sizing: border-box;
     border-radius: 10px;
@@ -262,7 +261,6 @@
 }
 
 .step-image {
-    width: 205px;
     height: 136px;
     margin: 20px auto 0;
     box-sizing: border-box;
@@ -584,11 +582,9 @@ code {
     font-size: 87.5%;
 }
 
-
-
-
-
-
+.break{
+    overflow-wrap: break-word;
+}
 
 .tutorial-debugging-icon {
     height: 40px;

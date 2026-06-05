@@ -30,6 +30,16 @@
     font-size: .875rem;
 }
 
+.create-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    height: calc($library-filter-bar-height + 2rem); /* padding */
+    padding: 0 1rem;
+    font-size: .875rem;
+}
+
 .filter-bar-item {
     margin-right: .75rem;
 }
@@ -67,4 +77,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.creation-button{
+    border: none;
+    background: $data-primary;
 }

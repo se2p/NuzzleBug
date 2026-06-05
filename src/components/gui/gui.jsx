@@ -55,6 +55,7 @@ import testsIcon from '../block-based-testing/icons/rules-icon.svg';
 import LitterBoxInterface from '../../containers/litterbox-interface.tsx';
 
 import HintsExplanationCard from '../hint-gen/hints-explanation-card.jsx';
+import TutorialCreationComponent from '../tutorial_creation/tutorial_creation_start.jsx';
 
 const messages = defineMessages({
     addExtension: {
@@ -148,6 +149,7 @@ const GUIComponent = props => {
         stageSizeMode,
         telemetryModalVisible,
         tipsLibraryVisible,
+        tutorialCreationVisible,
         vm,
         ...componentProps
     } = omit(props, 'dispatch');
@@ -257,6 +259,12 @@ const GUIComponent = props => {
 
                 {alertsVisible ? (
                     <Alerts className={styles.alertsContainer}/>
+                ) : null}
+                {tutorialCreationVisible ? (
+                    <TutorialCreationComponent
+                        vm={vm}
+                        intl={intl}
+                    />
                 ) : null}
                 {connectionModalVisible ? (
                     <ConnectionModal
@@ -525,6 +533,7 @@ GUIComponent.propTypes = {
     stageSizeMode: PropTypes.oneOf(Object.keys(STAGE_SIZE_MODES)),
     telemetryModalVisible: PropTypes.bool,
     tipsLibraryVisible: PropTypes.bool,
+    tutorialCreationVisible: PropTypes.bool,
     tutorialCardsVisible: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired
 };

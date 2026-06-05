@@ -170,6 +170,7 @@ const mapStateToProps = state => {
         soundsTabVisible: state.scratchGui.editorTab.activeTabIndex === SOUNDS_TAB_INDEX,
         telemetryModalVisible: state.scratchGui.modals.telemetryModal,
         tipsLibraryVisible: state.scratchGui.modals.tipsLibrary,
+        tutorialCreationVisible: state.scratchGui.modals.tutorialCreation,
         vm: state.scratchGui.vm
     };
 };

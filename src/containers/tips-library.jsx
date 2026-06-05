@@ -13,7 +13,7 @@ import LibraryComponent from '../components/library/library.jsx';
 import {connect} from 'react-redux';
 
 import {
-    closeTipsLibrary
+    closeTipsLibrary, openTutorialCreation
 } from '../reducers/modals';
 
 import {
@@ -81,6 +81,7 @@ class TipsLibrary extends React.PureComponent {
         return (
             <LibraryComponent
                 filterable
+                create
                 data={decksLibraryThumbnailData}
                 id="tipsLibrary"
                 tags={tutorialTags}
@@ -101,6 +102,7 @@ TipsLibrary.propTypes = {
     visible: PropTypes.bool
 };
 
+
 const mapStateToProps = state => ({
     visible: state.scratchGui.modals.tipsLibrary,
     projectId: state.scratchGui.projectState.projectId
@@ -108,7 +110,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     onActivateDeck: id => dispatch(activateDeck(id)),
-    onRequestClose: () => dispatch(closeTipsLibrary())
+    onRequestClose: () => dispatch(closeTipsLibrary()),
 });
 
 export default injectIntl(connect(
