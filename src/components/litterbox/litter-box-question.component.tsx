@@ -75,7 +75,6 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
     }
 
     private toHtml(text: string | undefined): string {
-        console.log(text);
         if (!text) return '';
         let html = text.replace(/\[b]/g, '<strong>');
         html = html.replace(/\[\/b]/g, '</strong>');
@@ -114,7 +113,9 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
     };
 
     private readonly handleCheckAnswer = () => {
-        logging.logClickEvent('BUTTON', new Date(), 'LB_CHECK_ANSWER', null);
+        if (logging.isActive()) {
+            logging.logClickEvent('BUTTON', new Date(), 'LB_CHECK_ANSWER', null);
+        }
         const {question} = this.props;
         const {selectedChoice, inputValue} = this.state;
         const correctAnswers = question.correctAnswers || [];
@@ -154,7 +155,9 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
     };
 
     private handleQuestionLog(logMsg: any, purpose: string) {
-        logging.logJsonEvent(`LitterBox_QLC_${purpose}.json`, 'LITTERBOX', 'QUESTION', logMsg, new Date());
+        if (logging.isActive()) {
+            logging.logJsonEvent(`LitterBox_QLC_${purpose}.json`, 'LITTERBOX', 'QUESTION', logMsg, new Date());
+        }
     }
 
     private renderChoiceOptions(): React.ReactNode {

@@ -57,12 +57,16 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
     };
 
     componentDidMount() {
-        logging.logClickEvent('ICON', new Date(), 'LB_OPEN', null);
+        if (logging.isActive()) {
+            logging.logClickEvent('ICON', new Date(), 'LB_OPEN', null);
+        }
         this.fetchLitterBoxIssues();
     }
 
     componentWillUnmount() {
-        logging.logClickEvent('ICON', new Date(), 'LB_CLOSE', null);
+        if (logging.isActive()) {
+            logging.logClickEvent('ICON', new Date(), 'LB_CLOSE', null);
+        }
     }
 
 
@@ -125,17 +129,23 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
     };
 
     private readonly handleRecheckCodeQuality = () => {
-        logging.logClickEvent('BUTTON', new Date(), 'LB_CHECK_AGAIN', null);
+        if (logging.isActive()) {
+            logging.logClickEvent('BUTTON', new Date(), 'LB_CHECK_AGAIN', null);
+        }
         this.fetchLitterBoxIssues();
     };
 
     private readonly handleRecheckQuestions = () => {
-        logging.logClickEvent('BUTTON', new Date(), 'LB_CODE_UNDERSTANDING_CHECK_AGAIN', null);
+        if (logging.isActive()) {
+            logging.logClickEvent('BUTTON', new Date(), 'LB_CODE_UNDERSTANDING_CHECK_AGAIN', null);
+        }
         this.fetchLitterBoxQuestions();
     };
 
     private readonly handleOnExplainIssue = (id: number) => {
-        logging.logClickEvent('BUTTON', new Date(), 'LB_GPT_EXPLAIN', null);
+        if (logging.isActive()) {
+            logging.logClickEvent('BUTTON', new Date(), 'LB_GPT_EXPLAIN', null);
+        }
         const relevantIssue = this.findIssue(id);
         if (relevantIssue === undefined) {
             return;
@@ -162,11 +172,15 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
     };
 
     private handleQuestionLog (logMsg: any, purpose: string) {
-        logging.logJsonEvent(`LLM_${purpose}.json`, 'LITTERBOX', 'LLM', logMsg, new Date());
+        if (logging.isActive()) {
+            logging.logJsonEvent(`LLM_${purpose}.json`, 'LITTERBOX', 'LLM', logMsg, new Date());
+        }
     }
 
     private readonly handleOnFixIssue = (id: number) => {
-        logging.logClickEvent('BUTTON', new Date(), 'LB_GPT_FIX', null);
+        if (logging.isActive()) {
+            logging.logClickEvent('BUTTON', new Date(), 'LB_GPT_FIX', null);
+        }
         const relevantIssue = this.findIssue(id);
         if (relevantIssue === undefined) {
             return;
@@ -203,7 +217,9 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
     };
 
     private readonly handleOnRevertFix = () => {
-        logging.logClickEvent('BUTTON', new Date(), 'LB_REVERT_FIX', null);
+        if (logging.isActive()) {
+            logging.logClickEvent('BUTTON', new Date(), 'LB_REVERT_FIX', null);
+        }
         if (this.state.previousProject === undefined) {
             return;
         }
