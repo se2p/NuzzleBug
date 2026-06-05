@@ -261,6 +261,7 @@ LibraryComponent.propTypes = {
         /* eslint-enable react/no-unused-prop-types, lines-around-comment */
     ),
     filterable: PropTypes.bool,
+    create: PropTypes.bool,
     id: PropTypes.string.isRequired,
     intl: intlShape.isRequired,
     onItemMouseEnter: PropTypes.func,

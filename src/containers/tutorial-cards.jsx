@@ -25,23 +25,29 @@ import * as messagesEN from '../lib/libraries/tutorial-messages-en.js';
 import TutorialCardsComponent from '../components/tutorial/tutorial-cards.jsx';
 import * as tutorials from 'tutorial-tests/src/tutorials';
 
+import {
+    openTutorialCreation
+} from '../reducers/modals';
+
 class TutorialCards extends React.Component {
     constructor (props) {
         super(props);
         this.handleHome = this.handleHome.bind(this);
         this.handleNext = this.handleNext.bind(this);
         this.handlePrev = this.handlePrev.bind(this);
+        this.onUpload = this.onUpload.bind(this);
+        this.tutorialParsed = this.tutorialParsed.bind(this);
         this.handleStartTutorial = this.handleStartTutorial.bind(this);
         this.scrollToBottom = this.scrollToBottom.bind(this);
         this.onBackToTutorialSelection = this.onBackToTutorialSelection.bind(this);
         this.myRef = null;
+        this.tutorials = tutorials;
     }
 
     processTutorials () {
         const rows = [];
-        const values = Object.values(tutorials);
-        for (let i = 0; i < values.length; i++) {
-            const tutorial = values[i];
+        for (let i = 0; i < Object.values(this.tutorials).length; i++) {
+            const tutorial = Object.values(this.tutorials)[i];
             let messages = tutorial[`messages${this.props.locale.toUpperCase()}`];
             if (typeof messages === 'undefined') {
                 messages = tutorial.messagesDE;
@@ -61,6 +67,164 @@ class TutorialCards extends React.Component {
             );
         }
         return rows;
+    }
+
+    onUpload (event){
+        const JSZip = require('jszip');
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                const arrayBuffer = e.target.result;
+                JSZip.loadAsync(arrayBuffer).then(zip => {
+                    let id = null;
+                    const images = {};
+                    const sprites = {};
+                    const languages = {};
+                    const tutorial = {};
+                    let index = 0;
+                    // ignore folders for content looping
+                    const size = Object.values(zip.files).filter(value => !value.dir).length;
+                    zip.forEach((relativePath, zipEntry) => {
+                        if (!zipEntry.dir) {
+                            if (relativePath.split('/')[2] === 'images'){
+                                // read images as blobs
+                                zipEntry.async('blob').then(content => {
+                                    index++;
+                                    const pathParts = relativePath.split('/');
+                                    const filename = pathParts[pathParts.length - 1];
+                                    images[filename] = content;
+                                    // create tutorial if everything is read
+                                    if (index === size){
+                                        tutorial.images = images;
+                                        tutorial.messages = languages;
+                                        tutorial.sprites = sprites;
+                                        this.tutorialParsed(tutorial);
+                                    }
+                                });
+                            } else {
+                                // read everything else as string
+                                zipEntry.async('string').then(content => {
+                                    index++;
+                                    const pathParts = relativePath.split('/');
+                                    const filename = pathParts[pathParts.length - 1];
+                                    if (id === null){
+                                        id = pathParts[1];
+                                        // eslint-disable-next-line brace-style
+                                    }
+                                    // index.js
+                                    if (filename === 'index.js'){
+                                    // global
+                                        if (pathParts[0] === 'tutorials'){
+                                            tutorial.indexJsGlobal = content;
+                                        } else {
+                                            tutorial.indexJsTestcases = content;
+                                        }
+                                    // eslint-disable-next-line brace-style
+                                    }
+                                    // Messages or Sprites
+                                    else if (pathParts.length === 3){
+                                    // messages
+                                        if (pathParts[0] === 'tutorials'){
+                                            languages[filename] = content;
+                                        } else {
+                                            // sprites
+                                            sprites[filename] = content;
+                                        }
+                                    }
+                                    // create tutorial if everything is read
+                                    if (index === size){
+                                        tutorial.images = images;
+                                        tutorial.messages = languages;
+                                        tutorial.sprites = sprites;
+                                        this.tutorialParsed(tutorial);
+                                    }
+                                });
+                            }
+                        }
+                    });
+
+                });
+            };
+            reader.readAsArrayBuffer(file);
+        }
+    }
+
+    tutorialParsed (tutorial){
+        // init tutorial object
+        const tutorialObject = {};
+        const images = {};
+
+
+        // parse images
+        for (const key of Object.keys(tutorial.images)){
+            const url = URL.createObjectURL(tutorial.images[key], {type: 'image/png'});
+            if (key.includes('thumbnail')){
+                tutorialObject.img = url;
+            } else {
+                images[key] = url;
+            }
+        }
+
+
+        // parse language files
+        for (const key of Object.keys(tutorial.messages)){
+            let messages = tutorial.messages[key];
+            // refine and execute messages object to get the desired information
+            messages = messages.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '').trim();
+            messages = messages.replace('export default', 'const messageObject =');
+            const messageFunc = new Function(`${messages}; return messageObject;`);
+            // save with key without ".js"
+            tutorialObject[key.split('.')[0]] = {default: messageFunc(), _esModule: true};
+        }
+
+        // parse indexJs global
+        let indexJs = tutorial.indexJsGlobal.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '').trim();
+        indexJs = indexJs.replace(/require\((.*?)\);/g, '$1');
+        indexJs = `
+             const exports = {};
+             ${indexJs}
+             return exports;`;
+        const indexJsFunc = new Function(indexJs);
+        // Execute the function to get the desired stuff
+        const indexJsObject = indexJsFunc();
+        tutorialObject.id = indexJsObject.id;
+        tutorialObject.difficulty = indexJsObject.difficulty;
+        tutorialObject.totalSteps = indexJsObject.totalSteps;
+        // downloads are no longer required for new tutorials
+        tutorialObject.totalDownloads = 0;
+        tutorialObject.uploaded = true;
+
+        // Parse IndexJs for Tests
+        let indexJsTest = tutorial.indexJsTestcases.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '').trim();
+        indexJsTest = indexJsTest.replace('export default', 'exports.default =');
+        // remove sprites (not needed)
+        const spriteIndex = indexJsTest.indexOf('sprites');
+        const closingSprite = indexJsTest.indexOf(']', spriteIndex);
+        indexJsTest = indexJsTest.slice(0, spriteIndex - 1) + indexJsTest.slice(closingSprite + 1);
+        // wrap in callable object
+        indexJsTest = `
+             const exports = {};
+             ${indexJsTest}
+             return exports;`;
+        const indexJsTestFunc = new Function(indexJsTest);
+        // Execute the function to get the desired stuff
+        const indexJsTestObject = indexJsTestFunc();
+        // set steps and sprites
+        tutorialObject.steps = indexJsTestObject.default.steps;
+        tutorialObject.sprites = tutorial.sprites;
+
+        // set all other images
+        for (const key in indexJsObject){
+            if (key.includes('image')){
+                const keyParts = indexJsObject[key].split('/');
+                tutorialObject[key] = images[keyParts[keyParts.length - 1]];
+            }
+        }
+
+        // push created tutorial
+        this.tutorials[tutorialObject.id] = tutorialObject;
+        this.setState({});
     }
 
     handleHome () {
@@ -108,7 +272,7 @@ class TutorialCards extends React.Component {
         let tutorial;
 
         if (this.props.selectedTutorial !== '') {
-            tutorial = tutorials[`${this.props.selectedTutorial}`];
+            tutorial = this.tutorials[`${this.props.selectedTutorial}`];
             let messages = tutorial[`messages${this.props.locale.toUpperCase()}`];
             if (typeof messages === 'undefined') {
                 messages = tutorial.messagesEN;
@@ -142,6 +306,8 @@ class TutorialCards extends React.Component {
                 homeButtonTitle={homeButtonTitle}
                 backButtonTitle={backButtonTitle}
                 onHomeMenu={this.handleHome}
+                onUpload={this.onUpload}
+                onCreateTutorial={this.props.handleCreationClick}
                 onNextStep={this.handleNext}
                 onPrevStep={this.handlePrev}
                 tutorialIndexData={tutorial}
@@ -164,6 +330,7 @@ TutorialCards.propTypes = {
     onCloseCards: PropTypes.func.isRequired,
     onReset: PropTypes.func.isRequired,
     onSelectTutorial: PropTypes.func.isRequired,
+    handleCreationClick: PropTypes.func,
     onHome: PropTypes.func.isRequired,
     locale: PropTypes.string.isRequired,
     isRtl: PropTypes.bool.isRequired,
@@ -190,6 +357,7 @@ const mapStateToProps = state => ({
     locale: state.locales.locale,
     isRtl: state.locales.isRtl,
     dragging: state.scratchGui.tutorialCards.dragging,
+    uploadedTutorial: state.uploadedTutorial,
     contentType: state.scratchGui.tutorialCards.contentType,
     tutorialPoints: state.scratchGui.tutorialCards.tutorialPoints,
 });
@@ -205,6 +373,7 @@ const mapDispatchToProps = dispatch => ({
     onSelectTutorial: (tutorial, totalSteps) => dispatch(selectTutorial(tutorial, totalSteps)),
     onHome: () => dispatch(homeMenu()),
     onReset: () => dispatch(reset()),
+    handleCreationClick: () => dispatch(openTutorialCreation()),
     onSetContentType: (contentType) => dispatch(setContentType(contentType)),
     startTutorial: () => dispatch(onStartTutorial()),
     onOpenHelp: () => dispatch(onOpenHelp()),

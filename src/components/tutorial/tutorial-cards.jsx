@@ -14,6 +14,9 @@ import closeIcon from '../cards/icon--close.svg';
 import leftArrow from '../cards/icon--prev.svg';
 import rightArrow from '../cards/icon--next.svg';
 import backIcon from './images/icon--back.png';
+import fileUploadIcon from '../../components/action-menu/icon--file-upload.svg';
+import createIcon from '../../components/action-menu/icon--sprite.svg';
+
 
 import VirtualMachine from 'scratch-vm';
 import DebuggingTutorialHelp from '../../containers/debugging-tutorial-help.jsx';
@@ -78,6 +81,8 @@ const TutorialHeader = props => {
         onCloseCards,
         onShrinkExpandCards,
         onHomeMenu,
+        onUpload,
+        onCreateTutorial,
         totalSteps,
         step,
         expanded,
@@ -122,7 +127,6 @@ const TutorialHeader = props => {
                     {guiMessages.points}
                 </div>}
             </div>
-
             <div className={tutorialStyles.cardTitleHeader}>
                 <span> {title} </span>
             </div>
@@ -164,6 +168,49 @@ const TutorialHeader = props => {
                         />
                     }
                 </div>
+                {expanded ?
+                    <div >
+                        <input
+                            type="file"
+                            id="file-upload"
+                            className={tutorialStyles.homeButton}
+                            onChange={onUpload}
+                            style={{display: 'none'}}
+                        />
+                        <label
+                            htmlFor="file-upload"
+                            className={tutorialStyles.homeButton}
+                        >
+                            <img
+                                className={tutorialStyles.homeButtonIcon}
+                                draggable={false}
+                                src={fileUploadIcon}
+                                alt="Upload"
+                            />
+                            <FormattedMessage
+                                defaultMessage="Tutorial Upload"
+                                description="Title for button to upload a tutorial"
+                                id="gui.cards.uploadTutorial"
+                            />
+                        </label>
+                    </div> : null}
+                {expanded ?
+                    <div
+                        className={tutorialStyles.homeButton}
+                        onClick={onCreateTutorial}
+                    >
+                        <img
+                            className={tutorialStyles.homeButtonIcon}
+                            draggable={false}
+                            src={createIcon}
+                            alt={'Create Icon'}
+                        />
+                        <FormattedMessage
+                            defaultMessage="Create Tutorial"
+                            description="Title for button to create a tutorial"
+                            id="gui.cards.createTutorial"
+                        />
+                    </div> : null}
                 <div
                     className={styles.removeButton}
                     onClick={onCloseCards}
@@ -191,6 +238,8 @@ TutorialHeader.propTypes = {
     onCloseCards: PropTypes.func.isRequired,
     onShrinkExpandCards: PropTypes.func.isRequired,
     onHomeMenu: PropTypes.func.isRequired,
+    onUpload: PropTypes.func.isRequired,
+    onCreateTutorial: PropTypes.func.isRequired,
     step: PropTypes.number,
     totalSteps: PropTypes.number,
     tutorialPoints: PropTypes.number
@@ -238,6 +287,8 @@ const TutorialCards = props => {
         onPrevStep,
         onSelectTutorial,
         onHomeMenu,
+        onUpload,
+        onCreateTutorial,
         totalSteps,
         step,
         expanded,
@@ -360,6 +411,8 @@ const TutorialCards = props => {
                             contentType={contentType}
                             tutorialPoints={tutorialPoints}
                             guiMessages={guiMessages}
+                            onUpload={onUpload}
+                            onCreateTutorial={onCreateTutorial}
                         />
                         <div
                             className={expanded ? classNames(styles.stepBody, tutorialStyles.stepBody) : styles.hidden}
@@ -419,6 +472,8 @@ TutorialCards.propTypes = {
     onStartDrag: PropTypes.func,
     onSelectTutorial: PropTypes.func.isRequired,
     onHomeMenu: PropTypes.func.isRequired,
+    onUpload: PropTypes.func.isRequired,
+    onCreateTutorial: PropTypes.func.isRequired,
     totalSteps: PropTypes.number.isRequired,
     step: PropTypes.number.isRequired,
     currentTutorialStep: PropTypes.number.isRequired,
