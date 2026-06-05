@@ -31,11 +31,11 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
         feedback: null
     };
 
-    componentDidMount() {
+    componentDidMount () {
         this.updateQuestionTextHtml();
     }
 
-    componentDidUpdate(
+    componentDidUpdate (
         prevProps: Readonly<LitterBoxQuestionProps>,
         prevState: Readonly<LitterBoxQuestionState>
     ) {
@@ -48,11 +48,11 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
         }
     }
 
-    private updateQuestionTextHtml(): void {
+    private updateQuestionTextHtml (): void {
         this.setState({questionTextHtml: this.toHtml(this.props.question.questionText)});
     }
 
-    private triggerInlineScratchBlocksRender(): void {
+    private triggerInlineScratchBlocksRender (): void {
         scratchblocks.renderMatching('code.b', {
             inline: true,
             style: 'scratch3',
@@ -61,27 +61,33 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
         });
     }
 
-    private translateBlockText(blockText: string): string {
-        if (this.props.locale === 'en') return blockText;
+    private translateBlockText (blockText: string): string {
+        if (this.props.locale === 'en') {
+            return blockText;
+        }
         try {
             const lang = scratchblocks.allLanguages[this.props.locale];
-            if (!lang) return blockText;
+            if (!lang) {
+                return blockText;
+            }
             const block = scratchblocks.parse(blockText, {languages: ['en', this.props.locale]});
             block.translate(lang);
             return block.stringify();
-        } catch (e) {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (_ignored) {
             return blockText;
         }
     }
 
-    private toHtml(text: string | undefined): string {
+    private toHtml (text: string | undefined): string {
         if (!text) return '';
         let html = text.replace(/\[b]/g, '<strong>');
         html = html.replace(/\[\/b]/g, '</strong>');
         html = html.replace(/\[newLine]/g, '<br />');
         html = html.replace(/\[sbi]([\s\S]*?)\[\/sbi]/g, (_, blockCode) => {
             const translated = this.translateBlockText(blockCode.trim());
-            const escaped = translated.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            const escaped = translated.replace(/&/g, '&amp;').replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
             return `<code class="b">${escaped}</code>`;
         });
         html = html.replace(/\[var]/g, '<code class="b">(Variable "');
@@ -91,18 +97,18 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
         return html;
     }
 
-    private titleColor(): string {
+    private titleColor (): string {
         switch (this.props.question.type) {
-            case 'MULTIPLE_CHOICE':
-                return 'dodgerblue';
-            case 'YES_NO':
-                return 'green';
-            case 'NUMBER':
-                return 'orange';
-            case 'FREE_TEXT':
-                return 'gray';
-            default:
-                return 'black';
+        case 'MULTIPLE_CHOICE':
+            return 'dodgerblue';
+        case 'YES_NO':
+            return 'green';
+        case 'NUMBER':
+            return 'orange';
+        case 'FREE_TEXT':
+            return 'gray';
+        default:
+            return 'black';
         }
     }
 
@@ -135,10 +141,10 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
             givenAnswer = selectedChoice;
             isCorrect = correctAnswers.some(a => a.toLowerCase() === selectedChoice.toLowerCase());
         } else if (question.type === 'NUMBER') {
-            const userNum = parseFloat(inputValue);
-            if (isNaN(userNum)) return;
+            const userNum = Number.parseFloat(inputValue);
+            if (Number.isNaN(userNum)) return;
             givenAnswer = inputValue;
-            isCorrect = correctAnswers.some(a => parseFloat(a) === userNum);
+            isCorrect = correctAnswers.some(a => Number.parseFloat(a) === userNum);
         } else if (question.type === 'FREE_TEXT') {
             if (!inputValue.trim()) return;
             givenAnswer = inputValue;
@@ -154,13 +160,13 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
         this.setState({feedback: isCorrect ? 'correct' : 'incorrect'});
     };
 
-    private handleQuestionLog(logMsg: any, purpose: string) {
+    private handleQuestionLog (logMsg: any, purpose: string) {
         if (logging.isActive()) {
             logging.logJsonEvent(`LitterBox_QLC_${purpose}.json`, 'LITTERBOX', 'QUESTION', logMsg, new Date());
         }
     }
 
-    private renderChoiceOptions(): React.ReactNode {
+    private renderChoiceOptions (): React.ReactNode {
         const {question} = this.props;
         const {selectedChoice, feedback} = this.state;
         const choices = question.choices || [];
@@ -182,13 +188,13 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
 
                     return (
                         <div
-                            key={i}
+                            key={choice}
                             className={className}
                             onClick={() => this.handleSelectChoice(choice)}
                         >
                             <span className={questionStyles.optionLetter}>{letters[i]}</span>
                             {/* eslint-disable-next-line react/no-danger */}
-                            <span dangerouslySetInnerHTML={{__html: this.toHtml(choice)}}/>
+                            <span dangerouslySetInnerHTML={{__html: this.toHtml(choice)}} />
                         </div>
                     );
                 })}
@@ -196,14 +202,22 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
         );
     }
 
-    private renderYesNoOptions(): React.ReactNode {
+    private renderYesNoOptions (): React.ReactNode {
         const {question} = this.props;
         const {selectedChoice, feedback} = this.state;
         const hasCustomChoices = !!(question.choices?.length);
         const choices: string[] = question.choices?.length ? question.choices : ['Yes', 'No'];
         const yesNoLabels = [
-            <FormattedMessage id="gui.litterBox.question.yes" defaultMessage="Yes" />,
-            <FormattedMessage id="gui.litterBox.question.no" defaultMessage="No" />
+            <FormattedMessage
+                key={'yes'}
+                id="gui.litterBox.question.yes"
+                defaultMessage="Yes"
+            />,
+            <FormattedMessage
+                key={'no'}
+                id="gui.litterBox.question.no"
+                defaultMessage="No"
+            />
         ];
 
         return (
@@ -222,13 +236,13 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
 
                     return (
                         <div
-                            key={i}
+                            key={choice}
                             className={className}
                             onClick={() => this.handleSelectChoice(choice)}
                         >
                             {hasCustomChoices ?
                                 // eslint-disable-next-line react/no-danger
-                                <span dangerouslySetInnerHTML={{__html: this.toHtml(choice)}}/> :
+                                <span dangerouslySetInnerHTML={{__html: this.toHtml(choice)}} /> :
                                 <span>{yesNoLabels[i]}</span>
                             }
                         </div>
@@ -238,7 +252,7 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
         );
     }
 
-    private renderTextInput(type: 'text' | 'number'): React.ReactNode {
+    private renderTextInput (type: 'text' | 'number'): React.ReactNode {
         return (
             <input
                 type={type}
@@ -250,7 +264,7 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
         );
     }
 
-    private renderFeedback(): React.ReactNode {
+    private renderFeedback (): React.ReactNode {
         const {feedback} = this.state;
         if (feedback === null) return null;
         if (feedback === 'manual') {
@@ -270,7 +284,7 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
         );
     }
 
-    private renderAnswerSection(): React.ReactNode {
+    private renderAnswerSection (): React.ReactNode {
         const {question} = this.props;
         const hasCorrectAnswers = (question.correctAnswers || []).length > 0;
 
@@ -305,7 +319,7 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
         );
     }
 
-    render() {
+    render () {
         const {question, index, total} = this.props;
 
         return (

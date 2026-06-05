@@ -56,14 +56,14 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
         previousProject: undefined
     };
 
-    componentDidMount() {
+    componentDidMount () {
         if (logging.isActive()) {
             logging.logClickEvent('ICON', new Date(), 'LB_OPEN', null);
         }
         this.fetchLitterBoxIssues();
     }
 
-    componentWillUnmount() {
+    componentWillUnmount () {
         if (logging.isActive()) {
             logging.logClickEvent('ICON', new Date(), 'LB_CLOSE', null);
         }
@@ -77,14 +77,14 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
         }));
 
         switch (feature) {
-            case LitterBoxFeature.ISSUES:
-                this.handleOnSelectIssues();
-                break;
-            case LitterBoxFeature.LLM_QUESTION:
-                break;
-            case LitterBoxFeature.QUESTIONS:
-                this.handleOnSelectQuestions();
-                break;
+        case LitterBoxFeature.ISSUES:
+            this.handleOnSelectIssues();
+            break;
+        case LitterBoxFeature.LLM_QUESTION:
+            break;
+        case LitterBoxFeature.QUESTIONS:
+            this.handleOnSelectQuestions();
+            break;
         }
     };
 
@@ -287,7 +287,7 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
             });
     };
 
-    render() {
+    render () {
         return (
             <Box className={styles.main}>
                 <div style={{width: 'fit-content', marginRight: '0.5rem'}}>
