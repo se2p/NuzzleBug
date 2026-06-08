@@ -6,6 +6,7 @@ import styles from './hints.css';
 import questionStyles from './litter-box-question.css';
 import sharedStyles from './shared.css';
 import scratchblocks from 'scratchblocks';
+import ScratchBlocksReact from 'scratchblocks-react';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import logging from 'scratch-vm/src/util/logging.js';
 
@@ -180,6 +181,42 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
         }
     }
 
+    private renderChoiceContent (choice: string): React.ReactNode {
+        const parts: React.ReactNode[] = [];
+        let lastIndex = 0;
+        const SCRATCHBLOCKS_PATTERN = /\[scratchblocks]([\s\S]*?)\[\/scratchblocks]/g;
+        let match: RegExpExecArray | null;
+        // eslint-disable-next-line no-cond-assign
+        while ((match = SCRATCHBLOCKS_PATTERN.exec(choice)) !== null) {
+            if (match.index > lastIndex) {
+                const textPart = choice.slice(lastIndex, match.index);
+                parts.push(
+                    // eslint-disable-next-line react/no-danger
+                    <span key={`text-${lastIndex}`} dangerouslySetInnerHTML={{__html: this.toHtml(textPart)}} />
+                );
+            }
+            const blockCode = this.translateBlockText(match[1].trim());
+            parts.push(
+                <ScratchBlocksReact key={`blocks-${match.index}`} blockStyle="scratch3" languages={['en', 'de']}>
+                    {blockCode}
+                </ScratchBlocksReact>
+            );
+            lastIndex = match.index + match[0].length;
+        }
+        if (lastIndex < choice.length) {
+            const textPart = choice.slice(lastIndex);
+            if (lastIndex === 0) {
+                // eslint-disable-next-line react/no-danger
+                return <span dangerouslySetInnerHTML={{__html: this.toHtml(textPart)}} />;
+            }
+            parts.push(
+                // eslint-disable-next-line react/no-danger
+                <span key={`text-${lastIndex}`} dangerouslySetInnerHTML={{__html: this.toHtml(textPart)}} />
+            );
+        }
+        return parts.length === 0 ? null : <>{parts}</>;
+    }
+
     private renderChoiceOptions (): React.ReactNode {
         const {question} = this.props;
         const {selectedChoices, feedback} = this.state;
@@ -207,8 +244,7 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
                             onClick={() => this.handleSelectChoice(choice, true)}
                         >
                             <span className={questionStyles.optionLetter}>{letters[i]}</span>
-                            {/* eslint-disable-next-line react/no-danger */}
-                            <span dangerouslySetInnerHTML={{__html: this.toHtml(choice)}} />
+                            <div>{this.renderChoiceContent(choice)}</div>
                         </button>
                     );
                 })}
@@ -244,8 +280,7 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
                             className={className}
                             onClick={() => this.handleSelectChoice(choice)}
                         >
-                            {/* eslint-disable-next-line react/no-danger */}
-                            <span dangerouslySetInnerHTML={{__html: this.toHtml(choice)}} />
+                            <div>{this.renderChoiceContent(choice)}</div>
                         </button>
                     );
                 })}
