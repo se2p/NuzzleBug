@@ -6,7 +6,7 @@ import styles from './hints.css';
 import questionStyles from './litter-box-question.css';
 import sharedStyles from './shared.css';
 import scratchblocks from 'scratchblocks';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, injectIntl} from 'react-intl';
 import logging from 'scratch-vm/src/util/logging.js';
 
 interface LitterBoxQuestionProps {
@@ -14,6 +14,7 @@ interface LitterBoxQuestionProps {
     index: number;
     total: number;
     locale: string;
+    intl: IntlShape;
 }
 
 interface LitterBoxQuestionState {
@@ -216,26 +217,16 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
     }
 
     private renderYesNoOptions (): React.ReactNode {
-        const {question} = this.props;
+        const {question, intl} = this.props;
         const {selectedChoices, feedback} = this.state;
-        const hasCustomChoices = !!(question.choices?.length);
-        const choices: string[] = question.choices?.length ? question.choices : ['Yes', 'No'];
-        const yesNoLabels = [
-            <FormattedMessage
-                key={'yes'}
-                id="gui.litterBox.question.yes"
-                defaultMessage="Yes"
-            />,
-            <FormattedMessage
-                key={'no'}
-                id="gui.litterBox.question.no"
-                defaultMessage="No"
-            />
+        const choices: string[] = question.choices?.length ? question.choices : [
+            intl.formatMessage({id: 'gui.litterBox.question.yes', defaultMessage: 'Yes'}),
+            intl.formatMessage({id: 'gui.litterBox.question.no', defaultMessage: 'No'})
         ];
 
         return (
             <div className={questionStyles.answerOptions}>
-                {choices.map((choice, i) => {
+                {choices.map(choice => {
                     const isSelected = selectedChoices[0] === choice;
                     const isCorrect = (question.correctAnswers || []).some(
                         a => a.toLowerCase() === choice.toLowerCase()
@@ -253,11 +244,8 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
                             className={className}
                             onClick={() => this.handleSelectChoice(choice)}
                         >
-                            {hasCustomChoices ?
-                                // eslint-disable-next-line react/no-danger
-                                <span dangerouslySetInnerHTML={{__html: this.toHtml(choice)}} /> :
-                                <span>{yesNoLabels[i]}</span>
-                            }
+                            {/* eslint-disable-next-line react/no-danger */}
+                            <span dangerouslySetInnerHTML={{__html: this.toHtml(choice)}} />
                         </button>
                     );
                 })}
@@ -377,4 +365,4 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
     }
 }
 
-export default LitterBoxQuestionComponent;
+export default injectIntl(LitterBoxQuestionComponent);
