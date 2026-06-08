@@ -292,7 +292,13 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
         }
         return (
             <div className={feedback === 'correct' ? questionStyles.feedbackCorrect : questionStyles.feedbackIncorrect}>
-                {feedback === 'correct' ? '✓ Correct!' : '✗ Incorrect'}
+                {feedback === 'correct' ? <FormattedMessage
+                    id={'gui.litterBox.question.correct'}
+                    defaultMessage={'✓ Correct!'}
+                /> : <FormattedMessage
+                    id={'gui.litterBox.question.incorrect'}
+                    defaultMessage={'✗ Incorrect'}
+                />}
             </div>
         );
     }
