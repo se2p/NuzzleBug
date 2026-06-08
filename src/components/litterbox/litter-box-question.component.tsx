@@ -18,7 +18,7 @@ interface LitterBoxQuestionProps {
 
 interface LitterBoxQuestionState {
     questionTextHtml: string;
-    selectedChoice: string | null;
+    selectedChoices: string[];
     inputValue: string;
     feedback: 'correct' | 'incorrect' | 'manual' | null;
 }
@@ -26,7 +26,7 @@ interface LitterBoxQuestionState {
 class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps, LitterBoxQuestionState> {
     state: LitterBoxQuestionState = {
         questionTextHtml: '',
-        selectedChoice: null,
+        selectedChoices: [],
         inputValue: '',
         feedback: null
     };
@@ -41,7 +41,7 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
     ) {
         if (prevProps.question !== this.props.question) {
             this.updateQuestionTextHtml();
-            this.setState({selectedChoice: null, inputValue: '', feedback: null});
+            this.setState({selectedChoices: [], inputValue: '', feedback: null});
         }
         if (prevState.questionTextHtml !== this.state.questionTextHtml) {
             this.triggerInlineScratchBlocksRender();
@@ -112,9 +112,17 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
         }
     }
 
-    private readonly handleSelectChoice = (choice: string) => {
-        if (this.state.feedback === null) {
-            this.setState({selectedChoice: choice});
+    private readonly handleSelectChoice = (choice: string, multiSelect = false) => {
+        if (this.state.feedback !== null) return;
+        if (multiSelect) {
+            const {selectedChoices} = this.state;
+            if (selectedChoices.includes(choice)) {
+                this.setState({selectedChoices: selectedChoices.filter(c => c !== choice)});
+            } else {
+                this.setState({selectedChoices: [...selectedChoices, choice]});
+            }
+        } else {
+            this.setState({selectedChoices: [choice]});
         }
     };
 
@@ -123,7 +131,7 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
             logging.logClickEvent('BUTTON', new Date(), 'LB_CHECK_ANSWER', null);
         }
         const {question} = this.props;
-        const {selectedChoice, inputValue} = this.state;
+        const {selectedChoices, inputValue} = this.state;
         const correctAnswers = question.correctAnswers || [];
 
         if (question.type === 'FREE_TEXT' && correctAnswers.length === 0) {
@@ -136,10 +144,15 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
         let isCorrect = false;
         let givenAnswer: string | null = null;
 
-        if (question.type === 'MULTIPLE_CHOICE' || question.type === 'YES_NO') {
-            if (selectedChoice === null) return;
-            givenAnswer = selectedChoice;
-            isCorrect = correctAnswers.some(a => a.toLowerCase() === selectedChoice.toLowerCase());
+        if (question.type === 'MULTIPLE_CHOICE') {
+            if (selectedChoices.length === 0) return;
+            givenAnswer = selectedChoices.join(', ');
+            isCorrect = correctAnswers.length === selectedChoices.length &&
+                correctAnswers.every(a => selectedChoices.some(s => s.toLowerCase() === a.toLowerCase()));
+        } else if (question.type === 'YES_NO') {
+            if (selectedChoices.length === 0) return;
+            givenAnswer = selectedChoices[0];
+            isCorrect = correctAnswers.some(a => a.toLowerCase() === selectedChoices[0].toLowerCase());
         } else if (question.type === 'NUMBER') {
             const userNum = Number.parseFloat(inputValue);
             if (Number.isNaN(userNum)) return;
@@ -168,14 +181,14 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
 
     private renderChoiceOptions (): React.ReactNode {
         const {question} = this.props;
-        const {selectedChoice, feedback} = this.state;
+        const {selectedChoices, feedback} = this.state;
         const choices = question.choices || [];
         const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
         return (
             <div className={questionStyles.answerOptions}>
                 {choices.map((choice, i) => {
-                    const isSelected = selectedChoice === choice;
+                    const isSelected = selectedChoices.includes(choice);
                     const isCorrect = (question.correctAnswers || []).some(
                         a => a.toLowerCase() === choice.toLowerCase()
                     );
@@ -190,7 +203,7 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
                         <button
                             key={choice}
                             className={className}
-                            onClick={() => this.handleSelectChoice(choice)}
+                            onClick={() => this.handleSelectChoice(choice, true)}
                         >
                             <span className={questionStyles.optionLetter}>{letters[i]}</span>
                             {/* eslint-disable-next-line react/no-danger */}
@@ -204,7 +217,7 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
 
     private renderYesNoOptions (): React.ReactNode {
         const {question} = this.props;
-        const {selectedChoice, feedback} = this.state;
+        const {selectedChoices, feedback} = this.state;
         const hasCustomChoices = !!(question.choices?.length);
         const choices: string[] = question.choices?.length ? question.choices : ['Yes', 'No'];
         const yesNoLabels = [
@@ -223,7 +236,7 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
         return (
             <div className={questionStyles.answerOptions}>
                 {choices.map((choice, i) => {
-                    const isSelected = selectedChoice === choice;
+                    const isSelected = selectedChoices[0] === choice;
                     const isCorrect = (question.correctAnswers || []).some(
                         a => a.toLowerCase() === choice.toLowerCase()
                     );
