@@ -15,6 +15,9 @@
     cursor: pointer;
     user-select: none;
     background: white;
+    font: inherit;
+    text-align: left;
+    width: 100%;
 }
 
 .answer-option:hover {

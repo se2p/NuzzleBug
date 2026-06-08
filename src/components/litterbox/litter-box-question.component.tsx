@@ -187,7 +187,7 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
                     ].filter(Boolean).join(' ');
 
                     return (
-                        <div
+                        <button
                             key={choice}
                             className={className}
                             onClick={() => this.handleSelectChoice(choice)}
@@ -195,7 +195,7 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
                             <span className={questionStyles.optionLetter}>{letters[i]}</span>
                             {/* eslint-disable-next-line react/no-danger */}
                             <span dangerouslySetInnerHTML={{__html: this.toHtml(choice)}} />
-                        </div>
+                        </button>
                     );
                 })}
             </div>
@@ -235,7 +235,7 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
                     ].filter(Boolean).join(' ');
 
                     return (
-                        <div
+                        <button
                             key={choice}
                             className={className}
                             onClick={() => this.handleSelectChoice(choice)}
@@ -245,7 +245,7 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
                                 <span dangerouslySetInnerHTML={{__html: this.toHtml(choice)}} /> :
                                 <span>{yesNoLabels[i]}</span>
                             }
-                        </div>
+                        </button>
                     );
                 })}
             </div>
