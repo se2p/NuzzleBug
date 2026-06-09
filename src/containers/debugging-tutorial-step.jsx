@@ -46,10 +46,9 @@ class DebuggingTutorialStep extends React.Component {
     }
 
     onTest () {
-        if (logging.isActive()) {
-            logging.logClickEvent('ICON', new Date(), 'START_TESTS', null);
-            logging.pauseLogging(true);
-        }
+        logging.logClickEvent('ICON', new Date(), 'START_TESTS', null);
+        logging.pauseLogging(true);
+
         this.props.setLoadingProject('TEST');
         this.props.lockVM();
         this.props.setTestPageIndex(0);
@@ -97,12 +96,11 @@ class DebuggingTutorialStep extends React.Component {
     }
 
     onNextStep () {
-        if (logging.isActive()) {
-            logging.pauseLogging(false);
-            logging.logClickEvent('ICON', new Date(), 'NEXT_STEP', null);
-            logTutorialScore(this.props.tutorialPoints + 3, `${this.props.tutorialMessages?.title}_${this.props.step + 1}`);
-            logging.pauseLogging(true);
-        }
+        logging.pauseLogging(false);
+        logging.logClickEvent('ICON', new Date(), 'NEXT_STEP', null);
+        logTutorialScore(this.props.tutorialPoints + 3, `${this.props.tutorialMessages?.title}_${this.props.step + 1}`);
+        logging.pauseLogging(true);
+
 
         this.props.setTutorialPoints(this.props.tutorialPoints + 3); // Add 3 points
         this.props.setLoadingProject('NEXT');

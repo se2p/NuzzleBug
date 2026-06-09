@@ -40,10 +40,7 @@ const handleFileUpload = function (fileInput, onload, onerror) {
             const fileName = extractFileName(file.name);
             onload(reader.result, fileType, fileName, i, files.length);
             readFile(i + 1, files);
-
-            if (logging.isActive()) {
-                logging.logFile(file.name, file.type, file, new Date());
-            }
+            logging.logFile(file.name, file.type, file, new Date());
         };
         reader.onerror = onerror;
         reader.readAsArrayBuffer(file);

@@ -227,8 +227,10 @@ class IRAnswer extends React.Component {
 
     _initGraphSize () {
         const svgNode = this.graphDiv.current.children[0];
-        const height = Number(svgNode.getAttribute('height').split('pt')[0]) + 20;
-        const width = Number(svgNode.getAttribute('width').split('pt')[0]);
+        const height = Number(svgNode.getAttribute('height')
+            .split('pt')[0]) + 20;
+        const width = Number(svgNode.getAttribute('width')
+            .split('pt')[0]);
         this.graphSize = {height, width};
         let zoomFactor = 1;
         if (width > 600) {
@@ -331,14 +333,17 @@ class IRAnswer extends React.Component {
         }
         const background = {color, title};
         const svgBlock = this.props.createSvgBlock(block, scaleFactor, executionInfo, background);
-        const width = Number(svgBlock.getAttribute('width').split('px')[0]);
-        const height = Number(svgBlock.getAttribute('height').split('px')[0]);
+        const width = Number(svgBlock.getAttribute('width')
+            .split('px')[0]);
+        const height = Number(svgBlock.getAttribute('height')
+            .split('px')[0]);
         svgGraphNode.appendChild(svgBlock);
         return {id: blockId, width, height, isStackBlock: !block.outputConnection && block.previousConnection};
     }
 
     _getScratchBlock (blockId) {
-        let block = ScratchBlocks.getAbstractWorkspace().getBlockById(blockId);
+        let block = ScratchBlocks.getAbstractWorkspace()
+            .getBlockById(blockId);
         if (block) {
             return block;
         }
@@ -917,7 +922,8 @@ class IRAnswer extends React.Component {
 
         // Hide the responsible targets if the answer graph only contains blocks of the selected target of interest.
         if (this.props.answer.graph.responsibleTargetIds.size === 1 && !this.props.block &&
-            this.props.answer.graph.responsibleTargetIds.values().next().value === this.target.id) {
+            this.props.answer.graph.responsibleTargetIds.values()
+                .next().value === this.target.id) {
             return;
         }
 
@@ -1050,21 +1056,20 @@ class IRAnswer extends React.Component {
         }
         this.forceUpdate();
 
-        if (logging.isActive()) {
-            const question = this.props.selectedQuestion;
-            logging.logQuestionEvent(
-                'QUESTION',
-                new Date(),
-                'RATE',
-                this.props.block ? this.props.block.id : null,
-                question.feedback,
-                getContentMessageKey(question.content, question.values),
-                Object.values(question.values).join(', '),
-                question.category,
-                question.form,
-                this.props.block ? this.props.block.opcode : null
-            );
-        }
+        const question = this.props.selectedQuestion;
+        logging.logQuestionEvent(
+            'QUESTION',
+            new Date(),
+            'RATE',
+            this.props.block ? this.props.block.id : null,
+            question.feedback,
+            getContentMessageKey(question.content, question.values),
+            Object.values(question.values)
+                .join(', '),
+            question.category,
+            question.form,
+            this.props.block ? this.props.block.opcode : null
+        );
     }
 
     getFeedbackIcon (feedback) {

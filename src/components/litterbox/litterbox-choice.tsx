@@ -21,23 +21,17 @@ interface LitterBoxFeatureSelectorProps {
 class LitterBoxFeatureSelector extends React.Component<LitterBoxFeatureSelectorProps, never> {
 
     private readonly handleSelectIssues = () => {
-        if (logging.isActive()) {
-            logging.logClickEvent('BUTTON', new Date(), 'LB_CODE_QUALITY', null);
-        }
+        logging.logClickEvent('BUTTON', new Date(), 'LB_CODE_QUALITY', null);
         this.props.onSelect(LitterBoxFeature.ISSUES);
     };
 
     private readonly handleSelectLlmQuestion = () => {
-        if (logging.isActive()) {
-            logging.logClickEvent('BUTTON', new Date(), 'LB_ASK', null);
-        }
+        logging.logClickEvent('BUTTON', new Date(), 'LB_ASK', null);
         this.props.onSelect(LitterBoxFeature.LLM_QUESTION);
     };
 
     private readonly handleSelectQuestions = () => {
-        if (logging.isActive()) {
-            logging.logClickEvent('BUTTON', new Date(), 'LB_CODE_UNDERSTANDING', null);
-        }
+        logging.logClickEvent('BUTTON', new Date(), 'LB_CODE_UNDERSTANDING', null);
         this.props.onSelect(LitterBoxFeature.QUESTIONS);
     };
 

@@ -129,9 +129,8 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
     };
 
     private readonly handleCheckAnswer = () => {
-        if (logging.isActive()) {
-            logging.logClickEvent('BUTTON', new Date(), 'LB_CHECK_ANSWER', null);
-        }
+        logging.logClickEvent('BUTTON', new Date(), 'LB_CHECK_ANSWER', null);
+
         const {question} = this.props;
         const {selectedChoices, inputValue} = this.state;
         const correctAnswers = question.correctAnswers || [];
@@ -176,9 +175,7 @@ class LitterBoxQuestionComponent extends React.Component<LitterBoxQuestionProps,
     };
 
     private handleQuestionLog (logMsg: any, purpose: string) {
-        if (logging.isActive()) {
-            logging.logJsonEvent(`LitterBox_QLC_${purpose}.json`, 'LITTERBOX', 'QUESTION', logMsg, new Date());
-        }
+        logging.logJsonEvent(`LitterBox_QLC_${purpose}.json`, 'LITTERBOX', 'QUESTION', logMsg, new Date());
     }
 
     private renderChoiceContent (choice: string): React.ReactNode {
