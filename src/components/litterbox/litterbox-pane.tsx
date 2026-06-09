@@ -9,10 +9,13 @@ import {
     askQuestion,
     explainIssue,
     fixIssue,
+    generateQuestions,
     LitterBoxHint,
+    LitterBoxQuestion,
     runLitterBoxAnalysis
 } from '../../containers/litterbox-web-api.ts';
 import LitterBoxLlmQuestionComponent from './litterbox-llm-question.component.tsx';
+import LitterBoxQuestionsComponent from './litterbox-questions.tsx';
 import logging from 'scratch-vm/src/util/logging.js';
 
 interface LitterBoxPaneProps {
@@ -36,6 +39,7 @@ interface PreviousProject {
 interface LitterBoxPaneState {
     selectedFeature: LitterBoxFeature;
     litterBoxIssues: LitterBoxHint[] | undefined;
+    litterBoxQuestions: LitterBoxQuestion[] | undefined;
     llmResponse: string | undefined;
     analysisIsForCurrentProject: boolean;
     previousProject: PreviousProject | undefined;
@@ -46,18 +50,23 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
     state: LitterBoxPaneState = {
         selectedFeature: LitterBoxFeature.ISSUES,
         litterBoxIssues: undefined,
+        litterBoxQuestions: undefined,
         llmResponse: undefined,
         analysisIsForCurrentProject: true,
         previousProject: undefined
     };
 
-    componentDidMount() {
-        logging.logClickEvent('ICON', new Date(), 'LB_OPEN', null);
+    componentDidMount () {
+        if (logging.isActive()) {
+            logging.logClickEvent('ICON', new Date(), 'LB_OPEN', null);
+        }
         this.fetchLitterBoxIssues();
     }
 
-    componentWillUnmount() {
-        logging.logClickEvent('ICON', new Date(), 'LB_CLOSE', null);
+    componentWillUnmount () {
+        if (logging.isActive()) {
+            logging.logClickEvent('ICON', new Date(), 'LB_CLOSE', null);
+        }
     }
 
 
@@ -68,13 +77,14 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
         }));
 
         switch (feature) {
-            case LitterBoxFeature.ISSUES:
-                this.handleOnSelectIssues();
-                break;
-            case LitterBoxFeature.LLM_QUESTION:
-            case LitterBoxFeature.QUESTIONS:
-                // do nothing for now
-                break;
+        case LitterBoxFeature.ISSUES:
+            this.handleOnSelectIssues();
+            break;
+        case LitterBoxFeature.LLM_QUESTION:
+            break;
+        case LitterBoxFeature.QUESTIONS:
+            this.handleOnSelectQuestions();
+            break;
         }
     };
 
@@ -82,6 +92,23 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
         if (!this.state.litterBoxIssues) {
             this.fetchLitterBoxIssues();
         }
+    };
+
+    private readonly handleOnSelectQuestions = () => {
+        if (!this.state.litterBoxQuestions) {
+            this.fetchLitterBoxQuestions();
+        }
+    };
+
+    private readonly fetchLitterBoxQuestions = () => {
+        generateQuestions(this.props.vm.toJSON(), this.props.locale)
+            .then(litterBoxQuestions => {
+                this.setState({litterBoxQuestions});
+            })
+            .catch(err => {
+                console.log(err);
+                this.setState({litterBoxQuestions: []});
+            });
     };
 
     private readonly fetchLitterBoxIssues = () => {
@@ -102,12 +129,23 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
     };
 
     private readonly handleRecheckCodeQuality = () => {
-        logging.logClickEvent('BUTTON', new Date(), 'LB_CHECK_AGAIN', null);
+        if (logging.isActive()) {
+            logging.logClickEvent('BUTTON', new Date(), 'LB_CHECK_AGAIN', null);
+        }
         this.fetchLitterBoxIssues();
     };
 
+    private readonly handleRecheckQuestions = () => {
+        if (logging.isActive()) {
+            logging.logClickEvent('BUTTON', new Date(), 'LB_CODE_UNDERSTANDING_CHECK_AGAIN', null);
+        }
+        this.fetchLitterBoxQuestions();
+    };
+
     private readonly handleOnExplainIssue = (id: number) => {
-        logging.logClickEvent('BUTTON', new Date(), 'LB_GPT_EXPLAIN', null);
+        if (logging.isActive()) {
+            logging.logClickEvent('BUTTON', new Date(), 'LB_GPT_EXPLAIN', null);
+        }
         const relevantIssue = this.findIssue(id);
         if (relevantIssue === undefined) {
             return;
@@ -134,11 +172,15 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
     };
 
     private handleQuestionLog (logMsg: any, purpose: string) {
-        logging.logJsonEvent(`LLM_${purpose}.json`, 'LITTERBOX', 'LLM', logMsg, new Date());
+        if (logging.isActive()) {
+            logging.logJsonEvent(`LLM_${purpose}.json`, 'LITTERBOX', 'LLM', logMsg, new Date());
+        }
     }
 
     private readonly handleOnFixIssue = (id: number) => {
-        logging.logClickEvent('BUTTON', new Date(), 'LB_GPT_FIX', null);
+        if (logging.isActive()) {
+            logging.logClickEvent('BUTTON', new Date(), 'LB_GPT_FIX', null);
+        }
         const relevantIssue = this.findIssue(id);
         if (relevantIssue === undefined) {
             return;
@@ -175,7 +217,9 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
     };
 
     private readonly handleOnRevertFix = () => {
-        logging.logClickEvent('BUTTON', new Date(), 'LB_REVERT_FIX', null);
+        if (logging.isActive()) {
+            logging.logClickEvent('BUTTON', new Date(), 'LB_REVERT_FIX', null);
+        }
         if (this.state.previousProject === undefined) {
             return;
         }
@@ -243,10 +287,10 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
             });
     };
 
-    render() {
+    render () {
         return (
             <Box className={styles.main}>
-                <div style={{maxWidth: '100px', marginRight: '0.5rem'}}>
+                <div style={{width: 'fit-content', marginRight: '0.5rem'}}>
                     <LitterBoxFeatureSelector
                         selectedFeature={this.state.selectedFeature}
                         onSelect={this.handleOnSelectFeature}
@@ -263,6 +307,15 @@ class LitterBoxPane extends React.Component<LitterBoxPaneProps, LitterBoxPaneSta
                             analysisIsForCurrentProject={this.state.analysisIsForCurrentProject}
                             issues={this.state.litterBoxIssues ?? []}
                             locale={this.props.locale}
+                        /> :
+                        null
+                }
+                {
+                    this.state.selectedFeature === LitterBoxFeature.QUESTIONS ?
+                        <LitterBoxQuestionsComponent
+                            questions={this.state.litterBoxQuestions ?? []}
+                            locale={this.props.locale}
+                            onRecheck={this.handleRecheckQuestions}
                         /> :
                         null
                 }

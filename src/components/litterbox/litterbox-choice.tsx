@@ -8,8 +8,8 @@ import logging from 'scratch-vm/src/util/logging.js';
 
 export enum LitterBoxFeature {
     ISSUES,
-    LLM_QUESTION,
     QUESTIONS,
+    LLM_QUESTION,
 }
 
 interface LitterBoxFeatureSelectorProps {
@@ -21,16 +21,23 @@ interface LitterBoxFeatureSelectorProps {
 class LitterBoxFeatureSelector extends React.Component<LitterBoxFeatureSelectorProps, never> {
 
     private readonly handleSelectIssues = () => {
-        logging.logClickEvent('BUTTON', new Date(), 'LB_CODE_QUALITY', null);
+        if (logging.isActive()) {
+            logging.logClickEvent('BUTTON', new Date(), 'LB_CODE_QUALITY', null);
+        }
         this.props.onSelect(LitterBoxFeature.ISSUES);
     };
 
     private readonly handleSelectLlmQuestion = () => {
-        logging.logClickEvent('BUTTON', new Date(), 'LB_ASK', null);
+        if (logging.isActive()) {
+            logging.logClickEvent('BUTTON', new Date(), 'LB_ASK', null);
+        }
         this.props.onSelect(LitterBoxFeature.LLM_QUESTION);
     };
 
     private readonly handleSelectQuestions = () => {
+        if (logging.isActive()) {
+            logging.logClickEvent('BUTTON', new Date(), 'LB_CODE_UNDERSTANDING', null);
+        }
         this.props.onSelect(LitterBoxFeature.QUESTIONS);
     };
 
@@ -52,6 +59,15 @@ class LitterBoxFeatureSelector extends React.Component<LitterBoxFeatureSelectorP
                     />
                 </button>
                 <button
+                    className={this.buttonStyle(LitterBoxFeature.QUESTIONS)}
+                    onClick={this.handleSelectQuestions}
+                >
+                    <FormattedMessage
+                        id={'gui.litterBox.question'}
+                        defaultMessage={'Code understanding'}
+                    />
+                </button>
+                <button
                     className={this.buttonStyle(LitterBoxFeature.LLM_QUESTION)}
                     onClick={this.handleSelectLlmQuestion}
                 >
@@ -60,8 +76,6 @@ class LitterBoxFeatureSelector extends React.Component<LitterBoxFeatureSelectorP
                         defaultMessage={'Ask about Code'}
                     />
                 </button>
-                {/* todo(obermuel,spielede): future extension for LitterBox questions */}
-                {/* <button onClick={this.handleSelectQuestions}>{'Question'}</button> */}
                 <button
                     className={sharedStyles.genericButton}
                     style={{marginTop: '1rem'}}

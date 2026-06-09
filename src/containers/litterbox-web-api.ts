@@ -14,7 +14,27 @@ export interface LitterBoxHint {
     scratchBlocksCode: ScratchBlocksCode;
 }
 
-export type IssueType = 'BUG' | 'SMELL' | 'PERFUME' | 'QUESTION';
+export interface LitterBoxQuestion {
+    id: number;
+    type: QuestionType;
+    name: string;
+    translatedFinderName: string;
+    questionText: string;
+    sprite: string;
+    scratchBlocksCode: ScratchBlocksCode;
+    programDimension: ProgramDimension;
+    scopeOfFocus: ScopeOfFocus;
+    choices?: string[];
+    correctAnswers?: string[];
+}
+
+export type IssueType = 'BUG' | 'SMELL' | 'PERFUME';
+
+export type QuestionType = 'MULTIPLE_CHOICE' | 'FREE_TEXT' | 'NUMBER' | 'YES_NO';
+
+export type ProgramDimension = 'TEXT' | 'EXECUTION' | 'PURPOSE';
+
+export type ScopeOfFocus = 'ATOM' | 'BLOCK' | 'RELATION' | 'MACRO';
 
 const baseUrl = process.env.LITTERBOX_BASE_URL;
 
@@ -153,6 +173,44 @@ export const fixIssue = (
 ): Promise<IssueFixResponse> => {
     const body: IssueExplainRequest = {program, issue, locale};
     return postJsonWithJsonResponse('llm/issue/fix', body);
+};
+
+interface LitterBoxQuestionRequest {
+    program: ScratchProjectJson;
+    language: string;
+    finders?: string;
+    dimensions?: ProgramDimension[];
+    scopes?: ScopeOfFocus[];
+    maxQuestions?: number;
+    balanced?: boolean;
+    perCell?: number;
+    shuffle?: boolean;
+    seed?: number;
+}
+
+/**
+ * Generates comprehension questions for a Scratch program via the QLC endpoint.
+ *
+ * @param program - A Scratch program.
+ * @param language - The language of the question text in the response (BCP 47 tag, e.g. "en", "de").
+ * @param options - Optional filters and sampling settings forwarded to the server.
+ * @returns A list of generated comprehension questions.
+ */
+export const generateQuestions = async (
+    program: ScratchProjectJson,
+    language: string,
+    options?: Omit<LitterBoxQuestionRequest, 'program' | 'language'>
+): Promise<LitterBoxQuestion[]> => {
+    const body: LitterBoxQuestionRequest = {
+        program,
+        language,
+        maxQuestions: 0,
+        balanced: false,
+        perCell: 0,
+        shuffle: false,
+        ...options
+    };
+    return postJsonWithJsonResponse<LitterBoxQuestionRequest, LitterBoxQuestion[]>('qlc/generate', body);
 };
 
 interface QuestionRequest {

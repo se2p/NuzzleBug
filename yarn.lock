@@ -12199,7 +12199,7 @@ scratch-l10n@^3.18.3:
 
 "scratch-l10n@git+https://gitlab+deploy-token-23:gldt-eEF7gYLbzCgz3nSXm9zh@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-l10n.git#master":
   version "3.14.0"
-  resolved "git+https://gitlab+deploy-token-23:gldt-eEF7gYLbzCgz3nSXm9zh@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-l10n.git#ed93d9bee92ea9addceaee8cbbafe4be43763d93"
+  resolved "git+https://gitlab+deploy-token-23:gldt-eEF7gYLbzCgz3nSXm9zh@gitlab.infosun.fim.uni-passau.de/se2/interrogative-debugging/scratch-l10n.git#cb19fe573e7653b00852c94f3138f9e31a0cf5fa"
   dependencies:
     "@babel/cli" "^7.1.2"
     "@babel/core" "^7.1.2"
@@ -12323,7 +12323,7 @@ scratch-translate-extension-languages@^1.0.0:
 
 "scratch-vm@git+https://gitlab+deploy-token-3:i8XTz2vnGPewCoYALnoy@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-vm.git#develop":
   version "1.5.76"
-  resolved "git+https://gitlab+deploy-token-3:i8XTz2vnGPewCoYALnoy@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-vm.git#10cd3c483c275a76677a6d4c37eba9b91c6aa78f"
+  resolved "git+https://gitlab+deploy-token-3:i8XTz2vnGPewCoYALnoy@gitlab.infosun.fim.uni-passau.de/se2/scratch/scratch-vm.git#c372dc27f8e3177c0470aa9c57881ba851bc552a"
   dependencies:
     "@vernier/godirect" "^1.5.0"
     arraybuffer-loader "^1.0.6"

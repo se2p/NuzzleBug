@@ -1,0 +1,96 @@
+.answer-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.5rem 0;
+}
+
+.answer-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.75rem;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    user-select: none;
+    background: white;
+    font: inherit;
+    text-align: left;
+    width: 100%;
+    overflow: hidden;
+}
+
+.answer-option > div {
+    min-width: 0;
+    overflow: hidden;
+}
+
+.answer-option > div svg,
+.answer-option > div img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.answer-option:hover {
+    border-color: #888;
+}
+
+.answer-option.selected {
+    border-color: dodgerblue;
+    background: #e8f4ff;
+}
+
+.answer-option.correct {
+    border-color: green;
+    background: #e8f8e8;
+}
+
+.answer-option.incorrect {
+    border-color: red;
+    background: #ffe8e8;
+}
+
+.option-letter {
+    font-weight: bold;
+    color: #555;
+    min-width: 1rem;
+    text-align: center;
+}
+
+.free-text-input {
+    padding: 0.35rem 0.5rem;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    margin: 0.5rem 0.5rem 0.5rem 0;
+}
+
+.free-text-input[type="number"]::-webkit-inner-spin-button,
+.free-text-input[type="number"]::-webkit-outer-spin-button {
+    appearance: none;
+    margin: 0;
+}
+
+.free-text-input[type="number"] {
+    appearance: textfield;
+}
+
+.feedback-correct {
+    margin-top: 0.4rem;
+    color: green;
+    font-weight: bold;
+}
+
+.feedback-incorrect {
+    margin-top: 0.4rem;
+    color: red;
+    font-weight: bold;
+}
+
+.feedback-manual {
+    margin-top: 0.4rem;
+    color: gray;
+    font-style: italic;
+}
