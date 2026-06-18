@@ -27,7 +27,7 @@ class IRQuestionCategory extends React.Component {
     }
 
     handleToggleExpansion (event) {
-        if (event && logging.isActive()) {
+        if (event) {
             logging.logQuestionEvent(
                 'QUESTION_CATEGORY',
                 new Date(),

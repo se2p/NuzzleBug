@@ -57,28 +57,26 @@ class IRDebugger extends React.Component {
         props.vm.storeEditingTarget();
         this.init();
 
-        if (logging.isActive()) {
-            if (this.block) {
-                logging.logDebuggerEvent(
-                    'BLOCK',
-                    new Date(),
-                    'OPEN_BLOCK',
-                    this.block.id,
-                    this.block.opcode,
-                    null,
-                    null
-                );
-            } else {
-                logging.logDebuggerEvent(
-                    'TARGET',
-                    new Date(),
-                    'OPEN_DEBUGGER',
-                    this.targetOrigin.id,
-                    this.targetOrigin.getName(),
-                    null,
-                    null
-                );
-            }
+        if (this.block) {
+            logging.logDebuggerEvent(
+                'BLOCK',
+                new Date(),
+                'OPEN_BLOCK',
+                this.block.id,
+                this.block.opcode,
+                null,
+                null
+            );
+        } else {
+            logging.logDebuggerEvent(
+                'TARGET',
+                new Date(),
+                'OPEN_DEBUGGER',
+                this.targetOrigin.id,
+                this.targetOrigin.getName(),
+                null,
+                null
+            );
         }
     }
 
@@ -135,13 +133,11 @@ class IRDebugger extends React.Component {
         this.props.vm.resetLastTrace();
         this.props.vm.resetEditingTarget();
         this.props.onCloseDebugger();
-        if (this.props.helpMenuInjected){
+        if (this.props.helpMenuInjected) {
             this.props.onCloseHelpMenu();
         }
 
-        if (logging.isActive()) {
-            logging.logClickEvent('BUTTON', new Date(), 'CLOSE_DEBUGGER', null);
-        }
+        logging.logClickEvent('BUTTON', new Date(), 'CLOSE_DEBUGGER', null);
     }
 
     initTraces () {
@@ -161,7 +157,8 @@ class IRDebugger extends React.Component {
             }
 
             this.block = this.isBlockDebugger ?
-                Object.values(this.targetOrigin.blocks._blocks).find(b => b.id === this.currentBlockId) :
+                Object.values(this.targetOrigin.blocks._blocks)
+                    .find(b => b.id === this.currentBlockId) :
                 null;
 
             this.calculateBlockExecutionOptions();
@@ -190,7 +187,8 @@ class IRDebugger extends React.Component {
 
     updateAbstractWorkspace () {
         const targets = this.props.vm.runtime.targets;
-        let xmlBlocks = targets.map(target => target.blocks.toXML()).join('');
+        let xmlBlocks = targets.map(target => target.blocks.toXML())
+            .join('');
         // Add blocks to the workspace, that are needed for some answers although they are not used in the project.
         xmlBlocks += `,
             <block type="event_whenflagclicked" id="abstract_flag_clicked"></block>,
@@ -352,7 +350,8 @@ class IRDebugger extends React.Component {
 
         if (this.isBlockDebugger) {
             return vm.runtime.targets.find(target =>
-                Object.values(target.blocks._blocks).some(block => block.id === this.currentBlockId));
+                Object.values(target.blocks._blocks)
+                    .some(block => block.id === this.currentBlockId));
         }
         return vm.runtime.targets.find(target => target.id === targetOriginId);
     }
@@ -400,17 +399,15 @@ class IRDebugger extends React.Component {
             this.update();
             this.forceUpdate();
 
-            if (logging.isActive()) {
-                logging.logDebuggerEvent(
-                    'SPRITE',
-                    new Date(),
-                    'SELECT_SPRITE',
-                    targetOption.id,
-                    this.targetOrigin.getName(),
-                    targetOption.isOriginal ? '1' : '0',
-                    null
-                );
-            }
+            logging.logDebuggerEvent(
+                'SPRITE',
+                new Date(),
+                'SELECT_SPRITE',
+                targetOption.id,
+                this.targetOrigin.getName(),
+                targetOption.isOriginal ? '1' : '0',
+                null
+            );
         }
     }
 
@@ -450,17 +447,15 @@ class IRDebugger extends React.Component {
     handleSelectedBlockExecutionChange (blockExecution) {
         this.setSelectedBlockExecution(blockExecution);
 
-        if (logging.isActive()) {
-            logging.logDebuggerEvent(
-                'BLOCK',
-                new Date(),
-                'SELECT_BLOCK_EXECUTION',
-                blockExecution.blockTrace.id,
-                blockExecution.blockTrace.opcode,
-                null,
-                blockExecution.execution
-            );
-        }
+        logging.logDebuggerEvent(
+            'BLOCK',
+            new Date(),
+            'SELECT_BLOCK_EXECUTION',
+            blockExecution.blockTrace.id,
+            blockExecution.blockTrace.opcode,
+            null,
+            blockExecution.execution
+        );
     }
 
     setTargetOptionOfBlockExecutionOption (blockExecutionOption) {
@@ -551,7 +546,7 @@ class IRDebugger extends React.Component {
                 }
                 this.props.onSelectQuestionType();
                 this.forceUpdate();
-            } else if (this.props.helpMenuChooseQuestionType){
+            } else if (this.props.helpMenuChooseQuestionType) {
                 for (const category of this.questionHierarchy) {
                     if (category.type === selectedCategory.type && category.questionCategories) {
                         for (const subcategory of category.questionCategories) {
@@ -579,27 +574,25 @@ class IRDebugger extends React.Component {
     }
 
     handleQuestionClick (question) {
-        if (this.props.helpMenuInjected){
+        if (this.props.helpMenuInjected) {
             this.props.onCloseHelpMenu();
             this.forceUpdate();
         }
         this.setSelectedQuestion(question);
 
-
-        if (logging.isActive()) {
-            logging.logQuestionEvent(
-                'QUESTION',
-                new Date(),
-                'SELECT',
-                this.block ? this.block.id : null,
-                null,
-                getContentMessageKey(question.content, question.values),
-                Object.values(question.values).join(', '),
-                question.category,
-                question.form,
-                this.block ? this.block.opcode : null
-            );
-        }
+        logging.logQuestionEvent(
+            'QUESTION',
+            new Date(),
+            'SELECT',
+            this.block ? this.block.id : null,
+            null,
+            getContentMessageKey(question.content, question.values),
+            Object.values(question.values)
+                .join(', '),
+            question.category,
+            question.form,
+            this.block ? this.block.opcode : null
+        );
     }
 
     selectBlockExecutionQuestion () {
@@ -615,8 +608,8 @@ class IRDebugger extends React.Component {
         try {
             this.crashed = false;
             const newLastTrace = this.isBlockDebugger &&
-                (this.selectedQuestion.category === QuestionCategoryType.SENSING ||
-                    this.selectedQuestion.content === QuestionContent.BLOCK_EXECUTION_TIME) ?
+            (this.selectedQuestion.category === QuestionCategoryType.SENSING ||
+                this.selectedQuestion.content === QuestionContent.BLOCK_EXECUTION_TIME) ?
                 this.selectedBlockExecution.lastTrace : this.props.vm.storedLastTrace;
             const traces = this.props.vm.getTraces().debugTrace;
             const lastTrace = this.props.vm.runtime.newLastTrace ?
@@ -657,17 +650,15 @@ class IRDebugger extends React.Component {
             }
             this.forceUpdate();
 
-            if (logging.isActive()) {
-                logging.logDebuggerEvent(
-                    'BLOCK',
-                    new Date(),
-                    'ROUTE_TO_BLOCK',
-                    graphNode.block.id,
-                    graphNode.block.opcode,
-                    null,
-                    this.selectedBlockExecution.execution
-                );
-            }
+            logging.logDebuggerEvent(
+                'BLOCK',
+                new Date(),
+                'ROUTE_TO_BLOCK',
+                graphNode.block.id,
+                graphNode.block.opcode,
+                null,
+                this.selectedBlockExecution.execution
+            );
         }
     }
 

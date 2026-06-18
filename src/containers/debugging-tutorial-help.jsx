@@ -22,7 +22,8 @@ import {
     onDiagrammExplanation,
     setResponseType
 } from '../reducers/debugging-tutorial-help';
-import DebuggingTutorialStepComponent from '../components/debuggingTutorial/pages/tutorial-step/features/debugging-help/debugging-help.jsx';
+import DebuggingTutorialStepComponent
+    from '../components/debuggingTutorial/pages/tutorial-step/features/debugging-help/debugging-help.jsx';
 import PropTypes from 'prop-types';
 import logging from 'scratch-vm/src/util/logging.js';
 
@@ -129,11 +130,12 @@ class DebuggingTutorialHelp extends React.Component {
                 }
             });
 
-            Object.entries(this.props.selectedBlocks).forEach(([option, idList]) => {
-                if (idList.some(element => !tutorial.possibleAnswers.includes(`${option}_${element}`) && !tutorial.necessaryAnswers.includes(`${option}_${element}`))) {
-                    correctSelection = false;
-                }
-            });
+            Object.entries(this.props.selectedBlocks)
+                .forEach(([option, idList]) => {
+                    if (idList.some(element => !tutorial.possibleAnswers.includes(`${option}_${element}`) && !tutorial.necessaryAnswers.includes(`${option}_${element}`))) {
+                        correctSelection = false;
+                    }
+                });
 
             if (correctSelection) {
                 this.props.setStep(tutorial.next.slice(6));
@@ -155,20 +157,18 @@ class DebuggingTutorialHelp extends React.Component {
      * Logs the current step as a JSON.
      */
     logStep (step, tutorial, selectedAnswer, isAnswerCorrect) {
-        if (logging.isActive) {
-            const curStep = `step${(this.props.stepNumber + 1).toString()}_${this.props.level}`;
+        const curStep = `step${(this.props.stepNumber + 1).toString()}_${this.props.level}`;
 
-            const logMsg = {
-                timestamp: new Date().toISOString(),
-                tutorialTitle: this.props.tutorial.title,
-                questionStep: step,
-                questionText: tutorial.text,
-                questionType: tutorial.questionType,
-                selectedAnswer: selectedAnswer,
-                isAnswerCorrect: isAnswerCorrect
-            };
-            logging.logJsonEvent(`${this.props.tutorial.id + curStep}.json`, 'TUTORIAL', 'QUESTION', logMsg, new Date());
-        }
+        const logMsg = {
+            timestamp: new Date().toISOString(),
+            tutorialTitle: this.props.tutorial.title,
+            questionStep: step,
+            questionText: tutorial.text,
+            questionType: tutorial.questionType,
+            selectedAnswer: selectedAnswer,
+            isAnswerCorrect: isAnswerCorrect
+        };
+        logging.logJsonEvent(`${this.props.tutorial.id + curStep}.json`, 'TUTORIAL', 'QUESTION', logMsg, new Date());
     }
 
     componentDidUpdate (prevProps, prevState, snapshot) {

@@ -129,8 +129,6 @@ function localizeScratchCode (code, locale) {
  * @param durationMs Wie lange es dauert, bis der Einleitungstext vom LLM generiert wurde
  */
 export const logResponse = (hintObj, testId, optionsSelectHistory, durationMs) => {
-    if (!logging.isActive()) return;
-
     const solutionOptions = Array.isArray(hintObj?.solutionOptions) ? hintObj.solutionOptions : [];
 
     // Füge für jede der 3 Optionen ein, in welcher Reihenfolge diese vom Nutzer ausgewählt wurde.
@@ -158,8 +156,6 @@ export const logResponse = (hintObj, testId, optionsSelectHistory, durationMs) =
  * @param tutorialTitle De Titel des aktuellen Tutorials, um den Score in der DB später eindeutig zuordnen zu können.
  */
 export const logTutorialScore = (score, tutorialTitle) => {
-    if (!logging.isActive()) return;
-
     const logMsg = {
         tutorialTitle: tutorialTitle,
         score: score
@@ -169,8 +165,6 @@ export const logTutorialScore = (score, tutorialTitle) => {
 };
 
 export const logLLMError = scratchBlocks => {
-    if (!logging.isActive()) return;
-
     const logMsg = {
         scratchBlocks: scratchBlocks
     };

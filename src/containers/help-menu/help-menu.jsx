@@ -78,9 +78,7 @@ class HelpMenu extends React.Component {
 
     handleClose () {
         this.props.onCloseHelpMenu();
-        if (logging.isActive()) {
-            logging.logClickEvent('BUTTON', new Date(), 'CLOSE_HELP_MENU', null);
-        }
+        logging.logClickEvent('BUTTON', new Date(), 'CLOSE_HELP_MENU', null);
     }
 
     handleMessage (){

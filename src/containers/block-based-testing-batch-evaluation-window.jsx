@@ -262,9 +262,7 @@ const BBTBatchEvaluationWindow = props => {
 
         props.vm.stopAll();
 
-        if (logging.isActive()) {
-            logging.logClickEvent('ICON', new Date(), 'STOPALL', null);
-        }
+        logging.logClickEvent('ICON', new Date(), 'STOPALL', null);
     };
 
     const handleClearAllResults = () => {

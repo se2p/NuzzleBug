@@ -15,23 +15,17 @@ interface IssueTypeSelectorComponentProps {
 class IssueTypeSelectorComponent extends React.Component<IssueTypeSelectorComponentProps, never> {
 
     private readonly handleOnClickBugs = () => {
-        if (logging.isActive()) {
-            logging.logClickEvent('BUTTON', new Date(), 'LB_BUGS', null);
-        }
+        logging.logClickEvent('BUTTON', new Date(), 'LB_BUGS', null);
         this.props.onSelect('BUG');
     };
 
     private readonly handleOnClickSmells = () => {
-        if (logging.isActive()) {
-            logging.logClickEvent('BUTTON', new Date(), 'LB_SMELLS', null);
-        }
+        logging.logClickEvent('BUTTON', new Date(), 'LB_SMELLS', null);
         this.props.onSelect('SMELL');
     };
 
     private readonly handleOnClickPerfumes = () => {
-        if (logging.isActive()) {
-            logging.logClickEvent('BUTTON', new Date(), 'LB_ELEGANT_CODE', null);
-        }
+        logging.logClickEvent('BUTTON', new Date(), 'LB_ELEGANT_CODE', null);
         this.props.onSelect('PERFUME');
     };
 

@@ -91,9 +91,7 @@ class Controls extends React.Component {
         e.preventDefault();
         if ((this.props.projectRunning && this.props.projectPaused) || !this.props.projectRunning) {
             this.props.vm.stepBack();
-            if (logging.isActive()) {
-                logging.logClickEvent('BUTTON', new Date(), 'STEP_BACK', null);
-            }
+            logging.logClickEvent('BUTTON', new Date(), 'STEP_BACK', null);
         }
     }
     handleHelpMenuButtonClick (e) {
@@ -106,9 +104,7 @@ class Controls extends React.Component {
             if (this.props.executedOnce){
                 this.props.onActionExecuted();
             }
-            if (logging.isActive()) {
-                logging.logClickEvent('BUTTON', new Date(), 'HELP_MENU_BUTTON', null);
-            }
+            logging.logClickEvent('BUTTON', new Date(), 'HELP_MENU_BUTTON', null);
         }
     }
     handleStepOver (e) {
@@ -116,9 +112,7 @@ class Controls extends React.Component {
 
         if (this.props.projectPaused && this.props.projectRunning) {
             this.props.vm.stepOver();
-            if (logging.isActive()) {
-                logging.logClickEvent('BUTTON', new Date(), 'STEP_OVER', null);
-            }
+            logging.logClickEvent('BUTTON', new Date(), 'STEP_OVER', null);
         }
     }
     handleInitialStep (e) {
@@ -127,9 +121,7 @@ class Controls extends React.Component {
         this.props.vm.runtime.oneStep = true;
         this.handleGreenFlagClick(e);
         this.props.vm.haltExecutionForDebugger();
-        if (logging.isActive()) {
-            logging.logClickEvent('BUTTON', new Date(), 'PAUSE_EXECUTION', null);
-        }
+        logging.logClickEvent('BUTTON', new Date(), 'PAUSE_EXECUTION', null);
     }
     handlePauseResumeClick (e) {
         e.preventDefault();
@@ -141,14 +133,10 @@ class Controls extends React.Component {
 
         if (this.props.projectPaused) {
             this.resetPauseResume();
-            if (logging.isActive()) {
-                logging.logClickEvent('BUTTON', new Date(), 'RESUME_EXECUTION', null);
-            }
+           logging.logClickEvent('BUTTON', new Date(), 'RESUME_EXECUTION', null);
         } else {
             this.props.vm.haltExecutionForDebugger();
-            if (logging.isActive()) {
-                logging.logClickEvent('BUTTON', new Date(), 'PAUSE_EXECUTION', null);
-            }
+            logging.logClickEvent('BUTTON', new Date(), 'PAUSE_EXECUTION', null);
         }
     }
     handleStopAllClick (e) {
@@ -169,14 +157,10 @@ class Controls extends React.Component {
         e.preventDefault();
         if (this.props.tracingActive) {
             this.deactivateTracing();
-            if (logging.isActive()) {
-                logging.logClickEvent('BUTTON', new Date(), 'DEACTIVATE_OBSERVATION', null);
-            }
+            logging.logClickEvent('BUTTON', new Date(), 'DEACTIVATE_OBSERVATION', null);
         } else {
             this.activateTracing();
-            if (logging.isActive()) {
-                logging.logClickEvent('BUTTON', new Date(), 'ACTIVATE_OBSERVATION', null);
-            }
+            logging.logClickEvent('BUTTON', new Date(), 'ACTIVATE_OBSERVATION', null);
         }
     }
     activateTracing () {

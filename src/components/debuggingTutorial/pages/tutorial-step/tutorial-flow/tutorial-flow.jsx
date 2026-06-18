@@ -176,9 +176,7 @@ const DebuggingTutorialStep = props => {
         const myRequestId = ++hintRequestIdRef.current;
         let firstChunkLogged = false;
 
-        if (logging.isActive()) {
-            logging.logClickEvent('BUTTON', new Date(), 'OPEN_HELP_PAGE', null);
-        }
+        logging.logClickEvent('BUTTON', new Date(), 'OPEN_HELP_PAGE', null);
 
         if (tutorialConfig.classic.llmHintsEnabled) {
             const startTime = performance.now();

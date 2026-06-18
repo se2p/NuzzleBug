@@ -81,9 +81,8 @@ const ControlPanelButtons = ({
 
     const onClickHelp = () => { // Nutzer klickt auf "frage Euli". Also öffne die Debugging-Hilfestellung.
         if (!isDebuggingTutorial) return;
-        if (logging.isActive()) {
-            logging.logClickEvent('BUTTON', new Date(), 'OPEN_HELP_PAGE', null);
-        }
+
+        logging.logClickEvent('BUTTON', new Date(), 'OPEN_HELP_PAGE', null);
         onOpenHelp();
     };
 
