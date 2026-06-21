@@ -4,7 +4,7 @@ import {defineMessages, FormattedMessage, injectIntl, intlShape} from 'react-int
 import {TutorialCreation, Language, TestMessage} from './tutorial_creation';
 import PropTypes from 'prop-types';
 import styles from './tutorial_creation.css';
-import closeImage from '../../lib/assets/icon--close.svg';
+import deleteImage from '../../lib/assets/icon--delete.svg';
 
 import classNames from 'classnames';
 import PopUp from './pop_up.jsx';
@@ -20,6 +20,11 @@ const messages = defineMessages({
         id: 'gui.tutorialCreation.addLanguage',
         defaultMessage: 'Add Language',
         description: 'Add a Language'
+    },
+    removeLanguage: {
+        id: 'gui.tutorialCreation.removeLanguage',
+        defaultMessage: 'Remove Language',
+        description: 'Tooltip for the button that removes a language from the tutorial'
     }
 });
 
@@ -113,12 +118,14 @@ class TutorialCreationLanguages extends React.Component {
                                     <td>
                                         <div
                                             className={classNames(styles.hoverable, styles.removeButton)}
+                                            title={this.props.intl.formatMessage(messages.removeLanguage)}
                                             // best way I could do it here
                                             /* eslint-disable-next-line react/jsx-no-bind */
                                             onClick={() => this.handleRemoveLanguage(language)}
                                         >
                                             <img
-                                                src={closeImage}
+                                                src={deleteImage}
+                                                alt={this.props.intl.formatMessage(messages.removeLanguage)}
                                                 style={{
                                                     width: '20px',
                                                     height: '20px'

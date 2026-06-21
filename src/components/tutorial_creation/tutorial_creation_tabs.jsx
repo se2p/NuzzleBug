@@ -68,6 +68,10 @@ const messages = defineMessages({
 
 });
 
+// Index of the last step (Finish). Used to hide the "Next" button there
+// so the user cannot advance past it onto an empty panel.
+const LAST_STEP = 4;
+
 const tabClassNames = {
     tabs: styles.tabs,
     tab: classNames(tabStyles.reactTabsTab, styles.tab),
@@ -321,23 +325,25 @@ class TutorialCreationTabs extends React.Component {
                             onClick={this.handleFifthTab}
                         >
                             <FormattedMessage
-                                defaultMessage="Fnish"
-                                description="Button to get to the Fnish panel"
+                                defaultMessage="Finish"
+                                description="Button to get to the Finish panel"
                                 id="gui.tutorialCreation.finishTab"
                             />
                         </Tab>
                     </TabList>
 
-                    <button
-                        className={styles.nextButton}
-                        onClick={this.handleNextTab}
-                    >
-                        <FormattedMessage
-                            defaultMessage="Next"
-                            description="Advance to next step"
-                            id="gui.tutorialCreation.next"
-                        />
-                    </button>
+                    {this.state.step < LAST_STEP ? (
+                        <button
+                            className={styles.nextButton}
+                            onClick={this.handleNextTab}
+                        >
+                            <FormattedMessage
+                                defaultMessage="Next"
+                                description="Advance to next step"
+                                id="gui.tutorialCreation.next"
+                            />
+                        </button>
+                    ) : null}
 
                     {this.state.step > 0 ? (
                         <button
