@@ -37,6 +37,19 @@ export class StepMessage {
     }
 }
 
+// Help texts appended to the warnings for malformed tests so the creator
+// immediately sees the expected format.
+// Test name: <step>_<index> (e.g. 1_2).
+// Comment per language: <lang>$Name$Description$FailureMessage, multiple
+// languages joined with '&'.
+const TEST_NAME_FORMAT_HELP =
+    '\n\nExpected test name format: <step>_<index> (e.g. 1_2).';
+const COMMENT_FORMAT_HELP =
+    '\n\nExpected comment format per language:\n' +
+    '<lang>$Name$Description$FailureMessage\n' +
+    'Join multiple languages with "&", e.g.:\n' +
+    'DE$Titel$Beschreibung$Fehlermeldung&EN$Title$Description$FailureMessage';
+
 export class BBT {
     name:string;
     comment = {};
@@ -50,7 +63,7 @@ export class BBT {
 
     constructor (name: string, comment: string, id: string, sprite: string) {
         if (name === null || !name || name.length === 0){
-            alert(`There are Tests without names`); // eslint-disable-line
+            alert(`There are Tests without names${TEST_NAME_FORMAT_HELP}`); // eslint-disable-line
         }
         this.name = name;
         this.comment = comment;
@@ -62,13 +75,13 @@ export class BBT {
             parseFloat(parts[0]))){
             this.number = Number(parts[0]);
         } else {
-            alert(`Test ${name} seems to have no Step number`); // eslint-disable-line
+            alert(`Test ${name} seems to have no Step number${TEST_NAME_FORMAT_HELP}`); // eslint-disable-line
         }
         if (parts.length > 1 && !isNaN(
             parseFloat(parts[1]))){
             this.index = Number(parts[1]);
         } else {
-            alert(`Test ${name} seems to have no Index number`); // eslint-disable-line
+            alert(`Test ${name} seems to have no Index number${TEST_NAME_FORMAT_HELP}`); // eslint-disable-line
         }
         this.name = `step_${this.number}_${this.index}`;
         // deconstruct comment
@@ -79,22 +92,26 @@ export class BBT {
             const commentParts = comment.split('&');
             for (const commentPart of commentParts){
                 const keys = commentPart.split('$');
+                // Normalize the language key so the parser accepts both 'DE' and
+                // 'de'. Lookups later use the uppercase shortCode (e.g. lang.shortCode),
+                // so we store everything uppercased to avoid a case mismatch.
+                const langKey = (keys[0] || '').trim().toUpperCase();
                 if (keys.length > 1){
-                    this.names[keys[0]] = keys[1].trim();
+                    this.names[langKey] = keys[1].trim();
                 } else {
-                    alert(`Test ${name} is missing a Name in comment`); // eslint-disable-line
+                    alert(`Test ${name} is missing a Name in comment${COMMENT_FORMAT_HELP}`); // eslint-disable-line
                     break;
                 }
                 if (keys.length > 2){
-                    this.comment[keys[0]] = keys[2].trim();
+                    this.comment[langKey] = keys[2].trim();
                 } else {
-                    alert(`Test ${name} is missing a Description in comment`); // eslint-disable-line
+                    alert(`Test ${name} is missing a Description in comment${COMMENT_FORMAT_HELP}`); // eslint-disable-line
                     break;
                 }
                 if (keys.length > 3){
-                    this.failureMessages[keys[0]] = keys[3].trim();
+                    this.failureMessages[langKey] = keys[3].trim();
                 } else {
-                    alert(`Test ${name} is missing a Failure Message in comment`); // eslint-disable-line
+                    alert(`Test ${name} is missing a Failure Message in comment${COMMENT_FORMAT_HELP}`); // eslint-disable-line
                     break;
                 }
             }
