@@ -120,5 +120,6 @@ export default {
         newHint: "Gib mir einen neuen Hinweis",
         returnToResults: "Zurück zu den Testergebnissen",
         thinking: "Überlege ",
+        code_suggestion: "Welcher Code-Vorschlag könnte das Problem lösen?",
     }
 };

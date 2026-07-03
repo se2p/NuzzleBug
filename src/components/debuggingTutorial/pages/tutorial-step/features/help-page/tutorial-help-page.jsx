@@ -91,7 +91,7 @@ const TutorialHelpPage = ({
                             </div>}
 
                             {!isGeneratingHint && <TypewriterText
-                                text={`${help?.problemText}\n\nWelcher Code-Vorschlag könnte das Problem lösen?`}
+                                text={`${help?.problemText}\n\n${guiMessages.help_page.code_suggestion}`}
                                 speed={15}
                                 onComplete={onFinishedAnswer}
                             />}

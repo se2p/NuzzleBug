@@ -127,5 +127,6 @@ export default {
         newHint: "Give me a new hint",
         returnToResults: "Back to the test results",
         thinking: "Thinking ",
+        code_suggestion: "Which code suggestion could solve the problem?",
     }
 };
